@@ -21,6 +21,8 @@ USER_ID = uuid.uuid4()
 EVENT_ID = uuid.uuid4()
 COMPANY_ID = uuid.uuid4()
 REPORT_ID = uuid.uuid4()
+CLAIM_ID = uuid.uuid4()
+SIGNAL_ID = uuid.uuid4()
 
 
 class FakeIntelligenceRepository:
@@ -234,8 +236,19 @@ class FakeIntelligenceRepository:
                 related_company_id=COMPANY_ID,
                 related_industry_id="semiconductors",
                 evidence_refs=[{"id": "evidence-1"}],
-                status="open",
+                evidence_signal_ids=[SIGNAL_ID],
+                state="escalated",
+                dedupe_key="company:banking:threshold",
+                score_version="v1",
+                what_could_reduce_risk=[
+                    {"signal_ref": "deposit_outflow", "comparator": "<", "threshold": 0.2}
+                ],
+                news_driven=decimal.Decimal("0.4"),
+                experimental=True,
+                superseded_by=None,
                 created_at=NOW,
+                updated_at=NOW,
+                resolved_at=None,
             )
         ]
 
@@ -258,13 +271,20 @@ class FakeIntelligenceRepository:
             (
                 SimpleNamespace(
                     id=REPORT_ID,
-                    user_id=USER_ID,
+                    # The daily brief is global: it has no owner.
+                    user_id=None,
                     report_type="daily_brief",
+                    brief_date=NOW.date(),
+                    event_id=None,
                     title="Daily Intelligence Brief",
                     status="published",
+                    version=2,
+                    change_reason="upstream event reprocessed",
+                    stale=False,
                     confidence_score=decimal.Decimal("0.86"),
                     generated_by_run_id=uuid.uuid4(),
                     created_at=NOW,
+                    updated_at=NOW,
                 ),
                 [
                     SimpleNamespace(
@@ -272,7 +292,9 @@ class FakeIntelligenceRepository:
                         section_order=1,
                         title="Overview",
                         body="Risk remains moderate.",
-                        evidence_refs=[{"id": "evidence-1"}],
+                        blocks=[{"text": "Risk remains moderate.", "claim_ids": [str(CLAIM_ID)]}],
+                        evidence_refs=[CLAIM_ID],
+                        grounding_status="passed",
                     )
                 ],
             )
@@ -379,3 +401,39 @@ def test_frontend_query_endpoints_return_database_shaped_payloads(client: TestCl
         "top_driver"
     ] == "supply chain disruption"
     assert responses["/api/v1/reports"].json()["items"][0]["sections"][0]["title"] == "Overview"
+
+
+def test_alert_wire_status_is_the_adr0010_lifecycle_state(client: TestClient) -> None:
+    alert = client.get("/api/v1/alerts").json()["items"][0]
+    # The adapter contract pins the wire field `status` to the lifecycle vocabulary.
+    assert alert["status"] == "escalated"
+    assert alert["state"] == "escalated"
+    assert alert["dedupe_key"] == "company:banking:threshold"
+    assert alert["news_driven"] == 0.4
+    assert alert["experimental"] is True
+    assert alert["evidence_signal_ids"] == [str(SIGNAL_ID)]
+    assert alert["resolved_at"] is None
+
+
+def test_report_wire_shape_carries_versioning_and_claim_level_citations(
+    client: TestClient,
+) -> None:
+    report = client.get("/api/v1/reports").json()["items"][0]
+    # A daily brief is global and versioned; regeneration bumps the version.
+    assert report["user_id"] is None
+    assert report["brief_date"] == "2026-06-20"
+    assert report["version"] == 2
+    assert report["stale"] is False
+
+    section = report["sections"][0]
+    # evidence_refs is a flat list of claim IDs the Evidence Drawer can resolve.
+    assert section["evidence_refs"] == [str(CLAIM_ID)]
+    assert section["grounding_status"] == "passed"
+    assert section["blocks"][0]["claim_ids"] == [str(CLAIM_ID)]
+
+
+def test_timestamps_are_utc_iso8601_with_trailing_z(client: TestClient) -> None:
+    # The adapter cannot infer a timezone from a naive timestamp (api-adapter-contract).
+    created_at = client.get("/api/v1/alerts").json()["items"][0]["created_at"]
+    assert created_at == "2026-06-20T12:00:00Z"
+    assert client.get("/api/v1/events").json()["items"][0]["created_at"].endswith("Z")

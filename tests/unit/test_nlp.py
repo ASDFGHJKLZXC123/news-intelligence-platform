@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 import datetime
+import uuid
+from unittest.mock import Mock
 
+from sqlalchemy.dialects import postgresql
+
+from db.models import EMBEDDING_DIM, Article, ArticleEmbedding
+from packages.providers.base import EmbeddingResult
 from services.nlp import (
     ArticleRecord,
     ClusterItem,
@@ -12,6 +18,8 @@ from services.nlp import (
     cosine_similarity,
     exact_duplicate_groups,
 )
+from services.nlp.cluster_service import ClusterResult, cluster_unclustered_articles
+from services.nlp.embeddings import embed_unembedded_articles
 from services.nlp.features import event_severity_score, source_diversity_score
 
 _T = datetime.datetime(2026, 1, 1, 12, 0, tzinfo=datetime.UTC)
@@ -67,3 +75,53 @@ def test_compute_event_features_aggregates_cluster() -> None:
     assert 0.0 <= features["confidence_score"] <= 1.0
     assert features["evidence_keys"] == ["a1", "a2", "a3"]
     assert features["source_authority_score"] == 0.8
+
+
+def test_cluster_query_pins_one_model_version_instead_of_selecting_newest() -> None:
+    session = Mock()
+    session.execute.return_value.all.return_value = []
+
+    result = cluster_unclustered_articles(
+        session,
+        embedding_model="text-embedding-3-small",
+        embedding_model_version="current",
+    )
+
+    assert result == ClusterResult(0, 0, 0)
+    statement = session.execute.call_args.args[0]
+    sql = str(
+        statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
+    )
+    assert "article_embeddings.model = 'text-embedding-3-small'" in sql
+    assert "article_embeddings.model_version = 'current'" in sql
+    assert "'next'" not in sql
+    assert "DISTINCT ON" not in sql
+
+
+def test_embedding_write_persists_provider_model_identity() -> None:
+    article = Article(id=uuid.uuid4(), title="Article", summary=None)
+    provider = Mock(model_name="configured-model", model_version="v2")
+    provider.embed.return_value = [
+        EmbeddingResult(
+            vector=(0.0,) * EMBEDDING_DIM,
+            provider_name="provider",
+            model_name="configured-model",
+            model_version="v2",
+            dimension=EMBEDDING_DIM,
+            model_run_id="run-1",
+        )
+    ]
+    session = Mock()
+    session.scalars.return_value.all.return_value = [article]
+
+    assert embed_unembedded_articles(session, provider) == 1
+
+    embedding = session.add.call_args.args[0]
+    assert isinstance(embedding, ArticleEmbedding)
+    assert (embedding.model, embedding.model_version) == ("configured-model", "v2")
+    statement = session.scalars.call_args.args[0]
+    sql = str(
+        statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
+    )
+    assert "article_embeddings.model = 'configured-model'" in sql
+    assert "article_embeddings.model_version = 'v2'" in sql

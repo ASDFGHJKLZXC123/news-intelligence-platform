@@ -659,6 +659,9 @@ class RSSProvider(Protocol):
 class EmbeddingProvider(Protocol):
     """Produce embedding vectors for a batch of texts."""
 
+    model_name: str
+    model_version: str
+
     def embed(self, texts: list[str]) -> list[EmbeddingResult]: ...
 
 

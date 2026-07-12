@@ -65,6 +65,12 @@ class Settings(BaseSettings):
     eia_base_url: str = "https://api.eia.gov/v2"
     eia_api_key: str = ""
 
+    # --- NLP ------------------------------------------------------------------
+    # Embedding readers must select one model space; comparing vectors produced by
+    # different model/version pairs is undefined (ADR 0004).
+    embedding_model: str = "text-embedding-3-small"
+    embedding_model_version: str = "current"
+
     @field_validator("log_level")
     @classmethod
     def _normalize_log_level(cls, value: str) -> str:

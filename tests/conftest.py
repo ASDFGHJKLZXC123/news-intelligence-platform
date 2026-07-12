@@ -14,11 +14,37 @@ Integration policy:
 from __future__ import annotations
 
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# Load `.env` the way Compose and Settings do, without overriding a real environment
+# variable: explicit env > .env > the defaults below.
+load_dotenv(_PROJECT_ROOT / ".env", override=False)
+
+
+def _compose_database_url() -> str:
+    """Build the host-side URL of the Compose database.
+
+    docker-compose.yml publishes the container's 5432 on ``POSTGRES_HOST_PORT`` and
+    bootstraps the role/db from ``POSTGRES_USER``/``POSTGRES_PASSWORD``/``POSTGRES_DB``.
+    Deriving the URL from those same variables keeps host-run processes (pytest,
+    alembic) pointed at the container even when it is published off the default port
+    -- e.g. because a local PostgreSQL already owns 5432.
+    """
+    user = os.environ.get("POSTGRES_USER", "news")
+    password = os.environ.get("POSTGRES_PASSWORD", "news")
+    database = os.environ.get("POSTGRES_DB", "news")
+    port = os.environ.get("POSTGRES_HOST_PORT", "5432")
+    return f"postgresql+psycopg2://{user}:{password}@localhost:{port}/{database}"
+
 
 # Ensure a deterministic, local-only configuration for the whole test session.
 os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("LOG_LEVEL", "INFO")
-os.environ.setdefault("DATABASE_URL", "postgresql+psycopg2://news:news@localhost:5432/news")
+os.environ.setdefault("DATABASE_URL", _compose_database_url())
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
 os.environ.setdefault("CELERY_BROKER_URL", "redis://localhost:6379/1")
 os.environ.setdefault("CELERY_RESULT_BACKEND", "redis://localhost:6379/2")

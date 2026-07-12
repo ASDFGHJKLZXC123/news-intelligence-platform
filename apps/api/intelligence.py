@@ -13,10 +13,11 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, or_, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from db.base import get_session
 from db.models import (
+    ACTIVE_ALERT_STATES,
     Alert,
     Company,
     CompanyRiskRollup,
@@ -42,7 +43,18 @@ router = APIRouter(tags=["intelligence"])
 
 
 def _iso(value: datetime.date | datetime.datetime | None) -> str | None:
-    return value.isoformat() if value is not None else None
+    """Render a date/datetime for the wire: UTC ISO 8601 with a trailing `Z`.
+
+    Naive datetimes are stored as UTC, so they are stamped as UTC rather than emitted
+    without an offset -- the adapter cannot guess a timezone (api-adapter-contract).
+    """
+    if value is None:
+        return None
+    if not isinstance(value, datetime.datetime):
+        return value.isoformat()
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=datetime.UTC)
+    return value.astimezone(datetime.UTC).isoformat().replace("+00:00", "Z")
 
 
 def _json_value(value: Any) -> Any:
@@ -51,7 +63,7 @@ def _json_value(value: Any) -> Any:
     if isinstance(value, uuid.UUID):
         return str(value)
     if isinstance(value, datetime.date | datetime.datetime):
-        return value.isoformat()
+        return _iso(value)
     return value
 
 
@@ -197,8 +209,20 @@ def _serialize_alert(alert: Alert) -> dict[str, Any]:
         "related_company_id": _json_value(alert.related_company_id),
         "related_industry_id": alert.related_industry_id,
         "evidence_refs": alert.evidence_refs,
-        "status": alert.status,
+        "evidence_signal_ids": [str(value) for value in alert.evidence_signal_ids or []],
+        # The wire field `status` carries the ADR 0010 lifecycle state; the adapter maps it
+        # down to the UI triad (api-adapter-contract, "Enums").
+        "status": alert.state,
+        "state": alert.state,
+        "dedupe_key": alert.dedupe_key,
+        "score_version": alert.score_version,
+        "what_could_reduce_risk": alert.what_could_reduce_risk,
+        "news_driven": _json_value(alert.news_driven),
+        "experimental": alert.experimental,
+        "superseded_by": _json_value(alert.superseded_by),
         "created_at": _iso(alert.created_at),
+        "updated_at": _iso(alert.updated_at),
+        "resolved_at": _iso(alert.resolved_at),
     }
 
 
@@ -218,13 +242,20 @@ def _serialize_watchlist_item(item: WatchlistItem) -> dict[str, Any]:
 def _serialize_report(report: Report, sections: list[ReportSection] | None = None) -> dict[str, Any]:
     payload = {
         "id": str(report.id),
-        "user_id": str(report.user_id),
+        # The daily brief is global; only user-scoped reports carry an owner.
+        "user_id": _json_value(report.user_id),
         "report_type": report.report_type,
+        "brief_date": _iso(report.brief_date),
+        "event_id": _json_value(report.event_id),
         "title": report.title,
         "status": report.status,
+        "version": report.version,
+        "change_reason": report.change_reason,
+        "stale": report.stale,
         "confidence_score": _json_value(report.confidence_score),
         "generated_by_run_id": _json_value(report.generated_by_run_id),
         "created_at": _iso(report.created_at),
+        "updated_at": _iso(report.updated_at),
     }
     if sections is not None:
         payload["sections"] = [
@@ -233,7 +264,10 @@ def _serialize_report(report: Report, sections: list[ReportSection] | None = Non
                 "section_order": section.section_order,
                 "title": section.title,
                 "body": section.body,
-                "evidence_refs": section.evidence_refs,
+                "blocks": section.blocks,
+                # Claim-level citations: the drawer resolves these through claim_evidence.
+                "evidence_refs": [str(value) for value in section.evidence_refs or []],
+                "grounding_status": section.grounding_status,
             }
             for section in sections
         ]
@@ -255,7 +289,8 @@ class IntelligenceRepository:
         return self.session.execute(stmt).scalars().first()
 
     def count_open_alerts(self) -> int:
-        stmt = select(func.count(Alert.id)).where(Alert.status == "open")
+        # "Open" means live: everything that has not been resolved or superseded.
+        stmt = select(func.count(Alert.id)).where(Alert.state.in_(ACTIVE_ALERT_STATES))
         return int(self.session.execute(stmt).scalar_one())
 
     def list_risk_scores(
@@ -380,8 +415,21 @@ class IntelligenceRepository:
         return company, rollup
 
     def list_industries(self, *, limit: int) -> list[IndustryRiskRollup]:
-        stmt = select(IndustryRiskRollup).order_by(IndustryRiskRollup.as_of.desc()).limit(limit)
-        return list(self.session.execute(stmt).scalars().all())
+        # One row per industry -- its latest rollup. Ordering by `as_of` alone returned the
+        # same industry once per snapshot (api-adapter-contract, shape gap 6).
+        stmt = (
+            select(IndustryRiskRollup)
+            .distinct(IndustryRiskRollup.industry_id)
+            .order_by(IndustryRiskRollup.industry_id, IndustryRiskRollup.as_of.desc())
+            .subquery()
+        )
+        latest = aliased(IndustryRiskRollup, stmt)
+        rollups = (
+            self.session.execute(select(latest).order_by(latest.as_of.desc()).limit(limit))
+            .scalars()
+            .all()
+        )
+        return list(rollups)
 
     def get_industry(self, industry_id: str) -> IndustryRiskRollup | None:
         stmt = (
@@ -401,11 +449,12 @@ class IntelligenceRepository:
         return list(self.session.execute(stmt).scalars().all())
 
     def list_alerts(self, *, user_id: uuid.UUID | None, status: str | None, limit: int) -> list[Alert]:
+        # `status` is the wire name for the ADR 0010 lifecycle state.
         stmt = select(Alert).order_by(Alert.created_at.desc()).limit(limit)
         if user_id is not None:
             stmt = stmt.where(Alert.user_id == user_id)
         if status:
-            stmt = stmt.where(Alert.status == status)
+            stmt = stmt.where(Alert.state == status)
         return list(self.session.execute(stmt).scalars().all())
 
     def list_watchlist(self, *, user_id: uuid.UUID | None, limit: int) -> list[WatchlistItem]:

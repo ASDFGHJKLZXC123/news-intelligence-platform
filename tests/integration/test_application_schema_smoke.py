@@ -38,5 +38,6 @@ def test_application_tables_constraints_and_indexes(require_postgres: None) -> N
     }
     assert "ix_users_email" in indexes["users"]
     assert "ix_watchlist_items_user_type" in indexes["watchlist_items"]
-    assert "ix_alerts_user_status_created" in indexes["alerts"]
+    # `state` replaced the overlapping `status` column on alerts (ADR 0010, migration 0013).
+    assert "ix_alerts_user_state_created" in indexes["alerts"]
     assert "ix_reports_user_status_created" in indexes["reports"]

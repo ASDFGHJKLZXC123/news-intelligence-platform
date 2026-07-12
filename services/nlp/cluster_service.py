@@ -14,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from db.models import Article, ArticleEmbedding, Event, EventArticle, EventRiskFeature, Source
+from packages.config.settings import get_settings
 from services.nlp.clustering import ClusterItem, cluster_by_similarity
 from services.nlp.features import ArticleRecord, compute_event_features
 
@@ -27,14 +28,31 @@ class ClusterResult:
     features_emitted: int
 
 
-def cluster_unclustered_articles(session: Session, *, threshold: float = 0.8) -> ClusterResult:
-    """Cluster embedded, not-yet-evented articles into events with risk features."""
+def cluster_unclustered_articles(
+    session: Session,
+    *,
+    threshold: float = 0.8,
+    embedding_model: str | None = None,
+    embedding_model_version: str | None = None,
+) -> ClusterResult:
+    """Cluster articles in exactly one configured embedding vector space."""
+    settings = get_settings()
+    model = settings.embedding_model if embedding_model is None else embedding_model
+    model_version = (
+        settings.embedding_model_version
+        if embedding_model_version is None
+        else embedding_model_version
+    )
     stmt = (
         select(Article, ArticleEmbedding.embedding, Source.authority_score)
         .join(ArticleEmbedding, ArticleEmbedding.article_id == Article.id)
         .join(Source, Source.id == Article.source_id)
         .outerjoin(EventArticle, EventArticle.article_id == Article.id)
-        .where(EventArticle.article_id.is_(None))
+        .where(
+            EventArticle.article_id.is_(None),
+            ArticleEmbedding.model == model,
+            ArticleEmbedding.model_version == model_version,
+        )
         .order_by(Article.fetched_at)
     )
     rows = session.execute(stmt).all()

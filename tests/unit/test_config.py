@@ -38,6 +38,8 @@ def test_api_key_empty_by_default() -> None:
 
 def test_provider_settings_defaults_are_safe() -> None:
     settings = Settings()
+    assert settings.embedding_model == "text-embedding-3-small"
+    assert settings.embedding_model_version == "current"
     assert settings.fred_api_key == ""
     assert "configure SEC_USER_AGENT" in settings.sec_user_agent
     assert settings.gdelt_base_url == "https://api.gdeltproject.org/api/v2"

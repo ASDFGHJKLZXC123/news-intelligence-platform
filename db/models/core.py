@@ -13,7 +13,9 @@ from typing import Any
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
+    ARRAY,
     Boolean,
+    CheckConstraint,
     Date,
     DateTime,
     ForeignKey,
@@ -25,6 +27,7 @@ from sqlalchemy import (
     UniqueConstraint,
     Uuid,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -34,6 +37,60 @@ from db.base import Base
 from db.models.enums import SourceType
 
 EMBEDDING_DIM = 1536
+
+#: Embedding identity written by the pipeline (ADR 0004). Embedding rows are keyed by
+#: ``(article_id, model, model_version)``, so readers must pin the pair they want.
+EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_MODEL_VERSION = "current"
+
+# Vocabularies shared with migration 0013. `*_score` fields are 0-100; `confidence`,
+# `probability`, and `similarity_score` are 0-1 (llm-contracts-reconciliation spec).
+EPISODE_TYPES = (
+    "banking_stress",
+    "sovereign_debt",
+    "supply_shock",
+    "industry_shock",
+    "company_distress",
+    "geopolitical",
+    "pandemic",
+    "monetary_regime",
+)
+
+EPISODE_OUTCOMES = (
+    "contained",
+    "systemic_crisis",
+    "recession",
+    "default",
+    "bailout",
+    "failure",
+    "recovery",
+    "regime_change",
+)
+
+HORIZONS = ("0_6m", "6_12m", "12_18m", "within_18m")
+SCENARIO_NAMES = ("base_case", "upside_case", "downside_case", "tail_risk_case")
+RISK_LEVELS = ("low", "medium", "high", "critical")
+
+LLM_RUN_STATUSES = (
+    "queued",
+    "running",
+    "succeeded",
+    "failed",
+    "validation_failed",
+    "cached",
+    "skipped",
+)
+# ADR 0010 lifecycle. `alerts.state` is the single lifecycle column; the API serves it as
+# the wire field `status` (api-adapter-contract "Enums").
+ALERT_STATES = ("open", "escalated", "downgraded", "resolved", "superseded")
+ACTIVE_ALERT_STATES = ("open", "escalated", "downgraded")
+REPORT_STATUSES = ("generating", "grounding_check", "published", "failed")
+GROUNDING_STATUSES = ("pending", "passed", "failed", "data_quality_note")
+
+
+def _sql_enum(values: tuple[str, ...]) -> str:
+    """Render a vocabulary as a SQL `IN (...)` value list."""
+    return ", ".join(f"'{value}'" for value in values)
 
 
 class GeometryPoint(UserDefinedType):
@@ -104,8 +161,12 @@ class ArticleEmbedding(Base):
     article_id: Mapped[uuid.UUID] = mapped_column(
         Uuid, ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
     )
-    model: Mapped[str] = mapped_column(String(128), nullable=False)
-    model_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    model: Mapped[str] = mapped_column(
+        String(128), nullable=False, server_default=EMBEDDING_MODEL, primary_key=True
+    )
+    model_version: Mapped[str] = mapped_column(
+        String(64), nullable=False, server_default=EMBEDDING_MODEL_VERSION, primary_key=True
+    )
     dimension: Mapped[int] = mapped_column(Integer, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM), nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
@@ -148,6 +209,13 @@ class Event(Base):
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "severity_score IS NULL OR (severity_score >= 0 AND severity_score <= 100)",
+            name="ck_events_severity_score",
+        ),
     )
 
 
@@ -215,6 +283,14 @@ class EventEntity(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100)",
+            name="ck_event_entities_impact_score",
+        ),
+        CheckConstraint(
+            "confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1)",
+            name="ck_event_entities_confidence_score",
+        ),
         Index("ix_event_entities_entity", "entity_profile_id"),
         Index("ix_event_entities_impact", "impact_direction", "impact_score"),
     )
@@ -241,6 +317,18 @@ class EventCompany(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100)",
+            name="ck_event_companies_impact_score",
+        ),
+        CheckConstraint(
+            "risk_score IS NULL OR (risk_score >= 0 AND risk_score <= 100)",
+            name="ck_event_companies_risk_score",
+        ),
+        CheckConstraint(
+            "confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1)",
+            name="ck_event_companies_confidence_score",
+        ),
         Index("ix_event_companies_company", "company_id"),
         Index("ix_event_companies_scores", "impact_score", "risk_score"),
     )
@@ -264,6 +352,18 @@ class EventIndustry(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100)",
+            name="ck_event_industries_impact_score",
+        ),
+        CheckConstraint(
+            "risk_score IS NULL OR (risk_score >= 0 AND risk_score <= 100)",
+            name="ck_event_industries_risk_score",
+        ),
+        CheckConstraint(
+            "opportunity_score IS NULL OR (opportunity_score >= 0 AND opportunity_score <= 100)",
+            name="ck_event_industries_opportunity_score",
+        ),
         Index("ix_event_industries_industry", "industry_id"),
         Index("ix_event_industries_scores", "impact_score", "risk_score"),
     )
@@ -351,16 +451,66 @@ class LLMRun(Base):
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     prompt_name: Mapped[str] = mapped_column(String(128), nullable=False)
     prompt_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    prompt_template_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    prompt_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
     provider: Mapped[str] = mapped_column(String(64), nullable=False)
     model: Mapped[str] = mapped_column(String(128), nullable=False)
+    model_params: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    temperature: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    seed: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, server_default="succeeded")
+    attempt: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    error_details: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    output_schema_name: Mapped[str | None] = mapped_column(String(64), nullable=True)
     output_schema_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
     input_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     output: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    no_finding_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    input_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    output_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
     cost_usd: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    trace_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    started_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    completed_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            f"status IN ({_sql_enum(LLM_RUN_STATUSES)})",
+            name="ck_llm_runs_status",
+        ),
+        CheckConstraint("attempt >= 1", name="ck_llm_runs_attempt_positive"),
+        CheckConstraint(
+            "input_tokens IS NULL OR input_tokens >= 0",
+            name="ck_llm_runs_input_tokens_non_negative",
+        ),
+        CheckConstraint(
+            "output_tokens IS NULL OR output_tokens >= 0",
+            name="ck_llm_runs_output_tokens_non_negative",
+        ),
+        CheckConstraint(
+            "latency_ms IS NULL OR latency_ms >= 0",
+            name="ck_llm_runs_latency_ms_non_negative",
+        ),
+        CheckConstraint(
+            "cost_usd IS NULL OR cost_usd >= 0",
+            name="ck_llm_runs_cost_usd_non_negative",
+        ),
+        CheckConstraint(
+            "temperature IS NULL OR (temperature >= 0 AND temperature <= 2)",
+            name="ck_llm_runs_temperature_range",
+        ),
+        Index("ix_llm_runs_trace_id", "trace_id"),
+        Index("ix_llm_runs_status_created", "status", "created_at"),
     )
 
 
@@ -1022,6 +1172,68 @@ class EntityIdentifier(Base):
     )
 
 
+class EntityAlias(Base):
+    """Alternate names for a canonical entity profile."""
+
+    __tablename__ = "entity_aliases"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    entity_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("entity_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    alias: Mapped[str] = mapped_column(Text, nullable=False)
+    normalized_alias: Mapped[str] = mapped_column(Text, nullable=False)
+    alias_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    source: Mapped[str] = mapped_column(String(64), nullable=False, server_default="internal")
+    valid_from: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    valid_to: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "entity_id",
+            "normalized_alias",
+            "source",
+            name="uq_entity_aliases_entity_normalized_alias_source",
+        ),
+        # Candidate lookup by surface form is the linker's hot path (ADR 0005/0006).
+        Index("ix_entity_aliases_normalized_alias", "normalized_alias"),
+    )
+
+
+class EntityRedirect(Base):
+    """Historical aliasing for renamed/merged entities."""
+
+    __tablename__ = "entity_redirects"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    old_entity_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("entity_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    new_entity_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("entity_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    effective_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "old_entity_id",
+            "new_entity_id",
+            "effective_date",
+            name="uq_entity_redirects_old_new_effective_date",
+        ),
+        CheckConstraint(
+            "old_entity_id <> new_entity_id", name="ck_entity_redirects_no_self_redirect"
+        ),
+    )
+
+
 class EntityRelationship(Base):
     """Parent, subsidiary, ownership, or control relationship between entity profiles."""
 
@@ -1174,6 +1386,235 @@ class CompanyIdentifier(Base):
             name="uq_company_identifiers_company_type_value_provider",
         ),
         Index("ix_company_identifiers_type_value", "identifier_type", "identifier_value"),
+    )
+
+
+class HistoricalEpisode(Base):
+    """Historical episodes with onset embeddings and normalized outcome tags."""
+
+    __tablename__ = "historical_episodes"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(Text, nullable=False)
+    episode_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    onset_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    peak_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    end_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    onset_summary: Mapped[str] = mapped_column(Text, nullable=False)
+    onset_indicators: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    onset_embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM), nullable=False)
+    model: Mapped[str] = mapped_column(
+        String(128), nullable=False, server_default="text-embedding-3-small"
+    )
+    model_version: Mapped[str] = mapped_column(
+        String(64), nullable=False, server_default="current"
+    )
+    outcome_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    outcomes: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    resolution_mechanism: Mapped[str | None] = mapped_column(Text, nullable=True)
+    geography: Mapped[str | None] = mapped_column(Text, nullable=True)
+    affected_industries: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    regime_tags: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    parent_episode_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("historical_episodes.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    is_counterexample: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
+    source_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    license_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+    review_due_at: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+
+    __table_args__ = (
+        CheckConstraint(
+            f"episode_type IN ({_sql_enum(EPISODE_TYPES)})",
+            name="ck_historical_episodes_type",
+        ),
+        # Array containment, not a subquery: Postgres rejects subqueries in CHECK.
+        CheckConstraint(
+            f"outcomes IS NULL OR outcomes <@ ARRAY[{_sql_enum(EPISODE_OUTCOMES)}]::text[]",
+            name="ck_historical_episodes_outcomes",
+        ),
+        CheckConstraint("version >= 1", name="ck_historical_episodes_version_positive"),
+        CheckConstraint(
+            "peak_date IS NULL OR peak_date >= onset_date",
+            name="ck_historical_episodes_peak_after_onset",
+        ),
+        CheckConstraint(
+            "end_date IS NULL OR end_date >= onset_date",
+            name="ck_historical_episodes_end_after_onset",
+        ),
+        CheckConstraint(
+            "parent_episode_id IS NULL OR parent_episode_id <> id",
+            name="ck_historical_episodes_no_self_parent",
+        ),
+        Index(
+            "ix_historical_episodes_onset_embedding_hnsw",
+            "onset_embedding",
+            postgresql_using="hnsw",
+            postgresql_with={"m": 16, "ef_construction": 64},
+            postgresql_ops={"onset_embedding": "vector_cosine_ops"},
+        ),
+        # Hard filters run before vector similarity (episode spec, "Retrieval").
+        Index("ix_historical_episodes_episode_type", "episode_type"),
+        Index("ix_historical_episodes_onset_date", "onset_date"),
+        Index("ix_historical_episodes_regime_tags", "regime_tags", postgresql_using="gin"),
+        Index(
+            "ix_historical_episodes_affected_industries",
+            "affected_industries",
+            postgresql_using="gin",
+        ),
+    )
+
+
+class ForecastScenario(Base):
+    """Forecast scenarios generated for a live event."""
+
+    __tablename__ = "forecast_scenarios"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    event_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("events.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    llm_run_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    #: Groups the scenarios emitted by one Forecast Agent run. The MECE rule (probabilities
+    #: sum to 1.0 +/- 0.01) is checked by the validator over a set, so the set needs an id.
+    scenario_set_id: Mapped[uuid.UUID] = mapped_column(Uuid, nullable=False, index=True)
+    scenario_name: Mapped[str] = mapped_column(String(32), nullable=False)
+    probability: Mapped[float] = mapped_column(Numeric, nullable=False)
+    risk_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    severity: Mapped[str] = mapped_column(String(16), nullable=False)
+    horizon: Mapped[str] = mapped_column(String(16), nullable=False)
+    narrative: Mapped[str] = mapped_column(Text, nullable=False)
+    assumptions: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    triggers: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    leading_indicators: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    expected_impact: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    invalidation_signals: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    confidence: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "scenario_set_id",
+            "scenario_name",
+            name="uq_forecast_scenarios_set_scenario_name",
+        ),
+        CheckConstraint(
+            f"scenario_name IN ({_sql_enum(SCENARIO_NAMES)})",
+            name="ck_forecast_scenarios_scenario_name",
+        ),
+        CheckConstraint(
+            "probability >= 0 AND probability <= 1", name="ck_forecast_scenarios_probability"
+        ),
+        CheckConstraint(
+            "risk_score >= 0 AND risk_score <= 100", name="ck_forecast_scenarios_risk_score"
+        ),
+        CheckConstraint(
+            f"severity IN ({_sql_enum(RISK_LEVELS)})",
+            name="ck_forecast_scenarios_severity",
+        ),
+        CheckConstraint(
+            f"horizon IN ({_sql_enum(HORIZONS)})",
+            name="ck_forecast_scenarios_horizon",
+        ),
+        CheckConstraint(
+            "confidence IS NULL OR (confidence >= 0 AND confidence <= 1)",
+            name="ck_forecast_scenarios_confidence",
+        ),
+    )
+
+
+class EventAnalogy(Base):
+    """Historical analogy match for an event."""
+
+    __tablename__ = "event_analogies"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    event_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("events.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    historical_episode_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("historical_episodes.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    llm_run_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    similarity_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    limitations: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    shared_causes: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    regime_caveats: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
+    evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "event_id",
+            "historical_episode_id",
+            name="uq_event_analogies_event_episode",
+        ),
+        CheckConstraint(
+            "similarity_score >= 0 AND similarity_score <= 1",
+            name="ck_event_analogies_similarity_score",
+        ),
+    )
+
+
+class RiskWarning(Base):
+    """Risk warning candidates before persistence into alerts."""
+
+    __tablename__ = "risk_warnings"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    alert_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("alerts.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    event_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("events.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    llm_run_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    risk_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    risk_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    probability: Mapped[float] = mapped_column(Numeric, nullable=False)
+    horizon: Mapped[str] = mapped_column(String(16), nullable=False)
+    severity: Mapped[str] = mapped_column(String(16), nullable=False)
+    warning_message: Mapped[str] = mapped_column(Text, nullable=False)
+    what_could_reduce_risk: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "risk_score >= 0 AND risk_score <= 100", name="ck_risk_warnings_risk_score"
+        ),
+        CheckConstraint(
+            "probability >= 0 AND probability <= 1", name="ck_risk_warnings_probability"
+        ),
+        CheckConstraint(
+            f"horizon IN ({_sql_enum(HORIZONS)})",
+            name="ck_risk_warnings_horizon",
+        ),
+        CheckConstraint(
+            f"severity IN ({_sql_enum(RISK_LEVELS)})",
+            name="ck_risk_warnings_severity",
+        ),
     )
 
 
@@ -1739,6 +2180,11 @@ class Alert(Base):
     severity: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
     risk_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     alert_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    #: ADR 0010 lifecycle, and the only status column on this table. The API serves it as
+    #: the wire field `status` (api-adapter-contract "Enums").
+    state: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default="open", index=True
+    )
     related_event_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("events.id", ondelete="SET NULL"), nullable=True, index=True
     )
@@ -1746,15 +2192,89 @@ class Alert(Base):
         Uuid, ForeignKey("companies.id", ondelete="SET NULL"), nullable=True, index=True
     )
     related_industry_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+    #: `(risk_type, scope_entity, condition_class)`. At most one *active* alert per key --
+    #: enforced by `uq_alerts_active_dedupe_key`; the same condition updates that row.
+    dedupe_key: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
-    status: Mapped[str] = mapped_column(String(32), nullable=False, server_default="open", index=True)
+    evidence_signal_ids: Mapped[list[uuid.UUID] | None] = mapped_column(ARRAY(Uuid), nullable=True)
+    score_version: Mapped[str | None] = mapped_column(
+        String(16), nullable=True, server_default="v1"
+    )
+    #: Structured predicates `(signal_ref, comparator, threshold)` where machine-checkable,
+    #: free text otherwise. Evaluated every run to drive downgrades.
+    what_could_reduce_risk: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    #: Share of the score contributed by news-velocity terms, 0-1. Rendered as its own badge.
+    news_driven: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    #: Hysteresis state. The 2-consecutive-runs velocity rule lives on the row, not in
+    #: worker memory; `clear_band_since` drives downgraded -> resolved after 7 days;
+    #: `cooldown_until` blocks a resolved key from re-firing for 24h at equal severity.
+    velocity_streak: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
+    last_evaluated_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    clear_band_since: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    cooldown_until: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    #: Null-model gate: composite-score alerts stay experimental until they beat
+    #: `services/crisis_model/baseline.py` on precision AND lead time.
+    experimental: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
+    #: Notification surface. Resolution emits an explicit all-clear -- de-escalation is
+    #: information, not silence -- so it is tracked separately from the first notification.
+    notified_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    all_clear_notified_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    superseded_by: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("alerts.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+    resolved_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     __table_args__ = (
-        Index("ix_alerts_user_status_created", "user_id", "status", "created_at"),
+        CheckConstraint(
+            "risk_score IS NULL OR (risk_score >= 0 AND risk_score <= 100)",
+            name="ck_alerts_risk_score",
+        ),
+        CheckConstraint(f"state IN ({_sql_enum(ALERT_STATES)})", name="ck_alerts_state"),
+        CheckConstraint(f"severity IN ({_sql_enum(RISK_LEVELS)})", name="ck_alerts_severity"),
+        CheckConstraint(
+            "news_driven IS NULL OR (news_driven >= 0 AND news_driven <= 1)",
+            name="ck_alerts_news_driven",
+        ),
+        CheckConstraint("velocity_streak >= 0", name="ck_alerts_velocity_streak_non_negative"),
+        CheckConstraint(
+            "state <> 'resolved' OR resolved_at IS NOT NULL",
+            name="ck_alerts_resolved_has_timestamp",
+        ),
+        CheckConstraint(
+            "state <> 'superseded' OR superseded_by IS NOT NULL",
+            name="ck_alerts_superseded_has_target",
+        ),
+        CheckConstraint("superseded_by IS NULL OR superseded_by <> id", name="ck_alerts_no_self_supersede"),
+        # Flapping is structurally impossible: one live alert per dedupe key.
+        Index(
+            "uq_alerts_active_dedupe_key",
+            "dedupe_key",
+            unique=True,
+            postgresql_where=text(
+                f"dedupe_key IS NOT NULL AND state IN ({_sql_enum(ACTIVE_ALERT_STATES)})"
+            ),
+        ),
+        Index("ix_alerts_user_state_created", "user_id", "state", "created_at"),
         Index("ix_alerts_severity_created", "severity", "created_at"),
+        Index("ix_alerts_state_updated", "state", "updated_at"),
     )
 
 
@@ -1765,11 +2285,18 @@ class Report(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(
-        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+        Uuid, ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True
     )
     report_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    brief_date: Mapped[datetime.date | None] = mapped_column(Date, nullable=True)
+    event_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("events.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     title: Mapped[str] = mapped_column(Text, nullable=False)
-    status: Mapped[str] = mapped_column(String(32), nullable=False, server_default="draft", index=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, server_default="generating", index=True)
+    version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
+    change_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    stale: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     confidence_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     generated_by_run_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
@@ -1777,12 +2304,52 @@ class Report(Base):
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
 
-    __table_args__ = (Index("ix_reports_user_status_created", "user_id", "status", "created_at"),)
+    __table_args__ = (
+        CheckConstraint(f"status IN ({_sql_enum(REPORT_STATUSES)})", name="ck_reports_status"),
+        CheckConstraint("version >= 1", name="ck_reports_version_positive"),
+        # A report is a daily brief (keyed by brief_date) or an event report (keyed by
+        # event_id), never both. Neither is allowed: reports predating this split carry
+        # no subject key, and ad-hoc types are keyed by neither.
+        CheckConstraint(
+            "brief_date IS NULL OR event_id IS NULL",
+            name="ck_reports_brief_xor_event",
+        ),
+        # Uniqueness is per (type, subject, version): regeneration adds a version, it never
+        # mutates a published report (report-generation spec, "Lifecycle and versioning").
+        Index(
+            "uq_reports_type_brief_date_version",
+            "report_type",
+            "brief_date",
+            "version",
+            unique=True,
+            postgresql_where=text("brief_date IS NOT NULL"),
+        ),
+        Index(
+            "uq_reports_type_event_version",
+            "report_type",
+            "event_id",
+            "version",
+            unique=True,
+            postgresql_where=text("event_id IS NOT NULL"),
+        ),
+        Index("ix_reports_user_status_created", "user_id", "status", "created_at"),
+        Index("ix_reports_report_type_status_created", "report_type", "status", "created_at"),
+        Index("ix_reports_brief_date", "brief_date"),
+    )
 
 
 class ReportSection(Base):
-    """Ordered body section for a generated report."""
+    """Ordered body section for a generated report.
+
+    Citations are claim-level, not section-level: the Composer emits claim-tagged blocks
+    (`{text, claim_ids[]}`) and `evidence_refs` is the typed list of the claim IDs those
+    blocks cite, which resolve through `claim_evidence` to articles (report-generation
+    spec, "Citation mechanics"). The grounding gate records its verdict per section.
+    """
 
     __tablename__ = "report_sections"
 
@@ -1793,10 +2360,18 @@ class ReportSection(Base):
     section_order: Mapped[int] = mapped_column(Integer, nullable=False)
     title: Mapped[str] = mapped_column(Text, nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
-    evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    blocks: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    evidence_refs: Mapped[list[uuid.UUID] | None] = mapped_column(ARRAY(Uuid), nullable=True)
+    grounding_status: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default="pending"
+    )
 
     __table_args__ = (
         UniqueConstraint("report_id", "section_order", name="uq_report_sections_report_order"),
+        CheckConstraint(
+            f"grounding_status IN ({_sql_enum(GROUNDING_STATUSES)})",
+            name="ck_report_sections_grounding_status",
+        ),
     )
 
 
