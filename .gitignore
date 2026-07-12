@@ -8,6 +8,7 @@ venv/
 .ruff_cache/
 .coverage
 htmlcov/
+.cache/
 
 # Environment / secrets
 .env
