@@ -1,0 +1,81 @@
+-- Reference schema for the news intelligence platform.
+--
+-- This file is a human-readable reference only; Alembic migrations under
+-- db/migrations are the source of truth applied to the database.
+--
+-- Stage 1 establishes only the pgvector extension. Business tables (sources,
+-- articles, article_embeddings, events, jobs, llm_runs, ...) are introduced from
+-- Stage 2 onward and will be reflected here as they land.
+
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS postgis;
+
+-- Stage 2 (migration 0002) creates the core pipeline tables and the four canonical
+-- crisis-model tables. The ORM models in db/models/*.py and migration 0002 are the
+-- source of truth; the column contract is documented in
+-- docs/contracts/canonical-schema.md.
+--
+--   Core pipeline:  sources, articles, article_embeddings, events, event_articles,
+--                   llm_runs, jobs
+--   Crisis model:   country_daily_risk_signals, event_risk_features (P4-P5 output
+--                   contract), crisis_predictions, crisis_prediction_evaluations
+--
+-- The crisis-model tables are written by the standalone model (Track M) and are not
+-- wired into the pipeline/API/frontend until the Integration Gate.
+--
+-- Stage 5 (migration 0005) enables PostGIS for location-aware intelligence.
+--
+-- Stage 6 (migration 0006) creates the canonical company master tables:
+--
+--   companies, company_aliases, company_identifiers, securities
+--
+-- These sit on top of entity_profiles and provider identity tables, and are intended
+-- to back company search, company detail pages, ticker/security lookup, logo metadata,
+-- and source-independent company aliases.
+--
+-- Stage 7 (migration 0007) creates ingestion observability tables:
+--
+--   source_health_snapshots, raw_document_assets
+--
+-- These support Admin/source-health APIs, replayable ingestion, and metadata pointers
+-- to bulky raw assets stored in object storage.
+--
+-- Stage 8 (migration 0008) creates evidence and claim tables:
+--
+--   evidence_items, claims, claim_evidence
+--
+-- These provide queryable evidence records and claim-to-evidence traceability for
+-- evidence drawers, cited AI answers, event details, and generated reports.
+--
+-- Stage 9 (migration 0009) creates event intelligence tables:
+--
+--   event_embeddings, event_entities, event_companies, event_industries,
+--   event_timeline_items, event_locations, geocoding_cache
+--
+-- These support event semantic search, affected entity/company/industry exposure,
+-- event timelines, map queries, and deterministic geocoding reuse.
+--
+-- Stage 10 (migration 0010) adds provider provenance columns to normalized provider
+-- domain tables:
+--
+--   schema_version, raw_document_asset_id, retrieved_at
+--
+-- These keep FRED, SEC EDGAR, sanctions, World Bank, ReliefWeb, geospatial, and
+-- energy records traceable to raw assets and schema versions without replacing their
+-- existing natural keys.
+--
+-- Stage 11 (migration 0011) creates risk output tables:
+--
+--   risk_score_observations, company_risk_rollups, industry_risk_rollups,
+--   daily_intelligence_summaries
+--
+-- These back dashboard risk summaries, Risk Radar trends, company/industry detail
+-- rollups, and generated daily intelligence summaries.
+--
+-- Stage 12 (migration 0012) creates application workspace tables:
+--
+--   users, watchlist_items, alert_rules, alerts, reports, report_sections,
+--   saved_searches
+--
+-- These make watchlists, alert rules, alerts, reports, report sections, and saved
+-- searches durable across API restarts and page reloads.

@@ -1,0 +1,451 @@
+[
+  {
+    "id": "evt-semis",
+    "title": "Semiconductor export-control risk rises",
+    "summary": "New reports suggest stricter export controls may affect advanced AI chips and the semiconductor-equipment suppliers that serve affected regions.",
+    "eventType": "Policy · Technology · Supply Chain",
+    "eventTypes": ["Policy", "Technology", "Supply Chain"],
+    "status": "developing",
+    "riskLevel": "high",
+    "hotnessScore": 88,
+    "riskScore": 76,
+    "confidenceScore": 0.72,
+    "crisisRating": {
+      "target_type": "event_cluster",
+      "target_id": "evt-semis",
+      "risk_type": "geopolitical_supply_chain",
+      "as_of_date": "2026-06-05",
+      "probability_0_6m": 0.18,
+      "probability_6_12m": 0.13,
+      "probability_12_18m": 0.07,
+      "probability_within_18m": 0.38,
+      "risk_score": 76,
+      "risk_level": "critical",
+      "confidence_score": 0.72,
+      "model_versions": {
+        "ensemble": "crisis-ensemble.v1",
+        "baseline_probability": "baseline-probability.v1",
+        "news_event_shock": "news-event-shock.v1",
+        "historical_analogy": "historical-analogy.v1",
+        "prediction_builder": "prediction-builder.v1",
+        "critic": "rule-based-critic.v1"
+      },
+      "top_drivers": [
+        { "component": "news_event_shock", "signal": "Official technology-trade review", "score": 84, "evidence_refs": [{ "source_type": "official", "source_id": "ev3" }] },
+        { "component": "market_stress", "signal": "Semiconductor index repricing", "score": 78, "evidence_refs": [{ "source_type": "market_data", "source_id": "ev4" }] },
+        { "component": "historical_analogy", "signal": "2022–2023 export-control tightening", "similarity_score": 0.81, "evidence_refs": [{ "source_type": "historical_case", "source_id": "ev6" }] },
+        { "component": "evidence_strength", "signal": "Official, market, and company-source coverage", "score": 72, "evidence_refs": [{ "source_type": "article", "source_id": "ev1" }, { "source_type": "filing", "source_id": "ev5" }] }
+      ],
+      "evidence_refs": [
+        { "source_type": "article", "source_id": "ev1" },
+        { "source_type": "article", "source_id": "ev2" },
+        { "source_type": "official", "source_id": "ev3" },
+        { "source_type": "market_data", "source_id": "ev4" },
+        { "source_type": "filing", "source_id": "ev5" },
+        { "source_type": "historical_case", "source_id": "ev6" }
+      ],
+      "what_could_escalate": [
+        "Final rule published with narrow exemptions",
+        "Equipment supplier guidance cuts or order cancellations",
+        "Retaliatory controls on critical materials or tooling inputs"
+      ],
+      "what_could_reduce_risk": [
+        "Broad carve-outs for existing contracts and allied supply chains",
+        "Official clarification that the review is preliminary",
+        "Company disclosures showing limited revenue exposure"
+      ]
+    },
+    "affectedIndustries": ["Semiconductors", "Cloud Computing", "AI Infrastructure"],
+    "affectedCompanies": [
+      { "name": "NVIDIA", "ticker": "NVDA", "impactDirection": "negative" },
+      { "name": "AMD", "ticker": "AMD", "impactDirection": "negative" },
+      { "name": "ASML", "ticker": "ASML", "impactDirection": "negative" },
+      { "name": "TSMC", "ticker": "TSM", "impactDirection": "mixed" }
+    ],
+    "locations": ["Washington, D.C.", "Hsinchu", "Veldhoven"],
+    "primaryLocation": "Washington, D.C.",
+    "sourceCount": 18,
+    "articleCount": 31,
+    "firstSeenAt": "2026-06-05T06:10:00-07:00",
+    "lastUpdatedAt": "2026-06-05T08:20:00-07:00",
+    "whyItMatters": "Advanced-chip supply is a strategic chokepoint. Tighter controls reshape revenue exposure for designers and equipment makers and can re-route global cloud procurement.",
+    "overview": {
+      "whatHappened": "Multiple outlets reported that officials are weighing stricter export controls on advanced AI accelerators and the lithography/equipment used to produce them. A preliminary government statement acknowledged an ongoing technology-trade review without confirming specific measures.",
+      "whyItMatters": "Advanced compute is a strategic chokepoint. Controls change addressable demand for designers and equipment suppliers, and can re-route cloud-provider procurement across regions.",
+      "keyActors": ["U.S. Dept. of Commerce", "Major chip designers", "Lithography & equipment suppliers", "Hyperscale cloud buyers"],
+      "affectedIndustries": ["Semiconductors", "Semiconductor Equipment", "Cloud Computing", "AI Infrastructure"],
+      "affectedCompanies": ["NVIDIA", "AMD", "ASML", "Applied Materials", "Lam Research", "TSMC"],
+      "shortTermImplications": ["Headline-driven volatility across the semiconductor complex.", "Equipment names underperform designers on direct order risk."],
+      "mediumTermImplications": ["Possible guidance revisions if license details narrow addressable markets.", "Procurement diversification by cloud buyers to de-risk supply."],
+      "longTermImplications": ["Acceleration of regional fab and tooling localization.", "Structural bifurcation of advanced-compute supply chains."],
+      "keyUncertainties": ["Scope and timing of any final measures.", "Breadth of exemptions for existing contracts.", "Direct revenue exposure by company and region."]
+    },
+    "timeline": [
+      { "id": "t1", "timestamp": "2026-06-05T05:40:00-07:00", "title": "First reports surface", "description": "Major financial media report officials are weighing stricter advanced-chip export curbs.", "sourceIds": ["ev1"], "importance": "high" },
+      { "id": "t2", "timestamp": "2026-06-05T06:20:00-07:00", "title": "Equipment makers slide pre-market", "description": "Chip-equipment suppliers move lower as the story is corroborated by a second outlet.", "sourceIds": ["ev2"], "importance": "high" },
+      { "id": "t3", "timestamp": "2026-06-05T07:10:00-07:00", "title": "Preliminary official statement", "description": "Commerce Dept. acknowledges an ongoing technology-trade review; declines to confirm specifics.", "sourceIds": ["ev3"], "importance": "medium" },
+      { "id": "t4", "timestamp": "2026-06-05T08:05:00-07:00", "title": "Sector index opens −2.8%", "description": "The semiconductor index opens sharply lower; equipment names lead the decline.", "sourceIds": ["ev4"], "importance": "medium" }
+    ],
+    "relatedIndustries": [
+      {
+        "industryId": "semi-equip", "name": "Semiconductor Equipment", "impactDirection": "negative", "impactScore": 84, "riskScore": 78, "opportunityScore": 14,
+        "impactPathway": "New export restrictions may reduce addressable demand for advanced lithography and deposition/etch equipment suppliers serving affected regions.",
+        "relatedCompanies": [
+          { "companyId": "asml", "name": "ASML", "ticker": "ASML" },
+          { "companyId": "amat", "name": "Applied Materials", "ticker": "AMAT" },
+          { "companyId": "lrcx", "name": "Lam Research", "ticker": "LRCX" }
+        ],
+        "historicalSensitivity": "High — equipment names showed the largest drawdowns during the 2022–2023 control cycle.",
+        "keyIndicators": ["Export-license announcements", "Company guidance updates", "Order-backlog changes", "Government exemptions"],
+        "confidenceScore": 0.7
+      },
+      {
+        "industryId": "ai-infra", "name": "AI Infrastructure", "impactDirection": "mixed", "impactScore": 58, "riskScore": 41, "opportunityScore": 63,
+        "impactPathway": "Supply constraints could tighten accelerator availability, supporting pricing for incumbents while raising procurement risk for buyers.",
+        "relatedCompanies": [
+          { "companyId": "nvda", "name": "NVIDIA", "ticker": "NVDA" },
+          { "companyId": "avgo", "name": "Broadcom", "ticker": "AVGO" }
+        ],
+        "historicalSensitivity": "Medium — demand resilience partly offset prior supply shocks.",
+        "keyIndicators": ["Hyperscaler capex guidance", "Accelerator lead times", "Custom-silicon roadmaps"],
+        "confidenceScore": 0.6
+      }
+    ],
+    "relatedCompanies": [
+      {
+        "companyId": "nvda", "name": "NVIDIA", "ticker": "NVDA", "exchange": "NASDAQ", "industry": "Semiconductors", "impactDirection": "negative", "impactScore": 82, "riskScore": 76,
+        "exposureExplanation": "Advanced AI-accelerator export restrictions may affect revenue exposure in specific international markets and could change cloud-provider procurement plans.",
+        "evidenceSourceIds": ["ev1", "ev4", "ev5"], "relatedHistoricalCaseIds": ["ev6"],
+        "monitoringIndicators": ["Management commentary", "Export-license details", "Cloud capex guidance", "Data-center GPU demand"], "confidenceScore": 0.72
+      },
+      {
+        "companyId": "asml", "name": "ASML", "ticker": "ASML", "exchange": "AMS", "industry": "Semiconductors", "impactDirection": "negative", "impactScore": 79, "riskScore": 72,
+        "exposureExplanation": "As the sole supplier of advanced EUV lithography, ASML faces direct addressable-market risk if equipment to affected regions is curtailed.",
+        "evidenceSourceIds": ["ev2", "ev3"], "relatedHistoricalCaseIds": ["ev6"],
+        "monitoringIndicators": ["Order intake by region", "License clarifications", "Backlog adjustments"], "confidenceScore": 0.69
+      },
+      {
+        "companyId": "tsm", "name": "TSMC", "ticker": "TSM", "exchange": "TPE", "industry": "Semiconductors", "impactDirection": "mixed", "impactScore": 68, "riskScore": 61,
+        "exposureExplanation": "As a foundry, exposure is indirect: customer demand mix and tooling access matter more than direct sales restrictions.",
+        "evidenceSourceIds": ["ev2", "ev4"], "relatedHistoricalCaseIds": ["ev6"],
+        "monitoringIndicators": ["Utilization rates", "Advanced-node demand", "Customer concentration"], "confidenceScore": 0.6
+      }
+    ],
+    "historicalAnalogies": [
+      {
+        "historicalEventId": "h-2022ec", "title": "2022–2023 export-control tightening", "startDate": "2022-10-01", "endDate": "2023-06-30", "similarityScore": 0.81,
+        "similarities": ["Advanced-compute focus", "Equipment makers most exposed", "Headline-driven volatility", "Phased rollout of measures"],
+        "differences": ["Market is better positioned for the news", "Companies have diversified some revenue", "Faster corporate communication this cycle"],
+        "historicalOutcome": "Initial sharp drawdowns in equipment names were partly recovered as exemptions and demand resilience became clear over subsequent quarters.",
+        "lessonsForCurrentEvent": ["Distinguish headline risk from realized revenue impact", "Watch the exemption language closely", "Equipment beta exceeds designer beta"],
+        "analogyLimitations": ["Scope of any new measures is unknown", "Demand backdrop differs from 2022"], "sourceIds": ["ev6"]
+      }
+    ],
+    "forecastScenarios": [
+      {
+        "id": "f1", "name": "base_case", "probability": 0.55, "timeHorizon": "1–4 weeks", "confidenceScore": 0.68, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Policy discussion continues but implementation detail stays limited. Related companies carry headline risk, yet immediate operational disruption is contained.",
+        "triggers": ["Official policy statement", "Company guidance update", "Export-license clarification"],
+        "leadingIndicators": ["Frequency of official commentary", "Sector option-implied volatility"],
+        "expectedImpact": { "industries": ["Semiconductors", "Semiconductor Equipment"], "companies": ["ASML", "Applied Materials"], "market": ["Elevated sector volatility"] },
+        "invalidationSignals": ["Government denial", "Broad exemptions", "Strong company commentary indicating limited exposure"]
+      },
+      {
+        "id": "f2", "name": "downside_case", "probability": 0.25, "timeHorizon": "2–8 weeks", "confidenceScore": 0.55, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Formal measures are announced with narrow exemptions, prompting guidance revisions among equipment suppliers and a re-rating across the complex.",
+        "triggers": ["Final rule publication", "Guidance cut from an equipment maker"],
+        "leadingIndicators": ["Draft-rule leaks", "Order-cancellation reports"],
+        "expectedImpact": { "industries": ["Semiconductor Equipment", "Cloud Computing"], "companies": ["ASML", "Lam Research", "NVIDIA"], "market": ["Sector drawdown"] },
+        "invalidationSignals": ["Phase-in periods", "Grandfathering of existing orders"]
+      },
+      {
+        "id": "f3", "name": "upside_case", "probability": 0.15, "timeHorizon": "1–3 weeks", "confidenceScore": 0.5, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Officials clarify a narrow scope with generous exemptions; the complex recovers as realized exposure proves limited.",
+        "triggers": ["Clarifying statement", "Reassuring company commentary"],
+        "leadingIndicators": ["Tone of official briefings"],
+        "expectedImpact": { "industries": ["Semiconductors"], "companies": ["NVIDIA", "ASML"], "market": ["Relief rally"] },
+        "invalidationSignals": ["Escalatory rhetoric", "Additional outlets reporting broader scope"]
+      },
+      {
+        "id": "f4", "name": "tail_risk_case", "probability": 0.05, "timeHorizon": "1–2 quarters", "confidenceScore": 0.4, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Measures broaden into retaliation, disrupting materials and tooling flows and forcing structural supply-chain realignment.",
+        "triggers": ["Retaliatory measures", "Critical-materials restrictions"],
+        "leadingIndicators": ["Diplomatic breakdown", "Materials export curbs"],
+        "expectedImpact": { "industries": ["Semiconductors", "Commodities", "Transportation"], "companies": ["ASML", "TSMC"], "macro": ["Growth drag"], "market": ["Broad risk-off"] },
+        "invalidationSignals": ["De-escalation", "Negotiated carve-outs"]
+      }
+    ],
+    "evidenceSourceIds": ["ev1", "ev2", "ev3", "ev4", "ev5", "ev6"],
+    "claimMap": [
+      { "claim": "Officials are weighing stricter export controls.", "evidenceIds": ["ev1", "ev3"] },
+      { "claim": "Equipment suppliers are most directly exposed.", "evidenceIds": ["ev2"] },
+      { "claim": "The sector repriced lower on the news.", "evidenceIds": ["ev2", "ev4"] },
+      { "claim": "NVIDIA carries geographic revenue concentration.", "evidenceIds": ["ev5"] },
+      { "claim": "A 2022–2023 analogy informs the impact path.", "evidenceIds": ["ev6"] }
+    ],
+    "modelDebate": {
+      "consensusPoints": ["The event is likely to create short-term sector volatility.", "Equipment suppliers carry more direct exposure than designers.", "Realized revenue impact depends heavily on exemption language."],
+      "disagreementPoints": ["Two models see regulatory escalation as a material downside risk; one argues it is overstated given limited policy detail.", "Models diverge on whether demand resilience offsets supply restrictions."],
+      "criticNotes": ["Evidence is still early-stage and partly anonymous-sourced.", "Direct company revenue exposure is not yet confirmed.", "Historical analogies may overstate systemic risk."],
+      "modelVotes": [
+        { "modelName": "Analyst-Pro", "riskLevel": "high", "probabilityEstimate": 0.62, "summary": "Direct equipment exposure justifies an elevated near-term risk read." },
+        { "modelName": "Macro-Synth", "riskLevel": "high", "probabilityEstimate": 0.58, "summary": "Policy-momentum signals point to escalation risk over a multi-week window." },
+        { "modelName": "Contrarian-1", "riskLevel": "medium", "probabilityEstimate": 0.4, "summary": "Absent confirmed measures, headline risk likely exceeds realized impact." },
+        { "modelName": "Critic-X", "riskLevel": "medium", "probabilityEstimate": 0.45, "summary": "Evidence quality caps confidence; flags over-reliance on the 2022 analogy." }
+      ]
+    }
+  },
+  {
+    "id": "evt-banking",
+    "title": "Regional banking stress stays contained but news velocity climbs",
+    "summary": "Deposit-concentration scrutiny returns to several regional lenders. Price action is muted, but the rate of related coverage is accelerating faster than markets.",
+    "eventType": "Financial · Banking",
+    "eventTypes": ["Financial", "Banking"],
+    "status": "developing",
+    "riskLevel": "high",
+    "hotnessScore": 74,
+    "riskScore": 71,
+    "confidenceScore": 0.59,
+    "crisisRating": {
+      "target_type": "event_cluster",
+      "target_id": "evt-banking",
+      "risk_type": "banking",
+      "as_of_date": "2026-06-05",
+      "probability_0_6m": 0.16,
+      "probability_6_12m": 0.09,
+      "probability_12_18m": 0.04,
+      "probability_within_18m": 0.29,
+      "risk_score": 71,
+      "risk_level": "high",
+      "confidence_score": 0.59,
+      "model_versions": {
+        "ensemble": "crisis-ensemble.v1",
+        "baseline_probability": "baseline-probability.v1",
+        "news_event_shock": "news-event-shock.v1",
+        "historical_analogy": "historical-analogy.v1",
+        "prediction_builder": "prediction-builder.v1",
+        "critic": "rule-based-critic.v1"
+      },
+      "top_drivers": [
+        { "component": "news_event_shock", "signal": "Regional-bank coverage velocity", "score": 79, "evidence_refs": [{ "source_type": "macro_indicator", "source_id": "ev7" }] },
+        { "component": "baseline_probability", "signal": "Deposit concentration and unrealized-loss exposure", "score": 71, "evidence_refs": [] },
+        { "component": "historical_analogy", "signal": "2023 regional-bank liquidity crisis", "similarity_score": 0.83, "evidence_refs": [] },
+        { "component": "critic", "signal": "No acute funding trigger observed", "score": 41, "evidence_refs": [] }
+      ],
+      "evidence_refs": [
+        { "source_type": "macro_indicator", "source_id": "ev7" }
+      ],
+      "what_could_escalate": [
+        "Disclosed deposit outflows at a named institution",
+        "Wholesale funding spreads widen across regional peers",
+        "Ratings action that forces balance-sheet de-risking"
+      ],
+      "what_could_reduce_risk": [
+        "Stable or improving daily deposit-flow disclosures",
+        "Regulatory liquidity backstop communication",
+        "Coverage velocity normalizes without price or funding stress"
+      ]
+    },
+    "affectedIndustries": ["Banking", "Insurance", "Real Estate"],
+    "affectedCompanies": [
+      { "name": "Western Alliance", "ticker": "WAL", "impactDirection": "negative" },
+      { "name": "Comerica", "ticker": "CMA", "impactDirection": "negative" }
+    ],
+    "locations": ["Phoenix", "Dallas", "New York"],
+    "primaryLocation": "New York",
+    "sourceCount": 12,
+    "articleCount": 19,
+    "firstSeenAt": "2026-06-05T04:50:00-07:00",
+    "lastUpdatedAt": "2026-06-05T08:00:00-07:00",
+    "whyItMatters": "Regional-bank stress is confidence-driven and can spread quickly. Rising news velocity ahead of price is a classic early-warning pattern worth monitoring.",
+    "overview": {
+      "whatHappened": "Coverage of deposit-concentration and unrealized-loss exposure at several regional lenders picked up sharply overnight, without a single acute trigger. Equity and funding markets are so far calm.",
+      "whyItMatters": "Regional-bank stress is reflexive: confidence and liquidity reinforce one another. News velocity rising ahead of price is a recognized early-warning configuration.",
+      "keyActors": ["Regional lenders", "Depositors", "Banking regulators", "Ratings agencies"],
+      "affectedIndustries": ["Banking", "Insurance", "Real Estate"],
+      "affectedCompanies": ["Western Alliance", "Comerica", "Regional peers"],
+      "shortTermImplications": ["Heightened sensitivity to deposit-flow headlines.", "Funding-spread monitoring intensifies."],
+      "mediumTermImplications": ["Potential precautionary liquidity actions.", "Renewed scrutiny of held-to-maturity portfolios."],
+      "longTermImplications": ["Possible structural deposit-base diversification.", "Regulatory framework refinement."],
+      "keyUncertainties": ["Whether any single institution faces an acute trigger.", "Speed of any regulatory response.", "Deposit-base stickiness under stress."]
+    },
+    "timeline": [
+      { "id": "t1", "timestamp": "2026-06-05T04:50:00-07:00", "title": "Coverage picks up overnight", "description": "Several outlets revisit regional deposit-concentration and unrealized-loss exposure.", "sourceIds": [], "importance": "medium" },
+      { "id": "t2", "timestamp": "2026-06-05T06:30:00-07:00", "title": "Funding spreads steady", "description": "Wholesale funding markets show little movement; equity premarket muted.", "sourceIds": [], "importance": "low" },
+      { "id": "t3", "timestamp": "2026-06-05T08:00:00-07:00", "title": "News-velocity flag triggers", "description": "Coverage rate crosses an internal threshold relative to the trailing baseline.", "sourceIds": [], "importance": "high" }
+    ],
+    "relatedIndustries": [
+      {
+        "industryId": "banking", "name": "Banking", "impactDirection": "negative", "impactScore": 69, "riskScore": 71, "opportunityScore": 16,
+        "impactPathway": "Confidence-sensitive deposit bases can trigger liquidity stress that propagates across peers with similar profiles.",
+        "relatedCompanies": [
+          { "companyId": "wal", "name": "Western Alliance", "ticker": "WAL" },
+          { "companyId": "cma", "name": "Comerica", "ticker": "CMA" }
+        ],
+        "historicalSensitivity": "High — 2023 episode showed rapid confidence-driven contagion.",
+        "keyIndicators": ["Deposit flows", "Funding spreads", "Held-to-maturity marks", "Ratings actions"],
+        "confidenceScore": 0.58
+      }
+    ],
+    "relatedCompanies": [
+      {
+        "companyId": "wal", "name": "Western Alliance", "ticker": "WAL", "exchange": "NYSE", "industry": "Banking", "impactDirection": "negative", "impactScore": 67, "riskScore": 70,
+        "exposureExplanation": "Elevated deposit concentration and a sizeable held-to-maturity book leave the franchise sensitive to confidence shocks.",
+        "evidenceSourceIds": [], "relatedHistoricalCaseIds": ["h-svb"],
+        "monitoringIndicators": ["Deposit flows", "Insured-deposit ratio", "Funding mix", "Bond-portfolio marks"], "confidenceScore": 0.57
+      },
+      {
+        "companyId": "cma", "name": "Comerica", "ticker": "CMA", "exchange": "NYSE", "industry": "Banking", "impactDirection": "negative", "impactScore": 59, "riskScore": 64,
+        "exposureExplanation": "Commercial deposit concentration and unrealized securities losses are the primary channels of sensitivity.",
+        "evidenceSourceIds": [], "relatedHistoricalCaseIds": ["h-svb"],
+        "monitoringIndicators": ["Commercial deposit trends", "Net interest margin", "Securities marks"], "confidenceScore": 0.55
+      }
+    ],
+    "historicalAnalogies": [
+      {
+        "historicalEventId": "h-svb", "title": "2023 regional-bank liquidity crisis", "startDate": "2023-03-08", "endDate": "2023-05-01", "similarityScore": 0.83,
+        "similarities": ["Deposit-concentration risk", "Interest-rate pressure", "Unrealized bond losses", "Confidence-driven liquidity stress"],
+        "differences": ["Faster expected regulatory response", "Market more sensitive to early-warning signs", "Different asset-liability profiles"],
+        "historicalOutcome": "Liquidity stress spread quickly across several regional banks before policy intervention reduced systemic contagion.",
+        "lessonsForCurrentEvent": ["Monitor deposit flows over price", "Watch insured-deposit ratios", "Confidence dynamics dominate fundamentals short-term"],
+        "analogyLimitations": ["Current banks may hold stronger liquidity buffers", "Deposit bases may be more diversified now"], "sourceIds": []
+      }
+    ],
+    "forecastScenarios": [
+      {
+        "id": "f1", "name": "base_case", "probability": 0.62, "timeHorizon": "1–3 weeks", "confidenceScore": 0.6, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Coverage stays elevated but funding and deposit metrics hold. Stress remains contained to sentiment without an acute liquidity event.",
+        "triggers": ["Stable deposit reports", "Calm funding markets"], "leadingIndicators": ["Daily deposit-flow proxies", "Funding spreads"],
+        "expectedImpact": { "industries": ["Banking"], "companies": ["Western Alliance", "Comerica"], "market": ["Idiosyncratic moves"] },
+        "invalidationSignals": ["Accelerating deposit outflows", "Funding-spread widening"]
+      },
+      {
+        "id": "f2", "name": "downside_case", "probability": 0.23, "timeHorizon": "1–4 weeks", "confidenceScore": 0.5, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "A single institution shows visible outflows, reviving contagion fears and pressuring peers with similar profiles.",
+        "triggers": ["Disclosed outflows", "Ratings action"], "leadingIndicators": ["Branch/online withdrawal proxies"],
+        "expectedImpact": { "industries": ["Banking", "Real Estate"], "companies": ["Western Alliance"], "market": ["Regional-bank drawdown"] },
+        "invalidationSignals": ["Liquidity backstop", "Stabilizing deposits"]
+      },
+      {
+        "id": "f3", "name": "upside_case", "probability": 0.12, "timeHorizon": "1–2 weeks", "confidenceScore": 0.45, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Reassuring deposit data and proactive communication quiet the coverage; sentiment normalizes.",
+        "triggers": ["Strong deposit updates"], "leadingIndicators": ["Coverage rate decline"],
+        "expectedImpact": { "industries": ["Banking"], "companies": ["Comerica"], "market": ["Relief"] },
+        "invalidationSignals": ["Renewed outflow reports"]
+      },
+      {
+        "id": "f4", "name": "tail_risk_case", "probability": 0.03, "timeHorizon": "2–6 weeks", "confidenceScore": 0.35, "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+        "narrative": "Confidence shock cascades across multiple regionals before intervention, echoing the 2023 episode.",
+        "triggers": ["Multi-bank outflows"], "leadingIndicators": ["System-wide funding stress"],
+        "expectedImpact": { "industries": ["Banking", "Real Estate", "Insurance"], "companies": ["Western Alliance", "Comerica"], "macro": ["Credit tightening"], "market": ["Risk-off"] },
+        "invalidationSignals": ["Coordinated backstop", "Deposit stabilization"]
+      }
+    ],
+    "evidenceSourceIds": ["ev7"],
+    "claimMap": [
+      { "claim": "News velocity is rising ahead of price.", "evidenceIds": ["ev7"] },
+      { "claim": "Deposit concentration is the primary channel.", "evidenceIds": [] }
+    ],
+    "modelDebate": {
+      "consensusPoints": ["Stress is currently sentiment-led, not funding-led.", "News velocity is a leading signal worth monitoring."],
+      "disagreementPoints": ["Models diverge on contagion probability if one institution shows outflows."],
+      "criticNotes": ["No acute trigger identified.", "Deposit-flow data is lagged and proxy-based."],
+      "modelVotes": [
+        { "modelName": "Analyst-Pro", "riskLevel": "medium", "probabilityEstimate": 0.4, "summary": "Contained for now; velocity flag warrants attention." },
+        { "modelName": "Macro-Synth", "riskLevel": "high", "probabilityEstimate": 0.5, "summary": "Reflexive dynamics raise tail risk if a trigger emerges." },
+        { "modelName": "Contrarian-1", "riskLevel": "low", "probabilityEstimate": 0.25, "summary": "Stronger buffers than 2023 limit systemic read." },
+        { "modelName": "Critic-X", "riskLevel": "medium", "probabilityEstimate": 0.38, "summary": "Proxy data caps confidence; avoid over-extrapolation." }
+      ]
+    }
+  },
+  {
+    "id": "evt-energy",
+    "title": "Energy markets reprice on Gulf shipping escalation",
+    "summary": "Fresh geopolitical escalation along a key shipping lane lifts crude and freight-cost expectations; refiners and majors diverge.",
+    "eventType": "Geopolitical · Energy",
+    "eventTypes": ["Geopolitical", "Energy"],
+    "status": "developing",
+    "riskLevel": "high",
+    "hotnessScore": 81,
+    "riskScore": 68,
+    "confidenceScore": 0.66,
+    "affectedIndustries": ["Energy", "Transportation", "Defense", "Commodities"],
+    "affectedCompanies": [
+      { "name": "ExxonMobil", "ticker": "XOM", "impactDirection": "positive" },
+      { "name": "Lockheed Martin", "ticker": "LMT", "impactDirection": "positive" }
+    ],
+    "locations": ["Strait of Hormuz", "London", "Houston"],
+    "primaryLocation": "Strait of Hormuz",
+    "sourceCount": 15,
+    "articleCount": 24,
+    "firstSeenAt": "2026-06-05T03:20:00-07:00",
+    "lastUpdatedAt": "2026-06-05T08:10:00-07:00",
+    "whyItMatters": "Shipping-lane risk transmits directly to energy prices, freight costs, and inflation expectations across multiple sectors."
+  },
+  {
+    "id": "evt-aiinfra",
+    "title": "AI-infrastructure demand signals stay positive into Q3",
+    "summary": "Hyperscaler capex commentary and custom-silicon order flow point to durable AI-infrastructure demand despite supply-side headline risk.",
+    "eventType": "Technology · Demand",
+    "eventTypes": ["Technology", "Demand"],
+    "status": "updated",
+    "riskLevel": "low",
+    "hotnessScore": 69,
+    "riskScore": 34,
+    "confidenceScore": 0.7,
+    "affectedIndustries": ["AI Infrastructure", "Cloud Computing", "Semiconductors"],
+    "affectedCompanies": [
+      { "name": "Microsoft", "ticker": "MSFT", "impactDirection": "positive" },
+      { "name": "Broadcom", "ticker": "AVGO", "impactDirection": "positive" }
+    ],
+    "locations": ["Redmond", "San Jose"],
+    "primaryLocation": "San Jose",
+    "sourceCount": 11,
+    "articleCount": 16,
+    "firstSeenAt": "2026-06-04T22:10:00-07:00",
+    "lastUpdatedAt": "2026-06-05T07:50:00-07:00",
+    "whyItMatters": "A positive demand signal diverging from supply-side risk is unusual and informs how to weight the semiconductor export-control story."
+  },
+  {
+    "id": "evt-recession",
+    "title": "Recession-risk monitors steady ahead of Friday labor data",
+    "summary": "Recession-model inputs are mixed-to-stable; Friday's labor release is the key swing factor for the medium-term macro read.",
+    "eventType": "Macro · Labor",
+    "eventTypes": ["Macro", "Labor"],
+    "status": "new",
+    "riskLevel": "medium",
+    "hotnessScore": 58,
+    "riskScore": 62,
+    "confidenceScore": 0.64,
+    "affectedIndustries": ["Consumer Discretionary", "Banking", "Real Estate"],
+    "affectedCompanies": [],
+    "locations": ["Washington, D.C."],
+    "primaryLocation": "Washington, D.C.",
+    "sourceCount": 8,
+    "articleCount": 10,
+    "firstSeenAt": "2026-06-05T05:30:00-07:00",
+    "lastUpdatedAt": "2026-06-05T07:30:00-07:00",
+    "whyItMatters": "Labor-market softening is the single most important input to the 12-month recession-probability estimate."
+  },
+  {
+    "id": "evt-merger",
+    "title": "Cross-border tech merger faces regulatory deadline",
+    "summary": "A pending technology merger approaches a regulatory decision window, with antitrust commentary intensifying.",
+    "eventType": "Policy · M&A",
+    "eventTypes": ["Policy", "M&A"],
+    "status": "developing",
+    "riskLevel": "medium",
+    "hotnessScore": 51,
+    "riskScore": 49,
+    "confidenceScore": 0.57,
+    "affectedIndustries": ["Technology", "Cloud Computing"],
+    "affectedCompanies": [],
+    "locations": ["Brussels", "Washington, D.C."],
+    "primaryLocation": "Brussels",
+    "sourceCount": 7,
+    "articleCount": 9,
+    "firstSeenAt": "2026-06-04T12:00:00-07:00",
+    "lastUpdatedAt": "2026-06-05T06:40:00-07:00",
+    "whyItMatters": "The decision sets a precedent for cross-border technology consolidation and platform competition policy."
+  }
+]

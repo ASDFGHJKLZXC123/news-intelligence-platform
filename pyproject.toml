@@ -1,0 +1,27 @@
+[project]
+name = "news-intelligence-platform"
+version = "0.1.0"
+description = "Backend-first AI news intelligence platform (Stage 1 foundation)"
+requires-python = ">=3.11"
+# Runtime/dev dependencies are pinned in requirements.txt / requirements-dev.txt to
+# keep container builds reproducible. This file owns project metadata and tooling.
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["frontend"]
+
+[tool.ruff.lint]
+# Sensible default rule set: pyflakes, pycodestyle, isort, bugbear, pyupgrade.
+select = ["E", "F", "I", "B", "UP", "W"]
+ignore = ["E501"]  # line-length handled by the formatter, not the linter
+
+[tool.pytest.ini_options]
+# Run from the repo root so the modular-monolith packages import as top-level names
+# (apps.*, packages.*, workers.*, db.*).
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "integration: tests that require a live PostgreSQL/Redis (skipped without one)",
+]

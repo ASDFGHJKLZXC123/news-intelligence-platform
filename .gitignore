@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment / secrets
+.env
+
+# OS
+.DS_Store
+
+# Local planning and implementation documentation (intentionally not published)
+/docs/
+/BUILDING_PLAN.md
+/backend_platform_building_plan.md
+/build.md
+/frontend/uploads/frontend_building_plan.md
+/incomplete.md

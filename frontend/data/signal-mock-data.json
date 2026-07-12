@@ -1,0 +1,725 @@
+{
+  "_comment": "SIGNAL mock dataset. Every collection conforms to the TypeScript schema in app/types.ts (mirrors the building plan). Same content previously hard-coded in app/data.js. Derived lookups (eventsById, evidenceById) and the synthetic risk trend series are rebuilt by app/data.js at load time.",
+  "meta": {
+    "now": "2026-06-05T08:30:00-07:00"
+  },
+  "dashboard": {
+    "dailySummary": {
+      "date": "2026-06-05",
+      "lastUpdatedAt": "2026-06-05T08:30:00-07:00",
+      "overallRiskLevel": "high",
+      "confidenceScore": 0.71,
+      "modelRating": {
+        "target_type": "global_posture",
+        "target_id": "SIGNAL-GLOBAL",
+        "risk_type": "composite",
+        "as_of_date": "2026-06-05",
+        "probability_0_6m": 0.18,
+        "probability_6_12m": 0.14,
+        "probability_12_18m": 0.08,
+        "probability_within_18m": 0.40,
+        "risk_score": 72,
+        "risk_level": "high",
+        "confidence_score": 0.71,
+        "model_versions": {
+          "ensemble": "crisis-ensemble.v1",
+          "news_event_shock": "news-event-shock.v1",
+          "historical_analogy": "historical-analogy.v1",
+          "prediction_builder": "prediction-builder.v1"
+        },
+        "top_drivers": [
+          { "component": "news_event_shock", "signal": "Policy and geopolitical news velocity", "score": 82, "evidence_refs": [{ "source_type": "official", "source_id": "ev3" }] },
+          { "component": "market_stress", "signal": "Semiconductor and energy repricing", "score": 76, "evidence_refs": [{ "source_type": "market_data", "source_id": "ev4" }] },
+          { "component": "baseline_probability", "signal": "Labor-market and credit indicators", "score": 58, "evidence_refs": [{ "source_type": "macro_indicator", "source_id": "ev7" }] }
+        ],
+        "evidence_refs": [
+          { "source_type": "official", "source_id": "ev3" },
+          { "source_type": "market_data", "source_id": "ev4" },
+          { "source_type": "macro_indicator", "source_id": "ev7" }
+        ],
+        "what_could_escalate": [
+          "Formal export-control rule with narrow exemptions",
+          "Gulf shipping disruption that lifts energy prices further",
+          "Deposit-flow deterioration in regional banking data"
+        ],
+        "what_could_reduce_risk": [
+          "Official clarification that technology measures are narrow",
+          "Stable regional-bank deposit and funding data",
+          "Labor data consistent with gradual cooling rather than recession"
+        ]
+      },
+      "summary": "Markets opened to a tightening policy backdrop. Semiconductor export-control chatter is the dominant signal of the day, with secondary stress building quietly in regional banking. Energy is repricing on geopolitical headlines, while AI-infrastructure demand signals stay firmly positive — a rare divergence worth watching.",
+      "keyPoints": [
+        "Semiconductor export-control risk increased after new policy reports surfaced overnight.",
+        "Regional banking stress remains contained, but news velocity is rising faster than price.",
+        "Energy markets are reacting to fresh geopolitical escalation in the Gulf.",
+        "AI-infrastructure companies are seeing positive demand signals into Q3.",
+        "Recession risk remains medium, with Friday's labor data the key monitor."
+      ]
+    },
+    "metrics": [
+      { "label": "Top Events Today", "value": 42, "previousValue": 38, "change": 4, "changeDirection": "up", "severity": "medium" },
+      { "label": "High-Risk Events", "value": 7, "previousValue": 4, "change": 3, "changeDirection": "up", "severity": "high" },
+      { "label": "Industries Affected", "value": 11, "previousValue": 9, "change": 2, "changeDirection": "up", "severity": "medium" },
+      { "label": "Companies Affected", "value": 126, "previousValue": 118, "change": 8, "changeDirection": "up", "severity": "medium" },
+      { "label": "New Alerts", "value": 9, "previousValue": 5, "change": 4, "changeDirection": "up", "severity": "high" },
+      { "label": "Overall Risk", "value": "High", "severity": "high", "change": 6, "changeDirection": "up", "previousValue": "Medium" }
+    ],
+    "upcomingTriggers": [
+      { "id": "ut1", "title": "Labor-market data release", "expectedAt": "2026-06-06T05:30:00-07:00", "relatedEventId": "evt-recession", "importance": "high", "reason": "Single most important input to the 12-month recession-probability estimate." },
+      { "id": "ut2", "title": "Export-control details expected", "expectedAt": "2026-06-08T00:00:00-07:00", "relatedEventId": "evt-semis", "importance": "critical", "reason": "Scope and exemptions will determine realized vs. headline impact for the semiconductor complex." },
+      { "id": "ut3", "title": "Central-bank policy announcement", "expectedAt": "2026-06-12T06:00:00-07:00", "importance": "high", "reason": "Rate path drives financial-stress and recession-risk reads." },
+      { "id": "ut4", "title": "Major regional-bank earnings", "expectedAt": "2026-06-15T13:00:00-07:00", "relatedEventId": "evt-banking", "importance": "medium", "reason": "First fundamental read on deposit trends since velocity flag." },
+      { "id": "ut5", "title": "Merger regulatory deadline", "expectedAt": "2026-06-18T09:00:00-07:00", "relatedEventId": "evt-merger", "importance": "medium", "reason": "Sets precedent for cross-border technology consolidation." }
+    ],
+    "eventMap": [
+      { "locationName": "Washington, D.C.", "latitude": 38.9, "longitude": -77, "x": 0.27, "y": 0.4, "eventCount": 6, "maxRiskScore": 76, "dominantEventType": "Policy", "relatedEventIds": ["evt-semis", "evt-recession", "evt-merger"] },
+      { "locationName": "Strait of Hormuz", "latitude": 26.6, "longitude": 56.5, "x": 0.63, "y": 0.46, "eventCount": 4, "maxRiskScore": 78, "dominantEventType": "Geopolitical", "relatedEventIds": ["evt-energy"] },
+      { "locationName": "Hsinchu / Taipei", "latitude": 24.8, "longitude": 121, "x": 0.82, "y": 0.48, "eventCount": 5, "maxRiskScore": 61, "dominantEventType": "Supply Chain", "relatedEventIds": ["evt-semis"] },
+      { "locationName": "New York", "latitude": 40.7, "longitude": -74, "x": 0.29, "y": 0.39, "eventCount": 5, "maxRiskScore": 71, "dominantEventType": "Financial", "relatedEventIds": ["evt-banking"] },
+      { "locationName": "Veldhoven", "latitude": 51.4, "longitude": 5.4, "x": 0.49, "y": 0.33, "eventCount": 3, "maxRiskScore": 72, "dominantEventType": "Technology", "relatedEventIds": ["evt-semis"] },
+      { "locationName": "Brussels", "latitude": 50.8, "longitude": 4.4, "x": 0.48, "y": 0.34, "eventCount": 2, "maxRiskScore": 49, "dominantEventType": "Policy", "relatedEventIds": ["evt-merger"] },
+      { "locationName": "San Jose", "latitude": 37.3, "longitude": -121.9, "x": 0.16, "y": 0.42, "eventCount": 4, "maxRiskScore": 34, "dominantEventType": "Technology", "relatedEventIds": ["evt-aiinfra"] }
+    ]
+  },
+  "risk": {
+    "riskRadar": [
+      { "riskType": "Macro Risk", "score": 58, "level": "medium", "change24h": 2, "change7d": 5, "topDriver": "Labor-market softening", "confidenceScore": 0.64 },
+      { "riskType": "Financial Stress", "score": 41, "level": "medium", "change24h": 6, "change7d": 9, "topDriver": "Regional deposit outflows", "confidenceScore": 0.59 },
+      { "riskType": "Geopolitical Risk", "score": 78, "level": "high", "change24h": 8, "change7d": 14, "topDriver": "Gulf shipping escalation", "confidenceScore": 0.7 },
+      { "riskType": "Supply Chain Risk", "score": 64, "level": "medium", "change24h": 5, "change7d": 7, "topDriver": "Export-control proposals", "confidenceScore": 0.66 },
+      { "riskType": "Policy / Regulatory", "score": 72, "level": "high", "change24h": 9, "change7d": 12, "topDriver": "Advanced-chip export rules", "confidenceScore": 0.68 },
+      { "riskType": "Industry Shock", "score": 55, "level": "medium", "change24h": 3, "change7d": 4, "topDriver": "Semiconductor repricing", "confidenceScore": 0.61 },
+      { "riskType": "Company Crisis", "score": 33, "level": "low", "change24h": -2, "change7d": 1, "topDriver": "Isolated guidance cuts", "confidenceScore": 0.55 }
+    ],
+    "riskDetails": {
+      "Macro Risk": {
+        "riskType": "Macro Risk",
+        "score": 58,
+        "severity": "medium",
+        "probabilityByHorizon": [
+          { "horizon": "3 months", "probability": 0.12 },
+          { "horizon": "6 months", "probability": 0.2 },
+          { "horizon": "12 months", "probability": 0.28 }
+        ],
+        "mainDrivers": [
+          "Labor-market softening",
+          "Yield-curve recession model remains elevated",
+          "Credit spreads widening moderately",
+          "Recession-related news velocity increasing"
+        ],
+        "signals": [
+          { "name": "Sahm Rule", "value": "Neutral", "status": "neutral", "explanation": "Trigger threshold not breached; trend bears watching.", "source": "BLS", "lastUpdatedAt": "2026-06-04T05:30:00-07:00" },
+          { "name": "Yield-Curve Model", "value": "Elevated", "status": "warning", "explanation": "Inversion-implied probability remains above neutral.", "source": "Treasury", "lastUpdatedAt": "2026-06-05T06:00:00-07:00" },
+          { "name": "Initial Jobless Claims", "value": "Watch", "status": "watch", "explanation": "4-week average ticking higher off a low base.", "source": "BLS", "lastUpdatedAt": "2026-06-04T05:30:00-07:00" },
+          { "name": "PMI (Composite)", "value": "49.4", "status": "watch", "explanation": "Just below the expansion threshold; mildly negative.", "source": "S&P Global", "lastUpdatedAt": "2026-06-02T06:00:00-07:00" },
+          { "name": "Credit Spreads", "value": "Widening", "status": "watch", "explanation": "Investment-grade spreads up modestly week-over-week.", "source": "Market Data", "lastUpdatedAt": "2026-06-05T08:00:00-07:00" },
+          { "name": "Financial Stress Index", "value": "Low–Med", "status": "neutral", "explanation": "Composite stress remains below stressed thresholds.", "source": "Fed", "lastUpdatedAt": "2026-06-04T16:00:00-07:00" }
+        ],
+        "historicalComparisons": [
+          "Mid-cycle slowdowns where labor softened without recession",
+          "Late-cycle phases preceding policy easing"
+        ],
+        "leadingIndicators": ["Nonfarm payrolls", "Continuing claims", "Temp-help employment", "Quits rate"],
+        "invalidationSignals": ["Re-acceleration in hiring", "PMI back above 50", "Credit spreads tightening"],
+        "relatedEventIds": ["evt-recession"],
+        "relatedIndustryIds": ["consumer-disc", "banking"],
+        "relatedCompanyIds": []
+      }
+    }
+  },
+  "industries": [
+    { "industryId": "semis", "industryName": "Semiconductors", "impactScore": 86, "riskScore": 78, "opportunityScore": 22, "relatedEventCount": 9, "direction": "negative", "newsVelocityScore": 91, "summary": "Export-control proposals dominate sentiment; equipment makers most exposed." },
+    { "industryId": "ai-infra", "industryName": "AI Infrastructure", "impactScore": 74, "riskScore": 38, "opportunityScore": 81, "relatedEventCount": 7, "direction": "positive", "newsVelocityScore": 77, "summary": "Demand signals into Q3 stay strong despite supply-side headline risk." },
+    { "industryId": "cloud", "industryName": "Cloud Computing", "impactScore": 61, "riskScore": 44, "opportunityScore": 67, "relatedEventCount": 6, "direction": "mixed", "newsVelocityScore": 58, "summary": "Capex commentary supportive; procurement re-routing a watch item." },
+    { "industryId": "banking", "industryName": "Banking", "impactScore": 69, "riskScore": 71, "opportunityScore": 18, "relatedEventCount": 8, "direction": "negative", "newsVelocityScore": 66, "summary": "Regional deposit concentration back in focus; systemic read still contained." },
+    { "industryId": "energy", "industryName": "Energy", "impactScore": 72, "riskScore": 63, "opportunityScore": 58, "relatedEventCount": 6, "direction": "mixed", "newsVelocityScore": 70, "summary": "Crude repricing on Gulf escalation; refiners and majors diverge." },
+    { "industryId": "defense", "industryName": "Defense", "impactScore": 64, "riskScore": 35, "opportunityScore": 73, "relatedEventCount": 4, "direction": "positive", "newsVelocityScore": 49, "summary": "Escalation narrative lifts order-book expectations." },
+    { "industryId": "insurance", "industryName": "Insurance", "impactScore": 38, "riskScore": 47, "opportunityScore": 31, "relatedEventCount": 3, "direction": "mixed", "newsVelocityScore": 28, "summary": "Catastrophe and credit exposure monitored; no acute trigger." },
+    { "industryId": "healthcare", "industryName": "Healthcare", "impactScore": 24, "riskScore": 22, "opportunityScore": 41, "relatedEventCount": 2, "direction": "positive", "newsVelocityScore": 19, "summary": "Defensive bid; limited direct event exposure today." },
+    { "industryId": "consumer-disc", "industryName": "Consumer Discretionary", "impactScore": 33, "riskScore": 39, "opportunityScore": 36, "relatedEventCount": 3, "direction": "negative", "newsVelocityScore": 31, "summary": "Rate-path sensitivity; spending data the swing factor." },
+    { "industryId": "transport", "industryName": "Transportation", "impactScore": 47, "riskScore": 52, "opportunityScore": 29, "relatedEventCount": 4, "direction": "negative", "newsVelocityScore": 44, "summary": "Shipping-lane risk lifts freight cost expectations." },
+    { "industryId": "realestate", "industryName": "Real Estate", "impactScore": 35, "riskScore": 49, "opportunityScore": 27, "relatedEventCount": 2, "direction": "negative", "newsVelocityScore": 22, "summary": "Regional-bank credit linkage the primary channel." },
+    { "industryId": "commodities", "industryName": "Commodities", "impactScore": 56, "riskScore": 51, "opportunityScore": 62, "relatedEventCount": 5, "direction": "mixed", "newsVelocityScore": 53, "summary": "Energy complex bid; industrial metals soft on demand reads." }
+  ],
+  "companies": [
+    { "companyId": "nvda", "name": "NVIDIA", "ticker": "NVDA", "exchange": "NASDAQ", "industry": "Semiconductors", "country": "US", "impactDirection": "negative", "impactScore": 82, "riskScore": 76, "relatedEventCount": 6, "topDriver": "Export-control concerns", "lastUpdatedAt": "2026-06-05T08:10:00-07:00" },
+    { "companyId": "asml", "name": "ASML", "ticker": "ASML", "exchange": "AMS", "industry": "Semiconductors", "country": "NL", "impactDirection": "negative", "impactScore": 79, "riskScore": 72, "relatedEventCount": 5, "topDriver": "Equipment export restrictions", "lastUpdatedAt": "2026-06-05T07:55:00-07:00" },
+    { "companyId": "tsm", "name": "TSMC", "ticker": "TSM", "exchange": "TPE", "industry": "Semiconductors", "country": "TW", "impactDirection": "mixed", "impactScore": 68, "riskScore": 61, "relatedEventCount": 5, "topDriver": "Supply-chain uncertainty", "lastUpdatedAt": "2026-06-05T07:40:00-07:00" },
+    { "companyId": "amd", "name": "AMD", "ticker": "AMD", "exchange": "NASDAQ", "industry": "Semiconductors", "country": "US", "impactDirection": "negative", "impactScore": 64, "riskScore": 58, "relatedEventCount": 4, "topDriver": "Data-center GPU exposure", "lastUpdatedAt": "2026-06-05T07:30:00-07:00" },
+    { "companyId": "amat", "name": "Applied Materials", "ticker": "AMAT", "exchange": "NASDAQ", "industry": "Semiconductors", "country": "US", "impactDirection": "negative", "impactScore": 71, "riskScore": 66, "relatedEventCount": 3, "topDriver": "Equipment order risk", "lastUpdatedAt": "2026-06-05T07:20:00-07:00" },
+    { "companyId": "msft", "name": "Microsoft", "ticker": "MSFT", "exchange": "NASDAQ", "industry": "Cloud Computing", "country": "US", "impactDirection": "positive", "impactScore": 58, "riskScore": 31, "relatedEventCount": 4, "topDriver": "AI capex commitment", "lastUpdatedAt": "2026-06-05T08:05:00-07:00" },
+    { "companyId": "avgo", "name": "Broadcom", "ticker": "AVGO", "exchange": "NASDAQ", "industry": "AI Infrastructure", "country": "US", "impactDirection": "positive", "impactScore": 61, "riskScore": 34, "relatedEventCount": 3, "topDriver": "Custom-silicon demand", "lastUpdatedAt": "2026-06-05T07:50:00-07:00" },
+    { "companyId": "wal", "name": "Western Alliance", "ticker": "WAL", "exchange": "NYSE", "industry": "Banking", "country": "US", "impactDirection": "negative", "impactScore": 67, "riskScore": 70, "relatedEventCount": 5, "topDriver": "Deposit-concentration scrutiny", "lastUpdatedAt": "2026-06-05T08:00:00-07:00" },
+    { "companyId": "cma", "name": "Comerica", "ticker": "CMA", "exchange": "NYSE", "industry": "Banking", "country": "US", "impactDirection": "negative", "impactScore": 59, "riskScore": 64, "relatedEventCount": 4, "topDriver": "Unrealized bond losses", "lastUpdatedAt": "2026-06-05T07:45:00-07:00" },
+    { "companyId": "xom", "name": "ExxonMobil", "ticker": "XOM", "exchange": "NYSE", "industry": "Energy", "country": "US", "impactDirection": "positive", "impactScore": 55, "riskScore": 42, "relatedEventCount": 3, "topDriver": "Crude price repricing", "lastUpdatedAt": "2026-06-05T07:35:00-07:00" },
+    { "companyId": "lmt", "name": "Lockheed Martin", "ticker": "LMT", "exchange": "NYSE", "industry": "Defense", "country": "US", "impactDirection": "positive", "impactScore": 52, "riskScore": 28, "relatedEventCount": 2, "topDriver": "Escalation order-book", "lastUpdatedAt": "2026-06-05T07:25:00-07:00" },
+    { "companyId": "lrcx", "name": "Lam Research", "ticker": "LRCX", "exchange": "NASDAQ", "industry": "Semiconductors", "country": "US", "impactDirection": "negative", "impactScore": 66, "riskScore": 62, "relatedEventCount": 3, "topDriver": "Equipment export restrictions", "lastUpdatedAt": "2026-06-05T07:15:00-07:00" }
+  ],
+  "companyProfiles": {
+    "nvda": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Highly profitable, cash-rich AI accelerator leader with exceptional margins and high exposure to export controls.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$130.5B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+92%", "tone": "positive" },
+          { "label": "Net margin", "value": "54%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$58.7B", "tone": "positive" },
+          { "label": "Cash / debt", "value": "Net cash", "tone": "positive" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Profitability is driven by data-center GPU demand and software ecosystem leverage.", "Main financial risk is demand normalization or tighter export licensing."]
+      },
+      "business": {
+        "description": "NVIDIA designs GPUs, AI accelerators, networking hardware, and software platforms. It earns most revenue from data-center AI systems sold to cloud providers, enterprises, and AI labs.",
+        "segments": [
+          { "label": "Data Center", "value": "~78%", "detail": "AI accelerators, networking, systems, and enterprise AI software." },
+          { "label": "Gaming", "value": "~12%", "detail": "Consumer GPUs and gaming platform revenue." },
+          { "label": "Other", "value": "~10%", "detail": "Professional visualization, automotive, and OEM channels." }
+        ],
+        "advantages": ["CUDA and developer ecosystem", "High-end accelerator supply position", "Networking and full-stack AI systems"],
+        "watchItems": ["Hyperscaler capex cycles", "Export licensing", "Advanced packaging capacity"]
+      },
+      "industry": {
+        "position": "Leading merchant AI accelerator supplier in a fast-growing but capacity-constrained semiconductor market.",
+        "growthDrivers": ["AI training and inference demand", "Cloud data-center capex", "Enterprise AI adoption"],
+        "risks": ["Export controls", "Custom silicon competition", "Supply-chain bottlenecks"],
+        "outlook": "Growth runway remains strong, but expectations are high and policy risk can quickly reprice the stock."
+      },
+      "valuation": {
+        "view": "Premium",
+        "price": "$128.40",
+        "marketCap": "$3.1T",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~34x" },
+          { "label": "EV / Sales", "value": "~23x" },
+          { "label": "FCF yield", "value": "~1.9%" }
+        ],
+        "interpretation": "The stock is priced for sustained AI leadership. Valuation can be reasonable only if high growth and margins persist."
+      }
+    },
+    "asml": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable lithography monopoly with strong backlog, high margins, and direct sensitivity to export restrictions.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$31.8B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+7%", "tone": "neutral" },
+          { "label": "Net margin", "value": "28%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$7.4B", "tone": "positive" },
+          { "label": "Backlog", "value": "High", "tone": "positive" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Large backlog supports revenue visibility.", "License restrictions can shift timing and geography of shipments."]
+      },
+      "business": {
+        "description": "ASML sells advanced lithography systems and services to semiconductor manufacturers. EUV tools are critical for leading-edge chip production.",
+        "segments": [
+          { "label": "Systems", "value": "~75%", "detail": "EUV and DUV lithography equipment." },
+          { "label": "Installed Base", "value": "~25%", "detail": "Service, upgrades, and field support." }
+        ],
+        "advantages": ["Unique EUV technology position", "Deep customer lock-in", "Long-cycle backlog visibility"],
+        "watchItems": ["Export license details", "China shipment mix", "Foundry capex cycles"]
+      },
+      "industry": {
+        "position": "Critical semiconductor-equipment supplier with a near-monopoly in advanced EUV lithography.",
+        "growthDrivers": ["Leading-edge node transitions", "AI chip demand", "Regional fab buildouts"],
+        "risks": ["Government export limits", "Customer capex pauses", "Tool supply constraints"],
+        "outlook": "Long-term demand remains structurally strong, but revenue timing depends on customer investment cycles and policy rules."
+      },
+      "valuation": {
+        "view": "Premium but defensible",
+        "price": "$948.20",
+        "marketCap": "$375B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~31x" },
+          { "label": "EV / Sales", "value": "~11x" },
+          { "label": "Dividend yield", "value": "~0.8%" }
+        ],
+        "interpretation": "The valuation reflects scarcity value and monopoly-like positioning, but policy shocks can compress the multiple."
+      }
+    },
+    "tsm": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Scale leader with high profitability, heavy capex requirements, and strong advanced-node demand.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$92.4B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+29%", "tone": "positive" },
+          { "label": "Net margin", "value": "39%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$18.9B", "tone": "positive" },
+          { "label": "Capex intensity", "value": "High", "tone": "neutral" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Margins are supported by leading-node pricing power.", "Capital spending remains structurally high to defend technology leadership."]
+      },
+      "business": {
+        "description": "TSMC manufactures chips for fabless semiconductor customers. Revenue is driven by wafer volume, advanced-node pricing, and long-term customer commitments.",
+        "segments": [
+          { "label": "High-performance compute", "value": "~52%", "detail": "AI, CPU, GPU, and accelerator customers." },
+          { "label": "Smartphone", "value": "~34%", "detail": "Mobile processors and related components." },
+          { "label": "Other platforms", "value": "~14%", "detail": "Automotive, IoT, and specialty technologies." }
+        ],
+        "advantages": ["Leading-node process execution", "Scale and yield expertise", "Deep customer relationships"],
+        "watchItems": ["Taiwan geopolitical risk", "Customer concentration", "Advanced packaging capacity"]
+      },
+      "industry": {
+        "position": "Dominant independent foundry for advanced chips.",
+        "growthDrivers": ["AI accelerator demand", "Advanced-node migration", "Chip outsourcing by fabless companies"],
+        "risks": ["Geopolitical concentration", "Cyclical utilization", "Capex execution"],
+        "outlook": "Future growth depends on maintaining node leadership and meeting AI-related capacity demand."
+      },
+      "valuation": {
+        "view": "Reasonable premium",
+        "price": "$178.60",
+        "marketCap": "$925B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~24x" },
+          { "label": "EV / EBITDA", "value": "~13x" },
+          { "label": "Dividend yield", "value": "~1.3%" }
+        ],
+        "interpretation": "The multiple is below many AI peers but includes geopolitical and capex risk discounts."
+      }
+    },
+    "amd": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable semiconductor designer with improving AI exposure and more moderate margins than the AI leader.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$27.6B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+18%", "tone": "positive" },
+          { "label": "Net margin", "value": "11%", "tone": "neutral" },
+          { "label": "Free cash flow", "value": "$3.2B", "tone": "positive" },
+          { "label": "Cash / debt", "value": "Net cash", "tone": "positive" },
+          { "label": "Financial health", "value": "Good", "tone": "positive" }
+        ],
+        "notes": ["AI accelerator demand is the key margin upside lever.", "PC and gaming cycles can still create earnings volatility."]
+      },
+      "business": {
+        "description": "AMD designs CPUs, GPUs, AI accelerators, and adaptive chips. It monetizes through data-center processors, client PCs, gaming, and embedded markets.",
+        "segments": [
+          { "label": "Data Center", "value": "~43%", "detail": "EPYC CPUs and Instinct accelerators." },
+          { "label": "Client", "value": "~24%", "detail": "PC processors and related platform revenue." },
+          { "label": "Gaming / Embedded", "value": "~33%", "detail": "Console semi-custom, GPUs, and adaptive chips." }
+        ],
+        "advantages": ["CPU share gains", "Broad compute portfolio", "Fabless flexibility"],
+        "watchItems": ["AI accelerator traction", "Gross margin mix", "PC demand"]
+      },
+      "industry": {
+        "position": "Scaled challenger across CPUs and accelerators.",
+        "growthDrivers": ["Server CPU share gains", "AI accelerator adoption", "PC refresh cycle"],
+        "risks": ["Execution versus larger AI competitors", "Foundry capacity", "Cyclical end-markets"],
+        "outlook": "Growth can continue if AI product adoption broadens and server CPU share gains hold."
+      },
+      "valuation": {
+        "view": "Growth-dependent",
+        "price": "$156.30",
+        "marketCap": "$253B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~39x" },
+          { "label": "EV / Sales", "value": "~8x" },
+          { "label": "FCF yield", "value": "~1.3%" }
+        ],
+        "interpretation": "The stock needs accelerating AI revenue and margin expansion to justify a premium multiple."
+      }
+    },
+    "amat": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable equipment supplier with strong cash generation and cyclical exposure to fab spending.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$28.3B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+10%", "tone": "positive" },
+          { "label": "Net margin", "value": "27%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$6.8B", "tone": "positive" },
+          { "label": "Buyback support", "value": "High", "tone": "positive" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Margins are supported by broad process-equipment exposure.", "Order timing can shift quickly when foundry and memory capex slows."]
+      },
+      "business": {
+        "description": "Applied Materials sells wafer fabrication equipment, services, and display manufacturing tools. Revenue depends on semiconductor capital expenditure cycles.",
+        "segments": [
+          { "label": "Semiconductor Systems", "value": "~74%", "detail": "Deposition, etch, implant, and process control equipment." },
+          { "label": "Services", "value": "~22%", "detail": "Spares, maintenance, and installed base support." },
+          { "label": "Display / Other", "value": "~4%", "detail": "Display and adjacent equipment markets." }
+        ],
+        "advantages": ["Broad tool portfolio", "Installed base service revenue", "Scale across foundry and memory"],
+        "watchItems": ["Fab capex", "China controls", "Memory recovery"]
+      },
+      "industry": {
+        "position": "Broad-based semiconductor capital-equipment leader.",
+        "growthDrivers": ["AI-driven fab demand", "Advanced packaging", "Regional semiconductor subsidies"],
+        "risks": ["Export restrictions", "Capex cycles", "Customer concentration"],
+        "outlook": "Long-term semiconductor complexity supports demand, but near-term order risk is policy and cycle sensitive."
+      },
+      "valuation": {
+        "view": "Reasonable to premium",
+        "price": "$214.90",
+        "marketCap": "$178B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~22x" },
+          { "label": "EV / Sales", "value": "~6x" },
+          { "label": "FCF yield", "value": "~3.8%" }
+        ],
+        "interpretation": "Valuation is less stretched than AI chip designers but still depends on resilient equipment orders."
+      }
+    },
+    "msft": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Very profitable, diversified software and cloud platform with strong cash flow and AI capex commitments.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$281.2B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+15%", "tone": "positive" },
+          { "label": "Operating margin", "value": "45%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$82.5B", "tone": "positive" },
+          { "label": "Cash / debt", "value": "Net cash", "tone": "positive" },
+          { "label": "Financial health", "value": "Excellent", "tone": "positive" }
+        ],
+        "notes": ["Cloud and software subscriptions create recurring revenue.", "AI infrastructure spend can pressure near-term free cash flow."]
+      },
+      "business": {
+        "description": "Microsoft earns revenue from cloud infrastructure, enterprise software, productivity subscriptions, Windows, gaming, LinkedIn, and AI-enabled services.",
+        "segments": [
+          { "label": "Cloud", "value": "~43%", "detail": "Azure, server products, and enterprise services." },
+          { "label": "Productivity", "value": "~34%", "detail": "Office, Dynamics, LinkedIn, and collaboration tools." },
+          { "label": "Personal Computing", "value": "~23%", "detail": "Windows, gaming, devices, and search ads." }
+        ],
+        "advantages": ["Enterprise distribution", "Cloud scale", "Bundled productivity ecosystem"],
+        "watchItems": ["AI capex returns", "Cloud growth rate", "Regulatory scrutiny"]
+      },
+      "industry": {
+        "position": "Top-tier cloud and enterprise software platform.",
+        "growthDrivers": ["Azure AI services", "Copilot adoption", "Enterprise cloud migration"],
+        "risks": ["Cloud price competition", "AI monetization pace", "Antitrust/regulatory reviews"],
+        "outlook": "Growth outlook is durable if AI features lift ARPU and Azure demand remains strong."
+      },
+      "valuation": {
+        "view": "Premium quality",
+        "price": "$472.10",
+        "marketCap": "$3.5T",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~32x" },
+          { "label": "EV / Sales", "value": "~12x" },
+          { "label": "FCF yield", "value": "~2.4%" }
+        ],
+        "interpretation": "The stock is not cheap, but the premium is supported by scale, margins, and recurring revenue quality."
+      }
+    },
+    "avgo": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Highly profitable semiconductor and infrastructure software company with strong cash generation and leverage from acquisitions.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$58.9B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+37%", "tone": "positive" },
+          { "label": "EBITDA margin", "value": "60%+", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$24.6B", "tone": "positive" },
+          { "label": "Leverage", "value": "Moderate", "tone": "neutral" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Software and custom silicon support high margins.", "Debt reduction remains important after large acquisitions."]
+      },
+      "business": {
+        "description": "Broadcom sells networking, custom silicon, wireless components, storage connectivity, and infrastructure software.",
+        "segments": [
+          { "label": "Semiconductors", "value": "~60%", "detail": "Networking, wireless, broadband, storage, and custom accelerators." },
+          { "label": "Infrastructure Software", "value": "~40%", "detail": "Enterprise software, virtualization, and security assets." }
+        ],
+        "advantages": ["Custom silicon relationships", "High-margin software base", "Disciplined acquisition model"],
+        "watchItems": ["AI networking orders", "VMware integration", "Debt paydown"]
+      },
+      "industry": {
+        "position": "Key supplier for AI networking and custom silicon plus enterprise infrastructure software.",
+        "growthDrivers": ["AI networking buildout", "Custom accelerator ASICs", "Infrastructure software cash flows"],
+        "risks": ["Customer concentration", "Integration execution", "Cyclical semiconductor demand"],
+        "outlook": "Growth depends on AI infrastructure demand and successful software integration."
+      },
+      "valuation": {
+        "view": "Premium",
+        "price": "$1,645.00",
+        "marketCap": "$765B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~29x" },
+          { "label": "EV / EBITDA", "value": "~22x" },
+          { "label": "Dividend yield", "value": "~1.2%" }
+        ],
+        "interpretation": "Valuation is high versus history but supported by AI networking and software cash flow expectations."
+      }
+    },
+    "wal": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable regional bank, but deposit concentration and funding costs keep financial-risk sensitivity elevated.",
+        "metrics": [
+          { "label": "Net income TTM", "value": "$0.8B", "tone": "neutral" },
+          { "label": "ROE", "value": "10%", "tone": "neutral" },
+          { "label": "Net interest margin", "value": "3.2%", "tone": "neutral" },
+          { "label": "CET1 ratio", "value": "10.8%", "tone": "positive" },
+          { "label": "Deposit trend", "value": "Watch", "tone": "warning" },
+          { "label": "Financial health", "value": "Sensitive", "tone": "warning" }
+        ],
+        "notes": ["Profitability remains positive, but funding mix and deposit stability are key.", "Regional-bank stress can reprice valuation faster than earnings change."]
+      },
+      "business": {
+        "description": "Western Alliance is a regional bank serving commercial, specialty finance, treasury, mortgage, and deposit clients.",
+        "segments": [
+          { "label": "Commercial banking", "value": "Core", "detail": "Loans, deposits, treasury, and business banking." },
+          { "label": "Specialty finance", "value": "Material", "detail": "Niche lending and sector-focused banking." },
+          { "label": "Mortgage / consumer", "value": "Smaller", "detail": "Residential and consumer-related services." }
+        ],
+        "advantages": ["Specialty banking niches", "Commercial relationships", "Regional market knowledge"],
+        "watchItems": ["Deposit flows", "CRE exposure", "Unrealized bond losses"]
+      },
+      "industry": {
+        "position": "Regional bank with higher sensitivity to funding confidence and deposit mix.",
+        "growthDrivers": ["Loan growth in specialty verticals", "Rate stabilization", "Deposit recovery"],
+        "risks": ["Deposit outflows", "Commercial real estate stress", "Regulatory scrutiny"],
+        "outlook": "Growth outlook is tied to confidence in regional-bank funding and credit quality."
+      },
+      "valuation": {
+        "view": "Cheap but risk-discounted",
+        "price": "$72.80",
+        "marketCap": "$8.0B",
+        "metrics": [
+          { "label": "P / TBV", "value": "~1.1x" },
+          { "label": "Forward P/E", "value": "~9x" },
+          { "label": "Dividend yield", "value": "~2.1%" }
+        ],
+        "interpretation": "The stock appears inexpensive, but the discount reflects deposit and credit-risk concerns."
+      }
+    },
+    "cma": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable regional bank with meaningful rate and credit sensitivity, especially around deposits and securities marks.",
+        "metrics": [
+          { "label": "Net income TTM", "value": "$0.9B", "tone": "neutral" },
+          { "label": "ROE", "value": "9%", "tone": "neutral" },
+          { "label": "Net interest margin", "value": "2.8%", "tone": "neutral" },
+          { "label": "CET1 ratio", "value": "11.2%", "tone": "positive" },
+          { "label": "AOCI pressure", "value": "Elevated", "tone": "warning" },
+          { "label": "Financial health", "value": "Watch", "tone": "warning" }
+        ],
+        "notes": ["Earnings depend on deposit costs and loan credit quality.", "Unrealized securities losses can affect sentiment and capital flexibility."]
+      },
+      "business": {
+        "description": "Comerica provides commercial banking, wealth management, and retail banking, with strong middle-market and business-banking exposure.",
+        "segments": [
+          { "label": "Commercial banking", "value": "Largest", "detail": "Loans, deposits, treasury management, and business services." },
+          { "label": "Wealth management", "value": "Secondary", "detail": "Private banking, trust, and advisory services." },
+          { "label": "Retail banking", "value": "Smaller", "detail": "Consumer deposits and branch banking." }
+        ],
+        "advantages": ["Middle-market banking relationships", "Treasury management franchise", "Diversified business deposits"],
+        "watchItems": ["Deposit costs", "Credit losses", "Rate path"]
+      },
+      "industry": {
+        "position": "Regional commercial bank exposed to the same funding and credit cycle as peers.",
+        "growthDrivers": ["Business loan demand", "Deposit normalization", "Fee income stability"],
+        "risks": ["Credit deterioration", "Rate pressure", "Regulatory capital changes"],
+        "outlook": "Upside depends on stable deposits and lower funding pressure; downside comes from credit or bond-loss concerns."
+      },
+      "valuation": {
+        "view": "Discounted",
+        "price": "$54.30",
+        "marketCap": "$7.2B",
+        "metrics": [
+          { "label": "P / TBV", "value": "~1.0x" },
+          { "label": "Forward P/E", "value": "~10x" },
+          { "label": "Dividend yield", "value": "~5.2%" }
+        ],
+        "interpretation": "The valuation looks low versus quality compounders, but it reflects sector-wide funding and credit risk."
+      }
+    },
+    "xom": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Highly profitable integrated energy major with strong balance sheet and commodity-price sensitivity.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$356B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+4%", "tone": "neutral" },
+          { "label": "Net margin", "value": "11%", "tone": "neutral" },
+          { "label": "Free cash flow", "value": "$38B", "tone": "positive" },
+          { "label": "Net debt", "value": "Low", "tone": "positive" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["Cash flow is highly linked to crude, gas, and refining margins.", "Balance sheet strength supports dividends and buybacks."]
+      },
+      "business": {
+        "description": "ExxonMobil explores, produces, refines, transports, and sells oil, natural gas, chemicals, and low-carbon energy products.",
+        "segments": [
+          { "label": "Upstream", "value": "Largest earnings driver", "detail": "Oil and gas production." },
+          { "label": "Product Solutions", "value": "Material", "detail": "Refining, chemicals, fuels, and lubricants." },
+          { "label": "Low Carbon", "value": "Emerging", "detail": "Carbon capture, hydrogen, and adjacent projects." }
+        ],
+        "advantages": ["Scale and reserve base", "Integrated downstream footprint", "Capital discipline"],
+        "watchItems": ["Crude prices", "Refining margins", "Regulatory policy"]
+      },
+      "industry": {
+        "position": "Global integrated energy major with leverage to oil, gas, and refining cycles.",
+        "growthDrivers": ["Permian production", "Guyana growth", "High commodity prices"],
+        "risks": ["Oil price declines", "Climate policy", "Project execution"],
+        "outlook": "Earnings can remain strong in a supportive commodity environment, but valuation depends on the oil-price cycle."
+      },
+      "valuation": {
+        "view": "Reasonable cyclical",
+        "price": "$114.70",
+        "marketCap": "$505B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~13x" },
+          { "label": "EV / EBITDA", "value": "~7x" },
+          { "label": "Dividend yield", "value": "~3.3%" }
+        ],
+        "interpretation": "The stock looks reasonable if oil prices stay firm, but cheaper multiples are normal for cyclical energy earnings."
+      }
+    },
+    "lmt": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable defense prime with durable backlog, steady cash flow, and modest organic growth.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$71.4B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+5%", "tone": "neutral" },
+          { "label": "Operating margin", "value": "11%", "tone": "neutral" },
+          { "label": "Free cash flow", "value": "$6.5B", "tone": "positive" },
+          { "label": "Backlog", "value": "Very high", "tone": "positive" },
+          { "label": "Financial health", "value": "Good", "tone": "positive" }
+        ],
+        "notes": ["Backlog provides visibility across defense programs.", "Margins can be affected by fixed-price contracts and program execution."]
+      },
+      "business": {
+        "description": "Lockheed Martin earns revenue from defense systems, aircraft, missiles, space systems, sustainment, and government contracts.",
+        "segments": [
+          { "label": "Aeronautics", "value": "~40%", "detail": "F-35 and tactical aircraft programs." },
+          { "label": "Missiles / Fire Control", "value": "~17%", "detail": "Missiles, sensors, and fire-control systems." },
+          { "label": "Rotary, Mission, Space", "value": "~43%", "detail": "Helicopters, mission systems, satellites, and space assets." }
+        ],
+        "advantages": ["Defense backlog", "Mission-critical programs", "Government relationships"],
+        "watchItems": ["Budget approvals", "Program margins", "Geopolitical demand"]
+      },
+      "industry": {
+        "position": "Large U.S. defense prime with exposure to multi-year modernization and deterrence spending.",
+        "growthDrivers": ["Defense budget growth", "Missile defense demand", "F-35 sustainment"],
+        "risks": ["Budget delays", "Program execution", "Political contract scrutiny"],
+        "outlook": "Long-cycle defense demand is supportive, but growth is steadier than high-growth technology sectors."
+      },
+      "valuation": {
+        "view": "Reasonable defensive",
+        "price": "$468.50",
+        "marketCap": "$111B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~17x" },
+          { "label": "EV / EBITDA", "value": "~13x" },
+          { "label": "Dividend yield", "value": "~2.7%" }
+        ],
+        "interpretation": "The stock screens reasonable for a defensive cash-flow compounder, with upside tied to budget and margin execution."
+      }
+    },
+    "lrcx": {
+      "asOf": "2026-06-05",
+      "financial": {
+        "headline": "Profitable wafer-equipment supplier with strong margins and direct exposure to memory and foundry capex cycles.",
+        "metrics": [
+          { "label": "Revenue TTM", "value": "$15.9B", "tone": "positive" },
+          { "label": "Revenue growth", "value": "+13%", "tone": "positive" },
+          { "label": "Net margin", "value": "26%", "tone": "positive" },
+          { "label": "Free cash flow", "value": "$4.1B", "tone": "positive" },
+          { "label": "Memory exposure", "value": "High", "tone": "warning" },
+          { "label": "Financial health", "value": "Strong", "tone": "positive" }
+        ],
+        "notes": ["High margins and buybacks support shareholder returns.", "Orders are sensitive to memory spending and export restrictions."]
+      },
+      "business": {
+        "description": "Lam Research sells wafer fabrication equipment and services, especially deposition and etch tools used in advanced chip manufacturing.",
+        "segments": [
+          { "label": "Systems", "value": "~63%", "detail": "Etch, deposition, and clean tools." },
+          { "label": "Customer Support", "value": "~37%", "detail": "Spares, upgrades, maintenance, and installed base services." }
+        ],
+        "advantages": ["Etch/deposition expertise", "Large installed base", "Memory and foundry relationships"],
+        "watchItems": ["Memory capex", "Export controls", "Advanced packaging demand"]
+      },
+      "industry": {
+        "position": "Key process-equipment supplier for advanced semiconductor manufacturing.",
+        "growthDrivers": ["NAND and DRAM recovery", "Gate-all-around transitions", "Advanced packaging"],
+        "risks": ["China restrictions", "Memory downturns", "Customer capex pauses"],
+        "outlook": "Growth can accelerate with memory recovery, but policy restrictions are an immediate valuation risk."
+      },
+      "valuation": {
+        "view": "Reasonable to premium",
+        "price": "$1,004.00",
+        "marketCap": "$130B",
+        "metrics": [
+          { "label": "Forward P/E", "value": "~24x" },
+          { "label": "EV / Sales", "value": "~8x" },
+          { "label": "FCF yield", "value": "~3.1%" }
+        ],
+        "interpretation": "The stock is not deeply cheap, but the multiple can be supported if memory and leading-edge spending recover."
+      }
+    }
+  },
+  "evidence": [
+    { "id": "ev1", "sourceType": "rss", "title": "Officials weigh stricter curbs on advanced AI chip exports", "publisher": "Reuters", "url": "#", "publishedAt": "2026-06-05T05:40:00-07:00", "credibilityScore": 0.86, "relatedClaims": ["c1", "c2"] },
+    { "id": "ev2", "sourceType": "rss", "title": "Chip-equipment makers slide on fresh export-control reports", "publisher": "Bloomberg", "url": "#", "publishedAt": "2026-06-05T06:20:00-07:00", "credibilityScore": 0.88, "relatedClaims": ["c2", "c3"] },
+    { "id": "ev3", "sourceType": "official", "title": "Commerce Dept. — preliminary statement on technology trade review", "publisher": "U.S. Dept. of Commerce", "url": "#", "publishedAt": "2026-06-05T07:10:00-07:00", "credibilityScore": 0.95, "relatedClaims": ["c1"] },
+    { "id": "ev4", "sourceType": "market_data", "title": "PHLX Semiconductor Index intraday −2.8%", "publisher": "Market Data Feed", "url": "#", "publishedAt": "2026-06-05T08:05:00-07:00", "credibilityScore": 0.9, "relatedClaims": ["c3"] },
+    { "id": "ev5", "sourceType": "filing", "title": "NVDA 10-K — geographic revenue concentration disclosure", "publisher": "SEC EDGAR", "url": "#", "publishedAt": "2026-02-21T00:00:00-08:00", "credibilityScore": 0.97, "relatedClaims": ["c4"] },
+    { "id": "ev6", "sourceType": "historical_case", "title": "2022–2023 export-control tightening — outcome study", "publisher": "Internal Research", "url": "#", "publishedAt": "2025-11-01T00:00:00-08:00", "credibilityScore": 0.8, "relatedClaims": ["c4", "c5"] },
+    { "id": "ev7", "sourceType": "macro_indicator", "title": "Initial jobless claims, 4-week moving average", "publisher": "BLS", "url": "#", "publishedAt": "2026-06-04T05:30:00-07:00", "credibilityScore": 0.93, "relatedClaims": ["c6"] }
+  ],
+  "alerts": [
+    { "id": "al1", "title": "Policy/Regulatory risk crossed High threshold", "message": "Advanced-chip export-rule reports pushed the policy-risk score above 70.", "severity": "high", "riskScore": 72, "alertType": "Risk threshold crossed", "relatedEventId": "evt-semis", "relatedIndustryId": "semis", "evidenceSourceIds": ["ev1", "ev3"], "status": "new", "createdAt": "2026-06-05T07:15:00-07:00" },
+    { "id": "al2", "title": "News-velocity acceleration — Regional Banking", "message": "Coverage rate for regional-bank stress crossed 2× its trailing baseline.", "severity": "high", "riskScore": 71, "alertType": "Risk acceleration", "relatedEventId": "evt-banking", "relatedIndustryId": "banking", "evidenceSourceIds": ["ev7"], "status": "new", "createdAt": "2026-06-05T08:00:00-07:00" },
+    { "id": "al3", "title": "New high-risk event — Gulf shipping escalation", "message": "A new geopolitical event opened above the high-risk threshold.", "severity": "critical", "riskScore": 78, "alertType": "New high-risk event", "relatedEventId": "evt-energy", "evidenceSourceIds": [], "status": "new", "createdAt": "2026-06-05T03:25:00-07:00" },
+    { "id": "al4", "title": "Watchlist company event — NVIDIA", "message": "NVIDIA impact score rose to 82 on export-control coverage.", "severity": "high", "riskScore": 76, "alertType": "Company watchlist event", "relatedEventId": "evt-semis", "relatedCompanyId": "nvda", "evidenceSourceIds": ["ev1", "ev4"], "status": "acknowledged", "createdAt": "2026-06-05T06:45:00-07:00" },
+    { "id": "al5", "title": "Forecast probability changed — Semiconductor downside", "message": "Downside-case probability rose from 18% to 25%.", "severity": "medium", "riskScore": 60, "alertType": "Forecast probability changed", "relatedEventId": "evt-semis", "evidenceSourceIds": [], "status": "new", "createdAt": "2026-06-05T07:40:00-07:00" },
+    { "id": "al6", "title": "Critical source update — Commerce Dept.", "message": "Official preliminary statement published; credibility-weighted.", "severity": "medium", "riskScore": 55, "alertType": "Critical source update", "relatedEventId": "evt-semis", "evidenceSourceIds": ["ev3"], "status": "acknowledged", "createdAt": "2026-06-05T07:12:00-07:00" },
+    { "id": "al7", "title": "Industry watchlist event — Energy", "message": "Energy impact score rose to 72 on shipping-lane escalation.", "severity": "medium", "riskScore": 63, "alertType": "Industry watchlist event", "relatedEventId": "evt-energy", "relatedIndustryId": "energy", "evidenceSourceIds": [], "status": "new", "createdAt": "2026-06-05T04:10:00-07:00" },
+    { "id": "al8", "title": "Company watchlist event — Western Alliance", "message": "WAL risk score climbed to 70 on deposit-concentration coverage.", "severity": "high", "riskScore": 70, "alertType": "Company watchlist event", "relatedEventId": "evt-banking", "relatedCompanyId": "wal", "evidenceSourceIds": [], "status": "new", "createdAt": "2026-06-05T05:20:00-07:00" },
+    { "id": "al9", "title": "Risk threshold crossed — Geopolitical", "message": "Geopolitical risk score advanced to 78, the highest in 30 days.", "severity": "critical", "riskScore": 78, "alertType": "Risk threshold crossed", "relatedEventId": "evt-energy", "evidenceSourceIds": [], "status": "resolved", "createdAt": "2026-06-05T03:30:00-07:00" }
+  ],
+  "watchlist": [
+    { "id": "w1", "itemType": "company", "label": "NVIDIA", "metadata": { "ticker": "NVDA" }, "alertEnabled": true, "createdAt": "2026-05-20" },
+    { "id": "w2", "itemType": "company", "label": "Western Alliance", "metadata": { "ticker": "WAL" }, "alertEnabled": true, "createdAt": "2026-05-28" },
+    { "id": "w3", "itemType": "industry", "label": "Semiconductors", "alertEnabled": true, "createdAt": "2026-05-12" },
+    { "id": "w4", "itemType": "risk", "label": "Recession Risk", "alertEnabled": true, "createdAt": "2026-05-01" },
+    { "id": "w5", "itemType": "keyword", "label": "export controls", "alertEnabled": false, "createdAt": "2026-05-30" }
+  ],
+  "admin": {
+    "jobs": [
+      { "id": "j1", "jobType": "Ingestion · News API", "status": "succeeded", "startedAt": "08:25:02", "finishedAt": "08:25:48", "durationMs": 46000, "errorMessage": null, "throughput": "1,284 articles" },
+      { "id": "j2", "jobType": "Event Clustering", "status": "running", "startedAt": "08:28:10", "finishedAt": null, "durationMs": null, "errorMessage": null, "throughput": "42 clusters" },
+      { "id": "j3", "jobType": "Entity Linking", "status": "succeeded", "startedAt": "08:26:30", "finishedAt": "08:27:55", "durationMs": 85000, "errorMessage": null, "throughput": "318 entities" },
+      { "id": "j4", "jobType": "Forecast Generation", "status": "queued", "startedAt": null, "finishedAt": null, "durationMs": null, "errorMessage": null, "throughput": "—" },
+      { "id": "j5", "jobType": "Risk Scoring", "status": "succeeded", "startedAt": "08:24:00", "finishedAt": "08:24:39", "durationMs": 39000, "errorMessage": null, "throughput": "7 categories" },
+      { "id": "j6", "jobType": "Report Generation · Daily Brief", "status": "succeeded", "startedAt": "08:29:00", "finishedAt": "08:30:12", "durationMs": 72000, "errorMessage": null, "throughput": "1 report" },
+      { "id": "j7", "jobType": "Macro-Data Sync", "status": "failed", "startedAt": "08:20:00", "finishedAt": "08:20:08", "durationMs": 8000, "errorMessage": "Upstream 503 from macro-data provider; retry scheduled.", "throughput": "0 series" },
+      { "id": "j8", "jobType": "Ingestion · RSS", "status": "succeeded", "startedAt": "08:22:14", "finishedAt": "08:22:51", "durationMs": 37000, "errorMessage": null, "throughput": "604 articles" }
+    ],
+    "sources": [
+      { "sourceId": "s1", "name": "Reuters Wire", "sourceType": "news_api", "status": "healthy", "lastFetchedAt": "08:25", "articlesFetchedToday": 1284, "errorRate": 0.4, "averageLatencyMs": 320 },
+      { "sourceId": "s2", "name": "Bloomberg Terminal Feed", "sourceType": "news_api", "status": "healthy", "lastFetchedAt": "08:25", "articlesFetchedToday": 980, "errorRate": 0.7, "averageLatencyMs": 410 },
+      { "sourceId": "s3", "name": "Gov / Official RSS", "sourceType": "official", "status": "healthy", "lastFetchedAt": "08:23", "articlesFetchedToday": 142, "errorRate": 0.1, "averageLatencyMs": 260 },
+      { "sourceId": "s4", "name": "SEC EDGAR", "sourceType": "filing", "status": "degraded", "lastFetchedAt": "08:10", "articlesFetchedToday": 88, "errorRate": 4.2, "averageLatencyMs": 1240 },
+      { "sourceId": "s5", "name": "Macro-Data Provider", "sourceType": "macro_indicator", "status": "down", "lastFetchedAt": "07:50", "articlesFetchedToday": 0, "errorRate": 100, "averageLatencyMs": 0 },
+      { "sourceId": "s6", "name": "Market-Data Feed", "sourceType": "market_data", "status": "healthy", "lastFetchedAt": "08:30", "articlesFetchedToday": 0, "errorRate": 0.2, "averageLatencyMs": 95 }
+    ],
+    "models": [
+      { "provider": "Anthropic", "modelName": "claude-analyst", "taskType": "Event analysis", "requestCount": 1840, "successRate": 99.2, "averageLatencyMs": 2300, "averageCostUsd": 0.018, "schemaValidityRate": 98.6, "fallbackCount": 12 },
+      { "provider": "Anthropic", "modelName": "claude-critic", "taskType": "Model debate / critique", "requestCount": 612, "successRate": 99.5, "averageLatencyMs": 1900, "averageCostUsd": 0.014, "schemaValidityRate": 99.1, "fallbackCount": 3 },
+      { "provider": "OpenAI", "modelName": "macro-synth", "taskType": "Risk scoring", "requestCount": 980, "successRate": 98.1, "averageLatencyMs": 1500, "averageCostUsd": 0.009, "schemaValidityRate": 97.2, "fallbackCount": 21 },
+      { "provider": "Internal", "modelName": "embed-v3", "taskType": "Clustering / similarity", "requestCount": 14200, "successRate": 99.9, "averageLatencyMs": 80, "averageCostUsd": 0.0002, "schemaValidityRate": 100, "fallbackCount": 0 }
+    ]
+  },
+  "ask": {
+    "suggestions": [
+      "What are the biggest risks to the semiconductor industry this week?",
+      "Which companies are most affected by the latest export-control news?",
+      "Is recession risk increasing?",
+      "What historical events are similar to today's banking stress?",
+      "What should I monitor for AI-infrastructure companies?"
+    ]
+  },
+  "events": []
+}

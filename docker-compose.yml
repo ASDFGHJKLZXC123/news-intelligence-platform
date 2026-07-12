@@ -1,0 +1,97 @@
+# Stage 1 local stack: API, Celery worker, Celery beat, PostgreSQL (pgvector + PostGIS), Redis.
+# Validate with `docker compose config`. Bring up with `make up`.
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: infra/docker/postgres.Dockerfile
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-news}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-news}
+      POSTGRES_DB: ${POSTGRES_DB:-news}
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-news}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    env_file:
+      # Optional: load .env when present so a clean checkout (no .env) still validates.
+      - path: .env
+        required: false
+    environment:
+      # Override host-oriented defaults with in-network service hostnames.
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-news}:${POSTGRES_PASSWORD:-news}@postgres:5432/${POSTGRES_DB:-news}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    env_file:
+      # Optional: load .env when present so a clean checkout (no .env) still validates.
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-news}:${POSTGRES_PASSWORD:-news}@postgres:5432/${POSTGRES_DB:-news}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "workers.celery_app.celery_app", "worker", "--loglevel=info", "--queues=default,ingestion,pipeline"]
+
+  beat:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    env_file:
+      # Optional: load .env when present so a clean checkout (no .env) still validates.
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-news}:${POSTGRES_PASSWORD:-news}@postgres:5432/${POSTGRES_DB:-news}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "workers.celery_app.celery_app", "beat", "--loglevel=info"]
+
+volumes:
+  pgdata:

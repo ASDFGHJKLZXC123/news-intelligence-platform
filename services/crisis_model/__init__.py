@@ -1,0 +1,170 @@
+"""Standalone crisis-model contract helpers.
+
+Track M stays gated from the live pipeline/API. This package is only for shared
+payload semantics that model-building stages can depend on.
+"""
+
+from services.crisis_model.baseline import (
+    BASELINE_MODEL_VERSION,
+    RISK_TYPE_IMPACT_PRIOR,
+    RISK_TYPE_MULTIPLIER,
+    BaselinePrediction,
+    build_baseline_prediction,
+    horizon_bucket_probabilities,
+    signal_group_scores,
+)
+from services.crisis_model.calibration import (
+    IdentityCalibrator,
+    PiecewiseIsotonicCalibrator,
+    PlattCalibrator,
+    calibrate_buckets,
+)
+from services.crisis_model.contract import (
+    EVALUATION_REQUIRED_FIELDS,
+    EVIDENCE_REF_KINDS,
+    PREDICTION_REQUIRED_FIELDS,
+    PROBABILITY_FIELDS,
+    RISK_SCORE_WEIGHTS,
+    ContractValidationError,
+    cumulative_probabilities,
+    risk_score_from_components,
+    validate_evaluation_payload,
+    validate_evidence_refs,
+    validate_prediction_payload,
+    validate_probability_contract,
+)
+from services.crisis_model.critic import CriticResult, CritiqueFinding, RuleBasedForecastCritic
+from services.crisis_model.ensemble import (
+    ENSEMBLE_MODEL_VERSION,
+    EnsembleWeights,
+    combine_component_forecasts,
+    component_disagreement,
+)
+from services.crisis_model.evaluation import (
+    brier_score,
+    evaluate_prediction,
+    lead_time_days,
+    log_loss,
+    probability_for_horizon,
+)
+from services.crisis_model.event_shock import (
+    EVENT_SHOCK_MODEL_VERSION,
+    EventRiskInput,
+    EventShockFeatures,
+    RuleBasedNewsEventShockModel,
+    aggregate_event_shocks,
+    coerce_event_risk_input,
+    news_event_bucket_probabilities,
+    score_event_intensity,
+)
+from services.crisis_model.evidence import (
+    dedupe_evidence_refs,
+    event_feature_evidence_refs,
+    evidence_ref,
+    validate_component_evidence,
+)
+from services.crisis_model.historical import (
+    HISTORICAL_MODEL_VERSION,
+    CurrentSituation,
+    HistoricalAnalogy,
+    HistoricalCase,
+    historical_analogy_prior,
+    retrieve_analogies,
+    similarity_score,
+)
+from services.crisis_model.prediction_builder import (
+    PREDICTION_BUILDER_VERSION,
+    build_prediction_payload,
+)
+from services.crisis_model.reports import (
+    ReportClaim,
+    ReportComposer,
+    ReportSection,
+    RiskReport,
+    validate_report_evidence,
+)
+from services.crisis_model.signals import (
+    SIGNAL_DEFINITIONS,
+    CountrySignalPanel,
+    NormalizedSignal,
+    SignalDefinition,
+    SignalScore,
+    build_country_signal_panel,
+    normalize_signal_value,
+    score_signal_panel,
+)
+from services.crisis_model.types import ComponentForecast, HorizonBuckets
+
+__all__ = [
+    "EVALUATION_REQUIRED_FIELDS",
+    "EVIDENCE_REF_KINDS",
+    "PREDICTION_REQUIRED_FIELDS",
+    "PROBABILITY_FIELDS",
+    "RISK_SCORE_WEIGHTS",
+    "ContractValidationError",
+    "cumulative_probabilities",
+    "risk_score_from_components",
+    "validate_evaluation_payload",
+    "validate_evidence_refs",
+    "validate_prediction_payload",
+    "validate_probability_contract",
+    "SIGNAL_DEFINITIONS",
+    "CountrySignalPanel",
+    "NormalizedSignal",
+    "SignalDefinition",
+    "SignalScore",
+    "build_country_signal_panel",
+    "normalize_signal_value",
+    "score_signal_panel",
+    "BASELINE_MODEL_VERSION",
+    "RISK_TYPE_IMPACT_PRIOR",
+    "RISK_TYPE_MULTIPLIER",
+    "BaselinePrediction",
+    "build_baseline_prediction",
+    "horizon_bucket_probabilities",
+    "signal_group_scores",
+    "IdentityCalibrator",
+    "PiecewiseIsotonicCalibrator",
+    "PlattCalibrator",
+    "calibrate_buckets",
+    "CriticResult",
+    "CritiqueFinding",
+    "RuleBasedForecastCritic",
+    "ENSEMBLE_MODEL_VERSION",
+    "EnsembleWeights",
+    "combine_component_forecasts",
+    "component_disagreement",
+    "brier_score",
+    "evaluate_prediction",
+    "lead_time_days",
+    "log_loss",
+    "probability_for_horizon",
+    "EVENT_SHOCK_MODEL_VERSION",
+    "EventRiskInput",
+    "EventShockFeatures",
+    "RuleBasedNewsEventShockModel",
+    "aggregate_event_shocks",
+    "coerce_event_risk_input",
+    "news_event_bucket_probabilities",
+    "score_event_intensity",
+    "dedupe_evidence_refs",
+    "event_feature_evidence_refs",
+    "evidence_ref",
+    "validate_component_evidence",
+    "HISTORICAL_MODEL_VERSION",
+    "CurrentSituation",
+    "HistoricalAnalogy",
+    "HistoricalCase",
+    "historical_analogy_prior",
+    "retrieve_analogies",
+    "similarity_score",
+    "PREDICTION_BUILDER_VERSION",
+    "build_prediction_payload",
+    "ReportClaim",
+    "ReportComposer",
+    "ReportSection",
+    "RiskReport",
+    "validate_report_evidence",
+    "ComponentForecast",
+    "HorizonBuckets",
+]
