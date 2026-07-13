@@ -251,7 +251,9 @@ def test_event_analogies_contract() -> None:
     }
     assert ("historical_episode_id", "historical_episodes") in fks
     assert "uq_event_analogies_event_episode" in _constraints("event_analogies")
-    assert "CHECK (similarity_score >= 0 AND similarity_score <= 1)" in _ddl("event_analogies")
+    assert "CHECK (similarity_score >= 0 AND similarity_score <= 100)" in _ddl(
+        "event_analogies"
+    )
 
 
 def test_risk_warnings_contract() -> None:
@@ -275,6 +277,50 @@ def test_risk_warnings_contract() -> None:
     assert "CHECK (risk_score >= 0 AND risk_score <= 100)" in ddl
     assert "CHECK (probability >= 0 AND probability <= 1)" in ddl
     assert "CHECK (severity IN ('low', 'medium', 'high', 'critical'))" in ddl
+
+
+#: The persisted contract score destinations pinned to NUMERIC(5, 2) by migration 0014.
+SCORE_COLUMNS = [
+    ("event_industries", "impact_score"),
+    ("event_companies", "impact_score"),
+    ("event_analogies", "similarity_score"),
+    ("forecast_scenarios", "risk_score"),
+    ("risk_warnings", "risk_score"),
+]
+
+
+@pytest.mark.parametrize(("table", "column"), SCORE_COLUMNS)
+def test_persisted_contract_scores_are_numeric_5_2(table: str, column: str) -> None:
+    # A 0-100 score at the contract's two decimals. Leaving these an unconstrained NUMERIC
+    # lets the column store a precision the contract cannot express (migration 0014).
+    type_ = _table(table).c[column].type
+    assert type_.precision == 5
+    assert type_.scale == 2
+    # The pipeline does float arithmetic on scores; asdecimal=False keeps it a float and
+    # keeps the column honest against its `Mapped[float]` annotation.
+    assert type_.asdecimal is False
+    assert f"{column} NUMERIC(5, 2)" in _ddl(table)
+
+
+def test_similarity_score_is_a_0_100_score_like_every_other_score() -> None:
+    # Migration 0014 rescaled it off the 0-1 scale 0013 gave it; probability/confidence,
+    # which are genuinely 0-1, must not have moved with it.
+    assert "CHECK (similarity_score >= 0 AND similarity_score <= 100)" in _ddl("event_analogies")
+    assert "CHECK (probability >= 0 AND probability <= 1)" in _ddl("risk_warnings")
+    assert "CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 1))" in _ddl(
+        "forecast_scenarios"
+    )
+
+
+def test_llm_runs_keeps_the_raw_provider_payload() -> None:
+    # `output` is normalized; `raw_output` is what the provider actually returned, which is
+    # what makes a rescaled score auditable. Nullable with no default: runs written before
+    # migration 0014 have no raw payload, and inventing one would forge audit evidence.
+    raw_output = _table("llm_runs").c.raw_output
+    assert isinstance(raw_output.type, postgresql.JSONB)
+    assert raw_output.nullable is True
+    assert raw_output.server_default is None
+    assert raw_output.default is None
 
 
 def test_existing_llm_destination_tables_gain_numeric_scale_checks() -> None:

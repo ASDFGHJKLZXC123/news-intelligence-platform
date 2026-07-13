@@ -71,6 +71,101 @@ class Settings(BaseSettings):
     embedding_model: str = "text-embedding-3-small"
     embedding_model_version: str = "current"
 
+    # --- LLM (Stage 2) -------------------------------------------------------
+    # API secrets are read from the environment only.
+    anthropic_api_key: str = ""
+    openai_api_key: str = ""
+
+    # Budgeting controls for the orchestrator and runtime cost ceilings.
+    llm_monthly_budget_usd: float = 10.0
+    llm_budget_enforced: bool = True
+
+    # Runtime model selection per service tier (ADR 0008). T0 is the embedding space
+    # (ADR 0004); T1/T2 are Anthropic reasoning models; T3 is the cross-vendor OpenAI
+    # second opinion. Model IDs live here and are never hard-coded at call sites.
+    llm_models: dict[str, str] = {
+        "T0": "text-embedding-3-small",
+        "T1": "claude-haiku-4-5",
+        "T2": "claude-sonnet-5",
+        "T3": "gpt-4.1",
+    }
+
+    # Explicit tier -> provider mapping. Never infer the provider from the model string.
+    llm_tier_providers: dict[str, str] = {
+        "T0": "openai",
+        "T1": "anthropic",
+        "T2": "anthropic",
+        "T3": "openai",
+    }
+
+    # Ordered cross-vendor fallbacks for reasoning tiers. T3 remains the OpenAI verifier.
+    llm_tier_fallbacks: dict[str, list[dict[str, str]]] = {
+        "T1": [{"provider": "openai", "model": "gpt-4.1-mini"}],
+        "T2": [{"provider": "openai", "model": "gpt-4.1"}],
+    }
+
+    # Provider API base URLs (overridable for staging/proxy deployments).
+    anthropic_base_url: str = "https://api.anthropic.com"
+    anthropic_api_version: str = "2023-06-01"
+    openai_base_url: str = "https://api.openai.com"
+    llm_request_timeout_seconds: float = 60.0
+
+    # Provider request/throughput guardrails.
+    llm_provider_rpm_limits: dict[str, int] = {
+        "openai": 60,
+        "anthropic": 60,
+    }
+    llm_provider_tpm_limits: dict[str, int] = {
+        "openai": 120_000,
+        "anthropic": 30_000,
+    }
+
+    # Provider pricing in USD per 1M tokens (input/output). Sub-cent precision matters:
+    # a single T1 call costs a small fraction of a cent, and monthly spend is the sum of
+    # hundreds of them, so these are never rounded to cents at the call site.
+    llm_provider_token_price_usd_per_1m: dict[str, dict[str, float]] = {
+        "anthropic:claude-haiku-4-5": {
+            "input": 1.00,
+            "output": 5.00,
+        },
+        "anthropic:claude-sonnet-5": {
+            "input": 3.00,
+            "output": 15.00,
+        },
+        "openai:gpt-4.1": {
+            "input": 2.00,
+            "output": 8.00,
+        },
+        "openai:gpt-4.1-mini": {
+            "input": 0.40,
+            "output": 1.60,
+        },
+        "openai:text-embedding-3-small": {
+            "input": 0.02,
+            "output": 0.00,
+        },
+    }
+
+    # Provider Batch API discount (ADR 0008: daily batch stages take ~50% off).
+    llm_batch_discount_multiplier: float = 0.5
+
+    # Per-tier context and response token budgets.
+    llm_tier_context_token_limits: dict[str, int] = {
+        "T0": 8_000,
+        "T1": 40_000,
+        "T2": 64_000,
+        "T3": 96_000,
+    }
+    llm_tier_max_output_tokens: dict[str, int] = {
+        "T0": 0,
+        "T1": 2_000,
+        "T2": 4_000,
+        "T3": 6_000,
+    }
+
+    # T2 retrieval cap.
+    llm_t2_top_n: int = 5
+
     @field_validator("log_level")
     @classmethod
     def _normalize_log_level(cls, value: str) -> str:

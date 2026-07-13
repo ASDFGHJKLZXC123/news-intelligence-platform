@@ -43,8 +43,14 @@ EMBEDDING_DIM = 1536
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_MODEL_VERSION = "current"
 
-# Vocabularies shared with migration 0013. `*_score` fields are 0-100; `confidence`,
-# `probability`, and `similarity_score` are 0-1 (llm-contracts-reconciliation spec).
+#: Type of a persisted contract score (migration 0014): 0-100 at the contract's two decimal
+#: places. ``asdecimal=False`` keeps the mapped attribute a plain ``float``, so the scores
+#: stay arithmetic-compatible with the rest of the pipeline and with ``Mapped[float]``.
+SCORE_NUMERIC = Numeric(5, 2, asdecimal=False)
+
+# Vocabularies shared with migrations 0013/0014. `*_score` fields are 0-100 -- including
+# `similarity_score`, which migration 0014 rescaled off its original 0-1 scale. `confidence`
+# and `probability` remain 0-1 (llm-contracts-reconciliation spec).
 EPISODE_TYPES = (
     "banking_stress",
     "sovereign_debt",
@@ -308,7 +314,7 @@ class EventCompany(Base):
         Uuid, ForeignKey("companies.id", ondelete="CASCADE"), primary_key=True
     )
     impact_direction: Mapped[str | None] = mapped_column(String(32), nullable=True)
-    impact_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    impact_score: Mapped[float | None] = mapped_column(SCORE_NUMERIC, nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     exposure_explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
     confidence_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
@@ -344,7 +350,7 @@ class EventIndustry(Base):
     )
     industry_id: Mapped[str] = mapped_column(String(128), primary_key=True)
     impact_direction: Mapped[str | None] = mapped_column(String(32), nullable=True)
-    impact_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    impact_score: Mapped[float | None] = mapped_column(SCORE_NUMERIC, nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     opportunity_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
@@ -466,6 +472,9 @@ class LLMRun(Base):
     output_schema_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
     input_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     output: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
+    # `output` is the normalized contract payload used downstream; `raw_output` keeps the
+    # provider payload exactly as parsed, so a normalized score stays auditable.
+    raw_output: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     evidence_refs: Mapped[Any | None] = mapped_column(JSONB, nullable=True)
     no_finding_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     input_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -1489,7 +1498,7 @@ class ForecastScenario(Base):
     scenario_set_id: Mapped[uuid.UUID] = mapped_column(Uuid, nullable=False, index=True)
     scenario_name: Mapped[str] = mapped_column(String(32), nullable=False)
     probability: Mapped[float] = mapped_column(Numeric, nullable=False)
-    risk_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    risk_score: Mapped[float] = mapped_column(SCORE_NUMERIC, nullable=False)
     severity: Mapped[str] = mapped_column(String(16), nullable=False)
     horizon: Mapped[str] = mapped_column(String(16), nullable=False)
     narrative: Mapped[str] = mapped_column(Text, nullable=False)
@@ -1550,7 +1559,7 @@ class EventAnalogy(Base):
     llm_run_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    similarity_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    similarity_score: Mapped[float] = mapped_column(SCORE_NUMERIC, nullable=False)
     rationale: Mapped[str] = mapped_column(Text, nullable=False)
     limitations: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
     shared_causes: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
@@ -1567,7 +1576,7 @@ class EventAnalogy(Base):
             name="uq_event_analogies_event_episode",
         ),
         CheckConstraint(
-            "similarity_score >= 0 AND similarity_score <= 1",
+            "similarity_score >= 0 AND similarity_score <= 100",
             name="ck_event_analogies_similarity_score",
         ),
     )
@@ -1589,7 +1598,7 @@ class RiskWarning(Base):
         Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
     )
     risk_type: Mapped[str] = mapped_column(String(64), nullable=False)
-    risk_score: Mapped[float] = mapped_column(Numeric, nullable=False)
+    risk_score: Mapped[float] = mapped_column(SCORE_NUMERIC, nullable=False)
     probability: Mapped[float] = mapped_column(Numeric, nullable=False)
     horizon: Mapped[str] = mapped_column(String(16), nullable=False)
     severity: Mapped[str] = mapped_column(String(16), nullable=False)
