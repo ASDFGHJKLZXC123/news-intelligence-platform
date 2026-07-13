@@ -17,11 +17,13 @@ from pydantic import ValidationError
 
 from db.models.enums import Horizon, RiskLevel, risk_level_for_score
 from services.llm.contracts import (
+    NIL_DECISION,
     AssertionStatus,
     BaseLLMContract,
     CompanyImpact,
     Critique,
     CritiqueVerdict,
+    EntityLinkAdjudication,
     EventExtraction,
     ForecastScenarios,
     HistoricalAnalogy,
@@ -195,6 +197,11 @@ def _payloads() -> dict[str, dict[str, Any]]:
                 }
             ],
         },
+        "EntityLinkAdjudication": {
+            **envelope,
+            "schema_name": "EntityLinkAdjudication",
+            "decision": "company-acme",
+        },
     }
 
 
@@ -225,6 +232,7 @@ def test_registry_and_contract_names_are_discoverable() -> None:
         "Critique",
         "RiskWarning",
         "ReportComposition",
+        "EntityLinkAdjudication",
     }
 
 
@@ -1167,3 +1175,92 @@ def test_report_composition_blocks_must_be_claim_tagged() -> None:
 
     with pytest.raises(ValidationError, match="at least 1 item"):
         ReportComposition.model_validate(payload)
+
+
+# --- EntityLinkAdjudication: one whitelisted candidate id, or NIL (ADR 0005 stage 3) ---
+
+
+def test_entity_link_adjudication_accepts_a_whitelisted_candidate_id() -> None:
+    contract = validate_llm_contract_payload(
+        schema_name="EntityLinkAdjudication",
+        payload=_payload("EntityLinkAdjudication"),
+        allowed_ids=ALLOWED_IDS,
+    )
+
+    assert isinstance(contract, EntityLinkAdjudication)
+    assert contract.decision == "company-acme"
+    assert contract.selected_id == "company-acme"
+
+
+def test_entity_link_adjudication_accepts_nil_without_whitelisting_it() -> None:
+    """NIL is the abstain path, so it passes a whitelist that does not contain it."""
+
+    payload = _payload("EntityLinkAdjudication")
+    payload["decision"] = NIL_DECISION
+
+    contract = validate_llm_contract_payload(
+        schema_name="EntityLinkAdjudication",
+        payload=payload,
+        allowed_ids=["company-acme"],
+    )
+
+    assert contract.decision == NIL_DECISION
+    # NIL selects nothing: there is no id here for a caller to attach an entity by.
+    assert contract.selected_id is None
+
+
+@pytest.mark.parametrize(
+    "minted",
+    ["company-minted", "nil", "NIL ", "company-acme,company-other", ""],
+)
+def test_entity_link_adjudication_rejects_any_id_it_was_not_given(minted: str) -> None:
+    """Only an injected id or the exact literal NIL: no minted id, no case variant, no list."""
+
+    payload = _payload("EntityLinkAdjudication")
+    payload["decision"] = minted
+
+    with pytest.raises(ValidationError):
+        validate_llm_contract_payload(
+            schema_name="EntityLinkAdjudication",
+            payload=payload,
+            allowed_ids=["company-acme"],
+        )
+
+
+def test_entity_link_adjudication_permits_an_abstain_reason_only_with_nil() -> None:
+    """The envelope's abstain reason is a reason for NIL, never prose attached to a selection."""
+
+    payload = _payload("EntityLinkAdjudication")
+    payload["no_finding_reason"] = "Neither candidate is this company."
+
+    with pytest.raises(ValidationError, match="abstain reason"):
+        validate_llm_contract_payload(
+            schema_name="EntityLinkAdjudication",
+            payload=payload,
+            allowed_ids=ALLOWED_IDS,
+        )
+
+    payload["decision"] = NIL_DECISION
+    contract = validate_llm_contract_payload(
+        schema_name="EntityLinkAdjudication",
+        payload=payload,
+        allowed_ids=ALLOWED_IDS,
+    )
+    assert contract.no_finding_reason == "Neither candidate is this company."
+
+
+def test_entity_link_adjudication_schema_asks_for_exactly_one_decision_field() -> None:
+    """The provider-native schema has no field for prose, a runner-up, or a model confidence."""
+
+    schema = llm_contract_json_schema("EntityLinkAdjudication")
+
+    assert schema["additionalProperties"] is False
+    assert "decision" in schema["required"]
+    assert set(schema["properties"]) == {
+        "schema_name",
+        "schema_version",
+        "prompt_template_version",
+        "no_finding_reason",
+        "decision",
+    }
+    assert NIL_DECISION in schema["properties"]["decision"]["description"]

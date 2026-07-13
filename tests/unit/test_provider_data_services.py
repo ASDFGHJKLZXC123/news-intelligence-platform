@@ -32,12 +32,16 @@ class FakeSession:
         self.items.append(obj)
 
     def find_one(self, model: type[Any], **criteria: Any) -> Any | None:
-        for item in self.items:
-            if not isinstance(item, model):
-                continue
-            if all(getattr(item, key) == value for key, value in criteria.items()):
-                return item
+        for item in self.find_all(model, **criteria):
+            return item
         return None
+
+    def find_all(self, model: type[Any], **criteria: Any) -> list[Any]:
+        return [
+            item
+            for item in self.all_of(model)
+            if all(getattr(item, key) == value for key, value in criteria.items())
+        ]
 
     def all_of(self, model: type[Any]) -> list[Any]:
         return [item for item in self.items if isinstance(item, model)]

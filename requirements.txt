@@ -14,3 +14,8 @@ celery[redis]>=5.3,<6.0
 redis>=6.4,<6.5
 # HTTP client for the live LLM provider adapters (Stage 2, ADR 0008).
 httpx>=0.28,<1.0
+# Mention extraction (ADR 0005 stage 1). The `en_core_web_trf` pipeline is NOT a Python
+# dependency and is deliberately not pinned here: it is an explicit deployment step
+# (`python -m spacy download en_core_web_trf`, which also installs the spacy-transformers
+# runtime the model declares). Nothing in the application downloads a model.
+spacy>=3.8,<4.0

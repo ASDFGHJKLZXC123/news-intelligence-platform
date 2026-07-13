@@ -79,6 +79,10 @@ class LLMOrchestratorRequest:
     articles: tuple[dict[str, Any], ...] = ()
     allowed_ids: tuple[str, ...] | None = None
     context: dict[str, Any] | None = None
+    #: Sampling temperature for this run. ``None`` leaves the provider default in place, which
+    #: is what every caller before ADR 0005 stage 3 relied on; a caller that needs a
+    #: reproducible run asks for one (adjudication asks for 0).
+    temperature: float | None = None
 
 
 @dataclass(frozen=True)
@@ -202,6 +206,7 @@ class LLMOrchestrator:
             requested_schema=request.requested_schema,
             context=selected_context,
             mode=mode,
+            temperature=request.temperature,
         )
 
     @staticmethod
@@ -281,7 +286,7 @@ class LLMOrchestrator:
                 "degraded_provider": degraded_provider,
                 "degraded_reasons": list(route_degraded_reasons),
             },
-            temperature=None,
+            temperature=request.temperature,
             seed=None,
             status=status,
             attempt=attempt,

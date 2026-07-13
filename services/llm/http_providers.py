@@ -38,6 +38,21 @@ class LLMBatchModeUnsupported(LLMProviderError):
     """Raised when batch mode is requested from a realtime-only adapter."""
 
 
+def _with_temperature(
+    body: dict[str, Any], request: LLMInvocationRequest
+) -> dict[str, Any]:
+    """Add the requested sampling temperature to a provider body, and only when one was asked for.
+
+    Both vendors name the field ``temperature`` and both default it themselves. A request that
+    asks for none therefore sends none, so every call written before the field existed keeps the
+    exact body it had; a request that asks for 0 (ADR 0005 stage-3 adjudication) sends 0.
+    """
+
+    if request.temperature is None:
+        return body
+    return {**body, "temperature": float(request.temperature)}
+
+
 class _HTTPProviderAdapter:
     """Shared transport plumbing for the live HTTP providers."""
 
@@ -134,20 +149,23 @@ class AnthropicMessagesProvider(_HTTPProviderAdapter):
         schema_name = request.requested_schema
         body = self._post(
             "/v1/messages",
-            {
-                "model": self.model_name,
-                "max_tokens": self._max_output_tokens,
-                "messages": [{"role": "user", "content": request.prompt}],
-                "tools": [
-                    {
-                        "name": schema_name,
-                        "description": f"Return exactly one {schema_name} payload.",
-                        "input_schema": llm_contract_json_schema(schema_name),
-                    }
-                ],
-                # Forcing the tool is what makes the response schema-shaped rather than prose.
-                "tool_choice": {"type": "tool", "name": schema_name},
-            },
+            _with_temperature(
+                {
+                    "model": self.model_name,
+                    "max_tokens": self._max_output_tokens,
+                    "messages": [{"role": "user", "content": request.prompt}],
+                    "tools": [
+                        {
+                            "name": schema_name,
+                            "description": f"Return exactly one {schema_name} payload.",
+                            "input_schema": llm_contract_json_schema(schema_name),
+                        }
+                    ],
+                    # Forcing the tool is what makes the response schema-shaped, not prose.
+                    "tool_choice": {"type": "tool", "name": schema_name},
+                },
+                request,
+            ),
         )
 
         structured = self._tool_input(body, schema_name)
@@ -203,22 +221,25 @@ class OpenAIChatCompletionsProvider(_HTTPProviderAdapter):
         schema_name = request.requested_schema
         body = self._post(
             "/v1/chat/completions",
-            {
-                "model": self.model_name,
-                "max_completion_tokens": self._max_output_tokens,
-                "messages": [{"role": "user", "content": request.prompt}],
-                "response_format": {
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": schema_name,
-                        # Non-strict: the contract schemas carry $refs and range/length
-                        # constraints that strict mode rejects. Pydantic re-validates the
-                        # payload, and the orchestrator retries once with the errors.
-                        "strict": False,
-                        "schema": llm_contract_json_schema(schema_name),
+            _with_temperature(
+                {
+                    "model": self.model_name,
+                    "max_completion_tokens": self._max_output_tokens,
+                    "messages": [{"role": "user", "content": request.prompt}],
+                    "response_format": {
+                        "type": "json_schema",
+                        "json_schema": {
+                            "name": schema_name,
+                            # Non-strict: the contract schemas carry $refs and range/length
+                            # constraints that strict mode rejects. Pydantic re-validates the
+                            # payload, and the orchestrator retries once with the errors.
+                            "strict": False,
+                            "schema": llm_contract_json_schema(schema_name),
+                        },
                     },
                 },
-            },
+                request,
+            ),
         )
 
         structured = self._message_payload(body)

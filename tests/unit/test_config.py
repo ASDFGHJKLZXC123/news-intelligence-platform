@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import json
 
+import pytest
+from pydantic import ValidationError
+
 from packages.config.settings import Settings
 
 
@@ -55,6 +58,9 @@ def test_provider_settings_defaults_are_safe() -> None:
     assert settings.nasa_firms_map_key == ""
     assert settings.eia_base_url == "https://api.eia.gov/v2"
     assert settings.eia_api_key == ""
+    assert settings.wikidata_sparql_endpoint == "https://query.wikidata.org/sparql"
+    assert "configure WIKIDATA_USER_AGENT" in settings.wikidata_user_agent
+    assert settings.wikidata_timeout_seconds == 30.0
 
 
 def test_provider_settings_env_overrides(monkeypatch) -> None:
@@ -71,6 +77,9 @@ def test_provider_settings_env_overrides(monkeypatch) -> None:
     monkeypatch.setenv("NASA_FIRMS_MAP_KEY", "test-firms-key")
     monkeypatch.setenv("EIA_BASE_URL", "https://example.test/eia")
     monkeypatch.setenv("EIA_API_KEY", "test-eia-key")
+    monkeypatch.setenv("WIKIDATA_SPARQL_ENDPOINT", "https://example.test/sparql")
+    monkeypatch.setenv("WIKIDATA_USER_AGENT", "Example App test@example.com")
+    monkeypatch.setenv("WIKIDATA_TIMEOUT_SECONDS", "5")
 
     settings = Settings()
 
@@ -87,6 +96,9 @@ def test_provider_settings_env_overrides(monkeypatch) -> None:
     assert settings.nasa_firms_map_key == "test-firms-key"
     assert settings.eia_base_url == "https://example.test/eia"
     assert settings.eia_api_key == "test-eia-key"
+    assert settings.wikidata_sparql_endpoint == "https://example.test/sparql"
+    assert settings.wikidata_user_agent == "Example App test@example.com"
+    assert settings.wikidata_timeout_seconds == 5.0
 
 
 def test_stage2_llm_settings_default_values() -> None:
@@ -209,3 +221,100 @@ def test_stage2_llm_settings_env_overrides(monkeypatch) -> None:
     assert settings.llm_tier_context_token_limits == {"T1": 1000, "T2": 2000, "T3": 3000}
     assert settings.llm_tier_max_output_tokens == {"T1": 100, "T2": 200, "T3": 300}
     assert settings.llm_t2_top_n == 12
+
+
+# --- Entity identity refresh configuration (ADR 0006) ---------------------------------
+def test_identity_refresh_defaults_are_offline_safe() -> None:
+    """A fresh checkout must not reach SEC, GLEIF, or WDQS from a scheduled refresh."""
+    settings = Settings()
+
+    # Both curated inputs are empty, so neither monthly refresh has anything to look up.
+    assert settings.identity_watchlist_names == []
+    assert settings.wikidata_qid_seed_list == []
+    # The fair-access User-Agents are still placeholders, which is what makes the SEC and
+    # Wikidata bindings record a skipped run instead of calling out.
+    assert "configure SEC_USER_AGENT" in settings.sec_user_agent
+    assert "configure WIKIDATA_USER_AGENT" in settings.wikidata_user_agent
+    # Every live call is bounded by an explicit timeout.
+    assert settings.sec_timeout_seconds > 0
+    assert settings.gleif_timeout_seconds > 0
+    assert settings.wikidata_timeout_seconds > 0
+
+
+def test_identity_watchlist_parsing_cleans_and_deduplicates() -> None:
+    settings = Settings(identity_watchlist="Nestle S.A., Siemens AG ,, Nestle S.A. ,Bosch GmbH")
+
+    # Repeats collapse and configured order is preserved; blanks never become a search.
+    assert settings.identity_watchlist_names == ["Nestle S.A.", "Siemens AG", "Bosch GmbH"]
+
+
+def test_wikidata_qid_seed_parsing_normalizes_and_deduplicates() -> None:
+    settings = Settings(wikidata_qid_seeds=" q312 ,Q95,, Q312 ")
+
+    assert settings.wikidata_qid_seed_list == ["Q312", "Q95"]
+
+
+@pytest.mark.parametrize("value", ["Q312, P31", "Q0", "312", "Q312x", "Q"])
+def test_a_malformed_wikidata_qid_seed_is_rejected_at_configuration_time(value: str) -> None:
+    """A typo'd seed would otherwise silently drop an entity from the monthly enrichment."""
+    with pytest.raises(ValidationError, match="invalid Wikidata QID"):
+        Settings(wikidata_qid_seeds=value)
+
+
+@pytest.mark.parametrize("field", ["gleif_search_limit", "wikidata_batch_size"])
+def test_a_non_positive_identity_bound_is_rejected(field: str) -> None:
+    with pytest.raises(ValidationError):
+        Settings(**{field: 0})
+
+
+def test_identity_settings_read_from_the_environment(monkeypatch) -> None:
+    monkeypatch.setenv("SEC_USER_AGENT", "news-intel/1.0 (ops@example.com)")
+    monkeypatch.setenv("WIKIDATA_USER_AGENT", "news-intel/1.0 (ops@example.com)")
+    monkeypatch.setenv("GLEIF_USER_AGENT", "news-intel/1.0 (ops@example.com)")
+    monkeypatch.setenv("IDENTITY_WATCHLIST", "Nestle S.A.,Siemens AG")
+    monkeypatch.setenv("WIKIDATA_QID_SEEDS", "Q312,Q95")
+    monkeypatch.setenv("WIKIDATA_SPARQL_ENDPOINT", "https://wdqs.example.test/sparql")
+    monkeypatch.setenv("SEC_TIMEOUT_SECONDS", "12.5")
+    monkeypatch.setenv("GLEIF_SEARCH_LIMIT", "5")
+    monkeypatch.setenv("WIKIDATA_BATCH_SIZE", "50")
+
+    settings = Settings()
+
+    assert settings.sec_user_agent == "news-intel/1.0 (ops@example.com)"
+    assert settings.gleif_user_agent == "news-intel/1.0 (ops@example.com)"
+    assert settings.identity_watchlist_names == ["Nestle S.A.", "Siemens AG"]
+    assert settings.wikidata_qid_seed_list == ["Q312", "Q95"]
+    assert settings.wikidata_sparql_endpoint == "https://wdqs.example.test/sparql"
+    assert settings.sec_timeout_seconds == 12.5
+    assert settings.gleif_search_limit == 5
+    assert settings.wikidata_batch_size == 50
+
+
+# --- Mention extraction configuration (ADR 0005) --------------------------------------
+def test_ner_defaults_name_the_transformer_pipeline_and_a_cpu_batch() -> None:
+    settings = Settings()
+
+    assert settings.ner_model == "en_core_web_trf"
+    assert settings.ner_batch_size >= 1
+
+
+def test_ner_settings_read_from_the_environment(monkeypatch) -> None:
+    monkeypatch.setenv("NER_MODEL", " en_core_web_sm ")
+    monkeypatch.setenv("NER_BATCH_SIZE", "32")
+
+    settings = Settings()
+
+    assert settings.ner_model == "en_core_web_sm"  # surrounding whitespace is stripped
+    assert settings.ner_batch_size == 32
+
+
+@pytest.mark.parametrize("value", [0, -4])
+def test_a_non_positive_ner_batch_size_is_rejected(value: int) -> None:
+    with pytest.raises(ValidationError, match="positive number of articles"):
+        Settings(ner_batch_size=value)
+
+
+@pytest.mark.parametrize("value", ["", "   "])
+def test_a_blank_ner_model_name_is_rejected(value: str) -> None:
+    with pytest.raises(ValidationError, match="must name an installed spaCy pipeline"):
+        Settings(ner_model=value)

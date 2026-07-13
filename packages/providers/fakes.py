@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime
 import hashlib
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 from packages.providers.base import (
     Clock,
@@ -43,9 +43,17 @@ from packages.providers.base import (
     SanctionsIdentifier,
     SanctionsProvider,
     SECCompanyFact,
+    SECCompanyTicker,
+    SECCompanyTickerProvider,
     SECEdgarProvider,
     SECSubmission,
+    WikidataAlias,
+    WikidataEntity,
+    WikidataItemRef,
+    WikidataProvider,
+    WikidataQidMatch,
     ensure_utc,
+    normalize_wikidata_qid,
 )
 
 FAKE_PROVIDER_NAME = "fake-provider"
@@ -382,6 +390,37 @@ class FakeSECEdgarProvider(SECEdgarProvider):
         return list(self._facts_by_cik.get(normalized_cik, self._default_facts(cik)))
 
 
+class FakeSECCompanyTickerProvider(SECCompanyTickerProvider):
+    """Return a fixed SEC company_tickers.json identity seed."""
+
+    def __init__(self, tickers: list[SECCompanyTicker] | None = None) -> None:
+        self._tickers = tickers if tickers is not None else self._default_tickers()
+
+    @staticmethod
+    def _default_tickers() -> list[SECCompanyTicker]:
+        rows = (
+            ("320193", "AAPL", "Apple Inc."),
+            ("1652044", "GOOGL", "Alphabet Inc."),
+            # Same CIK, second class of stock: exercises multi-ticker-per-company handling.
+            ("1652044", "GOOG", "Alphabet Inc."),
+        )
+        return [
+            SECCompanyTicker(
+                cik=cik,
+                ticker=ticker,
+                title=title,
+                provider_name=FAKE_PROVIDER_NAME,
+                source_refs=(f"sec:company_tickers:{cik.zfill(10)}",),
+                evidence_refs=("https://www.sec.gov/files/company_tickers.json",),
+                metadata={"deterministic": True},
+            )
+            for cik, ticker, title in rows
+        ]
+
+    def fetch_company_tickers(self) -> list[SECCompanyTicker]:
+        return list(self._tickers)
+
+
 class FakeSanctionsProvider(SanctionsProvider):
     """Return deterministic sanctioned entities and deltas."""
 
@@ -563,6 +602,81 @@ class FakeEntityIdentityProvider(EntityIdentityProvider):
                 if relationship.relationship_type == relationship_type
             ]
         return relationships[:limit]
+
+
+class FakeWikidataProvider(WikidataProvider):
+    """Return deterministic Wikidata identity payloads for the bounded QIDs asked for."""
+
+    def __init__(
+        self,
+        entities: list[WikidataEntity] | None = None,
+        qid_matches: list[WikidataQidMatch] | None = None,
+    ) -> None:
+        self._entities = entities if entities is not None else self._default_entities()
+        self._qid_matches = (
+            qid_matches if qid_matches is not None else self._default_qid_matches()
+        )
+
+    @staticmethod
+    def _default_entities() -> list[WikidataEntity]:
+        return [
+            WikidataEntity(
+                qid="Q312",
+                label="Apple Inc.",
+                description="American multinational technology company",
+                aliases=(
+                    WikidataAlias(value="Apple Inc.", alias_type="legal_name"),
+                    WikidataAlias(value="Apple", alias_type="colloquial"),
+                    WikidataAlias(
+                        value="Apple Computer, Inc.",
+                        alias_type="former_name",
+                        valid_from=datetime.date(1977, 1, 3),
+                        valid_to=datetime.date(2007, 1, 9),
+                    ),
+                    WikidataAlias(value="iPhone", alias_type="brand_product", qid="Q2766"),
+                ),
+                tickers=("AAPL",),
+                leis=("HWUPKR0MPOU8FGXBT394",),
+                ciks=("0000320193",),
+                industries=(WikidataItemRef(qid="Q11661", label="information technology"),),
+                provider_name=FAKE_PROVIDER_NAME,
+                source_refs=("wikidata:sparql",),
+                evidence_refs=("https://www.wikidata.org/wiki/Q312",),
+                metadata={"deterministic": True},
+            )
+        ]
+
+    @staticmethod
+    def _default_qid_matches() -> list[WikidataQidMatch]:
+        return [
+            WikidataQidMatch(
+                qid="Q312",
+                identifier_type="cik",
+                identifier_value="0000320193",
+                provider_name=FAKE_PROVIDER_NAME,
+            )
+        ]
+
+    def resolve_qids(
+        self,
+        *,
+        ciks: Sequence[str] = (),
+        leis: Sequence[str] = (),
+        limit: int = 10_000,
+    ) -> list[WikidataQidMatch]:
+        wanted = {("cik", str(value)) for value in ciks} | {("lei", str(value)) for value in leis}
+        matches = [
+            match
+            for match in self._qid_matches
+            if (match.identifier_type, match.identifier_value) in wanted
+        ]
+        return matches[:limit]
+
+    def fetch_entities(
+        self, qids: Sequence[str], *, limit: int = 10_000
+    ) -> list[WikidataEntity]:
+        wanted = {normalize_wikidata_qid(qid) for qid in qids}
+        return [entity for entity in self._entities if entity.qid in wanted][:limit]
 
 
 class FakeCountryIndicatorProvider(CountryIndicatorProvider):

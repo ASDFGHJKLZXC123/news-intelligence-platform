@@ -10,9 +10,11 @@ from services.llm.adapters import (
 )
 from services.llm.cache import InMemoryLLMPromptCache, PromptCache, RedisLLMPromptCache
 from services.llm.contracts import (
+    NIL_DECISION,
     BaseLLMContract,
     Critique,
     CritiqueVerdict,
+    EntityLinkAdjudication,
     EventExtraction,
     ForecastScenarios,
     ImpactDirection,
@@ -62,9 +64,11 @@ from services.llm.selection import (
 
 __all__ = [
     "CALLABLE_TIERS",
+    "NIL_DECISION",
     "AnthropicMessagesProvider",
     "BaseLLMContract",
     "CompositeProviderLimiter",
+    "EntityLinkAdjudication",
     "InMemoryLLMRuntimeRepository",
     "InMemoryTokenBucketLimiter",
     "LLMBatchModeUnsupported",

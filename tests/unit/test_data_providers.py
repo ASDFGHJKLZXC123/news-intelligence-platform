@@ -48,9 +48,11 @@ class RecordingTransport:
     def __init__(self, *payloads: dict[str, Any]) -> None:
         self.payloads = list(payloads)
         self.targets: list[str | Request] = []
+        self.timeouts: list[float | None] = []
 
-    def __call__(self, target: str | Request) -> BytesResponse:
+    def __call__(self, target: str | Request, timeout: float | None = None) -> BytesResponse:
         self.targets.append(target)
+        self.timeouts.append(timeout)
         return BytesResponse(self.payloads.pop(0))
 
 

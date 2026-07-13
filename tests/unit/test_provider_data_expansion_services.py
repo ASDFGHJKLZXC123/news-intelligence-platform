@@ -8,9 +8,6 @@ from db.models import (
     CountryIndicatorObservation,
     CountryIndicatorSeries,
     EnergyMarketSnapshot,
-    EntityIdentifier,
-    EntityProfile,
-    EntityRelationship,
     GeoIncident,
     HumanitarianReport,
     RawIngestionItem,
@@ -22,7 +19,6 @@ from db.models import (
 from packages.providers.fakes import (
     FakeCountryIndicatorProvider,
     FakeEnergyProvider,
-    FakeEntityIdentityProvider,
     FakeGeoIncidentProvider,
     FakeHumanitarianProvider,
     FakeSanctionsProvider,
@@ -30,7 +26,6 @@ from packages.providers.fakes import (
 from services.provider_data import (
     ingest_country_indicators,
     ingest_energy_series,
-    ingest_entity_identity_records,
     ingest_geo_incidents,
     ingest_humanitarian_reports,
     ingest_sanctions_entities,
@@ -79,22 +74,8 @@ def test_sanctions_ingestion_upserts_entities_aliases_identifiers_and_raw_items(
     assert entity.programs == ["CYBER2"]
 
 
-def test_entity_identity_ingestion_upserts_profiles_identifiers_relationships_and_raw() -> None:
-    session = FakeSession()
-    provider = FakeEntityIdentityProvider()
-
-    first = ingest_entity_identity_records(session, provider, queries=["Example Financial"])
-    second = ingest_entity_identity_records(session, provider, queries=["Example Financial"])
-
-    assert first.fetched == 1
-    assert first.inserted == 1
-    assert first.details["identifiers_inserted"] == 1
-    assert first.details["relationships_inserted"] == 1
-    assert second.inserted == 0
-    assert len(session.all_of(EntityProfile)) == 2  # record profile + related LEI placeholder
-    assert len(session.all_of(EntityIdentifier)) == 1
-    assert len(session.all_of(EntityRelationship)) == 1
-    assert len(session.all_of(RawIngestionItem)) == 2
+# GLEIF identity ingestion moved to the bounded ADR 0006 item-2A path; its coverage now
+# lives in tests/unit/test_entity_identity_gleif.py.
 
 
 def test_country_indicator_ingestion_upserts_series_observations_and_raw() -> None:

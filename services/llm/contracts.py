@@ -50,6 +50,10 @@ from db.models.enums import Horizon, RiskLevel, risk_level_for_score
 
 _ALLOWED_IDS_CONTEXT_KEY: Final[str] = "allowed_ids"
 
+#: The one decision an ID-whitelisted contract may return that is not an ID: "none of these"
+#: (ADR 0005 stage 3). It is a literal, never an ID, so it can never collide with one.
+NIL_DECISION: Final[str] = "NIL"
+
 _SCORE_MIN: Final[Decimal] = Decimal(0)
 _SCORE_MAX: Final[Decimal] = Decimal(100)
 _SCORE_QUANTUM: Final[Decimal] = Decimal("0.01")
@@ -531,6 +535,53 @@ class ReportComposition(BaseLLMContract):
         return self
 
 
+class EntityLinkAdjudication(BaseLLMContract):
+    """ADR 0005 stage 3: which candidate an ambiguous news mention refers to, or ``NIL``.
+
+    The decision space is closed by construction, which is the whole point of the contract:
+    ``decision`` is one ID from the whitelist orchestration injected into the prompt, or the
+    literal ``NIL``, and nothing else. A minted ID fails the whitelist rule every other contract
+    obeys; ``NIL`` is permitted *explicitly* rather than by widening that rule, so abstaining
+    stays possible without any invented ID becoming possible with it.
+
+    There is no free-text field to argue in: ``extra="forbid"`` rejects one the model adds, and
+    the envelope's ``no_finding_reason`` is only allowed alongside ``NIL`` -- where it is the
+    universal abstain reason -- never as commentary attached to a selection.
+    """
+
+    SCHEMA_NAME: ClassVar[str] = "EntityLinkAdjudication"
+    schema_name: Literal["EntityLinkAdjudication"]
+    decision: str = Field(
+        min_length=1,
+        description=(
+            "Exactly one candidate id from the injected candidate list, or the literal "
+            f"'{NIL_DECISION}' when no candidate is the entity the mention refers to."
+        ),
+    )
+
+    @field_validator("decision")
+    @classmethod
+    def _validate_decision(cls, value: str, info: ValidationInfo) -> str:
+        if value == NIL_DECISION:
+            return value
+        return _enforce_allowed_id(value, info, field_name="decision")
+
+    @model_validator(mode="after")
+    def _validate_adjudication(self) -> EntityLinkAdjudication:
+        if self.no_finding_reason and self.decision != NIL_DECISION:
+            raise ValueError(
+                "no_finding_reason is the abstain reason and belongs only with "
+                f"decision='{NIL_DECISION}', never with a selected candidate"
+            )
+        return self
+
+    @property
+    def selected_id(self) -> str | None:
+        """The chosen candidate ID, or ``None`` when the model abstained with ``NIL``."""
+
+        return None if self.decision == NIL_DECISION else self.decision
+
+
 LLM_CONTRACT_REGISTRY: dict[str, type[BaseLLMContract]] = {
     EventExtraction.SCHEMA_NAME: EventExtraction,
     IndustryImpact.SCHEMA_NAME: IndustryImpact,
@@ -540,6 +591,7 @@ LLM_CONTRACT_REGISTRY: dict[str, type[BaseLLMContract]] = {
     Critique.SCHEMA_NAME: Critique,
     RiskWarning.SCHEMA_NAME: RiskWarning,
     ReportComposition.SCHEMA_NAME: ReportComposition,
+    EntityLinkAdjudication.SCHEMA_NAME: EntityLinkAdjudication,
 }
 
 

@@ -105,6 +105,87 @@ def normalize_name(value: str) -> str:
     return " ".join(value.casefold().strip().split())
 
 
+# ADR 0006: the legal suffixes stripped from alias keys, casefolded.
+LEGAL_SUFFIXES: frozenset[str] = frozenset(
+    {
+        "ag",
+        "co",
+        "corp",
+        "corporation",
+        "group",
+        "holdings",
+        "inc",
+        "limited",
+        "llc",
+        "lp",
+        "ltd",
+        "nv",
+        "plc",
+        "sa",
+    }
+)
+
+# Dropped outright so "U.S." -> "us" and "Macy's" -> "macys"; other punctuation becomes
+# a separator so "Coca-Cola" -> "coca cola".
+_ALIAS_DROPPED_PUNCTUATION = str.maketrans(dict.fromkeys(".'’`´"))
+
+
+def normalize_alias(value: str) -> str:
+    """Canonical alias key (ADR 0006).
+
+    casefold -> strip punctuation -> strip repeated trailing legal suffixes -> collapse
+    whitespace. The last token is never stripped, so an alias that is nothing but a legal
+    suffix ("Group", or the ticker "CO") still normalizes to a non-empty key.
+    """
+
+    folded = value.casefold().translate(_ALIAS_DROPPED_PUNCTUATION)
+    separated = "".join(
+        character if character.isalnum() or character.isspace() else " " for character in folded
+    )
+    tokens = separated.split()
+    while len(tokens) > 1 and tokens[-1] in LEGAL_SUFFIXES:
+        tokens.pop()
+    return " ".join(tokens)
+
+
+# ADR 0006 precedence on conflict for identity fields: SEC > GLEIF > Wikidata.
+IDENTITY_SOURCE_PRECEDENCE: Mapping[str, int] = {
+    "sec-edgar": 1,
+    "gleif": 2,
+    "wikidata": 3,
+}
+# An unranked source loses every conflict against a ranked one.
+UNRANKED_IDENTITY_PRECEDENCE = 99
+
+
+def identity_precedence(source: str | None) -> int:
+    """Rank an identity source; lower wins."""
+
+    if not source:
+        return UNRANKED_IDENTITY_PRECEDENCE
+    return IDENTITY_SOURCE_PRECEDENCE.get(source, UNRANKED_IDENTITY_PRECEDENCE)
+
+
+def identity_sources(metadata: Any) -> dict[str, str]:
+    """Read the per-field ownership map that ingestion records on ``profile_metadata``."""
+
+    if not isinstance(metadata, Mapping):
+        return {}
+    sources = metadata.get("identity_sources")
+    if not isinstance(sources, Mapping):
+        return {}
+    return {str(key): str(value) for key, value in sources.items()}
+
+
+def can_claim_identity_field(metadata: Any, field: str, *, source: str) -> bool:
+    """True when ``source`` outranks (or is) the source that already owns ``field``."""
+
+    owner = identity_sources(metadata).get(field)
+    if owner is None:
+        return True
+    return identity_precedence(source) <= identity_precedence(owner)
+
+
 def date_from_datetime(value: datetime.datetime | None) -> datetime.date | None:
     return value.date() if value is not None else None
 
@@ -141,6 +222,32 @@ def to_float_or_none(value: Any) -> float | None:
         return None
 
 
+def flush_pending(session: Any) -> None:
+    """Make rows this run already added visible to the next read.
+
+    Every upsert in these services guards on a ``find_one``/``find_all`` lookup, which is
+    only a real guard if it can see what the same run just added. A dict-backed fake session
+    gives that for free; a real Session is built with ``autoflush=False``, so without this a
+    second occurrence of the same row inside one run reads back empty and is inserted again —
+    a duplicate that only surfaces as a unique-constraint violation at commit. The SEC seed
+    hits this on its first run: a company with two share classes (Alphabet's GOOGL and GOOG)
+    is two rows carrying one CIK and one legal name.
+    """
+
+    flush = getattr(session, "flush", None)
+    if callable(flush):
+        flush()
+
+
+def _equality_query(model: type[Any], criteria: Mapping[str, Any]) -> Any:
+    stmt = select(model)
+    for name, expected in criteria.items():
+        column = getattr(model, name)
+        condition = column.is_(None) if expected is None else column == expected
+        stmt = stmt.where(condition)
+    return stmt
+
+
 def find_one(session: Any, model: type[Any], **criteria: Any) -> Any | None:
     """Find one row by simple equality criteria using SQLAlchemy or a lightweight fake."""
 
@@ -148,17 +255,39 @@ def find_one(session: Any, model: type[Any], **criteria: Any) -> Any | None:
     if callable(custom_find):
         return custom_find(model, **criteria)
 
-    stmt = select(model)
-    for name, expected in criteria.items():
-        column = getattr(model, name)
-        condition = column.is_(None) if expected is None else column == expected
-        stmt = stmt.where(condition)
-    return session.execute(stmt).scalars().first()
+    flush_pending(session)
+    return session.execute(_equality_query(model, criteria)).scalars().first()
+
+
+def find_all(session: Any, model: type[Any], **criteria: Any) -> list[Any]:
+    """List rows by simple equality criteria using SQLAlchemy or a lightweight fake."""
+
+    custom_find = getattr(session, "find_all", None)
+    if callable(custom_find):
+        return list(custom_find(model, **criteria))
+
+    flush_pending(session)
+    return list(session.execute(_equality_query(model, criteria)).scalars().all())
 
 
 def add(session: Any, obj: Any) -> Any:
     session.add(obj)
     return obj
+
+
+def add_entity_profile(session: Any, profile: Any) -> Any:
+    """Add a new entity profile and flush it, so rows pointing at it have a live FK target.
+
+    The identity models declare no ORM ``relationship()``, so SQLAlchemy's unit of work has no
+    inter-mapper dependency to sort inserts by and falls back to mapper name: ``EntityAlias``
+    and ``EntityIdentifier`` both sort before ``EntityProfile``. Adding a profile and its
+    aliases in one flush therefore emits the child inserts first, and they fail the profile's
+    foreign key. Flushing the profile on creation is what makes the parent exist first.
+    """
+
+    session.add(profile)
+    flush_pending(session)
+    return profile
 
 
 def retain_raw_item(

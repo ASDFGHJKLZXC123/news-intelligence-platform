@@ -1,5 +1,81 @@
-"""Entity identity resolution helpers."""
+"""Entity identity resolution helpers.
 
+Two resolvers, two problems: ``resolution`` links a provider record that already carries a
+CIK/LEI/ticker, and ``news_linking`` links a news mention that carries only a surface form
+(ADR 0005 stage 2). ``review_queue`` reads back the mentions the latter could not resolve.
+
+The rest is the ADR 0005 pipeline around them: ``adjudication`` is stage 3 (the LLM breaks ties
+in the ambiguous band, and only there), ``event_links`` persists what was accepted and carries
+the assertion status that decides risk eligibility, ``parent_exposure`` derives -- read-only, at
+scoring time -- the exposures a parent inherits from a mention of its child, and ``event_linking``
+runs all of it over one event.
+"""
+
+from services.entities.adjudication import (
+    ADJUDICATION_SCHEMA,
+    ADJUDICATION_TEMPERATURE,
+    ADJUDICATION_TIER,
+    AdjudicationDecision,
+    AdjudicationNotApplicableError,
+    MentionAdjudication,
+    MentionAdjudicator,
+    MentionAdjudicatorProtocol,
+    build_adjudication_prompt,
+    record_adjudication,
+)
+from services.entities.event_linking import (
+    EventLinkingResult,
+    EventNotFoundError,
+    MentionExtractor,
+    MentionOutcome,
+    SkippedArticle,
+    link_event_entities,
+)
+from services.entities.event_links import (
+    DIRECT_MENTION_ROLES,
+    RISK_ELIGIBLE_ROLES,
+    ROLE_ASSERTED,
+    ROLE_DENIED,
+    ROLE_SPECULATIVE,
+    EventEntityLink,
+    event_entity_links,
+    merge_roles,
+    persist_event_entity_link,
+    risk_eligible_event_links,
+    role_for_assertion,
+)
+from services.entities.news_linking import (
+    ACCEPT_THRESHOLD,
+    ADJUDICATE_THRESHOLD,
+    LINKABLE_ALIAS_TYPES,
+    NEWS_MENTION_TARGET_TYPE,
+    SIGNAL_WEIGHTS,
+    WIKIDATA_ALIAS_PRIOR,
+    AliasEvidence,
+    ArticleLinkingContext,
+    LinkBand,
+    LinkCandidate,
+    LinkSignal,
+    MentionLinkResult,
+    NewsEntityLinker,
+    NewsLinkingError,
+    RejectedCandidate,
+    SignalEvidence,
+    band_for_score,
+    band_of_run,
+    decide_band,
+    link_mention,
+    link_mentions,
+)
+from services.entities.parent_exposure import (
+    MAX_PARENT_DEPTH,
+    PARENT_RELATIONSHIP_TYPE,
+    PROPAGATED_PARENT,
+    ParentExposure,
+    RelationshipEvidence,
+    event_parent_exposures,
+    parent_exposures,
+)
 from services.entities.resolution import (
     AUTO_ACCEPTED,
     LIKELY_MATCH,
@@ -13,17 +89,82 @@ from services.entities.resolution import (
     confidence_band,
     resolve_entity,
 )
+from services.entities.review_queue import (
+    REVIEW_WINDOW,
+    ReviewQueueEntry,
+    unresolved_mention_queue,
+    weekly_unresolved_mention_queue,
+)
 
 __all__ = [
+    "ACCEPT_THRESHOLD",
+    "ADJUDICATE_THRESHOLD",
+    "ADJUDICATION_SCHEMA",
+    "ADJUDICATION_TEMPERATURE",
+    "ADJUDICATION_TIER",
     "AUTO_ACCEPTED",
+    "DIRECT_MENTION_ROLES",
     "LIKELY_MATCH",
+    "LINKABLE_ALIAS_TYPES",
+    "MAX_PARENT_DEPTH",
+    "NEWS_MENTION_TARGET_TYPE",
     "NO_MATCH",
+    "PARENT_RELATIONSHIP_TYPE",
+    "PROPAGATED_PARENT",
     "REVIEW_REQUIRED",
+    "REVIEW_WINDOW",
+    "RISK_ELIGIBLE_ROLES",
+    "ROLE_ASSERTED",
+    "ROLE_DENIED",
+    "ROLE_SPECULATIVE",
+    "SIGNAL_WEIGHTS",
+    "WIKIDATA_ALIAS_PRIOR",
+    "AdjudicationDecision",
+    "AdjudicationNotApplicableError",
+    "AliasEvidence",
+    "ArticleLinkingContext",
     "EntityResolutionRequest",
     "EntityResolutionResult",
     "EntityResolver",
+    "EventEntityLink",
+    "EventLinkingResult",
+    "EventNotFoundError",
+    "LinkBand",
+    "LinkCandidate",
+    "LinkSignal",
+    "MentionAdjudication",
+    "MentionAdjudicator",
+    "MentionAdjudicatorProtocol",
+    "MentionExtractor",
+    "MentionLinkResult",
+    "MentionOutcome",
+    "NewsEntityLinker",
+    "NewsLinkingError",
+    "ParentExposure",
+    "RejectedCandidate",
+    "RelationshipEvidence",
     "ResolutionCandidate",
+    "ReviewQueueEntry",
     "SanctionsResolutionCandidate",
+    "SignalEvidence",
+    "SkippedArticle",
+    "band_for_score",
+    "band_of_run",
+    "build_adjudication_prompt",
     "confidence_band",
+    "decide_band",
+    "event_entity_links",
+    "event_parent_exposures",
+    "link_event_entities",
+    "link_mention",
+    "link_mentions",
+    "merge_roles",
+    "parent_exposures",
+    "persist_event_entity_link",
+    "record_adjudication",
     "resolve_entity",
+    "risk_eligible_event_links",
+    "role_for_assertion",
+    "unresolved_mention_queue",
+    "weekly_unresolved_mention_queue",
 ]

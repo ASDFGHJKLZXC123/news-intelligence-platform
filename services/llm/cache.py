@@ -22,6 +22,9 @@ def make_llm_request_cache_key(
 ) -> str:
     """Compute deterministic SHA-256 key for a request/provider mode tuple."""
 
+    # `temperature` is part of the cache identity: a run asked for at 0 and a run asked for at
+    # 1 are different invocations, and replaying one as the other would silently change what a
+    # caller that pinned determinism actually gets back.
     payload = {
         "mode": mode.value,
         "provider_name": provider_name,
@@ -35,6 +38,7 @@ def make_llm_request_cache_key(
         "prompt": request.prompt,
         "context": request.context,
         "metadata": request.metadata,
+        "temperature": request.temperature,
     }
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()

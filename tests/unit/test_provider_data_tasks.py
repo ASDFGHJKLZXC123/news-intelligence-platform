@@ -47,12 +47,17 @@ class FakeSession:
         self.store[obj.id] = obj
 
     def find_one(self, model: type[Any], **criteria: Any) -> Any | None:
-        for item in self.store.values():
-            if not isinstance(item, model):
-                continue
-            if all(getattr(item, key) == value for key, value in criteria.items()):
-                return item
+        for item in self.find_all(model, **criteria):
+            return item
         return None
+
+    def find_all(self, model: type[Any], **criteria: Any) -> list[Any]:
+        return [
+            item
+            for item in self.store.values()
+            if isinstance(item, model)
+            and all(getattr(item, key) == value for key, value in criteria.items())
+        ]
 
     def flush(self) -> None:
         return None
@@ -253,7 +258,7 @@ def test_entity_identity_task_invokes_ingestion_service_with_fake_provider(monke
     )
 
     result = provider_data_tasks.run_entity_identity_ingestion(
-        queries=["Example Financial"],
+        curated_watchlist=["Example Financial"],
         country_code="US",
     )
 
@@ -263,7 +268,8 @@ def test_entity_identity_task_invokes_ingestion_service_with_fake_provider(monke
     assert result["network_called"] is False
     assert result["fetched"] == 1
     assert result["inserted"] == 1
-    assert len([item for item in store.values() if isinstance(item, EntityProfile)]) == 2
+    # The curated name resolves to one profile; the unresolved parent LEI mints nothing.
+    assert len([item for item in store.values() if isinstance(item, EntityProfile)]) == 1
     assert len([item for item in store.values() if isinstance(item, RawIngestionItem)]) == 2
 
 

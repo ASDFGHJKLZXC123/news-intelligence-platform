@@ -68,9 +68,11 @@ class RecordingTransport:
     def __init__(self, *payloads: Any) -> None:
         self.payloads = list(payloads)
         self.targets: list[str | Request] = []
+        self.timeouts: list[float | None] = []
 
-    def __call__(self, target: str | Request) -> BytesResponse:
+    def __call__(self, target: str | Request, timeout: float | None = None) -> BytesResponse:
         self.targets.append(target)
+        self.timeouts.append(timeout)
         return BytesResponse(self.payloads.pop(0))
 
 
@@ -290,6 +292,34 @@ def test_gleif_client_builds_queries_and_parses_records_and_relationships() -> N
         "5493001KJTIIGC8Y1R12"
     ]
     assert relationship_query["filter[relationship.type]"] == ["DIRECT_PARENT"]
+    # Level-2 direction: start node is the consolidated child, end node the parent.
+    assert relationships[0].lei == "5493001KJTIIGC8Y1R12"
+    assert relationships[0].related_lei == "213800D1EI4B9WTWWD28"
+
+
+def test_gleif_relationship_direction_comes_from_the_record_not_the_query() -> None:
+    transport = RecordingTransport(
+        {
+            "data": [
+                {
+                    "id": "rel-2",
+                    "attributes": {
+                        "relationship": {
+                            "type": "IS_ULTIMATELY_CONSOLIDATED_BY",
+                            "startNode": {"nodeID": "5493001KJTIIGC8Y1R12"},
+                            "endNode": {"nodeID": "213800D1EI4B9WTWWD28"},
+                        },
+                        "status": "ACTIVE",
+                    },
+                }
+            ]
+        }
+    )
+
+    # Query by the parent's LEI: the parsed edge must still run child -> parent.
+    relationships = GLEIFClient(urlopen=transport).fetch_relationships("213800D1EI4B9WTWWD28")
+
+    assert relationships[0].lei == "5493001KJTIIGC8Y1R12"
     assert relationships[0].related_lei == "213800D1EI4B9WTWWD28"
 
 

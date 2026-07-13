@@ -14,7 +14,7 @@ from typing import Any
 import httpx
 import pytest
 
-from db.models.core import Job
+from db.models.core import Job, LLMRun
 from packages.config.settings import Settings
 from services.llm.adapters import LLMInvocationMode, LLMInvocationRequest
 from services.llm.cache import (
@@ -47,6 +47,7 @@ from services.llm.orchestrator import (
 from services.llm.policy import LLMBudgetPolicy, LLMRoutingContext, LLMTier
 from services.llm.pricing import estimate_completion_cost_usd
 from services.llm.repository import InMemoryLLMRuntimeRepository
+from services.llm.runtime import build_production_orchestrator
 from services.llm.selection import estimate_token_count, select_representative_articles
 
 _ALLOWED_IDS: tuple[str, ...] = ("event-1", "article-1")
@@ -1186,6 +1187,24 @@ def test_limiter_denial_marks_nonessential_queue_and_raises_failure() -> None:
 # --- Live HTTP provider adapters (mocked transport) --------------------------------
 
 
+def _openai_handler(captured: dict[str, Any] | None = None) -> Any:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if captured is not None:
+            captured["url"] = str(request.url)
+            captured["headers"] = dict(request.headers)
+            captured["body"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "id": "chatcmpl_1",
+                "choices": [{"message": {"content": json.dumps(_event_payload())}}],
+                "usage": {"prompt_tokens": 90, "completion_tokens": 30},
+            },
+        )
+
+    return handler
+
+
 def _anthropic_handler(
     captured: dict[str, Any] | None = None,
 ) -> Any:
@@ -1417,3 +1436,179 @@ def test_provider_factory_rejects_an_unsupported_provider_name() -> None:
 
     with pytest.raises(LLMProviderError, match="unsupported provider"):
         build_providers_by_tier(settings, tiers=(LLMTier.T1,))
+
+
+# --- Temperature: opt-in, validated, and carried end to end ---------------------------
+
+
+def test_a_request_without_a_temperature_sends_none_and_records_none() -> None:
+    """The default is backward-compatible: no sampling field in the body, no value on the run."""
+
+    captured: dict[str, Any] = {}
+    settings = Settings(anthropic_api_key="anthropic-key")
+    provider = AnthropicMessagesProvider(
+        settings=settings,
+        model_name="claude-haiku-4-5",
+        max_output_tokens=2_000,
+        client=_mock_client(_anthropic_handler(captured), settings.anthropic_base_url),
+    )
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=InMemoryLLMRuntimeRepository(),
+        providers_by_tier={"T1": (provider,)},
+    )
+
+    result = orchestrator.run(_make_request(job_key="no-temperature"))
+
+    assert "temperature" not in captured["body"]
+    assert result.run.temperature is None
+
+
+@pytest.mark.parametrize(
+    ("provider_name", "url"),
+    [
+        ("anthropic", "https://api.anthropic.com/v1/messages"),
+        ("openai", "https://api.openai.com/v1/chat/completions"),
+    ],
+)
+def test_a_requested_temperature_reaches_both_provider_bodies(
+    provider_name: str, url: str
+) -> None:
+    captured: dict[str, Any] = {}
+    settings = Settings(anthropic_api_key="anthropic-key", openai_api_key="openai-key")
+    if provider_name == "anthropic":
+        provider: Any = AnthropicMessagesProvider(
+            settings=settings,
+            model_name="claude-haiku-4-5",
+            max_output_tokens=2_000,
+            client=_mock_client(_anthropic_handler(captured), settings.anthropic_base_url),
+        )
+    else:
+        provider = OpenAIChatCompletionsProvider(
+            settings=settings,
+            model_name="gpt-5",
+            max_output_tokens=2_000,
+            client=_mock_client(_openai_handler(captured), settings.openai_base_url),
+        )
+
+    provider.invoke(
+        LLMInvocationRequest(
+            prompt_name="news",
+            prompt_version="v1",
+            prompt_template_version="v1",
+            prompt="Adjudicate.",
+            requested_schema="EventExtraction",
+            temperature=0.0,
+        )
+    )
+
+    assert captured["url"] == url
+    assert captured["body"]["temperature"] == 0.0
+
+
+def test_the_orchestrator_persists_the_requested_temperature_on_the_run() -> None:
+    settings = Settings(anthropic_api_key="anthropic-key")
+    provider = AnthropicMessagesProvider(
+        settings=settings,
+        model_name="claude-haiku-4-5",
+        max_output_tokens=2_000,
+        client=_mock_client(_anthropic_handler(), settings.anthropic_base_url),
+    )
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=InMemoryLLMRuntimeRepository(),
+        providers_by_tier={"T1": (provider,)},
+    )
+
+    request = _make_request(job_key="temperature-run")
+    result = orchestrator.run(
+        LLMOrchestratorRequest(**{**request.__dict__, "temperature": 0.0})
+    )
+
+    # `llm_runs.temperature` is what makes a deterministic run auditable as one.
+    assert result.run.temperature == 0.0
+
+
+def test_temperature_is_part_of_the_cache_identity() -> None:
+    """Two runs that asked for different sampling are different runs, and never replay each other."""
+
+    base = _invocation_request()
+    keys = {
+        make_llm_request_cache_key(
+            request=LLMInvocationRequest(**{**base.__dict__, "temperature": temperature}),
+            provider_name="anthropic",
+            model_name="claude-haiku-4-5",
+            model_version="current",
+            mode=LLMInvocationMode.REALTIME,
+        )
+        for temperature in (None, 0.0, 1.0)
+    }
+
+    assert len(keys) == 3
+
+
+def test_a_validation_retry_re_asks_at_the_temperature_it_asked_at() -> None:
+    request = LLMInvocationRequest(
+        prompt_name="news",
+        prompt_version="v1",
+        prompt_template_version="v1",
+        prompt="Adjudicate.",
+        requested_schema="EntityLinkAdjudication",
+        temperature=0.0,
+        metadata={"origin": "adjudication"},
+    )
+
+    retried = request.with_feedback("decision must be whitelisted")
+
+    assert retried.temperature == 0.0
+    assert retried.metadata == {"origin": "adjudication"}
+    assert retried.prompt.endswith("Validation feedback: decision must be whitelisted")
+
+
+@pytest.mark.parametrize("invalid", [-0.1, 2.1, "0", True])
+def test_an_out_of_range_temperature_is_rejected_before_any_provider_is_called(
+    invalid: Any,
+) -> None:
+    """The 0-2 bound is the providers' and `ck_llm_runs_temperature_range`'s; it fails fast here."""
+
+    with pytest.raises(ValueError, match="temperature"):
+        LLMInvocationRequest(
+            prompt_name="news",
+            prompt_version="v1",
+            prompt_template_version="v1",
+            prompt="Adjudicate.",
+            requested_schema="EventExtraction",
+            temperature=invalid,
+        )
+
+
+def test_the_production_orchestrator_can_leave_the_transaction_to_its_caller() -> None:
+    """ADR 0005 linking runs the orchestrator inside its own unit of work, so it must not commit."""
+
+    class SpySession:
+        def __init__(self) -> None:
+            self.commits = 0
+            self.flushes = 0
+
+        def add(self, _obj: Any) -> None: ...
+
+        def commit(self) -> None:
+            self.commits += 1
+
+        def flush(self) -> None:
+            self.flushes += 1
+
+    settings = Settings(anthropic_api_key="key", openai_api_key="key")
+    session = SpySession()
+    orchestrator = build_production_orchestrator(
+        settings=settings,
+        session=session,
+        redis_client=FakeRedis(),
+        commit_on_write=False,
+    )
+
+    # The repository is internal to the orchestrator, and the switch it was built with is the
+    # whole point of this assertion: the caller's transaction has to survive an audit write.
+    orchestrator._repository.save_llm_run(LLMRun(prompt_name="p", prompt_version="v1", provider="anthropic", model="m"))
+
+    assert (session.commits, session.flushes) == (0, 1)

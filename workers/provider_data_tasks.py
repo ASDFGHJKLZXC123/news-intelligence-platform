@@ -32,6 +32,7 @@ from packages.providers.ofac import OFACClient
 from packages.providers.reliefweb import ReliefWebClient
 from packages.providers.sec_edgar import SECEdgarClient
 from packages.providers.usgs import USGSEarthquakeClient
+from packages.providers.wikidata import WikidataClient
 from packages.providers.world_bank import WorldBankClient
 from services.provider_data import (
     IngestionResult,
@@ -44,6 +45,8 @@ from services.provider_data import (
     ingest_humanitarian_reports,
     ingest_sanctions_entities,
     ingest_sec_companies,
+    ingest_sec_company_tickers,
+    ingest_wikidata_identities,
 )
 from workers.celery_app import Stage1Task
 
@@ -87,6 +90,17 @@ def _sorted_strings(values: Sequence[str] | None) -> list[str]:
     return sorted(str(value) for value in (values or []))
 
 
+def _weekly_period(now: datetime.datetime) -> str:
+    """The ISO week a refresh belongs to, e.g. ``2026-W28``."""
+    year, week, _ = now.isocalendar()
+    return f"{year:04d}-W{week:02d}"
+
+
+def _monthly_period(now: datetime.datetime) -> str:
+    """The calendar month a refresh belongs to, e.g. ``2026-07``."""
+    return f"{now.year:04d}-{now.month:02d}"
+
+
 def _task_result(run: ProviderRun, job: Stage1Job, *, idempotent: bool) -> dict[str, Any]:
     stats = run.stats or {}
     result = stats.get("result") if isinstance(stats.get("result"), Mapping) else {}
@@ -121,6 +135,8 @@ def _record_provider_run(
     ingest: Any | None,
 ) -> dict[str, Any]:
     normalized_parameters = _canonical_parameters(parameters)
+    run_key = _stable_run_key(provider, run_type, normalized_parameters)
+    run_id = _run_id_for_key(run_key)
     job = Stage1Job.create(
         "workers.provider_data_tasks.record_provider_run",
         {"provider": provider, "run_type": run_type, "parameters": normalized_parameters},
@@ -130,8 +146,6 @@ def _record_provider_run(
 
     session = SessionLocal()
     try:
-        run_key = _stable_run_key(provider, run_type, normalized_parameters)
-        run_id = _run_id_for_key(run_key)
         run = session.get(ProviderRun, run_id)
         if run is not None and run.status == "succeeded":
             metrics.increment(metrics.JOB_SUCCESSES)
@@ -193,14 +207,67 @@ def _record_provider_run(
             extra={"provider": provider, "run_type": run_type, "run_id": str(run.id)},
         )
         return _task_result(run, completed, idempotent=False)
-    except Exception:
+    except Exception as error:
         session.rollback()
+        _mark_run_failed(
+            session,
+            run_id=run_id,
+            run_key=run_key,
+            provider=provider,
+            run_type=run_type,
+            parameters=normalized_parameters,
+            error=error,
+        )
         metrics.increment(metrics.JOB_FAILURES)
         logger.exception("provider data lifecycle stub failed")
         raise
     finally:
         session.close()
         set_job_id(None)
+
+
+def _mark_run_failed(
+    session: Any,
+    *,
+    run_id: uuid.UUID,
+    run_key: str,
+    provider: str,
+    run_type: str,
+    parameters: Mapping[str, Any],
+    error: BaseException,
+) -> None:
+    """Record the terminal state of a failed run on a clean transaction.
+
+    The rollback above discards the in-flight row, so without this a failed run leaves no
+    trace at all and the retry cannot tell a first attempt from a fifth. The run is re-read
+    rather than reused because rollback detaches it. This must never raise: the provider
+    error is the one worth propagating, and Stage1Task retries on it.
+    """
+
+    try:
+        run = session.get(ProviderRun, run_id)
+        if run is None:
+            run = ProviderRun(
+                id=run_id,
+                run_key=run_key,
+                provider=provider,
+                run_type=run_type,
+                status="failed",
+                parameters=dict(parameters),
+                item_count=0,
+                started_at=_utc_now(),
+            )
+            session.add(run)
+        run.status = "failed"
+        run.error = {"message": str(error), "type": type(error).__name__}
+        run.completed_at = _utc_now()
+        session.commit()
+    except Exception:
+        session.rollback()
+        logger.exception(
+            "could not record provider run failure",
+            extra={"provider": provider, "run_type": run_type, "run_id": str(run_id)},
+        )
 
 
 @shared_task(name="workers.provider_data_tasks.run_fred_macro_ingestion", base=Stage1Task)
@@ -258,6 +325,32 @@ def run_sec_company_ingestion(ciks: Sequence[str] | None = None) -> dict[str, An
         run_type="company_filings",
         parameters={"ciks": normalized_ciks},
         provider_binding=_sec_provider_binding(),
+        ingest=ingest,
+    )
+
+
+@shared_task(name="workers.provider_data_tasks.run_sec_identity_refresh", base=Stage1Task)
+def run_sec_identity_refresh(period: str | None = None) -> dict[str, Any]:
+    """Weekly SEC ``company_tickers.json`` identity seed (ADR 0006 source 1, precedence 1).
+
+    The seed is the whole file, so this task takes no candidate list: it is the source that
+    *creates* the bounded candidate set the GLEIF and Wikidata refreshes later read.
+    """
+
+    refresh_period = period or _weekly_period(_utc_now())
+
+    def ingest(session: Any, run_id: uuid.UUID, provider: Any) -> IngestionResult:
+        return ingest_sec_company_tickers(session, provider, provider_run_id=run_id)
+
+    return _record_provider_run(
+        provider="sec-edgar",
+        run_type="company_identity",
+        # The period is what lets a *scheduled* refresh actually refresh. The run key is
+        # derived from the parameters, and a succeeded run short-circuits as idempotent, so
+        # a constant parameter set would make the second week a no-op forever. Keyed by week,
+        # a retry inside the week resumes that week's run and the next week opens its own.
+        parameters={"period": refresh_period},
+        provider_binding=_sec_identity_provider_binding(),
         ingest=ingest,
     )
 
@@ -327,28 +420,89 @@ def run_sanctions_ingestion(
 
 @shared_task(name="workers.provider_data_tasks.run_entity_identity_ingestion", base=Stage1Task)
 def run_entity_identity_ingestion(
-    queries: Sequence[str] | None = None,
+    curated_watchlist: Sequence[str] | None = None,
     country_code: str | None = None,
-    limit: int = 20,
+    limit: int | None = None,
+    period: str | None = None,
 ) -> dict[str, Any]:
-    """Run GLEIF entity identity ingestion for watched names."""
-    query_list = _sorted_strings(queries)
+    """Monthly GLEIF enrichment of SEC-seeded profiles plus the curated watchlist (ADR 0006).
+
+    Bounded on both sides: the service searches only the configured watchlist names and the
+    profiles a previous identity run already seeded, so an empty watchlist and an empty store
+    mean no provider call at all.
+    """
+
+    settings = get_settings()
+    # An omitted watchlist means "use the configured one"; an explicit empty list means
+    # "SEC-seeded profiles only", so an ad-hoc call can narrow a run without editing config.
+    watchlist = _sorted_strings(
+        settings.identity_watchlist_names if curated_watchlist is None else curated_watchlist
+    )
+    search_limit = settings.gleif_search_limit if limit is None else int(limit)
+    refresh_period = period or _monthly_period(_utc_now())
 
     def ingest(session: Any, run_id: uuid.UUID, provider: Any) -> IngestionResult:
         return ingest_entity_identity_records(
             session,
             provider,
-            queries=query_list,
+            curated_watchlist=watchlist,
             country_code=country_code,
-            limit=limit,
+            limit=search_limit,
             provider_run_id=run_id,
         )
 
     return _record_provider_run(
         provider="gleif",
         run_type="entity_identity",
-        parameters={"country_code": country_code, "limit": limit, "queries": query_list},
+        parameters={
+            "country_code": country_code,
+            "curated_watchlist": watchlist,
+            "limit": search_limit,
+            "period": refresh_period,
+        },
         provider_binding=_gleif_provider_binding(),
+        ingest=ingest,
+    )
+
+
+@shared_task(name="workers.provider_data_tasks.run_wikidata_identity_ingestion", base=Stage1Task)
+def run_wikidata_identity_ingestion(
+    curated_qids: Sequence[str] | None = None,
+    batch_size: int | None = None,
+    period: str | None = None,
+) -> dict[str, Any]:
+    """Monthly Wikidata enrichment at precedence 3 (ADR 0006 source 3).
+
+    Bounded by construction: the provider only ever sees explicitly configured QIDs and the
+    QIDs that CIK/LEI values already seeded on EntityProfiles resolve to. There is no
+    free-text lookup and no crawl, so this never widens the entity set on its own.
+    """
+
+    settings = get_settings()
+    qids = _sorted_strings(
+        settings.wikidata_qid_seed_list if curated_qids is None else curated_qids
+    )
+    size = settings.wikidata_batch_size if batch_size is None else int(batch_size)
+    refresh_period = period or _monthly_period(_utc_now())
+
+    def ingest(session: Any, run_id: uuid.UUID, provider: Any) -> IngestionResult:
+        return ingest_wikidata_identities(
+            session,
+            provider,
+            curated_qids=qids,
+            batch_size=size,
+            provider_run_id=run_id,
+        )
+
+    return _record_provider_run(
+        provider="wikidata",
+        run_type="entity_identity",
+        parameters={
+            "batch_size": size,
+            "curated_qids": qids,
+            "period": refresh_period,
+        },
+        provider_binding=_wikidata_provider_binding(),
         ingest=ingest,
     )
 
@@ -519,16 +673,70 @@ def _fred_provider_binding() -> ProviderBinding:
     )
 
 
+def _is_placeholder_user_agent(value: str, variable: str) -> bool:
+    """True while a fair-access User-Agent is still the placeholder the repo ships with."""
+
+    return not value.strip() or f"configure {variable}" in value
+
+
 def _sec_provider_binding() -> ProviderBinding:
     settings = get_settings()
-    if not settings.sec_user_agent.strip() or "configure SEC_USER_AGENT" in settings.sec_user_agent:
+    if _is_placeholder_user_agent(settings.sec_user_agent, "SEC_USER_AGENT"):
         return ProviderBinding(
             provider=None,
             mode="configuration_skipped",
             unavailable_reason="SEC_USER_AGENT is not configured",
         )
     return ProviderBinding(
-        provider=SECEdgarClient(user_agent=settings.sec_user_agent),
+        provider=SECEdgarClient(
+            user_agent=settings.sec_user_agent,
+            timeout=settings.sec_timeout_seconds,
+        ),
+        mode="provider_ingestion",
+        network_called=True,
+    )
+
+
+def _sec_identity_provider_binding() -> ProviderBinding:
+    """Bind the SEC client for the company_tickers identity seed (ADR 0006 source 1)."""
+
+    settings = get_settings()
+    # SEC fair access requires a descriptive, contactable User-Agent; the shipped placeholder
+    # would get the scheduled job blocked, so an unconfigured deployment records a skipped run.
+    if _is_placeholder_user_agent(settings.sec_user_agent, "SEC_USER_AGENT"):
+        return ProviderBinding(
+            provider=None,
+            mode="configuration_skipped",
+            unavailable_reason="SEC_USER_AGENT is not configured",
+        )
+    return ProviderBinding(
+        provider=SECEdgarClient(
+            user_agent=settings.sec_user_agent,
+            company_tickers_url=settings.sec_company_tickers_url,
+            timeout=settings.sec_timeout_seconds,
+        ),
+        mode="provider_ingestion",
+        network_called=True,
+    )
+
+
+def _wikidata_provider_binding() -> ProviderBinding:
+    """Bind the bounded WDQS client for the monthly enrichment (ADR 0006 source 3)."""
+
+    settings = get_settings()
+    # WDQS enforces a User-Agent policy of its own; a generic agent is rate-limited or blocked.
+    if _is_placeholder_user_agent(settings.wikidata_user_agent, "WIKIDATA_USER_AGENT"):
+        return ProviderBinding(
+            provider=None,
+            mode="configuration_skipped",
+            unavailable_reason="WIKIDATA_USER_AGENT is not configured",
+        )
+    return ProviderBinding(
+        provider=WikidataClient(
+            user_agent=settings.wikidata_user_agent,
+            endpoint=settings.wikidata_sparql_endpoint,
+            timeout=settings.wikidata_timeout_seconds,
+        ),
         mode="provider_ingestion",
         network_called=True,
     )
@@ -567,6 +775,8 @@ def _gleif_provider_binding() -> ProviderBinding:
         provider=GLEIFClient(
             records_endpoint=f"{base_url}/lei-records",
             relationships_endpoint=f"{base_url}/relationship-records",
+            user_agent=settings.gleif_user_agent,
+            timeout=settings.gleif_timeout_seconds,
         ),
         mode="provider_ingestion",
         network_called=True,

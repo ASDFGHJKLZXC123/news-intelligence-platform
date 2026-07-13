@@ -6,10 +6,25 @@ never written to logs (see ``packages.config.logging``).
 
 from __future__ import annotations
 
+import re
 from functools import lru_cache
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Config is the lowest layer and must not import the provider package, so the QID shape is
+# checked here directly; ``packages.providers`` re-validates every QID it is handed.
+_WIKIDATA_QID_PATTERN = re.compile(r"^Q[1-9][0-9]*$")
+
+
+def _split_csv(value: str) -> list[str]:
+    """Split a comma-separated setting into clean, non-empty entries."""
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _deduplicate(values: list[str]) -> list[str]:
+    """Drop repeats while preserving the configured order."""
+    return list(dict.fromkeys(values))
 
 
 class Settings(BaseSettings):
@@ -64,12 +79,46 @@ class Settings(BaseSettings):
     nasa_firms_map_key: str = ""
     eia_base_url: str = "https://api.eia.gov/v2"
     eia_api_key: str = ""
+    # WDQS enforces a user-agent policy like SEC fair access: a generic agent gets blocked.
+    wikidata_sparql_endpoint: str = "https://query.wikidata.org/sparql"
+    wikidata_user_agent: str = "news-intelligence-platform/0.1 (configure WIKIDATA_USER_AGENT)"
+    wikidata_timeout_seconds: float = 30.0
+
+    # --- Entity identity refreshes (ADR 0006) ---------------------------------
+    # The three scheduled identity refreshes are bounded by explicit configuration. Every
+    # default here is offline-safe: the User-Agent placeholders make the SEC and Wikidata
+    # tasks record a skipped run instead of calling out, and the curated inputs are empty,
+    # so importing this module or running the unit suite never reaches a live endpoint.
+    sec_company_tickers_url: str = "https://www.sec.gov/files/company_tickers.json"
+    sec_timeout_seconds: float = 30.0
+    gleif_user_agent: str = "news-intelligence-platform/0.1 (configure GLEIF_USER_AGENT)"
+    gleif_timeout_seconds: float = 30.0
+    gleif_search_limit: int = 20
+    # Curated legal names GLEIF may search beyond the SEC-seeded profiles: the non-US and
+    # private parents the SEC company_tickers seed never lists. Comma-separated.
+    identity_watchlist: str = ""
+    # Explicit QIDs the Wikidata refresh may enrich on top of the entities that SEC/GLEIF
+    # identifiers already resolve to. Comma-separated; there is no free-text discovery.
+    wikidata_qid_seeds: str = ""
+    wikidata_batch_size: int = 100
 
     # --- NLP ------------------------------------------------------------------
     # Embedding readers must select one model space; comparing vectors produced by
     # different model/version pairs is undefined (ADR 0004).
     embedding_model: str = "text-embedding-3-small"
     embedding_model_version: str = "current"
+
+    # Mention extraction (ADR 0005 stage 1). The transformer pipeline is an explicit
+    # deployment prerequisite (``python -m spacy download en_core_web_trf``): nothing in
+    # the application downloads a model, and no import loads one. The batch size is the
+    # number of articles handed to one ``nlp.pipe`` call on CPU.
+    ner_model: str = "en_core_web_trf"
+    ner_batch_size: int = 16
+
+    # Deterministic news-mention linking (ADR 0005 stage 2). The candidate list a mention keeps is
+    # injected into the stage-3 adjudication prompt, so its size is a cost ceiling, not a display
+    # preference, and it is bounded here rather than at each call site.
+    entity_link_max_candidates: int = 8
 
     # --- LLM (Stage 2) -------------------------------------------------------
     # API secrets are read from the environment only.
@@ -170,6 +219,68 @@ class Settings(BaseSettings):
     @classmethod
     def _normalize_log_level(cls, value: str) -> str:
         return value.upper()
+
+    @field_validator("wikidata_qid_seeds")
+    @classmethod
+    def _validate_wikidata_qid_seeds(cls, value: str) -> str:
+        """Reject a malformed QID at startup rather than on the monthly run.
+
+        A typo'd seed is otherwise invisible: it would just quietly drop that entity from
+        the enrichment set, and nothing downstream can tell the difference from an entity
+        Wikidata has no item for.
+        """
+        for qid in _split_csv(value):
+            if not _WIKIDATA_QID_PATTERN.match(qid.upper()):
+                msg = f"WIKIDATA_QID_SEEDS contains an invalid Wikidata QID: {qid!r}"
+                raise ValueError(msg)
+        return value
+
+    @field_validator("gleif_search_limit", "wikidata_batch_size")
+    @classmethod
+    def _validate_positive_bound(cls, value: int) -> int:
+        """A non-positive bound would either fetch nothing or divide a batch by zero."""
+        if value < 1:
+            msg = "identity refresh bounds must be positive"
+            raise ValueError(msg)
+        return value
+
+    @field_validator("ner_model")
+    @classmethod
+    def _validate_ner_model(cls, value: str) -> str:
+        """An empty model name would only ever surface as an opaque spaCy load failure."""
+        model = value.strip()
+        if not model:
+            msg = "NER_MODEL must name an installed spaCy pipeline"
+            raise ValueError(msg)
+        return model
+
+    @field_validator("ner_batch_size")
+    @classmethod
+    def _validate_ner_batch_size(cls, value: int) -> int:
+        """A non-positive batch is not a smaller batch: ``nlp.pipe`` would reject it."""
+        if value < 1:
+            msg = "NER_BATCH_SIZE must be a positive number of articles"
+            raise ValueError(msg)
+        return value
+
+    @field_validator("entity_link_max_candidates")
+    @classmethod
+    def _validate_entity_link_max_candidates(cls, value: int) -> int:
+        """A cap below one would drop the very candidate list stage 3 has to choose from."""
+        if value < 1:
+            msg = "ENTITY_LINK_MAX_CANDIDATES must keep at least one candidate"
+            raise ValueError(msg)
+        return value
+
+    @property
+    def identity_watchlist_names(self) -> list[str]:
+        """The curated legal names the GLEIF refresh searches, cleaned and de-duplicated."""
+        return _deduplicate(_split_csv(self.identity_watchlist))
+
+    @property
+    def wikidata_qid_seed_list(self) -> list[str]:
+        """The explicit QIDs the Wikidata refresh enriches, validated and de-duplicated."""
+        return _deduplicate([qid.upper() for qid in _split_csv(self.wikidata_qid_seeds)])
 
     @property
     def cors_origins_list(self) -> list[str]:

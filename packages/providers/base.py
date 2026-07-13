@@ -9,10 +9,15 @@ yet (those are gated to later stages).
 from __future__ import annotations
 
 import datetime
+import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Protocol, runtime_checkable
+
+# A Wikidata item id: "Q" followed by a positive integer. Nothing else is accepted anywhere
+# a QID is taken from a caller or a payload, so no caller-supplied text reaches a SPARQL query.
+WIKIDATA_QID_PATTERN = re.compile(r"^Q[1-9][0-9]*$")
 
 
 def ensure_utc(value: datetime.datetime) -> datetime.datetime:
@@ -31,6 +36,24 @@ def ensure_optional_utc(value: datetime.datetime | None) -> datetime.datetime | 
     if value is None:
         return None
     return ensure_utc(value)
+
+
+def normalize_sec_cik(value: Any) -> str:
+    """Return an SEC CIK as the zero-padded 10-digit string SEC endpoints expect."""
+    digits = "".join(character for character in str(value) if character.isdigit())
+    if not digits:
+        msg = "CIK must contain digits"
+        raise ValueError(msg)
+    return digits.zfill(10)
+
+
+def normalize_wikidata_qid(value: Any) -> str:
+    """Return a validated Wikidata QID (``Q312``) or raise for anything that is not one."""
+    qid = str(value).strip().upper()
+    if not WIKIDATA_QID_PATTERN.match(qid):
+        msg = f"invalid Wikidata QID: {value!r}"
+        raise ValueError(msg)
+    return qid
 
 
 def freeze_value(value: Any) -> Any:
@@ -296,6 +319,32 @@ class SECCompanyFact:
 
 
 @dataclass(frozen=True)
+class SECCompanyTicker:
+    """A normalized row of the SEC ``company_tickers.json`` identity seed (ADR 0006)."""
+
+    cik: str
+    ticker: str
+    title: str
+    provider_name: str = "sec-edgar"
+    output_schema_version: str = "sec-company-ticker.v1"
+    source_refs: tuple[str, ...] = field(default_factory=tuple)
+    evidence_refs: tuple[str, ...] = field(default_factory=tuple)
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "cik", normalize_sec_cik(self.cik))
+        object.__setattr__(self, "ticker", self.ticker.strip().upper())
+        object.__setattr__(self, "title", self.title.strip())
+        object.__setattr__(self, "source_refs", tuple(self.source_refs))
+        object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))
+        object.__setattr__(self, "metadata", freeze_value(self.metadata))
+
+    @property
+    def schema_version(self) -> str:
+        return self.output_schema_version
+
+
+@dataclass(frozen=True)
 class SanctionsAlias:
     """A normalized sanctions alias/name variant."""
 
@@ -429,7 +478,12 @@ class LEIRecord:
 
 @dataclass(frozen=True)
 class LEIRelationship:
-    """A normalized GLEIF relationship between two LEI records."""
+    """A normalized GLEIF relationship between two LEI records.
+
+    Direction follows GLEIF Level 2: ``lei`` is the start node (the consolidated entity, i.e.
+    the child) and ``related_lei`` is the end node (the entity consolidating it, i.e. the
+    parent) for the ``IS_*_CONSOLIDATED_BY`` / direct- and ultimate-parent types.
+    """
 
     relationship_id: str
     lei: str
@@ -450,6 +504,110 @@ class LEIRelationship:
         object.__setattr__(self, "source_refs", tuple(self.source_refs))
         object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))
         object.__setattr__(self, "metadata", freeze_value(self.metadata))
+
+    @property
+    def schema_version(self) -> str:
+        return self.output_schema_version
+
+
+@dataclass(frozen=True)
+class WikidataItemRef:
+    """A reference to a related Wikidata item (parent, subsidiary, industry, or brand)."""
+
+    qid: str
+    label: str = ""
+    output_schema_version: str = "wikidata-item-ref.v1"
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "qid", normalize_wikidata_qid(self.qid))
+        object.__setattr__(self, "label", self.label.strip())
+
+    @property
+    def schema_version(self) -> str:
+        return self.output_schema_version
+
+
+@dataclass(frozen=True)
+class WikidataAlias:
+    """One name variant of a Wikidata item, typed to the ADR 0006 ``alias_type`` enum.
+
+    ``valid_from``/``valid_to`` carry the statement's start/end qualifiers when Wikidata dates
+    the name (a former name has an end date); an undated name is an open interval and leaves
+    both as ``None``. ``qid`` is set only when the alias is itself an item (a brand), so the
+    consumer can tell a bare surface form from a reference to another entity.
+    """
+
+    value: str
+    alias_type: str
+    language: str = "en"
+    valid_from: datetime.date | None = None
+    valid_to: datetime.date | None = None
+    qid: str = ""
+    output_schema_version: str = "wikidata-alias.v1"
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "value", self.value.strip())
+        if self.qid:
+            object.__setattr__(self, "qid", normalize_wikidata_qid(self.qid))
+
+    @property
+    def schema_version(self) -> str:
+        return self.output_schema_version
+
+
+@dataclass(frozen=True)
+class WikidataEntity:
+    """A normalized Wikidata identity record for one item (ADR 0006 source 3)."""
+
+    qid: str
+    label: str
+    description: str = ""
+    aliases: tuple[WikidataAlias, ...] = field(default_factory=tuple)
+    tickers: tuple[str, ...] = field(default_factory=tuple)
+    leis: tuple[str, ...] = field(default_factory=tuple)
+    ciks: tuple[str, ...] = field(default_factory=tuple)
+    parents: tuple[WikidataItemRef, ...] = field(default_factory=tuple)
+    subsidiaries: tuple[WikidataItemRef, ...] = field(default_factory=tuple)
+    industries: tuple[WikidataItemRef, ...] = field(default_factory=tuple)
+    provider_name: str = "wikidata"
+    output_schema_version: str = "wikidata-entity.v1"
+    source_refs: tuple[str, ...] = field(default_factory=tuple)
+    evidence_refs: tuple[str, ...] = field(default_factory=tuple)
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "qid", normalize_wikidata_qid(self.qid))
+        object.__setattr__(self, "label", self.label.strip())
+        object.__setattr__(self, "aliases", tuple(self.aliases))
+        object.__setattr__(self, "tickers", tuple(self.tickers))
+        object.__setattr__(self, "leis", tuple(self.leis))
+        object.__setattr__(self, "ciks", tuple(self.ciks))
+        object.__setattr__(self, "parents", tuple(self.parents))
+        object.__setattr__(self, "subsidiaries", tuple(self.subsidiaries))
+        object.__setattr__(self, "industries", tuple(self.industries))
+        object.__setattr__(self, "source_refs", tuple(self.source_refs))
+        object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))
+        object.__setattr__(self, "metadata", freeze_value(self.metadata))
+
+    @property
+    def schema_version(self) -> str:
+        return self.output_schema_version
+
+
+@dataclass(frozen=True)
+class WikidataQidMatch:
+    """A QID resolved from an identifier value that an entity profile already carries."""
+
+    qid: str
+    identifier_type: str
+    identifier_value: str
+    provider_name: str = "wikidata"
+    output_schema_version: str = "wikidata-qid-match.v1"
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "qid", normalize_wikidata_qid(self.qid))
+        object.__setattr__(self, "identifier_type", self.identifier_type.strip().casefold())
+        object.__setattr__(self, "identifier_value", self.identifier_value.strip())
 
     @property
     def schema_version(self) -> str:
@@ -721,6 +879,13 @@ class SECEdgarProvider(Protocol):
 
 
 @runtime_checkable
+class SECCompanyTickerProvider(Protocol):
+    """Fetch the SEC ``company_tickers.json`` name/ticker/CIK identity seed."""
+
+    def fetch_company_tickers(self) -> list[SECCompanyTicker]: ...
+
+
+@runtime_checkable
 class SanctionsProvider(Protocol):
     """Fetch sanctioned entities and sanctions-list changes."""
 
@@ -759,6 +924,30 @@ class EntityIdentityProvider(Protocol):
         relationship_type: str | None = None,
         limit: int = 100,
     ) -> list[LEIRelationship]: ...
+
+
+@runtime_checkable
+class WikidataProvider(Protocol):
+    """Fetch bounded Wikidata identity payloads.
+
+    Both calls are bounded by construction: the caller supplies the exact QIDs or the exact
+    identifier values it already holds, and the implementation pins them into the query. There
+    is deliberately no free-text search entry point — Wikidata enrichment is restricted to
+    entities the other ADR 0006 sources already seeded plus a curated QID watchlist. ``limit``
+    caps the rows a single query may return.
+    """
+
+    def resolve_qids(
+        self,
+        *,
+        ciks: Sequence[str] = (),
+        leis: Sequence[str] = (),
+        limit: int = 10_000,
+    ) -> list[WikidataQidMatch]: ...
+
+    def fetch_entities(
+        self, qids: Sequence[str], *, limit: int = 10_000
+    ) -> list[WikidataEntity]: ...
 
 
 @runtime_checkable

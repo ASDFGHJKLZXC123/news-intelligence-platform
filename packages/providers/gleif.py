@@ -12,14 +12,16 @@ from urllib.request import urlopen as stdlib_urlopen
 
 from packages.providers.base import EntityIdentityProvider, LEIRecord, LEIRelationship
 
-UrlOpenCallable = Callable[[str | Request], Any]
+UrlOpenCallable = Callable[..., Any]
 
 DEFAULT_LEI_RECORDS_ENDPOINT = "https://api.gleif.org/api/v1/lei-records"
 DEFAULT_RELATIONSHIPS_ENDPOINT = "https://api.gleif.org/api/v1/relationship-records"
+DEFAULT_USER_AGENT = "news-intelligence-platform/0.1"
+DEFAULT_TIMEOUT_SECONDS = 30.0
 
 
 class GLEIFClient(EntityIdentityProvider):
-    """Small GLEIF API client with injectable transport."""
+    """Small GLEIF API client with injectable transport and an explicit timeout."""
 
     def __init__(
         self,
@@ -27,10 +29,22 @@ class GLEIFClient(EntityIdentityProvider):
         urlopen: UrlOpenCallable | None = None,
         records_endpoint: str = DEFAULT_LEI_RECORDS_ENDPOINT,
         relationships_endpoint: str = DEFAULT_RELATIONSHIPS_ENDPOINT,
+        user_agent: str = DEFAULT_USER_AGENT,
+        timeout: float = DEFAULT_TIMEOUT_SECONDS,
     ) -> None:
         self._urlopen = urlopen or stdlib_urlopen
         self._records_endpoint = records_endpoint
         self._relationships_endpoint = relationships_endpoint
+        self._user_agent = user_agent
+        self._timeout = timeout
+
+    def _request(self, url: str) -> Request:
+        # GLEIF does not mandate a User-Agent the way SEC and WDQS do, but a scheduled
+        # monthly job identifies itself anyway so the operator is reachable.
+        return Request(
+            url,
+            headers={"Accept": "application/json", "User-Agent": self._user_agent},
+        )
 
     def search_records(
         self,
@@ -51,7 +65,8 @@ class GLEIFClient(EntityIdentityProvider):
         }
         if country_code is not None:
             params["filter[entity.legalAddress.country]"] = country_code
-        payload = _read_json(self._urlopen, _build_url(self._records_endpoint, params))
+        request = self._request(_build_url(self._records_endpoint, params))
+        payload = _read_json(self._urlopen, request, self._timeout)
         return [_parse_record(record) for record in _data_records(payload)]
 
     def fetch_relationships(
@@ -73,7 +88,8 @@ class GLEIFClient(EntityIdentityProvider):
         }
         if relationship_type is not None:
             params["filter[relationship.type]"] = relationship_type
-        payload = _read_json(self._urlopen, _build_url(self._relationships_endpoint, params))
+        request = self._request(_build_url(self._relationships_endpoint, params))
+        payload = _read_json(self._urlopen, request, self._timeout)
         return [_parse_relationship(lei, record) for record in _data_records(payload)]
 
 
@@ -82,8 +98,10 @@ def _build_url(endpoint: str, params: Mapping[str, str | int]) -> str:
     return f"{endpoint}{separator}{urlencode(params)}"
 
 
-def _read_json(urlopen: UrlOpenCallable, target: str | Request) -> Mapping[str, Any]:
-    handle = urlopen(target)
+def _read_json(
+    urlopen: UrlOpenCallable, target: str | Request, timeout: float
+) -> Mapping[str, Any]:
+    handle = urlopen(target, timeout=timeout)
     if hasattr(handle, "__enter__"):
         with handle as response:
             body = response.read()
@@ -151,15 +169,16 @@ def _parse_relationship(lei: str, record: Mapping[str, Any]) -> LEIRelationship:
     first_period = periods[0] if isinstance(periods, list) and periods else {}
     if not isinstance(first_period, Mapping):
         first_period = {}
-    start_lei = _text(start_node.get("nodeID") or attrs.get("startNodeID"))
+    # Direction comes from the record, not from the LEI we happened to query: GLEIF Level 2
+    # runs start node (consolidated child) -> end node (consolidating parent).
+    start_lei = _text(start_node.get("nodeID") or attrs.get("startNodeID")) or lei
     end_lei = _text(end_node.get("nodeID") or attrs.get("endNodeID"))
-    related_lei = end_lei if start_lei == lei else start_lei
     links = _mapping(record.get("links"))
     relationship_id = _text(record.get("id") or attrs.get("id"))
     return LEIRelationship(
         relationship_id=relationship_id,
-        lei=lei,
-        related_lei=related_lei,
+        lei=start_lei,
+        related_lei=end_lei,
         relationship_type=_text(relationship.get("type") or attrs.get("relationshipType")),
         status=_text(attrs.get("status") or relationship.get("status")),
         start_at=_parse_datetime(first_period.get("startDate") or attrs.get("startDate")),

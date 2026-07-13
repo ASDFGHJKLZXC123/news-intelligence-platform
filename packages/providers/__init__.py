@@ -32,9 +32,18 @@ from packages.providers.base import (
     SanctionsIdentifier,
     SanctionsProvider,
     SECCompanyFact,
+    SECCompanyTicker,
+    SECCompanyTickerProvider,
     SECEdgarProvider,
     SECSubmission,
     SystemClock,
+    WikidataAlias,
+    WikidataEntity,
+    WikidataItemRef,
+    WikidataProvider,
+    WikidataQidMatch,
+    normalize_sec_cik,
+    normalize_wikidata_qid,
 )
 from packages.providers.eia import EIAClient
 from packages.providers.fakes import (
@@ -48,7 +57,9 @@ from packages.providers.fakes import (
     FakeLLMProvider,
     FakeRSSProvider,
     FakeSanctionsProvider,
+    FakeSECCompanyTickerProvider,
     FakeSECEdgarProvider,
+    FakeWikidataProvider,
     FixedClock,
 )
 from packages.providers.fred import FREDClient
@@ -57,11 +68,17 @@ from packages.providers.gleif import GLEIFClient
 from packages.providers.nasa_firms import NASAFIRMSClient
 from packages.providers.ofac import OFACClient
 from packages.providers.reliefweb import ReliefWebClient
-from packages.providers.sec_edgar import SECEdgarClient
+from packages.providers.sec_edgar import SEC_COMPANY_TICKERS_URL, SECEdgarClient
 from packages.providers.usgs import USGSEarthquakeClient
+from packages.providers.wikidata import (
+    DEFAULT_WIKIDATA_SPARQL_ENDPOINT,
+    WikidataClient,
+    WikidataError,
+)
 from packages.providers.world_bank import WorldBankClient
 
 __all__ = [
+    "DEFAULT_WIKIDATA_SPARQL_ENDPOINT",
     "Clock",
     "CountryIndicator",
     "CountryIndicatorObservation",
@@ -86,7 +103,9 @@ __all__ = [
     "FakeLLMProvider",
     "FakeRSSProvider",
     "FakeSanctionsProvider",
+    "FakeSECCompanyTickerProvider",
     "FakeSECEdgarProvider",
+    "FakeWikidataProvider",
     "FixedClock",
     "GDELTArticle",
     "GDELTClient",
@@ -111,11 +130,23 @@ __all__ = [
     "SanctionsEntity",
     "SanctionsIdentifier",
     "SanctionsProvider",
+    "SEC_COMPANY_TICKERS_URL",
     "SECCompanyFact",
+    "SECCompanyTicker",
+    "SECCompanyTickerProvider",
     "SECEdgarClient",
     "SECEdgarProvider",
     "SECSubmission",
     "SystemClock",
     "USGSEarthquakeClient",
+    "WikidataAlias",
+    "WikidataClient",
+    "WikidataEntity",
+    "WikidataError",
+    "WikidataItemRef",
+    "WikidataProvider",
+    "WikidataQidMatch",
     "WorldBankClient",
+    "normalize_sec_cik",
+    "normalize_wikidata_qid",
 ]
