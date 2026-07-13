@@ -8,7 +8,6 @@ import re
 from collections.abc import Mapping
 from typing import Any
 
-
 SECTION_PATTERNS: dict[str, re.Pattern[str]] = {
     "item_1_business": re.compile(r"\bitem\s+1[\.\s:-]+business\b", re.IGNORECASE),
     "item_1a_risk_factors": re.compile(r"\bitem\s+1a[\.\s:-]+risk\s+factors\b", re.IGNORECASE),
@@ -89,7 +88,7 @@ def section_hash(section_name: str, text: str) -> str:
     """Return a stable cache key for a filing section."""
 
     normalized = normalize_filing_text(text)
-    return hashlib.sha256(f"{section_name}\n{normalized}".encode("utf-8")).hexdigest()
+    return hashlib.sha256(f"{section_name}\n{normalized}".encode()).hexdigest()
 
 
 def _locate_sections(text: str) -> list[tuple[str, int]]:

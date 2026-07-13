@@ -1,24 +1,24 @@
 """Company research profile assembly services."""
 
 from services.company_research.contract import (
-    COMPANY_RESEARCH_CHECKLIST,
     COMPANY_RESEARCH_CATEGORIES,
+    COMPANY_RESEARCH_CHECKLIST,
     COMPANY_RESEARCH_FIELD_TOTAL,
     INFORMATION_NOT_AVAILABLE,
     assert_valid_company_research_profile,
     validate_company_research_profile,
 )
-from services.company_research.identity import (
-    build_company_universe,
-    resolve_company_identity,
-)
-from services.company_research.industry_context import industry_context_values
 from services.company_research.filing_text import (
     extract_filing_sections,
     filing_business_metadata,
     normalize_filing_text,
     section_hash,
 )
+from services.company_research.identity import (
+    build_company_universe,
+    resolve_company_identity,
+)
+from services.company_research.industry_context import industry_context_values
 from services.company_research.peers import (
     build_peer_group,
     peer_comparison_text,

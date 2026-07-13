@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-
 INDUSTRY_CONTEXT_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
     "industry_size": ("industry_size", "market_size"),
     "industry_growth_rate": ("industry_growth_rate", "growth_rate"),
