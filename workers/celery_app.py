@@ -112,6 +112,16 @@ celery_app = Celery(
         # it on demand (see ALERT_BEAT_SCHEDULE above for why it has no Beat entry yet);
         # `run_pending_alert_notification_sweep` does have one.
         "workers.alert_tasks",
+        # ADR 0004 embedding lifecycle (articles, events, historical episodes). Registered so a
+        # worker can execute each on demand, and deliberately not in BEAT_SCHEDULE: neither ADR
+        # 0004 nor the episode spec schedules an embedding run, and the trigger is what ingestion
+        # or clustering just produced, not a clock.
+        "workers.embedding_tasks",
+        # Historical-episode analogy rerank (ADR 0004 + the episode spec). Registered so a worker
+        # can execute it per event, and deliberately not in BEAT_SCHEDULE for the same reason as
+        # the embedding tasks it follows: an event is worth reranking once it has been embedded,
+        # which is an event in the pipeline, not a time of day.
+        "workers.analogy_tasks",
     ],
 )
 

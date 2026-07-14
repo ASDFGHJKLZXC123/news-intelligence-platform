@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "file": "07_pandemic",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "b9c7f918-3998-5ea3-8da7-f34ace72076b",
+      "slug": "covid-19-wuhan-lockdown-2020",
+      "name": "Wuhan lockdown, January 2020",
+      "episode_type": "pandemic",
+      "parent_slug": "arc-covid-19-pandemic-2020-2022",
+      "onset_date": "2020-01-23",
+      "peak_date": "2020-02-13",
+      "end_date": "2020-04-08",
+      "geography": "CN",
+      "affected_industries": ["public_health", "healthcare", "manufacturing", "logistics", "electronics", "automotive"],
+      "regime_tags": ["post_fiat", "post_qe", "post_ihr_2005", "post_social_media", "globalized_supply_chain", "emerging_market"],
+      "is_counterexample": false,
+      "onset_summary": "A city of eleven million is placed under a cordon: flights, trains and buses are stopped and residents are told not to leave. Nothing on this scale has been attempted in the modern era. The pathogen is a new coronavirus with confirmed human-to-human transmission, an unknown case fatality rate and an incubation period long enough that infected travellers have already left the city before the cordon. The province is a manufacturing and logistics hub embedded in supply chains that run on days of inventory, and the cordon begins as hundreds of millions of people travel for the lunar new year.",
+      "onset_indicators": [
+        {"key": "city_population_locked_down", "label": "Population placed under movement restrictions", "value": 11000000, "unit": "people", "as_of": "2020-01-23", "source_id": "who-china"},
+        {"key": "human_to_human_transmission", "label": "Sustained human-to-human transmission confirmed", "value": true, "unit": "boolean", "as_of": "2020-01-20", "source_id": "who-china"},
+        {"key": "case_fatality_rate_unknown", "label": "Case fatality rate not yet established", "value": true, "unit": "boolean", "as_of": "2020-01-23", "source_id": "who-china"},
+        {"key": "outbound_travel_before_cordon", "label": "Infected travellers had already left the city before the cordon", "value": true, "unit": "boolean", "as_of": "2020-01-23", "source_id": "who-china"},
+        {"key": "manufacturing_hub", "label": "Affected province is a hub for automotive and electronics supply chains", "value": true, "unit": "boolean", "as_of": "2020-01-23", "source_id": "oecd-supply"}
+      ],
+      "outcome_summary": "The cordon lasted 76 days and did suppress local transmission, but the virus was already seeded internationally and became a pandemic. Chinese industrial output fell about 13 percent in the first two months of 2020 and factories reopened from March, causing a global supply shock in components before demand collapsed. The lockdown model was copied by most countries within weeks, which is its main historical significance.",
+      "outcomes": ["contained", "systemic_crisis", "recession", "regime_change"],
+      "resolution_mechanism": "A 76-day cordon with mass testing and centralised isolation suppressed local transmission; industrial capacity was restarted from March under testing and quarantine controls.",
+      "source_refs": [
+        {"id": "who-china", "title": "WHO-China joint mission on COVID-19", "publisher": "World Health Organization", "url": "https://www.who.int/publications/i/item/report-of-the-who-china-joint-mission-on-coronavirus-disease-2019-(covid-19)", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "oecd-supply", "title": "OECD work on global value chains", "publisher": "Organisation for Economic Co-operation and Development", "url": "https://www.oecd.org/trade/topics/global-value-chains/", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "591194a1-b918-5aaa-94a8-15e786dc309e",
+      "slug": "covid-19-italy-lockdown-2020",
+      "name": "Italian COVID-19 outbreak and lockdown, 2020",
+      "episode_type": "pandemic",
+      "parent_slug": "arc-covid-19-pandemic-2020-2022",
+      "onset_date": "2020-02-21",
+      "peak_date": "2020-03-27",
+      "end_date": "2020-05-18",
+      "geography": "IT",
+      "affected_industries": ["public_health", "healthcare", "tourism", "hospitality", "manufacturing", "retail"],
+      "regime_tags": ["post_fiat", "post_qe", "post_ihr_2005", "post_social_media", "currency_union", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "A cluster of cases with no travel history appears in northern Italy, proving that the virus is transmitting undetected inside a European country with a modern health system. Intensive care beds in the affected region number in the hundreds, and the first patients already need them. The population is the oldest in Europe, containment by contact tracing is failing because the chains are already lost, and the choice is narrowing to a general closure of an economy that is the third largest in the currency union and already carries very high public debt.",
+      "onset_indicators": [
+        {"key": "untraceable_local_transmission", "label": "Cases with no travel link, indicating undetected local spread", "value": true, "unit": "boolean", "as_of": "2020-02-21", "source_id": "ecdc"},
+        {"key": "icu_capacity", "label": "Intensive care beds available in the worst-affected region", "value": 800, "unit": "count", "as_of": "2020-02-21", "source_id": "iss"},
+        {"key": "population_age_structure", "label": "Share of the population over 65, the highest in the region", "value": 23, "unit": "percent", "as_of": "2019-12-31", "source_id": "eurostat"},
+        {"key": "contact_tracing_overwhelmed", "label": "Contact tracing unable to keep pace with new cases", "value": true, "unit": "boolean", "as_of": "2020-02-24", "source_id": "ecdc"}
+      ],
+      "outcome_summary": "Italy imposed the first national lockdown outside China on 9 March 2020. Hospitals in Lombardy were overwhelmed and reported deaths exceeded 30,000 by May; output fell about 9 percent in 2020. The lockdown drove Europe's fiscal response, including the suspension of deficit rules and the creation of a joint recovery fund, and the ECB's pandemic purchase programme that ended the sovereign spread widening.",
+      "outcomes": ["systemic_crisis", "recession", "recovery", "regime_change"],
+      "resolution_mechanism": "National lockdown and health-system surge capacity, suspension of European fiscal rules, ECB pandemic emergency purchases holding down sovereign spreads, and a jointly financed EU recovery fund.",
+      "source_refs": [
+        {"id": "ecdc", "title": "ECDC COVID-19 situation updates", "publisher": "European Centre for Disease Prevention and Control", "url": "https://www.ecdc.europa.eu/en/covid-19", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "iss", "title": "Istituto Superiore di Sanita COVID-19 epidemiological reports", "publisher": "Istituto Superiore di Sanita", "url": "https://www.iss.it/en/coronavirus", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "eurostat", "title": "Population structure statistics", "publisher": "European Commission (Eurostat)", "url": "https://ec.europa.eu/eurostat/web/population-demography", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "73191520-ee33-5f7e-ada6-cf53d0a9fba3",
+      "slug": "sars-outbreak-2003",
+      "name": "SARS outbreak, 2003",
+      "episode_type": "pandemic",
+      "onset_date": "2003-03-12",
+      "peak_date": "2003-05-01",
+      "end_date": "2003-07-05",
+      "geography": "ASIA",
+      "affected_industries": ["public_health", "healthcare", "airlines", "tourism", "hospitality", "retail"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_ihr_2005", "pre_social_media", "emerging_market", "globalized_supply_chain"],
+      "is_counterexample": true,
+      "onset_summary": "The World Health Organization issues a global alert about a severe atypical pneumonia spreading between countries through air travel, after a doctor who treated patients in southern China infected guests at a Hong Kong hotel who then flew to three other countries. The pathogen is unidentified, there is no test and no treatment, and health workers are among the most affected. Reported case fatality is high, around 10 percent, and the affected economies are export-dependent and heavily reliant on travel and tourism.",
+      "onset_indicators": [
+        {"key": "who_global_alert", "label": "Global alert issued for a new severe respiratory illness", "value": true, "unit": "boolean", "as_of": "2003-03-12", "source_id": "who-sars"},
+        {"key": "case_fatality_rate", "label": "Reported case fatality rate among identified cases", "value": 10, "unit": "percent", "as_of": "2003-03-12", "source_id": "who-sars"},
+        {"key": "air_travel_transmission", "label": "International spread through air travel from a single hotel cluster", "value": true, "unit": "boolean", "as_of": "2003-03-12", "source_id": "who-sars"},
+        {"key": "healthcare_worker_infections", "label": "Health workers heavily represented among cases", "value": true, "unit": "boolean", "as_of": "2003-03-12", "source_id": "who-sars"},
+        {"key": "diagnostic_test_available", "label": "A diagnostic test exists", "value": false, "unit": "boolean", "as_of": "2003-03-12", "source_id": "who-sars"}
+      ],
+      "outcome_summary": "The outbreak was contained by July 2003 with about 8,000 cases and 774 deaths worldwide. Because the virus was only transmissible once patients were visibly symptomatic, isolation worked. Hong Kong and Singapore lost a quarter of their travel and retail activity for a quarter and rebounded fully within two; regional output growth was barely affected for the year. It is the canonical case of a frightening novel pathogen that was contained by conventional public-health measures.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Case isolation, contact tracing and quarantine, travel advisories and airport screening; containment was achievable because transmission followed symptoms. The episode produced the revised International Health Regulations of 2005.",
+      "source_refs": [
+        {"id": "who-sars", "title": "SARS: summary of probable cases and outbreak chronology", "publisher": "World Health Organization", "url": "https://www.who.int/health-topics/severe-acute-respiratory-syndrome", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "adb-sars", "title": "Asian Development Bank economic assessments", "publisher": "Asian Development Bank", "url": "https://www.adb.org/publications", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "172a0e64-18a2-5c08-a2d4-bd3f5da280da",
+      "slug": "h1n1-influenza-pandemic-2009",
+      "name": "H1N1 influenza pandemic, 2009",
+      "episode_type": "pandemic",
+      "onset_date": "2009-04-24",
+      "peak_date": "2009-10-31",
+      "end_date": "2010-08-10",
+      "geography": "GLOBAL",
+      "affected_industries": ["public_health", "healthcare", "pharmaceuticals", "airlines", "tourism", "livestock"],
+      "regime_tags": ["post_fiat", "post_qe", "post_ihr_2005", "post_social_media", "globalized_supply_chain", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "The World Health Organization reports a new influenza A virus of swine origin spreading between people in Mexico and the United States, with a genetic combination never seen before and no population immunity. Influenza pandemics are the scenario every national preparedness plan is built around, and the reference case is the 1918 outbreak that killed tens of millions. Early Mexican reports suggest an alarming fatality rate among young adults, the virus is already in several countries, and vaccine production will take about six months.",
+      "onset_indicators": [
+        {"key": "novel_reassortant_virus", "label": "Novel influenza A reassortant with no population immunity", "value": true, "unit": "boolean", "as_of": "2009-04-24", "source_id": "who-h1n1"},
+        {"key": "human_transmission_confirmed", "label": "Person-to-person transmission confirmed in multiple countries", "value": true, "unit": "boolean", "as_of": "2009-04-24", "source_id": "who-h1n1"},
+        {"key": "early_reported_fatality", "label": "Early reported fatality rate from the initial outbreak country", "value": "alarming", "unit": "category", "as_of": "2009-04-24", "source_id": "who-h1n1"},
+        {"key": "vaccine_lead_time", "label": "Months required to produce a matched vaccine", "value": 6, "unit": "months", "as_of": "2009-04-24", "source_id": "cdc-h1n1"}
+      ],
+      "outcome_summary": "The virus spread worldwide but proved far milder than feared: the eventual infection fatality rate was comparable to or below seasonal influenza, and estimated deaths of roughly 150,000 to 300,000 fell mainly on younger people. There were no lockdowns, no travel bans of consequence and no measurable economic effect; several governments were criticised for over-purchasing vaccines. It is the base-rate case that a declared influenza pandemic is not automatically a catastrophe.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Standard public-health response: surveillance, antiviral stockpiles and a vaccine campaign from late 2009; no economically significant restrictions were imposed and the pandemic was declared over in August 2010.",
+      "source_refs": [
+        {"id": "who-h1n1", "title": "Pandemic (H1N1) 2009 situation updates", "publisher": "World Health Organization", "url": "https://www.who.int/emergencies/situations/influenza-a-(h1n1)-outbreak", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "cdc-h1n1", "title": "2009 H1N1 pandemic summary", "publisher": "US Centers for Disease Control and Prevention", "url": "https://www.cdc.gov/flu/pandemic-resources/2009-h1n1-pandemic.html", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "6ef2e931-0225-5a71-bb34-1a537803ac39",
+      "slug": "west-africa-ebola-epidemic-2014",
+      "name": "West Africa Ebola epidemic, 2014-2016",
+      "episode_type": "pandemic",
+      "onset_date": "2014-03-23",
+      "peak_date": "2014-10-31",
+      "end_date": "2016-06-09",
+      "geography": "AFRICA",
+      "affected_industries": ["public_health", "healthcare", "mining", "agriculture", "airlines", "tourism"],
+      "regime_tags": ["post_fiat", "post_qe", "post_ihr_2005", "post_social_media", "emerging_market"],
+      "is_counterexample": false,
+      "onset_summary": "The World Health Organization is notified of an Ebola outbreak in Guinea, the first in West Africa, where no health system has ever handled the disease. Cases are already spread across several districts and across two borders, which is unlike every previous outbreak in remote central African villages. Case fatality runs above 50 percent, there is no vaccine or licensed treatment, transmission occurs through body fluids and is amplified by traditional burial practices, and the three affected countries have a few dozen doctors each for millions of people.",
+      "onset_indicators": [
+        {"key": "case_fatality_rate", "label": "Case fatality rate among confirmed cases", "value": 55, "unit": "percent", "as_of": "2014-03-23", "source_id": "who-ebola"},
+        {"key": "cross_border_spread", "label": "Cases already present across multiple districts and national borders", "value": true, "unit": "boolean", "as_of": "2014-03-23", "source_id": "who-ebola"},
+        {"key": "vaccine_or_treatment", "label": "Licensed vaccine or treatment available", "value": false, "unit": "boolean", "as_of": "2014-03-23", "source_id": "who-ebola"},
+        {"key": "physicians_per_capita", "label": "Physicians available in the affected countries per hundred thousand people", "value": 2, "unit": "count", "as_of": "2013-12-31", "source_id": "wb-health"}
+      ],
+      "outcome_summary": "The epidemic ran for two years, infecting more than 28,000 people and killing over 11,000, the worst Ebola outbreak on record. The three affected economies lost several percentage points of output and closed borders and schools; a handful of exported cases caused intense fear elsewhere but no sustained transmission outside West Africa. The response produced a licensed vaccine, a WHO emergency programme and a permanent African disease control agency.",
+      "outcomes": ["systemic_crisis", "recession", "contained", "regime_change"],
+      "resolution_mechanism": "A large international deployment of treatment centres and safe-burial teams, community engagement changing burial practices, a ring-vaccination trial that demonstrated an effective vaccine, and creation of new emergency response institutions.",
+      "source_refs": [
+        {"id": "who-ebola", "title": "Ebola virus disease outbreak in West Africa", "publisher": "World Health Organization", "url": "https://www.who.int/emergencies/situations/ebola-virus-disease-outbreak-west-africa", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wb-health", "title": "World Bank health and economic impact data", "publisher": "World Bank", "url": "https://data.worldbank.org/topic/health", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "469d882c-aa37-5bf9-8979-31981a0f69fa",
+      "slug": "mpox-multi-country-outbreak-2022",
+      "name": "Multi-country mpox outbreak, 2022",
+      "episode_type": "pandemic",
+      "onset_date": "2022-05-13",
+      "peak_date": "2022-08-15",
+      "end_date": "2023-05-11",
+      "geography": "GLOBAL",
+      "affected_industries": ["public_health", "healthcare", "pharmaceuticals"],
+      "regime_tags": ["post_fiat", "post_qe", "post_ihr_2005", "post_social_media", "globalized_supply_chain", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "The World Health Organization reports mpox cases in several countries where the virus is not endemic, in people with no travel history to the regions where it circulates, indicating sustained transmission outside its usual range for the first time. The world has just spent two years learning that a novel virus spreading in multiple countries can become a pandemic, and the reflex is to expect the same trajectory. The virus is a DNA orthopoxvirus, transmitted mainly through close physical contact, and existing smallpox vaccines and antivirals are known to work against it.",
+      "onset_indicators": [
+        {"key": "non_endemic_country_transmission", "label": "Sustained transmission in countries where the virus is not endemic", "value": true, "unit": "boolean", "as_of": "2022-05-13", "source_id": "who-mpox"},
+        {"key": "no_travel_link", "label": "Cases without travel links to endemic regions", "value": true, "unit": "boolean", "as_of": "2022-05-13", "source_id": "who-mpox"},
+        {"key": "existing_vaccine_effective", "label": "Existing smallpox vaccines expected to be effective", "value": true, "unit": "boolean", "as_of": "2022-05-13", "source_id": "who-mpox"},
+        {"key": "transmission_requires_close_contact", "label": "Transmission requires prolonged close physical contact rather than aerosols", "value": true, "unit": "boolean", "as_of": "2022-05-20", "source_id": "ecdc"}
+      ],
+      "outcome_summary": "The outbreak peaked in August 2022 and declined sharply. About 87,000 cases and 140 deaths were reported worldwide, and the emergency was lifted in May 2023. Transmission fell mainly because the affected community changed behaviour and was vaccinated quickly, not because of any restriction: there were no lockdowns, no travel bans and no economic effect. It is a useful counterexample to the assumption that any multi-country outbreak repeats the previous pandemic.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Targeted vaccination with existing smallpox vaccines, community-led behaviour change, and standard case isolation; no population-wide restrictions were used.",
+      "source_refs": [
+        {"id": "who-mpox", "title": "Multi-country outbreak of mpox: situation reports", "publisher": "World Health Organization", "url": "https://www.who.int/emergencies/situations/monkeypox-oubreak-2022", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ecdc", "title": "ECDC mpox situation updates", "publisher": "European Centre for Disease Prevention and Control", "url": "https://www.ecdc.europa.eu/en/mpox", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    }
+  ]
+}

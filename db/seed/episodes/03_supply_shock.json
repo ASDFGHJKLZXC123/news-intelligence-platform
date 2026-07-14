@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "file": "03_supply_shock",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "8569a09b-0195-5c23-a9e4-16361024d327",
+      "slug": "opec-oil-embargo-1973",
+      "name": "Arab oil embargo, 1973",
+      "episode_type": "supply_shock",
+      "onset_date": "1973-10-17",
+      "peak_date": "1974-01-01",
+      "end_date": "1974-03-18",
+      "geography": "GLOBAL",
+      "affected_industries": ["oil_gas", "energy", "automotive", "manufacturing", "transport"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "pre_basel", "pre_social_media", "high_inflation", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "Arab oil producers announce production cuts and an embargo on shipments to states seen as supporting Israel in the ongoing war, and posted prices are raised unilaterally by about 70 percent. The importing economies have no strategic reserves, no spare domestic capacity after US production peaked, and an energy-intensive industrial base built when crude cost under three dollars a barrel. Contracts are being repudiated in favour of spot sales, and the cartel has demonstrated that it can set price administratively rather than through the market.",
+      "onset_indicators": [
+        {"key": "posted_price_increase", "label": "Unilateral increase in posted crude prices", "value": 70, "unit": "percent", "as_of": "1973-10-16", "source_id": "eia-history"},
+        {"key": "production_cut", "label": "Announced monthly production cuts by the producer group", "value": 5, "unit": "percent", "as_of": "1973-10-17", "source_id": "opec"},
+        {"key": "strategic_reserve", "label": "Importing countries hold a strategic petroleum reserve", "value": false, "unit": "boolean", "as_of": "1973-10-17", "source_id": "eia-history"},
+        {"key": "import_dependence", "label": "Share of US oil consumption met by imports", "value": 35, "unit": "percent", "as_of": "1973-09-30", "source_id": "eia-history"}
+      ],
+      "outcome_summary": "Crude quadrupled to about 12 dollars a barrel within months. The importing economies suffered simultaneous recession and double-digit inflation, breaking the postwar policy consensus that the two could not coexist; rationing and speed limits were imposed, and the shock accelerated the shift to smaller cars, nuclear power and non-OPEC production. The embargo was lifted in March 1974 but prices never returned to their earlier level.",
+      "outcomes": ["recession", "regime_change", "systemic_crisis"],
+      "resolution_mechanism": "The embargo was lifted after diplomatic disengagement agreements; structurally it was resolved by demand conservation, strategic reserves, the creation of the International Energy Agency, and new non-OPEC supply from the North Sea and Alaska.",
+      "source_refs": [
+        {"id": "eia-history", "title": "US energy history and petroleum data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "opec", "title": "OPEC statistical bulletin", "publisher": "Organization of the Petroleum Exporting Countries", "url": "https://www.opec.org/opec_web/en/publications/202.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "frb-oil", "title": "Oil Shock of 1973-74", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1973-74", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "0fea9a42-9a2e-55f2-b3e0-87ca3b4f8f58",
+      "slug": "iranian-revolution-oil-shock-1979",
+      "name": "Iranian revolution oil shock, 1979",
+      "episode_type": "supply_shock",
+      "onset_date": "1978-12-27",
+      "peak_date": "1980-01-31",
+      "end_date": "1981-12-31",
+      "geography": "GLOBAL",
+      "affected_industries": ["oil_gas", "energy", "manufacturing", "transport", "automotive"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "pre_social_media", "high_inflation", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "Oil exports from a major producer stop entirely as strikes in its oil fields turn into a revolution, removing roughly 5 percent of world supply. Global spare capacity is thin, inventories are low, and buyers who lost term contracts bid aggressively in a spot market that is small enough for panic buying to set the price for everyone. Consuming countries are still adjusting to the previous decade's price shock, inflation is already high, and central banks have shown they will accommodate rather than resist an energy price rise.",
+      "onset_indicators": [
+        {"key": "supply_withdrawn", "label": "Share of world oil supply removed by the export halt", "value": 5, "unit": "percent", "as_of": "1978-12-27", "source_id": "eia-history"},
+        {"key": "spare_capacity", "label": "Global spare production capacity", "value": "thin", "unit": "category", "as_of": "1978-12-31", "source_id": "iea"},
+        {"key": "spot_market_bidding", "label": "Term contract holders bidding in a thin spot market", "value": true, "unit": "boolean", "as_of": "1979-01-05", "source_id": "iea"},
+        {"key": "us_cpi_inflation", "label": "US consumer price inflation before the shock", "value": 9, "unit": "percent", "as_of": "1978-11-30", "source_id": "fred-cpi"}
+      ],
+      "outcome_summary": "Crude rose from about 15 to nearly 40 dollars a barrel by 1980. Combined with a second disruption from the Iran-Iraq war, the shock pushed US inflation into double digits and provoked the Volcker tightening, producing back-to-back recessions and a debt crisis across commodity-importing developing countries. High prices eventually called forth new supply and demand destruction, and oil collapsed in 1986.",
+      "outcomes": ["recession", "systemic_crisis", "regime_change"],
+      "resolution_mechanism": "Demand destruction and efficiency gains, new non-OPEC supply, strategic reserve releases in later episodes, and ultimately a monetary regime change in the consuming countries that broke the inflation the shock had fed.",
+      "source_refs": [
+        {"id": "eia-history", "title": "US energy history and petroleum data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "iea", "title": "IEA oil market reports", "publisher": "International Energy Agency", "url": "https://www.iea.org/topics/oil", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-cpi", "title": "Consumer Price Index for All Urban Consumers (CPIAUCSL)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/CPIAUCSL", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "5850c985-a954-50bd-b536-0686534125bb",
+      "slug": "kuwait-invasion-oil-spike-1990",
+      "name": "Kuwait invasion oil price spike, 1990",
+      "episode_type": "supply_shock",
+      "onset_date": "1990-08-02",
+      "peak_date": "1990-10-11",
+      "end_date": "1991-02-28",
+      "geography": "GLOBAL",
+      "affected_industries": ["oil_gas", "energy", "airlines", "transport"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "One oil-producing state invades and annexes another, removing the combined exports of both from the market under sanctions: about 4 million barrels a day, roughly 7 percent of world supply. Prices double within weeks. Unlike the 1970s the importing countries now hold strategic reserves and the cartel has spare capacity, but there is a live risk that the conflict spreads to the largest producer next door, and the futures market prices that tail rather than the current barrel balance.",
+      "onset_indicators": [
+        {"key": "supply_removed", "label": "Combined exports removed from the market by invasion and sanctions", "value": 4.0, "unit": "million_barrels_per_day", "as_of": "1990-08-06", "source_id": "eia-history"},
+        {"key": "crude_price", "label": "Crude oil price at onset", "value": 28, "unit": "usd_per_barrel", "as_of": "1990-08-06", "source_id": "fred-oil"},
+        {"key": "strategic_reserves_available", "label": "Importing countries hold strategic petroleum reserves", "value": true, "unit": "boolean", "as_of": "1990-08-02", "source_id": "iea"},
+        {"key": "escalation_risk_priced", "label": "Market pricing the risk that conflict spreads to the largest regional producer", "value": true, "unit": "boolean", "as_of": "1990-08-06", "source_id": "iea"}
+      ],
+      "outcome_summary": "Crude peaked near 40 dollars in October and then fell back below 20 within days of the coalition air campaign in January 1991, as a coordinated reserve release and spare capacity from other producers covered the gap. The US entered a mild recession, more attributable to the credit crunch and thrift crisis than to oil. The feared regional supply catastrophe did not occur.",
+      "outcomes": ["recession", "contained", "recovery"],
+      "resolution_mechanism": "Coordinated strategic reserve release, other producers using spare capacity to replace the lost barrels, and a short military campaign that ended the supply threat.",
+      "source_refs": [
+        {"id": "eia-history", "title": "US energy history and petroleum data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "iea", "title": "IEA oil market reports", "publisher": "International Energy Agency", "url": "https://www.iea.org/topics/oil", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-oil", "title": "Crude Oil Prices: West Texas Intermediate (DCOILWTICO)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "6737e25c-3b15-5ad8-87fa-924e1da8d155",
+      "slug": "fukushima-supply-chain-disruption-2011",
+      "name": "Japanese earthquake supply-chain disruption, 2011",
+      "episode_type": "supply_shock",
+      "onset_date": "2011-03-11",
+      "peak_date": "2011-04-30",
+      "end_date": "2011-09-30",
+      "geography": "JP",
+      "affected_industries": ["automotive", "semiconductors", "electronics", "electric_utilities", "manufacturing"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "A magnitude nine earthquake and tsunami destroy plants and infrastructure across north-eastern Japan and trigger a nuclear emergency, cutting national electricity supply and forcing rolling blackouts in the industrial east. The affected region makes specialised inputs with no ready substitute: a single plant supplies a majority of the world's supply of a particular automotive pigment, another a large share of silicon wafers. Global manufacturers hold days of inventory by design, and most do not know who supplies their suppliers below the first tier.",
+      "onset_indicators": [
+        {"key": "power_supply_loss", "label": "National electricity generating capacity taken offline", "value": "large_share", "unit": "category", "as_of": "2011-03-12", "source_id": "meti"},
+        {"key": "tier_n_visibility", "label": "Manufacturers lack visibility into suppliers below the first tier", "value": true, "unit": "boolean", "as_of": "2011-03-14", "source_id": "oecd-supply"},
+        {"key": "single_source_inputs", "label": "Specialised inputs concentrated in single plants in the affected region", "value": true, "unit": "boolean", "as_of": "2011-03-14", "source_id": "oecd-supply"},
+        {"key": "inventory_days", "label": "Typical just-in-time inventory buffer held by assemblers", "value": 5, "unit": "days", "as_of": "2011-03-11", "source_id": "oecd-supply"}
+      ],
+      "outcome_summary": "Global vehicle production fell for several months and some plants abroad idled for want of a single component, but the disruption was substantially resolved within six months: alternative sources were qualified, damaged plants were rebuilt faster than expected, and no manufacturer failed. Japan's output rebounded within the year. The lasting effect was corporate, not macroeconomic: multi-tier supplier mapping and inventory buffers became standard practice.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Rapid rebuilding and requalification of alternative suppliers, emergency power rationing, and central-bank liquidity to the affected banking system; supply chains restored within roughly six months.",
+      "source_refs": [
+        {"id": "meti", "title": "Japanese industrial production statistics", "publisher": "Ministry of Economy, Trade and Industry, Japan", "url": "https://www.meti.go.jp/english/statistics/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "oecd-supply", "title": "OECD work on global value chains", "publisher": "Organisation for Economic Co-operation and Development", "url": "https://www.oecd.org/trade/topics/global-value-chains/", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "boj-tankan", "title": "Bank of Japan statistics", "publisher": "Bank of Japan", "url": "https://www.boj.or.jp/en/statistics/index.htm", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "c865aa90-59ab-5cce-ad5d-0209e4a9fe16",
+      "slug": "thailand-floods-component-shortage-2011",
+      "name": "Thai floods component shortage, 2011",
+      "episode_type": "supply_shock",
+      "onset_date": "2011-10-04",
+      "peak_date": "2011-11-15",
+      "end_date": "2012-06-30",
+      "geography": "TH",
+      "affected_industries": ["electronics", "semiconductors", "automotive", "manufacturing", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "emerging_market", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "Monsoon flooding inundates industrial estates north of Bangkok that host a large share of world hard-disk-drive assembly and component production. The estates were built on a flood plain and the plants share the same water, so a regional weather event hits what looks like a diversified supplier base but is in fact one geographic point of failure. Drive makers hold limited finished inventory, and computer manufacturers who buy drives on long-term contracts have no qualified alternative supplier for some components.",
+      "onset_indicators": [
+        {"key": "global_hdd_capacity_affected", "label": "Share of world hard-disk-drive output in the flooded estates", "value": 40, "unit": "percent", "as_of": "2011-10-10", "source_id": "bot"},
+        {"key": "geographic_concentration", "label": "Nominally diversified suppliers concentrated on one flood plain", "value": true, "unit": "boolean", "as_of": "2011-10-10", "source_id": "wb-tha"},
+        {"key": "plants_submerged", "label": "Industrial estates submerged", "value": 7, "unit": "count", "as_of": "2011-10-14", "source_id": "bot"},
+        {"key": "component_inventory", "label": "Finished component inventory held downstream", "value": "limited", "unit": "category", "as_of": "2011-10-04", "source_id": "wb-tha"}
+      ],
+      "outcome_summary": "Drive prices roughly doubled and personal computer production was constrained for two quarters, but the plants were pumped out and rebuilt, output recovered by mid-2012 and no manufacturer failed. Thai growth fell sharply in the fourth quarter and rebounded the next year. The episode is a clean case of a severe, narrow shock in a critical component that resolved on a two-to-three quarter horizon.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Reconstruction and flood defences at the industrial estates, temporary redistribution of production to other countries, and rebuilt inventories; prices normalised over about three quarters.",
+      "source_refs": [
+        {"id": "bot", "title": "Bank of Thailand statistics and reports", "publisher": "Bank of Thailand", "url": "https://www.bot.or.th/en/statistics.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wb-tha", "title": "World Bank data: Thailand", "publisher": "World Bank", "url": "https://data.worldbank.org/country/thailand", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "0eec2381-1c9e-53ff-8e2e-608cbf50e7c7",
+      "slug": "iceland-volcano-airspace-closure-2010",
+      "name": "Icelandic volcano airspace closure, 2010",
+      "episode_type": "supply_shock",
+      "onset_date": "2010-04-14",
+      "peak_date": "2010-04-18",
+      "end_date": "2010-04-23",
+      "geography": "EU",
+      "affected_industries": ["airlines", "logistics", "tourism", "manufacturing", "agriculture"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "An Icelandic volcano erupts under a glacier, producing a fine ash plume that drifts across the busiest airspace in the world. Regulators close it under a precautionary rule that assumes any measurable ash concentration is unsafe for jet engines, with no agreed tolerance threshold and no test data to set one. Roughly a hundred thousand flights are cancelled within a week. Air-freighted goods with short shelf lives or high value density, from horticultural exports to electronic components, have no substitute transport on the same timescale.",
+      "onset_indicators": [
+        {"key": "airspace_closed", "label": "European airspace closed to commercial traffic", "value": true, "unit": "boolean", "as_of": "2010-04-15", "source_id": "eurocontrol"},
+        {"key": "flights_cancelled", "label": "Flights cancelled during the closure", "value": 100000, "unit": "count", "as_of": "2010-04-20", "source_id": "eurocontrol"},
+        {"key": "no_ash_tolerance_standard", "label": "No agreed engine tolerance threshold for ash concentration", "value": true, "unit": "boolean", "as_of": "2010-04-15", "source_id": "easa"},
+        {"key": "air_freight_share_of_value", "label": "High-value and perishable trade dependent on air freight", "value": "significant", "unit": "category", "as_of": "2010-04-14", "source_id": "icao"}
+      ],
+      "outcome_summary": "Airlines lost roughly 1.7 billion dollars and some perishable exporters lost a season's crop, but airspace reopened within a week once regulators and manufacturers agreed tolerance thresholds and began flying test aircraft; there was no measurable effect on quarterly output in the affected economies and no airline failed. The lasting change was regulatory: a graduated ash-concentration framework replaced the blanket closure rule.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Replacement of a zero-tolerance closure rule with graduated ash-concentration zones agreed between regulators, manufacturers and airlines, validated by test flights.",
+      "source_refs": [
+        {"id": "eurocontrol", "title": "Eurocontrol network operations reports", "publisher": "Eurocontrol", "url": "https://www.eurocontrol.int/publications", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "easa", "title": "EASA safety publications", "publisher": "European Union Aviation Safety Agency", "url": "https://www.easa.europa.eu/en/document-library", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "icao", "title": "ICAO volcanic ash contingency planning", "publisher": "International Civil Aviation Organization", "url": "https://www.icao.int/safety/meteorology/Pages/default.aspx", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d65446e0-bda7-5de5-b0ec-31a7886feccc",
+      "slug": "suez-canal-blockage-2021",
+      "name": "Suez Canal blockage, 2021",
+      "episode_type": "supply_shock",
+      "onset_date": "2021-03-23",
+      "peak_date": "2021-03-27",
+      "end_date": "2021-03-29",
+      "geography": "GLOBAL",
+      "affected_industries": ["shipping", "logistics", "retail", "manufacturing", "oil_gas"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "A 400-metre container ship grounds diagonally across the Suez Canal in a sandstorm, blocking a waterway that carries roughly 12 percent of world trade and about a million barrels of oil a day in each direction. There is no bypass except a two-week detour around southern Africa. A queue of several hundred ships builds within days, and the blockage lands on supply chains already short of container capacity and running at full port utilisation after a year of pandemic demand distortion.",
+      "onset_indicators": [
+        {"key": "world_trade_share_through_canal", "label": "Share of world seaborne trade transiting the canal", "value": 12, "unit": "percent", "as_of": "2021-03-23", "source_id": "unctad"},
+        {"key": "ships_waiting", "label": "Vessels waiting at both ends of the canal", "value": 300, "unit": "count", "as_of": "2021-03-27", "source_id": "unctad"},
+        {"key": "detour_duration", "label": "Additional voyage days if routed around southern Africa", "value": 12, "unit": "days", "as_of": "2021-03-23", "source_id": "imo"},
+        {"key": "container_capacity_tightness", "label": "Container shipping capacity already fully utilised before the grounding", "value": true, "unit": "boolean", "as_of": "2021-03-23", "source_id": "unctad"}
+      ],
+      "outcome_summary": "The ship was refloated after six days with dredgers and a spring tide, the queue cleared in about ten days, and the canal never closed again. Ports absorbed a bunched arrival wave that worsened existing congestion for some weeks. There was no measurable effect on global output or inflation, and the episode became the standard example of a highly visible chokepoint failure whose economic consequences were far smaller than the images suggested.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Dredging and tug refloating assisted by a spring tide, then a managed convoy backlog clearance; no rerouting of the bulk of traffic proved necessary.",
+      "source_refs": [
+        {"id": "unctad", "title": "Review of Maritime Transport", "publisher": "United Nations Conference on Trade and Development", "url": "https://unctad.org/topic/transport-and-trade-logistics/review-of-maritime-transport", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "imo", "title": "IMO shipping and trade facilitation", "publisher": "International Maritime Organization", "url": "https://www.imo.org/en/OurWork/Safety/Pages/default.aspx", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "2bbee4e7-0b82-51de-bb35-1eeeb42d5ff8",
+      "slug": "global-semiconductor-shortage-2021",
+      "name": "Global semiconductor shortage, 2020-2022",
+      "episode_type": "supply_shock",
+      "onset_date": "2020-12-18",
+      "peak_date": "2021-09-30",
+      "end_date": "2022-12-31",
+      "geography": "GLOBAL",
+      "affected_industries": ["semiconductors", "automotive", "electronics", "manufacturing", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "Vehicle manufacturers begin announcing production cuts because they cannot obtain microcontrollers. Having cancelled chip orders when demand collapsed at the start of the pandemic, they released the foundry capacity to consumer electronics makers whose demand had surged, and cannot get it back: the chips they need are made on mature nodes with little spare capacity, lead times run beyond six months, and building a new fab takes years. The industry orders just-in-time and holds almost no buffer, so a demand snapback arrives as an outright shortage.",
+      "onset_indicators": [
+        {"key": "automaker_production_cuts", "label": "Vehicle manufacturers announcing output cuts for want of chips", "value": true, "unit": "boolean", "as_of": "2020-12-18", "source_id": "sia"},
+        {"key": "foundry_lead_time", "label": "Semiconductor order lead time", "value": 6, "unit": "months", "as_of": "2020-12-18", "source_id": "sia"},
+        {"key": "mature_node_utilisation", "label": "Utilisation of the mature process nodes the affected chips require", "value": "at_capacity", "unit": "category", "as_of": "2020-12-18", "source_id": "sia"},
+        {"key": "buffer_inventory", "label": "Chip inventory buffer held by vehicle assemblers", "value": "minimal", "unit": "category", "as_of": "2020-12-18", "source_id": "oecd-supply"}
+      ],
+      "outcome_summary": "Global vehicle production was cut by millions of units through 2021 and 2022, new and used car prices rose sharply and contributed materially to headline inflation, and manufacturers ran plants with unfinished vehicles awaiting chips. No large manufacturer failed. The shortage eased through 2022 as capacity was added and consumer electronics demand fell, and it produced a durable policy shift toward subsidised domestic fabrication capacity.",
+      "outcomes": ["contained", "regime_change", "recovery"],
+      "resolution_mechanism": "Capacity expansion at mature nodes, reallocation of foundry allocations, direct manufacturer-to-foundry contracting replacing tiered ordering, and state subsidy programmes for domestic fabrication.",
+      "source_refs": [
+        {"id": "sia", "title": "Semiconductor industry data", "publisher": "US Department of Commerce", "url": "https://www.commerce.gov/data-and-reports", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "oecd-supply", "title": "OECD work on global value chains", "publisher": "Organisation for Economic Co-operation and Development", "url": "https://www.oecd.org/trade/topics/global-value-chains/", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-vehicles", "title": "Total Vehicle Sales (TOTALSA)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/TOTALSA", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "27e0690e-6b66-51e2-91f5-71550fa0bbfe",
+      "slug": "european-gas-supply-cut-2022",
+      "name": "European gas supply cut, 2022",
+      "episode_type": "supply_shock",
+      "onset_date": "2022-06-14",
+      "peak_date": "2022-08-26",
+      "end_date": "2023-03-31",
+      "geography": "EU",
+      "affected_industries": ["natural_gas", "energy", "electric_utilities", "chemicals", "metals", "manufacturing"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media", "high_inflation"],
+      "is_counterexample": true,
+      "onset_summary": "The main pipeline supplier cuts flows to Europe to 40 percent of capacity, citing a turbine under sanctions-related repair, having already halted deliveries to several member states that refused to pay in roubles. Europe took about 40 percent of its gas from this one supplier by pipeline, its storage is well below the level needed to get through winter, and its liquefied-gas import terminals are too few to replace pipeline volumes. Benchmark gas prices are already many times their historical range, and heavy industry that uses gas as a feedstock is on the margin of viability.",
+      "onset_indicators": [
+        {"key": "pipeline_flow_reduction", "label": "Pipeline flows cut to a share of contracted capacity", "value": 40, "unit": "percent", "as_of": "2022-06-16", "source_id": "ec-energy"},
+        {"key": "import_dependence", "label": "Share of European gas supplied by the single pipeline supplier before the cut", "value": 40, "unit": "percent", "as_of": "2021-12-31", "source_id": "ec-energy"},
+        {"key": "storage_level", "label": "Gas storage fill level entering the injection season", "value": 55, "unit": "percent", "as_of": "2022-06-14", "source_id": "ec-energy"},
+        {"key": "benchmark_gas_price", "label": "European benchmark gas price", "value": 130, "unit": "eur_per_mwh", "as_of": "2022-06-14", "source_id": "iea-gas"},
+        {"key": "lng_import_capacity", "label": "Regasification capacity available to substitute for pipeline gas", "value": "insufficient", "unit": "category", "as_of": "2022-06-14", "source_id": "iea-gas"}
+      ],
+      "outcome_summary": "The feared rationing and blackouts did not happen. Europe filled storage above 90 percent by November through record liquefied-gas imports, a mild winter, and a demand cut of roughly 15 percent achieved largely by industry and households responding to price. Prices fell back below pre-invasion levels by mid-2023. Output contracted in energy-intensive sectors and governments spent heavily on price support, but there was no recession in the euro area in 2022 and no involuntary curtailment.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Emergency liquefied-gas import capacity (including floating terminals), coordinated demand reduction targets, storage filling mandates, fiscal price support, and a mild winter; no involuntary rationing was required.",
+      "source_refs": [
+        {"id": "ec-energy", "title": "European Commission energy security and gas storage data", "publisher": "European Commission", "url": "https://energy.ec.europa.eu/topics/energy-security_en", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "iea-gas", "title": "IEA gas market reports", "publisher": "International Energy Agency", "url": "https://www.iea.org/topics/natural-gas", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "472c521c-f17d-5cc3-bac6-fa93a8e010a4",
+      "slug": "abqaiq-oil-facility-attack-2019",
+      "name": "Saudi oil processing facility attack, 2019",
+      "episode_type": "supply_shock",
+      "onset_date": "2019-09-14",
+      "peak_date": "2019-09-16",
+      "end_date": "2019-09-30",
+      "geography": "SA",
+      "affected_industries": ["oil_gas", "energy", "defense"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "emerging_market"],
+      "is_counterexample": true,
+      "onset_summary": "Drone and cruise-missile strikes hit the world's largest crude stabilisation plant and a major oil field, taking about 5.7 million barrels a day offline, roughly 5 percent of global supply and the single largest sudden disruption ever recorded. Brent rises about 15 percent at the open, the biggest one-day move in decades. The plant is the chokepoint through which most of the kingdom's exports must pass, air defences did not stop the attack, and the immediate question is whether repairs take weeks or many months.",
+      "onset_indicators": [
+        {"key": "supply_offline", "label": "Crude production taken offline by the strike", "value": 5.7, "unit": "million_barrels_per_day", "as_of": "2019-09-14", "source_id": "eia-history"},
+        {"key": "share_of_world_supply", "label": "Share of world oil supply removed", "value": 5, "unit": "percent", "as_of": "2019-09-14", "source_id": "iea"},
+        {"key": "brent_one_day_move", "label": "One-day increase in the benchmark crude price", "value": 15, "unit": "percent", "as_of": "2019-09-16", "source_id": "fred-brent"},
+        {"key": "repair_timeline_unknown", "label": "Time required to restore the damaged processing trains is unknown", "value": true, "unit": "boolean", "as_of": "2019-09-16", "source_id": "iea"},
+        {"key": "spare_capacity_and_reserves", "label": "Other producers hold spare capacity and importers hold strategic reserves", "value": true, "unit": "boolean", "as_of": "2019-09-14", "source_id": "iea"}
+      ],
+      "outcome_summary": "Production was restored within about two weeks, far faster than almost anyone forecast, using stored crude and rapid repairs; prices gave back the entire spike within a month and ended the year lower. There was no shortage anywhere, no reserve release was needed, and no measurable macroeconomic effect. It is the cleanest available case of a maximal-looking supply shock that self-repaired.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Rapid repair of the damaged processing trains, drawdown of the producer's own crude inventories to maintain exports, and available spare capacity elsewhere; no strategic reserve release was needed.",
+      "source_refs": [
+        {"id": "eia-history", "title": "US energy history and petroleum data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "iea", "title": "IEA oil market reports", "publisher": "International Energy Agency", "url": "https://www.iea.org/topics/oil", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-brent", "title": "Crude Oil Prices: Brent - Europe (DCOILBRENTEU)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "f2339fa4-17af-50d9-b259-d08147c4a550",
+      "slug": "red-sea-shipping-attacks-2023",
+      "name": "Red Sea shipping attacks, 2023-2024",
+      "episode_type": "supply_shock",
+      "onset_date": "2023-11-19",
+      "peak_date": "2024-01-31",
+      "end_date": "2024-12-31",
+      "geography": "MENA",
+      "affected_industries": ["shipping", "logistics", "retail", "oil_gas", "manufacturing"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "emerging_market"],
+      "is_counterexample": true,
+      "onset_summary": "An armed group seizes a car carrier in the southern Red Sea and begins attacking commercial vessels with drones and missiles, declaring that ships linked to one country are targets. The strait carries traffic bound for the Suez Canal, roughly 12 percent of world trade. War-risk insurance premiums for the transit multiply, and the only alternative for Asia-Europe container services is the two-week detour around southern Africa, which absorbs vessel capacity in a market whose freight rates are already low from oversupply.",
+      "onset_indicators": [
+        {"key": "vessel_seized", "label": "Commercial vessel seized in the strait", "value": true, "unit": "boolean", "as_of": "2023-11-19", "source_id": "imo"},
+        {"key": "trade_share_at_risk", "label": "Share of world seaborne trade routed through the strait", "value": 12, "unit": "percent", "as_of": "2023-11-19", "source_id": "unctad"},
+        {"key": "war_risk_premium", "label": "War-risk insurance premium for the transit", "value": "multiplied", "unit": "category", "as_of": "2023-11-30", "source_id": "unctad"},
+        {"key": "detour_duration", "label": "Additional voyage days when routing around southern Africa", "value": 12, "unit": "days", "as_of": "2023-11-19", "source_id": "imo"},
+        {"key": "spare_container_capacity", "label": "Container fleet capacity available to absorb longer voyages", "value": "ample", "unit": "category", "as_of": "2023-11-19", "source_id": "unctad"}
+      ],
+      "outcome_summary": "Most container lines rerouted around Africa within weeks. Freight rates on Asia-Europe routes multiplied for several months and delivery times lengthened by about two weeks, but the surplus of container ships absorbed the extra voyage distance, no significant goods shortages developed in importing countries, and the contribution to consumer inflation was small. Canal transit volumes and Egyptian canal revenue fell sharply, which was the largest measurable cost.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Commercial rerouting around southern Africa absorbed by surplus container capacity, naval escort operations for some traffic, and higher war-risk premiums priced into freight rather than shortages.",
+      "source_refs": [
+        {"id": "unctad", "title": "Review of Maritime Transport", "publisher": "United Nations Conference on Trade and Development", "url": "https://unctad.org/topic/transport-and-trade-logistics/review-of-maritime-transport", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "imo", "title": "IMO maritime security", "publisher": "International Maritime Organization", "url": "https://www.imo.org/en/OurWork/Security/Pages/MaritimeSecurity.aspx", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d87a149e-c8f4-5739-977d-c899b8b1af1b",
+      "slug": "colonial-pipeline-ransomware-2021",
+      "name": "US fuel pipeline ransomware shutdown, 2021",
+      "episode_type": "supply_shock",
+      "onset_date": "2021-05-07",
+      "peak_date": "2021-05-12",
+      "end_date": "2021-05-15",
+      "geography": "US",
+      "affected_industries": ["oil_gas", "energy", "logistics", "technology", "airlines"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "A criminal ransomware group encrypts the business systems of the pipeline that carries nearly half the fuel consumed on the US east coast, and the operator shuts the pipeline itself as a precaution because it cannot bill or schedule shipments. The physical asset is undamaged. The region has limited alternative supply routes, terminals hold days of inventory, and there is no obvious authority that can compel or coordinate a restart. Consumers can watch the shutdown in real time and refuel pre-emptively.",
+      "onset_indicators": [
+        {"key": "regional_fuel_share", "label": "Share of east-coast fuel supply carried by the pipeline", "value": 45, "unit": "percent", "as_of": "2021-05-07", "source_id": "eia-history"},
+        {"key": "operational_systems_intact", "label": "Physical pipeline and control systems undamaged; shutdown was precautionary", "value": true, "unit": "boolean", "as_of": "2021-05-08", "source_id": "cisa"},
+        {"key": "terminal_inventory", "label": "Days of fuel inventory held at downstream terminals", "value": 5, "unit": "days", "as_of": "2021-05-07", "source_id": "eia-history"},
+        {"key": "consumer_visibility", "label": "Shutdown publicly reported, enabling pre-emptive consumer buying", "value": true, "unit": "boolean", "as_of": "2021-05-08", "source_id": "cisa"}
+      ],
+      "outcome_summary": "The pipeline restarted after five days once the operator paid a ransom of about 4.4 million dollars, most of which was later recovered by law enforcement. Panic buying, not the supply loss itself, emptied roughly a tenth of filling stations in the affected states for about a week; there was no lasting shortage or price effect. The episode drove the first mandatory cybersecurity directives for US pipeline operators.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Ransom payment and restoration of business systems, emergency waivers allowing road and waterborne fuel transport, and subsequently mandatory pipeline cybersecurity directives.",
+      "source_refs": [
+        {"id": "cisa", "title": "CISA advisories on ransomware affecting critical infrastructure", "publisher": "US Cybersecurity and Infrastructure Security Agency", "url": "https://www.cisa.gov/news-events/cybersecurity-advisories", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "eia-history", "title": "US petroleum supply data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    }
+  ]
+}

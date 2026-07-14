@@ -9,6 +9,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from apps.api.analogies import router as analogies_router
 from apps.api.entities import router as entities_router
 from apps.api.health import router as health_router
 from apps.api.intelligence import router as intelligence_router
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(entities_router)
     app.include_router(risk_intelligence_router)
     app.include_router(intelligence_router)
+    app.include_router(analogies_router)
 
     logger.info("api initialized", extra={"env": settings.app_env})
     return app

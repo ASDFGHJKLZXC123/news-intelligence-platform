@@ -9,8 +9,9 @@ yet (those are gated to later stages).
 from __future__ import annotations
 
 import datetime
+import math
 import re
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Protocol, runtime_checkable
@@ -18,6 +19,28 @@ from typing import Any, Protocol, runtime_checkable
 # A Wikidata item id: "Q" followed by a positive integer. Nothing else is accepted anywhere
 # a QID is taken from a caller or a payload, so no caller-supplied text reaches a SPARQL query.
 WIKIDATA_QID_PATTERN = re.compile(r"^Q[1-9][0-9]*$")
+
+
+def ensure_finite_vector(values: Iterable[Any]) -> tuple[float, ...]:
+    """Coerce an embedding to floats, rejecting non-numeric and non-finite components.
+
+    A NaN or an infinity is not a degraded vector, it is a corrupt one, and the damage is silent:
+    pgvector's cosine distance against a NaN component is NaN, `NaN >= threshold` is False, and the
+    row simply never matches anything ever again. An infinity poisons the index instead. Neither
+    may reach a table whose whole purpose is to be compared against. Booleans are rejected too --
+    a JSON `true` would otherwise coerce to a perfectly plausible 1.0.
+    """
+    vector: list[float] = []
+    for index, value in enumerate(values):
+        if isinstance(value, bool) or not isinstance(value, int | float):
+            msg = f"embedding value at index {index} is not a number: {value!r}"
+            raise ValueError(msg)
+        number = float(value)
+        if not math.isfinite(number):
+            msg = f"embedding value at index {index} is not finite: {value!r}"
+            raise ValueError(msg)
+        vector.append(number)
+    return tuple(vector)
 
 
 def ensure_utc(value: datetime.datetime) -> datetime.datetime:
@@ -110,7 +133,9 @@ class EmbeddingResult:
     evidence_refs: tuple[str, ...] = field(default_factory=tuple)
 
     def __post_init__(self) -> None:
-        vector = tuple(float(value) for value in self.vector)
+        # Every provider's vector passes through here, so this is the one place a NaN/Inf can be
+        # stopped for all of them rather than in each adapter.
+        vector = ensure_finite_vector(self.vector)
         object.__setattr__(self, "vector", vector)
         object.__setattr__(self, "source_refs", tuple(self.source_refs))
         object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))

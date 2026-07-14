@@ -1,0 +1,104 @@
+{
+  "template_version": 1,
+  "purpose": "Machine-readable authoring and review template for one curated historical episode. Copy `episode_skeleton` into a numbered corpus file (NN_<family>.json), fill it, then run the offline validator. This file is product data, not documentation: `services.analogies.corpus` validates the committed corpus against the same rules stated here, and tests assert that every corpus row carries the review block this template defines.",
+  "not_loaded_as_data": "The corpus loader only reads files matching NN_*.json in this directory, so this template is never seeded.",
+  "workflow": {
+    "steps": [
+      {"step": 1, "actor": "llm", "action": "Draft the episode from the fixed field skeleton below. The onset fields must be written as-if-live: only what a contemporary observer could have known on onset_date, with no knowledge of what happened next."},
+      {"step": 2, "actor": "automated", "action": "Run `python -m db.seed.seed --validate-only`. It checks shape, dates, enums, parent order, indicator typing, source structure, onset/outcome separation heuristics, and corpus-level quotas. It cannot check whether a fact is true."},
+      {"step": 3, "actor": "human", "action": "Independent review by a person who did not draft the row: verify every date and figure against the cited sources, confirm the onset text contains no hindsight, confirm outcome facts appear only in outcome fields, and confirm the narrative is original prose rather than paraphrased source text. Budget roughly 20 minutes per episode."},
+      {"step": 4, "actor": "human", "action": "Record the sign-off: set review.status to 'human_reviewed', set review.human_signoff.reviewer to the reviewer's real identifier, set reviewed_at, and set every checklist item the reviewer verified to true. Never record a sign-off that did not happen."},
+      {"step": 5, "actor": "automated", "action": "Seed with `python -m db.seed.seed`. Rows are upserted by their fixed UUID; onset embeddings are recomputed only for new rows and rows whose onset text, version or model space changed."}
+    ],
+    "honesty_rule": "review.status may only be 'human_reviewed' when a named reviewer actually reviewed the row. Automated validation is recorded separately and is never a substitute for it. The corpus as committed is 'llm_drafted_pending_human_review': every row passes the validator, and no row has been signed off by a human. An operator adopting this corpus in production is expected to run step 3 and record step 4."
+  },
+  "review_statuses": {
+    "llm_drafted_pending_human_review": "Drafted and machine-validated. No human has verified the facts. This is the state of the committed corpus.",
+    "human_reviewed": "A named human verified the row against its sources. Requires human_signoff.reviewer, human_signoff.reviewed_at and all checklist items true.",
+    "needs_revision": "A reviewer rejected the row. It stays in the corpus only if it still validates; otherwise it must be fixed or removed."
+  },
+  "review_checklist": {
+    "onset_as_if_live": "onset_summary and onset_indicators contain only what was observable on or shortly after onset_date.",
+    "onset_outcome_separation": "No result, resolution, casualty count or policy response that came later appears in any onset field.",
+    "dates_verified": "onset_date is the first date a contemporary observer could identify the episode, not the famous collapse date; peak and end dates check out against the sources.",
+    "indicators_verified": "Every indicator value, unit and as_of date is supported by the cited source.",
+    "sources_verified": "Every source URL resolves, is authoritative (central bank, regulator, government, IMF/World Bank/BIS/WHO or equivalent), and supports the claims attributed to it.",
+    "outcome_tags_verified": "The outcomes[] tags match what actually happened, and resolution_mechanism describes the mechanism rather than the narrative.",
+    "license_original_prose": "The narrative is original prose written for this corpus, not quoted or closely paraphrased from a retrospective source."
+  },
+  "onset_indicator_rules": {
+    "shape": "A list of typed objects. The loader serialises it to {\"schema\": \"onset_indicators_v1\", \"indicators\": [...]} for deterministic JSON, and the same serialisation is what gets embedded.",
+    "keys": ["key", "label", "value", "unit", "as_of", "source_id"],
+    "key": "snake_case identifier, unique within the episode.",
+    "value": "number, string or boolean. Use a `category` or `boolean` unit rather than inventing a precise figure that cannot be sourced.",
+    "unit": "One of services.analogies.corpus.INDICATOR_UNITS.",
+    "as_of": "ISO date. Must fall inside the onset window: no earlier than five years before onset_date and no later than 14 days after it. An indicator dated outside that window is hindsight, not an onset signal.",
+    "source_id": "Optional, but preferred: must match an id in this episode's source_refs."
+  },
+  "boundary_rules": {
+    "onset_date": "First date a contemporary observer could identify the episode. The 2008 arc begins on 2007-08-09 (the fund redemption freeze), not on the day a bank failed.",
+    "ordering": "peak_date and end_date, when present, must be on or after onset_date, and peak_date must not follow end_date.",
+    "parents": "A long arc is a parent row; the event-sized episodes inside it are children carrying parent_slug. Parents live in 00_arcs.json so they are always seeded before their children. Retrieval ranks only leaf episodes; a parent supplies context after a child matches."
+  },
+  "episode_skeleton": {
+    "id": "<uuid, fixed forever; generate once and never change it>",
+    "slug": "<kebab-case, unique; used for parent_slug references and gold-set curation>",
+    "name": "<human title; never embedded, so it may name the episode>",
+    "episode_type": "<one of: banking_stress | sovereign_debt | supply_shock | industry_shock | company_distress | geopolitical | pandemic | monetary_regime>",
+    "parent_slug": "<slug of the parent arc, or omit>",
+    "onset_date": "<YYYY-MM-DD>",
+    "peak_date": "<YYYY-MM-DD or omit>",
+    "end_date": "<YYYY-MM-DD or omit>",
+    "geography": "<ISO-3166 alpha-2 code, or a region code from services.analogies.corpus.GEOGRAPHIES>",
+    "affected_industries": ["<from services.analogies.corpus.INDUSTRIES>"],
+    "regime_tags": ["<from services.analogies.corpus.REGIME_TAGS>"],
+    "is_counterexample": "<true when the episode resolved benignly enough to be a near-miss rather than a crisis>",
+    "onset_summary": "<EMBEDDED. As-if-live prose: the structure of the situation as an observer saw it on onset_date. State the mechanism, the exposure, and what is not yet known. Never state what happened next, and never mention a year later than onset_date's year.>",
+    "onset_indicators": [
+      {"key": "<snake_case>", "label": "<what the signal is>", "value": "<number|string|boolean>", "unit": "<INDICATOR_UNITS>", "as_of": "<YYYY-MM-DD>", "source_id": "<source_refs id>"}
+    ],
+    "outcome_summary": "<NEVER EMBEDDED. What became of it: results, casualties, policy response, duration.>",
+    "outcomes": ["<one or more of: contained | systemic_crisis | recession | default | bailout | failure | recovery | regime_change>"],
+    "resolution_mechanism": "<NEVER EMBEDDED. The mechanism that ended it, stated as a mechanism.>",
+    "source_refs": [
+      {"id": "<short id referenced by indicators>", "title": "<document or dataset title>", "publisher": "<institution>", "url": "<https URL on an allowlisted institutional domain>", "accessed": "<YYYY-MM-DD>", "kind": "<primary|institutional|statistical>"}
+    ],
+    "license_note": "<inherited from the file-level defaults; must state the narrative is original prose>",
+    "version": "<integer, bump to force re-embedding after an onset edit>",
+    "updated_at": "<YYYY-MM-DD>",
+    "review_due_at": "<YYYY-MM-DD; history gets reinterpreted, so rows expire>",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "<model identifier>",
+      "drafted_at": "<YYYY-MM-DD>",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "gold_pair_skeleton": {
+    "note": "Labelled retrieval pairs live in analogy_gold.json. They are evaluation data: never tune the similarity threshold or weights on them inside the curation task that produces them.",
+    "pair_id": "<gold-NNN, unique>",
+    "title": "<as-if-live current-event headline>",
+    "summary": "<as-if-live onset context for the current event. No outcomes, no hindsight: this text is embedded as the query.>",
+    "as_of": "<YYYY-MM-DD, the notional date of the current event>",
+    "episode_types": ["<families the event maps to; every expected episode must be in one of them>"],
+    "regime_tags": ["<the current regime's tags; drives the regime-caveat gate>"],
+    "geographies": "<null to leave unfiltered, or a list of geography codes>",
+    "industries": "<null to leave unfiltered, or a list of industry tokens>",
+    "expected_episode_ids": ["<primary correct analogy UUIDs; a hit on any counts>"],
+    "acceptable_episode_ids": ["<also-correct alternatives; counted as hits but ranked after the primaries in curation notes>"],
+    "expects_counterexample": "<true when the correct analogy is a near-miss; used to check the corpus fights doom bias>",
+    "notes": "<why this pairing is correct; curation only, never embedded>"
+  }
+}

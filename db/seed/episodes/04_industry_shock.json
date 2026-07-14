@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "file": "04_industry_shock",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "3440e1b2-1634-5ab9-850a-4425b673c5aa",
+      "slug": "uk-bse-beef-crisis-1996",
+      "name": "UK BSE beef crisis, 1996",
+      "episode_type": "industry_shock",
+      "onset_date": "1996-03-20",
+      "peak_date": "1996-03-27",
+      "end_date": "1999-08-01",
+      "geography": "GB",
+      "affected_industries": ["livestock", "agriculture", "food", "retail", "public_health"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The government tells parliament that a new variant of a fatal human brain disease is most plausibly explained by exposure to cattle infected with a spongiform encephalopathy, reversing a decade of official assurance that beef was safe. Roughly 160,000 cattle have been confirmed infected since the 1980s, the incubation period in humans is unknown and may be many years, and no live test exists. Consumers cannot distinguish a safe carcass from an unsafe one, and neither can the export market.",
+      "onset_indicators": [
+        {"key": "human_link_announced", "label": "Government announces a probable link between the cattle disease and a fatal human illness", "value": true, "unit": "boolean", "as_of": "1996-03-20", "source_id": "bse-inquiry"},
+        {"key": "confirmed_cattle_cases", "label": "Cattle cases confirmed since the disease was identified", "value": 160000, "unit": "count", "as_of": "1996-03-20", "source_id": "bse-inquiry"},
+        {"key": "live_test_available", "label": "A test able to detect infection in a live animal exists", "value": false, "unit": "boolean", "as_of": "1996-03-20", "source_id": "who-bse"},
+        {"key": "human_incubation_unknown", "label": "Human incubation period unknown, so the eventual case count cannot be bounded", "value": true, "unit": "boolean", "as_of": "1996-03-20", "source_id": "who-bse"}
+      ],
+      "outcome_summary": "The European Union banned British beef exports within a week and domestic consumption fell by about a third. Some 4.4 million cattle were slaughtered under a mass cull, the industry needed several billion pounds of public support and the export ban lasted until 1999. The human epidemic, feared in early modelling to reach hundreds of thousands, produced fewer than 200 confirmed deaths.",
+      "outcomes": ["contained", "bailout", "regime_change"],
+      "resolution_mechanism": "A mass cattle cull with compensation, a ban on feeding meat-and-bone meal to ruminants, removal of specified risk materials from the food chain, and the creation of an independent food standards agency.",
+      "source_refs": [
+        {"id": "bse-inquiry", "title": "The BSE Inquiry report", "publisher": "UK Government (National Archives)", "url": "https://webarchive.nationalarchives.gov.uk/ukgwa/20060715141954/http://www.bseinquiry.gov.uk/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "who-bse", "title": "Variant Creutzfeldt-Jakob disease fact sheet", "publisher": "World Health Organization", "url": "https://www.who.int/news-room/fact-sheets/detail/variant-creutzfeldt-jakob-disease", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "e46f5b11-36c2-5d1f-96e2-18ca780ad602",
+      "slug": "uk-foot-and-mouth-outbreak-2001",
+      "name": "UK foot-and-mouth outbreak, 2001",
+      "episode_type": "industry_shock",
+      "onset_date": "2001-02-20",
+      "peak_date": "2001-03-31",
+      "end_date": "2002-01-14",
+      "geography": "GB",
+      "affected_industries": ["livestock", "agriculture", "food", "tourism", "hospitality"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Foot-and-mouth disease is confirmed in pigs at an abattoir, the first case in the country in twenty years. The virus is airborne and highly contagious, animals were moved through markets for weeks before detection, and the tracing of those movements is incomplete. National policy is to control the disease by slaughter rather than vaccination, in order to preserve disease-free trading status. Livestock movements are suspended immediately, and the countryside itself is a vector: footpaths, vehicles and people carry the virus.",
+      "onset_indicators": [
+        {"key": "first_case_confirmed", "label": "First confirmed case in two decades", "value": true, "unit": "boolean", "as_of": "2001-02-20", "source_id": "defra"},
+        {"key": "undetected_spread_window", "label": "Weeks of livestock movement before detection", "value": 3, "unit": "weeks", "as_of": "2001-02-23", "source_id": "defra"},
+        {"key": "policy_is_cull_not_vaccinate", "label": "Control policy is slaughter rather than vaccination, to preserve trade status", "value": true, "unit": "boolean", "as_of": "2001-02-21", "source_id": "defra"},
+        {"key": "movement_ban", "label": "National ban on livestock movements imposed", "value": true, "unit": "boolean", "as_of": "2001-02-23", "source_id": "defra"}
+      ],
+      "outcome_summary": "More than 6 million animals were slaughtered over ten months and the disease was eradicated by early 2002. Direct agricultural losses were around 3 billion pounds, but the larger cost fell on tourism, which lost a similar amount when the countryside was closed. A general election was postponed. The episode produced contingency planning that allows emergency vaccination in any future outbreak.",
+      "outcomes": ["contained", "bailout", "regime_change"],
+      "resolution_mechanism": "Mass contiguous culling with movement bans and biosecurity controls, compensation to farmers, and subsequent contingency planning permitting emergency vaccination.",
+      "source_refs": [
+        {"id": "defra", "title": "Foot and mouth disease 2001: lessons to be learned inquiry", "publisher": "UK Government", "url": "https://www.gov.uk/government/publications/foot-and-mouth-disease-2001-lessons-to-be-learned-inquiry-report", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "woah", "title": "Foot and mouth disease technical information", "publisher": "World Organisation for Animal Health", "url": "https://www.woah.org/en/disease/foot-and-mouth-disease/", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d8dd4d7c-e281-53ed-afe5-eb1e700e449e",
+      "slug": "china-african-swine-fever-2018",
+      "name": "African swine fever in China, 2018",
+      "episode_type": "industry_shock",
+      "onset_date": "2018-08-03",
+      "peak_date": "2019-10-31",
+      "end_date": "2021-06-30",
+      "geography": "CN",
+      "affected_industries": ["livestock", "agriculture", "food", "retail"],
+      "regime_tags": ["post_fiat", "post_qe", "emerging_market", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": false,
+      "onset_summary": "African swine fever is confirmed in a herd in north-eastern China, the first outbreak in a country that holds roughly half the world's pigs. The virus is almost invariably fatal to pigs, survives for months in feed and frozen meat, and has no vaccine or treatment. Most of the national herd is kept in small backyard operations with limited biosecurity, and live pigs are transported long distances to slaughter, which is precisely the transmission channel the disease exploits. Pork is the dominant protein in the national diet and a component of the official price index.",
+      "onset_indicators": [
+        {"key": "share_of_world_herd", "label": "Share of the world pig herd held in the affected country", "value": 50, "unit": "percent", "as_of": "2018-08-03", "source_id": "fao"},
+        {"key": "vaccine_available", "label": "Vaccine or treatment available", "value": false, "unit": "boolean", "as_of": "2018-08-03", "source_id": "woah"},
+        {"key": "smallholder_share", "label": "Share of the herd in smallholder operations with limited biosecurity", "value": "majority", "unit": "category", "as_of": "2018-08-03", "source_id": "fao"},
+        {"key": "long_distance_live_transport", "label": "Live pigs routinely transported long distances to slaughter", "value": true, "unit": "boolean", "as_of": "2018-08-03", "source_id": "fao"}
+      ],
+      "outcome_summary": "About half the national pig herd was lost to disease and culling within eighteen months, the largest animal-disease loss ever recorded. Pork prices more than doubled, adding significantly to headline consumer inflation, and global protein trade was rerouted as imports surged. The herd was rebuilt by 2021 through large-scale industrial farms with high biosecurity, permanently restructuring the industry away from backyard production.",
+      "outcomes": ["contained", "regime_change", "recovery"],
+      "resolution_mechanism": "Culling and movement controls, reserve pork releases to damp prices, import substitution, and state-supported reconstruction of the herd in large biosecure facilities.",
+      "source_refs": [
+        {"id": "fao", "title": "African swine fever situation updates", "publisher": "Food and Agriculture Organization of the United Nations", "url": "https://www.fao.org/animal-health/situation-updates/asf-situation-update/en", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "woah", "title": "African swine fever technical information", "publisher": "World Organisation for Animal Health", "url": "https://www.woah.org/en/disease/african-swine-fever/", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "83f029c7-7a66-5ea8-ac32-55b819221f4c",
+      "slug": "boeing-737-max-grounding-2019",
+      "name": "737 MAX worldwide grounding, 2019",
+      "episode_type": "industry_shock",
+      "onset_date": "2019-03-10",
+      "peak_date": "2019-03-13",
+      "end_date": "2020-11-18",
+      "geography": "US",
+      "affected_industries": ["aerospace", "airlines", "manufacturing", "defense"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "A second new-model narrowbody airliner crashes shortly after take-off within five months, killing everyone aboard, with a flight profile resembling the first. Regulators outside the manufacturer's home country begin grounding the type within days, ahead of the home regulator, which is unusual and publicly visible. The aircraft is the manufacturer's best-selling model with thousands of unfilled orders; a flight-control system that can command nose-down trim from a single sensor is under scrutiny, and pilots say it was not described in their manuals.",
+      "onset_indicators": [
+        {"key": "second_fatal_accident", "label": "Second fatal accident of the same new type within five months", "value": true, "unit": "boolean", "as_of": "2019-03-10", "source_id": "ntsb"},
+        {"key": "foreign_regulators_ground_first", "label": "Foreign regulators ground the type before the home regulator", "value": true, "unit": "boolean", "as_of": "2019-03-11", "source_id": "easa"},
+        {"key": "single_sensor_authority", "label": "Flight-control function able to act on a single angle-of-attack sensor", "value": true, "unit": "boolean", "as_of": "2019-03-10", "source_id": "faa"},
+        {"key": "order_backlog", "label": "Unfilled orders for the grounded type", "value": 4600, "unit": "count", "as_of": "2019-02-28", "source_id": "sec-filings"}
+      ],
+      "outcome_summary": "The type was grounded worldwide for twenty months, the longest such grounding in aviation history, costing the manufacturer over 20 billion dollars and its chief executive his job, with criminal settlements and a badly damaged regulatory relationship. But the company did not fail, deliveries resumed after a software and training fix, the backlog largely held, and airlines that had ordered the type kept flying it. Certification oversight was reformed by statute.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Redesign of the flight-control law to use two sensors with limited authority, mandatory simulator training, recertification by regulators acting jointly, and legislation reforming delegated certification authority.",
+      "source_refs": [
+        {"id": "faa", "title": "FAA 737 MAX return to service documentation", "publisher": "US Federal Aviation Administration", "url": "https://www.faa.gov/foia/electronic_reading_room/boeing_reading_room", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ntsb", "title": "NTSB safety recommendations", "publisher": "US National Transportation Safety Board", "url": "https://www.ntsb.gov/safety/safety-recs/Pages/default.aspx", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "easa", "title": "EASA airworthiness directives", "publisher": "European Union Aviation Safety Agency", "url": "https://ad.easa.europa.eu/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-filings", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "850c6261-c158-551e-be14-476fac1fd464",
+      "slug": "us-equity-flash-crash-2010",
+      "name": "US equity flash crash, May 2010",
+      "episode_type": "industry_shock",
+      "onset_date": "2010-05-06",
+      "peak_date": "2010-05-06",
+      "end_date": "2010-05-06",
+      "geography": "US",
+      "affected_industries": ["exchanges", "asset_management", "banking", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "The main equity index falls about 9 percent and recovers most of it within roughly half an hour, with individual large-company shares printing at a cent and others at 100,000 dollars. A large sell order in index futures executed by a volume-based algorithm meets a market whose liquidity is supplied by high-frequency firms with no obligation to quote; as volatility rises they withdraw, and orders route to venues where the only resting bids are stub quotes. There is no market-wide circuit breaker for single stocks, and no consolidated audit trail to reconstruct what happened.",
+      "onset_indicators": [
+        {"key": "index_intraday_drawdown", "label": "Intraday decline in the main equity index", "value": 9, "unit": "percent", "as_of": "2010-05-06", "source_id": "sec-cftc"},
+        {"key": "recovery_time", "label": "Minutes taken to recover most of the decline", "value": 30, "unit": "minutes", "as_of": "2010-05-06", "source_id": "sec-cftc"},
+        {"key": "liquidity_providers_withdraw", "label": "Automated liquidity providers withdraw quotes as volatility spikes", "value": true, "unit": "boolean", "as_of": "2010-05-06", "source_id": "sec-cftc"},
+        {"key": "single_stock_circuit_breakers", "label": "Single-stock circuit breakers exist", "value": false, "unit": "boolean", "as_of": "2010-05-06", "source_id": "sec-cftc"}
+      ],
+      "outcome_summary": "The market closed down about 3 percent on the day and recovered in the following sessions; roughly 20,000 trades executed at absurd prices were cancelled. No firm failed and there was no credit event or macroeconomic consequence. Regulators introduced single-stock circuit breakers, limit-up limit-down bands, revised clearly-erroneous-trade rules and eventually a consolidated audit trail. It is the standard case of a purely microstructural dislocation with no fundamental content.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Cancellation of clearly erroneous trades, then structural fixes: single-stock circuit breakers, limit-up limit-down price bands, market-wide breaker recalibration and a consolidated audit trail.",
+      "source_refs": [
+        {"id": "sec-cftc", "title": "Findings regarding the market events of May 6, 2010", "publisher": "US Securities and Exchange Commission and Commodity Futures Trading Commission", "url": "https://www.sec.gov/news/studies/2010/marketevents-report.pdf", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-sp500", "title": "S&P 500 index (SP500)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/SP500", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "f54cd36d-9621-5ea3-92c4-765cf1e66b74",
+      "slug": "lme-nickel-squeeze-2022",
+      "name": "London nickel short squeeze, 2022",
+      "episode_type": "industry_shock",
+      "onset_date": "2022-03-07",
+      "peak_date": "2022-03-08",
+      "end_date": "2022-03-16",
+      "geography": "GB",
+      "affected_industries": ["metals", "mining", "exchanges", "banking", "commodities_trading"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "Nickel prices on the London metal exchange rise 66 percent in a day and then double again in hours, passing 100,000 dollars a tonne, after sanctions risk to Russian supply collides with an enormous short position held by one producer as a hedge. Much of that position sits in bilateral over-the-counter contracts the exchange cannot see, so the clearing house cannot size the margin call it is about to make. There are no daily price limits on the contract, and the physical market is nowhere near these prices.",
+      "onset_indicators": [
+        {"key": "one_day_price_move", "label": "Single-session increase in the benchmark metal price", "value": 66, "unit": "percent", "as_of": "2022-03-07", "source_id": "fca-lme"},
+        {"key": "concentrated_short_position", "label": "Very large short position held by a single producer as a hedge", "value": true, "unit": "boolean", "as_of": "2022-03-07", "source_id": "fca-lme"},
+        {"key": "otc_positions_invisible", "label": "A large share of the position held in bilateral contracts invisible to the exchange", "value": true, "unit": "boolean", "as_of": "2022-03-07", "source_id": "fca-lme"},
+        {"key": "daily_price_limit", "label": "Daily price limit on the contract exists", "value": false, "unit": "boolean", "as_of": "2022-03-07", "source_id": "boe-fmi"}
+      ],
+      "outcome_summary": "The exchange suspended trading and cancelled about 3.9 billion dollars of trades already executed, a decision that protected the clearing house and the short holder but was challenged in court and cost the venue much of its credibility and volume. No clearing member defaulted and there was no wider financial contagion. Regulators found serious failings in the exchange's controls, and price limits and position visibility rules were introduced.",
+      "outcomes": ["contained", "regime_change"],
+      "resolution_mechanism": "Trading suspension and retrospective cancellation of trades to prevent a clearing-member default, a bilateral standstill with the short holder's banks, and subsequent introduction of daily price limits and OTC position reporting.",
+      "source_refs": [
+        {"id": "fca-lme", "title": "Review of the LME nickel market events of March 2022", "publisher": "UK Financial Conduct Authority and Bank of England", "url": "https://www.fca.org.uk/publications", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "boe-fmi", "title": "Bank of England supervision of financial market infrastructures", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/financial-stability/financial-market-infrastructure-supervision", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "7fd6af8d-ede2-55a8-a8e3-a9e7753864e7",
+      "slug": "terra-luna-stablecoin-collapse-2022",
+      "name": "Algorithmic stablecoin collapse, May 2022",
+      "episode_type": "industry_shock",
+      "onset_date": "2022-05-07",
+      "peak_date": "2022-05-12",
+      "end_date": "2022-05-16",
+      "geography": "GLOBAL",
+      "affected_industries": ["crypto", "payments", "asset_management"],
+      "regime_tags": ["post_fiat", "post_qe", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": false,
+      "onset_summary": "A large algorithmic stablecoin loses its one-dollar peg after heavy withdrawals from the lending protocol that had been paying a fixed 20 percent yield on it. The coin holds no cash reserves: its peg is maintained by an arbitrage that lets holders mint one dollar of a companion token for each coin burned, so a falling coin price expands the companion token's supply, and a falling companion token weakens the peg. Roughly 40 billion dollars of value sits in the pair, most of it deposited to earn the yield, and the mechanism has never been tested in a sustained outflow.",
+      "onset_indicators": [
+        {"key": "peg_deviation", "label": "Stablecoin trading below its one-dollar peg", "value": 0.98, "unit": "ratio", "as_of": "2022-05-08", "source_id": "bis-crypto"},
+        {"key": "reserve_backing", "label": "Cash or bond reserves backing the coin", "value": false, "unit": "boolean", "as_of": "2022-05-07", "source_id": "bis-crypto"},
+        {"key": "advertised_yield", "label": "Fixed yield advertised by the associated lending protocol", "value": 20, "unit": "percent", "as_of": "2022-05-07", "source_id": "bis-crypto"},
+        {"key": "reflexive_mint_burn", "label": "Peg maintained by minting a companion token whose price depends on the peg", "value": true, "unit": "boolean", "as_of": "2022-05-07", "source_id": "fsb-crypto"}
+      ],
+      "outcome_summary": "The mechanism ran in reverse within four days: the companion token's supply expanded by trillions of units and its price went to essentially zero, destroying roughly 40 billion dollars of nominal value and wiping out retail holders. Contagion took down several crypto lenders and a large fund over the following months, but the traditional financial system was untouched because it had almost no exposure. The episode drove stablecoin reserve-backing legislation in several jurisdictions.",
+      "outcomes": ["failure", "systemic_crisis", "contained", "regime_change"],
+      "resolution_mechanism": "No rescue: the token pair collapsed and the network was abandoned. Contagion within crypto lending was resolved through bankruptcies; the spillover was limited by the sector's near-total lack of connection to regulated banking.",
+      "source_refs": [
+        {"id": "bis-crypto", "title": "BIS work on stablecoins and crypto", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/topic/fintech/crypto.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fsb-crypto", "title": "FSB assessment of risks from crypto-assets", "publisher": "Financial Stability Board", "url": "https://www.fsb.org/work-of-the-fsb/financial-innovation-and-structural-change/crypto-assets-and-global-stablecoins/", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "5e771688-89f8-593d-9e7c-8c80f04606ac",
+      "slug": "dot-com-equity-bust-2000",
+      "name": "Dot-com equity bust, 2000-2002",
+      "episode_type": "industry_shock",
+      "onset_date": "2000-03-13",
+      "peak_date": "2001-09-21",
+      "end_date": "2002-10-09",
+      "geography": "US",
+      "affected_industries": ["technology", "telecom", "software", "media", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": false,
+      "onset_summary": "The technology-heavy index begins falling from a level reached after a doubling in twelve months. Loss-making internet companies have been floated on measures such as page views and cash burn rate, insiders' lock-ups from the 1999 flotation wave are expiring, and the central bank has been raising rates for nine months. Telecom operators have borrowed heavily to build fibre capacity on traffic-growth forecasts that assume demand doubles every hundred days, a figure originating with a single equipment vendor.",
+      "onset_indicators": [
+        {"key": "index_gain_prior_year", "label": "Increase in the technology index over the preceding twelve months", "value": 100, "unit": "percent", "as_of": "2000-03-10", "source_id": "fred-nasdaq"},
+        {"key": "loss_making_ipos", "label": "Share of recent flotations with no earnings", "value": "majority", "unit": "category", "as_of": "2000-03-13", "source_id": "sec-filings"},
+        {"key": "policy_tightening", "label": "Consecutive policy rate increases before the peak", "value": 5, "unit": "count", "as_of": "2000-03-13", "source_id": "fred-fedfunds"},
+        {"key": "telecom_capex_debt", "label": "Telecom fibre build financed with debt against untested traffic forecasts", "value": true, "unit": "boolean", "as_of": "2000-03-13", "source_id": "fcc"}
+      ],
+      "outcome_summary": "The technology index fell about 78 percent over two and a half years and roughly five trillion dollars of market value was destroyed. Hundreds of internet companies and several large telecom operators failed, and accounting frauds at two of them followed. The recession that came in 2001 was nevertheless mild and short, because the losses fell on equity holders rather than on leveraged banks, and the surviving firms became the dominant companies of the following decade.",
+      "outcomes": ["failure", "recession", "recovery"],
+      "resolution_mechanism": "No rescue: equity losses were absorbed by shareholders, insolvent firms were liquidated or restructured, policy rates were cut sharply, and accounting rules were tightened by the Sarbanes-Oxley Act.",
+      "source_refs": [
+        {"id": "fred-nasdaq", "title": "NASDAQ Composite Index (NASDAQCOM)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/NASDAQCOM", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "sec-filings", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-fedfunds", "title": "Federal Funds Effective Rate (FEDFUNDS)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/FEDFUNDS", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fcc", "title": "FCC communications industry reports", "publisher": "US Federal Communications Commission", "url": "https://www.fcc.gov/reports-research/reports", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "ae1bb559-8c29-5449-bebe-cec3bed72e14",
+      "slug": "us-shale-oil-price-collapse-2014",
+      "name": "Shale oil price collapse, 2014-2016",
+      "episode_type": "industry_shock",
+      "onset_date": "2014-11-27",
+      "peak_date": "2016-02-11",
+      "end_date": "2016-12-31",
+      "geography": "US",
+      "affected_industries": ["oil_gas", "energy", "banking", "mining"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "advanced_economy", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": false,
+      "onset_summary": "The producer cartel decides not to cut output in the face of a supply glut, choosing to defend market share instead, and crude falls immediately below 70 dollars a barrel. US shale output has roughly doubled in four years, funded with high-yield debt and reserve-based loans underwritten at 90-dollar oil by producers whose wells decline steeply and must be redrilled to hold production. Energy is now a large share of the high-yield bond index, and the banks' borrowing-base redeterminations are due in the spring.",
+      "onset_indicators": [
+        {"key": "cartel_declines_to_cut", "label": "Producer group declines to reduce output, choosing market share", "value": true, "unit": "boolean", "as_of": "2014-11-27", "source_id": "opec"},
+        {"key": "crude_price", "label": "Crude oil price after the decision", "value": 68, "unit": "usd_per_barrel", "as_of": "2014-11-28", "source_id": "fred-oil"},
+        {"key": "energy_share_of_high_yield", "label": "Energy issuers as a share of the high-yield bond index", "value": 15, "unit": "percent", "as_of": "2014-09-30", "source_id": "fred-hy"},
+        {"key": "reserve_based_loan_price_deck", "label": "Bank borrowing bases underwritten at far higher oil prices", "value": true, "unit": "boolean", "as_of": "2014-11-27", "source_id": "eia-history"}
+      ],
+      "outcome_summary": "Crude fell to about 26 dollars by early 2016. More than 100 North American producers and many oilfield service firms filed for bankruptcy, hundreds of thousands of jobs were lost and energy high-yield spreads blew out to distressed levels; regional economies dependent on drilling entered recession. Consumers gained a large windfall and the national economy kept growing. Shale did not disappear: cost per barrel fell sharply and output recovered by 2018.",
+      "outcomes": ["failure", "contained", "recovery"],
+      "resolution_mechanism": "Market clearing through bankruptcy and consolidation, sharp cost deflation in drilling and completion, capital discipline imposed by creditors, and eventually a production agreement between the cartel and other producers.",
+      "source_refs": [
+        {"id": "opec", "title": "OPEC statements and statistical bulletin", "publisher": "Organization of the Petroleum Exporting Countries", "url": "https://www.opec.org/opec_web/en/publications/202.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "eia-history", "title": "US petroleum and drilling data", "publisher": "US Energy Information Administration", "url": "https://www.eia.gov/petroleum/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-oil", "title": "Crude Oil Prices: West Texas Intermediate (DCOILWTICO)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fred-hy", "title": "ICE BofA US High Yield Index Option-Adjusted Spread (BAMLH0A0HYM2)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    }
+  ]
+}

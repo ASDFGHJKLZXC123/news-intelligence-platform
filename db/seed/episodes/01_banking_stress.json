@@ -1,0 +1,622 @@
+{
+  "schema_version": 1,
+  "file": "01_banking_stress",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "76ed905d-eee3-5359-9686-36956d958acf",
+      "slug": "bnp-paribas-fund-freeze-2007",
+      "name": "French bank fund redemption freeze, August 2007",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2007-08-09",
+      "peak_date": "2007-08-10",
+      "end_date": "2007-08-28",
+      "geography": "FR",
+      "affected_industries": ["banking", "asset_management", "money_markets"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "basel_ii", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A large French bank suspends subscriptions and redemptions in three investment funds exposed to US subprime-linked asset-backed securities, stating that the complete evaporation of liquidity in these market segments makes it impossible to value the assets regardless of their credit quality. The suspension is the first admission by a major institution that a marked-to-model book cannot be marked at all. Euro-area overnight rates jump above the policy rate and the central bank injects emergency liquidity into the interbank market the same morning.",
+      "onset_indicators": [
+        {"key": "funds_gated", "label": "Investment funds suspended for inability to value holdings", "value": 3, "unit": "count", "as_of": "2007-08-09", "source_id": "ecb-2007"},
+        {"key": "emergency_liquidity_tender", "label": "Same-day fixed-rate euro liquidity tender at full allotment", "value": 94.8, "unit": "eur_billions", "as_of": "2007-08-09", "source_id": "ecb-2007"},
+        {"key": "abcp_rollover", "label": "Asset-backed commercial paper conduits unable to roll maturing paper", "value": true, "unit": "boolean", "as_of": "2007-08-09", "source_id": "fred-abcp"},
+        {"key": "interbank_term_spread", "label": "Three-month interbank spreads over overnight index swaps widen abruptly", "value": "sharp_widening", "unit": "category", "as_of": "2007-08-09", "source_id": "fred-ted"}
+      ],
+      "outcome_summary": "The funds reopened at the end of August with heavy writedowns, but the funding stress did not reverse: term interbank markets never returned to pre-August spreads, conduit sponsors were forced to bring off-balance-sheet vehicles back onto their books, and the episode is generally dated as the first day of the global financial crisis. The bank itself survived without state capital.",
+      "outcomes": ["systemic_crisis", "contained"],
+      "resolution_mechanism": "Central-bank liquidity operations at full allotment, reopening of the funds after writedowns, and the eventual consolidation of off-balance-sheet conduits onto sponsor balance sheets.",
+      "source_refs": [
+        {"id": "ecb-2007", "title": "ECB press releases, August 2007", "publisher": "European Central Bank", "url": "https://www.ecb.europa.eu/press/pr/date/2007/html/index.en.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "bis-ar-2008", "title": "BIS 78th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/arpdf/ar2008e.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-ted", "title": "TED Spread (TEDRATE)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/TEDRATE", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fred-abcp", "title": "Asset-Backed Commercial Paper Outstanding (ABCOMP)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/ABCOMP", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "c85b11d5-d2cd-5a78-b55f-68509164bb47",
+      "slug": "northern-rock-run-2007",
+      "name": "UK mortgage lender retail deposit run, September 2007",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2007-09-13",
+      "peak_date": "2007-09-17",
+      "end_date": "2008-02-22",
+      "geography": "GB",
+      "affected_industries": ["banking", "housing", "money_markets"],
+      "regime_tags": ["post_fiat", "pre_qe", "basel_ii", "deposit_insurance", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "News breaks that a fast-growing mortgage lender has asked the central bank for emergency liquidity support. The lender funds a prime, low-arrears mortgage book mainly through securitisation and wholesale money markets rather than retail deposits, and the securitisation market has been closed since August. Retail depositors queue at branches the following morning. National deposit insurance covers the first tranche of a balance in full and only 90 percent of the next band, so a rational saver with an ordinary balance has a reason to withdraw.",
+      "onset_indicators": [
+        {"key": "wholesale_funding_share", "label": "Share of funding from wholesale and securitisation markets rather than retail deposits", "value": "majority", "unit": "category", "as_of": "2007-09-13", "source_id": "boe-nr"},
+        {"key": "lender_of_last_resort_request", "label": "Emergency liquidity support requested from the central bank", "value": true, "unit": "boolean", "as_of": "2007-09-13", "source_id": "boe-nr"},
+        {"key": "securitisation_market_closed", "label": "Residential mortgage securitisation issuance closed since August", "value": true, "unit": "boolean", "as_of": "2007-09-13", "source_id": "boe-fsr-2007"},
+        {"key": "deposit_insurance_coinsurance", "label": "Deposit guarantee covers only part of an ordinary balance, giving savers a reason to run", "value": true, "unit": "boolean", "as_of": "2007-09-13", "source_id": "hmt-nr"}
+      ],
+      "outcome_summary": "The run stopped only when the government guaranteed all existing deposits. Emergency lending peaked in the tens of billions of pounds, no private buyer would take the bank without state support, and it was taken into public ownership in February 2008. The UK subsequently abolished depositor co-insurance and raised the guarantee limit.",
+      "outcomes": ["failure", "bailout", "regime_change"],
+      "resolution_mechanism": "Central-bank emergency liquidity assistance, a blanket government guarantee of existing deposits, then temporary public ownership; deposit-insurance reform removed co-insurance.",
+      "source_refs": [
+        {"id": "boe-nr", "title": "Bank of England financial stability publications", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/financial-stability-report", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "hmt-nr", "title": "Run on the Rock (Treasury Committee report)", "publisher": "UK Parliament", "url": "https://publications.parliament.uk/pa/cm200708/cmselect/cmtreasy/56/56i.pdf", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "boe-fsr-2007", "title": "Financial Stability Report, October 2007", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/financial-stability-report/2007/october-2007", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "fedf3f33-78fb-5206-97a7-856172725a5b",
+      "slug": "bear-stearns-liquidity-run-2008",
+      "name": "US investment bank repo run, March 2008",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2008-03-10",
+      "peak_date": "2008-03-14",
+      "end_date": "2008-05-30",
+      "geography": "US",
+      "affected_industries": ["banking", "money_markets", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "basel_ii", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Rumours of liquidity problems at the smallest of the US independent investment banks circulate on a Monday and the firm publicly denies them. It finances a large book of mortgage-related securities overnight in the tri-party repo market, so its funding must be renewed every morning by lenders who are themselves under redemption pressure. Repo counterparties begin refusing its collateral, hedge-fund clients pull cash balances and novate derivatives away, and the cash position falls by billions of dollars a day. The firm is not a bank and has no access to the discount window.",
+      "onset_indicators": [
+        {"key": "overnight_repo_dependence", "label": "Mortgage inventory financed overnight in tri-party repo", "value": true, "unit": "boolean", "as_of": "2008-03-10", "source_id": "fcic"},
+        {"key": "cash_position_drawdown", "label": "Firm cash position falling by billions of dollars per day", "value": "rapid_drawdown", "unit": "category", "as_of": "2008-03-13", "source_id": "fcic"},
+        {"key": "no_discount_window_access", "label": "Broker-dealer without access to the central bank discount window", "value": true, "unit": "boolean", "as_of": "2008-03-10", "source_id": "frb-bear"},
+        {"key": "leverage_multiple", "label": "Balance-sheet leverage typical of the US broker-dealer sector", "value": 30, "unit": "multiple", "as_of": "2007-12-31", "source_id": "sec-dealer"}
+      ],
+      "outcome_summary": "The firm ran out of cash in four days. The Federal Reserve lent against a ring-fenced portfolio to enable a rival to buy it at two dollars a share, later raised to ten, and opened a lending facility to primary dealers for the first time since the 1930s. Shareholders were nearly wiped out but no counterparty took a loss, and the rescue set an expectation of support that shaped behaviour for the next six months.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "A central-bank-financed acquisition (non-recourse lending against a segregated asset pool) plus a new primary dealer credit facility extending discount-window-style access to broker-dealers.",
+      "source_refs": [
+        {"id": "frb-bear", "title": "Federal Reserve press releases, March 2008", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/newsevents/pressreleases/2008press.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fcic", "title": "The Financial Crisis Inquiry Report", "publisher": "US Government Publishing Office", "url": "https://www.govinfo.gov/app/details/GPO-FCIC", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-dealer", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "ac723686-aaff-5415-878a-18ae6d7d2ab4",
+      "slug": "lehman-brothers-funding-run-2008",
+      "name": "US broker-dealer funding run, September 2008",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2008-09-09",
+      "peak_date": "2008-09-15",
+      "end_date": "2008-09-22",
+      "geography": "US",
+      "affected_industries": ["banking", "money_markets", "real_estate", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "basel_ii", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Talks with a sovereign-linked strategic investor collapse and the shares of a major US broker-dealer fall by about 45 percent in a single session. The firm carries a large commercial real-estate and mortgage inventory at marks the market does not accept, funds itself overnight in repo, and has already seen clearing banks demand more collateral. Its capital raise has no anchor investor. Two weeks earlier the mortgage agencies were placed in conservatorship, so the market is actively testing which firms are considered too central to be allowed to fail.",
+      "onset_indicators": [
+        {"key": "strategic_investor_talks_failed", "label": "Capital-raising talks with a strategic investor publicly collapse", "value": true, "unit": "boolean", "as_of": "2008-09-09", "source_id": "sec-filings"},
+        {"key": "single_day_equity_decline", "label": "Single-session decline in the firm's share price", "value": 45, "unit": "percent", "as_of": "2008-09-09", "source_id": "sec-filings"},
+        {"key": "clearing_bank_collateral_calls", "label": "Clearing banks demanding additional collateral to continue settling repo", "value": true, "unit": "boolean", "as_of": "2008-09-11", "source_id": "fcic"},
+        {"key": "cre_inventory_marks_disputed", "label": "Commercial real-estate inventory carried above transactable levels", "value": "disputed", "unit": "category", "as_of": "2008-09-09", "source_id": "fcic"}
+      ],
+      "outcome_summary": "No buyer would take the firm without public support and none was offered; it filed the largest bankruptcy in US history on 15 September 2008 with about 600 billion dollars of assets. Its commercial paper losses broke a large money-market fund the next day, triggering a run on the sector, and interbank and commercial paper markets froze globally. The failure is the central event of the crisis and the direct cause of the emergency guarantees and capital injections that followed.",
+      "outcomes": ["failure", "systemic_crisis", "recession"],
+      "resolution_mechanism": "Chapter 11 bankruptcy and piecemeal sale of the operating businesses; the systemic fallout was met with money-fund guarantees, the commercial paper funding facility, and mandatory bank capital injections.",
+      "source_refs": [
+        {"id": "fcic", "title": "The Financial Crisis Inquiry Report", "publisher": "US Government Publishing Office", "url": "https://www.govinfo.gov/app/details/GPO-FCIC", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-filings", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-lehman", "title": "Federal Reserve press releases, September 2008", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/newsevents/pressreleases/2008press.htm", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "27fba53d-ebb1-5ae9-b06d-50323315fbb4",
+      "slug": "money-market-fund-break-2008",
+      "name": "US money-market fund breaks the buck, September 2008",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2008-09-16",
+      "peak_date": "2008-09-18",
+      "end_date": "2008-09-19",
+      "geography": "US",
+      "affected_industries": ["money_markets", "asset_management", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The oldest US money-market fund writes its holding of a failed broker-dealer's commercial paper down to zero and its net asset value falls below one dollar a share. Investors have always treated these funds as cash equivalents redeemable at par, and there is no deposit insurance behind them. Institutional redemption requests arrive within hours, and because the funds are the marginal buyer of commercial paper, issuers who need to roll paper the same week find no bid. Prime funds begin hoarding cash instead of lending it.",
+      "onset_indicators": [
+        {"key": "net_asset_value", "label": "Fund net asset value per share falls below the one-dollar par convention", "value": 0.97, "unit": "ratio", "as_of": "2008-09-16", "source_id": "sec-mmf"},
+        {"key": "commercial_paper_written_off", "label": "Defaulted broker-dealer commercial paper written down to zero", "value": 785, "unit": "usd_millions", "as_of": "2008-09-16", "source_id": "sec-mmf"},
+        {"key": "prime_fund_redemptions", "label": "Institutional prime money-fund redemption requests surge", "value": "surging", "unit": "category", "as_of": "2008-09-17", "source_id": "frb-amlf"},
+        {"key": "no_deposit_insurance", "label": "Funds carry no deposit insurance despite being used as cash", "value": true, "unit": "boolean", "as_of": "2008-09-16", "source_id": "sec-mmf"}
+      ],
+      "outcome_summary": "Roughly 300 billion dollars left prime funds within days and the commercial paper market shut, cutting short-term funding to industrial borrowers with no connection to mortgages. The Treasury guaranteed money-fund balances and the Federal Reserve opened facilities to buy commercial paper and finance fund assets; the run stopped within a week. The SEC later required floating net asset values and liquidity fees for institutional prime funds.",
+      "outcomes": ["systemic_crisis", "bailout", "contained", "regime_change"],
+      "resolution_mechanism": "A temporary Treasury guarantee of money-market fund share values, Federal Reserve facilities (AMLF, CPFF, MMIFF) to finance fund assets and buy commercial paper directly, and later reform of money-fund rules.",
+      "source_refs": [
+        {"id": "sec-mmf", "title": "Money market fund reform: SEC rulemaking record", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/rules/final/2010/ic-29132.pdf", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-amlf", "title": "Federal Reserve credit and liquidity programs", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/regreform/reform-mmlf.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "treasury-mmf", "title": "Treasury guarantee program for money market funds", "publisher": "US Department of the Treasury", "url": "https://home.treasury.gov/news/press-releases", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "b4257836-176d-5bce-9569-723b23552c15",
+      "slug": "covid-19-dash-for-cash-2020",
+      "name": "Government bond market dash for cash, March 2020",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-covid-19-pandemic-2020-2022",
+      "onset_date": "2020-03-09",
+      "peak_date": "2020-03-18",
+      "end_date": "2020-04-09",
+      "geography": "GLOBAL",
+      "affected_industries": ["money_markets", "asset_management", "banking", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_dodd_frank", "basel_iii", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "The safest asset in the world stops trading normally. Dealers, constrained by leverage rules and already holding record inventories, widen bid-offer spreads on long-dated government bonds to many times normal levels, and prices fall alongside equities instead of rising. Levered relative-value funds unwind cash-futures basis positions into the same exit; foreign official holders and corporate treasurers sell bills to raise dollars; prime money funds face redemptions and stop rolling commercial paper. The demand is not for a hedge but for cash itself, and the plumbing that converts one into the other is jammed.",
+      "onset_indicators": [
+        {"key": "treasury_bid_offer_spread", "label": "Bid-offer spreads on long-dated government bonds widen to a multiple of normal", "value": "severe_widening", "unit": "category", "as_of": "2020-03-12", "source_id": "bis-mar2020"},
+        {"key": "safe_asset_correlation_break", "label": "Government bond prices falling with equities rather than rising", "value": true, "unit": "boolean", "as_of": "2020-03-12", "source_id": "bis-mar2020"},
+        {"key": "dealer_inventory_capacity", "label": "Dealer balance-sheet capacity exhausted at record inventory levels", "value": "exhausted", "unit": "category", "as_of": "2020-03-13", "source_id": "nyfed-treasury"},
+        {"key": "prime_fund_outflows", "label": "Institutional prime money-fund outflows accelerating", "value": "surging", "unit": "category", "as_of": "2020-03-17", "source_id": "frb-mmlf"}
+      ],
+      "outcome_summary": "The central bank bought government bonds at an unprecedented pace, reopened commercial-paper and money-fund facilities within nine days, extended dollar swap lines and a repo facility to foreign central banks, and temporarily excluded reserves and Treasuries from the leverage ratio. Market function was restored inside a month with no dealer or fund failure. The episode became the case for standing repo facilities and for reform of non-bank leverage rather than an argument that the system was unsound.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Large-scale central-bank purchases of government bonds, revived commercial-paper and money-fund liquidity facilities, expanded dollar swap lines and a foreign repo facility, and temporary relief on the bank leverage ratio.",
+      "source_refs": [
+        {"id": "bis-mar2020", "title": "BIS Bulletin: the March 2020 market turmoil", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/bisbull02.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "nyfed-treasury", "title": "Treasury market functioning", "publisher": "Federal Reserve Bank of New York", "url": "https://www.newyorkfed.org/markets/treasury-market-functioning", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "frb-mmlf", "title": "Money Market Mutual Fund Liquidity Facility", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/regreform/reform-mmlf.htm", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "6f221b6a-0d40-5fbc-82c2-aa6b50b08e60",
+      "slug": "iceland-bank-failures-2008",
+      "name": "Icelandic banking system collapse, 2008",
+      "episode_type": "banking_stress",
+      "onset_date": "2008-09-29",
+      "peak_date": "2008-10-09",
+      "end_date": "2008-11-19",
+      "geography": "IS",
+      "affected_industries": ["banking", "sovereign_finance", "money_markets"],
+      "regime_tags": ["post_fiat", "pre_qe", "basel_ii", "deposit_insurance", "advanced_economy", "pre_social_media", "floating_exchange_rate"],
+      "is_counterexample": false,
+      "onset_summary": "The state takes a 75 percent stake in the third-largest Icelandic bank after it cannot refinance a maturing bond. The three main banks have grown to roughly ten times national output in six years, funded by wholesale euro and sterling borrowing and by high-rate online deposits gathered in other European countries. Their liabilities are overwhelmingly in foreign currency, which the domestic central bank cannot print; foreign-currency reserves are a small fraction of the banks' short-term external obligations. The currency and bank credit spreads move together.",
+      "onset_indicators": [
+        {"key": "bank_assets_to_gdp", "label": "Consolidated banking-system assets relative to national output", "value": 10, "unit": "multiple", "as_of": "2008-06-30", "source_id": "imf-isl"},
+        {"key": "fx_reserves_to_short_term_external", "label": "Central bank foreign-currency reserves against banks' short-term external debt", "value": "far_below_one", "unit": "category", "as_of": "2008-09-29", "source_id": "cbi-report"},
+        {"key": "cross_border_online_deposits", "label": "Retail deposits gathered online in other jurisdictions under branch passporting", "value": true, "unit": "boolean", "as_of": "2008-09-29", "source_id": "cbi-report"},
+        {"key": "state_stake_in_bank", "label": "State equity stake taken in a major bank that could not refinance", "value": 75, "unit": "percent", "as_of": "2008-09-29", "source_id": "cbi-report"}
+      ],
+      "outcome_summary": "All three banks failed within two weeks. Emergency legislation split them into domestic and foreign entities, protecting local deposits while foreign depositors were left to their home guarantee schemes, producing a long international dispute. Capital controls were imposed, the currency lost about half its value, output fell sharply, and Iceland took an IMF programme. The controls were lifted only in 2017 and the economy recovered strongly.",
+      "outcomes": ["systemic_crisis", "failure", "recession", "bailout", "recovery"],
+      "resolution_mechanism": "Emergency law splitting the banks into new domestic entities and legacy estates, deposit prioritisation, comprehensive capital controls, an IMF-supported programme, and a long wind-down of the estates.",
+      "source_refs": [
+        {"id": "imf-isl", "title": "IMF country information: Iceland", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/ISL", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "cbi-report", "title": "Central Bank of Iceland publications", "publisher": "Central Bank of Iceland", "url": "https://www.sedlabanki.is/utgefid-efni/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wb-isl", "title": "World Bank data: Iceland", "publisher": "World Bank", "url": "https://data.worldbank.org/country/iceland", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "218ff70a-29e5-57e7-b29b-1f04bf901841",
+      "slug": "svb-deposit-run-2023",
+      "name": "Silicon Valley Bank deposit run, March 2023",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-us-regional-banking-stress-2023",
+      "onset_date": "2023-03-08",
+      "peak_date": "2023-03-09",
+      "end_date": "2023-03-27",
+      "geography": "US",
+      "affected_industries": ["banking", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": false,
+      "onset_summary": "A mid-size bank whose depositors are almost entirely venture-backed technology companies announces after the close that it has sold its available-for-sale securities portfolio at a 1.8 billion dollar loss and will raise equity to fill the gap. About 94 percent of its deposits sit above the insurance cap, so nearly every depositor has a reason to move first, and its held-to-maturity book carries large unrealised losses after 450 basis points of policy tightening. The depositor base is small, concentrated, and connected: a few dozen venture funds can instruct hundreds of companies at once, and the transfers can be made online within the hour.",
+      "onset_indicators": [
+        {"key": "uninsured_deposit_share", "label": "Share of deposits above the insurance cap", "value": 94, "unit": "percent", "as_of": "2022-12-31", "source_id": "frb-svb-review"},
+        {"key": "realised_securities_loss", "label": "Loss realised on the sale of the available-for-sale portfolio", "value": 1.8, "unit": "usd_billions", "as_of": "2023-03-08", "source_id": "sec-svb"},
+        {"key": "htm_unrealised_loss", "label": "Unrealised loss on the held-to-maturity securities book", "value": 15, "unit": "usd_billions", "as_of": "2022-12-31", "source_id": "sec-svb"},
+        {"key": "depositor_coordination_channel", "label": "Depositors coordinated through a small number of venture investors and public messaging", "value": true, "unit": "boolean", "as_of": "2023-03-09", "source_id": "frb-svb-review"}
+      ],
+      "outcome_summary": "Depositors requested 42 billion dollars in a single day, a quarter of the balance sheet, and the bank was closed by its state regulator the next morning in the fastest large bank run on record. Uninsured depositors were made whole under the systemic risk exception, shareholders and unsecured bondholders were wiped out, and the deposit franchise was sold to another bank. Supervisors were criticised for delayed action on known interest-rate and liquidity findings.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "State regulator closure and FDIC receivership with the systemic risk exception, a purchase-and-assumption sale of the deposit franchise, and the new Bank Term Funding Program lending against securities valued at par.",
+      "source_refs": [
+        {"id": "frb-svb-review", "title": "Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/publications/review-of-the-federal-reserves-supervision-and-regulation-of-silicon-valley-bank.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fdic-failed", "title": "FDIC failed bank list", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank-failures/failed-bank-list", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-svb", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "c33bac3b-10d6-57ea-9067-99f63a159df2",
+      "slug": "signature-bank-closure-2023",
+      "name": "Signature Bank closure, March 2023",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-us-regional-banking-stress-2023",
+      "onset_date": "2023-03-10",
+      "peak_date": "2023-03-12",
+      "end_date": "2023-03-20",
+      "geography": "US",
+      "affected_industries": ["banking", "crypto", "real_estate"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A New York commercial bank with a large digital-asset client base and a real-time settlement network for those clients faces heavy withdrawal requests the day another technology-focused bank is closed. Its deposits are also mostly uninsured, its funding is concentrated in a client sector already under stress from a crypto-market downturn and the wind-down of a crypto-focused peer, and the depositors move on a weekend when the payments network the bank itself operates continues to run.",
+      "onset_indicators": [
+        {"key": "uninsured_deposit_share", "label": "Share of deposits above the insurance cap", "value": 90, "unit": "percent", "as_of": "2022-12-31", "source_id": "fdic-oig"},
+        {"key": "digital_asset_deposit_concentration", "label": "Deposit base concentrated in digital-asset clients", "value": "concentrated", "unit": "category", "as_of": "2023-03-10", "source_id": "fdic-oig"},
+        {"key": "weekend_withdrawal_requests", "label": "Withdrawal requests continuing outside normal banking hours", "value": true, "unit": "boolean", "as_of": "2023-03-11", "source_id": "fdic-oig"},
+        {"key": "peer_closure_same_week", "label": "A peer bank serving the same client sector closed the previous day", "value": true, "unit": "boolean", "as_of": "2023-03-10", "source_id": "fdic-failed"}
+      ],
+      "outcome_summary": "The state regulator closed the bank on Sunday 12 March 2023, the third-largest US bank failure at the time. Uninsured depositors were protected under the systemic risk exception invoked the same evening, and most of the deposits and loans were sold to another bank a week later, with the digital-asset business excluded from the sale.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "State regulator closure and FDIC receivership under the systemic risk exception, followed by a purchase-and-assumption sale that excluded the digital-asset deposits.",
+      "source_refs": [
+        {"id": "fdic-oig", "title": "FDIC material loss reviews and reports", "publisher": "Federal Deposit Insurance Corporation Office of Inspector General", "url": "https://www.fdicoig.gov/reports", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fdic-failed", "title": "FDIC failed bank list", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank-failures/failed-bank-list", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-2023", "title": "Joint statement by Treasury, Federal Reserve and FDIC", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312b.htm", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "d97ef4c3-ba54-5b75-9749-c50cc2739da2",
+      "slug": "first-republic-deposit-flight-2023",
+      "name": "First Republic deposit flight, March-May 2023",
+      "episode_type": "banking_stress",
+      "parent_slug": "arc-us-regional-banking-stress-2023",
+      "onset_date": "2023-03-10",
+      "peak_date": "2023-03-16",
+      "end_date": "2023-05-01",
+      "geography": "US",
+      "affected_industries": ["banking", "real_estate", "asset_management"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": false,
+      "onset_summary": "A private-banking-focused lender with wealthy coastal clients sees its shares fall sharply as depositors compare its balance sheet with the bank closed that morning. Roughly two-thirds of its deposits exceed the insurance cap and its assets are long-dated: low-rate jumbo mortgages and municipal bonds written when policy rates were near zero, worth far less than carrying value after a year of tightening. Unlike a securities book, the loans cannot be sold quickly without crystallising the loss, and the deposits can leave the same day.",
+      "onset_indicators": [
+        {"key": "uninsured_deposit_share", "label": "Share of deposits above the insurance cap", "value": 68, "unit": "percent", "as_of": "2022-12-31", "source_id": "sec-frc"},
+        {"key": "long_duration_loan_book", "label": "Assets dominated by low-rate jumbo mortgages and municipal bonds", "value": "long_duration", "unit": "category", "as_of": "2022-12-31", "source_id": "sec-frc"},
+        {"key": "unrealised_loss_on_loans", "label": "Fair value of the loan book materially below carrying value", "value": true, "unit": "boolean", "as_of": "2022-12-31", "source_id": "sec-frc"},
+        {"key": "peer_failure_same_day", "label": "A comparable bank was closed by regulators the same morning", "value": true, "unit": "boolean", "as_of": "2023-03-10", "source_id": "fdic-failed"}
+      ],
+      "outcome_summary": "Eleven large banks deposited 30 billion dollars in an attempted private rescue, which delayed but did not stop the outflow; about 100 billion dollars of deposits left in the first quarter. The bank was closed on 1 May 2023 and sold immediately to the largest US bank, the second-largest failure in US history. The deposit insurance fund absorbed roughly 13 billion dollars of loss and the private rescue deposits were repaid.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "A failed private-sector deposit rescue, then FDIC receivership with an immediate purchase-and-assumption sale to a large acquirer including a loss-share agreement.",
+      "source_refs": [
+        {"id": "sec-frc", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fdic-failed", "title": "FDIC failed bank list", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank-failures/failed-bank-list", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-fedfunds", "title": "Federal Funds Effective Rate (FEDFUNDS)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/FEDFUNDS", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "d537b6f8-2437-50e4-a58c-b4bcc7fe7e59",
+      "slug": "panic-of-1907",
+      "name": "Panic of 1907",
+      "episode_type": "banking_stress",
+      "onset_date": "1907-10-16",
+      "peak_date": "1907-10-22",
+      "end_date": "1907-11-06",
+      "geography": "US",
+      "affected_industries": ["banking", "money_markets", "metals"],
+      "regime_tags": ["gold_standard", "pre_fiat", "pre_deposit_insurance", "pre_basel", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "A failed attempt to corner the shares of a copper producer bankrupts the brokerage that financed it and exposes the speculators' links to a chain of New York banks and trust companies. Trust companies take deposits payable on demand but hold far lower cash reserves than national banks, are not members of the clearing house, and have no access to any lender of last resort: the country has no central bank. Depositors begin lining up at the largest trust, and the call-money rate that finances stock positions spikes as lenders withdraw.",
+      "onset_indicators": [
+        {"key": "trust_company_cash_reserves", "label": "Trust company cash reserves far below those of national banks", "value": "low", "unit": "category", "as_of": "1907-10-16", "source_id": "frb-1907"},
+        {"key": "no_lender_of_last_resort", "label": "No central bank exists to lend against sound collateral", "value": true, "unit": "boolean", "as_of": "1907-10-16", "source_id": "frb-1907"},
+        {"key": "call_money_rate", "label": "Call money rate financing stock positions spikes", "value": "spiking", "unit": "category", "as_of": "1907-10-22", "source_id": "nber-1907"},
+        {"key": "failed_market_corner", "label": "Failed corner in a copper producer's shares bankrupts its brokerage backers", "value": true, "unit": "boolean", "as_of": "1907-10-16", "source_id": "frb-1907"}
+      ],
+      "outcome_summary": "The largest trust company failed and runs spread through the trust sector; a private syndicate assembled by a leading banker, joined by Treasury deposits, supplied the liquidity a central bank would have provided. Banks restricted cash payments nationally, output fell sharply and unemployment rose. The panic directly produced the Aldrich-Vreeland Act and, in 1913, the Federal Reserve Act.",
+      "outcomes": ["systemic_crisis", "failure", "recession", "regime_change", "contained"],
+      "resolution_mechanism": "Ad hoc private liquidity syndicate supported by Treasury deposits, clearing-house loan certificates and restriction of cash payments; institutionally resolved by creating a central bank.",
+      "source_refs": [
+        {"id": "frb-1907", "title": "The Panic of 1907", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/panic-of-1907", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "nber-1907", "title": "NBER business cycle dating", "publisher": "National Bureau of Economic Research", "url": "https://www.nber.org/research/business-cycle-dating", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "9772a7ce-24e6-5661-872d-7f2e10c1c86b",
+      "slug": "us-banking-panics-1930-1933",
+      "name": "US banking panics, 1930-1933",
+      "episode_type": "banking_stress",
+      "onset_date": "1930-11-07",
+      "peak_date": "1933-03-06",
+      "end_date": "1933-03-13",
+      "geography": "US",
+      "affected_industries": ["banking", "agriculture", "manufacturing"],
+      "regime_tags": ["gold_standard", "pre_fiat", "pre_deposit_insurance", "pre_basel", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "A regional banking group fails in the American South and runs spread to hundreds of small unit banks that cannot diversify beyond one town's farmers and merchants. Deposits are not insured, so a rumour is enough to make withdrawal the rational choice. The central bank treats failures of non-member and country banks as a local matter and does not lend freely against illiquid loans; commodity prices and farm incomes are collapsing, and the currency is convertible into gold, which constrains any monetary response.",
+      "onset_indicators": [
+        {"key": "bank_suspensions", "label": "Bank suspensions over the preceding twelve months", "value": 1350, "unit": "count", "as_of": "1930-10-31", "source_id": "frb-panics"},
+        {"key": "deposit_insurance_absent", "label": "No federal deposit insurance exists", "value": true, "unit": "boolean", "as_of": "1930-11-07", "source_id": "fdic-history"},
+        {"key": "unit_bank_structure", "label": "Thousands of single-branch banks with undiversifiable local loan books", "value": true, "unit": "boolean", "as_of": "1930-11-07", "source_id": "frb-panics"},
+        {"key": "gold_convertibility", "label": "Currency convertible into gold, constraining monetary expansion", "value": true, "unit": "boolean", "as_of": "1930-11-07", "source_id": "frb-panics"}
+      ],
+      "outcome_summary": "Roughly 9,000 banks failed over four years, the money stock contracted about a third, and depositors lost their savings outright. Successive waves culminated in a nationwide bank holiday in March 1933, followed by gold-convertibility suspension, the reopening of solvent banks under federal licence, and the creation of federal deposit insurance. The banking collapse converted a severe recession into the Great Depression.",
+      "outcomes": ["systemic_crisis", "failure", "recession", "regime_change"],
+      "resolution_mechanism": "A nationwide bank holiday, suspension of gold convertibility, federal licensing and reopening of solvent banks, the Reconstruction Finance Corporation's capital injections, and the creation of the FDIC in the Banking Act of 1933.",
+      "source_refs": [
+        {"id": "frb-panics", "title": "Banking Panics of 1930-31", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/banking-panics-1930-31", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fdic-history", "title": "A brief history of deposit insurance", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank/historical/", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-m2", "title": "Money stock and banking statistics", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/M1SL", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "2e7693fe-9505-57f8-944d-45ce33b75623",
+      "slug": "continental-illinois-run-1984",
+      "name": "Continental Illinois wholesale funding run, 1984",
+      "episode_type": "banking_stress",
+      "onset_date": "1984-05-08",
+      "peak_date": "1984-05-17",
+      "end_date": "1984-09-26",
+      "geography": "US",
+      "affected_industries": ["banking", "oil_gas", "money_markets"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_basel", "deposit_insurance", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "Rumours of insolvency at the seventh-largest US bank trigger a silent electronic run. The bank has few retail deposits in its home state because branching is restricted, so it funds a fast-grown commercial loan book with overnight foreign interbank deposits and domestic wholesale money, almost all of it above the insurance limit. A large share of the energy loans were bought from a failed Oklahoma bank; non-performing loans have been rising for two years. Foreign lenders can withdraw before New York opens.",
+      "onset_indicators": [
+        {"key": "wholesale_funding_share", "label": "Funding dominated by uninsured overnight interbank and wholesale deposits", "value": true, "unit": "boolean", "as_of": "1984-05-08", "source_id": "fdic-ci"},
+        {"key": "purchased_energy_loans", "label": "Energy loan participations purchased from a bank that had already failed", "value": true, "unit": "boolean", "as_of": "1984-05-08", "source_id": "fdic-ci"},
+        {"key": "nonperforming_loans_trend", "label": "Non-performing loans rising for two years", "value": "rising", "unit": "category", "as_of": "1984-03-31", "source_id": "fdic-ci"},
+        {"key": "branching_restriction", "label": "State law prevents building a retail deposit base", "value": true, "unit": "boolean", "as_of": "1984-05-08", "source_id": "frb-ci"}
+      ],
+      "outcome_summary": "Deposits left at billions of dollars a day and the bank could not be sold. The FDIC guaranteed all depositors and general creditors regardless of the insurance limit, injected capital, took an 80 percent stake and replaced management; the Comptroller told Congress the largest banks would not be allowed to fail, and the phrase too big to fail entered policy. The bank operated under public ownership for years before being sold.",
+      "outcomes": ["bailout", "failure", "contained", "regime_change"],
+      "resolution_mechanism": "Open-bank assistance: a full guarantee of depositors and creditors, an FDIC capital injection taking majority ownership, central-bank liquidity, and management replacement rather than closure.",
+      "source_refs": [
+        {"id": "fdic-ci", "title": "Continental Illinois and 'Too Big to Fail' (History of the Eighties)", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank/historical/history/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-ci", "title": "Continental Illinois", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/continental-illinois", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d3242ad8-403c-5bc1-bd74-a5412aebb13f",
+      "slug": "ohio-thrift-runs-1985",
+      "name": "Ohio and Maryland thrift runs, 1985",
+      "episode_type": "banking_stress",
+      "onset_date": "1985-03-09",
+      "peak_date": "1985-03-15",
+      "end_date": "1985-07-31",
+      "geography": "US",
+      "affected_industries": ["banking", "housing", "real_estate"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_basel", "deposit_insurance", "pre_social_media", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "A government-securities dealer collapses and takes with it the capital of a savings institution that had lent it far more than its net worth. The thrift's deposits are insured not by the federal scheme but by a private state-sponsored fund whose reserves are a fraction of the deposits it nominally covers, and that fund insures dozens of other thrifts in the state. Depositors queue at branches; savers at the other member institutions can see the arithmetic of the guarantee fund as easily as anyone else.",
+      "onset_indicators": [
+        {"key": "insurance_fund_coverage_ratio", "label": "State-sponsored insurance fund reserves as a share of covered deposits", "value": "far_below_full", "unit": "category", "as_of": "1985-03-09", "source_id": "frb-ohio"},
+        {"key": "federal_insurance_absent", "label": "Affected thrifts not covered by federal deposit insurance", "value": true, "unit": "boolean", "as_of": "1985-03-09", "source_id": "frb-ohio"},
+        {"key": "counterparty_failure", "label": "Failure of a government-securities dealer exceeding the thrift's net worth", "value": true, "unit": "boolean", "as_of": "1985-03-09", "source_id": "sec-esm"},
+        {"key": "member_institutions_exposed", "label": "Other thrifts insured by the same fund face the same depositor arithmetic", "value": true, "unit": "boolean", "as_of": "1985-03-11", "source_id": "frb-ohio"}
+      ],
+      "outcome_summary": "The state governor closed 71 thrifts for several days, the state legislature required them to obtain federal insurance before reopening, and the regional Federal Reserve bank lent against their collateral. A near-identical run followed in Maryland in May and was contained the same way. Depositors were ultimately paid, the runs did not spread to federally insured institutions or to the banking system, and there was no recession.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "A temporary state deposit freeze, central-bank collateralised lending, mandatory conversion to federal deposit insurance, and orderly merger or sale of the affected thrifts.",
+      "source_refs": [
+        {"id": "frb-ohio", "title": "Federal Reserve Bank of Cleveland economic commentary and history", "publisher": "Federal Reserve Bank of Cleveland", "url": "https://www.clevelandfed.org/publications", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "sec-esm", "title": "SEC litigation releases", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/litreleases", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "a38d28ad-d6cb-588f-a412-8c587d015086",
+      "slug": "sweden-banking-crisis-1991",
+      "name": "Swedish banking crisis, 1991-1993",
+      "episode_type": "banking_stress",
+      "onset_date": "1991-10-01",
+      "peak_date": "1992-09-24",
+      "end_date": "1993-12-31",
+      "geography": "SE",
+      "affected_industries": ["banking", "real_estate", "construction"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "pre_basel", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A major Swedish bank requires capital support after loan losses in commercial property. Credit was deregulated in the mid-1980s without adjusting supervision or the tax treatment of debt, and bank lending to property finance companies grew explosively, funded increasingly in foreign currency. Property prices are now falling, the finance companies that intermediated the loans cannot roll their market funding, and the currency is pegged to the ECU, so the central bank must defend the exchange rate rather than ease into the downturn.",
+      "onset_indicators": [
+        {"key": "credit_growth_post_deregulation", "label": "Bank credit growth after deregulation, unmatched by supervisory capacity", "value": "explosive", "unit": "category", "as_of": "1990-12-31", "source_id": "riksbank"},
+        {"key": "commercial_property_prices", "label": "Commercial property prices falling from their peak", "value": "falling", "unit": "category", "as_of": "1991-09-30", "source_id": "riksbank"},
+        {"key": "finance_company_funding", "label": "Property finance companies unable to roll market funding", "value": true, "unit": "boolean", "as_of": "1991-09-30", "source_id": "riksbank"},
+        {"key": "currency_peg_constraint", "label": "Currency pegged to the ECU, constraining monetary easing", "value": true, "unit": "boolean", "as_of": "1991-10-01", "source_id": "imf-swe"}
+      ],
+      "outcome_summary": "Two of the six largest banks became insolvent. In September 1992 the government guaranteed all bank liabilities except equity, set up a bank support authority that forced full loss recognition, and split bad assets into publicly owned workout companies. Shareholders were wiped out where capital was gone, but no depositor lost money; the fiscal cost was largely recovered through later asset sales, and the model became a standard reference for crisis resolution.",
+      "outcomes": ["systemic_crisis", "bailout", "recession", "recovery", "contained"],
+      "resolution_mechanism": "A blanket state guarantee of bank liabilities excluding equity, a dedicated bank support authority, mandatory loss recognition, nationalisation of insolvent banks, and asset management companies to work out bad loans.",
+      "source_refs": [
+        {"id": "riksbank", "title": "Sveriges Riksbank publications", "publisher": "Sveriges Riksbank", "url": "https://www.riksbank.se/en-gb/press-and-published/publications/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-swe", "title": "IMF country information: Sweden", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/SWE", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "be670a14-08eb-504d-b813-5ed6be87cb7f",
+      "slug": "japan-call-market-stress-1997",
+      "name": "Japanese interbank call market default, November 1997",
+      "episode_type": "banking_stress",
+      "onset_date": "1997-11-03",
+      "peak_date": "1997-11-24",
+      "end_date": "1998-10-23",
+      "geography": "JP",
+      "affected_industries": ["banking", "real_estate", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_basel", "deposit_insurance", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A mid-size securities house fails and defaults in the interbank call market, the first such default in the postwar era, and the market that lenders had treated as risk-free reprices overnight. Japanese banks have carried impaired property and housing-loan exposures since the asset bubble deflated at the start of the decade, disclosing them slowly and holding capital that depends on unrealised equity gains that are now shrinking. Foreign counterparties begin charging a premium for lending to Japanese names.",
+      "onset_indicators": [
+        {"key": "call_market_default", "label": "First postwar default in the interbank call market", "value": true, "unit": "boolean", "as_of": "1997-11-03", "source_id": "boj"},
+        {"key": "unrecognised_property_losses", "label": "Impaired property and housing-loan exposures carried without full recognition", "value": true, "unit": "boolean", "as_of": "1997-09-30", "source_id": "boj"},
+        {"key": "capital_dependent_on_equity_gains", "label": "Regulatory capital dependent on unrealised gains on equity holdings", "value": true, "unit": "boolean", "as_of": "1997-09-30", "source_id": "imf-jpn"},
+        {"key": "japan_premium", "label": "Foreign lenders charging a premium to Japanese banks in interbank markets", "value": "widening", "unit": "category", "as_of": "1997-11-03", "source_id": "bis-ar-1998"}
+      ],
+      "outcome_summary": "Within a month a top-twenty bank and a leading securities house both closed, and two long-term credit banks were nationalised in 1998. Public funds were injected only after years of forbearance; credit contracted, output stagnated and deflation set in, with the episode becoming the reference case for the cost of delaying loss recognition. The banking system was not fully repaired until the early 2000s.",
+      "outcomes": ["systemic_crisis", "failure", "bailout", "recession"],
+      "resolution_mechanism": "Nationalisation of insolvent long-term credit banks, public capital injections under new legislation, a deposit guarantee, and eventually forced recognition of non-performing loans under a supervisory programme.",
+      "source_refs": [
+        {"id": "boj", "title": "Bank of Japan research and statistics", "publisher": "Bank of Japan", "url": "https://www.boj.or.jp/en/research/index.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-jpn", "title": "IMF country information: Japan", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/JPN", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bis-ar-1998", "title": "BIS 68th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/ar1998e.htm", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "2ec5a49d-59b6-5574-8372-1394bda12a9b",
+      "slug": "credit-suisse-confidence-collapse-2023",
+      "name": "Credit Suisse confidence collapse, March 2023",
+      "episode_type": "banking_stress",
+      "onset_date": "2023-03-15",
+      "peak_date": "2023-03-17",
+      "end_date": "2023-06-12",
+      "geography": "CH",
+      "affected_industries": ["banking", "asset_management", "insurance"],
+      "regime_tags": ["post_fiat", "post_qe", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": false,
+      "onset_summary": "A globally systemic Swiss bank's largest shareholder says publicly that it will not put in more capital, one day after the bank's annual report disclosed material weaknesses in its financial reporting controls. Its credit default swaps trade at levels normally seen in distressed names and its shares fall to a record low. The bank is well above its regulatory capital and liquidity minima but has lost more than 100 billion Swiss francs of client money in the previous quarter after years of scandals, and its wealth clients can move balances in a day.",
+      "onset_indicators": [
+        {"key": "shareholder_refuses_capital", "label": "Largest shareholder publicly rules out further capital", "value": true, "unit": "boolean", "as_of": "2023-03-15", "source_id": "finma"},
+        {"key": "cds_spread", "label": "Credit default swap spreads at distressed levels", "value": "distressed", "unit": "category", "as_of": "2023-03-15", "source_id": "snb-fsr"},
+        {"key": "client_outflows_prior_quarter", "label": "Client asset outflows in the preceding quarter", "value": 110, "unit": "chf_billions", "as_of": "2022-12-31", "source_id": "finma"},
+        {"key": "capital_ratios_above_minimum", "label": "Regulatory capital and liquidity ratios remain above minimum requirements", "value": true, "unit": "boolean", "as_of": "2022-12-31", "source_id": "finma"}
+      ],
+      "outcome_summary": "A 50 billion franc central-bank liquidity line failed to stop the outflows, and over one weekend the authorities forced a sale to the other Swiss global bank, using emergency law to bypass shareholder votes. About 16 billion francs of additional tier 1 bonds were written to zero while shareholders received stock, inverting the expected creditor hierarchy and repricing the instrument class globally. No depositor lost money and no systemic contagion followed.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "Emergency central-bank liquidity, then a state-brokered forced merger under emergency ordinance with public loss guarantees, a full write-down of additional tier 1 capital, and suspension of shareholder approval rights.",
+      "source_refs": [
+        {"id": "finma", "title": "FINMA press releases and reports", "publisher": "Swiss Financial Market Supervisory Authority", "url": "https://www.finma.ch/en/news/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "snb-fsr", "title": "Financial Stability Report", "publisher": "Swiss National Bank", "url": "https://www.snb.ch/en/publications/financial-stability-report", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "4fee1790-3be4-5ddd-8dee-20032e2d6c89",
+      "slug": "cyprus-deposit-bail-in-2013",
+      "name": "Cyprus deposit bail-in, March 2013",
+      "episode_type": "banking_stress",
+      "onset_date": "2013-03-16",
+      "peak_date": "2013-03-25",
+      "end_date": "2013-03-28",
+      "geography": "CY",
+      "affected_industries": ["banking", "sovereign_finance", "tourism"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "basel_ii", "deposit_insurance", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Euro-area finance ministers announce that a bank rescue for a small member state will be part-funded by a levy on bank deposits, including balances below the 100,000 euro guarantee that European law promises to protect. The island's banking system is about seven times national output and its deposits are heavily foreign; the banks are already insolvent after losses on the restructured debt of another member state. Banks are ordered shut and cash machines are emptied while the parliament debates.",
+      "onset_indicators": [
+        {"key": "bank_assets_to_gdp", "label": "Banking-system assets relative to national output", "value": 7, "unit": "multiple", "as_of": "2012-12-31", "source_id": "ecb-cy"},
+        {"key": "insured_deposits_in_scope", "label": "Levy proposed on deposits below the statutory guarantee", "value": true, "unit": "boolean", "as_of": "2013-03-16", "source_id": "eurogroup"},
+        {"key": "sovereign_debt_losses", "label": "Bank capital already impaired by losses on another member state's restructured debt", "value": true, "unit": "boolean", "as_of": "2012-12-31", "source_id": "imf-cyp"},
+        {"key": "bank_closure", "label": "Banks closed and withdrawals restricted while the measure is debated", "value": true, "unit": "boolean", "as_of": "2013-03-18", "source_id": "eurogroup"}
+      ],
+      "outcome_summary": "Parliament rejected the levy on insured deposits. The revised programme wound down the second-largest bank, imposed losses of nearly half on uninsured deposits above 100,000 euros at the largest bank, and left insured deposits untouched. Capital controls were imposed inside a monetary union for the first time and lasted two years. Output fell about 10 percent, but the euro area did not break and the guarantee for insured deposits was reaffirmed.",
+      "outcomes": ["systemic_crisis", "failure", "recession", "bailout", "contained"],
+      "resolution_mechanism": "Resolution of one bank and a bail-in of uninsured depositors at another, an ESM/IMF programme, temporary capital controls, and an explicit reaffirmation that insured deposits are protected.",
+      "source_refs": [
+        {"id": "eurogroup", "title": "Eurogroup statements on Cyprus", "publisher": "Council of the European Union", "url": "https://www.consilium.europa.eu/en/press/press-releases/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-cyp", "title": "IMF country information: Cyprus", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/CYP", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "ecb-cy", "title": "ECB statistical data warehouse", "publisher": "European Central Bank", "url": "https://data.ecb.europa.eu", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "54b9e9f5-8066-584e-990a-eb018d5ad5b1",
+      "slug": "italian-bank-recapitalisation-2016",
+      "name": "Italian bank capital shortfall, 2016",
+      "episode_type": "banking_stress",
+      "onset_date": "2016-07-29",
+      "peak_date": "2016-12-23",
+      "end_date": "2017-07-04",
+      "geography": "IT",
+      "affected_industries": ["banking", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "A European stress test shows that the oldest bank in the country would be left with negative capital in the adverse scenario, the worst result of any bank tested. Italian banks carry roughly 350 billion euros of non-performing loans accumulated through a long double-dip recession, provisioned at levels well below likely recovery values, and a slow judicial foreclosure process means collateral takes years to realise. New European rules require that junior bondholders be bailed in before public money is used, and much of that junior debt was sold to retail savers at bank branches.",
+      "onset_indicators": [
+        {"key": "stress_test_capital_shortfall", "label": "Adverse-scenario capital ratio falls below zero for the weakest bank", "value": true, "unit": "boolean", "as_of": "2016-07-29", "source_id": "eba-st"},
+        {"key": "system_npl_stock", "label": "Non-performing loans across the banking system", "value": 350, "unit": "eur_billions", "as_of": "2016-06-30", "source_id": "bankitalia"},
+        {"key": "retail_held_junior_debt", "label": "Junior bonds subject to bail-in widely held by retail savers", "value": true, "unit": "boolean", "as_of": "2016-07-29", "source_id": "bankitalia"},
+        {"key": "foreclosure_duration", "label": "Years typically required to enforce loan collateral through the courts", "value": 4, "unit": "years", "as_of": "2016-06-30", "source_id": "imf-ita"}
+      ],
+      "outcome_summary": "No systemic crisis followed. The weakest bank was recapitalised in 2017 with state money under the precautionary recapitalisation route, junior bondholders were converted but retail holders were compensated for mis-selling, two Veneto banks were liquidated under national law with a buyer taking the good assets, and bad-loan disposals were accelerated with a state guarantee scheme. The non-performing stock fell by more than half over the following four years.",
+      "outcomes": ["contained", "bailout", "recovery"],
+      "resolution_mechanism": "Precautionary recapitalisation with state funds under the EU state-aid framework, conversion of junior debt with retail compensation, national liquidation of two smaller banks, and a state guarantee scheme for securitised bad-loan disposals.",
+      "source_refs": [
+        {"id": "eba-st", "title": "EU-wide stress test results", "publisher": "European Banking Authority", "url": "https://www.eba.europa.eu/risk-and-data-analysis/risk-analysis/eu-wide-stress-testing", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "bankitalia", "title": "Financial Stability Report", "publisher": "Banca d'Italia", "url": "https://www.bancaditalia.it/pubblicazioni/rapporto-stabilita/index.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-ita", "title": "IMF country information: Italy", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/ITA", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "69dc072a-5321-5de8-b1a8-7c210bc7ce82",
+      "slug": "banco-espirito-santo-resolution-2014",
+      "name": "Banco Espirito Santo resolution, 2014",
+      "episode_type": "banking_stress",
+      "onset_date": "2014-07-10",
+      "peak_date": "2014-08-03",
+      "end_date": "2014-08-04",
+      "geography": "PT",
+      "affected_industries": ["banking", "asset_management"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Trading is suspended in the shares of Portugal's second-largest listed bank after a holding company in its controlling family group misses payments on short-term commercial paper. The paper was sold to the bank's own retail and institutional clients across the counter, the group's structure runs through several opaque offshore holding vehicles, and the supervisor has already ordered the bank to ring-fence its exposure to the group. Auditors have flagged accounting irregularities at the parent, and the bank's capital position depends on the value of intra-group claims.",
+      "onset_indicators": [
+        {"key": "parent_commercial_paper_default", "label": "Controlling group misses payments on short-term paper sold to bank clients", "value": true, "unit": "boolean", "as_of": "2014-07-10", "source_id": "bportugal"},
+        {"key": "shares_suspended", "label": "Trading in the bank's shares suspended", "value": true, "unit": "boolean", "as_of": "2014-07-10", "source_id": "cmvm"},
+        {"key": "intragroup_exposure", "label": "Bank capital dependent on the value of claims on its own controlling group", "value": true, "unit": "boolean", "as_of": "2014-06-30", "source_id": "bportugal"},
+        {"key": "accounting_irregularities_flagged", "label": "Auditors flagged accounting irregularities at the parent holding company", "value": true, "unit": "boolean", "as_of": "2014-05-31", "source_id": "bportugal"}
+      ],
+      "outcome_summary": "The bank reported a 3.6 billion euro half-year loss and was resolved on 3 August 2014. The central bank split it into a good bank capitalised with 4.9 billion euros from the national resolution fund, borrowed largely from the state, and a bad bank holding the group exposures, where shareholders and junior bondholders were left. Depositors were untouched, senior creditors were later the subject of litigation, and no wider banking panic followed.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "Bank resolution splitting the institution into a bridge bank capitalised by the national resolution fund and a legacy estate holding shareholders and junior debt; deposits transferred intact.",
+      "source_refs": [
+        {"id": "bportugal", "title": "Banco de Portugal press releases", "publisher": "Banco de Portugal", "url": "https://www.bportugal.pt/en/comunicados", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "cmvm", "title": "IMF country information: Portugal", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/PRT", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "62fc6479-348e-5296-97d9-af6998e9991f",
+      "slug": "us-repo-market-stress-2019",
+      "name": "US repo market rate spike, September 2019",
+      "episode_type": "banking_stress",
+      "onset_date": "2019-09-16",
+      "peak_date": "2019-09-17",
+      "end_date": "2019-10-11",
+      "geography": "US",
+      "affected_industries": ["money_markets", "banking", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "Overnight repo rates secured against government bonds spike to around 10 percent, several times the policy rate, and the effective policy rate itself prints above the target range. Two predictable cash drains land on the same day: quarterly corporate tax payments and the settlement of a large Treasury auction. The banks holding most of the system's reserves are unwilling to lend them out despite the arbitrage, because intraday liquidity requirements and resolution-planning expectations make reserves worth more to them than the return on lending, and the central bank has been shrinking its balance sheet for two years.",
+      "onset_indicators": [
+        {"key": "overnight_repo_rate", "label": "Overnight repo rate against government collateral", "value": 10, "unit": "percent", "as_of": "2019-09-17", "source_id": "nyfed-sofr"},
+        {"key": "policy_rate_breach", "label": "Effective policy rate printing above the target range", "value": true, "unit": "boolean", "as_of": "2019-09-17", "source_id": "fred-effr"},
+        {"key": "reserve_balances_trend", "label": "Aggregate reserve balances declining through balance-sheet runoff", "value": "declining", "unit": "category", "as_of": "2019-09-16", "source_id": "fred-walcl"},
+        {"key": "simultaneous_cash_drains", "label": "Corporate tax date and a large Treasury settlement fall on the same day", "value": true, "unit": "boolean", "as_of": "2019-09-16", "source_id": "nyfed-sofr"}
+      ],
+      "outcome_summary": "The New York Fed resumed overnight repo operations the next morning, rates normalised within days, and no institution failed or was even reported to be in difficulty. The central bank began buying Treasury bills to rebuild reserves and later created a standing repo facility. The episode was a plumbing failure, not a credit event, and is the reference case for distinguishing a collateral or reserve-scarcity squeeze from a run.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Immediate central-bank overnight and term repo operations, reserve rebuilding through Treasury bill purchases, and eventually a standing repo facility to cap the rate.",
+      "source_refs": [
+        {"id": "nyfed-sofr", "title": "Statement regarding repurchase operations", "publisher": "Federal Reserve Bank of New York", "url": "https://www.newyorkfed.org/markets/opolicy/operating_policy_190917", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-effr", "title": "Effective Federal Funds Rate (EFFR)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/EFFR", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fred-walcl", "title": "Total Assets of the Federal Reserve (WALCL)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/WALCL", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    }
+  ]
+}

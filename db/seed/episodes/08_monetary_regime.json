@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "file": "08_monetary_regime",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "ed6285c1-a689-5f3f-9e2e-fbe6c988eebe",
+      "slug": "nixon-gold-convertibility-end-1971",
+      "name": "End of dollar gold convertibility, 1971",
+      "episode_type": "monetary_regime",
+      "onset_date": "1971-08-15",
+      "peak_date": "1971-12-18",
+      "end_date": "1973-03-19",
+      "geography": "US",
+      "affected_industries": ["banking", "sovereign_finance", "commodities_trading", "manufacturing"],
+      "regime_tags": ["gold_standard", "bretton_woods", "pre_fiat", "fixed_exchange_rate", "pre_qe", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "The United States suspends the convertibility of dollars into gold, imposes a 10 percent import surcharge and freezes wages and prices, ending the arrangement under which every other currency was fixed to the dollar and the dollar to metal. Foreign official dollar claims now exceed the US gold stock several times over, so the promise was already unbackable; France and Britain have been converting. Every exchange rate in the developed world is now undefined, and central banks must decide within days whether to keep buying dollars at the old parity.",
+      "onset_indicators": [
+        {"key": "foreign_claims_vs_gold_stock", "label": "Foreign official dollar claims relative to the US gold stock", "value": 4, "unit": "multiple", "as_of": "1971-06-30", "source_id": "frb-nixon"},
+        {"key": "convertibility_suspended", "label": "Convertibility of dollars into gold suspended", "value": true, "unit": "boolean", "as_of": "1971-08-15", "source_id": "frb-nixon"},
+        {"key": "import_surcharge", "label": "Temporary surcharge imposed on dutiable imports", "value": 10, "unit": "percent", "as_of": "1971-08-15", "source_id": "state-dept"},
+        {"key": "wage_price_controls", "label": "Domestic wages and prices frozen by executive order", "value": true, "unit": "boolean", "as_of": "1971-08-15", "source_id": "frb-nixon"}
+      ],
+      "outcome_summary": "An attempt to re-fix rates at new parities in December 1971 lasted barely a year; by March 1973 the major currencies floated, and they have floated ever since. The dollar depreciated substantially, the wage-price freeze suppressed inflation only until it was lifted, and the loss of the external anchor is generally counted among the causes of the inflation of the 1970s. The change was permanent: it created the modern fiat regime.",
+      "outcomes": ["regime_change", "systemic_crisis"],
+      "resolution_mechanism": "A failed attempt at realignment (the Smithsonian agreement) followed by acceptance of generalised floating from 1973; the domestic price controls were abandoned as inflation resumed.",
+      "source_refs": [
+        {"id": "frb-nixon", "title": "Nixon Ends Convertibility of US Dollars to Gold", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/gold-convertibility-ends", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "state-dept", "title": "Foreign Relations of the United States: foreign economic policy 1969-1972", "publisher": "US Department of State, Office of the Historian", "url": "https://history.state.gov/historicaldocuments/frus1969-76v03", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "02813c50-296a-57b5-908c-e2b5d14b6adb",
+      "slug": "volcker-disinflation-1979",
+      "name": "Volcker disinflation, 1979-1982",
+      "episode_type": "monetary_regime",
+      "onset_date": "1979-10-06",
+      "peak_date": "1981-06-30",
+      "end_date": "1982-11-30",
+      "geography": "US",
+      "affected_industries": ["banking", "housing", "construction", "manufacturing", "agriculture", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "pre_basel", "pre_social_media", "high_inflation", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "The central bank announces at an unscheduled Saturday meeting that it will target the quantity of bank reserves rather than the level of the funds rate, accepting whatever interest rate that implies. Inflation is running above 12 percent and has survived two previous tightening attempts that were abandoned when unemployment rose; the public no longer believes the central bank will hold. The change is designed to make the rate rise automatic, and therefore credible. Rates immediately move to levels no borrower has planned for, and interest-sensitive industries are the first to feel it.",
+      "onset_indicators": [
+        {"key": "cpi_inflation", "label": "Consumer price inflation at the time of the announcement", "value": 12, "unit": "percent", "as_of": "1979-09-30", "source_id": "fred-cpi"},
+        {"key": "operating_target_changed", "label": "Operating target changed from the funds rate to reserve quantities", "value": true, "unit": "boolean", "as_of": "1979-10-06", "source_id": "frb-volcker"},
+        {"key": "previous_tightenings_abandoned", "label": "Prior tightening cycles were abandoned when unemployment rose", "value": true, "unit": "boolean", "as_of": "1979-10-06", "source_id": "frb-volcker"},
+        {"key": "inflation_expectations_unanchored", "label": "Long-term inflation expectations not anchored", "value": true, "unit": "boolean", "as_of": "1979-10-06", "source_id": "frb-volcker"}
+      ],
+      "outcome_summary": "The funds rate reached about 20 percent, and after a false start in 1980 the policy held through a deep recession: unemployment peaked near 11 percent, housing and manufacturing were devastated, farm debt collapsed and the developing-country debt crisis was triggered by the dollar and rate shock. Inflation fell from over 13 percent to under 4 percent by 1983 and stayed low for a generation. The credibility won is the foundation of modern inflation targeting.",
+      "outcomes": ["recession", "regime_change", "recovery"],
+      "resolution_mechanism": "Sustained monetary restraint until inflation expectations broke, at the cost of a deep recession; the regime was then institutionalised as central-bank independence and, later, explicit inflation targets.",
+      "source_refs": [
+        {"id": "frb-volcker", "title": "Anti-inflation measures, 1979", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/anti-inflation-measures", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-cpi", "title": "Consumer Price Index for All Urban Consumers (CPIAUCSL)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/CPIAUCSL", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fred-fedfunds", "title": "Federal Funds Effective Rate (FEDFUNDS)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/FEDFUNDS", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "aa61dc51-a3d0-5729-b94a-61150753310e",
+      "slug": "black-monday-1987",
+      "name": "Black Monday equity crash, 1987",
+      "episode_type": "monetary_regime",
+      "onset_date": "1987-10-19",
+      "peak_date": "1987-10-19",
+      "end_date": "1987-12-31",
+      "geography": "US",
+      "affected_industries": ["exchanges", "banking", "asset_management", "insurance"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "pre_basel", "pre_social_media", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "The main US equity index falls 22.6 percent in one session, the largest single-day decline ever recorded, roughly twice the worst day of 1929. Portfolio insurance strategies sell index futures automatically as prices fall, and index arbitrage transmits that selling into the cash market, which then triggers more insurance selling. Specialists cannot absorb the flow, quotes go stale, and the futures clearing house faces margin calls of unprecedented size overnight, with the banks that must fund them unsure whether the clearer will open.",
+      "onset_indicators": [
+        {"key": "single_day_index_decline", "label": "Single-session decline in the main equity index", "value": 22.6, "unit": "percent", "as_of": "1987-10-19", "source_id": "brady"},
+        {"key": "portfolio_insurance_feedback", "label": "Mechanical selling by portfolio insurance strategies amplifying the fall", "value": true, "unit": "boolean", "as_of": "1987-10-19", "source_id": "brady"},
+        {"key": "clearing_house_margin_calls", "label": "Unprecedented overnight margin calls at the futures clearing house", "value": true, "unit": "boolean", "as_of": "1987-10-20", "source_id": "frb-1987"},
+        {"key": "market_making_capacity", "label": "Specialist capacity to absorb the selling flow", "value": "exhausted", "unit": "category", "as_of": "1987-10-19", "source_id": "brady"}
+      ],
+      "outcome_summary": "The central bank issued a one-sentence statement before the open affirming its readiness to supply liquidity, and pressed banks to keep lending to securities firms; the clearing house opened, no major firm failed, and the market recovered its losses within two years. There was no recession: the economy grew about 4 percent in 1988. The crash produced circuit breakers and is the standard case of a record market fall with no macroeconomic consequence.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "An explicit central-bank liquidity commitment, moral suasion on banks to keep funding broker-dealers, and clearing-house support; followed by the introduction of market-wide circuit breakers.",
+      "source_refs": [
+        {"id": "brady", "title": "Report of the Presidential Task Force on Market Mechanisms", "publisher": "US Department of the Treasury", "url": "https://home.treasury.gov/about/history", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-1987", "title": "Stock Market Crash of 1987", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/stock-market-crash-of-1987", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "54bdd40e-ddca-5a15-9c1c-7713dcd05aa9",
+      "slug": "erm-crisis-black-wednesday-1992",
+      "name": "ERM crisis and sterling's exit, 1992",
+      "episode_type": "monetary_regime",
+      "onset_date": "1992-09-16",
+      "peak_date": "1992-09-16",
+      "end_date": "1993-08-02",
+      "geography": "GB",
+      "affected_industries": ["banking", "sovereign_finance", "housing", "manufacturing"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "advanced_economy", "pre_social_media", "pre_basel"],
+      "is_counterexample": false,
+      "onset_summary": "Sterling is being sold heavily at its floor in the European exchange rate mechanism. The country entered at a rate widely regarded as too strong, and it is in recession with high unemployment and mortgage rates that move with the policy rate, so the rate rises needed to defend the parity are politically and economically unbearable. German rates are high because of reunification financing, and the anchor currency's central bank has no obligation to help. The authorities raise the policy rate from 10 to 12 percent and then announce 15 percent within hours, while spending reserves on the same day.",
+      "onset_indicators": [
+        {"key": "policy_rate_increases_in_one_day", "label": "Announced policy rate increases within a single day", "value": 2, "unit": "count", "as_of": "1992-09-16", "source_id": "boe-erm"},
+        {"key": "entry_parity_overvalued", "label": "Entry parity widely judged to be overvalued", "value": true, "unit": "boolean", "as_of": "1992-09-16", "source_id": "hmt-erm"},
+        {"key": "domestic_recession", "label": "Economy in recession with mortgage rates tied to the policy rate", "value": true, "unit": "boolean", "as_of": "1992-06-30", "source_id": "ons"},
+        {"key": "anchor_country_rates_high", "label": "Anchor currency's policy rate held high for domestic reasons", "value": true, "unit": "boolean", "as_of": "1992-09-16", "source_id": "boe-erm"}
+      ],
+      "outcome_summary": "Sterling left the mechanism the same evening and the 15 percent rate was never implemented; reserves losses were about 3.3 billion pounds. The pound fell around 15 percent, rates were cut instead of raised, and the economy began a long expansion with the fastest growth in Europe: the humiliation produced inflation targeting and, later, an independent central bank. Italy left too, and the mechanism's bands were widened to 15 percent in 1993.",
+      "outcomes": ["regime_change", "recovery", "contained"],
+      "resolution_mechanism": "Abandonment of the peg and a float, followed by an explicit inflation target and eventually operational independence for the central bank; the exchange rate mechanism's bands were widened for the remaining members.",
+      "source_refs": [
+        {"id": "boe-erm", "title": "Bank of England archive and quarterly bulletins, 1992", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/quarterly-bulletin", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "hmt-erm", "title": "Treasury papers on the ERM (released records)", "publisher": "UK Government (National Archives)", "url": "https://www.nationalarchives.gov.uk", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ons", "title": "UK economic accounts", "publisher": "UK Office for National Statistics", "url": "https://www.ons.gov.uk/economy", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "59f1930e-d022-56d4-ba29-acddc5b5a626",
+      "slug": "us-bond-market-rout-1994",
+      "name": "US bond market rout, 1994",
+      "episode_type": "monetary_regime",
+      "onset_date": "1994-02-04",
+      "peak_date": "1994-11-15",
+      "end_date": "1995-02-28",
+      "geography": "US",
+      "affected_industries": ["banking", "asset_management", "municipal_finance", "money_markets", "housing"],
+      "regime_tags": ["post_fiat", "pre_qe", "floating_exchange_rate", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": true,
+      "onset_summary": "The central bank raises rates for the first time in five years, by a quarter point, after a long period of very low rates that pushed investors into duration and leverage. The market has no expectation of a series of increases and the bank does not publish a rate path; the ten-year yield begins rising immediately. Leveraged holders financed long bonds cheaply in repo, mortgage servicers are structurally short convexity and must sell as yields rise, and several public funds and corporates hold structured notes whose losses multiply with rates.",
+      "onset_indicators": [
+        {"key": "first_hike_after_pause", "label": "First policy rate increase in five years", "value": true, "unit": "boolean", "as_of": "1994-02-04", "source_id": "frb-1994"},
+        {"key": "no_published_rate_path", "label": "No published guidance on the expected path of rates", "value": true, "unit": "boolean", "as_of": "1994-02-04", "source_id": "frb-1994"},
+        {"key": "leveraged_duration_positions", "label": "Investors holding leveraged long-duration positions financed in repo", "value": true, "unit": "boolean", "as_of": "1994-02-04", "source_id": "gao-derivatives"},
+        {"key": "structured_note_exposure", "label": "Public funds and corporates holding leveraged structured notes", "value": true, "unit": "boolean", "as_of": "1994-02-04", "source_id": "gao-derivatives"}
+      ],
+      "outcome_summary": "Rates doubled to 6 percent within a year and the ten-year yield rose about 240 basis points, producing the worst bond year in decades and an estimated 1.5 trillion dollars of global losses. A California county went bankrupt on leveraged repo positions, a large mortgage fund collapsed and several dealers took heavy losses. But no systemic crisis followed, the expansion continued for six more years, and inflation stayed low: the tightening worked. It became the argument for transparent forward guidance.",
+      "outcomes": ["contained", "failure", "recovery", "regime_change"],
+      "resolution_mechanism": "The market absorbed the losses without a systemic event: leveraged holders were liquidated, the affected county entered municipal bankruptcy, and the central bank subsequently moved to announcing decisions and, later, publishing a rate path.",
+      "source_refs": [
+        {"id": "frb-1994", "title": "FOMC historical materials, 1994", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1994.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "gao-derivatives", "title": "Financial derivatives: actions needed to protect the financial system", "publisher": "US Government Accountability Office", "url": "https://www.gao.gov/products/ggd-94-133", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-dgs10", "title": "10-Year Treasury Constant Maturity Rate (DGS10)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DGS10", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "df80f1ad-48e0-5eaf-8d13-15665d88cfa0",
+      "slug": "thailand-baht-float-1997",
+      "name": "Thai baht float, July 1997",
+      "episode_type": "monetary_regime",
+      "parent_slug": "arc-asian-financial-crisis-1997-1998",
+      "onset_date": "1997-05-14",
+      "peak_date": "1997-07-02",
+      "end_date": "1998-12-31",
+      "geography": "TH",
+      "affected_industries": ["banking", "real_estate", "construction", "manufacturing", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "pre_basel", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Speculators attack the baht's dollar peg and the central bank defends it with spot and forward intervention. Headline reserves look adequate, but most of them are already committed in forward contracts, so the usable balance is a fraction of the published figure and no one outside the central bank knows this. Finance companies that borrowed dollars offshore and lent baht to property developers are failing; the current-account deficit is about 8 percent of output; and the currency has appreciated with the dollar against the yen, hollowing out export competitiveness.",
+      "onset_indicators": [
+        {"key": "current_account_deficit", "label": "Current-account deficit", "value": 8, "unit": "percent_of_gdp", "as_of": "1996-12-31", "source_id": "bot"},
+        {"key": "forward_book_commitment", "label": "Reserves committed in forward contracts and unusable for defence", "value": true, "unit": "boolean", "as_of": "1997-05-14", "source_id": "bot"},
+        {"key": "finance_company_failures", "label": "Finance companies funded offshore in dollars failing", "value": true, "unit": "boolean", "as_of": "1997-05-14", "source_id": "imf-tha"},
+        {"key": "unhedged_fx_borrowing", "label": "Corporate and financial borrowing in dollars against baht revenues", "value": "widespread", "unit": "category", "as_of": "1997-03-31", "source_id": "bis-ar-1998"}
+      ],
+      "outcome_summary": "The peg was abandoned on 2 July 1997 and the baht lost about half its value within six months, bankrupting every unhedged dollar borrower. Fifty-six finance companies were closed, output fell about 10 percent in 1998, and the country entered a 17 billion dollar IMF programme. The float triggered the regional crisis. Recovery came within two years on a devalued currency and a large current-account surplus.",
+      "outcomes": ["systemic_crisis", "recession", "bailout", "regime_change", "recovery"],
+      "resolution_mechanism": "Abandonment of the peg and a float, an IMF programme with financial-sector conditionality, closure and recapitalisation of finance companies and banks, and corporate debt restructuring.",
+      "source_refs": [
+        {"id": "bot", "title": "Bank of Thailand statistics and reports", "publisher": "Bank of Thailand", "url": "https://www.bot.or.th/en/statistics.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-tha", "title": "IMF country information: Thailand", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/THA", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bis-ar-1998", "title": "BIS 68th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/ar1998e.htm", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d0947183-384f-5d2c-9ede-3de94e4c1619",
+      "slug": "korea-won-crisis-1997",
+      "name": "Korean won crisis, November 1997",
+      "episode_type": "monetary_regime",
+      "parent_slug": "arc-asian-financial-crisis-1997-1998",
+      "onset_date": "1997-11-17",
+      "peak_date": "1997-12-23",
+      "end_date": "1998-12-31",
+      "geography": "KR",
+      "affected_industries": ["banking", "manufacturing", "semiconductors", "shipping", "automotive"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "pre_basel", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The won breaches its daily trading band as the central bank abandons defence, having spent most of its usable reserves; several industrial conglomerates have already failed this year under debt-to-equity ratios above four to one. Korean banks and merchant banks borrowed short-term dollars offshore and lent long domestically, so the country's short-term external debt exceeds its usable reserves by a wide margin and foreign banks are refusing to roll credit lines. This is not a current-account story: it is a rollover run on the banking system in a currency the central bank cannot print.",
+      "onset_indicators": [
+        {"key": "short_term_external_debt_to_reserves", "label": "Short-term external debt relative to usable reserves", "value": 3, "unit": "multiple", "as_of": "1997-11-17", "source_id": "bok"},
+        {"key": "chaebol_leverage", "label": "Debt-to-equity ratios at the largest industrial groups", "value": 4, "unit": "multiple", "as_of": "1996-12-31", "source_id": "imf-kor"},
+        {"key": "credit_lines_not_rolled", "label": "Foreign banks refusing to roll short-term credit lines", "value": true, "unit": "boolean", "as_of": "1997-11-17", "source_id": "bis-ar-1998"},
+        {"key": "band_abandoned", "label": "Daily trading band defence abandoned", "value": true, "unit": "boolean", "as_of": "1997-11-17", "source_id": "bok"}
+      ],
+      "outcome_summary": "Korea requested IMF assistance days later and received a record 58 billion dollar package; the won halved, output fell about 5 percent in 1998, and unemployment tripled. The decisive step was a coordinated rollover of short-term bank claims by foreign creditors at the end of December. Korea repaid early, recovered within two years, restructured the conglomerates and opened its capital markets; it is the fastest recovery in the regional crisis.",
+      "outcomes": ["systemic_crisis", "recession", "bailout", "recovery", "regime_change"],
+      "resolution_mechanism": "An IMF-led financing package combined with a coordinated rollover and rescheduling of short-term interbank claims, bank recapitalisation and closure, corporate restructuring, and a float of the currency.",
+      "source_refs": [
+        {"id": "bok", "title": "Bank of Korea economic statistics", "publisher": "Bank of Korea", "url": "https://www.bok.or.kr/eng/main/main.do", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-kor", "title": "IMF country information: Korea", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/KOR", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bis-ar-1998", "title": "BIS 68th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/ar1998e.htm", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "5b52fd75-7ac7-5ff7-bc9a-13d2544aa4bb",
+      "slug": "hong-kong-peg-defence-1998",
+      "name": "Hong Kong currency peg defence, 1998",
+      "episode_type": "monetary_regime",
+      "parent_slug": "arc-asian-financial-crisis-1997-1998",
+      "onset_date": "1998-08-14",
+      "peak_date": "1998-08-28",
+      "end_date": "1998-09-30",
+      "geography": "HK",
+      "affected_industries": ["banking", "exchanges", "real_estate", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "advanced_economy", "pre_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "The monetary authority begins buying local shares and futures with its reserves, an extraordinary step for a jurisdiction committed to non-intervention. Speculators have been running a double play: short the currency to force the automatic rate rise that a currency board delivers, while shorting the equity market that the rate rise will damage, so that both legs pay. The currency board holds foreign reserves several times the monetary base and the peg's mechanics are not in doubt; the attack is on the political will to accept the interest-rate pain, with property prices already down by half.",
+      "onset_indicators": [
+        {"key": "reserves_to_monetary_base", "label": "Foreign reserves relative to the monetary base under the currency board", "value": 7, "unit": "multiple", "as_of": "1998-07-31", "source_id": "hkma"},
+        {"key": "double_play_attack", "label": "Simultaneous short positions in the currency and the equity market", "value": true, "unit": "boolean", "as_of": "1998-08-14", "source_id": "hkma"},
+        {"key": "interbank_rate_spike", "label": "Overnight interbank rates spiking under the automatic adjustment mechanism", "value": true, "unit": "boolean", "as_of": "1998-08-14", "source_id": "hkma"},
+        {"key": "property_price_decline", "label": "Decline in property prices from their peak", "value": 50, "unit": "percent", "as_of": "1998-07-31", "source_id": "imf-hkg"}
+      ],
+      "outcome_summary": "The authority spent about 15 billion dollars buying roughly 7 percent of the market, the speculators were squeezed out, and the peg held; it has held ever since. The intervention was heavily criticised at the time as a betrayal of free-market principles, but the shares were sold back at a profit over the following years. Output fell about 5 percent in 1998 and deflation lasted years, the price of adjusting through prices rather than the exchange rate.",
+      "outcomes": ["contained", "recession", "recovery"],
+      "resolution_mechanism": "Direct market intervention to break the double play, followed by technical reforms to the currency board (an explicit convertibility undertaking and a discount window) that removed the mechanism the attack exploited.",
+      "source_refs": [
+        {"id": "hkma", "title": "Hong Kong Monetary Authority annual reports and background briefs", "publisher": "Hong Kong Monetary Authority", "url": "https://www.hkma.gov.hk/eng/news-and-media/publications-and-research/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-hkg", "title": "IMF country information: Hong Kong SAR", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/HKG", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "7ba482d7-a340-5b52-92ce-38f3ece7e1f5",
+      "slug": "taper-tantrum-2013",
+      "name": "Taper tantrum, 2013",
+      "episode_type": "monetary_regime",
+      "onset_date": "2013-05-22",
+      "peak_date": "2013-09-05",
+      "end_date": "2013-12-18",
+      "geography": "GLOBAL",
+      "affected_industries": ["sovereign_finance", "banking", "asset_management", "housing"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_dodd_frank", "emerging_market", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "The central bank chairman says in testimony that the pace of asset purchases could be reduced in the next few meetings if the labour market improves, and the ten-year yield begins a rise that reaches over 100 basis points in four months. Investors reaching for yield during years of near-zero rates have crowded into emerging-market local debt and long duration; several economies with current-account deficits financed by those flows now face an abrupt reversal. Nothing has actually changed in policy, and no purchase has yet been reduced.",
+      "onset_indicators": [
+        {"key": "guidance_change_only", "label": "Only the expected future path of purchases changed; no policy action taken", "value": true, "unit": "boolean", "as_of": "2013-05-22", "source_id": "frb-taper"},
+        {"key": "ten_year_yield_rise", "label": "Rise in the ten-year yield in the fortnight after the remarks", "value": 40, "unit": "basis_points", "as_of": "2013-06-05", "source_id": "fred-dgs10"},
+        {"key": "em_current_account_deficits", "label": "Emerging economies with current-account deficits financed by portfolio inflows", "value": 5, "unit": "count", "as_of": "2013-05-22", "source_id": "imf-weo"},
+        {"key": "crowded_carry_positions", "label": "Crowded positioning in emerging-market local debt after years of low rates", "value": true, "unit": "boolean", "as_of": "2013-05-22", "source_id": "bis-em"}
+      ],
+      "outcome_summary": "The most exposed emerging economies saw their currencies fall 10 to 20 percent and were forced to raise rates, but none defaulted or needed a programme, and all had stabilised within a year. Tapering itself began in December 2013 and was completed without further disruption; long yields were lower two years later. The episode is the reference case for a communication shock that repriced everything and broke nothing.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Clearer communication separating the taper from rate rises, defensive rate increases and reserve use in the affected emerging economies, and an eventual taper executed without market disruption.",
+      "source_refs": [
+        {"id": "frb-taper", "title": "Testimony and FOMC materials, 2013", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2013.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-dgs10", "title": "10-Year Treasury Constant Maturity Rate (DGS10)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DGS10", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "imf-weo", "title": "World Economic Outlook database", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Publications/WEO", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "bis-em", "title": "BIS quarterly review", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/quarterly.htm", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "723a964b-42b5-5a44-aa74-edc259a5f19a",
+      "slug": "china-renminbi-devaluation-2015",
+      "name": "Renminbi devaluation, August 2015",
+      "episode_type": "monetary_regime",
+      "onset_date": "2015-08-11",
+      "peak_date": "2016-01-07",
+      "end_date": "2016-12-31",
+      "geography": "CN",
+      "affected_industries": ["banking", "manufacturing", "exchanges", "commodities_trading", "sovereign_finance"],
+      "regime_tags": ["post_fiat", "post_qe", "fixed_exchange_rate", "capital_controls", "emerging_market", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": true,
+      "onset_summary": "The central bank changes how it sets the daily reference rate, saying it will follow the previous day's close, and the currency falls about 2 percent in a day, the largest move in two decades. The stated reason is a step toward a market-determined rate, but it lands weeks after a domestic equity crash and a growth scare, so it is widely read as a competitive devaluation by an economy large enough to export deflation. Reserves are enormous but have been falling as capital leaves, and capital controls are porous.",
+      "onset_indicators": [
+        {"key": "one_day_devaluation", "label": "Single-day fall in the currency against the dollar", "value": 1.9, "unit": "percent", "as_of": "2015-08-11", "source_id": "pboc"},
+        {"key": "fixing_mechanism_changed", "label": "Daily reference rate mechanism changed to follow the market close", "value": true, "unit": "boolean", "as_of": "2015-08-11", "source_id": "pboc"},
+        {"key": "reserves_declining", "label": "Foreign exchange reserves falling as capital leaves", "value": "declining", "unit": "category", "as_of": "2015-07-31", "source_id": "safe"},
+        {"key": "recent_equity_crash", "label": "Domestic equity market fell sharply in the preceding weeks", "value": true, "unit": "boolean", "as_of": "2015-07-31", "source_id": "imf-chn"}
+      ],
+      "outcome_summary": "The currency fell about 6 percent over the following six months and roughly a trillion dollars of reserves were spent slowing the decline, with global equities selling off twice on fears of a disorderly devaluation. It did not happen: capital controls were tightened, the fixing was made more transparent, and the currency stabilised through 2016 and appreciated in 2017. There was no hard landing, no banking crisis and no exported deflation shock of the kind feared.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Heavy reserve intervention to slow the depreciation, tightened enforcement of capital controls, a more transparent fixing formula with a currency-basket reference, and eventual stabilisation without a large one-off devaluation.",
+      "source_refs": [
+        {"id": "pboc", "title": "People's Bank of China policy statements", "publisher": "People's Bank of China", "url": "https://www.pbc.gov.cn/en/3688110/index.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "safe", "title": "Foreign exchange reserves data", "publisher": "State Administration of Foreign Exchange, China", "url": "https://www.safe.gov.cn/en/", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "imf-chn", "title": "IMF country information: China", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/CHN", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "4a877919-f613-52d8-83c4-5b2225bf9841",
+      "slug": "uk-ldi-gilt-crisis-2022",
+      "name": "UK LDI gilt market crisis, 2022",
+      "episode_type": "monetary_regime",
+      "onset_date": "2022-09-23",
+      "peak_date": "2022-09-28",
+      "end_date": "2022-10-14",
+      "geography": "GB",
+      "affected_industries": ["sovereign_finance", "insurance", "asset_management", "banking", "housing"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "advanced_economy", "post_social_media", "high_inflation", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "A new government announces large unfunded tax cuts without an independent fiscal forecast, and long-dated government bond yields rise by amounts normally seen over years. Pension funds run liability-driven investment strategies that use leveraged gilt derivatives to hedge their liabilities while holding illiquid assets elsewhere; a rapid yield rise triggers collateral calls they can only meet by selling the same gilts, which pushes yields higher again. The central bank is due to begin selling gilts from its own portfolio in days, and the spiral is measured in hours, not weeks.",
+      "onset_indicators": [
+        {"key": "long_gilt_yield_move", "label": "Rise in the 30-year gilt yield over three sessions", "value": 100, "unit": "basis_points", "as_of": "2022-09-27", "source_id": "boe-ldi"},
+        {"key": "unfunded_fiscal_announcement", "label": "Large unfunded tax cuts announced without an independent forecast", "value": true, "unit": "boolean", "as_of": "2022-09-23", "source_id": "hmt-2022"},
+        {"key": "ldi_leverage", "label": "Pension hedging strategies using leveraged gilt derivatives", "value": true, "unit": "boolean", "as_of": "2022-09-23", "source_id": "boe-ldi"},
+        {"key": "collateral_spiral", "label": "Collateral calls forcing sales of the same asset whose fall caused them", "value": true, "unit": "boolean", "as_of": "2022-09-27", "source_id": "boe-ldi"},
+        {"key": "qt_start_imminent", "label": "Central bank due to begin selling its own gilt holdings within days", "value": true, "unit": "boolean", "as_of": "2022-09-23", "source_id": "boe-ldi"}
+      ],
+      "outcome_summary": "The central bank announced time-limited purchases of long-dated gilts on 28 September, explicitly for financial stability rather than monetary policy, and set a fourteen-day deadline. The spiral stopped, the funds rebuilt collateral buffers, purchases ended on schedule with a small profit, and balance-sheet reduction began weeks later as planned. The fiscal package was reversed and the government fell. No pension fund failed and no member lost benefits.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "A time-limited, explicitly financial-stability central-bank purchase programme with a hard end date, forcing funds to recapitalise their hedges; the fiscal package that triggered it was withdrawn.",
+      "source_refs": [
+        {"id": "boe-ldi", "title": "Bank of England gilt market operation and Financial Policy Committee statements", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/news/2022/september/bank-of-england-announces-gilt-market-operation", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "hmt-2022", "title": "The Growth Plan 2022", "publisher": "HM Treasury", "url": "https://www.gov.uk/government/publications/the-growth-plan-2022-documents", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    }
+  ]
+}

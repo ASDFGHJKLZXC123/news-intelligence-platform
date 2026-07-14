@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "file": "02_sovereign_debt",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "ae25e4f5-f889-563f-ab3b-ab178a46320e",
+      "slug": "greece-deficit-revision-2009",
+      "name": "Greek deficit revision, October 2009",
+      "episode_type": "sovereign_debt",
+      "parent_slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "onset_date": "2009-10-20",
+      "peak_date": "2012-03-09",
+      "end_date": "2012-03-09",
+      "geography": "GR",
+      "affected_industries": ["sovereign_finance", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A newly elected government announces that the current-year deficit will be about 12.5 percent of output rather than the 6 percent its predecessor reported, and that the national statistical office's figures cannot be relied on. Public debt is already near 100 percent of output, the country borrows in a currency its central bank does not issue, and roughly half the stock is held abroad. Domestic banks hold the sovereign's bonds as their liquidity buffer and pledge them for central-bank funding, so any repricing of the sovereign is simultaneously a repricing of the banks.",
+      "onset_indicators": [
+        {"key": "deficit_revision", "label": "Revised current-year general government deficit", "value": 12.5, "unit": "percent_of_gdp", "as_of": "2009-10-20", "source_id": "eurostat"},
+        {"key": "prior_reported_deficit", "label": "Deficit reported by the previous government for the same year", "value": 6.0, "unit": "percent_of_gdp", "as_of": "2009-10-01", "source_id": "eurostat"},
+        {"key": "debt_to_gdp", "label": "General government debt", "value": 100, "unit": "percent_of_gdp", "as_of": "2009-09-30", "source_id": "eurostat"},
+        {"key": "statistics_unreliable", "label": "Government states its own fiscal statistics are unreliable", "value": true, "unit": "boolean", "as_of": "2009-10-20", "source_id": "eurostat"},
+        {"key": "bank_sovereign_nexus", "label": "Domestic banks hold the sovereign's bonds as their principal liquidity buffer", "value": "concentrated", "unit": "category", "as_of": "2009-10-20", "source_id": "imf-grc"}
+      ],
+      "outcome_summary": "The sovereign lost market access in April 2010 and took successive official programmes. In March 2012 private creditors accepted the largest restructuring in history, writing off more than half of a 200 billion euro claim. Output fell about a quarter from its peak and unemployment exceeded 25 percent. Greece did not leave the euro, and regained market access years later.",
+      "outcomes": ["default", "bailout", "recession", "systemic_crisis"],
+      "resolution_mechanism": "Successive EU/IMF financing programmes with fiscal conditionality, a private-sector debt exchange with more than 50 percent nominal haircut and collective action clauses inserted retroactively, and official-sector maturity extensions.",
+      "source_refs": [
+        {"id": "eurostat", "title": "Government finance statistics", "publisher": "European Commission (Eurostat)", "url": "https://ec.europa.eu/eurostat/web/government-finance-statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-grc", "title": "IMF country information: Greece", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/GRC", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "36d59a57-23b4-50a6-86b4-4c93ea910cb4",
+      "slug": "ireland-bank-guarantee-cost-2010",
+      "name": "Irish bank guarantee fiscal cost, 2010",
+      "episode_type": "sovereign_debt",
+      "parent_slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "onset_date": "2010-09-30",
+      "peak_date": "2010-11-21",
+      "end_date": "2013-12-15",
+      "geography": "IE",
+      "affected_industries": ["sovereign_finance", "banking", "construction", "real_estate"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "post_social_media", "basel_ii"],
+      "is_counterexample": false,
+      "onset_summary": "The state announces that recapitalising the banks it guaranteed in full two years earlier will cost about 34 billion euros for one institution alone, pushing the year's deficit above 30 percent of output. The guarantee converted private bank losses from a property bubble into sovereign liabilities in a single night, without a resolution regime that could have imposed losses on bondholders. The sovereign is solvent on its own account but not on the banks' account, and the yield on its ten-year debt is rising through 6 percent.",
+      "onset_indicators": [
+        {"key": "bank_recapitalisation_cost", "label": "Announced recapitalisation cost for the worst bank", "value": 34, "unit": "eur_billions", "as_of": "2010-09-30", "source_id": "centralbank-ie"},
+        {"key": "headline_deficit", "label": "Headline general government deficit including bank support", "value": 32, "unit": "percent_of_gdp", "as_of": "2010-09-30", "source_id": "eurostat"},
+        {"key": "blanket_guarantee_in_force", "label": "State guarantee covering nearly all bank liabilities", "value": true, "unit": "boolean", "as_of": "2010-09-30", "source_id": "centralbank-ie"},
+        {"key": "ten_year_yield", "label": "Ten-year sovereign yield", "value": 6.5, "unit": "percent", "as_of": "2010-09-30", "source_id": "imf-irl"}
+      ],
+      "outcome_summary": "Ireland lost market access and entered an 85 billion euro EU/IMF programme in November 2010. It implemented severe austerity, established a bad bank for property loans, and exited the programme in December 2013 as the first euro-area country to do so, returning to growth. Bank bondholders were largely repaid in full and the fiscal cost was borne by taxpayers.",
+      "outcomes": ["bailout", "recession", "recovery", "contained"],
+      "resolution_mechanism": "An EU/IMF programme, a national asset management agency taking property loans off bank balance sheets at a discount, bank recapitalisation and consolidation, and multi-year fiscal consolidation.",
+      "source_refs": [
+        {"id": "centralbank-ie", "title": "Central Bank of Ireland publications", "publisher": "Central Bank of Ireland", "url": "https://www.centralbank.ie/publication", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "eurostat", "title": "Government finance statistics", "publisher": "European Commission (Eurostat)", "url": "https://ec.europa.eu/eurostat/web/government-finance-statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-irl", "title": "IMF country information: Ireland", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/IRL", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "b278a64d-fd82-5196-9796-397a1ad4c4d4",
+      "slug": "portugal-market-access-loss-2011",
+      "name": "Portuguese loss of market access, 2011",
+      "episode_type": "sovereign_debt",
+      "parent_slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "onset_date": "2011-03-23",
+      "peak_date": "2011-04-06",
+      "end_date": "2014-05-17",
+      "geography": "PT",
+      "affected_industries": ["sovereign_finance", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The government falls after parliament rejects its fourth austerity package, leaving a caretaker administration to refinance large bond redemptions due within weeks. Ten-year yields are above 8 percent and rising, the country has run a decade of near-zero growth with persistent current-account deficits and unit labour costs well above its trading partners, and its banks depend on central-bank funding because wholesale markets are closed to them. There is no domestic monetary policy to devalue with.",
+      "onset_indicators": [
+        {"key": "government_collapse", "label": "Government loses a parliamentary vote on the fiscal package and resigns", "value": true, "unit": "boolean", "as_of": "2011-03-23", "source_id": "bportugal"},
+        {"key": "ten_year_yield", "label": "Ten-year sovereign yield", "value": 8.0, "unit": "percent", "as_of": "2011-03-23", "source_id": "imf-prt"},
+        {"key": "near_term_redemptions", "label": "Large bond redemptions falling due within weeks", "value": true, "unit": "boolean", "as_of": "2011-03-23", "source_id": "bportugal"},
+        {"key": "bank_reliance_on_central_bank", "label": "Banks funded mainly by central-bank operations rather than markets", "value": true, "unit": "boolean", "as_of": "2011-02-28", "source_id": "bportugal"},
+        {"key": "decade_growth", "label": "Average annual output growth over the preceding decade", "value": 0.7, "unit": "percent", "as_of": "2010-12-31", "source_id": "imf-prt"}
+      ],
+      "outcome_summary": "Portugal requested assistance on 6 April 2011 and received a 78 billion euro EU/IMF programme. It exited cleanly in May 2014 without a precautionary credit line, avoided any restructuring of its sovereign debt, and returned to investment grade several years later after a sustained fiscal adjustment. Output fell about 7 percent from peak to trough and unemployment reached 17 percent.",
+      "outcomes": ["bailout", "recession", "recovery", "contained"],
+      "resolution_mechanism": "An EU/IMF adjustment programme with fiscal consolidation and structural reform, bank recapitalisation with public backstops, and central-bank liquidity to the banking system; no sovereign debt restructuring.",
+      "source_refs": [
+        {"id": "bportugal", "title": "Banco de Portugal publications", "publisher": "Banco de Portugal", "url": "https://www.bportugal.pt/en/publications", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-prt", "title": "IMF country information: Portugal", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/PRT", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d354a85b-9656-56bd-a698-f07dcbfddf00",
+      "slug": "spain-banking-sovereign-loop-2012",
+      "name": "Spanish bank-sovereign doom loop, 2012",
+      "episode_type": "sovereign_debt",
+      "parent_slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "onset_date": "2012-05-09",
+      "peak_date": "2012-07-25",
+      "end_date": "2014-01-23",
+      "geography": "ES",
+      "affected_industries": ["sovereign_finance", "banking", "construction", "real_estate"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "post_social_media", "basel_ii"],
+      "is_counterexample": false,
+      "onset_summary": "The state takes control of the country's fourth-largest lender, a group of merged regional savings banks, converting its rescue loan into equity as doubts spread about the value of its property book. Savings banks were politically governed and financed a decade-long construction boom; land and unfinished developments sit on their books at appraisal values that no longer clear, provisioned well below likely recovery. The sovereign must fund the recapitalisation while its own ten-year yield rises toward 7 percent, and each euro of bank support widens the deficit that is driving the yield up.",
+      "onset_indicators": [
+        {"key": "state_intervention_in_bank", "label": "State takes control of a top-five lender formed from merged savings banks", "value": true, "unit": "boolean", "as_of": "2012-05-09", "source_id": "bde"},
+        {"key": "provisioning_shortfall", "label": "Provisions against land and development loans below likely recovery values", "value": true, "unit": "boolean", "as_of": "2012-03-31", "source_id": "bde"},
+        {"key": "ten_year_yield", "label": "Ten-year sovereign yield", "value": 6.0, "unit": "percent", "as_of": "2012-05-09", "source_id": "imf-esp"},
+        {"key": "construction_share_of_output", "label": "Construction share of output at the peak of the boom", "value": 12, "unit": "percent_of_gdp", "as_of": "2007-12-31", "source_id": "imf-esp"},
+        {"key": "unemployment_rate", "label": "Unemployment rate", "value": 24, "unit": "percent", "as_of": "2012-03-31", "source_id": "imf-esp"}
+      ],
+      "outcome_summary": "Spain took a 100 billion euro European credit line for its banks in July 2012 rather than a full sovereign programme, transferred property assets to a national bad bank, and imposed losses on junior bondholders including mis-sold retail holders. Yields fell only after the central bank promised in July 2012 to do whatever it took and announced conditional bond purchases. The sovereign never lost market access and exited the bank programme in January 2014.",
+      "outcomes": ["bailout", "recession", "contained", "recovery"],
+      "resolution_mechanism": "A European bank-recapitalisation credit line rather than a sovereign programme, a national asset management company for property assets, junior-debt burden sharing, and the ECB's conditional promise of unlimited secondary-market purchases.",
+      "source_refs": [
+        {"id": "bde", "title": "Banco de Espana publications", "publisher": "Banco de Espana", "url": "https://www.bde.es/bde/en/secciones/informes/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-esp", "title": "IMF country information: Spain", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/ESP", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "esm", "title": "ESM financial assistance to Spain", "publisher": "European Stability Mechanism", "url": "https://www.esm.europa.eu/financial-assistance/spain", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "002d9445-293a-55ea-89b5-b5348b2913f1",
+      "slug": "italy-sovereign-spread-stress-2011",
+      "name": "Italian sovereign spread stress, 2011",
+      "episode_type": "sovereign_debt",
+      "parent_slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "onset_date": "2011-07-08",
+      "peak_date": "2011-11-09",
+      "end_date": "2012-09-06",
+      "geography": "IT",
+      "affected_industries": ["sovereign_finance", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "The spread between Italian and German ten-year yields widens sharply in a single week as investors extend the crisis from small programme countries to the euro area's third-largest economy. Italy's debt is about 120 percent of output and its growth has been near zero for a decade, but it runs a primary surplus, its households are among the most heavily saving in Europe, most of its debt is held domestically, and its banks have little exposure to foreign property. The problem is not the annual deficit but the size of the rollover in a currency the sovereign cannot print.",
+      "onset_indicators": [
+        {"key": "sovereign_spread", "label": "Ten-year yield spread over the regional benchmark", "value": 300, "unit": "basis_points", "as_of": "2011-07-11", "source_id": "bancaditalia"},
+        {"key": "debt_to_gdp", "label": "General government debt", "value": 120, "unit": "percent_of_gdp", "as_of": "2011-06-30", "source_id": "eurostat"},
+        {"key": "primary_balance", "label": "Primary fiscal balance excluding interest", "value": 1.0, "unit": "percent_of_gdp", "as_of": "2011-06-30", "source_id": "eurostat"},
+        {"key": "domestic_holding_share", "label": "Share of the debt stock held by domestic investors", "value": "majority", "unit": "category", "as_of": "2011-06-30", "source_id": "bancaditalia"},
+        {"key": "annual_rollover_need", "label": "Gross financing requirement for the coming twelve months", "value": "large", "unit": "category", "as_of": "2011-07-08", "source_id": "bancaditalia"}
+      ],
+      "outcome_summary": "Yields peaked above 7 percent in November 2011, the government resigned and a technocratic cabinet passed a pension and fiscal package, and the central bank's three-year bank lending operations let domestic banks buy the debt. Spreads normalised after the July 2012 pledge to do whatever it took and the announcement of conditional purchases. Italy never restructured, never lost market access and never took a programme, though it endured a double-dip recession.",
+      "outcomes": ["contained", "recession", "recovery"],
+      "resolution_mechanism": "A technocratic government's fiscal and pension reform, three-year central-bank refinancing operations that funded domestic bank purchases of the debt, and the ECB's conditional commitment to unlimited secondary-market purchases; no programme and no restructuring.",
+      "source_refs": [
+        {"id": "bancaditalia", "title": "Financial Stability Report", "publisher": "Banca d'Italia", "url": "https://www.bancaditalia.it/pubblicazioni/rapporto-stabilita/index.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "eurostat", "title": "Government finance statistics", "publisher": "European Commission (Eurostat)", "url": "https://ec.europa.eu/eurostat/web/government-finance-statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ecb-omt", "title": "Technical features of Outright Monetary Transactions", "publisher": "European Central Bank", "url": "https://www.ecb.europa.eu/press/pr/date/2012/html/pr120906_1.en.html", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "63d4d5d6-0bb9-51c2-9788-f261409fed23",
+      "slug": "us-debt-ceiling-standoff-2011",
+      "name": "US debt ceiling standoff, 2011",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2011-05-16",
+      "peak_date": "2011-08-05",
+      "end_date": "2011-08-08",
+      "geography": "US",
+      "affected_industries": ["sovereign_finance", "money_markets", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_dodd_frank", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "The Treasury reaches the statutory borrowing limit and begins using accounting measures to keep paying, telling Congress the measures will be exhausted by early August. The impasse is political, not economic: the sovereign issues debt in the currency it prints, borrows at record-low real yields, and faces no market unwillingness to lend. Money funds and clearing houses hold Treasury bills maturing around the exhaustion date as their safest collateral, and dealers begin to ask what happens to that collateral if a coupon is missed for legislative rather than financial reasons.",
+      "onset_indicators": [
+        {"key": "extraordinary_measures_started", "label": "Treasury begins extraordinary measures after hitting the statutory limit", "value": true, "unit": "boolean", "as_of": "2011-05-16", "source_id": "treasury"},
+        {"key": "ten_year_yield", "label": "Ten-year sovereign yield at the onset of the standoff", "value": 3.2, "unit": "percent", "as_of": "2011-05-16", "source_id": "fred-dgs10"},
+        {"key": "debt_issued_in_own_currency", "label": "Sovereign debt denominated in the currency the sovereign issues", "value": true, "unit": "boolean", "as_of": "2011-05-16", "source_id": "treasury"},
+        {"key": "bill_collateral_at_risk_date", "label": "Bills maturing near the exhaustion date used as collateral across money markets", "value": true, "unit": "boolean", "as_of": "2011-05-16", "source_id": "gao-debt-limit"}
+      ],
+      "outcome_summary": "A deal was signed two days before the deadline, no payment was missed, and one rating agency nonetheless removed the sovereign's top rating for the first time. Equities fell sharply, but Treasury yields went down, not up, as investors bought the very asset supposedly at risk. The episode is the reference case for a self-imposed sovereign scare that is politically severe and financially benign.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Last-minute legislation raising the limit with spending caps and a sequestration trigger; no default, no missed payment, no central-bank intervention.",
+      "source_refs": [
+        {"id": "treasury", "title": "Debt limit information", "publisher": "US Department of the Treasury", "url": "https://home.treasury.gov/policy-issues/financial-markets-financial-institutions-and-fiscal-service/debt-limit", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "gao-debt-limit", "title": "Debt limit: analysis of 2011-2012 actions", "publisher": "US Government Accountability Office", "url": "https://www.gao.gov/products/gao-12-701", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-dgs10", "title": "10-Year Treasury Constant Maturity Rate (DGS10)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DGS10", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "795b5685-ca0f-54b4-bdfe-d992e08194e5",
+      "slug": "us-debt-ceiling-standoff-2023",
+      "name": "US debt ceiling standoff, 2023",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2023-01-19",
+      "peak_date": "2023-05-24",
+      "end_date": "2023-06-03",
+      "geography": "US",
+      "affected_industries": ["sovereign_finance", "money_markets", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "The Treasury hits the statutory borrowing limit again and starts extraordinary measures, with the exhaustion date estimated for early summer and unusually uncertain because it depends on April tax receipts. Credit default swaps on the sovereign trade wider than those of several emerging markets, and bills maturing around the projected date trade at a visible yield concession to their neighbours. As in the previous standoff there is no shortage of willing lenders and no funding pressure: the constraint is legislative, not financial.",
+      "onset_indicators": [
+        {"key": "extraordinary_measures_started", "label": "Treasury begins extraordinary measures after hitting the statutory limit", "value": true, "unit": "boolean", "as_of": "2023-01-19", "source_id": "treasury"},
+        {"key": "sovereign_cds_spread", "label": "Sovereign credit default swap spreads at multi-year wides", "value": "elevated", "unit": "category", "as_of": "2023-01-19", "source_id": "cbo-debt-limit"},
+        {"key": "bill_yield_kink", "label": "Bills maturing near the projected exhaustion date trade at a yield concession", "value": true, "unit": "boolean", "as_of": "2023-01-19", "source_id": "treasury"},
+        {"key": "x_date_uncertainty", "label": "Exhaustion date estimate depends on uncertain seasonal tax receipts", "value": true, "unit": "boolean", "as_of": "2023-01-19", "source_id": "cbo-debt-limit"}
+      ],
+      "outcome_summary": "Legislation suspending the limit was signed on 3 June 2023, days before the projected exhaustion date, and no payment was missed. The concession in bills maturing around the date disappeared immediately. One rating agency downgraded the sovereign in August 2023 citing governance, with no observable effect on borrowing costs. Like the 2011 episode, it resolved without financial damage.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Legislation suspending the limit until 2025 with discretionary spending caps; no default, no missed payment and no emergency facility.",
+      "source_refs": [
+        {"id": "treasury", "title": "Debt limit information", "publisher": "US Department of the Treasury", "url": "https://home.treasury.gov/policy-issues/financial-markets-financial-institutions-and-fiscal-service/debt-limit", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "cbo-debt-limit", "title": "Federal debt and the statutory limit", "publisher": "Congressional Budget Office", "url": "https://www.cbo.gov/topics/budget/federal-debt", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "a9c0732d-d294-50bf-80bd-58f0a6df9f71",
+      "slug": "argentina-sovereign-distress-2001",
+      "name": "Argentine convertibility crisis, 2001",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2001-07-11",
+      "peak_date": "2001-12-01",
+      "end_date": "2002-01-06",
+      "geography": "AR",
+      "affected_industries": ["sovereign_finance", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "pre_social_media", "high_inflation"],
+      "is_counterexample": false,
+      "onset_summary": "Country risk spreads pass 1,600 basis points and a Treasury bill auction clears at an annualised 14 percent as the government tries to roll short-term paper. The currency has been fixed one-to-one to the dollar by law for a decade, which anchored inflation but leaves no exchange-rate adjustment available after a large devaluation by the main trading partner; output has contracted for three years, tax receipts are falling, and the provinces issue their own scrip. Bank deposits are dollarised, so any devaluation would bankrupt borrowers whose income is in pesos.",
+      "onset_indicators": [
+        {"key": "country_risk_spread", "label": "Sovereign risk spread over US Treasuries", "value": 1600, "unit": "basis_points", "as_of": "2001-07-11", "source_id": "imf-arg"},
+        {"key": "bill_auction_yield", "label": "Annualised yield at a short-term Treasury bill auction", "value": 14, "unit": "percent", "as_of": "2001-07-11", "source_id": "imf-arg"},
+        {"key": "currency_board_in_law", "label": "One-to-one convertibility with the dollar fixed by statute", "value": true, "unit": "boolean", "as_of": "2001-07-11", "source_id": "bcra"},
+        {"key": "consecutive_recession_years", "label": "Consecutive years of falling output", "value": 3, "unit": "count", "as_of": "2001-06-30", "source_id": "wb-arg"},
+        {"key": "deposit_dollarisation", "label": "Bank deposits and loans denominated in dollars", "value": "majority", "unit": "category", "as_of": "2001-06-30", "source_id": "bcra"}
+      ],
+      "outcome_summary": "Deposit withdrawals forced a freeze on bank accounts in December 2001, riots followed, the president resigned and the country defaulted on about 100 billion dollars of debt at the end of the month, the largest sovereign default to that date. Convertibility was abandoned in January 2002, the peso lost three-quarters of its value, dollar contracts were converted at asymmetric rates, and output fell about 11 percent that year before a strong export-led recovery. The restructuring litigation ran for more than a decade.",
+      "outcomes": ["default", "systemic_crisis", "recession", "regime_change", "recovery"],
+      "resolution_mechanism": "Deposit freeze and capital controls, abandonment of the currency board and devaluation, asymmetric conversion of dollar contracts into pesos, unilateral default followed by coercive exchanges in 2005 and 2010, and a decade of holdout litigation.",
+      "source_refs": [
+        {"id": "imf-arg", "title": "IMF country information: Argentina", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/ARG", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bcra", "title": "Central Bank of Argentina statistics", "publisher": "Banco Central de la Republica Argentina", "url": "https://www.bcra.gob.ar/PublicacionesEstadisticas/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wb-arg", "title": "World Bank data: Argentina", "publisher": "World Bank", "url": "https://data.worldbank.org/country/argentina", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "e02e388b-fca9-52dd-9b5c-b0327adfb8fe",
+      "slug": "russia-gko-default-1998",
+      "name": "Russian domestic debt default, 1998",
+      "episode_type": "sovereign_debt",
+      "onset_date": "1998-05-27",
+      "peak_date": "1998-08-17",
+      "end_date": "1999-01-31",
+      "geography": "RU",
+      "affected_industries": ["sovereign_finance", "banking", "oil_gas"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "pre_social_media", "high_inflation"],
+      "is_counterexample": false,
+      "onset_summary": "The central bank triples its refinancing rate to 150 percent to defend a currency corridor as reserves drain. The state funds itself with very short rouble treasury bills at yields that already exceed 50 percent, so the debt must be rolled every few months and each rollover raises the cost; foreign investors hold a large share of these bills with forward currency hedges written by domestic banks. Oil, which supplies most export revenue, has fallen to about 12 dollars a barrel, and tax collection is chronically weak.",
+      "onset_indicators": [
+        {"key": "refinancing_rate", "label": "Central bank refinancing rate raised to defend the currency corridor", "value": 150, "unit": "percent", "as_of": "1998-05-27", "source_id": "cbr"},
+        {"key": "domestic_bill_yield", "label": "Yield on short-term rouble treasury bills", "value": 50, "unit": "percent", "as_of": "1998-05-27", "source_id": "imf-rus"},
+        {"key": "oil_price", "label": "Crude oil price, the main source of export revenue", "value": 12, "unit": "usd_per_barrel", "as_of": "1998-05-27", "source_id": "fred-oil"},
+        {"key": "foreign_holdings_hedged_locally", "label": "Foreign holders hedged with forward contracts written by domestic banks", "value": true, "unit": "boolean", "as_of": "1998-05-27", "source_id": "imf-rus"}
+      ],
+      "outcome_summary": "On 17 August 1998 Russia devalued, defaulted on its rouble treasury bills and declared a 90-day moratorium on private external debt payments, all at once. Domestic banks that had written the currency forwards failed, inflation reached 84 percent and output fell. The default's global significance was indirect: the flight to quality it triggered destroyed a large US hedge fund and forced an emergency policy response. Russia recovered quickly as oil prices rose.",
+      "outcomes": ["default", "systemic_crisis", "recession", "regime_change", "recovery"],
+      "resolution_mechanism": "Devaluation, unilateral default on domestic debt with a forced restructuring, a moratorium on private external payments, bank failures and a later restructuring of Soviet-era external debt; recovery driven by devaluation and rising oil prices.",
+      "source_refs": [
+        {"id": "cbr", "title": "Bank of Russia statistics", "publisher": "Central Bank of the Russian Federation", "url": "https://www.cbr.ru/eng/statistics/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-rus", "title": "IMF country information: Russian Federation", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/RUS", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-oil", "title": "Crude Oil Prices: West Texas Intermediate (DCOILWTICO)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "8b81cb9f-239c-5e71-bbc0-502c464e499a",
+      "slug": "mexico-peso-crisis-1994",
+      "name": "Mexican peso crisis, 1994",
+      "episode_type": "sovereign_debt",
+      "onset_date": "1994-12-20",
+      "peak_date": "1995-01-31",
+      "end_date": "1995-12-31",
+      "geography": "MX",
+      "affected_industries": ["sovereign_finance", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The authorities widen the currency's trading band by 15 percent, an implicit devaluation, after a year of political shocks and reserve losses. The state has been rolling its short-term debt into dollar-indexed instruments to keep peso yields down, so a devaluation mechanically inflates the debt stock in local terms; roughly 30 billion dollars of these instruments mature within a year against reserves of a few billion. The banking system was privatised recently and has grown credit fast with weak underwriting.",
+      "onset_indicators": [
+        {"key": "band_widened", "label": "Currency trading band widened, an implicit devaluation", "value": 15, "unit": "percent", "as_of": "1994-12-20", "source_id": "banxico"},
+        {"key": "dollar_indexed_short_debt", "label": "Short-term dollar-indexed government paper maturing within a year", "value": 30, "unit": "usd_billions", "as_of": "1994-12-20", "source_id": "imf-mex"},
+        {"key": "fx_reserves", "label": "Foreign exchange reserves", "value": 6, "unit": "usd_billions", "as_of": "1994-12-20", "source_id": "banxico"},
+        {"key": "recent_credit_boom", "label": "Rapid credit growth after bank privatisation with weak underwriting", "value": true, "unit": "boolean", "as_of": "1994-11-30", "source_id": "imf-mex"}
+      ],
+      "outcome_summary": "The peso floated two days later and lost about half its value, the dollar-indexed debt became unpayable, and the sovereign was rescued in January 1995 by a 50 billion dollar package led by the US Treasury's exchange stabilisation fund and the IMF. Output fell more than 6 percent in 1995, the banking system needed a costly rescue, but the loans were repaid early and the crisis did not spread beyond Latin America.",
+      "outcomes": ["bailout", "recession", "systemic_crisis", "recovery"],
+      "resolution_mechanism": "A currency float, a large international support package led by the US Treasury and the IMF used to redeem the dollar-indexed paper, and a state-funded bank rescue programme.",
+      "source_refs": [
+        {"id": "banxico", "title": "Bank of Mexico statistics", "publisher": "Banco de Mexico", "url": "https://www.banxico.org.mx/publicaciones-y-prensa/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-mex", "title": "IMF country information: Mexico", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/MEX", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "frb-mex", "title": "Mexican Peso Crisis", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/mexican-peso-crisis", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "06816ee2-8358-5649-83b2-47172ad4695e",
+      "slug": "latin-american-debt-crisis-1982",
+      "name": "Latin American debt crisis, 1982",
+      "episode_type": "sovereign_debt",
+      "onset_date": "1982-08-12",
+      "peak_date": "1982-08-20",
+      "end_date": "1989-12-31",
+      "geography": "LATAM",
+      "affected_industries": ["sovereign_finance", "banking", "oil_gas", "mining"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_basel", "emerging_market", "pre_social_media", "high_inflation", "floating_exchange_rate"],
+      "is_counterexample": false,
+      "onset_summary": "A large Latin American sovereign informs the US Treasury and the IMF that it cannot meet payments falling due on its external bank debt. The region borrowed heavily from commercial banks through the 1970s at floating rates tied to dollar money markets, recycling oil surpluses; the US policy rate has since been raised to fight inflation, tripling the interest bill, while commodity export prices have fallen and the dollar has strengthened. The nine largest US banks hold claims on the region worth well over their combined capital.",
+      "onset_indicators": [
+        {"key": "sovereign_cannot_pay", "label": "Sovereign notifies creditors it cannot meet payments on external bank debt", "value": true, "unit": "boolean", "as_of": "1982-08-12", "source_id": "frb-latam"},
+        {"key": "us_policy_rate", "label": "US policy rate driving the floating-rate interest bill", "value": 10, "unit": "percent", "as_of": "1982-08-12", "source_id": "fred-fedfunds"},
+        {"key": "money_center_bank_exposure", "label": "Claims on the region held by the largest US banks relative to their capital", "value": "above_capital", "unit": "category", "as_of": "1982-06-30", "source_id": "frb-latam"},
+        {"key": "commodity_export_prices", "label": "Prices of the region's commodity exports", "value": "falling", "unit": "category", "as_of": "1982-06-30", "source_id": "wb-commodities"}
+      ],
+      "outcome_summary": "More than a dozen countries suspended payments. Rather than write the loans down, regulators allowed banks to carry them at face value while the IMF arranged rescheduling with austerity conditions, protecting the banking system at the cost of a lost decade in Latin America: falling real incomes, hyperinflations and repeated reschedulings. The debts were finally written down through Brady bonds from 1989.",
+      "outcomes": ["default", "recession", "systemic_crisis", "regime_change"],
+      "resolution_mechanism": "Successive IMF programmes with reschedulings and austerity, regulatory forbearance letting creditor banks avoid writedowns, and eventually the Brady plan exchanging bank loans for collateralised bonds with principal reduction.",
+      "source_refs": [
+        {"id": "frb-latam", "title": "Latin American Debt Crisis of the 1980s", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/latin-american-debt-crisis", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-fedfunds", "title": "Federal Funds Effective Rate (FEDFUNDS)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/FEDFUNDS", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "wb-commodities", "title": "World Bank commodity price data", "publisher": "World Bank", "url": "https://www.worldbank.org/en/research/commodity-markets", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "6c81b07c-f12d-5bbe-9784-2fdd46fbec4b",
+      "slug": "sri-lanka-reserve-collapse-2022",
+      "name": "Sri Lankan reserve collapse, 2022",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2022-03-07",
+      "peak_date": "2022-07-09",
+      "end_date": "2023-03-20",
+      "geography": "LK",
+      "affected_industries": ["sovereign_finance", "tourism", "energy", "agriculture"],
+      "regime_tags": ["post_fiat", "post_qe", "emerging_market", "post_social_media", "high_inflation", "fixed_exchange_rate"],
+      "is_counterexample": false,
+      "onset_summary": "Usable foreign reserves fall to a few weeks of imports and the country begins rationing fuel and electricity because it cannot open letters of credit for cargoes waiting offshore. Tourism revenue, a main source of foreign currency, has not recovered from the pandemic; deep tax cuts made three years ago hollowed out revenue; a sudden ban on chemical fertiliser cut the rice and tea harvests. External debt is largely in dollars, held by bondholders and bilateral lenders, with heavy amortisation due within the year, and the currency is being held at an unsustainable peg.",
+      "onset_indicators": [
+        {"key": "usable_reserves_import_cover", "label": "Usable foreign reserves in weeks of import cover", "value": 3, "unit": "weeks", "as_of": "2022-02-28", "source_id": "cbsl"},
+        {"key": "fuel_rationing", "label": "Fuel and electricity rationing because import letters of credit cannot be opened", "value": true, "unit": "boolean", "as_of": "2022-03-07", "source_id": "cbsl"},
+        {"key": "external_amortisation_due", "label": "External debt service falling due within the year", "value": 7, "unit": "usd_billions", "as_of": "2022-03-07", "source_id": "imf-lka"},
+        {"key": "revenue_to_gdp", "label": "Government revenue after the 2019 tax cuts", "value": 8, "unit": "percent_of_gdp", "as_of": "2021-12-31", "source_id": "imf-lka"},
+        {"key": "fertiliser_import_ban", "label": "Ban on chemical fertiliser imports cutting agricultural output", "value": true, "unit": "boolean", "as_of": "2021-12-31", "source_id": "wb-lka"}
+      ],
+      "outcome_summary": "The currency was floated in March 2022 and halved, inflation exceeded 60 percent, and the government suspended payments on its external debt in April 2022 in the country's first default. Mass protests forced the president to flee and resign in July. An IMF programme followed in March 2023 with a domestic debt restructuring and a bondholder exchange completed in 2024; inflation and the currency stabilised faster than expected.",
+      "outcomes": ["default", "systemic_crisis", "recession", "regime_change", "bailout"],
+      "resolution_mechanism": "Currency float, unilateral suspension of external debt service, an IMF extended fund facility with revenue reform, domestic debt optimisation and a negotiated bondholder exchange with bilateral creditor assurances.",
+      "source_refs": [
+        {"id": "cbsl", "title": "Central Bank of Sri Lanka statistics", "publisher": "Central Bank of Sri Lanka", "url": "https://www.cbsl.gov.lk/en/statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-lka", "title": "IMF country information: Sri Lanka", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/LKA", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "wb-lka", "title": "World Bank data: Sri Lanka", "publisher": "World Bank", "url": "https://data.worldbank.org/country/sri-lanka", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "c7115afb-bf8b-539c-91e1-9a8a62b34235",
+      "slug": "latvia-internal-devaluation-2008",
+      "name": "Latvian internal devaluation, 2008",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2008-11-08",
+      "peak_date": "2009-06-30",
+      "end_date": "2011-12-19",
+      "geography": "LV",
+      "affected_industries": ["sovereign_finance", "banking", "construction", "real_estate"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "advanced_economy", "pre_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "The state takes over the largest domestically owned bank after a deposit run, and asks the IMF and the European Union for support. The economy ran a current-account deficit near 20 percent of output during a credit boom financed by Nordic parent banks, and most household mortgages are denominated in euros while incomes are in lats, so devaluing the peg would bankrupt the borrowers it was supposed to help. The government has committed to keeping the peg and joining the euro, which leaves only wage and price cuts as the adjustment channel.",
+      "onset_indicators": [
+        {"key": "current_account_deficit", "label": "Current-account deficit at the peak of the credit boom", "value": 20, "unit": "percent_of_gdp", "as_of": "2007-12-31", "source_id": "imf-lva"},
+        {"key": "fx_denominated_mortgages", "label": "Household mortgages denominated in euros while incomes are in local currency", "value": "majority", "unit": "category", "as_of": "2008-09-30", "source_id": "bank-lv"},
+        {"key": "state_takeover_of_bank", "label": "State takes over the largest domestically owned bank after a deposit run", "value": true, "unit": "boolean", "as_of": "2008-11-08", "source_id": "bank-lv"},
+        {"key": "peg_commitment", "label": "Government commits to the currency peg and the euro path", "value": true, "unit": "boolean", "as_of": "2008-11-08", "source_id": "imf-lva"}
+      ],
+      "outcome_summary": "Latvia held the peg. Output fell about 20 percent in two years and public wages were cut by a third, but the EU/IMF programme succeeded: growth resumed in 2011, the programme was exited without drawing the full amount, and the country adopted the euro in 2014. It is the reference case that fixed-rate adjustment through wages, though brutal, does not require devaluation or default.",
+      "outcomes": ["recession", "bailout", "recovery", "contained"],
+      "resolution_mechanism": "An EU/IMF programme built around holding the peg, with front-loaded fiscal consolidation and public wage cuts (internal devaluation), bank resolution, and Nordic parent-bank commitments to maintain exposure.",
+      "source_refs": [
+        {"id": "imf-lva", "title": "IMF country information: Latvia", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/LVA", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bank-lv", "title": "Bank of Latvia publications", "publisher": "Latvijas Banka", "url": "https://www.bank.lv/en/publications", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wb-lva", "title": "World Bank data: Latvia", "publisher": "World Bank", "url": "https://data.worldbank.org/country/latvia", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    }
+  ]
+}

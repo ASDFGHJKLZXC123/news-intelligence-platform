@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "file": "06_geopolitical",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "0278a909-b8d8-5dd8-bd58-caca737fcf69",
+      "slug": "september-11-attacks-2001",
+      "name": "September 11 attacks, 2001",
+      "episode_type": "geopolitical",
+      "onset_date": "2001-09-11",
+      "peak_date": "2001-09-17",
+      "end_date": "2001-09-28",
+      "geography": "US",
+      "affected_industries": ["airlines", "insurance", "banking", "tourism", "defense", "exchanges"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": false,
+      "onset_summary": "Coordinated attacks destroy the World Trade Center and strike the Pentagon, killing thousands. US airspace is closed and the equity exchanges do not open; the destruction sits on top of the financial district's own infrastructure, disabling clearing systems and forcing the government securities market to settle by hand. Airlines have no revenue while grounded, insurers face the largest man-made loss ever recorded, and no one knows whether more attacks are coming. The economy was already slowing into a recession that began in March.",
+      "onset_indicators": [
+        {"key": "markets_closed", "label": "Days the equity exchanges remained closed", "value": 4, "unit": "days", "as_of": "2001-09-11", "source_id": "sec-911"},
+        {"key": "airspace_closed", "label": "National airspace closed to commercial traffic", "value": true, "unit": "boolean", "as_of": "2001-09-11", "source_id": "faa"},
+        {"key": "payment_infrastructure_damaged", "label": "Clearing and settlement infrastructure in the financial district disabled", "value": true, "unit": "boolean", "as_of": "2001-09-11", "source_id": "frb-911"},
+        {"key": "recession_already_underway", "label": "The economy had already entered recession earlier in the year", "value": true, "unit": "boolean", "as_of": "2001-09-11", "source_id": "nber"}
+      ],
+      "outcome_summary": "The Federal Reserve lent record amounts through the discount window and opened swap lines, markets reopened after four days and equities fell about 12 percent that week before recovering the loss within a month. Insured losses were roughly 40 billion dollars, airlines received a 15 billion dollar federal support package and two large carriers later failed. The recession ended in November 2001. The lasting effects were institutional: a new security state, two wars, and permanent changes to aviation and payments resilience.",
+      "outcomes": ["contained", "recession", "recovery", "regime_change", "bailout"],
+      "resolution_mechanism": "Massive central-bank liquidity and swap lines to keep payment systems functioning, a rapid reopening of markets, federal financial support for airlines and a compensation fund for victims.",
+      "source_refs": [
+        {"id": "frb-911", "title": "Federal Reserve response to the September 11 attacks", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/newsevents/pressreleases/2001press.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-911", "title": "SEC market reopening actions", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/news/pressreleases", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "faa", "title": "FAA air traffic operations records", "publisher": "US Federal Aviation Administration", "url": "https://www.faa.gov/data_research", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "nber", "title": "NBER business cycle dating", "publisher": "National Bureau of Economic Research", "url": "https://www.nber.org/research/business-cycle-dating", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "c148f914-eeb4-5a7c-ba4c-f2042bb8b525",
+      "slug": "russia-invasion-of-ukraine-2022",
+      "name": "Russian invasion of Ukraine, 2022",
+      "episode_type": "geopolitical",
+      "onset_date": "2022-02-24",
+      "peak_date": "2022-03-08",
+      "end_date": "2023-12-31",
+      "geography": "UA",
+      "affected_industries": ["energy", "natural_gas", "agriculture", "metals", "defense", "banking", "commodities_trading"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "emerging_market", "high_inflation"],
+      "is_counterexample": false,
+      "onset_summary": "A nuclear-armed state invades its neighbour in the largest land war in Europe since 1945. The invaded country is a major exporter of wheat, maize and sunflower oil and its Black Sea ports are blockaded; the invader supplies a large share of Europe's gas, oil, nickel, palladium and fertiliser. Sanctions freezing roughly half the invader's central-bank reserves are announced within days, which is unprecedented against a major economy and puts every commodity contract with a Russian counterparty into question. Energy and food prices are already elevated after the pandemic.",
+      "onset_indicators": [
+        {"key": "central_bank_reserves_frozen", "label": "Share of the invading state's central bank reserves immobilised by sanctions", "value": 50, "unit": "percent", "as_of": "2022-02-28", "source_id": "eu-sanctions"},
+        {"key": "european_gas_dependence", "label": "Share of European gas supplied by the invading state", "value": 40, "unit": "percent", "as_of": "2021-12-31", "source_id": "ec-energy"},
+        {"key": "grain_export_share", "label": "Combined share of world wheat exports from the two countries", "value": 25, "unit": "percent", "as_of": "2021-12-31", "source_id": "fao"},
+        {"key": "black_sea_ports_blockaded", "label": "Grain export ports blockaded", "value": true, "unit": "boolean", "as_of": "2022-02-26", "source_id": "unctad"}
+      ],
+      "outcome_summary": "Energy and food prices spiked and then fell back within a year; European gas prices peaked in August 2022 and were below pre-war levels by mid-2023. Europe avoided both rationing and recession in 2022, but inflation reached double digits and forced the fastest central-bank tightening in four decades. The invaded economy lost about a third of its output in 2022. The war did not spread beyond the two countries, and the feared global food crisis was averted by a grain corridor and rerouted exports.",
+      "outcomes": ["systemic_crisis", "contained", "regime_change"],
+      "resolution_mechanism": "Coordinated sanctions and reserve immobilisation, emergency European energy substitution and demand reduction, a negotiated Black Sea grain corridor, and sustained fiscal and military support to the invaded state; the war itself remained unresolved.",
+      "source_refs": [
+        {"id": "eu-sanctions", "title": "EU sanctions against Russia", "publisher": "Council of the European Union", "url": "https://www.consilium.europa.eu/en/policies/sanctions-against-russia/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ec-energy", "title": "European Commission energy security data", "publisher": "European Commission", "url": "https://energy.ec.europa.eu/topics/energy-security_en", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fao", "title": "FAO food price index and market reports", "publisher": "Food and Agriculture Organization of the United Nations", "url": "https://www.fao.org/worldfoodsituation/foodpricesindex/en/", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "unctad", "title": "Review of Maritime Transport", "publisher": "United Nations Conference on Trade and Development", "url": "https://unctad.org/topic/transport-and-trade-logistics/review-of-maritime-transport", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "d954772e-ae7c-592e-98fa-67533cca7e19",
+      "slug": "crimea-annexation-sanctions-2014",
+      "name": "Crimea annexation and sanctions, 2014",
+      "episode_type": "geopolitical",
+      "onset_date": "2014-03-01",
+      "peak_date": "2014-12-16",
+      "end_date": "2015-12-31",
+      "geography": "RU",
+      "affected_industries": ["energy", "oil_gas", "banking", "defense", "agriculture"],
+      "regime_tags": ["post_fiat", "post_qe", "emerging_market", "post_social_media", "floating_exchange_rate", "globalized_supply_chain"],
+      "is_counterexample": false,
+      "onset_summary": "Unmarked troops take control of a neighbouring country's peninsula and its parliament authorises the use of force abroad. Western governments begin with targeted asset freezes and travel bans on individuals, and the market question is how far sanctions will go: the economy is a major oil and gas exporter, its banks and companies have roughly 700 billion dollars of external debt largely funded in dollar and euro markets, and its central bank holds substantial reserves. Capital flight is accelerating and the currency is under pressure.",
+      "onset_indicators": [
+        {"key": "external_debt", "label": "External debt of banks and corporates, mostly in foreign currency", "value": 700, "unit": "usd_billions", "as_of": "2014-01-01", "source_id": "cbr"},
+        {"key": "targeted_sanctions_imposed", "label": "Initial sanctions limited to individuals and entities", "value": true, "unit": "boolean", "as_of": "2014-03-06", "source_id": "ofac"},
+        {"key": "capital_flight", "label": "Net private capital outflow accelerating", "value": "accelerating", "unit": "category", "as_of": "2014-03-10", "source_id": "cbr"},
+        {"key": "hydrocarbon_export_share", "label": "Share of export revenue from oil and gas", "value": 65, "unit": "percent", "as_of": "2013-12-31", "source_id": "imf-rus"}
+      ],
+      "outcome_summary": "Sectoral sanctions cut the largest banks and energy companies off from Western capital markets in July 2014, and the oil price then halved for unrelated reasons. The currency lost about half its value, the central bank raised rates to 17 percent overnight in December 2014 and let the rouble float, output fell about 2 percent in 2015 and inflation reached 16 percent. The economy stabilised within two years under a floating currency and import substitution rather than collapsing.",
+      "outcomes": ["recession", "contained", "regime_change"],
+      "resolution_mechanism": "Adjustment rather than rescue: a currency float, an emergency rate rise to 17 percent, bank recapitalisation from the sovereign wealth fund, fiscal restraint and import substitution under continuing sanctions.",
+      "source_refs": [
+        {"id": "ofac", "title": "Ukraine-/Russia-related sanctions programs", "publisher": "US Department of the Treasury, Office of Foreign Assets Control", "url": "https://ofac.treasury.gov/sanctions-programs-and-country-information", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "cbr", "title": "Bank of Russia statistics", "publisher": "Central Bank of the Russian Federation", "url": "https://www.cbr.ru/eng/statistics/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-rus", "title": "IMF country information: Russian Federation", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/RUS", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "943aeb8c-5cbc-5f2c-bfb2-9dae3fde45e8",
+      "slug": "brexit-referendum-shock-2016",
+      "name": "UK referendum on EU membership, 2016",
+      "episode_type": "geopolitical",
+      "onset_date": "2016-06-24",
+      "peak_date": "2016-06-27",
+      "end_date": "2016-12-31",
+      "geography": "GB",
+      "affected_industries": ["banking", "asset_management", "real_estate", "manufacturing", "retail"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "advanced_economy", "post_social_media", "basel_iii", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "Voters decide to leave the European Union against the expectation priced by markets and bookmakers the previous evening. Sterling falls about 8 percent overnight, the largest one-day fall in its modern history, the prime minister resigns, and the country's terms of trade with its largest partner become undefined for an unspecified number of years. The economy runs a current-account deficit near 5 percent of output and depends on foreign capital inflows; open-ended property funds hold illiquid buildings against daily-dealing shares.",
+      "onset_indicators": [
+        {"key": "sterling_one_day_move", "label": "Single-day decline in the currency against the dollar", "value": 8, "unit": "percent", "as_of": "2016-06-24", "source_id": "boe-brexit"},
+        {"key": "current_account_deficit", "label": "Current-account deficit requiring continuing foreign inflows", "value": 5, "unit": "percent_of_gdp", "as_of": "2016-03-31", "source_id": "ons"},
+        {"key": "trade_terms_undefined", "label": "Future trading relationship with the largest partner undefined", "value": true, "unit": "boolean", "as_of": "2016-06-24", "source_id": "boe-brexit"},
+        {"key": "open_ended_property_funds", "label": "Daily-dealing property funds holding illiquid assets", "value": true, "unit": "boolean", "as_of": "2016-06-24", "source_id": "boe-fsr"}
+      ],
+      "outcome_summary": "Several property funds gated within a fortnight, but no bank or insurer failed, the payments system was untouched and there was no recession: the economy grew about 2 percent in 2016. The central bank cut rates and restarted asset purchases in August as a precaution, and sterling settled about 10 percent lower, boosting exporters and imported inflation. The economic damage was real but slow, showing up over years as lower investment and trade intensity, not as a crisis.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "Precautionary monetary easing and liquidity provision, a lower exchange rate absorbing the shock, and temporary gating of illiquid open-ended funds; no financial institution required support.",
+      "source_refs": [
+        {"id": "boe-brexit", "title": "Bank of England statements following the EU referendum", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/news/2016", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "boe-fsr", "title": "Financial Stability Report", "publisher": "Bank of England", "url": "https://www.bankofengland.co.uk/financial-stability-report", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ons", "title": "UK economic accounts", "publisher": "UK Office for National Statistics", "url": "https://www.ons.gov.uk/economy", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "ed8790ec-9c49-5df9-b6e0-04b35dadc297",
+      "slug": "us-china-tariff-escalation-2018",
+      "name": "US-China tariff escalation, 2018-2019",
+      "episode_type": "geopolitical",
+      "onset_date": "2018-03-22",
+      "peak_date": "2019-08-23",
+      "end_date": "2020-01-15",
+      "geography": "GLOBAL",
+      "affected_industries": ["manufacturing", "agriculture", "semiconductors", "technology", "retail", "logistics"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "The United States announces tariffs on about 50 billion dollars of Chinese imports following an investigation into technology transfer and intellectual property, and China immediately promises to retaliate in kind. Supply chains are built on the assumption that the tariff between the two largest economies is near zero and stable; retaliation is aimed at politically sensitive agricultural exports. Business investment plans depend on a trade regime that can now change by announcement, and the tariff schedule is being set unilaterally rather than through the dispute-settlement system.",
+      "onset_indicators": [
+        {"key": "tariff_scope_announced", "label": "Value of imports covered by the first announced tariffs", "value": 50, "unit": "usd_billions", "as_of": "2018-03-22", "source_id": "ustr"},
+        {"key": "retaliation_promised", "label": "Immediate promise of proportionate retaliation", "value": true, "unit": "boolean", "as_of": "2018-03-23", "source_id": "wto"},
+        {"key": "supply_chain_tariff_assumption", "label": "Supply chains built on a near-zero, stable bilateral tariff", "value": true, "unit": "boolean", "as_of": "2018-03-22", "source_id": "wto"},
+        {"key": "agricultural_exports_targeted", "label": "Retaliation aimed at politically sensitive agricultural exports", "value": true, "unit": "boolean", "as_of": "2018-04-04", "source_id": "usda"}
+      ],
+      "outcome_summary": "Tariffs eventually covered hundreds of billions of dollars of trade on both sides and a partial agreement was signed in January 2020. The macroeconomic damage was modest: growth in both economies continued, US inflation barely moved, and the main measurable costs fell on US farmers, who were compensated with about 28 billion dollars of federal payments, and on business investment, which stalled amid uncertainty. Trade was rerouted through third countries rather than eliminated.",
+      "outcomes": ["contained", "regime_change"],
+      "resolution_mechanism": "A negotiated partial agreement freezing further escalation with purchase commitments, federal compensation payments to affected farmers, and rerouting of trade through third countries; most tariffs remained in place.",
+      "source_refs": [
+        {"id": "ustr", "title": "Section 301 investigation and actions", "publisher": "Office of the United States Trade Representative", "url": "https://ustr.gov/issue-areas/enforcement/section-301-investigations", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "wto", "title": "WTO trade statistics and dispute records", "publisher": "World Trade Organization", "url": "https://www.wto.org/english/res_e/statis_e/statis_e.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "usda", "title": "USDA agricultural trade data and market facilitation program", "publisher": "US Department of Agriculture", "url": "https://www.usda.gov/topics/trade", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "70e02c6a-2db4-56a3-96f8-e6e2e3a77883",
+      "slug": "cuban-missile-crisis-1962",
+      "name": "Cuban missile crisis, 1962",
+      "episode_type": "geopolitical",
+      "onset_date": "1962-10-22",
+      "peak_date": "1962-10-27",
+      "end_date": "1962-11-20",
+      "geography": "GLOBAL",
+      "affected_industries": ["defense", "exchanges", "commodities_trading", "banking"],
+      "regime_tags": ["gold_standard", "bretton_woods", "pre_qe", "pre_social_media", "advanced_economy", "fixed_exchange_rate"],
+      "is_counterexample": true,
+      "onset_summary": "The US president tells the public that Soviet nuclear missiles have been placed 90 miles from Florida and announces a naval quarantine of the island, with a declared readiness to respond to any launch with full retaliation. Two nuclear-armed superpowers are now in direct military confrontation with ships approaching a blockade line and no reliable channel of communication between the leaderships. Equity markets fall, gold demand rises, and there is no historical precedent that can be used to price the tail.",
+      "onset_indicators": [
+        {"key": "public_confrontation_declared", "label": "Nuclear confrontation announced publicly with a naval quarantine", "value": true, "unit": "boolean", "as_of": "1962-10-22", "source_id": "state-dept"},
+        {"key": "direct_communication_channel", "label": "A reliable direct communication channel between the leaderships exists", "value": false, "unit": "boolean", "as_of": "1962-10-22", "source_id": "state-dept"},
+        {"key": "equity_market_decline", "label": "Equity market decline in the days around the announcement", "value": "sharp", "unit": "category", "as_of": "1962-10-23", "source_id": "frb-1962"},
+        {"key": "no_pricing_precedent", "label": "No precedent exists for pricing a nuclear-exchange tail risk", "value": true, "unit": "boolean", "as_of": "1962-10-22", "source_id": "frb-1962"}
+      ],
+      "outcome_summary": "The crisis was resolved in six days by a negotiated withdrawal of the missiles in exchange for a public non-invasion pledge and a private removal of US missiles from Turkey. Markets recovered all of their losses within weeks and 1962 ended without economic disruption. The confrontation produced the Moscow-Washington hotline and the partial test ban treaty: the highest-stakes geopolitical episode on record, with no economic consequence at all.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Direct negotiation producing a public missile withdrawal and non-invasion guarantee, with a secret reciprocal withdrawal; followed by the establishment of a crisis communication hotline.",
+      "source_refs": [
+        {"id": "state-dept", "title": "Foreign Relations of the United States: Cuban Missile Crisis", "publisher": "US Department of State, Office of the Historian", "url": "https://history.state.gov/historicaldocuments/frus1961-63v11", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-1962", "title": "Federal Reserve historical statistics", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/SP500", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "f387d10f-ff7c-5fea-8005-6a6023e3f4b7",
+      "slug": "egypt-uprising-2011",
+      "name": "Egyptian uprising, 2011",
+      "episode_type": "geopolitical",
+      "onset_date": "2011-01-25",
+      "peak_date": "2011-02-11",
+      "end_date": "2013-07-03",
+      "geography": "EG",
+      "affected_industries": ["tourism", "shipping", "banking", "sovereign_finance", "energy"],
+      "regime_tags": ["post_fiat", "post_qe", "emerging_market", "post_social_media", "fixed_exchange_rate"],
+      "is_counterexample": false,
+      "onset_summary": "Mass protests fill the capital's central square demanding the president's resignation, after a similar uprising toppled a neighbouring government weeks earlier. The state closes the banks and the stock exchange and shuts down the internet. Tourism and Suez Canal fees are the country's main foreign-currency earners alongside remittances; the currency is managed against the dollar with reserves that cover a few months of imports, and food subsidies consume a large share of a budget that is already in deficit. Global wheat prices are near record highs.",
+      "onset_indicators": [
+        {"key": "exchange_and_banks_closed", "label": "Banks and the stock exchange closed by the authorities", "value": true, "unit": "boolean", "as_of": "2011-01-27", "source_id": "cbe"},
+        {"key": "tourism_share_of_fx", "label": "Tourism as a share of foreign-currency earnings", "value": "large", "unit": "category", "as_of": "2010-12-31", "source_id": "imf-egy"},
+        {"key": "reserve_import_cover", "label": "Foreign reserves in months of import cover", "value": 7, "unit": "months", "as_of": "2010-12-31", "source_id": "cbe"},
+        {"key": "wheat_price", "label": "Global wheat prices, the key input to subsidised bread", "value": "near_record", "unit": "category", "as_of": "2011-01-25", "source_id": "fao"}
+      ],
+      "outcome_summary": "The president resigned after eighteen days and the military took power, followed by an elected government, a coup in 2013 and years of instability. Tourism receipts fell by roughly a third, reserves fell from 36 billion to under 15 billion dollars, and the country depended on Gulf deposits before eventually floating the currency and taking an IMF programme in 2016. The canal kept operating throughout and the global effect was limited to a temporary oil risk premium.",
+      "outcomes": ["regime_change", "recession", "bailout", "contained"],
+      "resolution_mechanism": "Political transition through military rule and elections, Gulf state deposits and grants financing the external gap, and eventually a currency float with an IMF programme in 2016.",
+      "source_refs": [
+        {"id": "cbe", "title": "Central Bank of Egypt statistics", "publisher": "Central Bank of Egypt", "url": "https://www.cbe.org.eg/en/economic-research/statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-egy", "title": "IMF country information: Egypt", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/EGY", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fao", "title": "FAO food price index", "publisher": "Food and Agriculture Organization of the United Nations", "url": "https://www.fao.org/worldfoodsituation/foodpricesindex/en/", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "4f2b52f1-889b-543e-a1c0-c738e4abffb7",
+      "slug": "korean-peninsula-nuclear-tension-2017",
+      "name": "Korean peninsula nuclear tension, 2017",
+      "episode_type": "geopolitical",
+      "onset_date": "2017-08-08",
+      "peak_date": "2017-09-15",
+      "end_date": "2018-04-27",
+      "geography": "KR",
+      "affected_industries": ["semiconductors", "electronics", "shipping", "defense", "manufacturing"],
+      "regime_tags": ["post_fiat", "post_qe", "advanced_economy", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": true,
+      "onset_summary": "The US president threatens fire and fury against North Korea, which responds by announcing a plan to fire missiles toward Guam; the North has tested an intercontinental missile twice in the preceding month and conducts a large nuclear test in September. South Korea hosts the world's largest memory-chip and display fabrication capacity and a large share of shipbuilding within artillery range of the border. Markets price the risk through the won and Korean credit default swaps, and there is no functioning diplomatic channel.",
+      "onset_indicators": [
+        {"key": "icbm_tests", "label": "Intercontinental ballistic missile tests in the preceding month", "value": 2, "unit": "count", "as_of": "2017-08-08", "source_id": "un-dprk"},
+        {"key": "explicit_military_threats", "label": "Explicit military threats exchanged publicly by both leaderships", "value": true, "unit": "boolean", "as_of": "2017-08-08", "source_id": "un-dprk"},
+        {"key": "chip_capacity_at_risk", "label": "Share of world memory-chip capacity located in the exposed economy", "value": "large", "unit": "category", "as_of": "2017-08-08", "source_id": "bok"},
+        {"key": "sovereign_cds", "label": "Sovereign credit default swap spreads of the exposed economy", "value": "widening", "unit": "category", "as_of": "2017-08-11", "source_id": "bok"}
+      ],
+      "outcome_summary": "No conflict occurred. Korean equities and the won fell modestly in August and recovered by October; the memory-chip cycle had its strongest year on record. Diplomacy reopened at the Winter Olympics in February 2018 and led to summits that year. The episode is a clean case of an extremely alarming military confrontation with essentially no lasting financial effect, useful as a base rate against which to judge later escalations.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "De-escalation through diplomacy: Olympic-mediated contacts, inter-Korean and US summits, and a suspension of testing; no military action and no economic disruption.",
+      "source_refs": [
+        {"id": "un-dprk", "title": "Security Council sanctions committee reports on the DPRK", "publisher": "United Nations", "url": "https://www.un.org/securitycouncil/sanctions/1718", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "bok", "title": "Bank of Korea economic statistics", "publisher": "Bank of Korea", "url": "https://www.bok.or.kr/eng/main/main.do", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "9ed2290a-2087-561e-aace-623d2fedb3b3",
+      "slug": "israel-gaza-war-energy-risk-2023",
+      "name": "Israel-Gaza war and regional energy risk, 2023",
+      "episode_type": "geopolitical",
+      "onset_date": "2023-10-07",
+      "peak_date": "2023-10-20",
+      "end_date": "2024-06-30",
+      "geography": "MENA",
+      "affected_industries": ["oil_gas", "natural_gas", "shipping", "defense", "tourism"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "emerging_market", "high_inflation"],
+      "is_counterexample": true,
+      "onset_summary": "A large-scale attack from Gaza kills more than a thousand people in Israel and is followed by a declaration of war and a ground campaign. The immediate market question is escalation: whether Iran and its regional partners enter the war, which would put the Strait of Hormuz and roughly a fifth of world oil supply at risk. Israel shuts an offshore gas field that supplies Egypt, Brent rises about 4 percent, and the region's shipping lanes carry a large share of world trade. Oil markets are well supplied and OPEC spare capacity is unusually high.",
+      "onset_indicators": [
+        {"key": "escalation_risk_to_hormuz", "label": "Risk that escalation reaches the strait carrying a fifth of world oil", "value": true, "unit": "boolean", "as_of": "2023-10-09", "source_id": "iea"},
+        {"key": "brent_move", "label": "Increase in the benchmark crude price in the first session", "value": 4, "unit": "percent", "as_of": "2023-10-09", "source_id": "fred-brent"},
+        {"key": "gas_field_shut", "label": "Offshore gas field supplying a neighbouring country shut as a precaution", "value": true, "unit": "boolean", "as_of": "2023-10-09", "source_id": "ec-energy"},
+        {"key": "opec_spare_capacity", "label": "Producer group spare capacity available to offset a disruption", "value": "high", "unit": "category", "as_of": "2023-09-30", "source_id": "iea"}
+      ],
+      "outcome_summary": "The feared oil shock did not happen: no producing infrastructure was hit, Hormuz stayed open, and Brent was lower at the end of 2023 than on the day of the attack. The war's economic transmission ran instead through Red Sea shipping attacks that raised freight rates without causing shortages. The regional human and fiscal costs were severe, but the global macroeconomic effect was negligible, contrary to almost every published scenario.",
+      "outcomes": ["contained"],
+      "resolution_mechanism": "No global economic mechanism was required: ample spare oil capacity, no strike on energy infrastructure, and rerouting of shipping absorbed the disruption; the conflict itself remained unresolved.",
+      "source_refs": [
+        {"id": "iea", "title": "IEA oil market reports", "publisher": "International Energy Agency", "url": "https://www.iea.org/topics/oil", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-brent", "title": "Crude Oil Prices: Brent - Europe (DCOILBRENTEU)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "ec-energy", "title": "European Commission energy security data", "publisher": "European Commission", "url": "https://energy.ec.europa.eu/topics/energy-security_en", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "494c34d3-dc23-5306-8c09-47c10f09bee8",
+      "slug": "taiwan-strait-military-exercises-2022",
+      "name": "Taiwan Strait military exercises, 2022",
+      "episode_type": "geopolitical",
+      "onset_date": "2022-08-02",
+      "peak_date": "2022-08-07",
+      "end_date": "2022-08-14",
+      "geography": "TW",
+      "affected_industries": ["semiconductors", "electronics", "shipping", "defense", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "post_social_media", "advanced_economy"],
+      "is_counterexample": true,
+      "onset_summary": "China announces live-fire military exercises encircling Taiwan in response to a visit by the US House speaker, with declared closure zones that overlap the island's ports and the shipping lanes carrying its exports. The island fabricates the large majority of the world's most advanced logic chips, with no substitute capacity anywhere; a blockade lasting weeks would halt production of most electronics globally. Markets must price the difference between a demonstration and a quarantine, with no way to distinguish them in advance.",
+      "onset_indicators": [
+        {"key": "exercise_zones_overlap_ports", "label": "Declared live-fire zones overlapping the island's ports and shipping lanes", "value": true, "unit": "boolean", "as_of": "2022-08-02", "source_id": "mofa-tw"},
+        {"key": "advanced_chip_share", "label": "Share of world leading-edge logic chip fabrication on the island", "value": 90, "unit": "percent", "as_of": "2022-06-30", "source_id": "commerce-chips"},
+        {"key": "substitute_capacity", "label": "Substitute fabrication capacity available elsewhere", "value": false, "unit": "boolean", "as_of": "2022-08-02", "source_id": "commerce-chips"},
+        {"key": "blockade_vs_demonstration_ambiguity", "label": "No way to distinguish a demonstration from the start of a quarantine in advance", "value": true, "unit": "boolean", "as_of": "2022-08-02", "source_id": "mofa-tw"}
+      ],
+      "outcome_summary": "The exercises ended after about a week, shipping was rerouted for days without significant delay, and chip production was never interrupted. Taiwanese equities fell about 3 percent and recovered within weeks. The episode raised the perceived tail risk permanently, accelerating subsidised chip fabrication in the US, Japan and Europe, but caused no measurable economic damage at the time.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "The exercises lapsed on their announced schedule; shipping rerouted temporarily and no quarantine was imposed. The durable response was policy: state-subsidised diversification of chip fabrication capacity.",
+      "source_refs": [
+        {"id": "mofa-tw", "title": "Maritime and aviation notices during the August 2022 exercises", "publisher": "International Maritime Organization", "url": "https://www.imo.org/en/OurWork/Safety/Pages/default.aspx", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "commerce-chips", "title": "Semiconductor supply chain assessment", "publisher": "US Department of Commerce", "url": "https://www.commerce.gov/data-and-reports", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    }
+  ]
+}

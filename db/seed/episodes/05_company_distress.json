@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "file": "05_company_distress",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "1c90d0f4-a95b-5405-8ac8-c27518db37b7",
+      "slug": "aig-collateral-calls-2008",
+      "name": "AIG collateral call spiral, September 2008",
+      "episode_type": "company_distress",
+      "parent_slug": "arc-global-financial-crisis-2007-2009",
+      "onset_date": "2008-09-12",
+      "peak_date": "2008-09-16",
+      "end_date": "2008-11-10",
+      "geography": "US",
+      "affected_industries": ["insurance", "banking", "asset_management"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A triple-A rated insurance group faces mounting collateral calls on credit default swaps its financial products unit wrote on mortgage-linked collateralised debt obligations, and the rating agencies signal a downgrade that would trigger tens of billions more. The contracts were written without reserves against them, because the unit treated a triple-A counterparty rating as a substitute for posting collateral, and it is not regulated as an insurer. The group also lent out its insurance subsidiaries' securities and reinvested the cash in mortgage paper it now cannot sell.",
+      "onset_indicators": [
+        {"key": "cds_notional_written", "label": "Notional of credit default protection written on structured mortgage products", "value": 440, "unit": "usd_billions", "as_of": "2008-06-30", "source_id": "fcic"},
+        {"key": "downgrade_trigger", "label": "A rating downgrade would trigger tens of billions in additional collateral", "value": true, "unit": "boolean", "as_of": "2008-09-12", "source_id": "gao-aig"},
+        {"key": "no_reserves_against_swaps", "label": "Protection written without reserves, relying on the group's own rating", "value": true, "unit": "boolean", "as_of": "2008-09-12", "source_id": "fcic"},
+        {"key": "securities_lending_reinvestment", "label": "Securities-lending cash reinvested in illiquid mortgage paper", "value": true, "unit": "boolean", "as_of": "2008-06-30", "source_id": "gao-aig"}
+      ],
+      "outcome_summary": "The downgrade came on 15 September and the group could not meet the calls. The Federal Reserve lent 85 billion dollars against a 79.9 percent equity stake, the first rescue of a non-bank in this crisis, and the total commitment rose to about 182 billion dollars. Counterparties were paid at par, which became the most criticised decision of the crisis. The government eventually exited at a profit and the swaps unit was wound down.",
+      "outcomes": ["bailout", "failure", "systemic_crisis", "contained"],
+      "resolution_mechanism": "An emergency central-bank credit facility in exchange for a controlling equity stake, later restructured with Treasury capital, purchase vehicles for the CDO and securities-lending exposures, and an orderly wind-down of the derivatives book.",
+      "source_refs": [
+        {"id": "fcic", "title": "The Financial Crisis Inquiry Report", "publisher": "US Government Publishing Office", "url": "https://www.govinfo.gov/app/details/GPO-FCIC", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "gao-aig", "title": "Federal Reserve assistance to AIG", "publisher": "US Government Accountability Office", "url": "https://www.gao.gov/products/gao-11-616", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-aig", "title": "Federal Reserve press releases, September 2008", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/newsevents/pressreleases/2008press.htm", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "53b2a1f8-bfbd-5538-ab30-13e2d4a47e33",
+      "slug": "enron-restatement-2001",
+      "name": "Enron restatement and collapse, 2001",
+      "episode_type": "company_distress",
+      "onset_date": "2001-10-16",
+      "peak_date": "2001-11-28",
+      "end_date": "2001-12-02",
+      "geography": "US",
+      "affected_industries": ["energy", "utilities", "commodities_trading", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": false,
+      "onset_summary": "An energy trading company reports a large quarterly loss and a 1.2 billion dollar reduction in shareholders' equity arising from the unwinding of partnerships run by its own chief financial officer. The company's earnings come from mark-to-model gains on long-dated contracts, its debt is parked in off-balance-sheet vehicles collateralised by its own shares, and its trading business needs an investment-grade rating to keep counterparties posting margin with it. The share price is falling and the auditor's independence is in question.",
+      "onset_indicators": [
+        {"key": "equity_reduction", "label": "Reduction in shareholders' equity from unwinding related-party partnerships", "value": 1.2, "unit": "usd_billions", "as_of": "2001-10-16", "source_id": "sec-enron"},
+        {"key": "related_party_vehicles", "label": "Off-balance-sheet vehicles run by the company's own finance officer", "value": true, "unit": "boolean", "as_of": "2001-10-16", "source_id": "sec-enron"},
+        {"key": "collateralised_by_own_stock", "label": "Off-balance-sheet debt collateralised by the company's own shares", "value": true, "unit": "boolean", "as_of": "2001-10-16", "source_id": "sec-enron"},
+        {"key": "rating_dependent_business", "label": "Trading counterparties require an investment-grade rating to continue dealing", "value": true, "unit": "boolean", "as_of": "2001-10-16", "source_id": "sec-enron"}
+      ],
+      "outcome_summary": "The company restated five years of accounts, was downgraded to junk on 28 November, and filed for bankruptcy on 2 December 2001, then the largest in US history. Shareholders and employee pension plans were wiped out; its auditor was destroyed by an obstruction conviction. There was no systemic financial contagion. The failure produced the Sarbanes-Oxley Act, which rewrote audit oversight and executive certification of accounts.",
+      "outcomes": ["failure", "regime_change", "contained"],
+      "resolution_mechanism": "Chapter 11 liquidation of the trading business, criminal prosecution of executives, and statutory reform of audit independence and financial reporting.",
+      "source_refs": [
+        {"id": "sec-enron", "title": "SEC litigation releases and reports on Enron", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/litreleases", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "senate-enron", "title": "The role of the board of directors in Enron's collapse", "publisher": "US Senate Permanent Subcommittee on Investigations", "url": "https://www.govinfo.gov/app/collection/cprt", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "593b2d07-3a22-5163-adc4-3b10f40e3abb",
+      "slug": "worldcom-accounting-fraud-2002",
+      "name": "WorldCom accounting fraud, 2002",
+      "episode_type": "company_distress",
+      "onset_date": "2002-06-25",
+      "peak_date": "2002-07-21",
+      "end_date": "2002-07-21",
+      "geography": "US",
+      "affected_industries": ["telecom", "technology", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": false,
+      "onset_summary": "A long-distance telecom operator announces that it has improperly capitalised about 3.8 billion dollars of ordinary line costs as capital expenditure over five quarters, turning reported profits into losses, and that its chief financial officer has been dismissed. The company grew by roughly sixty acquisitions and carries about 30 billion dollars of debt against telecom assets whose value is collapsing with the fibre glut. Its auditor is the firm already discredited by another failure, and its bank lines are being pulled.",
+      "onset_indicators": [
+        {"key": "misclassified_expenses", "label": "Ordinary operating costs improperly capitalised", "value": 3.8, "unit": "usd_billions", "as_of": "2002-06-25", "source_id": "sec-wcom"},
+        {"key": "debt_outstanding", "label": "Debt outstanding against depreciating telecom assets", "value": 30, "unit": "usd_billions", "as_of": "2002-03-31", "source_id": "sec-wcom"},
+        {"key": "acquisition_driven_growth", "label": "Growth built on serial acquisitions with unintegrated accounting", "value": true, "unit": "boolean", "as_of": "2002-06-25", "source_id": "sec-wcom"},
+        {"key": "auditor_discredited", "label": "Accounts signed by an auditor already discredited in another failure", "value": true, "unit": "boolean", "as_of": "2002-06-25", "source_id": "sec-wcom"}
+      ],
+      "outcome_summary": "The misstatement grew to about 11 billion dollars on investigation and the company filed for bankruptcy on 21 July 2002 with 104 billion dollars of assets, exceeding the previous year's record. Bondholders recovered a fraction, the chief executive was sentenced to 25 years, and the company reorganised and was later sold. Together with the previous year's energy-trading collapse it produced the Sarbanes-Oxley Act.",
+      "outcomes": ["failure", "regime_change", "contained"],
+      "resolution_mechanism": "Chapter 11 reorganisation and later sale of the business, criminal conviction of the executives, and statutory reform of accounting oversight and internal-control certification.",
+      "source_refs": [
+        {"id": "sec-wcom", "title": "SEC litigation releases", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/litreleases", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fcc", "title": "FCC communications industry reports", "publisher": "US Federal Communications Commission", "url": "https://www.fcc.gov/reports-research/reports", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "ec2ea563-990e-5292-b604-742e172fa119",
+      "slug": "penn-central-commercial-paper-1970",
+      "name": "Penn Central commercial paper default, 1970",
+      "episode_type": "company_distress",
+      "onset_date": "1970-06-21",
+      "peak_date": "1970-06-22",
+      "end_date": "1970-07-31",
+      "geography": "US",
+      "affected_industries": ["rail", "transport", "money_markets", "banking"],
+      "regime_tags": ["post_fiat", "pre_qe", "bretton_woods", "pre_basel", "pre_social_media", "advanced_economy"],
+      "is_counterexample": false,
+      "onset_summary": "The largest US railroad files for bankruptcy with about 200 million dollars of commercial paper outstanding, after the government declines to guarantee an emergency loan. The paper is unsecured, short-dated and held by corporate treasurers who treat it as a cash equivalent, and the entire market rolls every few weeks. Investors now have to ask whether the other large issuers can roll their paper, and the market has no backstop: commercial paper is not a bank liability and there is no facility to lend against it.",
+      "onset_indicators": [
+        {"key": "commercial_paper_outstanding", "label": "Commercial paper outstanding at the failing issuer", "value": 200, "unit": "usd_millions", "as_of": "1970-06-21", "source_id": "frb-pc"},
+        {"key": "government_guarantee_refused", "label": "Government declines to guarantee an emergency loan", "value": true, "unit": "boolean", "as_of": "1970-06-20", "source_id": "frb-pc"},
+        {"key": "market_rollover_frequency", "label": "The commercial paper market must be rolled every few weeks", "value": true, "unit": "boolean", "as_of": "1970-06-21", "source_id": "frb-pc"},
+        {"key": "no_backstop_facility", "label": "No lending facility exists against commercial paper", "value": true, "unit": "boolean", "as_of": "1970-06-21", "source_id": "frb-pc"}
+      ],
+      "outcome_summary": "The commercial paper market shut for other issuers within days. The Federal Reserve suspended the interest-rate ceiling on large certificates of deposit and told banks the discount window was open so that they could take over the lending, and the market reopened within weeks with no further failures. The railroad was nationalised into a public corporation. It is an early, clean case of a single default being stopped from becoming a funding run by an explicit central-bank backstop.",
+      "outcomes": ["failure", "contained", "regime_change"],
+      "resolution_mechanism": "Suspension of deposit-rate ceilings and open discount-window lending so banks could refinance commercial paper issuers; the failed railroad was taken into public ownership.",
+      "source_refs": [
+        {"id": "frb-pc", "title": "Penn Central", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/penn-central", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "fred-cp", "title": "Commercial paper outstanding", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/COMPOUT", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "68d51f40-6208-5cda-92d1-6bc1c7a7cfbb",
+      "slug": "long-term-capital-management-1998",
+      "name": "Long-Term Capital Management near-failure, 1998",
+      "episode_type": "company_distress",
+      "onset_date": "1998-09-02",
+      "peak_date": "1998-09-23",
+      "end_date": "1998-11-17",
+      "geography": "US",
+      "affected_industries": ["hedge_funds", "banking", "asset_management", "money_markets"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_basel", "advanced_economy", "pre_social_media", "pre_dodd_frank"],
+      "is_counterexample": true,
+      "onset_summary": "A large relative-value hedge fund writes to its investors disclosing that it lost 44 percent of its capital in August. Its strategy is to hold convergence trades in fixed income at very high leverage, roughly 25 to one on balance sheet and far more once derivatives are counted, and the sovereign default that triggered the loss has widened every spread it is long simultaneously. Its counterparties financed it on light margin because of its reputation, none of them knows the size of the positions the others are funding, and any liquidation would be into the same trades they hold themselves.",
+      "onset_indicators": [
+        {"key": "monthly_capital_loss", "label": "Capital lost in a single month", "value": 44, "unit": "percent", "as_of": "1998-08-31", "source_id": "gao-ltcm"},
+        {"key": "balance_sheet_leverage", "label": "On-balance-sheet leverage", "value": 25, "unit": "multiple", "as_of": "1998-08-31", "source_id": "gao-ltcm"},
+        {"key": "correlated_convergence_trades", "label": "Positions that were assumed to be independent all widening together", "value": true, "unit": "boolean", "as_of": "1998-09-02", "source_id": "frb-ltcm"},
+        {"key": "counterparty_position_opacity", "label": "No counterparty can see the total leverage extended by the others", "value": true, "unit": "boolean", "as_of": "1998-09-02", "source_id": "gao-ltcm"}
+      ],
+      "outcome_summary": "The Federal Reserve Bank of New York convened fourteen creditor banks, which put in 3.6 billion dollars of their own money for 90 percent of the fund and wound the positions down in an orderly way over the following year; no public money was used. The Fed cut rates three times in seven weeks. Markets recovered by year end, no bank failed, and the US expansion continued for another two years. It is the reference case for a leveraged near-failure that was contained without a bailout.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "A private recapitalisation by the fund's own creditor banks, coordinated but not funded by the central bank, with an orderly wind-down of positions; accompanied by three precautionary policy rate cuts.",
+      "source_refs": [
+        {"id": "frb-ltcm", "title": "Near Failure of Long-Term Capital Management", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/ltcm-near-failure", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "gao-ltcm", "title": "Long-Term Capital Management: regulators need to focus greater attention on systemic risk", "publisher": "US Government Accountability Office", "url": "https://www.gao.gov/products/ggd-00-3", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "953350a8-7fb2-5849-a0f9-e128b9436ced",
+      "slug": "archegos-margin-call-2021",
+      "name": "Archegos family office margin call, 2021",
+      "episode_type": "company_distress",
+      "onset_date": "2021-03-24",
+      "peak_date": "2021-03-26",
+      "end_date": "2021-04-30",
+      "geography": "US",
+      "affected_industries": ["hedge_funds", "banking", "asset_management", "media"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_dodd_frank", "basel_iii", "advanced_economy", "post_social_media"],
+      "is_counterexample": true,
+      "onset_summary": "A family office cannot meet margin calls on total return swaps held with several prime brokers after a large equity holding falls on a secondary offering. Because the exposure is synthetic, the positions are held in the banks' names and are not publicly disclosed, so each prime broker sees only its own book: the office is levered roughly five times and is the beneficial owner of a majority of the free float in some of its holdings, but no bank knows that. Once one broker starts selling, the others' collateral is worth less by the hour.",
+      "onset_indicators": [
+        {"key": "synthetic_exposure_hidden", "label": "Positions held as swaps in bank names, invisible to other prime brokers", "value": true, "unit": "boolean", "as_of": "2021-03-24", "source_id": "sec-archegos"},
+        {"key": "leverage_multiple", "label": "Gross leverage across prime brokers", "value": 5, "unit": "multiple", "as_of": "2021-03-24", "source_id": "finma-archegos"},
+        {"key": "concentration_in_float", "label": "Beneficial ownership of a large share of the free float in single names", "value": true, "unit": "boolean", "as_of": "2021-03-24", "source_id": "sec-archegos"},
+        {"key": "margin_call_unmet", "label": "Margin calls from multiple prime brokers left unmet", "value": true, "unit": "boolean", "as_of": "2021-03-25", "source_id": "finma-archegos"}
+      ],
+      "outcome_summary": "The family office was wiped out over two days and its brokers lost about 10 billion dollars between them, with a single Swiss bank absorbing 5.5 billion of it, exiting prime brokerage and firing senior management. No bank failed, no client money was lost and there was no market-wide contagion beyond the affected stocks. Regulators found risk-management failures and pushed for disclosure of synthetic positions.",
+      "outcomes": ["failure", "contained"],
+      "resolution_mechanism": "Disorderly liquidation of the swap positions by the prime brokers, losses absorbed by bank capital, and subsequent supervisory action requiring better margining and disclosure of synthetic equity exposure.",
+      "source_refs": [
+        {"id": "finma-archegos", "title": "FINMA enforcement proceedings and reports", "publisher": "Swiss Financial Market Supervisory Authority", "url": "https://www.finma.ch/en/news/", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-archegos", "title": "SEC litigation releases", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/litreleases", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "7e47266c-9675-5d90-ae29-7b577a3d130a",
+      "slug": "knight-capital-trading-loss-2012",
+      "name": "Knight Capital trading software failure, 2012",
+      "episode_type": "company_distress",
+      "onset_date": "2012-08-01",
+      "peak_date": "2012-08-01",
+      "end_date": "2012-12-19",
+      "geography": "US",
+      "affected_industries": ["exchanges", "banking", "technology", "asset_management"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_dodd_frank", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The largest US retail market maker deploys new routing software to eight servers but leaves obsolete code active on one of them, and at the opening bell that server begins sending millions of unintended child orders into 154 stocks. The firm has no automated kill switch and no position limit that halts the flow; it takes 45 minutes to identify and stop, by which time the firm holds several billion dollars of unwanted positions. Its own capital is a few hundred million dollars, and the trades must settle in three days.",
+      "onset_indicators": [
+        {"key": "erroneous_orders_duration", "label": "Minutes of uncontrolled order flow before the system was stopped", "value": 45, "unit": "minutes", "as_of": "2012-08-01", "source_id": "sec-knight"},
+        {"key": "unwanted_positions", "label": "Unwanted equity positions accumulated", "value": 7, "unit": "usd_billions", "as_of": "2012-08-01", "source_id": "sec-knight"},
+        {"key": "kill_switch", "label": "Automated kill switch or position limit in place", "value": false, "unit": "boolean", "as_of": "2012-08-01", "source_id": "sec-knight"},
+        {"key": "firm_capital", "label": "Firm capital available to absorb the loss", "value": 365, "unit": "usd_millions", "as_of": "2012-06-30", "source_id": "sec-filings"}
+      ],
+      "outcome_summary": "The firm sold the positions to a bank at a loss of about 460 million dollars, more than its entire capital and four times its prior-year profit, and was rescued the same week by a 400 million dollar rescue investment that diluted shareholders by roughly 70 percent. It was sold within months and ceased to exist as an independent firm. There was no market-wide contagion, and regulators later required exchange-level risk controls and kill switches.",
+      "outcomes": ["failure", "contained", "regime_change"],
+      "resolution_mechanism": "Emergency sale of the erroneous positions at a discount, a dilutive private rescue financing within days, and eventual acquisition of the firm; regulation subsequently mandated pre-trade risk controls.",
+      "source_refs": [
+        {"id": "sec-knight", "title": "SEC administrative proceeding on market access controls", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/admin", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "sec-filings", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "1775f220-3b95-5bc4-8352-cf7a2b3888be",
+      "slug": "wirecard-audit-failure-2020",
+      "name": "Wirecard audit failure, 2020",
+      "episode_type": "company_distress",
+      "onset_date": "2020-06-18",
+      "peak_date": "2020-06-25",
+      "end_date": "2020-08-25",
+      "geography": "DE",
+      "affected_industries": ["payments", "technology", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "advanced_economy", "post_social_media", "currency_union"],
+      "is_counterexample": false,
+      "onset_summary": "A listed payments processor's auditor refuses to sign the annual accounts because it cannot confirm the existence of 1.9 billion euros supposedly held in trustee accounts in Asia, about a quarter of the balance sheet. The company has been the subject of press allegations of accounting irregularities for years; the national regulator responded by investigating the journalists and short sellers and banning short selling in the stock. The cash is claimed to arise from third-party acquiring partners whose revenues no outside party has ever verified.",
+      "onset_indicators": [
+        {"key": "unconfirmed_cash", "label": "Cash the auditor cannot confirm exists", "value": 1.9, "unit": "eur_billions", "as_of": "2020-06-18", "source_id": "bafin"},
+        {"key": "audit_opinion_withheld", "label": "Auditor refuses to sign the annual accounts", "value": true, "unit": "boolean", "as_of": "2020-06-18", "source_id": "bafin"},
+        {"key": "regulator_targeted_critics", "label": "Regulator previously investigated journalists and banned short selling in the stock", "value": true, "unit": "boolean", "as_of": "2019-02-18", "source_id": "bundestag"},
+        {"key": "third_party_revenue_unverified", "label": "Reported revenue routed through unverifiable third-party partners", "value": true, "unit": "boolean", "as_of": "2020-06-18", "source_id": "bundestag"}
+      ],
+      "outcome_summary": "The company admitted the cash probably did not exist and filed for insolvency within a week, the first member of the blue-chip index to do so; the chief executive was arrested and the chief operating officer fled. Shareholders and lenders lost about 3 billion euros. The regulator's president was dismissed, supervision of financial reporting was restructured and audit rotation rules were tightened. There was no financial-system contagion.",
+      "outcomes": ["failure", "regime_change", "contained"],
+      "resolution_mechanism": "Insolvency and piecemeal sale of the operating businesses, criminal prosecution, dismissal of the supervisory leadership, and statutory reform of German accounting enforcement and audit rules.",
+      "source_refs": [
+        {"id": "bafin", "title": "BaFin press releases", "publisher": "Federal Financial Supervisory Authority (BaFin)", "url": "https://www.bafin.de/EN/PublikationenDaten/publikationendaten_node_en.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "bundestag", "title": "Bundestag committee of inquiry documents", "publisher": "German Bundestag", "url": "https://www.bundestag.de/dokumente", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "cee061ec-1fd3-5c8e-95d1-a56675b8ec9a",
+      "slug": "volkswagen-emissions-notice-2015",
+      "name": "Volkswagen emissions violation notice, 2015",
+      "episode_type": "company_distress",
+      "onset_date": "2015-09-18",
+      "peak_date": "2015-09-22",
+      "end_date": "2017-01-11",
+      "geography": "DE",
+      "affected_industries": ["automotive", "manufacturing", "technology"],
+      "regime_tags": ["post_fiat", "post_qe", "advanced_economy", "post_social_media", "currency_union", "globalized_supply_chain"],
+      "is_counterexample": true,
+      "onset_summary": "The US environmental regulator issues a notice of violation alleging that a European carmaker installed software in diesel vehicles that detects a test cycle and switches on full emissions controls only then, letting the cars emit many times the legal limit of nitrogen oxides in normal driving. About half a million vehicles are covered by the US notice, and the company has admitted the defeat device to the regulator. Diesel is roughly half of the manufacturer's European sales, and criminal as well as civil liability is now open in several jurisdictions.",
+      "onset_indicators": [
+        {"key": "defeat_device_admitted", "label": "Manufacturer admits software designed to detect emissions test cycles", "value": true, "unit": "boolean", "as_of": "2015-09-18", "source_id": "epa"},
+        {"key": "us_vehicles_covered", "label": "Vehicles covered by the initial regulatory notice", "value": 482000, "unit": "count", "as_of": "2015-09-18", "source_id": "epa"},
+        {"key": "emissions_multiple_of_limit", "label": "Nitrogen oxide emissions in real driving as a multiple of the legal limit", "value": 35, "unit": "multiple", "as_of": "2015-09-18", "source_id": "epa"},
+        {"key": "diesel_share_of_sales", "label": "Diesel share of the manufacturer's European sales", "value": 50, "unit": "percent", "as_of": "2015-06-30", "source_id": "ec-auto"}
+      ],
+      "outcome_summary": "The scandal spread to about 11 million vehicles worldwide, cost more than 30 billion euros in fines, buybacks and settlements, removed the chief executive and produced criminal convictions. The company did not fail: it remained profitable, kept its market share, and used the crisis to fund a pivot to electric vehicles. European diesel sales, not the manufacturer, were the lasting casualty, and regulators replaced laboratory testing with real-driving emissions measurement.",
+      "outcomes": ["contained", "recovery", "regime_change"],
+      "resolution_mechanism": "Regulatory settlements with buybacks and fines, recalls and software fixes, management change and criminal prosecutions, and a regulatory shift to real-driving emissions testing.",
+      "source_refs": [
+        {"id": "epa", "title": "Volkswagen light duty diesel vehicle violations", "publisher": "US Environmental Protection Agency", "url": "https://www.epa.gov/vw", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ec-auto", "title": "European Commission automotive emissions policy", "publisher": "European Commission", "url": "https://single-market-economy.ec.europa.eu/sectors/automotive-industry_en", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "6eafe788-ea18-5438-ac9b-4372b9f23341",
+      "slug": "deutsche-bank-capital-scare-2016",
+      "name": "Deutsche Bank capital scare, 2016",
+      "episode_type": "company_distress",
+      "onset_date": "2016-09-15",
+      "peak_date": "2016-09-30",
+      "end_date": "2016-12-23",
+      "geography": "DE",
+      "affected_industries": ["banking", "asset_management", "insurance"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "basel_iii", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": true,
+      "onset_summary": "The US Department of Justice opens settlement talks with a European global bank over mortgage-securities mis-selling by demanding 14 billion dollars, close to the bank's entire market capitalisation. The bank has posted losses, its capital ratio is the weakest of the large European banks, and its share price is at a record low; a handful of hedge funds move clearing balances away from it. Additional tier 1 coupon payments are discretionary and investors begin to ask whether the bank could be forced to skip one, which would be a public signal of distress.",
+      "onset_indicators": [
+        {"key": "opening_settlement_demand", "label": "Opening demand in the regulatory settlement talks", "value": 14, "unit": "usd_billions", "as_of": "2016-09-15", "source_id": "doj"},
+        {"key": "demand_vs_market_cap", "label": "Demand relative to the bank's market capitalisation", "value": "comparable", "unit": "category", "as_of": "2016-09-15", "source_id": "sec-filings"},
+        {"key": "client_balances_moved", "label": "Some clients move clearing balances and excess margin away from the bank", "value": true, "unit": "boolean", "as_of": "2016-09-29", "source_id": "esrb"},
+        {"key": "at1_coupon_discretion", "label": "Investors question whether discretionary hybrid coupons can be paid", "value": true, "unit": "boolean", "as_of": "2016-09-29", "source_id": "esrb"}
+      ],
+      "outcome_summary": "The settlement closed at 7.2 billion dollars in December 2016, half the opening demand and within what the bank had provisioned. The coupons were paid, the deposit base held, and the bank raised 8 billion euros of equity the following spring. No state support was needed and no counterparty took a loss. The episode is the reference case for a headline-driven confidence scare at a systemically important bank that did not become a run.",
+      "outcomes": ["contained", "recovery"],
+      "resolution_mechanism": "A negotiated settlement far below the opening demand, a subsequent equity raise, and restructuring of the investment bank; no public support and no central-bank facility were used.",
+      "source_refs": [
+        {"id": "doj", "title": "Department of Justice settlements on residential mortgage-backed securities", "publisher": "US Department of Justice", "url": "https://www.justice.gov/news", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "esrb", "title": "ESRB risk dashboard", "publisher": "European Systemic Risk Board", "url": "https://www.esrb.europa.eu/pub/rd/html/index.en.html", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "sec-filings", "title": "SEC filings and reports", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/edgar/searchedgar/companysearch", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "fd00af42-e2a3-5127-a5f5-3e81b251d421",
+      "slug": "evergrande-liquidity-crisis-2021",
+      "name": "Evergrande liquidity crisis, 2021",
+      "episode_type": "company_distress",
+      "onset_date": "2021-09-13",
+      "peak_date": "2021-12-09",
+      "end_date": "2022-03-31",
+      "geography": "CN",
+      "affected_industries": ["real_estate", "construction", "banking", "asset_management"],
+      "regime_tags": ["post_fiat", "post_qe", "emerging_market", "post_social_media", "capital_controls"],
+      "is_counterexample": false,
+      "onset_summary": "The largest property developer by sales warns that it may not meet its obligations, after regulators imposed leverage limits that cut off the refinancing its model depends on. It carries about 300 billion dollars of liabilities, of which a large part is not debt but pre-sold apartments owed to households who paid in advance for homes not yet built. Construction has stopped on many projects, suppliers are unpaid, retail investors in its wealth-management products are protesting at its offices, and offshore bondholders sit at the bottom of a structure whose assets are onshore.",
+      "onset_indicators": [
+        {"key": "total_liabilities", "label": "Total liabilities including presold-home obligations", "value": 300, "unit": "usd_billions", "as_of": "2021-06-30", "source_id": "hkex"},
+        {"key": "presold_unbuilt_homes", "label": "Apartments paid for in advance but not yet built", "value": 1500000, "unit": "count", "as_of": "2021-09-13", "source_id": "hkex"},
+        {"key": "leverage_limits_imposed", "label": "Regulatory leverage limits cutting off refinancing", "value": true, "unit": "boolean", "as_of": "2020-08-31", "source_id": "pboc"},
+        {"key": "construction_halted", "label": "Construction halted on projects for want of payment to suppliers", "value": true, "unit": "boolean", "as_of": "2021-09-13", "source_id": "hkex"}
+      ],
+      "outcome_summary": "The developer defaulted on offshore bonds in December 2021 and was ordered liquidated by a Hong Kong court in 2024, with offshore creditors recovering very little. The state's priority was completing pre-sold homes rather than rescuing bondholders. Contagion was contained to the property sector rather than the banking system, but the sector's multi-year contraction became the main drag on Chinese growth and spread to other developers.",
+      "outcomes": ["default", "failure", "contained", "recession"],
+      "resolution_mechanism": "No bailout of the company: state-directed completion of pre-sold housing, ring-fencing of project-level assets, court-ordered liquidation of the offshore group, and monetary and fiscal support to the wider property sector.",
+      "source_refs": [
+        {"id": "hkex", "title": "Listed company filings and announcements", "publisher": "Hong Kong Exchanges and Clearing", "url": "https://www.hkexnews.hk", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "pboc", "title": "People's Bank of China policy statements", "publisher": "People's Bank of China", "url": "https://www.pbc.gov.cn/en/3688110/index.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-chn", "title": "IMF country information: China", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/CHN", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "b064639c-fd26-5612-a199-fd562cf746f6",
+      "slug": "ftx-withdrawal-run-2022",
+      "name": "FTX exchange withdrawal run, 2022",
+      "episode_type": "company_distress",
+      "onset_date": "2022-11-02",
+      "peak_date": "2022-11-08",
+      "end_date": "2022-11-11",
+      "geography": "GLOBAL",
+      "affected_industries": ["crypto", "exchanges", "asset_management", "payments"],
+      "regime_tags": ["post_fiat", "post_qe", "post_social_media", "globalized_supply_chain"],
+      "is_counterexample": false,
+      "onset_summary": "A leaked balance sheet shows that the trading affiliate of a major crypto exchange holds most of its assets in a token the exchange itself created and whose price it can influence, rather than in cash or liquid securities. The exchange holds customer assets without segregation, has no audited accounts and no regulator, and its largest competitor announces it is selling its holding of that token. Customers can withdraw instantly, all at once, and there is no deposit insurance, no lender of last resort and no resolution regime.",
+      "onset_indicators": [
+        {"key": "affiliate_collateral_is_own_token", "label": "Affiliate's assets concentrated in a token issued by the exchange itself", "value": true, "unit": "boolean", "as_of": "2022-11-02", "source_id": "sec-ftx"},
+        {"key": "customer_assets_unsegregated", "label": "Customer assets not segregated from the firm's own funds", "value": true, "unit": "boolean", "as_of": "2022-11-02", "source_id": "cftc-ftx"},
+        {"key": "no_audited_accounts", "label": "No audited financial statements or prudential regulator", "value": true, "unit": "boolean", "as_of": "2022-11-02", "source_id": "sec-ftx"},
+        {"key": "competitor_liquidates_token", "label": "Largest competitor announces it will sell its holding of the token", "value": true, "unit": "boolean", "as_of": "2022-11-06", "source_id": "sec-ftx"}
+      ],
+      "outcome_summary": "Customers withdrew about 6 billion dollars in three days, the exchange halted withdrawals and filed for bankruptcy on 11 November 2022, and roughly 8 billion dollars of customer funds were found to be missing, having been lent to the affiliate. The founder was convicted of fraud and sentenced to 25 years. Several crypto lenders failed in the aftermath, but the regulated financial system was unaffected, and creditors were eventually repaid in full in dollar terms as asset prices recovered.",
+      "outcomes": ["failure", "default", "contained"],
+      "resolution_mechanism": "Chapter 11 bankruptcy with a court-appointed restructuring officer recovering and selling assets, criminal prosecution of the founders, and eventual full dollar-value repayment of customer claims from recovered assets.",
+      "source_refs": [
+        {"id": "sec-ftx", "title": "SEC litigation releases", "publisher": "US Securities and Exchange Commission", "url": "https://www.sec.gov/litigation/litreleases", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "cftc-ftx", "title": "CFTC enforcement actions", "publisher": "US Commodity Futures Trading Commission", "url": "https://www.cftc.gov/LawRegulation/Enforcement/index.htm", "accessed": "2026-07-13", "kind": "primary"}
+      ]
+    },
+    {
+      "id": "40c05167-1e44-55c7-8367-603387a99c11",
+      "slug": "hanjin-shipping-collapse-2016",
+      "name": "Hanjin Shipping collapse, 2016",
+      "episode_type": "company_distress",
+      "onset_date": "2016-08-31",
+      "peak_date": "2016-09-07",
+      "end_date": "2017-02-17",
+      "geography": "KR",
+      "affected_industries": ["shipping", "logistics", "retail", "manufacturing", "banking"],
+      "regime_tags": ["post_fiat", "post_qe", "globalized_supply_chain", "advanced_economy", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "The world's seventh-largest container line files for court receivership after its creditor banks, led by a state policy bank, refuse further support and its owners decline to inject more equity. Freight rates have been below cash cost for years because the industry ordered too many ships after the last boom. The immediate problem is physical: about 100 vessels are at sea carrying roughly 14 billion dollars of other people's cargo, and ports, tug operators and fuel suppliers will not serve a ship whose owner cannot pay, nor release cargo they may not be paid to handle.",
+      "onset_indicators": [
+        {"key": "creditor_support_withdrawn", "label": "Creditor banks decline further support and receivership is filed", "value": true, "unit": "boolean", "as_of": "2016-08-31", "source_id": "kdb"},
+        {"key": "vessels_at_sea", "label": "Vessels at sea when the filing occurred", "value": 100, "unit": "count", "as_of": "2016-09-01", "source_id": "unctad"},
+        {"key": "cargo_value_stranded", "label": "Value of third-party cargo aboard the stranded vessels", "value": 14, "unit": "usd_billions", "as_of": "2016-09-01", "source_id": "unctad"},
+        {"key": "freight_rates_below_cost", "label": "Container freight rates below cash operating cost", "value": true, "unit": "boolean", "as_of": "2016-06-30", "source_id": "unctad"}
+      ],
+      "outcome_summary": "Ships were arrested or refused entry at ports worldwide and cargo sat stranded for months during the peak pre-Christmas shipping season, raising trans-Pacific spot rates by about 50 percent temporarily. The company was liquidated in February 2017, the first failure of a top-ten container line. Shippers absorbed the losses, capacity was reabsorbed by rivals, freight rates soon fell back, and the industry consolidated into three alliances.",
+      "outcomes": ["failure", "contained"],
+      "resolution_mechanism": "Court receivership then liquidation, with cargo released under court-supervised funding arrangements; capacity was absorbed by competitors and the industry consolidated into alliances.",
+      "source_refs": [
+        {"id": "kdb", "title": "Korea Development Bank disclosures", "publisher": "Korea Development Bank", "url": "https://www.kdb.co.kr/index.jsp", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "unctad", "title": "Review of Maritime Transport", "publisher": "United Nations Conference on Trade and Development", "url": "https://unctad.org/topic/transport-and-trade-logistics/review-of-maritime-transport", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    }
+  ]
+}

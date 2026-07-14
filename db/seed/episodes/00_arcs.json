@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "file": "00_arcs",
+  "note": "Long-arc parent episodes. Loaded first so every child's parent row already exists (foreign key + seed order). Retrieval excludes parents from ranking; they carry context only.",
+  "defaults": {
+    "license_note": "Original prose written for this corpus from public institutional records; no retrospective source text is quoted or reproduced. Cited sources are listed for verification only.",
+    "version": 1,
+    "updated_at": "2026-07-13",
+    "review_due_at": "2027-07-13",
+    "review": {
+      "status": "llm_drafted_pending_human_review",
+      "drafted_by": "llm",
+      "draft_model": "claude-opus-4-8",
+      "drafted_at": "2026-07-13",
+      "template_version": 1,
+      "automated_validation": "services.analogies.corpus.validate_corpus",
+      "human_signoff": {"reviewer": null, "reviewed_at": null, "decision": null},
+      "checklist": {
+        "onset_as_if_live": false,
+        "onset_outcome_separation": false,
+        "dates_verified": false,
+        "indicators_verified": false,
+        "sources_verified": false,
+        "outcome_tags_verified": false,
+        "license_original_prose": false
+      }
+    }
+  },
+  "episodes": [
+    {
+      "id": "dfb5d187-b0ea-502c-bf6f-29e127155bdd",
+      "slug": "arc-global-financial-crisis-2007-2009",
+      "name": "Arc: global financial crisis, 2007-2009",
+      "episode_type": "banking_stress",
+      "onset_date": "2007-08-09",
+      "peak_date": "2008-09-15",
+      "end_date": "2009-06-30",
+      "geography": "GLOBAL",
+      "affected_industries": ["banking", "asset_management", "money_markets", "housing", "insurance"],
+      "regime_tags": ["post_fiat", "pre_qe", "pre_dodd_frank", "basel_ii", "deposit_insurance", "advanced_economy", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "Funding markets seize around securitised US mortgage credit. A large European bank suspends redemptions on three funds holding subprime-linked asset-backed paper, saying the assets can no longer be valued; euro-area overnight rates jump above the policy rate and the central bank injects emergency liquidity the same day. Asset-backed commercial paper cannot be rolled, mortgage originators dependent on warehouse lines are shut out, and dealers quote no bid on mezzanine subprime tranches. The exposure is spread across bank conduits, money funds and off-balance-sheet vehicles that no supervisor maps in full.",
+      "onset_indicators": [
+        {"key": "term_funding_spread", "label": "Three-month interbank term funding spreads widen sharply over overnight index swaps", "value": "sharp_widening", "unit": "category", "as_of": "2007-08-09", "source_id": "fred-ted"},
+        {"key": "central_bank_liquidity_injection", "label": "Same-day euro-area emergency liquidity tender", "value": 94.8, "unit": "eur_billions", "as_of": "2007-08-09", "source_id": "ecb-liquidity"},
+        {"key": "abcp_outstanding", "label": "US asset-backed commercial paper outstanding, before the rollover freeze", "value": 1180, "unit": "usd_billions", "as_of": "2007-08-08", "source_id": "fred-abcp"},
+        {"key": "valuation_suspension", "label": "Funds suspended redemptions citing an inability to value holdings", "value": true, "unit": "boolean", "as_of": "2007-08-09", "source_id": "bis-ar-2008"}
+      ],
+      "outcome_summary": "Funding stress persisted for thirteen months and then became a solvency crisis: an investment bank was rescued in March 2008, the mortgage agencies were placed in conservatorship, a major broker-dealer filed for bankruptcy in September 2008, and the largest insurer was taken into public hands. Governments recapitalised banking systems across the advanced economies, central banks cut to the effective lower bound and began asset purchases, and the shock transmitted into the deepest global recession since the 1930s.",
+      "outcomes": ["systemic_crisis", "recession", "bailout", "failure", "regime_change"],
+      "resolution_mechanism": "Public recapitalisation of banks (TARP and European equivalents), central-bank liquidity facilities and swap lines, deposit and money-fund guarantees, policy rates cut to the lower bound followed by large-scale asset purchases, and a post-crisis re-regulation (Dodd-Frank, Basel III).",
+      "source_refs": [
+        {"id": "bis-ar-2008", "title": "BIS 78th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/arpdf/ar2008e.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "ecb-liquidity", "title": "ECB press releases, 2007", "publisher": "European Central Bank", "url": "https://www.ecb.europa.eu/press/pr/date/2007/html/index.en.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-ted", "title": "TED Spread (TEDRATE)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/TEDRATE", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "fred-abcp", "title": "Asset-Backed Commercial Paper Outstanding (ABCOMP)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/ABCOMP", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "161e7e32-1a2b-5e1f-b059-49f18760b052",
+      "slug": "arc-euro-area-sovereign-debt-2009-2012",
+      "name": "Arc: euro-area sovereign debt crisis, 2009-2012",
+      "episode_type": "sovereign_debt",
+      "onset_date": "2009-10-20",
+      "peak_date": "2012-07-26",
+      "end_date": "2012-09-06",
+      "geography": "EA",
+      "affected_industries": ["sovereign_finance", "banking", "insurance", "construction"],
+      "regime_tags": ["post_fiat", "post_qe", "currency_union", "advanced_economy", "basel_ii", "post_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "An incoming euro-area government discloses that the current-year fiscal deficit is roughly double the figure its predecessor reported, at about 12 percent of output, and that the national statistics have been unreliable for years. The sovereign borrows in a currency it does not issue and has no central bank of its own to backstop the auction. Spreads over the regional benchmark widen immediately, rating agencies put the sovereign on review, and domestic banks that hold the debt as their liquidity buffer face collateral haircuts.",
+      "onset_indicators": [
+        {"key": "deficit_revision", "label": "Revised current-year general government deficit", "value": 12.5, "unit": "percent_of_gdp", "as_of": "2009-10-20", "source_id": "ec-greece"},
+        {"key": "statistics_reliability", "label": "National fiscal statistics disclosed as unreliable", "value": true, "unit": "boolean", "as_of": "2009-10-20", "source_id": "ec-greece"},
+        {"key": "no_domestic_lender_of_last_resort", "label": "Sovereign issues in a currency it does not control", "value": true, "unit": "boolean", "as_of": "2009-10-20", "source_id": "ecb-omt"},
+        {"key": "bank_sovereign_holdings", "label": "Domestic banks hold the sovereign's paper as their principal liquidity buffer", "value": "concentrated", "unit": "category", "as_of": "2009-10-20", "source_id": "bis-ar-2010"}
+      ],
+      "outcome_summary": "Three member states lost market access and entered official assistance programmes, a fourth recapitalised its banks with European funds, private holders of one sovereign's debt took a haircut of more than half in the largest restructuring on record, and unemployment in the programme countries rose above 25 percent. Break-up risk was only priced out after the central bank committed in mid-2012 to buy sovereign paper without a stated limit, conditional on a programme.",
+      "outcomes": ["systemic_crisis", "recession", "default", "bailout", "contained"],
+      "resolution_mechanism": "Official financing programmes (EFSF/ESM and the IMF), a negotiated private-sector restructuring of Greek debt, bank recapitalisation, and the central bank's conditional commitment to unlimited secondary-market purchases (OMT), which ended redenomination pricing without a single purchase being made.",
+      "source_refs": [
+        {"id": "ec-greece", "title": "Report on Greek government deficit and debt statistics", "publisher": "European Commission (Eurostat)", "url": "https://ec.europa.eu/eurostat/web/government-finance-statistics", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "ecb-omt", "title": "Technical features of Outright Monetary Transactions", "publisher": "European Central Bank", "url": "https://www.ecb.europa.eu/press/pr/date/2012/html/pr120906_1.en.html", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "bis-ar-2010", "title": "BIS 80th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/arpdf/ar2010e.htm", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "8e9c1ee6-b808-5f66-ba1c-f53d2b3125ef",
+      "slug": "arc-asian-financial-crisis-1997-1998",
+      "name": "Arc: Asian financial crisis, 1997-1998",
+      "episode_type": "monetary_regime",
+      "onset_date": "1997-05-14",
+      "peak_date": "1997-12-03",
+      "end_date": "1998-12-31",
+      "geography": "ASIA",
+      "affected_industries": ["banking", "sovereign_finance", "real_estate", "manufacturing", "construction"],
+      "regime_tags": ["post_fiat", "pre_qe", "fixed_exchange_rate", "emerging_market", "capital_controls", "pre_basel", "pre_social_media"],
+      "is_counterexample": false,
+      "onset_summary": "A coordinated speculative attack hits a South-East Asian currency pegged to the dollar. The central bank defends the peg with spot and forward intervention, burning reserves whose usable balance is far smaller than the headline number because much of it is committed in forward contracts. The wider region shares the same structure: dollar-denominated short-term external borrowing intermediated by weakly supervised domestic banks into local-currency property and industrial lending, with current-account deficits financed by portfolio inflows that can leave in days.",
+      "onset_indicators": [
+        {"key": "peg_under_attack", "label": "Speculative attack on a dollar-pegged currency", "value": true, "unit": "boolean", "as_of": "1997-05-14", "source_id": "imf-tha"},
+        {"key": "short_term_external_debt_to_reserves", "label": "Regional short-term external debt exceeds usable reserves", "value": "above_one", "unit": "category", "as_of": "1997-05-14", "source_id": "bis-ar-1998"},
+        {"key": "forward_book_encumbrance", "label": "Reserves committed in forward contracts, so usable reserves are far below the headline", "value": true, "unit": "boolean", "as_of": "1997-05-14", "source_id": "imf-tha"},
+        {"key": "credit_to_property", "label": "Bank credit concentrated in property and construction", "value": "concentrated", "unit": "category", "as_of": "1997-05-14", "source_id": "bis-ar-1998"}
+      ],
+      "outcome_summary": "Pegs fell across the region within months. Thailand, Indonesia and Korea entered IMF programmes; Indonesian output fell about 13 percent in 1998 and the government changed; Korea recovered quickly after recapitalising its banks. Hong Kong's peg held. Contagion reached Russia, whose 1998 default triggered the LTCM episode. Regional current accounts swung into large surpluses and reserve accumulation became standing policy.",
+      "outcomes": ["systemic_crisis", "recession", "bailout", "regime_change", "recovery"],
+      "resolution_mechanism": "Currency floats, IMF-supported programmes with fiscal and financial-sector conditionality, bank closures and recapitalisation, corporate debt workouts, and in Malaysia's case temporary capital controls; followed by a durable regional shift to reserve accumulation.",
+      "source_refs": [
+        {"id": "imf-tha", "title": "IMF country information: Thailand", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Countries/THA", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "bis-ar-1998", "title": "BIS 68th Annual Report", "publisher": "Bank for International Settlements", "url": "https://www.bis.org/publ/ar1998e.htm", "accessed": "2026-07-13", "kind": "institutional"},
+        {"id": "frb-asian-crisis", "title": "Asian Financial Crisis", "publisher": "Federal Reserve History", "url": "https://www.federalreservehistory.org/essays/asian-financial-crisis", "accessed": "2026-07-13", "kind": "institutional"}
+      ]
+    },
+    {
+      "id": "5edc8337-85a6-594d-b908-2b59f57d5305",
+      "slug": "arc-covid-19-pandemic-2020-2022",
+      "name": "Arc: COVID-19 pandemic, 2020-2022",
+      "episode_type": "pandemic",
+      "onset_date": "2019-12-31",
+      "peak_date": "2020-04-30",
+      "end_date": "2022-05-05",
+      "geography": "GLOBAL",
+      "affected_industries": ["public_health", "healthcare", "airlines", "tourism", "hospitality", "retail", "manufacturing", "logistics", "money_markets"],
+      "regime_tags": ["post_fiat", "post_qe", "zirp", "post_ihr_2005", "post_social_media", "globalized_supply_chain", "post_dodd_frank", "central_bank_backstop"],
+      "is_counterexample": false,
+      "onset_summary": "A national health authority notifies the World Health Organization of a cluster of pneumonia cases of unknown cause in a city of eleven million with a major international airport. No pathogen is identified and no transmission route is established. The city is a manufacturing and transport hub inside a supply network that runs single-sourced components worldwide on low inventories, and the international health framework depends on the reporting state's own disclosure and on border measures that historically lag the pathogen.",
+      "onset_indicators": [
+        {"key": "unexplained_pneumonia_cluster", "label": "Cluster of pneumonia cases of unknown cause reported to WHO", "value": 27, "unit": "cases", "as_of": "2019-12-31", "source_id": "who-don"},
+        {"key": "pathogen_identified", "label": "Causative pathogen identified at notification", "value": false, "unit": "boolean", "as_of": "2019-12-31", "source_id": "who-don"},
+        {"key": "outbreak_city_air_connectivity", "label": "Outbreak city has direct long-haul international air links", "value": true, "unit": "boolean", "as_of": "2019-12-31", "source_id": "who-don"},
+        {"key": "supply_chain_concentration", "label": "Global manufacturing runs single-sourced components on low inventories", "value": "concentrated", "unit": "category", "as_of": "2019-12-31", "source_id": "wb-data"}
+      ],
+      "outcome_summary": "The WHO declared a pandemic in March 2020. Most large economies imposed lockdowns; global output fell about 3 percent in 2020, the sharpest peacetime contraction on record. Governments and central banks responded with unprecedented fiscal transfers and asset purchases; markets recovered within months while supply chains and labour markets did not, contributing to the 2021-2022 inflation surge. Vaccines were authorised within a year, and reported deaths ran into the millions.",
+      "outcomes": ["systemic_crisis", "recession", "regime_change", "recovery"],
+      "resolution_mechanism": "Non-pharmaceutical interventions, emergency fiscal transfers, central-bank asset purchases and credit facilities, and vaccination campaigns beginning December 2020; the public-health emergency of international concern was lifted in May 2023.",
+      "source_refs": [
+        {"id": "who-don", "title": "Disease Outbreak News: pneumonia of unknown cause, China", "publisher": "World Health Organization", "url": "https://www.who.int/emergencies/disease-outbreak-news", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "imf-weo", "title": "World Economic Outlook database", "publisher": "International Monetary Fund", "url": "https://www.imf.org/en/Publications/WEO", "accessed": "2026-07-13", "kind": "statistical"},
+        {"id": "wb-data", "title": "World Bank open data", "publisher": "World Bank", "url": "https://data.worldbank.org", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    },
+    {
+      "id": "cb313db8-b722-5ba5-95b1-c7a1b0292dae",
+      "slug": "arc-us-regional-banking-stress-2023",
+      "name": "Arc: US regional banking stress, 2023",
+      "episode_type": "banking_stress",
+      "onset_date": "2023-03-08",
+      "peak_date": "2023-03-13",
+      "end_date": "2023-07-31",
+      "geography": "US",
+      "affected_industries": ["banking", "technology", "crypto", "real_estate"],
+      "regime_tags": ["post_fiat", "post_qe", "post_dodd_frank", "basel_iii", "deposit_insurance", "advanced_economy", "post_social_media", "central_bank_backstop"],
+      "is_counterexample": false,
+      "onset_summary": "A crypto-focused lender announces a voluntary wind-down on the same day that a mid-size bank serving venture-backed technology firms discloses the sale of its available-for-sale securities book at a loss and an equity raise to fill the hole. Both funded long-duration fixed-rate assets with deposits that are concentrated by industry and largely above the insurance cap, after the fastest policy tightening in four decades left held-to-maturity portfolios deeply underwater. Uninsured depositors can now move balances in minutes, and coordinate publicly.",
+      "onset_indicators": [
+        {"key": "uninsured_deposit_share", "label": "Share of deposits above the insurance cap at the affected bank", "value": 94, "unit": "percent", "as_of": "2022-12-31", "source_id": "fdic-svb"},
+        {"key": "afs_sale_at_a_loss", "label": "Securities portfolio sold at a realised loss to raise liquidity", "value": 1.8, "unit": "usd_billions", "as_of": "2023-03-08", "source_id": "fdic-svb"},
+        {"key": "policy_rate_change_12m", "label": "Increase in the policy rate over the preceding twelve months", "value": 450, "unit": "basis_points", "as_of": "2023-03-08", "source_id": "fred-fedfunds"},
+        {"key": "depositor_concentration", "label": "Deposit base concentrated in one industry with dense social ties", "value": "concentrated", "unit": "category", "as_of": "2023-03-08", "source_id": "frb-svb-review"}
+      ],
+      "outcome_summary": "Two banks were closed within five days and a third in May; all three were resolved by the FDIC with uninsured depositors made whole under the systemic risk exception, and the Federal Reserve opened a term facility lending against securities at par. The failures were the second, third and fourth largest in US history, but contagion stopped at the regional cohort: no large bank failed, and the deposit run subsided within weeks.",
+      "outcomes": ["failure", "bailout", "contained"],
+      "resolution_mechanism": "FDIC receivership with the systemic risk exception to protect uninsured depositors, purchase-and-assumption sales to acquirers, and the Bank Term Funding Program lending against collateral at par rather than market value.",
+      "source_refs": [
+        {"id": "fdic-svb", "title": "FDIC failed bank list", "publisher": "Federal Deposit Insurance Corporation", "url": "https://www.fdic.gov/bank-failures/failed-bank-list", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "frb-svb-review", "title": "Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank", "publisher": "Board of Governors of the Federal Reserve System", "url": "https://www.federalreserve.gov/publications/review-of-the-federal-reserves-supervision-and-regulation-of-silicon-valley-bank.htm", "accessed": "2026-07-13", "kind": "primary"},
+        {"id": "fred-fedfunds", "title": "Federal Funds Effective Rate (FEDFUNDS)", "publisher": "Federal Reserve Bank of St. Louis (FRED)", "url": "https://fred.stlouisfed.org/series/FEDFUNDS", "accessed": "2026-07-13", "kind": "statistical"}
+      ]
+    }
+  ]
+}
