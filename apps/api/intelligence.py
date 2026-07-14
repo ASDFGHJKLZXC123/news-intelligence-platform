@@ -1,7 +1,13 @@
-"""Read-only frontend intelligence query APIs.
+"""Frontend intelligence query APIs, plus the ADR 0010 alert operator endpoints.
 
-These endpoints are the database-backed contract the static frontend can cut over to
-page by page while keeping fixture JSON as a fallback during development.
+Most of this module is the database-backed read contract the static frontend can cut over
+to page by page while keeping fixture JSON as a fallback during development. The alert
+mutation endpoints near the bottom (`acknowledge`, `acknowledge-all-clear`, `supersede`) are
+the one place this module writes: they are thin HTTP wrappers over
+`services.alerts.AlertLifecycleService` and `services.alerts.supersession`, translating the
+service's typed exceptions into the 404 (unknown alert) / 409 (terminal or business-rule
+conflict) responses FastAPI callers expect. They hold no alert policy themselves -- the
+service decides, this module only serializes and maps errors.
 """
 
 from __future__ import annotations
@@ -12,6 +18,7 @@ import uuid
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, aliased
 
@@ -38,8 +45,17 @@ from db.models import (
     SourceHealthSnapshot,
     WatchlistItem,
 )
+from services.alerts import AlertLifecycleService, SQLAlchemyAlertRepository
+from services.alerts.supersession import SupersessionError, supersede_with_broader_alert
 
 router = APIRouter(tags=["intelligence"])
+
+
+def _utc_now() -> datetime.datetime:
+    return datetime.datetime.now(datetime.UTC)
+
+
+SessionDep = Annotated[Session, Depends(get_session)]
 
 
 def _iso(value: datetime.date | datetime.datetime | None) -> str | None:
@@ -692,6 +708,106 @@ def list_alerts(
 ) -> dict[str, Any]:
     alerts = repo.list_alerts(user_id=_uuid_or_none(user_id), status=status, limit=limit)
     return {"items": [_serialize_alert(alert) for alert in alerts], "count": len(alerts)}
+
+
+class SupersedeAlertRequest(BaseModel):
+    """Body for `POST /api/v1/alerts/{alert_id}/supersede`.
+
+    The path's ``alert_id`` is always one of the narrower alerts being replaced; this body
+    names the broader alert absorbing it and, optionally, further narrower alerts to fold
+    into the same replacement in one call.
+    """
+
+    broader_alert_id: str = Field(min_length=1)
+    additional_narrower_alert_ids: list[str] = Field(default_factory=list)
+
+
+def _require_alert_for_write(session: Session, alert_id: uuid.UUID) -> None:
+    """Raise 404 up front for a plainly-unknown alert, before touching the service.
+
+    Not strictly required -- the service raises ``LookupError`` for the same case -- but it
+    keeps the 404 path a single, obvious read rather than relying on exception-message
+    sniffing for the common case.
+    """
+    if session.get(Alert, alert_id) is None:
+        raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
+
+
+@router.post("/api/v1/alerts/{alert_id}/acknowledge")
+def acknowledge_alert(alert_id: uuid.UUID, session: SessionDep) -> dict[str, Any]:
+    """Record that a notification for this alert was actually delivered (ADR 0010).
+
+    Escalations re-notify by design, so this always records the *latest* delivery -- there is
+    no terminal-state conflict here, only "does this alert exist".
+    """
+    _require_alert_for_write(session, alert_id)
+    service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
+    try:
+        service.acknowledge_notification(alert_id, at=_utc_now())
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    alert = session.get(Alert, alert_id)
+    session.commit()
+    return {"alert": _serialize_alert(alert)}
+
+
+@router.post("/api/v1/alerts/{alert_id}/acknowledge-all-clear")
+def acknowledge_alert_all_clear(alert_id: uuid.UUID, session: SessionDep) -> dict[str, Any]:
+    """Record that the all-clear for this alert was delivered (ADR 0010).
+
+    An all-clear is sent once and only for a *resolved* alert: acknowledging one on a live
+    (open/escalated/downgraded) or already-superseded alert is a 409, not a 404 -- the alert
+    exists, it is simply not in the one state this action is valid for. Re-acknowledging an
+    already-acknowledged resolution is not an error: it is reported back as a no-op so a
+    retried request is idempotent.
+    """
+    _require_alert_for_write(session, alert_id)
+    service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
+    try:
+        acknowledged = service.acknowledge_all_clear(alert_id, at=_utc_now())
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    alert = session.get(Alert, alert_id)
+    session.commit()
+    return {"alert": _serialize_alert(alert), "acknowledged": acknowledged}
+
+
+@router.post("/api/v1/alerts/{alert_id}/supersede")
+def supersede_alert(
+    alert_id: uuid.UUID,
+    request: SupersedeAlertRequest,
+    session: SessionDep,
+) -> dict[str, Any]:
+    """Replace this alert (and any additional narrower alerts named) with a broader one.
+
+    Wraps `services.alerts.supersession.supersede_with_broader_alert`. Its
+    ``SupersessionError`` covers several distinct failures that this endpoint splits by HTTP
+    status: an unknown broader or narrower alert id is a 404 (nothing to act on); a malformed
+    id, a terminal (already resolved/superseded) alert, an alert owned by a different user, or
+    a narrower alert that is actually the broader alert's own dedupe key are all 409s -- the
+    named alerts exist, but the replacement as asked for is not a valid one.
+    """
+    narrower_ids = [str(alert_id), *request.additional_narrower_alert_ids]
+    repository = SQLAlchemyAlertRepository(session)
+    try:
+        result = supersede_with_broader_alert(
+            repository,
+            broader_alert_id=request.broader_alert_id,
+            narrower_alert_ids=narrower_ids,
+            now=_utc_now(),
+        )
+    except SupersessionError as exc:
+        message = str(exc)
+        status_code = 404 if message.startswith("unknown alert") else 409
+        raise HTTPException(status_code=status_code, detail=message) from exc
+    broader = session.get(Alert, result.replacement_id)
+    session.commit()
+    return {
+        "alert": _serialize_alert(broader),
+        "superseded_ids": [str(value) for value in result.superseded_ids],
+    }
 
 
 @router.get("/api/v1/watchlist")

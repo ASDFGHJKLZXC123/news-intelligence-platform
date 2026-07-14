@@ -52,6 +52,25 @@ IDENTITY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     },
 }
 
+# --- Alert lifecycle schedule (ADR 0010) -----------------------------------------------
+# `run_alert_evaluation` is deliberately *not* scheduled here, for the same reason
+# `run_event_entity_linking` isn't: it takes a batch of already-scored, already-owned
+# observations as an argument, and no pipeline stage in this repo assembles those yet
+# (see workers/alert_tasks.py's module docstring for the signal_fusion seam this is waiting
+# on). A clock cannot invent the observations a clock-triggered call would need.
+#
+# `run_pending_alert_notification_sweep` has no such dependency: it reads the `alerts` table
+# directly for rows a prior evaluation already decided owe a human a message but never got an
+# acknowledged delivery, and redelivers. That is real, schedulable work today regardless of
+# whether anything upstream calls `run_alert_evaluation` yet.
+ALERT_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
+    "alert-pending-notification-sweep": {
+        "task": "workers.alert_tasks.run_pending_alert_notification_sweep",
+        "schedule": 300.0,  # seconds; a retry net, not the evaluation cadence itself
+        "options": {"queue": QUEUE_PIPELINE},
+    },
+}
+
 # Celery Beat owns scheduled jobs, and this dict is their single definition: one entry per
 # schedule, no task scheduled twice. Stage 1's no-op heartbeat proves the scheduler wiring.
 BEAT_SCHEDULE: dict[str, dict[str, object]] = {
@@ -61,6 +80,7 @@ BEAT_SCHEDULE: dict[str, dict[str, object]] = {
         "options": {"queue": QUEUE_DEFAULT},
     },
     **IDENTITY_BEAT_SCHEDULE,
+    **ALERT_BEAT_SCHEDULE,
 }
 
 
@@ -88,6 +108,10 @@ celery_app = Celery(
         # in BEAT_SCHEDULE: the ADR schedules no linking run, and an event is linked when it has
         # articles, not when a clock fires.
         "workers.entity_linking_tasks",
+        # ADR 0010 alert lifecycle. `run_alert_evaluation` is registered so a worker can execute
+        # it on demand (see ALERT_BEAT_SCHEDULE above for why it has no Beat entry yet);
+        # `run_pending_alert_notification_sweep` does have one.
+        "workers.alert_tasks",
     ],
 )
 

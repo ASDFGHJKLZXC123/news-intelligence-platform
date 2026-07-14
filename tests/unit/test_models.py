@@ -441,6 +441,7 @@ def test_application_columns_match_plan() -> None:
         "title",
         "message",
         "severity",
+        "peak_severity",
         "state",
         "risk_score",
         "alert_type",

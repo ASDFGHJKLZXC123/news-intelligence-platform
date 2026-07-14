@@ -2187,6 +2187,13 @@ class Alert(Base):
     title: Mapped[str] = mapped_column(Text, nullable=False)
     message: Mapped[str] = mapped_column(Text, nullable=False)
     severity: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    #: The strongest severity this alert has ever held. `severity` tracks the score and decays
+    #: with it -- an alert can only resolve at Low -- so a resolved row remembers nothing about
+    #: how severe its condition was, and ADR 0010's "a resolved key cannot re-fire for 24h unless
+    #: the new severity is higher" would be vacuous: a new alert enters at Medium or above, which
+    #: is always higher than the Low a resolution leaves behind. The cooldown compares the new
+    #: severity against this peak instead.
+    peak_severity: Mapped[str | None] = mapped_column(String(32), nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     alert_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     #: ADR 0010 lifecycle, and the only status column on this table. The API serves it as
@@ -2259,6 +2266,10 @@ class Alert(Base):
         CheckConstraint(f"state IN ({_sql_enum(ALERT_STATES)})", name="ck_alerts_state"),
         CheckConstraint(f"severity IN ({_sql_enum(RISK_LEVELS)})", name="ck_alerts_severity"),
         CheckConstraint(
+            f"peak_severity IS NULL OR peak_severity IN ({_sql_enum(RISK_LEVELS)})",
+            name="ck_alerts_peak_severity",
+        ),
+        CheckConstraint(
             "news_driven IS NULL OR (news_driven >= 0 AND news_driven <= 1)",
             name="ck_alerts_news_driven",
         ),
@@ -2284,6 +2295,47 @@ class Alert(Base):
         Index("ix_alerts_user_state_created", "user_id", "state", "created_at"),
         Index("ix_alerts_severity_created", "severity", "created_at"),
         Index("ix_alerts_state_updated", "state", "updated_at"),
+    )
+
+
+class AlertConditionState(Base):
+    """Persisted state of an alert condition that has not opened an alert yet (ADR 0010).
+
+    A velocity condition (`z > 2.5`) may not fire until it has held for two consecutive runs, so
+    the first qualifying run must be remembered somewhere durable -- "not in worker memory" is
+    the whole point of the rule. No `alerts` row can be that home: the three active states are
+    exactly the states in which an alert is *live* (the alerts API serves them and the platform
+    budget counts them), so a not-yet-fired condition parked in one is a premature alert, while
+    the two terminal states are outright lies -- `resolved` claims an all-clear and arms the 24h
+    cooldown, `superseded` demands a successor row it does not have.
+
+    This row is the missing home, and only that: it is keyed by the same `dedupe_key`, it is
+    invisible to every alerts query, and it is deleted the moment the condition opens an alert --
+    from which point `alerts.velocity_streak` owns the streak, exactly as the ADR requires.
+    """
+
+    __tablename__ = "alert_condition_states"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    #: The `(risk_type, scope_entity, condition_class)` key this condition shares with the alert
+    #: it will become. Unique: one pre-fire streak per condition, whatever the worker count.
+    dedupe_key: Mapped[str] = mapped_column(String(255), nullable=False)
+    velocity_streak: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
+    last_evaluated_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+
+    __table_args__ = (
+        UniqueConstraint("dedupe_key", name="uq_alert_condition_states_dedupe_key"),
+        CheckConstraint(
+            "velocity_streak >= 0", name="ck_alert_condition_states_velocity_streak_non_negative"
+        ),
     )
 
 
