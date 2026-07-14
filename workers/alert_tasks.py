@@ -17,6 +17,24 @@ Nothing is loaded, connected, or configured at import, matching
 :mod:`workers.entity_linking_tasks`: the notifier is built inside the task, and the session is
 opened there too.
 
+## Transaction ownership, and why a delivery is never inside the evaluation's transaction
+
+Both tasks own their session, and both split it the same way, because a send cannot be un-sent.
+The lifecycle -- every create, escalate, downgrade, resolve, and supersession one run decided --
+is committed in one transaction *before* the first notifier call. Only then are the actions
+delivered, and each delivered action's receipt (`notified_at` / `all_clear_notified_at`) is
+committed on its own before the next action is sent.
+
+The alternative -- deliver, then commit the run -- is what makes ADR 0010's all-clear a lie: a
+commit that fails after the all-clear went out rolls the resolution back, the task retries, the
+alert resolves a second time, and the one message the platform must never send twice is sent
+twice. With the lifecycle already durable, a retry re-evaluates an alert that is *already*
+resolved, decides nothing, and owes nothing; the un-acknowledged message stays owed on its NULL
+timestamp and is redelivered by the sweep under the same idempotency key
+(:attr:`~services.alerts.notifications.PendingAlertAction.idempotency_key`) rather than as a new
+lifecycle event. Delivery is at-least-once by design and always was; what it now is not, is
+capable of announcing an ending that never happened.
+
 ## Why this task takes observations, not "current risk scores" (the signal_fusion seam)
 
 The task description asks this pipeline to "obtain current risk scores/signals via
@@ -243,14 +261,20 @@ def run_alert_evaluation(
 
     For each observation: build the engine's typed ``AlertObservation``, evaluate it through
     :class:`AlertLifecycleService` (which decides create/escalate/downgrade/resolve/suppress),
-    collect whatever :class:`~services.alerts.notifications.PendingAlertAction`\\ s the
-    evaluation and the platform budget produced, and deliver them all through
-    :func:`~services.alerts.notifications.deliver_actions` -- which acknowledges only the
-    ones that actually arrived, so a failed delivery leaves ``notified_at`` /
-    ``all_clear_notified_at`` NULL for :func:`run_pending_alert_notification_sweep` to retry.
+    and collect whatever :class:`~services.alerts.notifications.PendingAlertAction`\\ s the
+    evaluation and the platform budget produced.
 
-    One commit per run, one rollback on failure, matching every other Stage 1 task in this
-    package: an evaluation is not partially true.
+    Then, and only then, deliver. The whole batch of lifecycle decisions is committed in one
+    transaction -- an evaluation is not partially true, so it is still one commit -- before a
+    single notifier is called, and each delivered action's receipt is committed before the next
+    action is sent (see :func:`~services.alerts.notifications.deliver_actions`). A delivery that
+    fails, or whose receipt will not commit, leaves ``notified_at`` / ``all_clear_notified_at``
+    NULL for :func:`run_pending_alert_notification_sweep` to redeliver, and takes nothing durable
+    down with it.
+
+    A failure *before* the lifecycle commit -- a malformed payload, a stale observation, a lost
+    dedupe race -- rolls the whole evaluation back and re-raises for Stage1Task to retry, having
+    delivered nothing at all.
     """
     run_at = _parse_now(now)
     job = Stage1Job.create(
@@ -277,8 +301,14 @@ def run_alert_evaluation(
                 actions.append(_all_clear_action(outcome, observation.scope))
             actions.extend(outcome.actions)
 
-        report = deliver_actions(actions, notifier=notifier, acknowledger=service, now=run_at)
+        # Every lifecycle decision this run made becomes durable here, before the first notifier
+        # call. Nothing delivered below can be rolled back, so nothing delivered below may sit in
+        # a transaction that could still roll the alert that owed it back.
         session.commit()
+
+        report = deliver_actions(
+            actions, notifier=notifier, acknowledger=service, transaction=session, now=run_at
+        )
 
         metrics.increment(metrics.JOB_SUCCESSES)
         completed = job.mark_succeeded()
@@ -302,6 +332,10 @@ def run_alert_evaluation(
             "failed": len(report.failed),
         }
     except Exception:
+        # Before the commit above this discards the whole evaluation, which is the point: a
+        # partially-evaluated batch is not a batch. After it, there is nothing durable left to
+        # discard -- the lifecycle is committed and every receipt commits on its own -- so the
+        # retry re-evaluates rows that already moved and re-owes only what was never acknowledged.
         session.rollback()
         metrics.increment(metrics.JOB_FAILURES)
         logger.exception("alert evaluation pipeline failed")
@@ -324,7 +358,12 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
     (``celery_app.BEAT_SCHEDULE``) independently of whatever pipeline stage evaluates scores.
 
     This never re-runs the lifecycle decision -- an alert's severity or state is not
-    recomputed here -- it only resends what an earlier run already decided was owed.
+    recomputed here -- it only resends what an earlier run already decided was owed. So it writes
+    no lifecycle state and has none to commit up front: it reads the owed rows in a deterministic
+    order (oldest first, id-tiebroken), delivers them in that order, and commits each receipt
+    before the next send, exactly as :func:`run_alert_evaluation` does. A receipt that will not
+    commit costs its own action and nothing else; that action keeps its NULL timestamp, and the
+    next sweep finds it owed again.
     """
     run_at = _parse_now(now)
     job = Stage1Job.create(RUN_ALERT_NOTIFICATION_SWEEP, {}).mark_running()
@@ -337,22 +376,28 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
         service = AlertLifecycleService(repository)
         notifier = build_notifier()
 
+        # Ordered, so a redelivery run is reproducible and two sweeps take the same rows in the
+        # same order rather than racing each other into a different one.
         pending_notifications = list(
             session.execute(
-                select(Alert).where(
+                select(Alert)
+                .where(
                     Alert.state.in_(ACTIVE_ALERT_STATES),
                     Alert.notified_at.is_(None),
                 )
+                .order_by(Alert.created_at.asc(), Alert.id.asc())
             )
             .scalars()
             .all()
         )
         pending_all_clears = list(
             session.execute(
-                select(Alert).where(
+                select(Alert)
+                .where(
                     Alert.state == AlertState.RESOLVED.value,
                     Alert.all_clear_notified_at.is_(None),
                 )
+                .order_by(Alert.resolved_at.asc(), Alert.id.asc())
             )
             .scalars()
             .all()
@@ -380,8 +425,11 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
             for alert in pending_all_clears
         ]
 
-        report = deliver_actions(actions, notifier=notifier, acknowledger=service, now=run_at)
-        session.commit()
+        # Built from the rows before anything is delivered: an action carries plain values, so no
+        # step below has to touch an ORM row a per-receipt commit has since expired.
+        report = deliver_actions(
+            actions, notifier=notifier, acknowledger=service, transaction=session, now=run_at
+        )
 
         metrics.increment(metrics.JOB_SUCCESSES)
         completed = job.mark_succeeded()

@@ -12,13 +12,24 @@ a failed delivery leaves the timestamp NULL -- and a NULL timestamp is exactly h
 the message still owed. A notifier that returns ``False``, raises, or times out therefore claims
 nothing and loses nothing.
 
+Which is only true if the receipt outlives the send. A send cannot be un-sent, so it must never
+sit inside a transaction that can still roll back the evaluation that owed it: a rollback after a
+delivery is a resolution the retry re-resolves and announces a second time. :func:`deliver_actions`
+therefore requires the caller's lifecycle work to be committed *before* it is called, and commits
+each receipt it writes before delivering the next action -- so a crash costs the one receipt in
+flight and nothing else. What that leaves is an at-least-once channel with a stable name for every
+message (:attr:`PendingAlertAction.idempotency_key`); the platform owes the key, and a channel that
+honours it owes delivering that key once.
+
 Four kinds, and the difference between them is the product:
 
 * ``NOTIFICATION`` -- a new or escalated alert. Acknowledged into `notified_at`. An escalation
-  re-notifies by design, so the timestamp records the *latest* delivery.
+  re-notifies by design, so the timestamp records the *latest* delivery, and a redelivery is
+  tolerated: this message is at-least-once, and carries no idempotency key (see below).
 * ``ALL_CLEAR`` -- a resolved alert, and the one message that must never be sent twice or wrongly.
   Acknowledged into `all_clear_notified_at`, which is written once: a second acknowledgement of the
-  same alert is refused, so a retry after a partial failure cannot announce an ending twice.
+  same alert is refused, so a retry after a partial failure cannot announce an ending twice. It is
+  the kind that carries a stable idempotency key, because it is the kind that must not repeat.
 * ``SUPERSESSION`` -- an alert replaced by another (by the budget, or by a broader alert). It
   carries the successor's id, and it is emphatically *not* an all-clear: nothing ended, and no
   resolution timestamp is written anywhere on its path.
@@ -75,6 +86,35 @@ class PendingAlertAction:
         """Whether a successful delivery is written back to the alert row."""
         return self.kind in ACKNOWLEDGED_KINDS and self.alert_id is not None
 
+    @property
+    def idempotency_key(self) -> str | None:
+        """A stable name for *this message*, or ``None`` where no honest one exists.
+
+        Two actions carrying the same key are the same message, however many times a task retry or
+        a sweep re-derives them from the row. Delivery is at-least-once; a channel that honours the
+        key makes it once. That is the whole contract, and it is deliberately only claimed where it
+        is true:
+
+        * ``ALL_CLEAR`` -- ``all_clear:<alert_id>``. An alert row resolves exactly once (`resolved`
+          is terminal; a key that re-fires opens a *new* row with a new id), so this names one
+          real-world ending forever, and the evaluation task and the sweep derive it identically.
+        * ``SUPERSESSION`` -- ``supersession:<alert_id>:<successor_id>``. A row is superseded once,
+          by one successor.
+        * ``NOTIFICATION`` -- ``None``, and deliberately. Nothing on `alerts` records *which*
+          evaluation owes the message, so every key derivable from the row today (id, severity,
+          state) is reused when an alert escalates, downgrades, and escalates back into the same
+          band -- and a key-honouring channel would then swallow a real re-escalation. Duplicating
+          a notification is tolerated by design here; losing one is not.
+        * ``BUDGET_SUPPRESSED`` -- ``None``. Audit only: no row, and nothing ever redelivers it.
+        """
+        if self.alert_id is None:
+            return None
+        if self.kind is AlertActionKind.ALL_CLEAR:
+            return f"all_clear:{self.alert_id}"
+        if self.kind is AlertActionKind.SUPERSESSION and self.superseded_by is not None:
+            return f"supersession:{self.alert_id}:{self.superseded_by}"
+        return None
+
     def as_dict(self) -> dict[str, Any]:
         """A JSON-serialisable view, for task payloads and audit logs."""
         return {
@@ -85,6 +125,7 @@ class PendingAlertAction:
             "severity": None if self.severity is None else self.severity.value,
             "reason": self.reason,
             "superseded_by": None if self.superseded_by is None else str(self.superseded_by),
+            "idempotency_key": self.idempotency_key,
         }
 
 
@@ -106,6 +147,20 @@ class AlertAcknowledger(Protocol):
     def acknowledge_notification(self, alert_id: uuid.UUID, *, at: datetime.datetime) -> bool: ...
 
     def acknowledge_all_clear(self, alert_id: uuid.UUID, *, at: datetime.datetime) -> bool: ...
+
+
+@runtime_checkable
+class AckTransaction(Protocol):
+    """The unit of durability around one receipt. A :class:`sqlalchemy.orm.Session` is one.
+
+    :func:`deliver_actions` commits after each receipt it writes, and rolls back the single receipt
+    it could not write. It never commits the caller's lifecycle work: that is already durable
+    before the first notifier call, and making it so is the caller's job.
+    """
+
+    def commit(self) -> None: ...
+
+    def rollback(self) -> None: ...
 
 
 class LoggingAlertNotifier(AlertNotifier):
@@ -174,15 +229,27 @@ def deliver_actions(
     *,
     notifier: AlertNotifier,
     acknowledger: AlertAcknowledger,
+    transaction: AckTransaction,
     now: datetime.datetime,
 ) -> DeliveryReport:
-    """Deliver each action and acknowledge only the ones that actually arrived.
+    """Deliver the actions in the order given, committing each receipt before the next send.
 
-    Delivery comes first and the receipt second, never the other way round: a timestamp written
-    before a send that then fails is a message the platform believes it delivered and never will.
-    A notifier that raises is caught here rather than aborting the remaining actions -- one dead
-    channel must not swallow the other alerts this run owes -- and its action lands in ``failed``,
-    unacknowledged and still owed.
+    Three orderings, each of them load-bearing:
+
+    * **The lifecycle is already durable.** The caller committed the evaluation that produced these
+      actions before calling this, and nothing here writes lifecycle state -- only receipts. A send
+      cannot be un-sent, so it must not sit inside a transaction that can still roll the alert
+      back: a rollback after a delivery is a resolution the retry re-resolves and announces twice.
+    * **Delivery first, receipt second.** A timestamp written before a send that then fails is a
+      message the platform believes it delivered and never will.
+    * **Receipt committed before the next send.** A receipt that will not commit costs its own
+      action and nothing else: everything acknowledged earlier this run stays durable, and the
+      failed action keeps its NULL timestamp and stays owed.
+
+    A notifier that raises is caught rather than aborting the run -- one dead channel must not
+    swallow the other alerts this run owes -- and its action lands in ``failed``, unacknowledged
+    and still owed. So does a delivery whose receipt would not commit: it really was sent, and the
+    redelivery it will get carries the same :attr:`~PendingAlertAction.idempotency_key`.
     """
     delivered: list[PendingAlertAction] = []
     failed: list[PendingAlertAction] = []
@@ -197,8 +264,20 @@ def deliver_actions(
             logger.warning("alert action was not delivered", extra=action.as_dict())
             failed.append(action)
             continue
-        if action.requires_acknowledgement:
+        if not action.requires_acknowledgement:
+            delivered.append(action)  # no receipt to write, so no transaction to commit
+            continue
+        try:
             _acknowledge(action, acknowledger=acknowledger, now=now)
+            transaction.commit()
+        except Exception:
+            # The send happened; only its receipt did not. Roll back that receipt alone -- the
+            # lifecycle and every earlier receipt are already committed -- and leave the action
+            # owed, so the sweep redelivers it under the same idempotency key.
+            transaction.rollback()
+            logger.exception("alert action receipt was not committed", extra=action.as_dict())
+            failed.append(action)
+            continue
         delivered.append(action)
     return DeliveryReport(delivered=tuple(delivered), failed=tuple(failed))
 
@@ -210,7 +289,9 @@ def _acknowledge(
     assert action.alert_id is not None  # noqa: S101 - guarded by `requires_acknowledgement`
     if action.kind is AlertActionKind.NOTIFICATION:
         acknowledger.acknowledge_notification(action.alert_id, at=now)
-    elif action.kind is AlertActionKind.ALL_CLEAR:
-        # Returns False when the all-clear had already been acknowledged: a redelivered resolution
-        # keeps its original receipt rather than stamping a second, later one.
-        acknowledger.acknowledge_all_clear(action.alert_id, at=now)
+    elif not acknowledger.acknowledge_all_clear(action.alert_id, at=now):
+        # Refused: this all-clear already had a receipt, so it has just been announced a second
+        # time -- the residual at-least-once window a key-honouring channel is what closes. The
+        # original receipt stands (no second, later timestamp), and the duplicate is visible here
+        # rather than silent.
+        logger.warning("all-clear redelivered: it was already acknowledged", extra=action.as_dict())

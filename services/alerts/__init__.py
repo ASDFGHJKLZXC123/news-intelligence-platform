@@ -49,6 +49,7 @@ from services.alerts.lifecycle import (
 )
 from services.alerts.notifications import (
     ACKNOWLEDGED_KINDS,
+    AckTransaction,
     AlertAcknowledger,
     AlertActionKind,
     AlertNotifier,
@@ -118,6 +119,7 @@ __all__ = [
     "SEVERITY_ORDER",
     "VELOCITY_REQUIRED_RUNS",
     "VELOCITY_Z_THRESHOLD",
+    "AckTransaction",
     "AlertAcknowledger",
     "AlertActionKind",
     "AlertDedupeConflictError",
