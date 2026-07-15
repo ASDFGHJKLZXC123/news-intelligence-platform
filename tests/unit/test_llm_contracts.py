@@ -202,6 +202,14 @@ def _payloads() -> dict[str, dict[str, Any]]:
             "schema_name": "EntityLinkAdjudication",
             "decision": "company-acme",
         },
+        "ClaimGrounding": {
+            **envelope,
+            "schema_name": "ClaimGrounding",
+            "verdicts": [
+                {"claim_id": "claim-1", "verdict": "supported", "rationale": "matches the snippet"},
+                {"claim_id": "claim-2", "verdict": "unverifiable"},
+            ],
+        },
     }
 
 
@@ -233,6 +241,7 @@ def test_registry_and_contract_names_are_discoverable() -> None:
         "RiskWarning",
         "ReportComposition",
         "EntityLinkAdjudication",
+        "ClaimGrounding",
     }
 
 

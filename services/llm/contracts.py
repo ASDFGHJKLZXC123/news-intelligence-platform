@@ -582,6 +582,60 @@ class EntityLinkAdjudication(BaseLLMContract):
         return None if self.decision == NIL_DECISION else self.decision
 
 
+class GroundingVerdict(StrEnum):
+    """One cited claim's grounding verdict against its supportive evidence snippets (spec).
+
+    ``supported`` and ``unsupported`` are judgements the evidence carries; ``unverifiable`` is
+    the honest third answer when the snippets are insufficient to decide. Per the report-
+    generation spec only ``unsupported`` triggers a section regeneration -- ``unverifiable`` is
+    not a failure and never does.
+    """
+
+    SUPPORTED = "supported"
+    UNSUPPORTED = "unsupported"
+    UNVERIFIABLE = "unverifiable"
+
+
+class ClaimGroundingVerdict(_Finding):
+    """One cited claim's verdict.
+
+    ``claim_id`` is whitelisted like every other id: the grounding model may only return a
+    verdict for a claim the block actually cited, never a minted or foreign id. ``rationale`` is
+    optional prose the model may add and the gate may echo into regeneration feedback.
+    """
+
+    claim_id: str
+    verdict: GroundingVerdict
+    rationale: str = ""
+
+    @field_validator("claim_id")
+    @classmethod
+    def _validate_claim_id(cls, value: str, info: ValidationInfo) -> str:
+        return _enforce_allowed_id(value, info, field_name="claim_id")
+
+
+class ClaimGrounding(BaseLLMContract):
+    """Grounding gate output: verdicts for the claims cited by one claim-tagged block (spec).
+
+    The contract polices ids and shape; it does not police *coverage* -- that one verdict exists
+    per cited claim and no claim is verdicted twice is the grounding gate's fail-closed check,
+    because only the gate knows the exact set of claims the block cited.
+    """
+
+    SCHEMA_NAME: ClassVar[str] = "ClaimGrounding"
+    schema_name: Literal["ClaimGrounding"]
+    verdicts: list[ClaimGroundingVerdict] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _validate_verdicts(self) -> ClaimGrounding:
+        _validate_findings_or_no_reason(
+            items=self.verdicts,
+            no_finding_reason=self.no_finding_reason,
+            label="verdicts",
+        )
+        return self
+
+
 LLM_CONTRACT_REGISTRY: dict[str, type[BaseLLMContract]] = {
     EventExtraction.SCHEMA_NAME: EventExtraction,
     IndustryImpact.SCHEMA_NAME: IndustryImpact,
@@ -592,6 +646,7 @@ LLM_CONTRACT_REGISTRY: dict[str, type[BaseLLMContract]] = {
     RiskWarning.SCHEMA_NAME: RiskWarning,
     ReportComposition.SCHEMA_NAME: ReportComposition,
     EntityLinkAdjudication.SCHEMA_NAME: EntityLinkAdjudication,
+    ClaimGrounding.SCHEMA_NAME: ClaimGrounding,
 }
 
 

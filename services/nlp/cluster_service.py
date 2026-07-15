@@ -88,6 +88,7 @@ def cluster_unclustered_articles(
             title=lead.title,
             summary=lead.summary,
             severity_score=features["severity_score"],
+            hotness_score=features["hotness_score"],
             article_count=features["article_count"],
             source_count=features["source_count"],
             first_seen_at=features["first_seen_at"],

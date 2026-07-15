@@ -1,0 +1,63 @@
+GNU Unifont -- bundled font asset for the Stage 6 daily-brief PDF export
+========================================================================
+
+File            : unifont-14.0.04.ttf
+Upstream source : https://ftp.gnu.org/gnu/unifont/unifont-14.0.04/unifont-14.0.04.ttf
+Upstream version: 14.0.04
+SHA-256         : 211d1ddddc566511db254c746d83df77b4a1b9b2549cdffe0a3e901e46eefea8
+
+The file is the unmodified upstream release, bundled verbatim so that the PDF exporter
+(services/reports/_pdf.py) can embed a subset of it with no network access and no dependence
+on any system-installed font. It is read from disk only.
+
+Copyright
+---------
+Copyright (C) 1998-2022 Roman Czyborra, Paul Hardy, Qianqian Fang, Andrew Miller,
+Johnnie Weaver, David Corbett, Nils Moskopp, Rebecca Bettencourt, et al.
+
+License (as declared in the font's own `name` table, IDs 13 and 14)
+-------------------------------------------------------------------
+Dual license:
+  * SIL Open Font License, Version 1.1 -- https://scripts.sil.org/OFL
+  * GNU General Public License, Version 2 or later, with the GNU Font Embedding Exception
+    -- https://www.gnu.org/licenses/gpl.html
+
+This project relies on the SIL Open Font License v1.1 for redistribution of the font file and
+for embedding a subset of it in generated PDF documents. Under the OFL the font may be bundled,
+redistributed and embedded freely, including inside documents. The full OFL v1.1 text is
+available from the SIL URL above; the GNU Unifont sources ship it as their `OFL-1.1.txt`.
+
+SIL OPEN FONT LICENSE Version 1.1 -- 26 February 2007 (summary of the binding terms)
+------------------------------------------------------------------------------------
+PERMISSION & CONDITIONS. Permission is hereby granted, free of charge, to any person obtaining a
+copy of the font software, to use, study, copy, merge, embed, modify, redistribute, and sell
+modified and unmodified copies of the font software, subject to the following conditions:
+
+1) Neither the font software nor any of its individual components, in original or modified
+   versions, may be sold by itself.
+2) Original or modified versions of the font software may be bundled, redistributed and/or sold
+   with any software, provided that each copy contains the above copyright notice and this
+   license. These can be included either as stand-alone text files, human-readable headers or in
+   the appropriate machine-readable metadata fields within text or binary files as long as those
+   fields can be easily viewed by the user.
+3) No modified version of the font software may use the Reserved Font Name(s) unless explicit
+   written permission is granted by the corresponding Copyright Holder. (This bundle ships the
+   font unmodified and does not rename it.)
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the font software shall not be used
+   to promote, endorse or advertise any modified version, except to acknowledge the
+   contribution(s) of the Copyright Holder(s) and the Author(s) or with their explicit written
+   permission.
+5) The font software, modified or unmodified, in part or in whole, must be distributed entirely
+   under this license, and must not be distributed under any other license. The requirement for
+   fonts to remain under this license does not apply to any document created using the font
+   software.
+
+TERMINATION. This license becomes null and void if any of the above conditions are not met.
+
+DISCLAIMER. THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL,
+SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER
+DEALINGS IN THE FONT SOFTWARE.

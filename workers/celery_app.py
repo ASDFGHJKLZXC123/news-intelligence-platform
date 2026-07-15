@@ -7,6 +7,9 @@ limits, and Celery Beat schedule ownership. No product/business logic lives here
 
 from __future__ import annotations
 
+import datetime
+from zoneinfo import ZoneInfo
+
 from celery import Celery, Task
 from celery.schedules import crontab
 from kombu import Queue
@@ -22,6 +25,63 @@ QUEUE_INGESTION = "ingestion"
 QUEUE_PIPELINE = "pipeline"
 TASK_MAX_RETRIES = 3
 TASK_RETRY_BACKOFF_MAX = 600
+
+
+class EasternDailyCrontab(crontab):
+    """A ``crontab`` whose fields are evaluated in America/New_York, not the app timezone.
+
+    ADR 0009 anchors the daily brief to 05:30 ET so the cutoff never drifts into the US
+    trading day. Three non-options rule out the obvious approaches: Celery 5.6's ``crontab``
+    evaluates its fields in the *app* timezone (UTC here, ``enable_utc=True``) and does **not**
+    accept a ``timezone=`` argument -- passing one raises ``TypeError``; changing the global
+    ``celery_app.conf.timezone`` would silently move every schedule already accepted above; and
+    a fixed UTC hour would be an hour wrong for half the year.
+
+    So the DST-awareness is per-schedule and minimal. This subclass pins the evaluation
+    timezone to ET and forces every datetime the base scheduler reasons about into ET before
+    the cron arithmetic runs. ``crontab``'s own ``ffwd`` then lands on 05:30 *ET wall-clock* --
+    a :class:`~zoneinfo.ZoneInfo` instant whose UTC offset floats with DST -- which Celery
+    converts back to real UTC seconds. Net effect: **10:30 UTC in winter (EST), 09:30 UTC in
+    summer (EDT)**, and 05:30 ET on both transition days, fired exactly once each. 05:30 exists
+    on every US calendar date -- it is in neither the spring-forward gap (02:00-03:00) nor the
+    fall-back fold (01:00-02:00) -- so there is no missed or duplicated fire
+    (see :mod:`services.reports.window`).
+
+    Only the two seams the base class routes every datetime through are overridden, so the
+    object stays pickle/``__eq__``/Beat compatible: the inherited ``__reduce__`` reconstructs it
+    from its cron fields alone (no unpicklable ``nowfun`` is stored, and ``__init__`` re-pins the
+    timezone on every unpickle), and equality still compares the cron spec.
+    """
+
+    #: ADR 0009's anchor timezone. Deliberately duplicated from
+    #: ``services.reports.window.BRIEF_TIMEZONE`` rather than imported: this operational Celery
+    #: module must stay free of the report-generation service (product logic) at import time.
+    TIMEZONE = ZoneInfo("America/New_York")
+
+    def __init__(
+        self,
+        minute: object = "*",
+        hour: object = "*",
+        day_of_week: object = "*",
+        day_of_month: object = "*",
+        month_of_year: object = "*",
+        **kwargs: object,
+    ) -> None:
+        super().__init__(minute, hour, day_of_week, day_of_month, month_of_year, **kwargs)
+        # Shadow ``BaseSchedule.tz`` (a kombu ``cached_property`` -- a data descriptor whose
+        # ``__set__`` writes straight to ``__dict__``), so every ``maybe_make_aware``/``to_local``
+        # the base scheduler performs evaluates in ET. Re-applied by ``__init__`` on every unpickle.
+        self.tz = self.TIMEZONE
+
+    def maybe_make_aware(
+        self, dt: datetime.datetime, naive_as_utc: bool = True
+    ) -> datetime.datetime:
+        # The base method localizes *naive* datetimes to ``self.tz`` but leaves *aware* ones
+        # (Beat stores ``last_run_at`` UTC-aware) untouched -- which would make the cron
+        # arithmetic land on 05:30 UTC. Convert everything to ET so both ``last_run_at`` and
+        # ``now`` are ET wall-clock before the fields are compared and ``ffwd`` is applied.
+        return super().maybe_make_aware(dt, naive_as_utc=naive_as_utc).astimezone(self.tz)
+
 
 # --- Entity identity refresh schedule (ADR 0006) --------------------------------------
 # Cadence and ordering come straight from the ADR: SEC (precedence 1) weekly, GLEIF (2) and
@@ -71,6 +131,20 @@ ALERT_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     },
 }
 
+# --- Daily brief schedule (ADR 0009) ---------------------------------------------------
+# The one scheduled generation of the global daily brief: every calendar day at 05:30 ET (ADR
+# 0009's cutoff), via the DST-aware crontab above. The task is referenced by its exact name
+# (`generate_daily_brief`, matching ADR 0009) rather than imported, so this operational module
+# does not depend on `workers.report_tasks`. The task fires with no args and derives its own
+# `brief_date` from the ET cutoff at run time -- a static schedule cannot know "now".
+REPORT_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
+    "daily-brief-generation": {
+        "task": "generate_daily_brief",
+        "schedule": EasternDailyCrontab(minute=30, hour=5),
+        "options": {"queue": QUEUE_PIPELINE},
+    },
+}
+
 # Celery Beat owns scheduled jobs, and this dict is their single definition: one entry per
 # schedule, no task scheduled twice. Stage 1's no-op heartbeat proves the scheduler wiring.
 BEAT_SCHEDULE: dict[str, dict[str, object]] = {
@@ -81,6 +155,7 @@ BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     },
     **IDENTITY_BEAT_SCHEDULE,
     **ALERT_BEAT_SCHEDULE,
+    **REPORT_BEAT_SCHEDULE,
 }
 
 
@@ -122,6 +197,10 @@ celery_app = Celery(
         # the embedding tasks it follows: an event is worth reranking once it has been embedded,
         # which is an event in the pipeline, not a time of day.
         "workers.analogy_tasks",
+        # ADR 0009 daily brief. Registered so a worker can execute the `generate_daily_brief`
+        # coordinator, and unlike the tasks above it *does* have a Beat entry
+        # (REPORT_BEAT_SCHEDULE): the brief is a clock-triggered artifact, one per ET calendar day.
+        "workers.report_tasks",
     ],
 )
 

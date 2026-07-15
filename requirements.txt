@@ -19,3 +19,9 @@ httpx>=0.28,<1.0
 # (`python -m spacy download en_core_web_trf`, which also installs the spacy-transformers
 # runtime the model declares). Nothing in the application downloads a model.
 spacy>=3.8,<4.0
+# Portable, Unicode-capable PDF export of the daily brief (Stage 6, services/reports/_pdf.py).
+# Exact-pinned: the export contract requires byte-identical output for identical input, and a
+# minor fpdf2 change could alter font subsetting / metadata / object ordering. It pulls in its
+# own fonttools/Pillow/defusedxml; the bundled font (services/reports/assets/) is embedded from
+# disk with no network access. pypdf (extraction, tests only) lives in requirements-dev.txt.
+fpdf2==2.8.4

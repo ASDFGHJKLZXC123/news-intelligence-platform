@@ -15,17 +15,22 @@ from __future__ import annotations
 import datetime
 import decimal
 import uuid
+from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import func, or_, select
+from sqlalchemy import Text, and_, cast, func, or_, select
 from sqlalchemy.orm import Session, aliased
 
 from db.base import get_session
 from db.models import (
     ACTIVE_ALERT_STATES,
     Alert,
+    Article,
+    Claim,
+    ClaimEvidence,
     Company,
     CompanyRiskRollup,
     CrisisPrediction,
@@ -35,6 +40,7 @@ from db.models import (
     EventIndustry,
     EventLocation,
     EventTimelineItem,
+    EvidenceItem,
     IndustryRiskRollup,
     Job,
     LLMRun,
@@ -47,6 +53,25 @@ from db.models import (
 )
 from services.alerts import AlertLifecycleService, SQLAlchemyAlertRepository
 from services.alerts.supersession import SupersessionError, supersede_with_broader_alert
+from services.reports.context import (
+    ARTICLE_EVIDENCE_SOURCE_TYPE,
+    MAX_EXCERPT_CHARS,
+    build_source_excerpt,
+)
+from services.reports.exports import (
+    ReportExportRepository,
+    collect_claim_refs,
+    export_filename,
+    render_markdown,
+    render_pdf,
+)
+from services.reports.lifecycle import (
+    ReportLifecycleRepository,
+    ReportSectionSnapshot,
+    ReportSnapshot,
+)
+from services.reports.repository import DAILY_BRIEF_REPORT_TYPE
+from services.reports.selection import PUBLISHED_STATUS
 
 router = APIRouter(tags=["intelligence"])
 
@@ -290,6 +315,106 @@ def _serialize_report(report: Report, sections: list[ReportSection] | None = Non
     return payload
 
 
+def _serialize_brief_snapshot(
+    report: ReportSnapshot, sections: tuple[ReportSectionSnapshot, ...] | None = None
+) -> dict[str, Any]:
+    """Serialize a detached daily-brief snapshot from the lifecycle repository.
+
+    The dedicated daily-brief endpoints read through ``ReportLifecycleRepository``, whose reads
+    return frozen, session-detached snapshots (bounded, totally ordered, no ORM row). The wire
+    shape mirrors :func:`_serialize_report`; ``confidence_score`` is omitted because it is not part
+    of the snapshot (the daily brief never sets it). Section order/body/blocks/evidence_refs/
+    grounding_status are preserved exactly.
+    """
+    payload: dict[str, Any] = {
+        "id": str(report.id),
+        # The daily brief is a global artifact (ADR 0009): it has no owner.
+        "user_id": _json_value(report.user_id),
+        "report_type": report.report_type,
+        "brief_date": _iso(report.brief_date),
+        "event_id": _json_value(report.event_id),
+        "title": report.title,
+        "status": report.status,
+        "version": report.version,
+        "change_reason": report.change_reason,
+        "stale": report.stale,
+        "generated_by_run_id": _json_value(report.generated_by_run_id),
+        "created_at": _iso(report.created_at),
+        "updated_at": _iso(report.updated_at),
+    }
+    if sections is not None:
+        payload["sections"] = [
+            {
+                "id": str(section.id),
+                "section_order": section.section_order,
+                "title": section.title,
+                "body": section.body,
+                # A withheld/deterministic section has no blocks -> `[]`, faithfully.
+                "blocks": [
+                    {"text": block.text, "claim_ids": list(block.claim_ids)}
+                    for block in section.blocks
+                ],
+                "evidence_refs": [str(ref) for ref in section.evidence_refs],
+                "grounding_status": section.grounding_status,
+            }
+            for section in sections
+        ]
+    return payload
+
+
+#: The Evidence Drawer resolves one claim's evidence links. A single claim carrying more links than
+#: this is an upstream extraction fault, not a citation; the read over-reads by one and fails loud
+#: rather than returning a silently truncated list (report-generation spec / requirement 6).
+EVIDENCE_LINK_LIMIT = 200
+
+
+class EvidenceReadOverflowError(RuntimeError):
+    """A claim's evidence-link read exceeded :data:`EVIDENCE_LINK_LIMIT`; fail loud, do not truncate."""
+
+
+@dataclass(frozen=True)
+class EvidenceDrawerLink:
+    """One resolved ``claim_evidence`` row for the drawer. Detached: never an ORM row or full text.
+
+    ``snippet`` is a bounded (<= :data:`MAX_EXCERPT_CHARS`) excerpt derived deterministically from an
+    article's summary (then body); it is present only for article-typed evidence whose article
+    resolves. Article full text and ``EvidenceItem.raw_ref``/``metadata`` are never carried.
+    """
+
+    evidence_item_id: uuid.UUID
+    support_type: str
+    support_confidence: Any
+    source_type: str
+    source_id: str
+    title: str
+    publisher: str | None
+    url: str | None
+    published_at: datetime.datetime | None
+    credibility: Any
+    snippet: str | None
+    snippet_origin: str | None
+    snippet_truncated: bool
+
+
+def _serialize_evidence_link(link: EvidenceDrawerLink) -> dict[str, Any]:
+    return {
+        "evidence_item_id": str(link.evidence_item_id),
+        # The real claim_evidence support_type (supports/contradicts/...), never fabricated.
+        "support_type": link.support_type,
+        "confidence": _json_value(link.support_confidence),
+        "source_type": link.source_type,
+        "source_id": link.source_id,
+        "title": link.title,
+        "publisher": link.publisher,
+        "url": link.url,
+        "published_at": _iso(link.published_at),
+        "credibility": _json_value(link.credibility),
+        "snippet": link.snippet,
+        "snippet_origin": link.snippet_origin,
+        "snippet_truncated": link.snippet_truncated,
+    }
+
+
 class IntelligenceRepository:
     """SQLAlchemy-backed read model for frontend-facing intelligence endpoints."""
 
@@ -483,6 +608,30 @@ class IntelligenceRepository:
         stmt = select(Report).order_by(Report.created_at.desc()).limit(limit)
         if user_id is not None:
             stmt = stmt.where(Report.user_id == user_id)
+        # Daily briefs are versioned and global; the default listing serves only the latest
+        # PUBLISHED version per brief_date -- never a generating/failed/superseded one
+        # (report-generation spec, "Lifecycle and versioning"; the dedicated
+        # /reports/daily-brief endpoints expose full history). Every other report type
+        # (event/user reports) is returned unchanged. The predicate is a no-op on the
+        # user-scoped path: daily briefs are user_id IS NULL, so a user_id filter already
+        # excludes them.
+        newer_published = aliased(Report)
+        has_newer_published = (
+            select(newer_published.id)
+            .where(
+                newer_published.report_type == DAILY_BRIEF_REPORT_TYPE,
+                newer_published.brief_date == Report.brief_date,
+                newer_published.status == PUBLISHED_STATUS,
+                newer_published.version > Report.version,
+            )
+            .exists()
+        )
+        stmt = stmt.where(
+            or_(
+                Report.report_type != DAILY_BRIEF_REPORT_TYPE,
+                and_(Report.status == PUBLISHED_STATUS, ~has_newer_published),
+            )
+        )
         reports = list(self.session.execute(stmt).scalars().all())
         if not reports:
             return []
@@ -500,6 +649,107 @@ class IntelligenceRepository:
         for section in sections:
             sections_by_report[section.report_id].append(section)
         return [(report, sections_by_report[report.id]) for report in reports]
+
+    def get_claim(self, claim_id: uuid.UUID) -> Claim | None:
+        return self.session.get(Claim, claim_id)
+
+    def claim_evidence_links(self, claim_id: uuid.UUID) -> tuple[EvidenceDrawerLink, ...]:
+        """Every evidence item linked to a claim, resolved for the Evidence Drawer. Bounded, ordered.
+
+        One deterministic query joins ``claim_evidence -> evidence_items`` and *left*-joins the
+        backing ``articles``/``sources`` only for article-typed items (source_type = 'article',
+        source_id = the article UUID) -- the same discriminator the composition context uses. The
+        article body/summary never cross the boundary whole: only ``left(col, MAX+1)`` and the true
+        column length are read, from which a deterministic <= ``MAX_EXCERPT_CHARS`` snippet is
+        derived (summary first, then body). ``raw_ref``/``metadata`` are never selected. All
+        support types are returned (supports/contradicts/...); nothing is filtered or fabricated.
+        """
+        summary_head = func.left(Article.summary, MAX_EXCERPT_CHARS + 1)
+        body_head = func.left(Article.body, MAX_EXCERPT_CHARS + 1)
+        stmt = (
+            select(
+                ClaimEvidence.support_type,
+                ClaimEvidence.confidence_score.label("support_confidence"),
+                EvidenceItem.id.label("evidence_item_id"),
+                EvidenceItem.source_type,
+                EvidenceItem.source_id,
+                EvidenceItem.title,
+                EvidenceItem.publisher,
+                EvidenceItem.url,
+                EvidenceItem.published_at,
+                EvidenceItem.credibility_score,
+                Article.title.label("article_title"),
+                Article.url.label("article_url"),
+                Source.name.label("source_name"),
+                summary_head.label("summary_head"),
+                body_head.label("body_head"),
+                func.length(Article.summary).label("summary_length"),
+                func.length(Article.body).label("body_length"),
+            )
+            .select_from(ClaimEvidence)
+            .join(EvidenceItem, EvidenceItem.id == ClaimEvidence.evidence_item_id)
+            .outerjoin(
+                Article,
+                and_(
+                    EvidenceItem.source_type == ARTICLE_EVIDENCE_SOURCE_TYPE,
+                    EvidenceItem.source_id == cast(Article.id, Text),
+                ),
+            )
+            .outerjoin(Source, Source.id == Article.source_id)
+            .where(ClaimEvidence.claim_id == claim_id)
+            .order_by(
+                EvidenceItem.published_at.desc().nullslast(),
+                EvidenceItem.id,
+                ClaimEvidence.support_type,
+            )
+            # Over-read by one so an overflow fails loud rather than truncating silently.
+            .limit(EVIDENCE_LINK_LIMIT + 1)
+        )
+        rows = self.session.execute(stmt).all()
+        if len(rows) > EVIDENCE_LINK_LIMIT:
+            raise EvidenceReadOverflowError(
+                f"claim {claim_id} has more than {EVIDENCE_LINK_LIMIT} evidence links; "
+                "refusing to return a truncated list"
+            )
+        links: list[EvidenceDrawerLink] = []
+        for row in rows:
+            is_article = (
+                row.source_type == ARTICLE_EVIDENCE_SOURCE_TYPE and row.article_title is not None
+            )
+            snippet: str | None = None
+            snippet_origin: str | None = None
+            snippet_truncated = False
+            if is_article:
+                excerpt = build_source_excerpt(
+                    row.summary_head,
+                    row.body_head,
+                    summary_length=row.summary_length,
+                    body_length=row.body_length,
+                )
+                if not excerpt.is_empty:
+                    snippet = excerpt.text
+                    snippet_origin = excerpt.origin.value
+                    snippet_truncated = excerpt.truncated
+            links.append(
+                EvidenceDrawerLink(
+                    evidence_item_id=row.evidence_item_id,
+                    support_type=row.support_type,
+                    support_confidence=row.support_confidence,
+                    source_type=row.source_type,
+                    source_id=row.source_id,
+                    # For article evidence, prefer the citation snapshot but fall back to the
+                    # article's canonical link/publisher when the item did not store them.
+                    title=row.title,
+                    publisher=row.publisher or (row.source_name if is_article else None),
+                    url=row.url or (row.article_url if is_article else None),
+                    published_at=row.published_at,
+                    credibility=row.credibility_score,
+                    snippet=snippet,
+                    snippet_origin=snippet_origin,
+                    snippet_truncated=snippet_truncated,
+                )
+            )
+        return tuple(links)
 
     def list_jobs(self, *, state: str | None, limit: int) -> list[Job]:
         stmt = select(Job).order_by(Job.created_at.desc()).limit(limit)
@@ -535,6 +785,67 @@ def get_intelligence_repository(
 
 
 RepositoryDep = Annotated[IntelligenceRepository, Depends(get_intelligence_repository)]
+
+
+def get_report_lifecycle_repository(session: SessionDep) -> ReportLifecycleRepository:
+    """The accepted Stage 6 lifecycle read/stale repository over the request's session.
+
+    Its reads return detached, bounded, fail-loud snapshots; its one write here is the
+    stale-marking used by ``reprocess-event``. FastAPI caches ``get_session`` within a request,
+    so an endpoint taking both ``SessionDep`` and this dependency shares one session (and thus one
+    transaction) -- which is what lets ``reprocess-event`` mark stale and commit exactly once.
+    """
+    return ReportLifecycleRepository(session)
+
+
+LifecycleRepoDep = Annotated[ReportLifecycleRepository, Depends(get_report_lifecycle_repository)]
+
+
+def get_report_export_repository(session: SessionDep) -> ReportExportRepository:
+    """The Stage 6 export attribution repository over the request's session (read-only).
+
+    Shares ``get_session`` with the lifecycle repository (FastAPI caches it per request), so a
+    single export request reads the report snapshot, its sections and its source attribution over
+    one session -- and writes nothing.
+    """
+    return ReportExportRepository(session)
+
+
+ExportRepoDep = Annotated[ReportExportRepository, Depends(get_report_export_repository)]
+
+
+@dataclass(frozen=True)
+class QueuedBrief:
+    """The identity of a daily-brief generation task handed to the broker."""
+
+    task_id: str
+    task_name: str
+    queue: str
+
+
+def enqueue_generate_daily_brief(brief_date: datetime.date) -> QueuedBrief:
+    """Enqueue the accepted ``generate_daily_brief`` Celery task (ADR 0009) by name, asynchronously.
+
+    Opens no database and no Redis and never calls the coordinator: it hands the canonical
+    ``YYYY-MM-DD`` to the broker on ``QUEUE_PIPELINE`` and returns the task identity. The
+    coordinator (run by the worker) allocates a *new* version through its existing lifecycle
+    semantics; this never mutates or reuses a prior report. Imported lazily so importing this
+    module opens no broker connection and so the enqueue seam is monkeypatchable in tests.
+    """
+    from workers.celery_app import QUEUE_PIPELINE, celery_app
+    from workers.report_tasks import TASK_NAME
+
+    async_result = celery_app.send_task(
+        TASK_NAME, args=[brief_date.isoformat()], queue=QUEUE_PIPELINE
+    )
+    return QueuedBrief(task_id=str(async_result.id), task_name=TASK_NAME, queue=QUEUE_PIPELINE)
+
+
+def get_brief_enqueuer() -> Callable[[datetime.date], QueuedBrief]:
+    return enqueue_generate_daily_brief
+
+
+BriefEnqueuerDep = Annotated[Callable[[datetime.date], QueuedBrief], Depends(get_brief_enqueuer)]
 
 
 @router.get("/api/v1/dashboard")
@@ -833,6 +1144,172 @@ def list_reports(
     }
 
 
+# --------------------------------------------------------------------------------------
+# Daily brief (ADR 0009): the latest PUBLISHED version is served by default; prior versions
+# -- including generating/failed ones, with their status/stale/change_reason -- are explicit.
+# `/latest` is declared before `/{brief_date}` so the literal wins over the typed date param.
+# --------------------------------------------------------------------------------------
+
+
+def _brief_with_sections(repo: ReportLifecycleRepository, report: ReportSnapshot) -> dict[str, Any]:
+    return _serialize_brief_snapshot(report, repo.report_sections(report.id))
+
+
+@router.get("/api/v1/reports/daily-brief/latest")
+def get_daily_brief_latest(repo: LifecycleRepoDep) -> dict[str, Any]:
+    report = repo.latest_published_daily_brief()
+    if report is None:
+        raise HTTPException(status_code=404, detail="no published daily brief")
+    return {"report": _brief_with_sections(repo, report)}
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}")
+def get_daily_brief_by_date(brief_date: datetime.date, repo: LifecycleRepoDep) -> dict[str, Any]:
+    report = repo.latest_published_daily_brief_by_date(brief_date)
+    if report is None:
+        raise HTTPException(status_code=404, detail="no published daily brief for that date")
+    return {"report": _brief_with_sections(repo, report)}
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/versions")
+def list_daily_brief_versions(brief_date: datetime.date, repo: LifecycleRepoDep) -> dict[str, Any]:
+    versions = repo.daily_brief_versions(brief_date)
+    if not versions:
+        raise HTTPException(status_code=404, detail="no daily brief for that date")
+    # Newest first, bounded (the repository fails loud past its version bound). Metadata only:
+    # each entry carries status/stale/change_reason so a prior version is fully inspectable.
+    return {
+        "items": [_serialize_brief_snapshot(report) for report in versions],
+        "count": len(versions),
+    }
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/versions/{version}")
+def get_daily_brief_version(
+    brief_date: datetime.date,
+    version: Annotated[int, Path(ge=1)],
+    repo: LifecycleRepoDep,
+) -> dict[str, Any]:
+    report = repo.daily_brief_version(brief_date, version)
+    if report is None:
+        raise HTTPException(status_code=404, detail="no such daily brief version")
+    return {"report": _brief_with_sections(repo, report)}
+
+
+# --------------------------------------------------------------------------------------
+# Daily brief export (report-generation spec, S23.2): deterministic Markdown/PDF of a
+# *published* brief, with per-source attribution before the fixed disclaimer. Only published
+# reports may be exported: `latest` is the latest PUBLISHED version for a date; a specific
+# version exports only if that version is published (a failed/generating version is a 404).
+# Paths carry a `.md`/`.pdf` suffix -- a distinct literal segment that cannot shadow, and is
+# never shadowed by, the typed `{brief_date}`/`{version}` metadata routes above.
+# --------------------------------------------------------------------------------------
+
+#: Media types (RFC 7763 for Markdown); UTF-8 so the em dash in every brief title survives.
+_MARKDOWN_MEDIA_TYPE = "text/markdown; charset=utf-8"
+_PDF_MEDIA_TYPE = "application/pdf"
+
+
+def _published_or_404(report: ReportSnapshot | None) -> ReportSnapshot:
+    """Return a report only if it exists and is published; otherwise 404. Never exports a draft.
+
+    Guards the specific-version path in particular: ``daily_brief_version`` returns any status, so
+    a failed or still-generating version -- inspectable via the metadata endpoints -- must not be
+    exportable and is refused here.
+    """
+    if report is None or report.status != PUBLISHED_STATUS:
+        raise HTTPException(status_code=404, detail="no published daily brief to export")
+    return report
+
+
+def _export_response(
+    lifecycle_repo: ReportLifecycleRepository,
+    export_repo: ReportExportRepository,
+    report: ReportSnapshot,
+    *,
+    pdf: bool,
+) -> Response:
+    """Render a published brief to Markdown or PDF with a safe, deterministic download filename.
+
+    Reads only: the ordered sections, the distinct cited claims, and one bulk attribution query.
+    """
+    sections = lifecycle_repo.report_sections(report.id)
+    attributions = export_repo.source_attributions_for_report(collect_claim_refs(sections))
+    if pdf:
+        content: bytes = render_pdf(report, sections, attributions)
+        media_type, filename = _PDF_MEDIA_TYPE, export_filename(report, "pdf")
+    else:
+        content = render_markdown(report, sections, attributions).encode("utf-8")
+        media_type, filename = _MARKDOWN_MEDIA_TYPE, export_filename(report, "md")
+    return Response(
+        content=content,
+        media_type=media_type,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/export.md")
+def export_daily_brief_latest_markdown(
+    brief_date: datetime.date, repo: LifecycleRepoDep, export_repo: ExportRepoDep
+) -> Response:
+    report = _published_or_404(repo.latest_published_daily_brief_by_date(brief_date))
+    return _export_response(repo, export_repo, report, pdf=False)
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/export.pdf")
+def export_daily_brief_latest_pdf(
+    brief_date: datetime.date, repo: LifecycleRepoDep, export_repo: ExportRepoDep
+) -> Response:
+    report = _published_or_404(repo.latest_published_daily_brief_by_date(brief_date))
+    return _export_response(repo, export_repo, report, pdf=True)
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/versions/{version}/export.md")
+def export_daily_brief_version_markdown(
+    brief_date: datetime.date,
+    version: Annotated[int, Path(ge=1)],
+    repo: LifecycleRepoDep,
+    export_repo: ExportRepoDep,
+) -> Response:
+    report = _published_or_404(repo.daily_brief_version(brief_date, version))
+    return _export_response(repo, export_repo, report, pdf=False)
+
+
+@router.get("/api/v1/reports/daily-brief/{brief_date}/versions/{version}/export.pdf")
+def export_daily_brief_version_pdf(
+    brief_date: datetime.date,
+    version: Annotated[int, Path(ge=1)],
+    repo: LifecycleRepoDep,
+    export_repo: ExportRepoDep,
+) -> Response:
+    report = _published_or_404(repo.daily_brief_version(brief_date, version))
+    return _export_response(repo, export_repo, report, pdf=True)
+
+
+@router.get("/api/v1/evidence/{claim_id}")
+def get_evidence(claim_id: uuid.UUID, repo: RepositoryDep) -> dict[str, Any]:
+    """Resolve one claim id (from ``report_sections.evidence_refs``) to its evidence for the drawer.
+
+    A malformed id is rejected at routing (422 via the typed ``uuid.UUID`` path param); an unknown
+    claim is 404. Evidence is a bounded, deterministic list carrying the real support_type and, for
+    article evidence, a <= 200-char snippet plus canonical link/title/source attribution -- never
+    article full text or raw payload.
+    """
+    claim = repo.get_claim(claim_id)
+    if claim is None:
+        raise HTTPException(status_code=404, detail="claim not found")
+    links = repo.claim_evidence_links(claim_id)
+    return {
+        "claim": {
+            "id": str(claim.id),
+            "text": claim.claim_text,
+            "type": claim.claim_type,
+            "confidence": _json_value(claim.confidence_score),
+        },
+        "evidence": [_serialize_evidence_link(link) for link in links],
+    }
+
+
 @router.get("/api/v1/admin/jobs")
 def list_admin_jobs(
     repo: RepositoryDep,
@@ -921,8 +1398,63 @@ def list_admin_models(
     }
 
 
+class GenerateDailyBriefRequest(BaseModel):
+    """Body for ``POST /api/v1/internal/jobs/generate-daily-brief`` (ADR 0009 manual regeneration).
+
+    ``brief_date`` is required and explicit -- a manual regeneration always names the calendar date
+    it is for; an unparseable date is a 422 from the typed field. The ET-cutoff default is the
+    scheduled beat's job, not this endpoint's.
+    """
+
+    brief_date: datetime.date
+
+
+@router.post("/api/v1/internal/jobs/generate-daily-brief", status_code=202)
+def generate_daily_brief_job(
+    request: GenerateDailyBriefRequest, enqueue: BriefEnqueuerDep
+) -> dict[str, Any]:
+    """Queue the accepted ``generate_daily_brief`` task for one ``brief_date``; return 202 (ADR 0009).
+
+    Asynchronous only: it enqueues on the pipeline queue and returns the task identity. It opens no
+    database and no Redis, and never runs the coordinator inline -- the worker does that and mints a
+    *new* version through the lifecycle's existing semantics, never reusing a prior report.
+    """
+    queued = enqueue(request.brief_date)
+    return {
+        "status": "queued",
+        "task_id": queued.task_id,
+        "task_name": queued.task_name,
+        "queue": queued.queue,
+        "brief_date": request.brief_date.isoformat(),
+    }
+
+
+@router.post("/api/v1/admin/reprocess-event/{event_id}")
+def reprocess_event(
+    event_id: uuid.UUID, session: SessionDep, repo: LifecycleRepoDep
+) -> dict[str, Any]:
+    """Mark every published report that depends on an event stale (spec: reprocess never mutates).
+
+    404 if the event does not exist. Otherwise this only flips ``stale`` on dependent *published*
+    reports -- it never changes their content, status, or version, and does not touch Stage 4
+    observations. The stale-marking and the single commit share the request's session (``repo``
+    wraps the same ``session``), so it commits exactly once.
+    """
+    if session.get(Event, event_id) is None:
+        raise HTTPException(status_code=404, detail=f"event {event_id} not found")
+    count = repo.mark_published_reports_stale_for_event(event_id)
+    session.commit()
+    return {"event_id": str(event_id), "dependent_published_report_count": count}
+
+
 __all__ = [
+    "EvidenceDrawerLink",
     "IntelligenceRepository",
+    "QueuedBrief",
+    "enqueue_generate_daily_brief",
+    "get_brief_enqueuer",
     "get_intelligence_repository",
+    "get_report_export_repository",
+    "get_report_lifecycle_repository",
     "router",
 ]

@@ -202,6 +202,17 @@ class Event(Base):
     country: Mapped[str | None] = mapped_column(String(64), nullable=True)
     region: Mapped[str | None] = mapped_column(String(64), nullable=True)
     severity_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    #: How newsworthy the event is *right now* -- the daily brief ranks Top Events on
+    #: `0.6 x hotness_score + 0.4 x max_linked_risk_score` and qualifies nothing below 40
+    #: (report-generation spec, "Content selection"). It is not `severity_score`: severity
+    #: measures how big the event is (volume and source diversity), hotness measures how fast
+    #: and how widely it is being reported and by whom, so it also reads coverage velocity and
+    #: source authority. `services.nlp.features.event_hotness_score` is the formula.
+    #:
+    #: Nullable and never backfilled: hotness is a function of the coverage timing that formed
+    #: the cluster, and events clustered before the column existed were never scored on it.
+    #: Selection excludes a NULL hotness rather than guessing one (see `services.reports`).
+    hotness_score: Mapped[float | None] = mapped_column(SCORE_NUMERIC, nullable=True)
     article_count: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     source_count: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     first_seen_at: Mapped[datetime.datetime | None] = mapped_column(
@@ -222,6 +233,13 @@ class Event(Base):
             "severity_score IS NULL OR (severity_score >= 0 AND severity_score <= 100)",
             name="ck_events_severity_score",
         ),
+        CheckConstraint(
+            "hotness_score IS NULL OR (hotness_score >= 0 AND hotness_score <= 100)",
+            name="ck_events_hotness_score",
+        ),
+        # The daily brief's one event query: window on `updated_at` (ADR 0009), then the
+        # hotness floor. Leading range column, filter column second.
+        Index("ix_events_updated_at_hotness", "updated_at", "hotness_score"),
     )
 
 
