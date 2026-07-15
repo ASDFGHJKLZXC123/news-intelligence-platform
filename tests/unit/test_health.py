@@ -16,6 +16,7 @@ from apps.api.deps import (
     check_worker_config,
 )
 from apps.api.main import app
+from apps.api.middleware import REQUEST_ID_HEADER
 from packages.config.settings import get_settings
 
 
@@ -25,6 +26,20 @@ def _ok(name: str):
 
 def _bad(name: str):
     return lambda: ComponentStatus(name=name, ok=False, detail="stub-down")
+
+
+def _assert_error_envelope(resp) -> dict:
+    """A non-2xx health response uses the shared ``{"error": {...}}`` envelope with the
+    correlation id echoed in both the body and the X-Request-ID header. Returns the
+    inner error object for further assertions."""
+    body = resp.json()
+    assert set(body) == {"error"}
+    error = body["error"]
+    assert set(error) == {"code", "message", "request_id"}
+    assert isinstance(error["code"], str) and error["code"]
+    assert isinstance(error["message"], str) and error["message"]
+    assert error["request_id"] == resp.headers[REQUEST_ID_HEADER]
+    return error
 
 
 def test_health_ok_when_all_components_up() -> None:
@@ -54,7 +69,9 @@ def test_health_degraded_when_database_down() -> None:
     try:
         resp = TestClient(app).get("/health")
         assert resp.status_code == 503
-        assert resp.json()["status"] == "degraded"
+        # A degraded 503 uses the shared error envelope, not a bespoke top-level body.
+        error = _assert_error_envelope(resp)
+        assert error["code"] == "service_unavailable"
     finally:
         app.dependency_overrides.clear()
 
@@ -67,9 +84,10 @@ def test_health_degraded_when_config_down() -> None:
     try:
         resp = TestClient(app).get("/health")
         assert resp.status_code == 503
-        body = resp.json()
-        assert body["status"] == "degraded"
-        assert body["components"]["config"]["ok"] is False
+        error = _assert_error_envelope(resp)
+        assert error["code"] == "service_unavailable"
+        # The failing component's diagnostics are preserved in the envelope message.
+        assert "config" in error["message"]
     finally:
         app.dependency_overrides.clear()
 
@@ -82,9 +100,9 @@ def test_health_degraded_when_worker_down() -> None:
     try:
         resp = TestClient(app).get("/health")
         assert resp.status_code == 503
-        body = resp.json()
-        assert body["status"] == "degraded"
-        assert body["components"]["worker"]["ok"] is False
+        error = _assert_error_envelope(resp)
+        assert error["code"] == "service_unavailable"
+        assert "worker" in error["message"]
     finally:
         app.dependency_overrides.clear()
 

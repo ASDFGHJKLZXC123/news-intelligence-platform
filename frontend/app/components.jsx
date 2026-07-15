@@ -52,8 +52,8 @@ const SCORE_TIPS = {
 
 /* ---- ScoreStat: label + number + bar -------------------------------------- */
 function ScoreStat({ label, value, suffix = "/100", color, tip, compact }) {
-  const lvl = scoreLevel(typeof value === "number" ? value : 0);
-  const c = color || levelColor(lvl);
+  const has = typeof value === "number" && isFinite(value);
+  const c = color || levelColor(scoreLevel(has ? value : 0));
   return (
     <div style={{ minWidth: compact ? 0 : 84 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -61,11 +61,11 @@ function ScoreStat({ label, value, suffix = "/100", color, tip, compact }) {
         {tip && <Tip text={tip || SCORE_TIPS[label]}><Icon.info style={{ width: 12, height: 12, color: "var(--ink-faint)" }} /></Tip>}
       </div>
       <div className="mono" style={{ fontSize: compact ? 16 : 19, fontWeight: 600, marginTop: 2, lineHeight: 1 }}>
-        {value}<span style={{ fontSize: 11, color: "var(--ink-faint)", fontWeight: 400 }}>{suffix}</span>
+        {has ? value : "—"}{has && <span style={{ fontSize: 11, color: "var(--ink-faint)", fontWeight: 400 }}>{suffix}</span>}
       </div>
       {!compact && (
         <div className="scorebar" style={{ marginTop: 6 }}>
-          <i style={{ width: value + "%", background: c }} />
+          <i style={{ width: (has ? value : 0) + "%", background: c }} />
         </div>
       )}
     </div>
@@ -147,6 +147,8 @@ function Sparkline({ data, w = 120, h = 30, color = "var(--accent)", fill = true
 
 /* Radial gauge (0–100) */
 function Gauge({ value, size = 132, label, sub, level }) {
+  const has = typeof value === "number" && isFinite(value);
+  if (!has) value = 0;
   const lvl = level || scoreLevel(value);
   const col = levelColor(lvl);
   const r = size / 2 - 12;
@@ -169,7 +171,7 @@ function Gauge({ value, size = 132, label, sub, level }) {
           style={{ filter: `drop-shadow(0 0 6px ${col}55)` }} />
       </svg>
       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div className="mono" style={{ fontSize: 30, fontWeight: 600, lineHeight: 1, color: col }}>{value}</div>
+        <div className="mono" style={{ fontSize: 30, fontWeight: 600, lineHeight: 1, color: has ? col : "var(--ink-3)" }}>{has ? value : "—"}</div>
         {label && <div className="eyebrow" style={{ marginTop: 4 }}>{label}</div>}
         {sub && <div style={{ fontSize: 10.5, color: "var(--ink-3)", marginTop: 2 }}>{sub}</div>}
       </div>
@@ -256,15 +258,18 @@ function TrendChart({ series, w = 640, h = 220, max = 100, labels }) {
 function BarList({ rows, max = 100 }) {
   return (
     <div className="stack" style={{ gap: 10 }}>
-      {rows.map((r, i) => (
+      {rows.map((r, i) => {
+        const has = typeof r.value === "number" && isFinite(r.value);
+        return (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 130, fontSize: 12.5, color: "var(--ink-2)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{r.label}</div>
           <div className="scorebar" style={{ flex: 1, height: 8 }}>
-            <i style={{ width: (r.value / max * 100) + "%", background: r.color || "var(--accent)" }} />
+            <i style={{ width: (has ? r.value / max * 100 : 0) + "%", background: r.color || "var(--accent)" }} />
           </div>
-          <div className="mono tnum" style={{ width: 34, textAlign: "right", fontSize: 12.5, fontWeight: 600 }}>{r.value}</div>
+          <div className="mono tnum" style={{ width: 34, textAlign: "right", fontSize: 12.5, fontWeight: 600 }}>{has ? r.value : "—"}</div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -319,9 +324,115 @@ function EmptyState({ icon, title, hint, action }) {
   );
 }
 
+/* ============================================================================
+   DATA-QUALITY SURFACES (Stage 7, item 7)
+   Pure quality/format logic lives in app/data-quality.js (window.SignalDataQuality);
+   these are the thin presentational wrappers. A live block renders NO badge.
+   ========================================================================== */
+const DQ = window.SignalDataQuality;
+
+/* A subtle, non-live data badge. Renders nothing for a live/unknown quality so
+   healthy blocks stay quiet. `label`/`title` override the quality defaults. */
+function DataQualityBadge({ quality, label, title, style }) {
+  const meta = DQ.qualityMeta(quality);
+  if (!meta) return null;
+  const text = label || meta.label;
+  const tip = title || meta.title;
+  return (
+    <span className={"dq-badge dq-" + meta.quality} style={style}
+      role="note" aria-label={"Data status: " + text + ". " + tip} title={tip}>
+      <span className="dq-dot" aria-hidden="true" />{text}
+    </span>
+  );
+}
+
+/* Section-scoped badge bound to one window.DATA block by name. */
+function BlockBadge({ name, label, style }) {
+  return <DataQualityBadge quality={DQ.blockQuality(window.DATA, name)} label={label} style={style} />;
+}
+
+/* Compact page-header status: one clearly-labelled badge summarizing a route's
+   top-level blocks (or an explicit `quality`). Quiet when everything is live. */
+function PageStatus({ blocks, quality, label, style }) {
+  const q = quality || DQ.aggregateQuality(window.DATA, blocks || []);
+  const meta = DQ.qualityMeta(q);
+  if (!meta) return null;
+  return (
+    <div className="page-status" role="status" style={style}>
+      <DataQualityBadge quality={q} label={label} />
+    </div>
+  );
+}
+
+/* Persistent, calm demo-data banner — the whole snapshot is bundled fixture data
+   because the backend was wholly unreachable. */
+function DemoBanner() {
+  return (
+    <div className="global-notice demo-banner" role="status" aria-live="polite">
+      <Icon.warn className="notice-ico" aria-hidden="true" />
+      <div className="notice-text">
+        <strong>Demo data</strong>
+        <span>The intelligence backend is unreachable, so SIGNAL is showing bundled fixture data. Values are illustrative, not live.</span>
+      </div>
+    </div>
+  );
+}
+
+/* Calm, non-destructive degraded notice — the API is reachable but some blocks
+   failed to load. Successful blocks stay on the page; this only explains gaps
+   and surfaces any backend request IDs (labelled in plain terms). */
+function DegradedNotice() {
+  const [open, setOpen] = useState(false);
+  const D = window.DATA;
+  const details = DQ.errorSummaries(D);
+  const ids = DQ.requestIds(D);
+  return (
+    <div className="global-notice degraded-notice" role="status" aria-live="polite">
+      <div className="notice-row">
+        <Icon.activity className="notice-ico" aria-hidden="true" />
+        <div className="notice-text">
+          <strong>Some live data is unavailable</strong>
+          <span>Showing the data that loaded successfully — other sections will fill in once the backend recovers.</span>
+        </div>
+        {details.length > 0 && (
+          <button className="btn btn-sm btn-ghost notice-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+            {open ? "Hide details" : "Details"}
+          </button>
+        )}
+      </div>
+      {ids.length > 0 && (
+        <div className="notice-reqids">
+          {ids.length > 1 ? "Request IDs" : "Request ID"}: {ids.map((id, i) => <code key={i}>{id}</code>)}
+        </div>
+      )}
+      {open && details.length > 0 && (
+        <ul className="notice-details">
+          {details.map((e, i) => (
+            <li key={i}>
+              <span className="notice-msg">{e.message}</span>
+              {e.requestId && <span className="notice-reqid">Request ID <code>{e.requestId}</code></span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/* One global surface: the demo banner (whole-snapshot demo) OR the degraded
+   notice (reachable but partial) — never both, and quiet when all-live. */
+function GlobalDataNotices() {
+  const D = window.DATA;
+  if (!D) return null;
+  if (DQ.isDemo(D)) return <DemoBanner />;
+  if (DQ.isDegraded(D)) return <DegradedNotice />;
+  return null;
+}
+
 Object.assign(window, {
   LEVELS, levelClass, scoreLevel, levelColor, dirMeta, scenarioName,
   titleCaseLabel, pct, ratingHorizons,
   RiskBadge, Tip, SCORE_TIPS, ScoreStat, ConfidenceBadge, DirPill, Delta,
   timeAgo, fmtTime, Sparkline, Gauge, RadarChart, TrendChart, BarList, ProbBar, Card, EmptyState,
+  DataQualityBadge, BlockBadge, PageStatus, DemoBanner, DegradedNotice, GlobalDataNotices,
 });

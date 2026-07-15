@@ -9,7 +9,7 @@ from collections.abc import Mapping, Sequence
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, or_, select
+from sqlalchemy import Select, func, or_, select
 from sqlalchemy.orm import Session
 
 from db.base import get_session
@@ -43,7 +43,19 @@ company_research_router = APIRouter(prefix="/api/v1/company-research", tags=["co
 
 
 def _iso(value: datetime.date | datetime.datetime | None) -> str | None:
-    return value.isoformat() if value is not None else None
+    """Render a date/datetime for the wire: UTC ISO 8601 with a trailing `Z`.
+
+    Naive datetimes are stored as UTC, so they are stamped as UTC rather than emitted
+    without an offset -- the adapter cannot guess a timezone (api-adapter-contract). A
+    plain date keeps its date-only ISO form. Mirrors ``apps.api.intelligence._iso``.
+    """
+    if value is None:
+        return None
+    if not isinstance(value, datetime.datetime):
+        return value.isoformat()
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=datetime.UTC)
+    return value.astimezone(datetime.UTC).isoformat().replace("+00:00", "Z")
 
 
 def _json_value(value: Any) -> Any:
@@ -52,7 +64,7 @@ def _json_value(value: Any) -> Any:
     if isinstance(value, uuid.UUID):
         return str(value)
     if isinstance(value, datetime.date | datetime.datetime):
-        return value.isoformat()
+        return _iso(value)
     return value
 
 
@@ -418,6 +430,23 @@ class ProviderDataRepository:
         observations = list(self.session.execute(observations_stmt).scalars().all())
         return series, observations
 
+    def _filtered_sec_companies(
+        self, *, cik: str | None, ticker: str | None, q: str | None
+    ) -> Select[tuple[SECCompany]]:
+        """The SEC-company relation with only the WHERE filters applied (no order/limit/offset).
+
+        Shared by :meth:`list_sec_companies` and :meth:`count_sec_companies` so the page and its
+        ``total`` filter on identical predicates.
+        """
+        stmt = select(SECCompany)
+        if cik:
+            stmt = stmt.where(SECCompany.cik == cik.zfill(10))
+        if ticker:
+            stmt = stmt.where(func.upper(SECCompany.ticker) == ticker.upper())
+        if q:
+            stmt = stmt.where(SECCompany.name.ilike(f"%{q}%"))
+        return stmt
+
     def list_sec_companies(
         self,
         *,
@@ -425,15 +454,23 @@ class ProviderDataRepository:
         ticker: str | None,
         q: str | None,
         limit: int,
+        offset: int = 0,
     ) -> list[SECCompany]:
-        stmt = select(SECCompany).order_by(SECCompany.name).limit(limit)
-        if cik:
-            stmt = stmt.where(SECCompany.cik == cik.zfill(10))
-        if ticker:
-            stmt = stmt.where(func.upper(SECCompany.ticker) == ticker.upper())
-        if q:
-            stmt = stmt.where(SECCompany.name.ilike(f"%{q}%"))
+        # `id` is a unique tie-breaker so equal names page deterministically under offset.
+        stmt = (
+            self._filtered_sec_companies(cik=cik, ticker=ticker, q=q)
+            .order_by(SECCompany.name, SECCompany.id)
+            .limit(limit)
+            .offset(offset)
+        )
         return list(self.session.execute(stmt).scalars().all())
+
+    def count_sec_companies(self, *, cik: str | None, ticker: str | None, q: str | None) -> int:
+        """COUNT of SEC companies matching the filters, before LIMIT/OFFSET."""
+        stmt = select(func.count()).select_from(
+            self._filtered_sec_companies(cik=cik, ticker=ticker, q=q).subquery()
+        )
+        return int(self.session.execute(stmt).scalar_one())
 
     def get_sec_company_by_id(self, company_id: uuid.UUID) -> SECCompany | None:
         return self.session.execute(select(SECCompany).where(SECCompany.id == company_id)).scalars().first()
@@ -986,39 +1023,50 @@ def list_company_research_profiles(
     company_ids: str | None = None,
     q: str | None = None,
     limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
 ) -> dict[str, Any]:
-    """Return checklist-shaped company research profiles.
+    """Return checklist-shaped company research profiles with exact pagination metadata.
 
     The endpoint assembles the requested profiles from persisted provider data. It
     intentionally returns unavailable checklist fields instead of failing when a
     company, fact, filing, market-data, or industry-data input is missing.
+
+    Two modes, both reporting a real ``total`` and honouring ``limit``/``offset``:
+
+    * Explicit selectors (``tickers``/``ciks``/``company_ids``) are a bounded lookup: every
+      requested identifier is resolved so no category is silently dropped, ``total`` is the
+      full requested count, then the page is sliced. (The ``data.js`` batching-index bug that
+      mis-slices unrelated-length selector lists is owned by a later item, not fixed here.)
+    * Query mode reports the real filtered SEC-company total and pages the matching companies.
     """
 
-    profiles: list[dict[str, Any]] = []
     ticker_values = _csv_values(tickers)
     cik_values = _csv_values(ciks)
     company_id_values = _csv_values(company_ids)
 
     if ticker_values or cik_values or company_id_values:
+        assembled: list[dict[str, Any]] = []
         for company_id in company_id_values:
-            profiles.append(_company_research_profile_for_company_id(repo, company_id))
+            assembled.append(_company_research_profile_for_company_id(repo, company_id))
         for ticker in ticker_values:
             companies = repo.list_sec_companies(cik=None, ticker=ticker, q=None, limit=2)
             if len(companies) > 1:
-                profiles.append(_ambiguous_company_research_profile(ticker=ticker, companies=companies))
+                assembled.append(_ambiguous_company_research_profile(ticker=ticker, companies=companies))
             else:
                 company = companies[0] if companies else None
-                profiles.append(_company_research_profile_for_target(repo, company=company, ticker=ticker))
+                assembled.append(_company_research_profile_for_target(repo, company=company, ticker=ticker))
         for cik in cik_values:
             companies = repo.list_sec_companies(cik=cik, ticker=None, q=None, limit=1)
             company = companies[0] if companies else None
-            profiles.append(_company_research_profile_for_target(repo, company=company, cik=cik))
+            assembled.append(_company_research_profile_for_target(repo, company=company, cik=cik))
+        total = len(assembled)
+        items = assembled[offset : offset + limit]
     else:
-        companies = repo.list_sec_companies(cik=None, ticker=None, q=q, limit=limit)
-        for company in companies:
-            profiles.append(_company_research_profile_for_target(repo, company=company))
+        total = repo.count_sec_companies(cik=None, ticker=None, q=q)
+        companies = repo.list_sec_companies(cik=None, ticker=None, q=q, limit=limit, offset=offset)
+        items = [_company_research_profile_for_target(repo, company=company) for company in companies]
 
-    return {"items": profiles, "count": len(profiles)}
+    return {"items": items, "total": total, "limit": limit, "offset": offset}
 
 
 @company_research_router.get("/profiles/{company_id}")

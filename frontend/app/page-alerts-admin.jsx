@@ -45,6 +45,7 @@ function AlertsPage() {
           <div className="eyebrow" style={{ display: "flex", alignItems: "center", gap: 8 }}><span className="live-dot" style={{ background: "var(--r-high)" }} /> Workspace</div>
           <h1 className="page-title">Alerts</h1>
           <div className="page-sub">{counts.new} new · {counts.critical} critical · {counts.high} high</div>
+          <PageStatus blocks={["alerts"]} />
         </div>
         <button className="btn btn-sm"><Icon.check style={{ width: 14, height: 14 }} /> Mark all read</button>
       </div>
@@ -84,6 +85,7 @@ function AdminPage() {
           <div className="eyebrow">System · Pipeline Monitor</div>
           <h1 className="page-title">Admin</h1>
           <div className="page-sub">Ingestion, processing, and model operations</div>
+          <PageStatus blocks={["adminJobs", "adminSources", "adminModels"]} />
         </div>
         <button className="btn btn-sm"><Icon.refresh style={{ width: 14, height: 14 }} /> Refresh</button>
       </div>
@@ -132,10 +134,10 @@ function AdminPage() {
                   <td><span style={{ fontSize: 13, fontWeight: 550 }}>{s.name}</span></td>
                   <td><span className="mono" style={{ fontSize: 11.5, color: "var(--ink-3)" }}>{s.sourceType}</span></td>
                   <td><StatusDot status={s.status} /></td>
-                  <td><span className="mono" style={{ fontSize: 12 }}>{s.lastFetchedAt}</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5 }}>{s.articlesFetchedToday.toLocaleString()}</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5, color: s.errorRate > 5 ? "var(--r-crit)" : s.errorRate > 1 ? "var(--r-med)" : "var(--ink-2)" }}>{s.errorRate}%</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5 }}>{s.averageLatencyMs}ms</span></td>
+                  <td><span className="mono" style={{ fontSize: 12 }}>{s.lastFetchedAt || "—"}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5 }}>{SignalDataQuality.intOr(s.articlesFetchedToday)}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5, color: typeof s.errorRate === "number" ? (s.errorRate > 5 ? "var(--r-crit)" : s.errorRate > 1 ? "var(--r-med)" : "var(--ink-2)") : "var(--ink-3)" }}>{typeof s.errorRate === "number" ? s.errorRate + "%" : "—"}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5 }}>{SignalDataQuality.unitOr(s.averageLatencyMs, "ms")}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -151,12 +153,12 @@ function AdminPage() {
                 <tr key={m.modelName} style={{ cursor: "default" }}>
                   <td><div style={{ fontSize: 13, fontWeight: 600 }} className="mono">{m.modelName}</div><div style={{ fontSize: 11, color: "var(--ink-faint)" }}>{m.provider}</div></td>
                   <td><span style={{ fontSize: 12.5, color: "var(--ink-2)" }}>{m.taskType}</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5 }}>{m.requestCount.toLocaleString()}</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5, color: m.successRate > 99 ? "var(--r-low)" : "var(--r-med)" }}>{m.successRate}%</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5 }}>{m.averageLatencyMs}ms</span></td>
-                  <td><span className="mono" style={{ fontSize: 12.5 }}>${m.averageCostUsd.toFixed(4)}</span></td>
-                  <td><div style={{ width: 80 }}><MiniBar value={Math.round(m.schemaValidityRate)} /></div></td>
-                  <td><span className="mono" style={{ fontSize: 12.5, color: m.fallbackCount > 15 ? "var(--r-med)" : "var(--ink-2)" }}>{m.fallbackCount}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5 }}>{SignalDataQuality.intOr(m.requestCount)}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5, color: typeof m.successRate === "number" ? (m.successRate > 99 ? "var(--r-low)" : "var(--r-med)") : "var(--ink-3)" }}>{SignalDataQuality.pctOr(m.successRate)}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5 }}>{SignalDataQuality.unitOr(m.averageLatencyMs, "ms")}</span></td>
+                  <td><span className="mono" style={{ fontSize: 12.5 }}>{SignalDataQuality.moneyOr(m.averageCostUsd, 4)}</span></td>
+                  <td><div style={{ width: 80 }}><MiniBar value={typeof m.schemaValidityRate === "number" ? Math.round(m.schemaValidityRate) : null} /></div></td>
+                  <td><span className="mono" style={{ fontSize: 12.5, color: typeof m.fallbackCount === "number" && m.fallbackCount > 15 ? "var(--r-med)" : "var(--ink-2)" }}>{SignalDataQuality.numOr(m.fallbackCount)}</span></td>
                 </tr>
               ))}
             </tbody>

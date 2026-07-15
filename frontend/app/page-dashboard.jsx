@@ -59,24 +59,27 @@ function UpcomingTriggers({ items }) {
 function Dashboard() {
   const D = window.DATA;
   const sparks = D.riskTrends;
+  // dailySummary can be absent (empty/failed dashboard) — render from a safe
+  // placeholder rather than crashing; the page badge signals the gap honestly.
+  const ds = D.dailySummary || { date: D.NOW, lastUpdatedAt: D.NOW, summary: "", keyPoints: [], overallRiskLevel: "low", confidenceScore: 0 };
   const hotEvents = [...D.events].sort((a, b) => b.hotnessScore - a.hotnessScore);
   const topCompanies = [...D.companies].sort((a, b) => b.impactScore - a.impactScore).slice(0, 8);
-  const overallRating = D.dailySummary.modelRating || {
-    risk_score: 72,
-    risk_level: D.dailySummary.overallRiskLevel,
-    confidence_score: D.dailySummary.confidenceScore,
-    probability_within_18m: null,
-  };
-  const overallScore = Math.round(overallRating.risk_score);
+  // A composite model rating renders ONLY from a real CrisisRating (a live modelRating
+  // or a fixture-supplied one). The /dashboard summary carries no rating, so in live
+  // mode this is absent — the card then shows an honest unavailable state rather than a
+  // fabricated score (Stage 7: never silently fabricate live risk data).
+  const overallRating = ds.modelRating || null;
+  const overallScore = overallRating ? Math.round(overallRating.risk_score) : null;
 
   return (
     <div className="page">
       <div className="page-head">
         <div className="titles">
           <div className="eyebrow" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span className="live-dot" /> Live · {new Date(D.dailySummary.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+            <span className="live-dot" /> Live · {new Date(ds.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
           </div>
           <h1 className="page-title">Daily Intelligence</h1>
+          <PageStatus blocks={["dailySummary", "metrics", "events", "riskRadar", "upcomingTriggers", "eventMap", "industries", "companies"]} />
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           <button className="btn btn-sm"><Icon.refresh style={{ width: 14, height: 14 }} /> Refresh</button>
@@ -86,12 +89,14 @@ function Dashboard() {
 
       {/* Executive summary + overall risk */}
       <div className="grid" style={{ gridTemplateColumns: "1fr 280px", marginBottom: 16 }}>
-        <Card icon={Icon.bolt} eyebrow={"AI Daily Brief · updated " + timeAgo(D.dailySummary.lastUpdatedAt)} title="Today's Intelligence Summary"
-          action={<ConfidenceBadge score={D.dailySummary.confidenceScore} />}>
-          <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "var(--ink)", margin: "0 0 16px", textWrap: "pretty" }}>{D.dailySummary.summary}</p>
+        <Card icon={Icon.bolt} eyebrow={"AI Daily Brief · updated " + timeAgo(ds.lastUpdatedAt)} title="Today's Intelligence Summary"
+          action={<ConfidenceBadge score={ds.confidenceScore} />}>
+          {ds.summary
+            ? <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "var(--ink)", margin: "0 0 16px", textWrap: "pretty" }}>{ds.summary}</p>
+            : <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--ink-3)", margin: "0 0 16px" }}>No daily brief is available yet.</p>}
           <div className="eyebrow" style={{ marginBottom: 10 }}>Key Signals Today</div>
           <div className="stack" style={{ gap: 9 }}>
-            {D.dailySummary.keyPoints.map((p, i) => (
+            {ds.keyPoints.map((p, i) => (
               <div key={i} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
                 <span className="mono" style={{ fontSize: 11, color: "var(--accent)", fontWeight: 700, marginTop: 2, minWidth: 16 }}>{String(i + 1).padStart(2, "0")}</span>
                 <span style={{ fontSize: 13.5, color: "var(--ink-2)", lineHeight: 1.5 }}>{p}</span>
@@ -100,19 +105,24 @@ function Dashboard() {
           </div>
         </Card>
         <Card icon={Icon.shield} eyebrow="Model Rating" title="Risk Level">
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-            <Gauge value={overallScore} size={150} label="Composite" sub={overallRating.risk_type ? titleCaseLabel(overallRating.risk_type) : "weighted across 7 categories"} level={overallRating.risk_level} />
-            <div style={{ textAlign: "center" }}>
-              <RiskBadge level={overallRating.risk_level} label={titleCaseLabel(overallRating.risk_level) + " · " + overallScore + "/100"} />
-            </div>
-            {overallRating.probability_within_18m != null && (
-              <div style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 11.5, color: "var(--ink-3)" }}>
-                <span className="mono" style={{ color: levelColor(overallRating.risk_level), fontWeight: 600 }}>{pct(overallRating.probability_within_18m)}</span>
-                <span>within 18m</span>
+          {overallRating ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+              <Gauge value={overallScore} size={150} label="Composite" sub={overallRating.risk_type ? titleCaseLabel(overallRating.risk_type) : "weighted across 7 categories"} level={overallRating.risk_level} />
+              <div style={{ textAlign: "center" }}>
+                <RiskBadge level={overallRating.risk_level} label={titleCaseLabel(overallRating.risk_level) + " · " + overallScore + "/100"} />
               </div>
-            )}
-            <ConfidenceBadge score={overallRating.confidence_score} />
-          </div>
+              {overallRating.probability_within_18m != null && (
+                <div style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 11.5, color: "var(--ink-3)" }}>
+                  <span className="mono" style={{ color: levelColor(overallRating.risk_level), fontWeight: 600 }}>{pct(overallRating.probability_within_18m)}</span>
+                  <span>within 18m</span>
+                </div>
+              )}
+              <ConfidenceBadge score={overallRating.confidence_score} />
+            </div>
+          ) : (
+            <EmptyState icon={Icon.shield} title="Composite rating unavailable"
+              hint="No model rating has been published for today's summary yet." />
+          )}
         </Card>
       </div>
 

@@ -514,6 +514,7 @@ function EventDetail({ id }) {
           <RiskBadge level={e.riskLevel} label={e.riskLevel[0].toUpperCase() + e.riskLevel.slice(1) + " Risk"} />
           <span className="badge badge-neutral">{e.status}</span>
           {e.eventTypes.map((t) => <span key={t} className="eyebrow" style={{ color: "var(--ink-3)" }}>{t}</span>)}
+          <DataQualityBadge quality={e.dataQuality} label="Sample analysis" />
         </div>
         <h1 style={{ fontSize: 24, lineHeight: 1.2, marginBottom: 12, textWrap: "balance", maxWidth: 800 }}>{e.title}</h1>
         <p style={{ fontSize: 14.5, color: "var(--ink-2)", lineHeight: 1.55, maxWidth: 820, margin: "0 0 18px", textWrap: "pretty" }}>{e.summary}</p>

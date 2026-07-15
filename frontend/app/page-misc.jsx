@@ -12,9 +12,14 @@ function HistoricalPage() {
           <div className="eyebrow">Intelligence · Pattern Matching</div>
           <h1 className="page-title">Historical Analogies</h1>
           <div className="page-sub">Today's events matched against historical precedents</div>
+          <PageStatus quality="synthetic" label="Sample" />
         </div>
       </div>
       <div className="stack">
+        {all.length === 0 && (
+          <Card><EmptyState icon={Icon.historical} title="No historical analogies yet"
+            hint="Matched historical precedents appear here as event analysis completes." /></Card>
+        )}
         {all.map(({ a, e }) => (
           <Card key={a.historicalEventId} bodyClass="card-pad">
             <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
@@ -59,6 +64,7 @@ function WatchlistPage() {
           <div className="eyebrow">Workspace</div>
           <h1 className="page-title">Watchlist</h1>
           <div className="page-sub">{D.watchlist.length} items monitored for targeted alerts</div>
+          <PageStatus blocks={["watchlist"]} />
         </div>
         <button className="btn btn-sm btn-primary"><Icon.plus style={{ width: 14, height: 14 }} /> Add item</button>
       </div>
@@ -80,7 +86,7 @@ function WatchlistPage() {
                       {w.metadata && w.metadata.ticker && <div className="ticker">{w.metadata.ticker}</div>}
                     </div>
                     <span className="badge" style={{ background: w.alertEnabled ? "var(--accent-soft)" : "var(--surface-3)", color: w.alertEnabled ? "var(--accent)" : "var(--ink-3)", borderColor: w.alertEnabled ? "var(--accent-line)" : "var(--line)", flex: "0 0 auto" }}>{w.alertEnabled ? "Alerts on" : "Alerts off"}</span>
-                    <span className="mono" style={{ fontSize: 10.5, color: "var(--ink-faint)", flex: "0 0 auto" }}>since {w.createdAt.slice(5)}</span>
+                    <span className="mono" style={{ fontSize: 10.5, color: "var(--ink-faint)", flex: "0 0 auto" }}>since {(w.createdAt || "").slice(5) || "—"}</span>
                   </div>
                   );
                 })}
@@ -127,6 +133,7 @@ function ReportsPage() {
           <div className="eyebrow">Workspace</div>
           <h1 className="page-title">Reports</h1>
           <div className="page-sub">Generated briefs and intelligence reports</div>
+          <PageStatus quality="synthetic" label="Sample" />
         </div>
         <button className="btn btn-sm btn-primary"><Icon.plus style={{ width: 14, height: 14 }} /> New report</button>
       </div>
@@ -166,7 +173,7 @@ function ReportsPage() {
               <div key={s}>
                 <div className="eyebrow" style={{ marginBottom: 7, display: "flex", alignItems: "center", gap: 8 }}><span className="mono" style={{ color: "var(--accent)" }}>{String(i + 1).padStart(2, "0")}</span>{s}</div>
                 <p style={{ fontSize: 13, color: "var(--ink-2)", margin: 0, lineHeight: 1.6 }}>
-                  {i === 0 ? D.dailySummary.summary : "Section content is generated from the underlying intelligence base with full claim-to-evidence traceability. Every conclusion in this section links back to source articles, market data, and model reasoning."}
+                  {i === 0 ? ((D.dailySummary && D.dailySummary.summary) || "Executive summary is generated from the day's intelligence base.") : "Section content is generated from the underlying intelligence base with full claim-to-evidence traceability. Every conclusion in this section links back to source articles, market data, and model reasoning."}
                 </p>
               </div>
             ))}
@@ -218,6 +225,7 @@ function AskPage() {
           <div className="eyebrow" style={{ display: "flex", alignItems: "center", gap: 8 }}><Icon.spark style={{ width: 14, height: 14, color: "var(--accent)" }} /> Natural-language intelligence</div>
           <h1 className="page-title">Ask AI</h1>
           <div className="page-sub">Query the intelligence base. Every answer cites its evidence.</div>
+          <PageStatus blocks={["askSuggestions"]} label="Sample" />
         </div>
       </div>
 
@@ -260,8 +268,8 @@ function AskPage() {
               <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--line)" }}>
                 <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
                   {conv.r.ev.length > 0 && <div><div className="eyebrow" style={{ marginBottom: 7 }}>Evidence</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{conv.r.ev.map((id) => <SourceBadge key={id} id={id} inline />)}</div></div>}
-                  {conv.r.events.length > 0 && <div><div className="eyebrow" style={{ marginBottom: 7 }}>Related Events</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{conv.r.events.map((id) => { const e = D.eventsById[id]; return <span key={id} className="chip chip-x" onClick={() => Store.nav("event", id)}>{e.title.slice(0, 30)}…</span>; })}</div></div>}
-                  {conv.r.companies.length > 0 && <div><div className="eyebrow" style={{ marginBottom: 7 }}>Companies</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{conv.r.companies.map((id) => { const c = D.companies.find((x) => x.companyId === id); return <span key={id} className="chip chip-x" onClick={() => Store.nav("company", id)}><CompanyLogo company={c} size={18} />{c.name}</span>; })}</div></div>}
+                  {conv.r.events.length > 0 && <div><div className="eyebrow" style={{ marginBottom: 7 }}>Related Events</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{conv.r.events.map((id) => { const e = D.eventsById[id]; if (!e) return null; return <span key={id} className="chip chip-x" onClick={() => Store.nav("event", id)}>{e.title.slice(0, 30)}…</span>; })}</div></div>}
+                  {conv.r.companies.length > 0 && <div><div className="eyebrow" style={{ marginBottom: 7 }}>Companies</div><div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{conv.r.companies.map((id) => { const c = D.companies.find((x) => x.companyId === id); if (!c) return null; return <span key={id} className="chip chip-x" onClick={() => Store.nav("company", id)}><CompanyLogo company={c} size={18} />{c.name}</span>; })}</div></div>}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16 }}>
                   <ConfidenceBadge score={0.71} />

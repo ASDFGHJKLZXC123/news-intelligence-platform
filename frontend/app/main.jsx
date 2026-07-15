@@ -114,6 +114,7 @@ function App() {
       <Sidebar collapsed={collapsed} route={st.route} />
       <Topbar onToggleSidebar={() => setCollapsed((c) => !c)} theme={t.theme} onToggleTheme={toggleTheme} />
       <main className="main">
+        <GlobalDataNotices />
         <Outlet route={st.route} />
       </main>
 

@@ -275,6 +275,7 @@ function GeoIntelPage() {
           </div>
           <h1 className="page-title">Address-to-event globe</h1>
           <div className="page-sub">Geocoded locations linked to event clusters, risk posture, sectors, and exposed entities.</div>
+          <PageStatus blocks={["eventMap", "events"]} />
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           <button className="btn btn-sm" onClick={() => selectLocation("addr-commerce-dc")}><Icon.target /> Center Policy Node</button>

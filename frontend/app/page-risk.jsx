@@ -31,7 +31,7 @@ function RiskRadarPage() {
   const D = window.DATA;
   const [hl, setHl] = useState(["Geopolitical Risk", "Policy / Regulatory", "Supply Chain Risk"]);
   const trendColors = { "Geopolitical Risk": "var(--r-crit)", "Policy / Regulatory": "var(--r-high)", "Supply Chain Risk": "var(--r-med)", "Macro Risk": "var(--accent)", "Financial Stress": "var(--r-low)", "Industry Shock": "#a78bfa", "Company Crisis": "#8b93a7" };
-  const series = D.riskRadar.map((r) => ({ name: r.riskType, data: D.riskTrends[r.riskType], color: trendColors[r.riskType], bold: hl.includes(r.riskType), dim: !hl.includes(r.riskType) }));
+  const series = D.riskRadar.map((r) => ({ name: r.riskType, data: D.riskTrends[r.riskType] || [], color: trendColors[r.riskType], bold: hl.includes(r.riskType), dim: !hl.includes(r.riskType) }));
   const highRiskEvents = [...D.events].filter((e) => e.riskScore >= 60).sort((a, b) => b.riskScore - a.riskScore);
 
   return (
@@ -41,6 +41,7 @@ function RiskRadarPage() {
           <div className="eyebrow" style={{ display: "flex", alignItems: "center", gap: 8 }}><span className="live-dot" /> Risk Intelligence</div>
           <h1 className="page-title">Risk Radar</h1>
           <div className="page-sub">Global and thematic risk monitoring across 7 categories</div>
+          <PageStatus blocks={["riskRadar", "riskTrends", "riskDetails"]} />
         </div>
         <RiskBadge level="high" label="Overall · High" />
       </div>
@@ -114,7 +115,19 @@ function RiskRadarPage() {
 function RiskDetailPage({ type }) {
   const D = window.DATA;
   const r = D.riskRadar.find((x) => x.riskType === type) || D.riskRadar[0];
-  const detail = D.riskDetails[type] || D.riskDetails["Macro Risk"];
+  if (!r) return (
+    <div className="page">
+      <button className="btn btn-sm btn-ghost" style={{ marginBottom: 16 }} onClick={() => Store.nav("risk")}><Icon.chevL style={{ width: 15, height: 15 }} /> Risk Radar</button>
+      <Card><EmptyState icon={Icon.radar} title="No risk categories available" hint="Live risk-radar data has not loaded yet." /></Card>
+    </div>
+  );
+  const detail = D.riskDetails[type] || D.riskDetails[r.riskType] || {};
+  const horizons = Array.isArray(detail.probabilityByHorizon) ? detail.probabilityByHorizon : [];
+  const lastHorizon = horizons.length ? horizons[horizons.length - 1] : null;
+  const signals = Array.isArray(detail.signals) ? detail.signals : [];
+  const mainDrivers = Array.isArray(detail.mainDrivers) ? detail.mainDrivers : [];
+  const leadingIndicators = Array.isArray(detail.leadingIndicators) ? detail.leadingIndicators : [];
+  const invalidationSignals = Array.isArray(detail.invalidationSignals) ? detail.invalidationSignals : [];
   const col = levelColor(r.level);
   const statusColor = { positive: "var(--r-low)", neutral: "var(--ink-3)", watch: "var(--r-med)", warning: "var(--r-high)", critical: "var(--r-crit)" };
 
@@ -131,23 +144,24 @@ function RiskDetailPage({ type }) {
                 <div className="eyebrow">Risk Category</div>
                 <h1 style={{ fontSize: 24, margin: "4px 0 10px" }}>{type}</h1>
                 <p style={{ fontSize: 13.5, color: "var(--ink-2)", lineHeight: 1.55, margin: "0 0 14px", maxWidth: 480 }}>
-                  Composite score across leading indicators, market signals, and news velocity. {detail.probabilityByHorizon ? `Estimated ${Math.round(detail.probabilityByHorizon[detail.probabilityByHorizon.length - 1].probability * 100)}% probability over ${detail.probabilityByHorizon[detail.probabilityByHorizon.length - 1].horizon}.` : ""}
+                  Composite score across leading indicators, market signals, and news velocity. {lastHorizon ? `Estimated ${Math.round(lastHorizon.probability * 100)}% probability over ${SignalDataQuality.horizonLabel(lastHorizon.horizon)}.` : ""}
                 </p>
-                <div style={{ display: "flex", gap: 10 }}>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                   <RiskBadge level={r.level} /><ConfidenceBadge score={r.confidenceScore} />
                   <span className="badge badge-neutral">24h <Delta value={r.change24h} /></span>
+                  <BlockBadge name="riskDetails" />
                 </div>
               </div>
             </div>
           </Card>
 
-          {detail.probabilityByHorizon && (
+          {horizons.length > 0 && (
             <Card icon={Icon.scale} title="Estimated Probability by Horizon">
-              <div className="grid" style={{ gridTemplateColumns: "repeat(" + detail.probabilityByHorizon.length + ", 1fr)" }}>
-                {detail.probabilityByHorizon.map((p) => (
+              <div className="grid" style={{ gridTemplateColumns: "repeat(" + horizons.length + ", 1fr)" }}>
+                {horizons.map((p) => (
                   <div key={p.horizon} style={{ textAlign: "center", padding: 14, background: "var(--surface-2)", borderRadius: 10, border: "1px solid var(--line)" }}>
                     <div className="mono" style={{ fontSize: 28, fontWeight: 600, color: col }}>{Math.round(p.probability * 100)}%</div>
-                    <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 3 }}>over {p.horizon}</div>
+                    <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 3 }}>over {SignalDataQuality.horizonLabel(p.horizon)}</div>
                   </div>
                 ))}
               </div>
@@ -155,10 +169,13 @@ function RiskDetailPage({ type }) {
           )}
 
           <Card icon={Icon.activity} title="Signal Breakdown" bodyClass="">
+            {signals.length === 0 ? (
+              <div className="card-pad"><EmptyState icon={Icon.activity} title="No live signal breakdown" hint="Per-signal detail is not available for this risk category yet." /></div>
+            ) : (
             <table className="tbl">
               <thead><tr><th className="no-sort">Signal</th><th className="no-sort">Value</th><th className="no-sort">Status</th><th className="no-sort">Explanation</th><th className="no-sort">Updated</th></tr></thead>
               <tbody>
-                {detail.signals.map((s) => (
+                {signals.map((s) => (
                   <tr key={s.name} style={{ cursor: "default" }}>
                     <td><span style={{ fontSize: 13, fontWeight: 550 }}>{s.name}</span></td>
                     <td><span className="mono" style={{ fontSize: 12.5 }}>{s.value}</span></td>
@@ -169,22 +186,23 @@ function RiskDetailPage({ type }) {
                 ))}
               </tbody>
             </table>
+            )}
           </Card>
 
           <Card icon={Icon.trendUp} title="30-Day Trend">
-            <TrendChart series={[{ name: type, data: D.riskTrends[type] || D.riskTrends["Macro Risk"], color: col, bold: true }]} w={640} h={200} />
+            <TrendChart series={[{ name: type, data: D.riskTrends[type] || D.riskTrends[r.riskType] || [], color: col, bold: true }]} w={640} h={200} />
           </Card>
         </div>
 
         <div className="stack" style={{ position: "sticky", top: 0 }}>
           <Card icon={Icon.bolt} title="Main Drivers">
-            <div className="stack" style={{ gap: 8 }}>{detail.mainDrivers.map((d) => <div key={d} style={{ display: "flex", gap: 9, fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.45 }}><span style={{ width: 5, height: 5, borderRadius: "50%", background: col, marginTop: 6, flexShrink: 0 }} />{d}</div>)}</div>
+            {mainDrivers.length ? <div className="stack" style={{ gap: 8 }}>{mainDrivers.map((d) => <div key={d} style={{ display: "flex", gap: 9, fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.45 }}><span style={{ width: 5, height: 5, borderRadius: "50%", background: col, marginTop: 6, flexShrink: 0 }} />{d}</div>)}</div> : <span className="muted" style={{ fontSize: 12.5 }}>No drivers recorded.</span>}
           </Card>
           <Card icon={Icon.target} title="Leading Indicators">
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{detail.leadingIndicators.map((d) => <span key={d} className="chip" style={{ fontSize: 11 }}>{d}</span>)}</div>
+            {leadingIndicators.length ? <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{leadingIndicators.map((d) => <span key={d} className="chip" style={{ fontSize: 11 }}>{d}</span>)}</div> : <span className="muted" style={{ fontSize: 12.5 }}>No leading indicators available.</span>}
           </Card>
           <Card icon={Icon.shield} title="Invalidation Signals">
-            <div className="stack" style={{ gap: 7 }}>{detail.invalidationSignals.map((d) => <div key={d} style={{ display: "flex", gap: 8, fontSize: 12.5, color: "var(--ink-2)" }}><Icon.check style={{ width: 13, height: 13, color: "var(--r-low)", flexShrink: 0, marginTop: 1 }} />{d}</div>)}</div>
+            {invalidationSignals.length ? <div className="stack" style={{ gap: 7 }}>{invalidationSignals.map((d) => <div key={d} style={{ display: "flex", gap: 8, fontSize: 12.5, color: "var(--ink-2)" }}><Icon.check style={{ width: 13, height: 13, color: "var(--r-low)", flexShrink: 0, marginTop: 1 }} />{d}</div>)}</div> : <span className="muted" style={{ fontSize: 12.5 }}>No invalidation signals available.</span>}
           </Card>
           <WatchBtn id={"risk-" + type} />
         </div>

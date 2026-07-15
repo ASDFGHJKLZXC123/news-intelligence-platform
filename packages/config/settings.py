@@ -60,8 +60,10 @@ class Settings(BaseSettings):
     # When empty, mutating endpoints are treated as local-only. When set, the API
     # key middleware stub enforces a matching ``X-API-Key`` header on mutations.
     api_key: str = ""
-    # Comma-separated origins. Conservative default: localhost dev frontend only.
-    cors_allow_origins: str = "http://localhost:3000"
+    # Comma-separated origins. Conservative default: the no-build static frontend served
+    # locally via ``python -m http.server 3000 --directory frontend`` (ADR 0007), reachable
+    # on both host spellings. Never a wildcard (see ``cors_origins_list``).
+    cors_allow_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
     # --- External data providers ----------------------------------------------
     # API keys stay environment-only. Empty means the related provider task can

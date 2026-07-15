@@ -1,6 +1,23 @@
 /* SIGNAL — Companies & Industries (overview + detail) */
 const { useState, useEffect, useRef, useMemo } = React;
 
+/* A news-velocity mini-chart shaped from an available risk-trend series. The
+   live risk vocabulary differs from the demo fixture (no fixed "Macro Risk"
+   key), and a live velocity score can be null — so fall back to any non-empty
+   trend and render a plain dash rather than crash or invent a series. */
+function velocityBaseSeries(D) {
+  const trends = (D && D.riskTrends) || {};
+  if (Array.isArray(trends["Macro Risk"]) && trends["Macro Risk"].length) return trends["Macro Risk"];
+  for (const k in trends) if (Array.isArray(trends[k]) && trends[k].length) return trends[k];
+  return null;
+}
+function velocitySpark(D, velocity, divisor, w, h) {
+  const base = velocityBaseSeries(D);
+  const v = typeof velocity === "number" && isFinite(velocity) ? velocity : null;
+  if (!base || v == null) return <span className="muted" style={{ fontSize: 12 }}>—</span>;
+  return <div style={{ width: w }}><Sparkline data={base.map((x) => Math.round(x * v / divisor))} w={w} h={h} color="var(--r-med)" /></div>;
+}
+
 /* ---- Companies overview --------------------------------------------------- */
 function CompaniesPage() {
   const D = window.DATA;
@@ -19,6 +36,7 @@ function CompaniesPage() {
           <div className="eyebrow">Entities · Impact Ranking</div>
           <h1 className="page-title">Companies</h1>
           <div className="page-sub">{rows.length} companies ranked by today's event exposure</div>
+          <PageStatus blocks={["companies", "companyProfiles"]} />
         </div>
       </div>
       <div className="filter-toolbar entities-toolbar">
@@ -544,7 +562,7 @@ function CompanyDetail({ id }) {
         <div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
           <CompanyLogo company={c} size={52} />
           <div style={{ flex: "1 1 240px", minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><h1 style={{ fontSize: 23, minWidth: 0 }}>{c.name}</h1><DirPill d={c.impactDirection} /></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><h1 style={{ fontSize: 23, minWidth: 0 }}>{c.name}</h1><DirPill d={c.impactDirection} /><BlockBadge name="companies" /></div>
             <div style={{ display: "flex", gap: 10, marginTop: 4, fontSize: 12.5, color: "var(--ink-3)", flexWrap: "wrap" }} className="mono">
               <span>{c.ticker}</span><span>·</span><span>{c.exchange}</span><span>·</span><span>{c.industry}</span><span>·</span><span>{c.country}</span>
             </div>
@@ -566,7 +584,7 @@ function CompanyDetail({ id }) {
           <div className="stack">
             <Card icon={Icon.info} title="Exposure Summary">
               <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--ink-2)", margin: 0 }}>
-                {c.name} is currently flagged with <strong style={{ color: dirMeta(c.impactDirection).color }}>{dirMeta(c.impactDirection).label.toLowerCase()}</strong> impact, driven primarily by <strong>{c.topDriver.toLowerCase()}</strong>. The company appears across {relEvents.length} active event cluster{relEvents.length !== 1 ? "s" : ""} today, with an impact score of {c.impactScore} and a risk score of {c.riskScore}.
+                {c.name} is currently flagged with <strong style={{ color: dirMeta(c.impactDirection).color }}>{dirMeta(c.impactDirection).label.toLowerCase()}</strong> impact{c.topDriver ? <>, driven primarily by <strong>{c.topDriver.toLowerCase()}</strong></> : null}. The company appears across {relEvents.length} active event cluster{relEvents.length !== 1 ? "s" : ""} today, with an impact score of {SignalDataQuality.numOr(c.impactScore)} and a risk score of {SignalDataQuality.numOr(c.riskScore)}.
               </p>
             </Card>
             <Card icon={Icon.activity} title="Score Composition">
@@ -619,6 +637,7 @@ function IndustriesPage() {
           <div className="eyebrow">Entities · Sector Impact</div>
           <h1 className="page-title">Industries</h1>
           <div className="page-sub">{D.industries.length} sectors ranked by impact intensity</div>
+          <PageStatus blocks={["industries"]} />
         </div>
         <div style={{ display: "flex", gap: 4, background: "var(--surface-2)", border: "1px solid var(--line)", borderRadius: 8, padding: 3 }}>
           <button className="btn btn-sm" style={{ background: view === "heatmap" ? "var(--surface-3)" : "transparent", border: "none" }} onClick={() => setView("heatmap")}><Icon.grid style={{ width: 14, height: 14 }} /> Heatmap</button>
@@ -643,7 +662,7 @@ function IndustriesPage() {
                   <td><MiniBar value={it.opportunityScore} /></td>
                   <td><DirPill d={it.direction} /></td>
                   <td><span className="mono" style={{ fontSize: 12.5 }}>{it.relatedEventCount}</span></td>
-                  <td><div style={{ width: 80 }}><Sparkline data={window.DATA.riskTrends["Macro Risk"].map((v) => Math.round(v * it.newsVelocityScore / 60))} w={80} h={22} color="var(--r-med)" /></div></td>
+                  <td>{velocitySpark(D, it.newsVelocityScore, 60, 80, 22)}</td>
                 </tr>
               ))}
             </tbody>
@@ -671,7 +690,7 @@ function IndustryDetail({ id }) {
         <div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
           <div style={{ width: 50, height: 50, borderRadius: 12, background: `color-mix(in oklch, ${m.color} 16%, var(--surface-3))`, border: `1px solid color-mix(in oklch, ${m.color} 30%, var(--line))`, display: "grid", placeItems: "center", flex: "0 0 auto" }}><Icon.industries style={{ width: 24, height: 24, color: m.color }} /></div>
           <div style={{ flex: "1 1 240px", minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><h1 style={{ fontSize: 23, minWidth: 0 }}>{it.industryName}</h1><DirPill d={it.direction} /></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}><h1 style={{ fontSize: 23, minWidth: 0 }}>{it.industryName}</h1><DirPill d={it.direction} /><BlockBadge name="industries" /></div>
             <p style={{ fontSize: 13, color: "var(--ink-2)", margin: "5px 0 0", maxWidth: 560 }}>{it.summary}</p>
           </div>
           <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
@@ -692,7 +711,7 @@ function IndustryDetail({ id }) {
           </Card>
         </div>
         <div className="stack" style={{ position: "sticky", top: 0 }}>
-          <Card icon={Icon.activity} title="News Velocity"><div style={{ marginBottom: 8 }}><Sparkline data={D.riskTrends["Macro Risk"].map((v) => Math.round(v * it.newsVelocityScore / 55))} w={244} h={50} color="var(--r-med)" /></div><Row k="Velocity score" v={it.newsVelocityScore} /></Card>
+          <Card icon={Icon.activity} title="News Velocity"><div style={{ marginBottom: 8 }}>{velocitySpark(D, it.newsVelocityScore, 55, 244, 50)}</div><Row k="Velocity score" v={SignalDataQuality.numOr(it.newsVelocityScore)} /></Card>
           <Card icon={Icon.target} title="Key Indicators"><div className="stack" style={{ gap: 8 }}>{indicators.map((x) => <div key={x} style={{ display: "flex", gap: 8, fontSize: 12.5, color: "var(--ink-2)" }}><Icon.target style={{ width: 13, height: 13, color: "var(--accent)", flexShrink: 0, marginTop: 1 }} />{x}</div>)}</div></Card>
           <Card icon={Icon.book} title="Historical Sensitivity"><p style={{ fontSize: 12.5, color: "var(--ink-2)", margin: 0, lineHeight: 1.5 }}>This sector has shown {it.riskScore > 65 ? "high" : "moderate"} sensitivity to similar event types historically, with impact typically peaking 1–3 weeks after the initial signal.</p></Card>
           <WatchBtn id={it.industryId} />

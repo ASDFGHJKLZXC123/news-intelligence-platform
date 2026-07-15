@@ -132,7 +132,7 @@ def test_an_unknown_event_is_a_404(client: TestClient) -> None:
     response = _get(client, MISSING_EVENT_ID)
 
     assert response.status_code == 404
-    assert str(MISSING_EVENT_ID) in response.json()["detail"]
+    assert str(MISSING_EVENT_ID) in response.json()["error"]["message"]
 
 
 def test_an_event_with_no_durable_analogies_says_so_explicitly(client: TestClient) -> None:

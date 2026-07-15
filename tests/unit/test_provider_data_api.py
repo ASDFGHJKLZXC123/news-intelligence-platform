@@ -336,8 +336,15 @@ class FakeProviderDataRepository:
         ticker: str | None,
         q: str | None,
         limit: int,
+        offset: int = 0,
     ) -> list[SimpleNamespace]:
-        self.calls["sec_companies"] = {"cik": cik, "ticker": ticker, "q": q, "limit": limit}
+        self.calls["sec_companies"] = {
+            "cik": cik,
+            "ticker": ticker,
+            "q": q,
+            "limit": limit,
+            "offset": offset,
+        }
         if ticker and ticker.upper() == "DUP":
             return [self.duplicate_company, self.duplicate_company_alt][:limit]
         if ticker and ticker.upper() != "AAPL":
@@ -345,6 +352,12 @@ class FakeProviderDataRepository:
         if cik and cik.zfill(10) != self.company.cik:
             return []
         return [self.company]
+
+    def count_sec_companies(self, *, cik: str | None, ticker: str | None, q: str | None) -> int:
+        # A real filtered total that is deliberately larger than one page of results, so a
+        # query-mode test can prove `total` is a COUNT and not `len(items)`.
+        self.calls["count_sec_companies"] = {"cik": cik, "ticker": ticker, "q": q}
+        return 42
 
     def list_sec_filings(
         self,
@@ -699,7 +712,11 @@ def test_company_research_profiles_endpoint_collects_available_and_marks_missing
 
     assert resp.status_code == 200
     body = resp.json()
-    assert body["count"] == 2
+    # Explicit selectors are a bounded lookup: total is the full requested count, with exact
+    # pagination metadata and no legacy `count` key (api-adapter-contract).
+    assert set(body) == {"items", "total", "limit", "offset"}
+    assert body["total"] == 2
+    assert len(body["items"]) == 2
 
     apple = body["items"][0]
     assert apple["identity"]["ticker"] == "AAPL"
@@ -728,7 +745,7 @@ def test_company_research_profiles_canonical_route_alias() -> None:
 
     assert resp.status_code == 200
     body = resp.json()
-    assert body["count"] == 1
+    assert body["total"] == 1
     profile = body["items"][0]
     assert profile["identity"]["ticker"] == "AAPL"
     assert profile["missingFields"]
@@ -764,11 +781,77 @@ def test_company_research_profiles_support_company_ids_query() -> None:
 
     assert resp.status_code == 200
     body = resp.json()
-    assert body["count"] == 1
+    assert body["total"] == 1
     profile = body["items"][0]
     assert profile["identity"]["ticker"] == "AAPL"
     assert profile["coverage"]["total"] == 66
     assert repo.calls["sec_company_by_id"]["company_id"] == repo.company_id
+
+
+def test_company_research_profiles_query_mode_reports_real_filtered_total() -> None:
+    repo = FakeProviderDataRepository()
+    resp = _get_with_repo(
+        repo,
+        "/api/v1/company-research/profiles?q=apple&limit=5&offset=10",
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert set(body) == {"items", "total", "limit", "offset"}
+    # Query mode reports the real filtered company COUNT, not len(items) of this page.
+    assert body["total"] == 42
+    assert len(body["items"]) == 1
+    assert body["limit"] == 5
+    assert body["offset"] == 10
+    # The page window is threaded through to the repository read, and the count uses the
+    # same filters as the page (no selector predicates in query mode).
+    assert repo.calls["sec_companies"] == {
+        "cik": None,
+        "ticker": None,
+        "q": "apple",
+        "limit": 5,
+        "offset": 10,
+    }
+    assert repo.calls["count_sec_companies"] == {"cik": None, "ticker": None, "q": "apple"}
+
+
+def test_company_research_profiles_explicit_selectors_honor_offset_and_limit() -> None:
+    repo = FakeProviderDataRepository()
+    # Three requested identifiers => total 3; a one-wide window at offset 1 returns the 2nd.
+    resp = _get_with_repo(
+        repo,
+        "/api/v1/company-research/profiles?tickers=AAPL,MISSING,DUP&limit=1&offset=1",
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["total"] == 3
+    assert body["limit"] == 1
+    assert body["offset"] == 1
+    assert len(body["items"]) == 1
+    # offset=1 skips AAPL and returns the MISSING profile; no identifier category is dropped.
+    assert body["items"][0]["identity"]["ticker"] == "MISSING"
+
+
+def test_company_research_profiles_reject_negative_offset() -> None:
+    repo = FakeProviderDataRepository()
+    resp = _get_with_repo(
+        repo,
+        "/api/v1/company-research/profiles?tickers=AAPL&offset=-1",
+    )
+    assert resp.status_code == 422
+
+
+def test_company_research_profiles_provider_data_alias_uses_envelope() -> None:
+    repo = FakeProviderDataRepository()
+    resp = _get_with_repo(
+        repo,
+        "/api/v1/provider-data/company-research/profiles?tickers=AAPL",
+    )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert set(body) == {"items", "total", "limit", "offset"}
+    assert body["total"] == 1
 
 
 def test_company_research_profile_path_returns_valid_empty_profile_for_unknown_id() -> None:

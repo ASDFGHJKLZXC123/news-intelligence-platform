@@ -129,7 +129,7 @@ def test_acknowledge_unknown_alert_is_404(client: TestClient) -> None:
     response = client.post(f"/api/v1/alerts/{uuid.uuid4()}/acknowledge")
 
     assert response.status_code == 404
-    assert "not found" in response.json()["detail"]
+    assert "not found" in response.json()["error"]["message"]
 
 
 # --------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ def test_acknowledge_all_clear_on_a_live_alert_is_409(
     response = client.post(f"/api/v1/alerts/{alert.id}/acknowledge-all-clear")
 
     assert response.status_code == 409
-    assert "cannot all-clear" in response.json()["detail"]
+    assert "cannot all-clear" in response.json()["error"]["message"]
 
 
 def test_acknowledge_all_clear_unknown_alert_is_404(client: TestClient) -> None:
@@ -223,7 +223,7 @@ def test_supersede_unknown_broader_alert_is_404(
     )
 
     assert response.status_code == 404
-    assert "unknown alert" in response.json()["detail"]
+    assert "unknown alert" in response.json()["error"]["message"]
 
 
 def test_supersede_a_terminal_narrower_alert_is_409(
@@ -240,7 +240,7 @@ def test_supersede_a_terminal_narrower_alert_is_409(
     )
 
     assert response.status_code == 409
-    assert "terminal" in response.json()["detail"]
+    assert "terminal" in response.json()["error"]["message"]
 
 
 def test_supersede_across_owners_is_409(

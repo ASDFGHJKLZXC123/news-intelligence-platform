@@ -462,3 +462,75 @@ export type SignalDataset = {
   admin: { jobs: PipelineJob[]; sources: SourceStatus[]; models: ModelUsageStats[] };
   ask: { suggestions: string[] };
 };
+
+/* ---- Adapter runtime contract (frontend/app/api-adapter.js) --------------
+   These types describe what the api-adapter attaches on top of the fixture
+   schema above; they document the adapter output for item 6B (loader) and
+   item 7 (badges/banner). They add metadata only — the existing product shapes
+   are unchanged. Every block above is additionally tagged at runtime with a
+   NON-enumerable `dataQuality` marker (so arrays/maps keep their behavior and
+   key iteration); the same information is mirrored in the `blockQuality`
+   registry, which pages read for primitives (NOW/conf are `derived`). */
+
+export type DataQuality = "live" | "partial" | "synthetic" | "empty";
+
+/** A preserved backend request failure (adapter-contract error envelope). */
+export type AdapterApiError = {
+  endpoint: string;
+  code: string;                 // body error.code, else http_<status> / network_error / truncated
+  message: string;
+  requestId: string | null;     // body error.request_id, else X-Request-ID header
+};
+
+/** One entry in the blockQuality registry. Content blocks carry `quality`;
+    NOW/conf are `derived`; failed/truncated blocks carry the extra detail. */
+export type AdapterBlockQuality = {
+  quality?: DataQuality;
+  kind?: "derived";
+  error?: AdapterApiError;
+  truncated?: boolean;
+  total?: number;
+  shown?: number;
+};
+
+/** Snapshot-level runtime metadata. `mode` is "api" when the backend was
+    reachable (block-by-block merge) or "demo" for the full fixture fallback. */
+export type AdapterRuntime = {
+  mode: "api" | "demo";
+  apiBase: string;
+  now: string;
+  degraded: boolean;
+  reason?: string;
+  truncated?: { endpoint: string; total: number; shown: number }[];
+};
+
+/** The flattened, page-facing `window.DATA` the adapter assembles. Preserves
+    the retired data.js field surface exactly and appends adapter metadata. */
+export type SignalWindowData = {
+  NOW: string;
+  conf: (score: number) => "High" | "Medium" | "Low";
+  dailySummary: DailySummary | null;
+  metrics: DashboardMetric[];
+  upcomingTriggers: UpcomingTrigger[];
+  eventMap: EventMapPoint[];
+  riskRadar: RiskRadarItem[];
+  riskDetails: Record<string, RiskDetail>;
+  industries: IndustryHeatmapItem[];
+  companies: CompanyImpactRow[];
+  companyProfiles: Record<string, CompanyResearchProfile>;
+  evidence: EvidenceSource[];
+  evidenceById: Record<string, EvidenceSource>;
+  events: EventCard[];
+  eventsById: Record<string, EventCard>;
+  alerts: Alert[];
+  watchlist: WatchlistItem[];
+  adminJobs: PipelineJob[];
+  adminSources: SourceStatus[];
+  adminModels: ModelUsageStats[];
+  askSuggestions: string[];
+  riskTrends: Record<string, number[]>;
+  /* adapter metadata (item 7) */
+  blockQuality: Record<string, AdapterBlockQuality>;
+  runtime: AdapterRuntime;
+  apiErrors: AdapterApiError[];
+};

@@ -176,15 +176,17 @@ function HotEventCard({ e, rank }) {
             </span>
           </div>
 
-          <div style={{ marginTop: 13, padding: "10px 12px", background: "var(--accent-soft)", borderRadius: 9, border: "1px solid var(--accent-line)" }}>
-            <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-              <Icon.bolt style={{ width: 14, height: 14, color: "var(--accent)", flexShrink: 0, marginTop: 1 }} />
-              <div style={{ fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.45 }}>
-                <span style={{ color: "var(--accent)", fontWeight: 600, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: 0 }}>WHY IT MATTERS · </span>
-                {e.whyItMatters}
+          {e.whyItMatters && (
+            <div style={{ marginTop: 13, padding: "10px 12px", background: "var(--accent-soft)", borderRadius: 9, border: "1px solid var(--accent-line)" }}>
+              <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                <Icon.bolt style={{ width: 14, height: 14, color: "var(--accent)", flexShrink: 0, marginTop: 1 }} />
+                <div style={{ fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.45 }}>
+                  <span style={{ color: "var(--accent)", fontWeight: 600, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: 0 }}>WHY IT MATTERS · </span>
+                  {e.whyItMatters}
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div style={{ display: "flex", gap: 8, marginTop: 13 }}>
             <button className="btn btn-primary btn-sm" onClick={(ev) => { ev.stopPropagation(); Store.nav("event", e.id); }}>
@@ -220,9 +222,9 @@ function RiskRow({ r, onClick }) {
 
 /* Industry heatmap cell */
 function HeatCell({ it }) {
-  const lvl = scoreLevel(it.impactScore);
   const m = dirMeta(it.direction);
-  const intensity = it.impactScore / 100;
+  const impact = typeof it.impactScore === "number" && isFinite(it.impactScore) ? it.impactScore : null;
+  const intensity = (impact == null ? 0 : impact) / 100;
   const bg = `color-mix(in oklch, ${m.color} ${Math.round(8 + intensity * 26)}%, var(--surface))`;
   return (
     <div className="heat-cell" style={{ background: bg, borderColor: `color-mix(in oklch, ${m.color} 28%, var(--line))`, justifyContent: "flex-start", gap: 10 }}
@@ -230,7 +232,7 @@ function HeatCell({ it }) {
       <div style={{ fontSize: 12.5, fontWeight: 600, lineHeight: 1.25, textWrap: "balance" }}>{it.industryName}</div>
       <div style={{ marginTop: "auto" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-          <span className="mono" style={{ fontSize: 22, fontWeight: 600, color: m.color, lineHeight: 1 }}>{it.impactScore}</span>
+          <span className="mono" style={{ fontSize: 22, fontWeight: 600, color: m.color, lineHeight: 1 }}>{impact == null ? "—" : impact}</span>
           <span style={{ fontSize: 10, color: "var(--ink-3)" }}>impact</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 5, fontSize: 10.5, color: "var(--ink-3)" }}>
@@ -305,11 +307,12 @@ function TickerMark({ ticker }) {
 }
 
 function MiniBar({ value, risk }) {
-  const col = risk ? levelColor(scoreLevel(value)) : "var(--accent)";
+  const has = typeof value === "number" && isFinite(value);
+  const col = risk ? levelColor(scoreLevel(has ? value : 0)) : "var(--accent)";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 88 }}>
-      <div className="scorebar" style={{ width: 52, height: 6 }}><i style={{ width: value + "%", background: col }} /></div>
-      <span className="mono tnum" style={{ fontSize: 12.5, fontWeight: 600, width: 22 }}>{value}</span>
+      <div className="scorebar" style={{ width: 52, height: 6 }}><i style={{ width: (has ? value : 0) + "%", background: col }} /></div>
+      <span className="mono tnum" style={{ fontSize: 12.5, fontWeight: 600, width: 22 }}>{has ? value : "—"}</span>
     </div>
   );
 }

@@ -78,8 +78,12 @@ function activeNav(route) {
 /* ---- Sidebar -------------------------------------------------------------- */
 function Sidebar({ collapsed, route }) {
   const active = activeNav(route);
-  const radar = window.DATA.riskRadar;
-  const top3 = ["Macro Risk", "Financial Stress", "Geopolitical Risk"].map((t) => radar.find((r) => r.riskType === t));
+  const radar = window.DATA.riskRadar || [];
+  // Prefer these three categories; fall back to whatever risk types exist (the
+  // live risk vocabulary differs from the demo fixture), and tolerate none.
+  const preferred = ["Macro Risk", "Financial Stress", "Geopolitical Risk"]
+    .map((t) => radar.find((r) => r.riskType === t)).filter(Boolean);
+  const top3 = (preferred.length ? preferred : radar).slice(0, 3);
   return (
     <aside className="sidebar">
       <div className="brand">

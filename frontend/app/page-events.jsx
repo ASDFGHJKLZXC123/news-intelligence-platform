@@ -112,6 +112,7 @@ function EventsPage() {
           <div className="eyebrow">Intelligence · Event Clusters</div>
           <h1 className="page-title">Events</h1>
           <div className="page-sub">{filtered.length} of {D.events.length} detected event clusters today</div>
+          <PageStatus blocks={["events"]} />
         </div>
       </div>
 

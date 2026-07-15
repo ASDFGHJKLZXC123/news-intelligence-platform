@@ -26,9 +26,21 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Cesium.js"></script>
 
-<!-- data + icons (plain JS) -->
-<script src="app/data.js?v=company-research-2"></script>
+<!-- api adapter (the ONLY wire layer) — must load before the data loader -->
+<script src="app/api-adapter.js?v=stage7-6b-1"></script>
+<script>
+  // Preserve any caller-supplied base; otherwise adopt the adapter default.
+  // (Trailing-slash normalization is delegated to the adapter, not done here.)
+  if (!window.SIGNAL_API_BASE && window.SignalApiAdapter) {
+    window.SIGNAL_API_BASE = window.SignalApiAdapter.DEFAULT_API_BASE;
+  }
+</script>
+
+<!-- data loader + icons (plain JS) -->
+<script src="app/data.js?v=stage7-6b-1"></script>
 <script src="app/icons.js"></script>
+<!-- data-quality presentation helpers (pure, plain JS) — must load before the JSX that consumes window.SignalDataQuality -->
+<script src="app/data-quality.js?v=stage7-7-1"></script>
 <script src="app/globe-runtime.js?v=map-optimized-2"></script>
 
 <!-- tweaks shell + primitives -->
