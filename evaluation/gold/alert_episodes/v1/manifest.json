@@ -1,0 +1,75 @@
+{
+  "dataset_id": "historical_alert_episodes",
+  "schema_version": "v1",
+  "windows": [
+    {
+      "name": "2007-2009",
+      "start": "2007-01-01",
+      "end": "2009-12-31"
+    },
+    {
+      "name": "2020",
+      "start": "2020-01-01",
+      "end": "2020-12-31"
+    },
+    {
+      "name": "2023",
+      "start": "2023-01-01",
+      "end": "2023-12-31"
+    }
+  ],
+  "splits": [
+    {
+      "name": "train",
+      "file": "train.json",
+      "count": 24
+    },
+    {
+      "name": "development",
+      "file": "development.json",
+      "count": 12
+    },
+    {
+      "name": "final_holdout",
+      "file": "final_holdout.json",
+      "count": 12
+    }
+  ],
+  "total_count": 48,
+  "risk_types": [
+    "banking",
+    "company",
+    "market_liquidity",
+    "recession",
+    "sovereign"
+  ],
+  "horizons": [
+    "0_6m",
+    "6_12m",
+    "12_18m",
+    "within_18m"
+  ],
+  "metadata": {
+    "created_on": "2026-07-16",
+    "description": "Historical alert-episode labels for the ADR 0010 null-model backtest windows (2007-2009, 2020, 2023). Curated by an automated Stage 8 pass and validated only against the offline schema contract: no human review or labeling has occurred, and independent historical verification is pending. Supplies outcome-side labels and window inventories only; it never scores precision or lead time and never opens the null-model gate. Legally distinct cases can share one macro shock: the proximate March 2023 Silicon Valley Bank, Signature, First Republic and Credit Suisse contagion family is grouped wholly in the train split, while the held-out 2023 cases are intentionally different families, so Stage 9 must report family sensitivity and must not treat these correlated cases as independent draws.",
+    "provenance": "Automated Stage 8 curation and contract validation. No human authorship, labeling or review; independent historical verification pending. Onset prose is original paraphrase from public institutional records."
+  },
+  "labeling": {
+    "positive_rule": "Positive iff the declared target risk outcome materialised inside the case's one selected horizon bucket: outcome.occurred is true and actual_start_date falls in that bucket, with at least one adverse outcome class, sourced to outcome-supporting refs. Date-normalization convention: where an authoritative source dates a turning point only to a calendar month or quarter (for example NBER's monthly business-cycle chronology), actual_start_date and actual_end_date store the first day of that labeled month as an explicit representation convention; the stored day denotes the labeled month, not an observed calendar day.",
+    "control_rule": "Control is a stressed near-miss: a real alert condition was present at evaluation_as_of but the declared target outcome did not occur inside the selected bucket through evaluation_end, evidenced by control-supporting refs.",
+    "label_timing": "Labels are knowable only on label_available_on, on or after evaluation_end; onset and indicators use only evidence observable on or before evaluation_as_of.",
+    "onset_outcome_separation": "Onset holds only as-of-observable evidence with no hindsight, future year, outcome class or outcome date; outcome and control text are separate and never inputs.",
+    "controls": "Controls carry a substantive rationale and control-supporting sources; actual dates and classes stay null/empty. This is an automated pass with no human review, independent historical verification pending.",
+    "lead_time": "Lead time is computed downstream from actual_start_date relative to evaluation_as_of; it is never stored here, and horizon labels are buckets, not thresholds."
+  },
+  "source_policy": "Only authoritative primary, institutional or statistical https sources (regulators, central banks, governments, official filings, and BIS/IMF/World Bank/OECD/WHO/NBER/FRED and equivalents). No blogs, encyclopaedias, media summaries or placeholder URLs.",
+  "license": {
+    "id": "CC-BY-4.0",
+    "note": "Narrative text is original paraphrase written for this dataset; it quotes no copyrighted retrospective and does not relicense the underlying source facts or material, which remain governed by their own terms."
+  },
+  "review": {
+    "state": "automated_contract_validation_only",
+    "human_verified": false,
+    "independent_historical_verification": false
+  }
+}

@@ -1,0 +1,2066 @@
+{
+  "schema_version": "v1",
+  "split": "final_holdout",
+  "mentions": [
+    {
+      "mention_id": "final_holdout-0000",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0000",
+      "document_text": "Microsoft Corporation pledged to run its data centers on carbon-free power by 2030.",
+      "sentence": {
+        "index": 0,
+        "text": "Microsoft Corporation pledged to run its data centers on carbon-free power by 2030.",
+        "start": 0,
+        "end": 83,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Microsoft Corporation",
+      "start": 0,
+      "end": 21,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2023-08-29",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000789019",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "final_holdout-grp-0000",
+      "note": "legal_name example: Microsoft Corporation",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0001",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0001",
+      "document_text": "Sony Group Corporation denied that it would spin off its finance arm.",
+      "sentence": {
+        "index": 0,
+        "text": "Sony Group Corporation denied that it would spin off its finance arm.",
+        "start": 0,
+        "end": 69,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Sony Group Corporation",
+      "start": 0,
+      "end": 22,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2023-09-27",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000313838",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "final_holdout-grp-0001",
+      "note": "legal_name example: Sony Group Corporation",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0002",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0002",
+      "document_text": "Volkswagen AG is reportedly in talks to license charging technology.",
+      "sentence": {
+        "index": 0,
+        "text": "Volkswagen AG is reportedly in talks to license charging technology.",
+        "start": 0,
+        "end": 68,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Volkswagen AG",
+      "start": 0,
+      "end": 13,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2023-10-26",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-529900nnupaggompxz31",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "final_holdout-grp-0002",
+      "note": "legal_name example: Volkswagen AG",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0003",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0003",
+      "document_text": "Shopify Inc. denied that it would cut its free trial.",
+      "sentence": {
+        "index": 0,
+        "text": "Shopify Inc. denied that it would cut its free trial.",
+        "start": 0,
+        "end": 53,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Shopify Inc.",
+      "start": 0,
+      "end": 12,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2023-11-24",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001594805",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "final_holdout-grp-0003",
+      "note": "legal_name example: Shopify Inc.",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0004",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0004",
+      "document_text": "Novartis AG settled a long-running patent dispute in Europe.",
+      "sentence": {
+        "index": 0,
+        "text": "Novartis AG settled a long-running patent dispute in Europe.",
+        "start": 0,
+        "end": 60,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Novartis AG",
+      "start": 0,
+      "end": 11,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2023-12-23",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001114448",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "final_holdout-grp-0004",
+      "note": "legal_name example: Novartis AG",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0005",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0005",
+      "document_text": "Amazon denied that it would raise Prime prices this year.",
+      "sentence": {
+        "index": 0,
+        "text": "Amazon denied that it would raise Prime prices this year.",
+        "start": 0,
+        "end": 57,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Amazon",
+      "start": 0,
+      "end": 6,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2024-01-21",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001018724",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0005",
+      "note": "short_name example: Amazon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0006",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0006",
+      "document_text": "Apple is exploring a foldable display, suppliers indicate.",
+      "sentence": {
+        "index": 0,
+        "text": "Apple is exploring a foldable display, suppliers indicate.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Apple",
+      "start": 0,
+      "end": 5,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2024-02-19",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000320193",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0006",
+      "note": "short_name example: Apple",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0007",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0007",
+      "document_text": "SAP absorbed a small analytics startup.",
+      "sentence": {
+        "index": 0,
+        "text": "SAP absorbed a small analytics startup.",
+        "start": 0,
+        "end": 39,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SAP",
+      "start": 0,
+      "end": 3,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2024-03-19",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001000184",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0007",
+      "note": "short_name example: SAP",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0008",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0008",
+      "document_text": "TSMC is reportedly qualifying a new packaging process.",
+      "sentence": {
+        "index": 0,
+        "text": "TSMC is reportedly qualifying a new packaging process.",
+        "start": 0,
+        "end": 54,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "TSMC",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2024-04-17",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001046179",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0008",
+      "note": "short_name example: TSMC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0009",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0009",
+      "document_text": "Barclays denied plans to shrink its graduate program.",
+      "sentence": {
+        "index": 0,
+        "text": "Barclays denied plans to shrink its graduate program.",
+        "start": 0,
+        "end": 53,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Barclays",
+      "start": 0,
+      "end": 8,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2024-05-16",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000312069",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0009",
+      "note": "short_name example: Barclays",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0010",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0010",
+      "document_text": "AAPL paced the Dow after the buyback news.",
+      "sentence": {
+        "index": 0,
+        "text": "AAPL paced the Dow after the buyback news.",
+        "start": 0,
+        "end": 42,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "AAPL",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2024-06-14",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000320193",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "final_holdout-grp-0010",
+      "note": "ticker example: AAPL",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0011",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0011",
+      "document_text": "META is reportedly a crowded long, prime brokers note.",
+      "sentence": {
+        "index": 0,
+        "text": "META is reportedly a crowded long, prime brokers note.",
+        "start": 0,
+        "end": 54,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "META",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2024-07-13",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "final_holdout-grp-0011",
+      "note": "ticker example: META",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0012",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0012",
+      "document_text": "NVS ticked up in Zurich and New York.",
+      "sentence": {
+        "index": 0,
+        "text": "NVS ticked up in Zurich and New York.",
+        "start": 0,
+        "end": 37,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "NVS",
+      "start": 0,
+      "end": 3,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2024-08-11",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001114448",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "final_holdout-grp-0012",
+      "note": "ticker example: NVS",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0013",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0013",
+      "document_text": "The lender behind SAN denied it had cut its dividend.",
+      "sentence": {
+        "index": 0,
+        "text": "The lender behind SAN denied it had cut its dividend.",
+        "start": 0,
+        "end": 53,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SAN",
+      "start": 18,
+      "end": 21,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2024-09-09",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000891478",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "final_holdout-grp-0013",
+      "note": "ticker example: SAN",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0014",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0014",
+      "document_text": "NESN may steady after the margin guidance, analysts say.",
+      "sentence": {
+        "index": 0,
+        "text": "NESN may steady after the margin guidance, analysts say.",
+        "start": 0,
+        "end": 56,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "NESN",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2024-10-08",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-ky37lus27qqx7bb93l28",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "final_holdout-grp-0014",
+      "note": "ticker example: NESN",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0015",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0015",
+      "document_text": "Samsung is reportedly mass-producing a denser memory chip.",
+      "sentence": {
+        "index": 0,
+        "text": "Samsung is reportedly mass-producing a denser memory chip.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Samsung",
+      "start": 0,
+      "end": 7,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2024-11-06",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-9884007er46l6n7ei764",
+      "expected_label": "link",
+      "case_tags": [
+        "transliteration"
+      ],
+      "leakage_group": "final_holdout-grp-0015",
+      "note": "transliteration example: Samsung",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0016",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0016",
+      "document_text": "Toyota denied that it would delay its solid-state rollout.",
+      "sentence": {
+        "index": 0,
+        "text": "Toyota denied that it would delay its solid-state rollout.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Toyota",
+      "start": 0,
+      "end": 6,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2024-12-05",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001094517",
+      "expected_label": "link",
+      "case_tags": [
+        "transliteration"
+      ],
+      "leakage_group": "final_holdout-grp-0016",
+      "note": "transliteration example: Toyota",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0017",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0017",
+      "document_text": "A 2017 court exhibit still branded the network Facebook.",
+      "sentence": {
+        "index": 0,
+        "text": "A 2017 court exhibit still branded the network Facebook.",
+        "start": 0,
+        "end": 56,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Facebook",
+      "start": 47,
+      "end": 55,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2017-05-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "final_holdout-grp-0017",
+      "note": "former_name example: Facebook",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0018",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0018",
+      "document_text": "Legacy cabling contracts were signed by France Telecom.",
+      "sentence": {
+        "index": 0,
+        "text": "Legacy cabling contracts were signed by France Telecom.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "France Telecom",
+      "start": 40,
+      "end": 54,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2011-08-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001038143",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "final_holdout-grp-0018",
+      "note": "former_name example: France Telecom",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0019",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0019",
+      "document_text": "The acquisition closed under the name Google Inc.",
+      "sentence": {
+        "index": 0,
+        "text": "The acquisition closed under the name Google Inc.",
+        "start": 0,
+        "end": 49,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Google Inc.",
+      "start": 38,
+      "end": 49,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2015-02-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "google-llc",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "final_holdout-grp-0019",
+      "note": "former_name example: Google Inc.",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0020",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0020",
+      "document_text": "Mechanics still stock parts labeled VW.",
+      "sentence": {
+        "index": 0,
+        "text": "Mechanics still stock parts labeled VW.",
+        "start": 0,
+        "end": 39,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "VW",
+      "start": 36,
+      "end": 38,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2025-03-31",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-529900nnupaggompxz31",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "colloquial"
+      ],
+      "leakage_group": "final_holdout-grp-0020",
+      "note": "colloquial example: VW",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0021",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0021",
+      "document_text": "Coke is weighing a push into ready-to-drink coffee.",
+      "sentence": {
+        "index": 0,
+        "text": "Coke is weighing a push into ready-to-drink coffee.",
+        "start": 0,
+        "end": 51,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Coke",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2025-04-29",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000021344",
+      "expected_label": "link",
+      "case_tags": [
+        "colloquial"
+      ],
+      "leakage_group": "final_holdout-grp-0021",
+      "note": "colloquial example: Coke",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0022",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0022",
+      "document_text": "No competitor ships ASML's most advanced scanners.",
+      "sentence": {
+        "index": 0,
+        "text": "No competitor ships ASML's most advanced scanners.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "ASML",
+      "start": 20,
+      "end": 24,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2025-05-28",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000937966",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0022",
+      "note": "acronym example: ASML",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0023",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0023",
+      "document_text": "Older airframes still carry EADS part numbers.",
+      "sentence": {
+        "index": 0,
+        "text": "Older airframes still carry EADS part numbers.",
+        "start": 0,
+        "end": 46,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "EADS",
+      "start": 28,
+      "end": 32,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2012-06-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-mino79wloo247m1il051",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "former_name"
+      ],
+      "leakage_group": "final_holdout-grp-0023",
+      "note": "acronym example: EADS",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0024",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0024",
+      "document_text": "The latest iPhone leans on a custom imaging chip.",
+      "sentence": {
+        "index": 0,
+        "text": "The latest iPhone leans on a custom imaging chip.",
+        "start": 0,
+        "end": 49,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "iPhone",
+      "start": 11,
+      "end": 17,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2025-07-25",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Apple"
+        ],
+        "linked_target_ids": [
+          "sec-0000320193"
+        ]
+      },
+      "expected_target_id": "product-iphone",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "final_holdout-grp-0024",
+      "note": "brand_product example: iPhone",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0025",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0025",
+      "document_text": "A handheld Xbox may arrive next year, insiders suggest.",
+      "sentence": {
+        "index": 0,
+        "text": "A handheld Xbox may arrive next year, insiders suggest.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Xbox",
+      "start": 11,
+      "end": 15,
+      "label": "PRODUCT",
+      "assertion_status": "speculative",
+      "published_on": "2025-08-23",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "product-xbox",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "final_holdout-grp-0025",
+      "note": "brand_product example: Xbox",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0026",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0026",
+      "document_text": "A cloud-streaming update reached PlayStation this week.",
+      "sentence": {
+        "index": 0,
+        "text": "A cloud-streaming update reached PlayStation this week.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "PlayStation",
+      "start": 33,
+      "end": 44,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2025-09-21",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Sony"
+        ],
+        "linked_target_ids": [
+          "sec-0000313838"
+        ]
+      },
+      "expected_target_id": "product-playstation",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "final_holdout-grp-0026",
+      "note": "brand_product example: PlayStation",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0027",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0027",
+      "document_text": "WhatsApp denied that it would show banner ads in chats.",
+      "sentence": {
+        "index": 0,
+        "text": "WhatsApp denied that it would show banner ads in chats.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "WhatsApp",
+      "start": 0,
+      "end": 8,
+      "label": "PRODUCT",
+      "assertion_status": "denied",
+      "published_on": "2025-10-20",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "brand-whatsapp",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "final_holdout-grp-0027",
+      "note": "brand_product example: WhatsApp",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0028",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0028",
+      "document_text": "YouTube expanded its shopping partnerships with retailers.",
+      "sentence": {
+        "index": 0,
+        "text": "YouTube expanded its shopping partnerships with retailers.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "YouTube",
+      "start": 0,
+      "end": 7,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2025-11-18",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "brand-youtube",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "final_holdout-grp-0028",
+      "note": "brand_product example: YouTube",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0029",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0029",
+      "document_text": "On strong iPad sales, Apple guided higher.",
+      "sentence": {
+        "index": 0,
+        "text": "On strong iPad sales, Apple guided higher.",
+        "start": 0,
+        "end": 42,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Apple",
+      "start": 22,
+      "end": 27,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2025-12-17",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000320193",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0029",
+      "note": "ambiguous example: Apple",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0030",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0030",
+      "document_text": "Amazon is considering more robotics for its warehouses.",
+      "sentence": {
+        "index": 0,
+        "text": "Amazon is considering more robotics for its warehouses.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Amazon",
+      "start": 0,
+      "end": 6,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2026-01-15",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001018724",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0030",
+      "note": "ambiguous example: Amazon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0031",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0031",
+      "document_text": "The carrier Orange extended coverage across French villages.",
+      "sentence": {
+        "index": 0,
+        "text": "The carrier Orange extended coverage across French villages.",
+        "start": 0,
+        "end": 60,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Orange",
+      "start": 12,
+      "end": 18,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2026-02-13",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "fr"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001038143",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0031",
+      "note": "ambiguous example: Orange",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0032",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0032",
+      "document_text": "Meta denied that it would meter messaging.",
+      "sentence": {
+        "index": 0,
+        "text": "Meta denied that it would meter messaging.",
+        "start": 0,
+        "end": 42,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Meta",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2026-03-14",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0032",
+      "note": "ambiguous example: Meta",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0033",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0033",
+      "document_text": "Vendors reported that Coke moved more units at the match.",
+      "sentence": {
+        "index": 0,
+        "text": "Vendors reported that Coke moved more units at the match.",
+        "start": 0,
+        "end": 57,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Coke",
+      "start": 22,
+      "end": 26,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-01-09",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000021344",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "colloquial"
+      ],
+      "leakage_group": "final_holdout-grp-0033",
+      "note": "ambiguous example: Coke",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0034",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0034",
+      "document_text": "The bank Santander is reportedly eyeing a fintech stake.",
+      "sentence": {
+        "index": 0,
+        "text": "The bank Santander is reportedly eyeing a fintech stake.",
+        "start": 0,
+        "end": 56,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Santander",
+      "start": 9,
+      "end": 18,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2019-02-07",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "es"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000891478",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0034",
+      "note": "ambiguous example: Santander",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0035",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0035",
+      "document_text": "Around Hsinchu, TSMC broke its own output records.",
+      "sentence": {
+        "index": 0,
+        "text": "Around Hsinchu, TSMC broke its own output records.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "TSMC",
+      "start": 16,
+      "end": 20,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-03-08",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "tw"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001046179",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0035",
+      "note": "geographic_disambiguation example: TSMC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0036",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0036",
+      "document_text": "From its Basel base, Novartis denied halting the trial.",
+      "sentence": {
+        "index": 0,
+        "text": "From its Basel base, Novartis denied halting the trial.",
+        "start": 0,
+        "end": 55,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Novartis",
+      "start": 21,
+      "end": 29,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2019-04-06",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "ch"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001114448",
+      "expected_label": "link",
+      "case_tags": [
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "final_holdout-grp-0036",
+      "note": "geographic_disambiguation example: Novartis",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0037",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0037",
+      "document_text": "Near Seoul, Samsung commissioned a new line.",
+      "sentence": {
+        "index": 0,
+        "text": "Near Seoul, Samsung commissioned a new line.",
+        "start": 0,
+        "end": 44,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Samsung",
+      "start": 12,
+      "end": 19,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-05-05",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "kr"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-9884007er46l6n7ei764",
+      "expected_label": "link",
+      "case_tags": [
+        "geographic_disambiguation",
+        "transliteration"
+      ],
+      "leakage_group": "final_holdout-grp-0037",
+      "note": "geographic_disambiguation example: Samsung",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0038",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0038",
+      "document_text": "Pinehurst Freight denied defaulting on a lease.",
+      "sentence": {
+        "index": 0,
+        "text": "Pinehurst Freight denied defaulting on a lease.",
+        "start": 0,
+        "end": 47,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Pinehurst Freight",
+      "start": 0,
+      "end": 17,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2019-06-03",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0038",
+      "note": "hard_negative example: Pinehurst Freight",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0039",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0039",
+      "document_text": "Emberline Systems is reportedly weighing an IPO.",
+      "sentence": {
+        "index": 0,
+        "text": "Emberline Systems is reportedly weighing an IPO.",
+        "start": 0,
+        "end": 48,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Emberline Systems",
+      "start": 0,
+      "end": 17,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2019-07-02",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0039",
+      "note": "hard_negative example: Emberline Systems",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0040",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0040",
+      "document_text": "Coastward Bank opened twelve new branches.",
+      "sentence": {
+        "index": 0,
+        "text": "Coastward Bank opened twelve new branches.",
+        "start": 0,
+        "end": 42,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Coastward Bank",
+      "start": 0,
+      "end": 14,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-07-31",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0040",
+      "note": "hard_negative example: Coastward Bank",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0041",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0041",
+      "document_text": "Quill & Vane won a design award for its packaging.",
+      "sentence": {
+        "index": 0,
+        "text": "Quill & Vane won a design award for its packaging.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Quill & Vane",
+      "start": 0,
+      "end": 12,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-08-29",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0041",
+      "note": "hard_negative example: Quill & Vane",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0042",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0042",
+      "document_text": "The Lumen Tab shipped with a brighter panel.",
+      "sentence": {
+        "index": 0,
+        "text": "The Lumen Tab shipped with a brighter panel.",
+        "start": 0,
+        "end": 44,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Lumen Tab",
+      "start": 4,
+      "end": 13,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2019-09-27",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0042",
+      "note": "hard_negative example: Lumen Tab",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0043",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0043",
+      "document_text": "The Pulse Earbuds may gain noise cancellation, tipsters say.",
+      "sentence": {
+        "index": 0,
+        "text": "The Pulse Earbuds may gain noise cancellation, tipsters say.",
+        "start": 0,
+        "end": 60,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Pulse Earbuds",
+      "start": 4,
+      "end": 17,
+      "label": "PRODUCT",
+      "assertion_status": "speculative",
+      "published_on": "2019-10-26",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0043",
+      "note": "hard_negative example: Pulse Earbuds",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0044",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0044",
+      "document_text": "Grace Okoro was appointed to lead the unit.",
+      "sentence": {
+        "index": 0,
+        "text": "Grace Okoro was appointed to lead the unit.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Grace Okoro",
+      "start": 0,
+      "end": 11,
+      "label": "PERSON",
+      "assertion_status": "asserted",
+      "published_on": "2019-11-24",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0044",
+      "note": "hard_negative example: Grace Okoro",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0045",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0045",
+      "document_text": "Ravi Menon denied the allegations.",
+      "sentence": {
+        "index": 0,
+        "text": "Ravi Menon denied the allegations.",
+        "start": 0,
+        "end": 34,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Ravi Menon",
+      "start": 0,
+      "end": 10,
+      "label": "PERSON",
+      "assertion_status": "denied",
+      "published_on": "2019-12-23",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0045",
+      "note": "hard_negative example: Ravi Menon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0046",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0046",
+      "document_text": "Hannah Berg is reportedly joining the panel.",
+      "sentence": {
+        "index": 0,
+        "text": "Hannah Berg is reportedly joining the panel.",
+        "start": 0,
+        "end": 44,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Hannah Berg",
+      "start": 0,
+      "end": 11,
+      "label": "PERSON",
+      "assertion_status": "speculative",
+      "published_on": "2020-01-21",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0046",
+      "note": "hard_negative example: Hannah Berg",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0047",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0047",
+      "document_text": "Researchers tracked rainfall across the Amazon.",
+      "sentence": {
+        "index": 0,
+        "text": "Researchers tracked rainfall across the Amazon.",
+        "start": 0,
+        "end": 47,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Amazon",
+      "start": 40,
+      "end": 46,
+      "label": "GPE",
+      "assertion_status": "asserted",
+      "published_on": "2020-02-19",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "br"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0047",
+      "note": "ambiguous example: Amazon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0048",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0048",
+      "document_text": "The vineyards near Orange had a strong harvest.",
+      "sentence": {
+        "index": 0,
+        "text": "The vineyards near Orange had a strong harvest.",
+        "start": 0,
+        "end": 47,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Orange",
+      "start": 19,
+      "end": 25,
+      "label": "GPE",
+      "assertion_status": "asserted",
+      "published_on": "2020-03-19",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "fr"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0048",
+      "note": "ambiguous example: Orange",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "final_holdout-0049",
+      "split": "final_holdout",
+      "language": "en",
+      "article_key": "final_holdout-art-0049",
+      "document_text": "The parish of Cambourne denied the planning appeal.",
+      "sentence": {
+        "index": 0,
+        "text": "The parish of Cambourne denied the planning appeal.",
+        "start": 0,
+        "end": 51,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Cambourne",
+      "start": 14,
+      "end": 23,
+      "label": "GPE",
+      "assertion_status": "denied",
+      "published_on": "2020-04-17",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "final_holdout-grp-0049",
+      "note": "hard_negative example: Cambourne",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1559 @@
+{
+  "schema_version": "v1",
+  "targets": [
+    {
+      "target_id": "brand-instagram",
+      "fixture_uuid": "18e1437e-0805-5559-86d7-c6a80cd3180b",
+      "canonical_name": "Instagram",
+      "normalized_name": "instagram",
+      "entity_type": "product",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Instagram",
+          "normalized": "instagram",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "instagram-about",
+          "title": "About Instagram",
+          "publisher": "Meta Platforms, Inc.",
+          "url": "https://about.instagram.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "meta-about",
+          "title": "Meta company information",
+          "publisher": "Meta Platforms, Inc.",
+          "url": "https://about.meta.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q209330",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "parent": {
+        "target_id": "sec-0001326801",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "brand-whatsapp",
+      "fixture_uuid": "e07ef1c9-848f-50f8-add4-ecbd9b7fec17",
+      "canonical_name": "WhatsApp",
+      "normalized_name": "whatsapp",
+      "entity_type": "product",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "WhatsApp",
+          "normalized": "whatsapp",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "meta-about",
+          "title": "Meta company information",
+          "publisher": "Meta Platforms, Inc.",
+          "url": "https://about.meta.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "whatsapp-about",
+          "title": "About WhatsApp",
+          "publisher": "Meta Platforms, Inc.",
+          "url": "https://www.whatsapp.com/about",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q1049511",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "parent": {
+        "target_id": "sec-0001326801",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "brand-youtube",
+      "fixture_uuid": "78213f91-a6dc-501e-b8f8-48ff0f2b67d2",
+      "canonical_name": "YouTube",
+      "normalized_name": "youtube",
+      "entity_type": "product",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "YouTube",
+          "normalized": "youtube",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "google-about",
+          "title": "Google company information",
+          "publisher": "Google LLC",
+          "url": "https://about.google",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q866",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        },
+        {
+          "id": "youtube-about",
+          "title": "About YouTube",
+          "publisher": "Google LLC",
+          "url": "https://about.youtube",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        }
+      ],
+      "parent": {
+        "target_id": "google-llc",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "google-llc",
+      "fixture_uuid": "6a9d11dc-db47-5c37-98d0-911dad3f9236",
+      "canonical_name": "Google LLC",
+      "normalized_name": "google llc",
+      "entity_type": "private_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Google Inc.",
+          "normalized": "google",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2017-09-01"
+        },
+        {
+          "value": "Google LLC",
+          "normalized": "google",
+          "alias_type": "legal_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "Google",
+          "normalized": "google",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "alphabet-sec",
+          "title": "Alphabet Inc. EDGAR filings (parent)",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001652044.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "google-about",
+          "title": "Google company information",
+          "publisher": "Google LLC",
+          "url": "https://about.google",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q95",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "website": "https://about.google",
+      "parent": {
+        "target_id": "sec-0001652044",
+        "relationship_type": "subsidiary"
+      }
+    },
+    {
+      "target_id": "lei-529900nnupaggompxz31",
+      "fixture_uuid": "ce44bf30-9d8d-501b-8160-b442a67ce039",
+      "canonical_name": "Volkswagen AG",
+      "normalized_name": "volkswagen ag",
+      "entity_type": "public_company",
+      "country": "DE",
+      "aliases": [
+        {
+          "value": "VW",
+          "normalized": "vw",
+          "alias_type": "colloquial",
+          "source": "wikidata"
+        },
+        {
+          "value": "Volkswagen AG",
+          "normalized": "volkswagen",
+          "alias_type": "legal_name",
+          "source": "gleif"
+        },
+        {
+          "value": "Volkswagen",
+          "normalized": "volkswagen",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "VOW3",
+          "normalized": "vow3",
+          "alias_type": "ticker",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/529900NNUPAGGOMPXZ31",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "official",
+          "title": "Volkswagen Group corporate site",
+          "publisher": "Volkswagen AG",
+          "url": "https://www.volkswagenag.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q156578",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "VOW3",
+      "lei": "529900NNUPAGGOMPXZ31",
+      "website": "https://www.volkswagenag.com"
+    },
+    {
+      "target_id": "lei-9884007er46l6n7ei764",
+      "fixture_uuid": "8d66a181-cd20-5af3-b4c3-1cf920271e29",
+      "canonical_name": "Samsung Electronics Co., Ltd.",
+      "normalized_name": "samsung electronics co., ltd.",
+      "entity_type": "public_company",
+      "country": "KR",
+      "aliases": [
+        {
+          "value": "Samsung Electronics Co., Ltd.",
+          "normalized": "samsung electronics",
+          "alias_type": "legal_name",
+          "source": "gleif"
+        },
+        {
+          "value": "Samsung",
+          "normalized": "samsung",
+          "alias_type": "transliteration",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/9884007ER46L6N7EI764",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "official",
+          "title": "Samsung Electronics corporate site",
+          "publisher": "Samsung Electronics Co., Ltd.",
+          "url": "https://www.samsung.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q20718",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "lei": "9884007ER46L6N7EI764",
+      "website": "https://www.samsung.com"
+    },
+    {
+      "target_id": "lei-ky37lus27qqx7bb93l28",
+      "fixture_uuid": "6c05d4cd-ee71-59f9-aa27-863db0ac2d67",
+      "canonical_name": "Nestlé S.A.",
+      "normalized_name": "nestlé s.a.",
+      "entity_type": "public_company",
+      "country": "CH",
+      "aliases": [
+        {
+          "value": "Nestlé S.A.",
+          "normalized": "nestlé",
+          "alias_type": "legal_name",
+          "source": "gleif"
+        },
+        {
+          "value": "Nestlé",
+          "normalized": "nestlé",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "NESN",
+          "normalized": "nesn",
+          "alias_type": "ticker",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/KY37LUS27QQX7BB93L28",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "official",
+          "title": "Nestlé corporate site",
+          "publisher": "Nestlé S.A.",
+          "url": "https://www.nestle.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q160746",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "NESN",
+      "lei": "KY37LUS27QQX7BB93L28",
+      "website": "https://www.nestle.com"
+    },
+    {
+      "target_id": "lei-mino79wloo247m1il051",
+      "fixture_uuid": "650954d9-7aba-59e0-b4ed-42d917b59bbf",
+      "canonical_name": "Airbus SE",
+      "normalized_name": "airbus se",
+      "entity_type": "public_company",
+      "country": "NL",
+      "aliases": [
+        {
+          "value": "Airbus Group",
+          "normalized": "airbus",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2017-04-12"
+        },
+        {
+          "value": "EADS",
+          "normalized": "eads",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2013-12-26"
+        },
+        {
+          "value": "Airbus SE",
+          "normalized": "airbus se",
+          "alias_type": "legal_name",
+          "source": "gleif"
+        },
+        {
+          "value": "Airbus",
+          "normalized": "airbus",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "AIR",
+          "normalized": "air",
+          "alias_type": "ticker",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/MINO79WLOO247M1IL051",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "official",
+          "title": "Airbus corporate site",
+          "publisher": "Airbus SE",
+          "url": "https://www.airbus.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q2311",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "AIR",
+      "lei": "MINO79WLOO247M1IL051",
+      "website": "https://www.airbus.com"
+    },
+    {
+      "target_id": "product-iphone",
+      "fixture_uuid": "39e04d3b-4266-56d1-8e4f-4648cb180328",
+      "canonical_name": "iPhone",
+      "normalized_name": "iphone",
+      "entity_type": "product",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "iPhone",
+          "normalized": "iphone",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "apple-iphone",
+          "title": "iPhone product page",
+          "publisher": "Apple Inc.",
+          "url": "https://www.apple.com/iphone/",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "apple-sec",
+          "title": "Apple Inc. EDGAR filings (maker)",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q2766",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "parent": {
+        "target_id": "sec-0000320193",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "product-playstation",
+      "fixture_uuid": "5e94aa7a-052f-5063-8f25-decd7679512c",
+      "canonical_name": "PlayStation",
+      "normalized_name": "playstation",
+      "entity_type": "product",
+      "country": "JP",
+      "aliases": [
+        {
+          "value": "PlayStation",
+          "normalized": "playstation",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "playstation-site",
+          "title": "PlayStation official site",
+          "publisher": "Sony Interactive Entertainment",
+          "url": "https://www.playstation.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "sony-sec",
+          "title": "Sony Group Corporation EDGAR filings (parent)",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000313838.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q1323662",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "parent": {
+        "target_id": "sec-0000313838",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "product-xbox",
+      "fixture_uuid": "900eef81-b43c-53ee-878d-e2910651a8d8",
+      "canonical_name": "Xbox",
+      "normalized_name": "xbox",
+      "entity_type": "product",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Xbox",
+          "normalized": "xbox",
+          "alias_type": "brand_product",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "microsoft-sec",
+          "title": "Microsoft Corporation EDGAR filings (maker)",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000789019.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q15281614",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        },
+        {
+          "id": "xbox-site",
+          "title": "Xbox official site",
+          "publisher": "Microsoft Corporation",
+          "url": "https://www.xbox.com",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        }
+      ],
+      "parent": {
+        "target_id": "sec-0000789019",
+        "relationship_type": "brand"
+      }
+    },
+    {
+      "target_id": "sec-0000021344",
+      "fixture_uuid": "f9f4dbc8-dada-5c6e-b6bc-dd0cf0493b2e",
+      "canonical_name": "The Coca-Cola Company",
+      "normalized_name": "the coca-cola company",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Coke",
+          "normalized": "coke",
+          "alias_type": "colloquial",
+          "source": "internal"
+        },
+        {
+          "value": "The Coca-Cola Company",
+          "normalized": "the coca cola company",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Coca-Cola",
+          "normalized": "coca cola",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "KO",
+          "normalized": "ko",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "coke-trademark",
+          "title": "Coke trademark chronology",
+          "publisher": "The Coca-Cola Company",
+          "url": "https://www.coca-colacompany.com/about-us/history/coke-lore-trademark-chronology",
+          "accessed": "2026-07-16",
+          "kind": "company_disclosure"
+        },
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/UWJKFUJFZ02DKWI3RY53",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000021344.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q3295867",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "KO",
+      "cik": "0000021344",
+      "lei": "UWJKFUJFZ02DKWI3RY53",
+      "website": "https://www.coca-colacompany.com"
+    },
+    {
+      "target_id": "sec-0000312069",
+      "fixture_uuid": "a1888406-a32e-5755-bac2-6856d53268f4",
+      "canonical_name": "Barclays PLC",
+      "normalized_name": "barclays plc",
+      "entity_type": "public_company",
+      "country": "GB",
+      "aliases": [
+        {
+          "value": "Barclays PLC",
+          "normalized": "barclays",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Barclays",
+          "normalized": "barclays",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "BCS",
+          "normalized": "bcs",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/213800LBQA1Y9L22JB70",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000312069.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q245343",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "BCS",
+      "cik": "0000312069",
+      "lei": "213800LBQA1Y9L22JB70",
+      "website": "https://home.barclays"
+    },
+    {
+      "target_id": "sec-0000313838",
+      "fixture_uuid": "cec09e3f-e7f2-5b16-8147-c321006bc3f6",
+      "canonical_name": "Sony Group Corporation",
+      "normalized_name": "sony group corporation",
+      "entity_type": "public_company",
+      "country": "JP",
+      "aliases": [
+        {
+          "value": "Sony Corporation",
+          "normalized": "sony",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2021-04-01"
+        },
+        {
+          "value": "Sony Group Corporation",
+          "normalized": "sony",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "SONY",
+          "normalized": "sony",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Sony",
+          "normalized": "sony",
+          "alias_type": "transliteration",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/529900R5WX9N2OI2N910",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000313838.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q41187",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "SONY",
+      "cik": "0000313838",
+      "lei": "529900R5WX9N2OI2N910",
+      "website": "https://www.sony.com"
+    },
+    {
+      "target_id": "sec-0000320193",
+      "fixture_uuid": "52accfab-7e5f-5227-bf89-2ed5ed2c1c32",
+      "canonical_name": "Apple Inc.",
+      "normalized_name": "apple inc.",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Apple Inc.",
+          "normalized": "apple",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Apple",
+          "normalized": "apple",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "AAPL",
+          "normalized": "aapl",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/HWUPKR0MPOU8FGXBT394",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q312",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "AAPL",
+      "cik": "0000320193",
+      "lei": "HWUPKR0MPOU8FGXBT394",
+      "website": "https://www.apple.com"
+    },
+    {
+      "target_id": "sec-0000789019",
+      "fixture_uuid": "1817a32c-8129-5c2c-a959-6c68c266b5f2",
+      "canonical_name": "Microsoft Corporation",
+      "normalized_name": "microsoft corporation",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Microsoft Corporation",
+          "normalized": "microsoft",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Microsoft",
+          "normalized": "microsoft",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "MSFT",
+          "normalized": "msft",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/INR2EJN1ERAN0W5ZP974",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000789019.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q2283",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "MSFT",
+      "cik": "0000789019",
+      "lei": "INR2EJN1ERAN0W5ZP974",
+      "website": "https://www.microsoft.com"
+    },
+    {
+      "target_id": "sec-0000891478",
+      "fixture_uuid": "80bade31-1c3f-50de-81ff-91676b953395",
+      "canonical_name": "Banco Santander, S.A.",
+      "normalized_name": "banco santander, s.a.",
+      "entity_type": "public_company",
+      "country": "ES",
+      "aliases": [
+        {
+          "value": "Banco Santander, S.A.",
+          "normalized": "banco santander",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Santander",
+          "normalized": "santander",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "SAN",
+          "normalized": "san",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/5493006QMFDDMYWIAM13",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000891478.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q6496310",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "SAN",
+      "cik": "0000891478",
+      "lei": "5493006QMFDDMYWIAM13",
+      "website": "https://www.santander.com"
+    },
+    {
+      "target_id": "sec-0000937966",
+      "fixture_uuid": "396450ad-0144-591c-ba07-7abaeaeb089f",
+      "canonical_name": "ASML Holding N.V.",
+      "normalized_name": "asml holding n.v.",
+      "entity_type": "public_company",
+      "country": "NL",
+      "aliases": [
+        {
+          "value": "ASM Lithography Holding N.V.",
+          "normalized": "asm lithography holding",
+          "alias_type": "former_name",
+          "source": "sec-edgar",
+          "valid_to": "2001-02-16"
+        },
+        {
+          "value": "ASML Holding N.V.",
+          "normalized": "asml holding",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "ASML",
+          "normalized": "asml",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "ASML",
+          "normalized": "asml",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/724500Y6DUVHQD6OXN27",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0000937966.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q297879",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "ASML",
+      "cik": "0000937966",
+      "lei": "724500Y6DUVHQD6OXN27",
+      "website": "https://www.asml.com"
+    },
+    {
+      "target_id": "sec-0001000184",
+      "fixture_uuid": "14dbb8e4-ae31-55b0-83d1-43b7d62d5b86",
+      "canonical_name": "SAP SE",
+      "normalized_name": "sap se",
+      "entity_type": "public_company",
+      "country": "DE",
+      "aliases": [
+        {
+          "value": "SAP AG",
+          "normalized": "sap",
+          "alias_type": "former_name",
+          "source": "sec-edgar",
+          "valid_to": "2014-07-07"
+        },
+        {
+          "value": "SAP SE",
+          "normalized": "sap se",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "SAP",
+          "normalized": "sap",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "SAP",
+          "normalized": "sap",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/529900D6BF99LW9R2E68",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001000184.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q552581",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "SAP",
+      "cik": "0001000184",
+      "lei": "529900D6BF99LW9R2E68",
+      "website": "https://www.sap.com"
+    },
+    {
+      "target_id": "sec-0001018724",
+      "fixture_uuid": "1af84001-8f66-53a8-b154-b02600dd8c2a",
+      "canonical_name": "Amazon.com, Inc.",
+      "normalized_name": "amazon.com, inc.",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Amazon.com, Inc.",
+          "normalized": "amazoncom",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Amazon",
+          "normalized": "amazon",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "AMZN",
+          "normalized": "amzn",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/ZXTILKJKG63JELOEG630",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001018724.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q3884",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "AMZN",
+      "cik": "0001018724",
+      "lei": "ZXTILKJKG63JELOEG630",
+      "website": "https://www.amazon.com"
+    },
+    {
+      "target_id": "sec-0001038143",
+      "fixture_uuid": "72354977-27ca-536c-8f82-e7f053e3892e",
+      "canonical_name": "Orange S.A.",
+      "normalized_name": "orange s.a.",
+      "entity_type": "public_company",
+      "country": "FR",
+      "aliases": [
+        {
+          "value": "France Telecom",
+          "normalized": "france telecom",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2013-07-29"
+        },
+        {
+          "value": "Orange S.A.",
+          "normalized": "orange",
+          "alias_type": "legal_name",
+          "source": "gleif"
+        },
+        {
+          "value": "Orange",
+          "normalized": "orange",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/969500MCOONR8990S771",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001038143.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q1431486",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "cik": "0001038143",
+      "lei": "969500MCOONR8990S771",
+      "website": "https://www.orange.com"
+    },
+    {
+      "target_id": "sec-0001046179",
+      "fixture_uuid": "5abf26c8-0d3b-52b0-9464-dbbcf0867772",
+      "canonical_name": "Taiwan Semiconductor Manufacturing Company Limited",
+      "normalized_name": "taiwan semiconductor manufacturing company limited",
+      "entity_type": "public_company",
+      "country": "TW",
+      "aliases": [
+        {
+          "value": "Taiwan Semiconductor Manufacturing Company Limited",
+          "normalized": "taiwan semiconductor manufacturing company",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "TSMC",
+          "normalized": "tsmc",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "TSM",
+          "normalized": "tsm",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/549300KB6NK5SBD14S87",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001046179.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q713418",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "TSM",
+      "cik": "0001046179",
+      "lei": "549300KB6NK5SBD14S87",
+      "website": "https://www.tsmc.com"
+    },
+    {
+      "target_id": "sec-0001094517",
+      "fixture_uuid": "e5ac4d01-253f-577f-8fa1-c14043f46823",
+      "canonical_name": "Toyota Motor Corporation",
+      "normalized_name": "toyota motor corporation",
+      "entity_type": "public_company",
+      "country": "JP",
+      "aliases": [
+        {
+          "value": "Toyota Motor Corporation",
+          "normalized": "toyota motor",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "TM",
+          "normalized": "tm",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Toyota",
+          "normalized": "toyota",
+          "alias_type": "transliteration",
+          "source": "wikidata"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/5493006W3QUS5LMH6R84",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001094517.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q53268",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "TM",
+      "cik": "0001094517",
+      "lei": "5493006W3QUS5LMH6R84",
+      "website": "https://global.toyota"
+    },
+    {
+      "target_id": "sec-0001114448",
+      "fixture_uuid": "586e05e5-b307-5905-a980-930543931284",
+      "canonical_name": "Novartis AG",
+      "normalized_name": "novartis ag",
+      "entity_type": "public_company",
+      "country": "CH",
+      "aliases": [
+        {
+          "value": "Novartis AG",
+          "normalized": "novartis",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Novartis",
+          "normalized": "novartis",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "NVS",
+          "normalized": "nvs",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/5493007HIVTX6SY6XD66",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001114448.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q507154",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "NVS",
+      "cik": "0001114448",
+      "lei": "5493007HIVTX6SY6XD66",
+      "website": "https://www.novartis.com"
+    },
+    {
+      "target_id": "sec-0001326801",
+      "fixture_uuid": "d5e5ca02-b708-5127-97bb-b036746bd0bd",
+      "canonical_name": "Meta Platforms, Inc.",
+      "normalized_name": "meta platforms, inc.",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Facebook, Inc.",
+          "normalized": "facebook",
+          "alias_type": "former_name",
+          "source": "sec-edgar",
+          "valid_to": "2021-10-27"
+        },
+        {
+          "value": "Facebook",
+          "normalized": "facebook",
+          "alias_type": "former_name",
+          "source": "wikidata",
+          "valid_to": "2021-10-28"
+        },
+        {
+          "value": "Meta Platforms, Inc.",
+          "normalized": "meta platforms",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Meta",
+          "normalized": "meta",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "META",
+          "normalized": "meta",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/BQ4BKCS1HXDV9HN80Z93",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001326801.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q380",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "META",
+      "cik": "0001326801",
+      "lei": "BQ4BKCS1HXDV9HN80Z93",
+      "website": "https://www.meta.com"
+    },
+    {
+      "target_id": "sec-0001594805",
+      "fixture_uuid": "c7fc6bac-95e0-5146-8f02-d5c60f6c6d12",
+      "canonical_name": "Shopify Inc.",
+      "normalized_name": "shopify inc.",
+      "entity_type": "public_company",
+      "country": "CA",
+      "aliases": [
+        {
+          "value": "Shopify Inc.",
+          "normalized": "shopify",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Shopify",
+          "normalized": "shopify",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "SHOP",
+          "normalized": "shop",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/549300HGQ43STJLLP808",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001594805.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q7501150",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "SHOP",
+      "cik": "0001594805",
+      "lei": "549300HGQ43STJLLP808",
+      "website": "https://www.shopify.com"
+    },
+    {
+      "target_id": "sec-0001652044",
+      "fixture_uuid": "0db35e50-0c41-58ec-b278-7f5cc43955dd",
+      "canonical_name": "Alphabet Inc.",
+      "normalized_name": "alphabet inc.",
+      "entity_type": "public_company",
+      "country": "US",
+      "aliases": [
+        {
+          "value": "Alphabet Inc.",
+          "normalized": "alphabet",
+          "alias_type": "legal_name",
+          "source": "sec-edgar"
+        },
+        {
+          "value": "Alphabet",
+          "normalized": "alphabet",
+          "alias_type": "short_name",
+          "source": "wikidata"
+        },
+        {
+          "value": "GOOGL",
+          "normalized": "googl",
+          "alias_type": "ticker",
+          "source": "sec-edgar"
+        }
+      ],
+      "authoritative_refs": [
+        {
+          "id": "gleif",
+          "title": "GLEIF legal entity identifier record",
+          "publisher": "Global Legal Entity Identifier Foundation",
+          "url": "https://search.gleif.org/#/record/5493006MHB84DD0ZWV18",
+          "accessed": "2026-07-16",
+          "kind": "registry"
+        },
+        {
+          "id": "sec-edgar",
+          "title": "EDGAR company filing history",
+          "publisher": "U.S. Securities and Exchange Commission",
+          "url": "https://data.sec.gov/submissions/CIK0001652044.json",
+          "accessed": "2026-07-16",
+          "kind": "regulatory_filing"
+        },
+        {
+          "id": "wikidata",
+          "title": "Wikidata entity record",
+          "publisher": "Wikimedia Foundation",
+          "url": "https://www.wikidata.org/wiki/Q20800404",
+          "accessed": "2026-07-16",
+          "kind": "reference_work"
+        }
+      ],
+      "ticker": "GOOGL",
+      "cik": "0001652044",
+      "lei": "5493006MHB84DD0ZWV18",
+      "website": "https://abc.xyz"
+    }
+  ]
+}

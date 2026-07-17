@@ -1,0 +1,1112 @@
+{
+  "schema_version": "v1",
+  "split": "final_holdout",
+  "cases": [
+    {
+      "case_id": "amc-avoids-bankruptcy-2023",
+      "split": "final_holdout",
+      "window": "2023",
+      "episode_group": "grp-amc-avoids-bankruptcy-2023",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "amc-entertainment",
+        "name": "AMC Entertainment Holdings",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-01-15",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2024-07-15",
+      "label_available_on": "2024-08-14",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A large cinema chain is still carrying very heavy debt taken on to survive the pandemic while box-office revenue remains below pre-pandemic levels. Its bonds trade at distressed prices and commentary questions whether it can service its obligations without court protection.",
+        "indicators": [
+          {
+            "key": "box_office_shortfall",
+            "description": "Box-office revenue running below pre-pandemic levels",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "below_trend",
+            "unit": "category"
+          },
+          {
+            "key": "distressed_debt_load",
+            "description": "Heavy debt load with bonds at distressed prices",
+            "observed_on": "2023-01-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The chain raised substantial new equity during 2023, including through a special share structure, and did not enter court protection through the evaluation window; it kept operating its cinemas.",
+        "classes": [],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": "Its debt load made failure plausible, but repeated equity raises let the target avoid court protection within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1411579/000141157923000049/amc-20230331x10q.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-Q for the quarter ended 30 June 2024",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1411579/000141157924000060/amc-20240630x10q.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "brazil-no-default-2008",
+      "split": "final_holdout",
+      "window": "2007-2009",
+      "episode_group": "grp-brazil-no-default-2008",
+      "label": "control",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "brazil-sovereign",
+        "name": "Federative Republic of Brazil",
+        "geography": "BR"
+      },
+      "evaluation_as_of": "2008-11-18",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2010-05-18",
+      "label_available_on": "2010-06-17",
+      "onset": {
+        "observation_start": "2008-09-01",
+        "summary": "The global crisis has pushed the Brazilian currency down steeply, equity markets have fallen and external credit has tightened for emerging markets broadly. Brazil recently regained an investment-grade rating, but exporters and firms with foreign-currency derivative positions are under pressure and reserves are being watched closely.",
+        "indicators": [
+          {
+            "key": "currency_depreciation",
+            "description": "The real has depreciated sharply against the dollar",
+            "observed_on": "2008-11-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "sharp",
+            "unit": "category"
+          },
+          {
+            "key": "em_credit_tightening",
+            "description": "External credit conditions for emerging markets have tightened",
+            "observed_on": "2008-10-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "tightening",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Brazil kept servicing its debt and drew on ample reserves and a central-bank swap line rather than missing or restructuring any payment through the evaluation window.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "The external shock was sharp, but strong reserves and recent fiscal improvement meant the target's declared default outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Brazilian Reals to US Dollar (DEXBZUS)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/DEXBZUS",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "BIS Annual Economic Report 2009",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2009e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Federal Reserve establishes swap lines with the Banco Central do Brasil and three other central banks (press release, 29 October 2008)",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081029b.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "carnival-avoids-bankruptcy-2020",
+      "split": "final_holdout",
+      "window": "2020",
+      "episode_group": "grp-carnival-avoids-bankruptcy-2020",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "carnival",
+        "name": "Carnival Corporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-04-01",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2021-10-01",
+      "label_available_on": "2021-10-31",
+      "onset": {
+        "observation_start": "2020-02-20",
+        "summary": "The pandemic has halted the global cruise industry entirely, and a large operator has paused sailings with no clear restart while still incurring heavy fixed costs. Its shares have collapsed and it is seeking large amounts of new financing to survive the shutdown.",
+        "indicators": [
+          {
+            "key": "operations_suspended",
+            "description": "Fleet operations paused globally with no restart date",
+            "observed_on": "2020-03-13",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "liquidity_raise_underway",
+            "description": "Large secured financing and equity issuance sought",
+            "observed_on": "2020-04-01",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The operator raised several billion dollars in secured debt and equity in spring 2020 and did not enter court protection through the evaluation window, though sailings stayed suspended for much of the period.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "Cash outflows were severe with zero revenue, but capital-market access let the target avoid failure within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Statement on the second meeting of the IHR (2005) Emergency Committee on novel coronavirus (30 January 2020)",
+          "publisher": "World Health Organization",
+          "url": "https://www.who.int/news/item/30-01-2020-statement-on-the-second-meeting-of-the-international-health-regulations-(2005)-emergency-committee-regarding-the-outbreak-of-novel-coronavirus-(2019-ncov)",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: senior secured notes and equity offering (31 March 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/815097/000081509720000022/a20208-kofferingcoverp.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-Q for the quarter ended 31 August 2021",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/815097/000081509721000098/ccl-20210831.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "china-avoids-recession-2009",
+      "split": "final_holdout",
+      "window": "2007-2009",
+      "episode_group": "grp-china-avoids-recession-2009",
+      "label": "control",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "china-2009",
+        "name": "People's Republic of China",
+        "geography": "CN"
+      },
+      "evaluation_as_of": "2009-01-30",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2010-07-30",
+      "label_available_on": "2010-08-29",
+      "onset": {
+        "observation_start": "2008-10-01",
+        "summary": "Exports have fallen year on year as global demand collapses, coastal factories are closing and migrant unemployment is rising. China depends heavily on external demand, and many observers expect the trade shock to pull growth down toward a standstill.",
+        "indicators": [
+          {
+            "key": "export_decline",
+            "description": "Merchandise exports contracting year on year",
+            "observed_on": "2009-01-13",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "contracting",
+            "unit": "category"
+          },
+          {
+            "key": "factory_activity",
+            "description": "Coastal manufacturing activity indicators falling",
+            "observed_on": "2008-12-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "falling",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "China's output stayed strongly positive through the evaluation window, supported by a very large fiscal and credit stimulus; it did not record consecutive quarters of contraction.",
+        "classes": [],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": "The external trade shock was severe, but domestic stimulus kept the target's growth positive, so the declared downturn outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "People's Republic of China: 2010 Article IV Consultation Staff Report (IMF Country Report No. 10/238)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2010/cr10238.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "BIS 79th Annual Report (2008/09)",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2009e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "greece-deficit-revision",
+      "split": "final_holdout",
+      "window": "2007-2009",
+      "episode_group": "grp-greece-deficit-revision",
+      "label": "positive",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "greece-sovereign",
+        "name": "Hellenic Republic",
+        "geography": "GR"
+      },
+      "evaluation_as_of": "2009-10-20",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2010-10-20",
+      "label_available_on": "2010-11-19",
+      "onset": {
+        "observation_start": "2009-09-01",
+        "summary": "A newly elected government has revised the projected budget deficit to roughly double the previous official figure, to about 12 to 13 percent of national output, admitting earlier statistics understated the gap. Government bond spreads over the euro-area benchmark are widening and rating agencies have signalled review.",
+        "indicators": [
+          {
+            "key": "deficit_revision",
+            "description": "Projected budget deficit revised to about 12 to 13 percent of output",
+            "observed_on": "2009-10-20",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "doubled",
+            "unit": "category"
+          },
+          {
+            "key": "bond_spread_widening",
+            "description": "Government bond spreads over the euro-area benchmark widening",
+            "observed_on": "2009-10-16",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "widening",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2010-05-02",
+        "actual_end_date": null,
+        "summary": "Market access deteriorated over the following months and on 2 May 2010 the country agreed a joint euro-area and IMF financing programme with austerity conditionality, the first of the euro-area sovereign rescues.",
+        "classes": [
+          "bailout"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Greece: Staff Report on Request for Stand-By Arrangement (IMF Country Report No. 10/110, May 2010)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2010/cr10110.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Report on Greek Government Deficit and Debt Statistics, COM(2010) 1 final (January 2010)",
+          "publisher": "European Commission (Eurostat)",
+          "url": "https://ec.europa.eu/eurostat/documents/4187653/6404656/COM_2010_report_greek/c8523cfa-d3c1-4954-8ea1-64bb11e59b3a",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "iceland-banking-collapse",
+      "split": "final_holdout",
+      "window": "2007-2009",
+      "episode_group": "grp-iceland-banking-collapse",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "country",
+        "id": "iceland-banking-system",
+        "name": "Icelandic banking system",
+        "geography": "IS"
+      },
+      "evaluation_as_of": "2008-09-29",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2009-03-29",
+      "label_available_on": "2009-04-28",
+      "onset": {
+        "observation_start": "2008-06-30",
+        "summary": "The state has taken a majority stake in the third-largest Icelandic bank after it could not refinance a maturing bond. The three main banks have grown to roughly ten times national output, funded by wholesale foreign borrowing and high-rate online deposits gathered abroad; their liabilities are overwhelmingly in currencies the domestic central bank cannot print, and reserves are a small fraction of short-term external obligations.",
+        "indicators": [
+          {
+            "key": "bank_assets_to_output",
+            "description": "Consolidated banking-system assets relative to national output",
+            "observed_on": "2008-06-30",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 10,
+            "unit": "multiple"
+          },
+          {
+            "key": "reserves_vs_external_debt",
+            "description": "Central-bank reserves far below banks' short-term external debt",
+            "observed_on": "2008-09-29",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "far_below_one",
+            "unit": "category"
+          },
+          {
+            "key": "cross_border_online_deposits",
+            "description": "Retail deposits gathered online in other jurisdictions under passporting",
+            "observed_on": "2008-09-29",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2008-10-07",
+        "actual_end_date": "2008-10-09",
+        "summary": "All three banks were taken into resolution between 7 and 9 October 2008 under emergency legislation; capital controls were imposed, the currency lost about half its value and output fell sharply as the country took an IMF programme.",
+        "classes": [
+          "failure",
+          "systemic_crisis"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Iceland: Request for Stand-By Arrangement Staff Report; Press Release on the 19 November 2008 Executive Board Discussion (IMF Country Report No. 08/362)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2008/cr08362.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Monetary Bulletin 2008/3 (November 2008)",
+          "publisher": "Central Bank of Iceland",
+          "url": "https://www.cb.is/library/news-and-publications/publications/monetary-bulletin/2008/november/MB083_2.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "jcpenney-bankruptcy",
+      "split": "final_holdout",
+      "window": "2020",
+      "episode_group": "grp-jcpenney-bankruptcy",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "jcpenney",
+        "name": "J. C. Penney Company",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-04-15",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-10-15",
+      "label_available_on": "2020-11-14",
+      "onset": {
+        "observation_start": "2020-03-01",
+        "summary": "A large US department-store chain has closed all its stores under pandemic orders while carrying heavy debt from years of declining sales. It has skipped a scheduled bond interest payment and entered the grace period, and its bonds and shares trade at distressed levels.",
+        "indicators": [
+          {
+            "key": "store_closures",
+            "description": "Entire store fleet closed under pandemic restrictions",
+            "observed_on": "2020-03-20",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "skipped_coupon_grace",
+            "description": "Scheduled bond interest payment skipped, entering the grace period",
+            "observed_on": "2020-04-15",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-05-15",
+        "actual_end_date": null,
+        "summary": "Unable to service its debt with stores shut, the chain filed for Chapter 11 protection on 15 May 2020 and pursued a sale of its operating business, one of the largest pandemic-era retail collapses.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: voluntary Chapter 11 petition (18 May 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1166126/000119312520144411/d813078d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: skipped bond interest payment and grace period (15 April 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1166126/000116612620000029/jcp8-k4152020.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "nigeria-no-default-2020",
+      "split": "final_holdout",
+      "window": "2020",
+      "episode_group": "grp-nigeria-no-default-2020",
+      "label": "control",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "nigeria-2020",
+        "name": "Federal Republic of Nigeria",
+        "geography": "NG"
+      },
+      "evaluation_as_of": "2020-04-20",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2021-10-20",
+      "label_available_on": "2021-11-19",
+      "onset": {
+        "observation_start": "2020-03-01",
+        "summary": "The oil-price collapse has slashed the government's main revenue source, the currency is under heavy pressure and reserves are falling, and the pandemic is pushing the economy toward contraction. External bonds have sold off and market access has tightened.",
+        "indicators": [
+          {
+            "key": "oil_revenue_shock",
+            "description": "Crude prices collapsed, cutting the main source of government revenue",
+            "observed_on": "2020-04-20",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "collapsed",
+            "unit": "category"
+          },
+          {
+            "key": "reserve_pressure",
+            "description": "Foreign reserves falling under currency pressure",
+            "observed_on": "2020-04-10",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "falling",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Nigeria continued to service its external debt through the evaluation window, supported by an IMF emergency facility and domestic financing; it did not miss or restructure a payment despite the oil and pandemic shock.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "Revenue and reserves fell sharply, but the sovereign kept meeting obligations, so the declared default outcome did not occur for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Crude Oil Prices: West Texas Intermediate (DCOILWTICO)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/DCOILWTICO",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Nigeria: Request for Purchase under the Rapid Financing Instrument (IMF Country Report No. 20/142, April 2020)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2020/English/1NGAEA2020001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Nigeria: 2021 Article IV Consultation Staff Report (IMF Country Report No. 22/33, February 2022)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2022/English/1NGAEA2022001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "silvergate-wind-down",
+      "split": "final_holdout",
+      "window": "2023",
+      "episode_group": "grp-silvergate-wind-down",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "silvergate",
+        "name": "Silvergate Capital Corporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-01",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-01",
+      "label_available_on": "2023-10-01",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A bank built around digital-asset clients has delayed its annual report and warned of substantial doubt about its ability to keep operating. Deposits from crypto firms drained after the collapse of a large exchange, and it sold securities at a loss and borrowed heavily to meet withdrawals, leaving its capital position in question.",
+        "indicators": [
+          {
+            "key": "crypto_deposit_outflows",
+            "description": "Digital-asset client deposits drained after a major exchange collapsed",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "severe",
+            "unit": "category"
+          },
+          {
+            "key": "going_concern_warning",
+            "description": "Delayed annual report and warning of substantial doubt about continuing",
+            "observed_on": "2023-03-01",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-03-08",
+        "actual_end_date": null,
+        "summary": "On 8 March 2023 the company announced it would wind down the bank and voluntarily liquidate, repaying deposits in full, the first casualty of the March 2023 banking stress and outside the deposit-insurance resolution process.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: voluntary wind-down and liquidation of the bank (8 March 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1312109/000131210923000058/si-20230308.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form NT 10-K: notification of late annual report and going-concern doubt (1 March 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1312109/000110465923027353/tm238251d1_nt10k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "us-forecast-recession-that-did-not-occur-2023",
+      "split": "final_holdout",
+      "window": "2023",
+      "episode_group": "grp-us-forecast-recession-that-did-not-occur-2023",
+      "label": "control",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "united-states-2023",
+        "name": "United States",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-01-31",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2024-07-31",
+      "label_available_on": "2024-08-30",
+      "onset": {
+        "observation_start": "2023-01-02",
+        "summary": "The government-bond yield curve is deeply inverted, a leading gauge of activity has fallen for months, and the central bank is still raising rates rapidly to bring down high inflation. Many forecasters expect the economy to tip into a downturn during the year.",
+        "indicators": [
+          {
+            "key": "yield_curve_inversion",
+            "description": "Two-year to ten-year government yield curve deeply inverted",
+            "observed_on": "2023-01-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "deeply_inverted",
+            "unit": "category"
+          },
+          {
+            "key": "leading_index_decline",
+            "description": "A widely followed leading activity index falling for consecutive months",
+            "observed_on": "2023-01-20",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "falling",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "No downturn was dated through the evaluation window; output kept expanding, the labour market stayed strong, and the official chronology recorded no new peak after February 2020.",
+        "classes": [],
+        "source_ids": [
+          "s3",
+          "s4"
+        ]
+      },
+      "control_rationale": "Recession signals were widely cited, but growth continued, so the declared downturn outcome did not occur for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "10-Year minus 2-Year Treasury Spread (T10Y2Y)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/T10Y2Y",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Leading Index for the United States (USSLIND)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/USSLIND",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "NBER business-cycle chronology",
+          "publisher": "National Bureau of Economic Research",
+          "url": "https://www.nber.org/research/business-cycle-dating",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "control"
+          ]
+        },
+        {
+          "id": "s4",
+          "title": "US national output releases",
+          "publisher": "US Bureau of Economic Analysis",
+          "url": "https://www.bea.gov/data/gdp/gross-domestic-product",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "wework-bankruptcy",
+      "split": "final_holdout",
+      "window": "2023",
+      "episode_group": "grp-wework-bankruptcy",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "wework",
+        "name": "WeWork Inc",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-08-08",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2024-02-08",
+      "label_available_on": "2024-03-09",
+      "onset": {
+        "observation_start": "2023-06-01",
+        "summary": "A flexible-office company has disclosed substantial doubt about its ability to continue operating, citing member churn, mounting losses and thin liquidity against very large long-term lease obligations signed at the top of the market. Its shares trade near zero and it is trying to renegotiate leases and restructure debt.",
+        "indicators": [
+          {
+            "key": "going_concern_warning",
+            "description": "Company disclosed substantial doubt about continuing to operate",
+            "observed_on": "2023-08-08",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "member_churn",
+            "description": "Rising member churn worsening the cash outlook",
+            "observed_on": "2023-06-30",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "rising",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-11-06",
+        "actual_end_date": null,
+        "summary": "Lease renegotiations and debt talks fell short, and the company filed for Chapter 11 protection on 6 November 2023 to restructure its debt and shed unprofitable office leases.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 30 June 2023 (going-concern disclosure)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1813756/000181375623000059/we-20230630.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: voluntary Chapter 11 petition (7 November 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1813756/000119312523271902/d522028d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "zambia-2020-default",
+      "split": "final_holdout",
+      "window": "2020",
+      "episode_group": "grp-zambia-2020-default",
+      "label": "positive",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "zambia-2020",
+        "name": "Republic of Zambia",
+        "geography": "ZM"
+      },
+      "evaluation_as_of": "2020-09-30",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2021-03-30",
+      "label_available_on": "2021-04-29",
+      "onset": {
+        "observation_start": "2020-07-01",
+        "summary": "Zambia's external debt has more than doubled over five years to nearly half of national output, copper revenues and reserves are strained by the pandemic, and the government has asked Eurobond holders to agree a six-month interest standstill. Creditors are hesitant and a coupon falls due with only a short grace period.",
+        "indicators": [
+          {
+            "key": "external_debt_ratio",
+            "description": "External debt risen to roughly half of national output",
+            "observed_on": "2020-09-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          },
+          {
+            "key": "standstill_request",
+            "description": "Government has asked bondholders for an interest-payment standstill",
+            "observed_on": "2020-09-22",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-11-13",
+        "actual_end_date": null,
+        "summary": "Bondholders declined the standstill and the 30-day grace period on a coupon lapsed on 13 November 2020, making Zambia the first African sovereign to default during the pandemic and the start of a lengthy restructuring.",
+        "classes": [
+          "default"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Zambia: Request for an Arrangement Under the Extended Credit Facility (IMF Country Report No. 22/292, September 2022)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2022/English/1ZMBEA2022001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    }
+  ]
+}

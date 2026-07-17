@@ -1,0 +1,1102 @@
+{
+  "schema_version": "v1",
+  "split": "development",
+  "cases": [
+    {
+      "case_id": "aig-collateral-calls",
+      "split": "development",
+      "window": "2007-2009",
+      "episode_group": "grp-aig-collateral-calls",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "aig",
+        "name": "American International Group",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2008-09-12",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2009-03-12",
+      "label_available_on": "2009-04-11",
+      "onset": {
+        "observation_start": "2008-08-01",
+        "summary": "A global insurer that wrote large volumes of credit protection on structured mortgage products is facing escalating collateral calls as those products are marked down and its ratings come under review. A securities-lending programme has a growing cash shortfall, and a downgrade would trigger further calls the group cannot meet from liquid resources.",
+        "indicators": [
+          {
+            "key": "cds_collateral_calls",
+            "description": "Collateral calls escalating on written credit-protection contracts",
+            "observed_on": "2008-09-11",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "escalating",
+            "unit": "category"
+          },
+          {
+            "key": "ratings_trigger_exposure",
+            "description": "A downgrade would trigger additional collateral demands",
+            "observed_on": "2008-09-12",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "securities_lending_shortfall",
+            "description": "Cash shortfall growing in the securities-lending programme",
+            "observed_on": "2008-09-10",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2008-09-16",
+        "actual_end_date": "2008-11-10",
+        "summary": "After downgrades on 15 September the group could not meet its calls; on 16 September the central bank extended an 85 billion dollar credit line in exchange for a controlling equity stake, later expanded, to prevent disorderly counterparty losses.",
+        "classes": [
+          "bailout",
+          "systemic_crisis"
+        ],
+        "source_ids": [
+          "s1",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "The Financial Crisis Inquiry Report",
+          "publisher": "US Government Publishing Office",
+          "url": "https://www.govinfo.gov/content/pkg/GPO-FCIC/pdf/GPO-FCIC.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-Q for the quarter ended 30 June 2008",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/5272/000095012308008949/y59464e10vq.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Federal Reserve authorizes lending to the American International Group (press release, 16 September 2008)",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20080916a.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "bed-bath-beyond-bankruptcy",
+      "split": "development",
+      "window": "2023",
+      "episode_group": "grp-bed-bath-beyond-bankruptcy",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "bed-bath-beyond",
+        "name": "Bed Bath & Beyond Inc",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-01-26",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-07-26",
+      "label_available_on": "2023-08-25",
+      "onset": {
+        "observation_start": "2023-01-05",
+        "summary": "A large US home-goods retailer has warned of substantial doubt about its ability to continue operating after quarters of falling sales and cash burn. It has defaulted under its asset-based credit facility, its vendors are tightening terms, and its shares and bonds trade at deeply distressed levels.",
+        "indicators": [
+          {
+            "key": "going_concern_warning",
+            "description": "Company disclosed substantial doubt about continuing to operate",
+            "observed_on": "2023-01-05",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "credit_facility_breach",
+            "description": "Breach of the asset-based revolving credit facility",
+            "observed_on": "2023-01-25",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-04-23",
+        "actual_end_date": null,
+        "summary": "After a last-ditch equity raise fell short, the retailer filed for Chapter 11 protection on 23 April 2023 and moved to wind down and liquidate its stores.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: preliminary third-quarter results, going-concern doubt and credit-facility default (5 January 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/886158/000119312523002004/d427733d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: voluntary Chapter 11 petition and store wind-down (24 April 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/886158/000119312523111754/d465247d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "carvana-avoids-bankruptcy-2023",
+      "split": "development",
+      "window": "2023",
+      "episode_group": "grp-carvana-avoids-bankruptcy-2023",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "carvana",
+        "name": "Carvana Co",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-01-15",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2024-07-15",
+      "label_available_on": "2024-08-14",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "An online used-car retailer is deeply unprofitable, carrying a heavy debt load taken on during the boom while used-car prices fall and higher rates raise its financing costs. Its bonds trade at distressed prices and creditors have organised, with market commentary questioning whether it can avoid court protection.",
+        "indicators": [
+          {
+            "key": "bond_price_distress",
+            "description": "Unsecured bonds trading at deeply distressed prices",
+            "observed_on": "2023-01-10",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "distressed",
+            "unit": "category"
+          },
+          {
+            "key": "negative_operating_margin",
+            "description": "Operating margin sharply negative amid falling used-car prices",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The company completed an out-of-court exchange of senior notes for new secured notes, settled on 1 September 2023, and did not enter court protection through the evaluation window; it continued to operate and file as a going concern into 2024.",
+        "classes": [],
+        "source_ids": [
+          "s1",
+          "s3"
+        ]
+      },
+      "control_rationale": "Insolvency looked plausible at the observation point, but an out-of-court exchange and cost cuts let the target avoid failure within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: expiration and settlement of the senior notes exchange offers (1 September 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1690820/000169082023000273/cvna-20230830.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-K for the fiscal year ended 31 December 2022",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1690820/000169082023000052/cvna-20221231.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-Q for the quarter ended 30 June 2024",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1690820/000169082024000272/cvna-20240630.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "china-avoids-recession-2020",
+      "split": "development",
+      "window": "2020",
+      "episode_group": "grp-china-avoids-recession-2020",
+      "label": "control",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "china-2020",
+        "name": "People's Republic of China",
+        "geography": "CN"
+      },
+      "evaluation_as_of": "2020-03-15",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2021-03-15",
+      "label_available_on": "2021-04-14",
+      "onset": {
+        "observation_start": "2020-01-23",
+        "summary": "China locked down its industrial regions to contain the outbreak, and activity indicators for the first quarter have dropped to unprecedented lows as factories and transport halted. Global demand is now falling too, and a full-year contraction is widely expected.",
+        "indicators": [
+          {
+            "key": "q1_activity_slump",
+            "description": "First-quarter activity indicators at record lows during the lockdown",
+            "observed_on": "2020-03-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "record_low",
+            "unit": "category"
+          },
+          {
+            "key": "industrial_shutdown",
+            "description": "Industrial regions shut for containment",
+            "observed_on": "2020-02-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "After a sharp first-quarter fall the economy rebounded from the second quarter and recorded positive full-year output growth, avoiding two consecutive quarters of contraction through the evaluation window.",
+        "classes": [],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": "The initial shock was severe, but rapid reopening and stimulus returned the target to growth, so the declared downturn outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "People's Republic of China: 2020 Article IV Consultation (IMF Country Report No. 21/6, January 2021)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2021/English/1CHNEA2021001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "People's Republic of China: 2021 Article IV Consultation (IMF Country Report No. 22/21)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2022/English/1CHNEA2022001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "delta-avoids-bankruptcy-2020",
+      "split": "development",
+      "window": "2020",
+      "episode_group": "grp-delta-avoids-bankruptcy-2020",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "delta-air-lines",
+        "name": "Delta Air Lines",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-04-15",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2021-10-15",
+      "label_available_on": "2021-11-14",
+      "onset": {
+        "observation_start": "2020-03-01",
+        "summary": "Air travel has fallen by the vast majority of normal volumes and a large network carrier is burning tens of millions of dollars in cash a day with aircraft parked. Its shares have dropped steeply and forecasts see demand depressed for a long period.",
+        "indicators": [
+          {
+            "key": "passenger_volume_collapse",
+            "description": "Passenger volumes down by the great majority year on year",
+            "observed_on": "2020-04-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "collapsed",
+            "unit": "category"
+          },
+          {
+            "key": "daily_cash_burn",
+            "description": "Cash burn running at tens of millions of dollars per day",
+            "observed_on": "2020-04-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The carrier drew on federal payroll support and raised large private financing, and did not enter court protection through the evaluation window, unlike some smaller operators.",
+        "classes": [],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": "Revenue nearly vanished, but government payroll support and market financing let the target avoid failure within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2020",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/27904/000002790420000007/dal-20200331.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-Q for the quarter ended 30 September 2021",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/27904/000002790421000012/dal-20210930.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "deutsche-bank-declines-state-capital-2008",
+      "split": "development",
+      "window": "2007-2009",
+      "episode_group": "grp-deutsche-bank-declines-state-capital-2008",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "deutsche-bank-2008",
+        "name": "Deutsche Bank AG",
+        "geography": "DE"
+      },
+      "evaluation_as_of": "2008-10-20",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2010-04-20",
+      "label_available_on": "2010-05-20",
+      "onset": {
+        "observation_start": "2008-08-15",
+        "summary": "Wholesale funding has seized globally and Germany has legislated a large bank-support package with capital and guarantees. The country's largest bank runs high balance-sheet leverage and sizeable trading exposures, and its share price and credit spreads have moved sharply with the distressed global sector.",
+        "indicators": [
+          {
+            "key": "balance_sheet_leverage",
+            "description": "Balance-sheet leverage high by international peer standards",
+            "observed_on": "2008-09-30",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "high",
+            "unit": "category"
+          },
+          {
+            "key": "bank_support_scheme_open",
+            "description": "A national bank-support scheme with capital and guarantees is available",
+            "observed_on": "2008-10-17",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The bank did not draw on the state capital scheme and was not placed in resolution through the evaluation window; it raised private capital later and kept operating without a government stake.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "The target faced the same funding freeze as bailed-out peers but chose not to take state capital and did not fail, so the declared outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Germany: 2008 Article IV Consultation Staff Report (IMF Country Report No. 09/15, January 2009)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2009/cr0915.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 20-F for the fiscal year ended 31 December 2008",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1159508/000095012309005246/y75136e20vf.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 20-F for the fiscal year ended 31 December 2009",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1159508/000095012310025006/y81695te20vf.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "italy-covid-recession",
+      "split": "development",
+      "window": "2020",
+      "episode_group": "grp-italy-covid-recession",
+      "label": "positive",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "italy-2020",
+        "name": "Italian Republic",
+        "geography": "IT"
+      },
+      "evaluation_as_of": "2020-02-24",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-08-24",
+      "label_available_on": "2020-09-23",
+      "onset": {
+        "observation_start": "2020-02-01",
+        "summary": "Italy has become the first large Western economy to face a major cluster of the new respiratory disease, with towns in the north sealed off and public events suspended. The affected regions are the industrial heartland, tourism bookings are being cancelled, and wider restrictions are being prepared.",
+        "indicators": [
+          {
+            "key": "regional_lockdowns",
+            "description": "Northern towns sealed off and public gatherings suspended",
+            "observed_on": "2020-02-23",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "outbreak_epicentre",
+            "description": "First major Western outbreak cluster concentrated in the industrial north",
+            "observed_on": "2020-02-21",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-03-01",
+        "actual_end_date": null,
+        "summary": "A national lockdown that took hold in March 2020 drove one of the deepest peacetime output falls on record, with national output contracting through the first half of the year before a partial rebound. The downturn is dated to the March 2020 labeled month and stored as the first day of that month per the dataset's date-normalization convention.",
+        "classes": [
+          "recession"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Statement on the second meeting of the IHR (2005) Emergency Committee on novel coronavirus (30 January 2020)",
+          "publisher": "World Health Organization",
+          "url": "https://www.who.int/news/item/30-01-2020-statement-on-the-second-meeting-of-the-international-health-regulations-(2005)-emergency-committee-regarding-the-outbreak-of-novel-coronavirus-(2019-ncov)",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Italy: 2021 Article IV Consultation Staff Report (IMF Country Report No. 21/101, June 2021)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2021/English/1ITAEA2021001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "lebanon-2020-default",
+      "split": "development",
+      "window": "2020",
+      "episode_group": "grp-lebanon-2020-default",
+      "label": "positive",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "lebanon-2020",
+        "name": "Lebanese Republic",
+        "geography": "LB"
+      },
+      "evaluation_as_of": "2020-03-01",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-09-01",
+      "label_available_on": "2020-10-01",
+      "onset": {
+        "observation_start": "2020-01-01",
+        "summary": "Lebanon's foreign reserves have fallen steeply, banks have imposed informal limits on withdrawals and transfers since late 2019, and the currency is trading far weaker than its official peg on a parallel market. A large hard-currency bond falls due within days and the government is openly debating whether it can pay.",
+        "indicators": [
+          {
+            "key": "reserve_depletion",
+            "description": "Usable foreign reserves falling steeply",
+            "observed_on": "2020-02-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "depleting",
+            "unit": "category"
+          },
+          {
+            "key": "informal_capital_controls",
+            "description": "Banks limiting hard-currency withdrawals and transfers",
+            "observed_on": "2020-01-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-03-09",
+        "actual_end_date": null,
+        "summary": "The government announced it would not pay the 1.2 billion dollar Eurobond maturing 9 March 2020, the first sovereign default in the country's history, triggering cross-default across its outstanding Eurobonds and a long restructuring.",
+        "classes": [
+          "default"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Lebanon Economic Monitor, Fall 2020: The Deliberate Depression (World Bank, December 2020)",
+          "publisher": "World Bank",
+          "url": "https://documents.worldbank.org/curated/en/474551606779642981/pdf/Lebanon-Economic-Monitor-The-Deliberate-Depression.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "lehman-brothers-run",
+      "split": "development",
+      "window": "2007-2009",
+      "episode_group": "grp-lehman-brothers-run",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "lehman-brothers",
+        "name": "Lehman Brothers Holdings Inc",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2008-09-10",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2009-03-10",
+      "label_available_on": "2009-04-09",
+      "onset": {
+        "observation_start": "2008-09-10",
+        "summary": "On 10 September the firm reported an estimated 3.9 billion dollar net loss for its fiscal third quarter, driven primarily by writedowns on commercial and residential mortgage and real-estate assets. It also estimated 7.8 billion dollars in gross negative mark-to-market adjustments on assets and announced plans to reduce real-estate exposure and generate capital by selling a majority interest in part of its investment-management division.",
+        "indicators": [
+          {
+            "key": "preliminary_q3_net_loss",
+            "description": "Estimated fiscal third-quarter net loss announced with preliminary results",
+            "observed_on": "2008-09-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 3.9,
+            "unit": "USD_billion"
+          },
+          {
+            "key": "gross_mark_to_market_adjustments",
+            "description": "Estimated gross negative mark-to-market adjustments on assets for the fiscal third quarter",
+            "observed_on": "2008-09-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 7.8,
+            "unit": "USD_billion"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2008-09-15",
+        "actual_end_date": null,
+        "summary": "Lehman Brothers Holdings Inc filed a voluntary petition for relief under Chapter 11 in the US Bankruptcy Court for the Southern District of New York on 15 September 2008.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Exhibit 99.1: preliminary third-quarter results and strategic restructuring (10 September 2008)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/806085/000110465908057829/a08-22764_2ex99d1.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: bankruptcy or receivership (19 September 2008)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/806085/000110465908059632/a08-22764_48k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "poland-avoids-recession-2009",
+      "split": "development",
+      "window": "2007-2009",
+      "episode_group": "grp-poland-avoids-recession-2009",
+      "label": "control",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "poland",
+        "name": "Republic of Poland",
+        "geography": "PL"
+      },
+      "evaluation_as_of": "2009-02-15",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2010-02-15",
+      "label_available_on": "2010-03-17",
+      "onset": {
+        "observation_start": "2008-11-01",
+        "summary": "Output across the European Union is contracting and export orders in the region have fallen steeply. Poland is an open economy exposed to euro-area demand, its currency has weakened abruptly and foreign-currency household borrowing is widespread, with most forecasters expecting a regional slump to pull it lower.",
+        "indicators": [
+          {
+            "key": "eu_output_contraction",
+            "description": "European Union output contracting quarter on quarter",
+            "observed_on": "2009-02-13",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "contracting",
+            "unit": "category"
+          },
+          {
+            "key": "currency_depreciation",
+            "description": "The zloty has depreciated sharply against the euro",
+            "observed_on": "2009-02-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "sharp",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Poland recorded positive annual output growth through the evaluation window, the only large EU economy to avoid two consecutive quarters of contraction, helped by a flexible currency and limited export dependence.",
+        "classes": [],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": "Regional demand collapsed around it, but the target's output stayed positive, so the declared downturn outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Republic of Poland: 2010 Article IV Consultation Staff Report (IMF Country Report No. 10/118)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2010/cr10118.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "BIS 79th Annual Report (2008/09)",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2009e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "us-debt-limit-standoff-2023",
+      "split": "development",
+      "window": "2023",
+      "episode_group": "grp-us-debt-limit-standoff-2023",
+      "label": "control",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "united-states-debt-limit-2023",
+        "name": "United States (debt limit)",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-01-19",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-07-19",
+      "label_available_on": "2023-08-18",
+      "onset": {
+        "observation_start": "2023-01-01",
+        "summary": "The federal government has reached its statutory borrowing limit and the Treasury has begun extraordinary accounting measures to keep paying obligations. Congress is deadlocked over raising the limit, projections put the date cash runs short within months, and short-dated bill yields around that window have started to distort.",
+        "indicators": [
+          {
+            "key": "extraordinary_measures",
+            "description": "Treasury using extraordinary measures after hitting the borrowing limit",
+            "observed_on": "2023-01-19",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "bill_yield_distortion",
+            "description": "Short-dated bill yields around the projected date distorting",
+            "observed_on": "2023-01-18",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "distorting",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The limit was suspended by legislation signed on 3 June 2023 before cash ran short; the government made every scheduled payment and did not miss an obligation through the evaluation window.",
+        "classes": [],
+        "source_ids": [
+          "s1",
+          "s3"
+        ]
+      },
+      "control_rationale": "Brinkmanship raised real non-payment risk, but a deal preserved timely payment, so the declared default outcome did not occur for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Debt limit",
+          "publisher": "US Department of the Treasury",
+          "url": "https://home.treasury.gov/policy-issues/financial-markets-financial-institutions-and-fiscal-service/debt-limit",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "3-Month Treasury Bill Secondary Market Rate (DTB3)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/DTB3",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Federal debt",
+          "publisher": "Congressional Budget Office",
+          "url": "https://www.cbo.gov/topics/budget/federal-debt",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "yellow-corp-bankruptcy",
+      "split": "development",
+      "window": "2023",
+      "episode_group": "grp-yellow-corp-bankruptcy",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "yellow-corp",
+        "name": "Yellow Corporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-07-24",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2024-01-24",
+      "label_available_on": "2024-02-23",
+      "onset": {
+        "observation_start": "2023-06-01",
+        "summary": "A large US trucking company is losing freight as a labour dispute over restructuring its network escalates and customers divert shipments to rivals. It carries heavy debt including a federal pandemic loan, has missed contributions to benefit funds, and its liquidity is running down quickly.",
+        "indicators": [
+          {
+            "key": "freight_diversion",
+            "description": "Customers diverting freight volumes to competitors amid the dispute",
+            "observed_on": "2023-07-20",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "accelerating",
+            "unit": "category"
+          },
+          {
+            "key": "missed_benefit_contributions",
+            "description": "Missed required contributions to pension and health funds",
+            "observed_on": "2023-07-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-08-06",
+        "actual_end_date": null,
+        "summary": "Operations ceased at the end of July and the company filed for Chapter 11 protection on 6 August 2023, liquidating one of the largest US less-than-truckload carriers and eliminating about thirty thousand jobs.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: cessation of operations and Chapter 11 filing (7 August 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/716006/000119312523204370/d483482d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: labor dispute and network disruption (1 June 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/716006/000095017023026069/yell-20230601.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2076 @@
+{
+  "schema_version": "v1",
+  "split": "development",
+  "mentions": [
+    {
+      "mention_id": "development-0000",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0000",
+      "document_text": "The Coca-Cola Company lifted its full-year sales outlook.",
+      "sentence": {
+        "index": 0,
+        "text": "The Coca-Cola Company lifted its full-year sales outlook.",
+        "start": 0,
+        "end": 57,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "The Coca-Cola Company",
+      "start": 0,
+      "end": 21,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2019-09-09",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000021344",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0000",
+      "note": "legal_name example: The Coca-Cola Company",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0001",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0001",
+      "document_text": "Nestlé S.A. denied that it planned to sell its water division.",
+      "sentence": {
+        "index": 0,
+        "text": "Nestlé S.A. denied that it planned to sell its water division.",
+        "start": 0,
+        "end": 62,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Nestlé S.A.",
+      "start": 0,
+      "end": 11,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2019-10-08",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-ky37lus27qqx7bb93l28",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0001",
+      "note": "legal_name example: Nestlé S.A.",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0002",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0002",
+      "document_text": "Airbus SE is reportedly close to a large Gulf widebody order.",
+      "sentence": {
+        "index": 0,
+        "text": "Airbus SE is reportedly close to a large Gulf widebody order.",
+        "start": 0,
+        "end": 61,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Airbus SE",
+      "start": 0,
+      "end": 9,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2019-11-06",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-mino79wloo247m1il051",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0002",
+      "note": "legal_name example: Airbus SE",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0003",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0003",
+      "document_text": "Orange S.A. is exploring a tower-sharing deal, people familiar said.",
+      "sentence": {
+        "index": 0,
+        "text": "Orange S.A. is exploring a tower-sharing deal, people familiar said.",
+        "start": 0,
+        "end": 68,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Orange S.A.",
+      "start": 0,
+      "end": 11,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2019-12-05",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001038143",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0003",
+      "note": "legal_name example: Orange S.A.",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0004",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0004",
+      "document_text": "Google LLC denied that its Nevada data-center project had stalled.",
+      "sentence": {
+        "index": 0,
+        "text": "Google LLC denied that its Nevada data-center project had stalled.",
+        "start": 0,
+        "end": 66,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Google LLC",
+      "start": 0,
+      "end": 10,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2020-01-03",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "google-llc",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0004",
+      "note": "legal_name example: Google LLC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0005",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0005",
+      "document_text": "Barclays PLC agreed to sell a payments unit.",
+      "sentence": {
+        "index": 0,
+        "text": "Barclays PLC agreed to sell a payments unit.",
+        "start": 0,
+        "end": 44,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Barclays PLC",
+      "start": 0,
+      "end": 12,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-02-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000312069",
+      "expected_label": "link",
+      "case_tags": [
+        "legal_name"
+      ],
+      "leakage_group": "development-grp-0005",
+      "note": "legal_name example: Barclays PLC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0006",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0006",
+      "document_text": "TSMC broke ground on a second Japanese fab.",
+      "sentence": {
+        "index": 0,
+        "text": "TSMC broke ground on a second Japanese fab.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "TSMC",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-03-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001046179",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0006",
+      "note": "short_name example: TSMC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0007",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0007",
+      "document_text": "SAP denied that the pricing change would hit small customers.",
+      "sentence": {
+        "index": 0,
+        "text": "SAP denied that the pricing change would hit small customers.",
+        "start": 0,
+        "end": 61,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SAP",
+      "start": 0,
+      "end": 3,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2020-03-30",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001000184",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0007",
+      "note": "short_name example: SAP",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0008",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0008",
+      "document_text": "Novartis denied that the Boston licensing talks had collapsed.",
+      "sentence": {
+        "index": 0,
+        "text": "Novartis denied that the Boston licensing talks had collapsed.",
+        "start": 0,
+        "end": 62,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Novartis",
+      "start": 0,
+      "end": 8,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2020-04-28",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001114448",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0008",
+      "note": "short_name example: Novartis",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0009",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0009",
+      "document_text": "Shopify may enter the wholesale market, according to an internal memo.",
+      "sentence": {
+        "index": 0,
+        "text": "Shopify may enter the wholesale market, according to an internal memo.",
+        "start": 0,
+        "end": 70,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Shopify",
+      "start": 0,
+      "end": 7,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2020-05-27",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001594805",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0009",
+      "note": "short_name example: Shopify",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0010",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0010",
+      "document_text": "Meta shipped a lighter mixed-reality headset.",
+      "sentence": {
+        "index": 0,
+        "text": "Meta shipped a lighter mixed-reality headset.",
+        "start": 0,
+        "end": 45,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Meta",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-06-25",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0010",
+      "note": "short_name example: Meta",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0011",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0011",
+      "document_text": "GOOGL climbed after the ad-revenue surprise.",
+      "sentence": {
+        "index": 0,
+        "text": "GOOGL climbed after the ad-revenue surprise.",
+        "start": 0,
+        "end": 44,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "GOOGL",
+      "start": 0,
+      "end": 5,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-07-24",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001652044",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "development-grp-0011",
+      "note": "ticker example: GOOGL",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0012",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0012",
+      "document_text": "TM firmed in New York on the earnings beat.",
+      "sentence": {
+        "index": 0,
+        "text": "TM firmed in New York on the earnings beat.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "TM",
+      "start": 0,
+      "end": 2,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-08-22",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001094517",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "development-grp-0012",
+      "note": "ticker example: TM",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0013",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0013",
+      "document_text": "SONY may benefit from a stronger film slate, analysts suggest.",
+      "sentence": {
+        "index": 0,
+        "text": "SONY may benefit from a stronger film slate, analysts suggest.",
+        "start": 0,
+        "end": 62,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SONY",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2020-09-20",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000313838",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "development-grp-0013",
+      "note": "ticker example: SONY",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0014",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0014",
+      "document_text": "SAP touched a record high in Frankfurt trading.",
+      "sentence": {
+        "index": 0,
+        "text": "SAP touched a record high in Frankfurt trading.",
+        "start": 0,
+        "end": 47,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SAP",
+      "start": 0,
+      "end": 3,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-10-19",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001000184",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "development-grp-0014",
+      "note": "ticker example: SAP",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0015",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0015",
+      "document_text": "ASML led European tech higher on Monday.",
+      "sentence": {
+        "index": 0,
+        "text": "ASML led European tech higher on Monday.",
+        "start": 0,
+        "end": 40,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "ASML",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2020-11-17",
+      "article_url": null,
+      "context": {
+        "source_category": "markets",
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000937966",
+      "expected_label": "link",
+      "case_tags": [
+        "ticker"
+      ],
+      "leakage_group": "development-grp-0015",
+      "note": "ticker example: ASML",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0016",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0016",
+      "document_text": "Sony is reportedly boosting image-sensor output in Kyushu.",
+      "sentence": {
+        "index": 0,
+        "text": "Sony is reportedly boosting image-sensor output in Kyushu.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Sony",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2020-12-16",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000313838",
+      "expected_label": "link",
+      "case_tags": [
+        "transliteration"
+      ],
+      "leakage_group": "development-grp-0016",
+      "note": "transliteration example: Sony",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0017",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0017",
+      "document_text": "The 2018 hearings still referred to the company as Facebook.",
+      "sentence": {
+        "index": 0,
+        "text": "The 2018 hearings still referred to the company as Facebook.",
+        "start": 0,
+        "end": 60,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Facebook",
+      "start": 51,
+      "end": 59,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2018-04-10",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "development-grp-0017",
+      "note": "former_name example: Facebook",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0018",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0018",
+      "document_text": "Filings from 2016 list the parent as Airbus Group.",
+      "sentence": {
+        "index": 0,
+        "text": "Filings from 2016 list the parent as Airbus Group.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Airbus Group",
+      "start": 37,
+      "end": 49,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2016-03-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-mino79wloo247m1il051",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "development-grp-0018",
+      "note": "former_name example: Airbus Group",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0019",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0019",
+      "document_text": "The old prospectus named the issuer SAP AG.",
+      "sentence": {
+        "index": 0,
+        "text": "The old prospectus named the issuer SAP AG.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "SAP AG",
+      "start": 36,
+      "end": 42,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2013-11-01",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001000184",
+      "expected_label": "link",
+      "case_tags": [
+        "former_name"
+      ],
+      "leakage_group": "development-grp-0019",
+      "note": "former_name example: SAP AG",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0020",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0020",
+      "document_text": "Coke is reportedly testing a new zero-sugar line.",
+      "sentence": {
+        "index": 0,
+        "text": "Coke is reportedly testing a new zero-sugar line.",
+        "start": 0,
+        "end": 49,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Coke",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2021-04-11",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000021344",
+      "expected_label": "link",
+      "case_tags": [
+        "colloquial"
+      ],
+      "leakage_group": "development-grp-0020",
+      "note": "colloquial example: Coke",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0021",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0021",
+      "document_text": "VW denied that it would close the Belgian plant.",
+      "sentence": {
+        "index": 0,
+        "text": "VW denied that it would close the Belgian plant.",
+        "start": 0,
+        "end": 48,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "VW",
+      "start": 0,
+      "end": 2,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2021-05-10",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-529900nnupaggompxz31",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "colloquial"
+      ],
+      "leakage_group": "development-grp-0021",
+      "note": "colloquial example: VW",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0022",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0022",
+      "document_text": "Few firms rival ASML in extreme-ultraviolet tools.",
+      "sentence": {
+        "index": 0,
+        "text": "Few firms rival ASML in extreme-ultraviolet tools.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "ASML",
+      "start": 16,
+      "end": 20,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2021-06-08",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000937966",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0022",
+      "note": "acronym example: ASML",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0023",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0023",
+      "document_text": "A new controller shipped alongside the latest Xbox refresh.",
+      "sentence": {
+        "index": 0,
+        "text": "A new controller shipped alongside the latest Xbox refresh.",
+        "start": 0,
+        "end": 59,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Xbox",
+      "start": 46,
+      "end": 50,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2021-07-07",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Microsoft"
+        ],
+        "linked_target_ids": [
+          "sec-0000789019"
+        ]
+      },
+      "expected_target_id": "product-xbox",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "development-grp-0023",
+      "note": "brand_product example: Xbox",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0024",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0024",
+      "document_text": "Instagram may add a dedicated tab for live shopping, testers say.",
+      "sentence": {
+        "index": 0,
+        "text": "Instagram may add a dedicated tab for live shopping, testers say.",
+        "start": 0,
+        "end": 65,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Instagram",
+      "start": 0,
+      "end": 9,
+      "label": "PRODUCT",
+      "assertion_status": "speculative",
+      "published_on": "2021-08-05",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Meta"
+        ],
+        "linked_target_ids": [
+          "sec-0001326801"
+        ]
+      },
+      "expected_target_id": "brand-instagram",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "development-grp-0024",
+      "note": "brand_product example: Instagram",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0025",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0025",
+      "document_text": "WhatsApp rolled out cross-app messaging in Europe.",
+      "sentence": {
+        "index": 0,
+        "text": "WhatsApp rolled out cross-app messaging in Europe.",
+        "start": 0,
+        "end": 50,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "WhatsApp",
+      "start": 0,
+      "end": 8,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2021-09-03",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Meta"
+        ],
+        "linked_target_ids": [
+          "sec-0001326801"
+        ]
+      },
+      "expected_target_id": "brand-whatsapp",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "development-grp-0025",
+      "note": "brand_product example: WhatsApp",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0026",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0026",
+      "document_text": "Preorders opened for the slimmer PlayStation bundle.",
+      "sentence": {
+        "index": 0,
+        "text": "Preorders opened for the slimmer PlayStation bundle.",
+        "start": 0,
+        "end": 52,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "PlayStation",
+      "start": 33,
+      "end": 44,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2021-10-02",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [
+          "Sony"
+        ],
+        "linked_target_ids": [
+          "sec-0000313838"
+        ]
+      },
+      "expected_target_id": "product-playstation",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "development-grp-0026",
+      "note": "brand_product example: PlayStation",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0027",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0027",
+      "document_text": "YouTube denied that it would drop its free tier.",
+      "sentence": {
+        "index": 0,
+        "text": "YouTube denied that it would drop its free tier.",
+        "start": 0,
+        "end": 48,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "YouTube",
+      "start": 0,
+      "end": 7,
+      "label": "PRODUCT",
+      "assertion_status": "denied",
+      "published_on": "2021-10-31",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "brand-youtube",
+      "expected_label": "link",
+      "case_tags": [
+        "brand_product",
+        "subsidiary_parent"
+      ],
+      "leakage_group": "development-grp-0027",
+      "note": "brand_product example: YouTube",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0028",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0028",
+      "document_text": "Apple is reportedly prepping a cheaper model for emerging markets.",
+      "sentence": {
+        "index": 0,
+        "text": "Apple is reportedly prepping a cheaper model for emerging markets.",
+        "start": 0,
+        "end": 66,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Apple",
+      "start": 0,
+      "end": 5,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2021-11-29",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000320193",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0028",
+      "note": "ambiguous example: Apple",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0029",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0029",
+      "document_text": "Amazon denied throttling third-party sellers.",
+      "sentence": {
+        "index": 0,
+        "text": "Amazon denied throttling third-party sellers.",
+        "start": 0,
+        "end": 45,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Amazon",
+      "start": 0,
+      "end": 6,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2021-12-28",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001018724",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0029",
+      "note": "ambiguous example: Amazon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0030",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0030",
+      "document_text": "In France, Orange raised its fiber targets.",
+      "sentence": {
+        "index": 0,
+        "text": "In France, Orange raised its fiber targets.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Orange",
+      "start": 11,
+      "end": 17,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-01-26",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "fr"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001038143",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0030",
+      "note": "ambiguous example: Orange",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0031",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0031",
+      "document_text": "Meta is weighing paid verification for more regions.",
+      "sentence": {
+        "index": 0,
+        "text": "Meta is weighing paid verification for more regions.",
+        "start": 0,
+        "end": 52,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Meta",
+      "start": 0,
+      "end": 4,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2022-02-24",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001326801",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0031",
+      "note": "ambiguous example: Meta",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0032",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0032",
+      "document_text": "Retailers said Coke outsold rivals over the holidays.",
+      "sentence": {
+        "index": 0,
+        "text": "Retailers said Coke outsold rivals over the holidays.",
+        "start": 0,
+        "end": 53,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Coke",
+      "start": 15,
+      "end": 19,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-03-25",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000021344",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "colloquial"
+      ],
+      "leakage_group": "development-grp-0032",
+      "note": "ambiguous example: Coke",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0033",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0033",
+      "document_text": "The bank Santander denied cutting its Mexican lending.",
+      "sentence": {
+        "index": 0,
+        "text": "The bank Santander denied cutting its Mexican lending.",
+        "start": 0,
+        "end": 54,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Santander",
+      "start": 9,
+      "end": 18,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2022-04-23",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "es"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000891478",
+      "expected_label": "link",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0033",
+      "note": "ambiguous example: Santander",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0034",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0034",
+      "document_text": "Across its Korean campuses, Samsung added packaging capacity.",
+      "sentence": {
+        "index": 0,
+        "text": "Across its Korean campuses, Samsung added packaging capacity.",
+        "start": 0,
+        "end": 61,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Samsung",
+      "start": 28,
+      "end": 35,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-05-22",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "kr"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "lei-9884007er46l6n7ei764",
+      "expected_label": "link",
+      "case_tags": [
+        "geographic_disambiguation",
+        "transliteration"
+      ],
+      "leakage_group": "development-grp-0034",
+      "note": "geographic_disambiguation example: Samsung",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0035",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0035",
+      "document_text": "In Japan, Toyota is considering a new hydrogen line.",
+      "sentence": {
+        "index": 0,
+        "text": "In Japan, Toyota is considering a new hydrogen line.",
+        "start": 0,
+        "end": 52,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Toyota",
+      "start": 10,
+      "end": 16,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2022-06-20",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "jp"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001094517",
+      "expected_label": "link",
+      "case_tags": [
+        "geographic_disambiguation",
+        "transliteration"
+      ],
+      "leakage_group": "development-grp-0035",
+      "note": "geographic_disambiguation example: Toyota",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0036",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0036",
+      "document_text": "In the City of London, Barclays denied plans to cut jobs.",
+      "sentence": {
+        "index": 0,
+        "text": "In the City of London, Barclays denied plans to cut jobs.",
+        "start": 0,
+        "end": 57,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Barclays",
+      "start": 23,
+      "end": 31,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2022-07-19",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "gb"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0000312069",
+      "expected_label": "link",
+      "case_tags": [
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0036",
+      "note": "geographic_disambiguation example: Barclays",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0037",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0037",
+      "document_text": "In Hsinchu, TSMC lifted wafer starts.",
+      "sentence": {
+        "index": 0,
+        "text": "In Hsinchu, TSMC lifted wafer starts.",
+        "start": 0,
+        "end": 37,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "TSMC",
+      "start": 12,
+      "end": 16,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-08-17",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "tw"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": "sec-0001046179",
+      "expected_label": "link",
+      "case_tags": [
+        "acronym",
+        "geographic_disambiguation",
+        "short_name"
+      ],
+      "leakage_group": "development-grp-0037",
+      "note": "geographic_disambiguation example: TSMC",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0038",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0038",
+      "document_text": "Meridian Logistics denied that it had lost its biggest contract.",
+      "sentence": {
+        "index": 0,
+        "text": "Meridian Logistics denied that it had lost its biggest contract.",
+        "start": 0,
+        "end": 64,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Meridian Logistics",
+      "start": 0,
+      "end": 18,
+      "label": "ORG",
+      "assertion_status": "denied",
+      "published_on": "2022-09-15",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0038",
+      "note": "hard_negative example: Meridian Logistics",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0039",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0039",
+      "document_text": "Ashfield Robotics is reportedly raising a new round.",
+      "sentence": {
+        "index": 0,
+        "text": "Ashfield Robotics is reportedly raising a new round.",
+        "start": 0,
+        "end": 52,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Ashfield Robotics",
+      "start": 0,
+      "end": 17,
+      "label": "ORG",
+      "assertion_status": "speculative",
+      "published_on": "2022-10-14",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0039",
+      "note": "hard_negative example: Ashfield Robotics",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0040",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0040",
+      "document_text": "Northwind Energy switched on a coastal wind farm.",
+      "sentence": {
+        "index": 0,
+        "text": "Northwind Energy switched on a coastal wind farm.",
+        "start": 0,
+        "end": 49,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Northwind Energy",
+      "start": 0,
+      "end": 16,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-11-12",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0040",
+      "note": "hard_negative example: Northwind Energy",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0041",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0041",
+      "document_text": "Brightpath Labs opened a research center in Austin.",
+      "sentence": {
+        "index": 0,
+        "text": "Brightpath Labs opened a research center in Austin.",
+        "start": 0,
+        "end": 51,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Brightpath Labs",
+      "start": 0,
+      "end": 15,
+      "label": "ORG",
+      "assertion_status": "asserted",
+      "published_on": "2022-12-11",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0041",
+      "note": "hard_negative example: Brightpath Labs",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0042",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0042",
+      "document_text": "The Cobalt Phone drew long lines at launch.",
+      "sentence": {
+        "index": 0,
+        "text": "The Cobalt Phone drew long lines at launch.",
+        "start": 0,
+        "end": 43,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Cobalt Phone",
+      "start": 4,
+      "end": 16,
+      "label": "PRODUCT",
+      "assertion_status": "asserted",
+      "published_on": "2023-01-09",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0042",
+      "note": "hard_negative example: Cobalt Phone",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0043",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0043",
+      "document_text": "The Vega Speaker may gain a smaller model, tipsters claim.",
+      "sentence": {
+        "index": 0,
+        "text": "The Vega Speaker may gain a smaller model, tipsters claim.",
+        "start": 0,
+        "end": 58,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Vega Speaker",
+      "start": 4,
+      "end": 16,
+      "label": "PRODUCT",
+      "assertion_status": "speculative",
+      "published_on": "2023-02-07",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0043",
+      "note": "hard_negative example: Vega Speaker",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0044",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0044",
+      "document_text": "Laura Mendes took over as finance chief.",
+      "sentence": {
+        "index": 0,
+        "text": "Laura Mendes took over as finance chief.",
+        "start": 0,
+        "end": 40,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Laura Mendes",
+      "start": 0,
+      "end": 12,
+      "label": "PERSON",
+      "assertion_status": "asserted",
+      "published_on": "2023-03-08",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0044",
+      "note": "hard_negative example: Laura Mendes",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0045",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0045",
+      "document_text": "Omar Haddad denied leaking the memo.",
+      "sentence": {
+        "index": 0,
+        "text": "Omar Haddad denied leaking the memo.",
+        "start": 0,
+        "end": 36,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Omar Haddad",
+      "start": 0,
+      "end": 11,
+      "label": "PERSON",
+      "assertion_status": "denied",
+      "published_on": "2023-04-06",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0045",
+      "note": "hard_negative example: Omar Haddad",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0046",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0046",
+      "document_text": "Yuki Tanaka is reportedly in line for the board seat.",
+      "sentence": {
+        "index": 0,
+        "text": "Yuki Tanaka is reportedly in line for the board seat.",
+        "start": 0,
+        "end": 53,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Yuki Tanaka",
+      "start": 0,
+      "end": 11,
+      "label": "PERSON",
+      "assertion_status": "speculative",
+      "published_on": "2023-05-05",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0046",
+      "note": "hard_negative example: Yuki Tanaka",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0047",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0047",
+      "document_text": "Conservationists mapped new reserves along the Amazon.",
+      "sentence": {
+        "index": 0,
+        "text": "Conservationists mapped new reserves along the Amazon.",
+        "start": 0,
+        "end": 54,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Amazon",
+      "start": 47,
+      "end": 53,
+      "label": "GPE",
+      "assertion_status": "asserted",
+      "published_on": "2023-06-03",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "br"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0047",
+      "note": "ambiguous example: Amazon",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0048",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0048",
+      "document_text": "Cruise ships returned to Santander this summer.",
+      "sentence": {
+        "index": 0,
+        "text": "Cruise ships returned to Santander this summer.",
+        "start": 0,
+        "end": 47,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Santander",
+      "start": 25,
+      "end": 34,
+      "label": "GPE",
+      "assertion_status": "asserted",
+      "published_on": "2023-07-02",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [
+          "es"
+        ],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "ambiguous",
+        "geographic_disambiguation",
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0048",
+      "note": "ambiguous example: Santander",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    },
+    {
+      "mention_id": "development-0049",
+      "split": "development",
+      "language": "en",
+      "article_key": "development-art-0049",
+      "document_text": "The council in Fairview denied approving the bypass.",
+      "sentence": {
+        "index": 0,
+        "text": "The council in Fairview denied approving the bypass.",
+        "start": 0,
+        "end": 52,
+        "previous_text": null,
+        "next_text": null
+      },
+      "mention_text": "Fairview",
+      "start": 15,
+      "end": 23,
+      "label": "GPE",
+      "assertion_status": "denied",
+      "published_on": "2023-07-31",
+      "article_url": null,
+      "context": {
+        "source_category": null,
+        "industry_terms": [],
+        "location_terms": [],
+        "co_mention_surfaces": [],
+        "linked_target_ids": []
+      },
+      "expected_target_id": null,
+      "expected_label": "nil",
+      "case_tags": [
+        "hard_negative",
+        "nil"
+      ],
+      "leakage_group": "development-grp-0049",
+      "note": "hard_negative example: Fairview",
+      "provenance": {
+        "kind": "original_synthetic",
+        "created_on": "2026-07-16"
+      }
+    }
+  ]
+}

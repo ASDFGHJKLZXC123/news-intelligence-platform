@@ -1,0 +1,2394 @@
+{
+  "schema_version": "v1",
+  "split": "train",
+  "cases": [
+    {
+      "case_id": "argentina-2020-default",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-argentina-2020-default",
+      "label": "positive",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "argentina-2020",
+        "name": "Argentine Republic",
+        "geography": "AR"
+      },
+      "evaluation_as_of": "2020-04-22",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-10-22",
+      "label_available_on": "2020-11-21",
+      "onset": {
+        "observation_start": "2020-03-01",
+        "summary": "Argentine hard-currency bonds trade at deeply distressed prices and the government has put a restructuring proposal to creditors while an interest payment sits inside its grace period. Reserves are thin, the economy is contracting into the pandemic, and negotiations with large bondholders are unresolved.",
+        "indicators": [
+          {
+            "key": "bond_price_distress",
+            "description": "Hard-currency bonds trading at deeply distressed prices",
+            "observed_on": "2020-04-20",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "distressed",
+            "unit": "category"
+          },
+          {
+            "key": "restructuring_proposal",
+            "description": "Government has tabled a debt-restructuring proposal to creditors",
+            "observed_on": "2020-04-21",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-05-22",
+        "actual_end_date": null,
+        "summary": "The grace period on a bond coupon payment lapsed on 22 May 2020 without payment, a sovereign default; a restructuring of the country's foreign-law bonds was agreed with major creditors later in the year.",
+        "classes": [
+          "default"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Argentina: Staff Technical Note on Public Debt Sustainability (IMF Country Report No. 20/83, March 2020)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2020/English/1ARGEA2020001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Argentina: Ex-Post Evaluation of Exceptional Access Under the 2018 Stand-By Arrangement (IMF Country Report No. 21/279, December 2021)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2021/English/1ARGEA2021001.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "australia-avoids-recession-2009",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-australia-avoids-recession-2009",
+      "label": "control",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "australia",
+        "name": "Australia",
+        "geography": "AU"
+      },
+      "evaluation_as_of": "2009-01-30",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2010-01-30",
+      "label_available_on": "2010-03-01",
+      "onset": {
+        "observation_start": "2008-11-01",
+        "summary": "World trade and commodity prices are contracting sharply and every large advanced economy is shrinking. Australia is a commodity exporter heavily exposed to external demand, its currency and terms of trade have dropped, and forecasters widely expect its output to turn negative for consecutive quarters.",
+        "indicators": [
+          {
+            "key": "terms_of_trade",
+            "description": "Commodity terms of trade falling steeply from their peak",
+            "observed_on": "2009-01-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "falling",
+            "unit": "category"
+          },
+          {
+            "key": "global_trade_contraction",
+            "description": "World merchandise trade volumes contracting quarter on quarter",
+            "observed_on": "2008-12-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "contracting",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Australian output did not record two consecutive quarters of contraction through the evaluation window; a large fiscal stimulus, rate cuts and resilient resource exports kept annual growth positive.",
+        "classes": [],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": "The external demand shock hit Australia hard, but policy support and commodity demand meant the declared downturn outcome did not materialise for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Australia: 2010 Article IV Consultation Staff Report (IMF Country Report No. 10/331)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2010/cr10331.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "BIS 79th Annual Report (2008/09)",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2009e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "bear-stearns-repo-run",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-bear-stearns-repo-run",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "bear-stearns",
+        "name": "Bear Stearns Companies Inc",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2008-03-10",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2008-09-10",
+      "label_available_on": "2008-10-10",
+      "onset": {
+        "observation_start": "2008-02-01",
+        "summary": "The smallest of the US independent investment banks is denying market rumours about its liquidity. It finances a large book of mortgage-related securities overnight in tri-party repo, so its funding must be renewed each morning by lenders who are themselves under redemption pressure, and it has no access to the central-bank discount window.",
+        "indicators": [
+          {
+            "key": "overnight_repo_dependence",
+            "description": "Mortgage inventory financed overnight in tri-party repo",
+            "observed_on": "2008-03-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "no_discount_window_access",
+            "description": "Broker-dealer without access to the central-bank discount window",
+            "observed_on": "2008-03-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "term_funding_spread",
+            "description": "Three-month interbank spreads over overnight index swaps remain wide",
+            "observed_on": "2008-03-07",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2008-03-14",
+        "actual_end_date": "2008-05-30",
+        "summary": "Cash ran out within days. The central bank authorised financing against a ring-fenced pool of the firm's assets to facilitate its acquisition by a larger bank, and opened the Primary Dealer Credit Facility to lend to primary dealers.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "The Financial Crisis Inquiry Report",
+          "publisher": "US Government Publishing Office",
+          "url": "https://www.govinfo.gov/content/pkg/GPO-FCIC/pdf/GPO-FCIC.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "TED Spread (TEDRATE)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/TEDRATE",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Federal Reserve announces Primary Dealer Credit Facility and Bear Stearns financing (press release, 16 March 2008)",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20080316a.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "bnp-abs-fund-freeze",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-bnp-abs-fund-freeze",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "bnp-paribas-abs-funds",
+        "name": "BNP Paribas ABS money funds",
+        "geography": "FR"
+      },
+      "evaluation_as_of": "2007-08-08",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2008-02-08",
+      "label_available_on": "2008-03-09",
+      "onset": {
+        "observation_start": "2007-07-10",
+        "summary": "A large French bank is preparing to suspend subscriptions and redemptions in three funds exposed to US subprime-linked asset-backed securities because liquidity in those segments has evaporated and the assets can no longer be valued. Rating agencies have downgraded swathes of subprime paper, asset-backed commercial paper conduits cannot roll maturing notes, and a German lender has already needed rescue over similar exposures.",
+        "indicators": [
+          {
+            "key": "subprime_downgrades",
+            "description": "Mass rating downgrades of US subprime asset-backed paper",
+            "observed_on": "2007-07-12",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "widespread",
+            "unit": "category"
+          },
+          {
+            "key": "abcp_rollover_stress",
+            "description": "Asset-backed commercial paper conduits unable to roll maturing paper",
+            "observed_on": "2007-07-30",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "peer_conduit_rescue",
+            "description": "A peer institution has required support over similar structured exposures",
+            "observed_on": "2007-07-30",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2007-08-09",
+        "actual_end_date": "2007-08-28",
+        "summary": "The funds were gated on 9 August 2007, euro overnight rates jumped above the policy rate and the central bank injected emergency liquidity the same morning; term interbank markets never returned to pre-August spreads. The date is widely taken as the opening of the global funding crisis.",
+        "classes": [
+          "systemic_crisis"
+        ],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "BIS Annual Economic Report 2008",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2008e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Asset-Backed Commercial Paper Outstanding (ABCOMP)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/ABCOMP",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "The money market and the Eurosystem's operations in August 2007 (Monthly Bulletin September 2007, Box 3)",
+          "publisher": "European Central Bank",
+          "url": "https://www.ecb.europa.eu/pub/pdf/other/mb200709_focus03.en.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "boeing-avoids-bankruptcy-2020",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-boeing-avoids-bankruptcy-2020",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "boeing",
+        "name": "The Boeing Company",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-04-15",
+      "evaluation_horizons": [
+        "12_18m"
+      ],
+      "evaluation_end": "2021-10-15",
+      "label_available_on": "2021-11-14",
+      "onset": {
+        "observation_start": "2020-03-01",
+        "summary": "A large aircraft maker is burning cash heavily as the pandemic halts air travel and airline orders on top of an existing grounding of its best-selling jet. Its credit rating has been cut toward the bottom of investment grade, its shares have fallen steeply, and it is weighing whether to seek federal support.",
+        "indicators": [
+          {
+            "key": "cash_burn",
+            "description": "Operating cash flow deeply negative as deliveries stall",
+            "observed_on": "2020-03-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "rating_downgrade",
+            "description": "Credit rating cut toward the low end of investment grade",
+            "observed_on": "2020-04-01",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The company raised about 25 billion dollars in the corporate bond market in late April 2020 and did not enter court protection through the evaluation window; it continued operating and filing as a going concern.",
+        "classes": [],
+        "source_ids": [
+          "s3",
+          "s4"
+        ]
+      },
+      "control_rationale": "Liquidity stress was acute, but capital-market access let the target avoid court protection within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: first-quarter 2020 results and cash position (27 April 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/12927/000001292720000039/a202004apr278k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "ICE BofA US Corporate Index Option-Adjusted Spread (BAMLC0A0CM)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/BAMLC0A0CM",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-Q for the quarter ended 30 September 2021",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/12927/000001292721000094/ba-20210930.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        },
+        {
+          "id": "s4",
+          "title": "Prospectus supplement for a 25 billion dollar senior notes offering (Form 424B2, 1 May 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/12927/000119312520131122/d848621d424b2.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "canadian-banks-resilience",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-canadian-banks-resilience",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "royal-bank-of-canada",
+        "name": "Royal Bank of Canada",
+        "geography": "CA"
+      },
+      "evaluation_as_of": "2008-10-10",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2010-04-10",
+      "label_available_on": "2010-05-10",
+      "onset": {
+        "observation_start": "2008-08-01",
+        "summary": "Global interbank markets have frozen after a major US broker-dealer entered court protection, and wholesale funding is scarce and expensive worldwide. Canada's largest bank relies partly on wholesale markets and holds structured-credit exposures, and its share price has fallen sharply with the global sector.",
+        "indicators": [
+          {
+            "key": "global_interbank_stress",
+            "description": "Term interbank funding spreads at crisis-wide levels",
+            "observed_on": "2008-10-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "extreme",
+            "unit": "category"
+          },
+          {
+            "key": "wholesale_funding_use",
+            "description": "Bank funds part of its balance sheet in wholesale markets",
+            "observed_on": "2008-09-30",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "No Canadian bank was placed in resolution or required a government capital injection through the evaluation window; the system kept lending, supported only by routine central-bank and term-funding operations, and is cited as a resilient case.",
+        "classes": [],
+        "source_ids": [
+          "s2",
+          "s3"
+        ]
+      },
+      "control_rationale": "Acute global funding stress reached Canada, but conservative leverage, funding and supervision meant the target neither failed nor took state capital through the window.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "TED Spread (TEDRATE)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/TEDRATE",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Canada: 2009 Article IV Consultation Staff Report (IMF Country Report No. 09/162)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2009/cr09162.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "BIS Annual Economic Report 2009",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/arpdf/ar2009e.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "charles-schwab-survives-2023",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-charles-schwab-survives-2023",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "charles-schwab",
+        "name": "The Charles Schwab Corporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-13",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2024-03-13",
+      "label_available_on": "2024-04-12",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A large brokerage and bank holding company has come under market scrutiny over unrealised losses on its securities portfolio and the risk that clients move idle cash to higher-yielding options. Its shares have fallen sharply during the regional-bank panic.",
+        "indicators": [
+          {
+            "key": "unrealised_securities_losses",
+            "description": "Sizeable unrealised losses on the securities portfolio",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "cash_sorting_pressure",
+            "description": "Clients shifting idle cash toward higher-yielding alternatives",
+            "observed_on": "2023-03-10",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The company had access to very large contingent liquidity, retained client assets, and was not placed in resolution through the evaluation window; it remained an independent going concern.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "The market questioned its funding, but deep liquidity access and a broad franchise meant the target did not fail within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/316709/000031670923000026/schw-20230331.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Federal Funds Effective Rate (FEDFUNDS)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/FEDFUNDS",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-K for the fiscal year ended 31 December 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/316709/000031670924000018/schw-20231231.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "comerica-survives-2023",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-comerica-survives-2023",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "comerica",
+        "name": "Comerica Incorporated",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-05-04",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2024-05-04",
+      "label_available_on": "2024-06-03",
+      "onset": {
+        "observation_start": "2023-03-13",
+        "summary": "A second wave of the regional-bank sell-off has hit mid-size commercial lenders after another bank was seized earlier in the week, with investors again focused on uninsured deposits and unrealised securities losses. This bank's shares dropped sharply and it is watching deposit trends closely.",
+        "indicators": [
+          {
+            "key": "uninsured_deposit_share",
+            "description": "Elevated share of deposits above the insurance cap",
+            "observed_on": "2023-03-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          },
+          {
+            "key": "second_wave_selloff",
+            "description": "Shares fell sharply in the renewed regional-bank sell-off",
+            "observed_on": "2023-05-04",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "sharp",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The bank kept deposits broadly stable and access to contingent funding, and was not placed in resolution through the evaluation window; it stayed an independent going concern.",
+        "classes": [],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": "The renewed panic pressured the target, but stable funding meant it did not fail within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/28412/000002841223000163/cma-20230331.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-Q for the quarter ended 31 March 2024",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/28412/000002841224000263/cma-20240331.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "credit-suisse-confidence-collapse",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-credit-suisse-confidence-collapse",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "credit-suisse",
+        "name": "Credit Suisse Group AG",
+        "geography": "CH"
+      },
+      "evaluation_as_of": "2023-03-15",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-15",
+      "label_available_on": "2023-10-15",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A globally systemic Swiss bank's largest shareholder has publicly ruled out putting in more capital, a day after the annual report disclosed material weaknesses in financial-reporting controls. Its credit-default swaps trade at distressed levels and its shares are at a record low; it lost more than 100 billion Swiss francs of client money in the prior quarter, and wealth clients can move balances in a day.",
+        "indicators": [
+          {
+            "key": "shareholder_rules_out_capital",
+            "description": "Largest shareholder publicly rules out further capital",
+            "observed_on": "2023-03-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "cds_distressed",
+            "description": "Credit-default-swap spreads at distressed levels",
+            "observed_on": "2023-03-15",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "distressed",
+            "unit": "category"
+          },
+          {
+            "key": "client_outflows_prior_quarter",
+            "description": "Client asset outflows in the preceding quarter",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 110,
+            "unit": "chf_billions"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-03-19",
+        "actual_end_date": "2023-06-12",
+        "summary": "A large central-bank liquidity line did not stop the outflows, and over the weekend of 19 March 2023 the authorities forced a sale to the other Swiss global bank under emergency law, writing about 16 billion francs of additional tier-1 bonds to zero while shareholders received stock.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s1",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "FINMA approves merger of UBS and Credit Suisse (press release, 19 March 2023)",
+          "publisher": "Swiss Financial Market Supervisory Authority",
+          "url": "https://www.finma.ch/en/news/2023/03/20230319-mm-cs-ubs/",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Financial Stability Report 2023",
+          "publisher": "Swiss National Bank",
+          "url": "https://www.snb.ch/public/asset/en/www-snb-ch/publications/financial-stability-report/2023/stabrep_2023/publications0_en/stabrep_2023.en.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "FINMA approves merger of UBS and Credit Suisse (press release, 19 March 2023)",
+          "publisher": "Swiss Financial Market Supervisory Authority",
+          "url": "https://www.finma.ch/en/news/2023/03/20230319-mm-cs-ubs/",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "first-republic-deposit-flight",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-first-republic-deposit-flight",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "first-republic-bank",
+        "name": "First Republic Bank",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-16",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-16",
+      "label_available_on": "2023-10-16",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A private-banking-focused lender with wealthy coastal clients is losing deposits fast as savers compare it with a bank closed days earlier. Roughly two-thirds of its deposits exceed the insurance cap and its assets are long-dated low-rate jumbo mortgages and municipal bonds worth far less than carrying value; eleven large banks are placing an uninsured deposit with it to steady confidence.",
+        "indicators": [
+          {
+            "key": "uninsured_deposit_share",
+            "description": "Share of deposits above the insurance cap",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 68,
+            "unit": "percent"
+          },
+          {
+            "key": "large_bank_deposit_backstop",
+            "description": "Eleven large banks placing a 30 billion dollar deposit to steady it",
+            "observed_on": "2023-03-16",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "long_duration_assets",
+            "description": "Assets dominated by low-rate jumbo mortgages and municipal bonds",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "long_duration",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-05-01",
+        "actual_end_date": "2023-05-01",
+        "summary": "The private deposit backstop delayed but did not stop the outflow; about 100 billion dollars left in the first quarter, and the bank was closed on 1 May 2023 and sold immediately to the largest US bank, the second-largest US bank collapse on record.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "FDIC's Supervision of First Republic Bank (report, September 2023)",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/news/press-releases/2023/pr23073a.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Joint Statement by the Treasury, Federal Reserve, FDIC and OCC on the $30 billion deposit into First Republic Bank (16 March 2023)",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/news/press-releases/2023/pr23020.html",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "First Republic Bank of San Francisco, California, closed and deposits assumed by JPMorgan Chase (press release PR-34-2023)",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/news/press-releases/2023/pr23034.html",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "ford-avoids-bankruptcy",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-ford-avoids-bankruptcy",
+      "label": "control",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "ford-motor",
+        "name": "Ford Motor Company",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2008-11-18",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2010-05-18",
+      "label_available_on": "2010-06-17",
+      "onset": {
+        "observation_start": "2008-09-01",
+        "summary": "US light-vehicle sales have collapsed to their lowest annualised pace in decades and the large domestic automakers are drawing down cash and lobbying Congress for support. Ford carries heavy legacy obligations and negative operating cash flow, and its bonds trade at deeply distressed levels alongside its Detroit peers.",
+        "indicators": [
+          {
+            "key": "us_vehicle_sales",
+            "description": "US light-vehicle sales at a multi-decade low annualised pace",
+            "observed_on": "2008-11-01",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "collapsed",
+            "unit": "category"
+          },
+          {
+            "key": "operating_cash_burn",
+            "description": "Automotive operating cash flow negative in the latest quarter",
+            "observed_on": "2008-09-30",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Ford drew on a large committed private credit line arranged before the crisis and did not enter court protection or take the federal industry rescue loans; it kept operating through the downturn and beyond.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "Distress at the observation point was matched by peers that did file, but Ford's earlier private liquidity and mortgaged assets let it keep servicing obligations, so the failure condition never resolved through the evaluation window.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Total Vehicle Sales (TOTALSA)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/TOTALSA",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-K for the fiscal year ended 31 December 2008",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/37996/000114036109005071/form10k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-K for the fiscal year ended 31 December 2009",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/37996/000115752310001218/a6182308.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "hertz-bankruptcy",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-hertz-bankruptcy",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "hertz",
+        "name": "Hertz Global Holdings",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-05-01",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-11-01",
+      "label_available_on": "2020-12-01",
+      "onset": {
+        "observation_start": "2020-03-15",
+        "summary": "Travel has collapsed under pandemic restrictions and a large car-rental group's revenue has fallen sharply while the value of its fleet, pledged in asset-backed vehicle financings, is declining. The group has missed lease payments under those financings and is in forbearance talks with lenders, with a heavy debt load and thin liquidity.",
+        "indicators": [
+          {
+            "key": "travel_demand_collapse",
+            "description": "Rental demand collapsed as travel restrictions took hold",
+            "observed_on": "2020-04-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "collapsed",
+            "unit": "category"
+          },
+          {
+            "key": "missed_fleet_lease_payments",
+            "description": "Missed payments under asset-backed vehicle lease financings",
+            "observed_on": "2020-04-27",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-05-22",
+        "actual_end_date": null,
+        "summary": "Forbearance lapsed and the group filed for Chapter 11 protection on 22 May 2020, unable to restructure its vehicle financings out of court as used-car values and rental demand fell together.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Used cars and trucks price index (CUSR0000SETA02)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/CUSR0000SETA02",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: fleet lease forbearance and amended master lease (29 April 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1657853/000165785320000043/a8-kleaseagreements.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 8-K: voluntary Chapter 11 petition (26 May 2020)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1657853/000110465920065674/tm2020858d1_8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "northern-rock-run",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-northern-rock-run",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "northern-rock",
+        "name": "Northern Rock plc",
+        "geography": "GB"
+      },
+      "evaluation_as_of": "2007-09-12",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2008-03-12",
+      "label_available_on": "2008-04-11",
+      "onset": {
+        "observation_start": "2007-08-15",
+        "summary": "A fast-growing British mortgage lender that funds a prime loan book mainly through securitisation and wholesale money markets rather than retail deposits has approached the central bank for emergency liquidity support after wholesale issuance closed. National deposit insurance covers only part of an ordinary balance, giving savers a reason to withdraw, and queues have formed at branches.",
+        "indicators": [
+          {
+            "key": "wholesale_funding_reliance",
+            "description": "Funding dominated by wholesale and securitisation markets rather than retail deposits",
+            "observed_on": "2007-09-12",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "majority",
+            "unit": "category"
+          },
+          {
+            "key": "emergency_liquidity_request",
+            "description": "Emergency liquidity support requested from the central bank",
+            "observed_on": "2007-09-12",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "securitisation_market_closed",
+            "description": "Residential mortgage securitisation issuance closed since August",
+            "observed_on": "2007-09-05",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2007-09-14",
+        "actual_end_date": "2008-02-22",
+        "summary": "The run halted only after the government guaranteed existing deposits; emergency lending reached tens of billions of pounds, no private buyer would take the lender without state support, and it was taken into public ownership in February 2008.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Financial Stability Report, October 2007 (Issue 22)",
+          "publisher": "Bank of England",
+          "url": "https://www.bankofengland.co.uk/financial-stability-report/2007/october-2007",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Run on the Rock (Treasury Committee report)",
+          "publisher": "UK Parliament",
+          "url": "https://publications.parliament.uk/pa/cm200708/cmselect/cmtreasy/56/56i.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "reserve-primary-money-fund",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-reserve-primary-money-fund",
+      "label": "positive",
+      "risk_type": "market_liquidity",
+      "target": {
+        "type": "company",
+        "id": "reserve-primary-fund",
+        "name": "Reserve Primary Fund",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2008-09-15",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2009-03-15",
+      "label_available_on": "2009-04-14",
+      "onset": {
+        "observation_start": "2008-09-02",
+        "summary": "The oldest US money-market fund holds several hundred million dollars of a large broker-dealer's commercial paper whose issuer has just entered court protection. Investors treat these funds as cash redeemable at par with no insurance behind them, institutional redemption requests are arriving within hours, and prime funds are hoarding cash rather than rolling commercial paper.",
+        "indicators": [
+          {
+            "key": "broker_paper_exposure",
+            "description": "Fund holds commercial paper of a broker-dealer now under court protection",
+            "observed_on": "2008-09-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "no_par_guarantee",
+            "description": "Shares carry no insurance despite being used as a cash equivalent",
+            "observed_on": "2008-09-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "prime_fund_redemptions",
+            "description": "Institutional prime money-fund redemption requests surging",
+            "observed_on": "2008-09-15",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "surging",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2008-09-16",
+        "actual_end_date": "2008-09-19",
+        "summary": "The fund's net asset value fell below one dollar a share on 16 September 2008 as its holdings of a failed broker-dealer's commercial paper were written toward zero, breaking the buck; redemptions swept prime money funds and the commercial-paper market seized until the central bank opened a facility to backstop the sector.",
+        "classes": [
+          "failure",
+          "systemic_crisis"
+        ],
+        "source_ids": [
+          "s2",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Money market fund reform: SEC rulemaking record",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/rules/final/2010/ic-29132.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Federal Reserve establishes Asset-Backed Commercial Paper Money Market Mutual Fund Liquidity Facility (press release, 19 September 2008)",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20080919a.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "SEC Charges Operators of Reserve Primary Fund With Fraud (press release 2009-104, 5 May 2009)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/news/press/2009/2009-104.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "signature-bank-closure",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-signature-bank-closure",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "signature-bank",
+        "name": "Signature Bank",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-10",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-10",
+      "label_available_on": "2023-10-10",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A New York commercial bank with a large digital-asset client base is facing heavy withdrawal requests on the day a technology-focused peer is closed. Its deposits are also mostly above the insurance cap, its funding is concentrated in a client sector already stressed by a crypto-market downturn, and withdrawal requests are continuing over the weekend.",
+        "indicators": [
+          {
+            "key": "uninsured_deposit_share",
+            "description": "Share of deposits above the insurance cap",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 90,
+            "unit": "percent"
+          },
+          {
+            "key": "digital_asset_concentration",
+            "description": "Deposit base concentrated in digital-asset clients",
+            "observed_on": "2023-03-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "concentrated",
+            "unit": "category"
+          },
+          {
+            "key": "peer_closure_same_week",
+            "description": "A peer serving the same client sector was closed the same week",
+            "observed_on": "2023-03-10",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-03-12",
+        "actual_end_date": "2023-03-20",
+        "summary": "The regulator closed the bank on 12 March 2023, then the third-largest US bank collapse; uninsured depositors were protected under the systemic-risk exception invoked that evening, and most deposits and loans were sold to another bank a week later.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s2",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "FDIC's Supervision of Signature Bank (report, 28 April 2023)",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/news/press-releases/2023/pr23033a.pdf",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "FDIC failed bank list",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/bank-failures/failed-bank-list",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Joint statement by Treasury, Federal Reserve and FDIC",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312b.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "silicon-valley-bank-run",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-silicon-valley-bank-run",
+      "label": "positive",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "silicon-valley-bank",
+        "name": "Silicon Valley Bank",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-08",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-08",
+      "label_available_on": "2023-10-08",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A mid-size bank whose depositors are almost entirely venture-backed technology companies has announced after the close that it sold its available-for-sale securities at a 1.8 billion dollar loss and will raise equity to fill the gap. About 94 percent of its deposits sit above the insurance cap, its held-to-maturity book carries large unrealised losses after sharp policy tightening, and its depositors are concentrated and can move online within the hour.",
+        "indicators": [
+          {
+            "key": "uninsured_deposit_share",
+            "description": "Share of deposits above the insurance cap",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": 94,
+            "unit": "percent"
+          },
+          {
+            "key": "realised_securities_loss",
+            "description": "Loss realised selling the available-for-sale portfolio to raise cash",
+            "observed_on": "2023-03-08",
+            "source_ids": [
+              "s2"
+            ],
+            "value": 1.8,
+            "unit": "usd_billions"
+          },
+          {
+            "key": "htm_unrealised_loss",
+            "description": "Large unrealised loss on the held-to-maturity securities book",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2023-03-10",
+        "actual_end_date": "2023-03-27",
+        "summary": "Depositors requested about 42 billion dollars in a single day and the bank was closed by its regulator on 10 March 2023, the fastest large bank run on record; uninsured depositors were protected under a systemic-risk exception and the franchise was sold.",
+        "classes": [
+          "bailout",
+          "failure"
+        ],
+        "source_ids": [
+          "s1",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/publications/review-of-the-federal-reserves-supervision-and-regulation-of-silicon-valley-bank.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 8-K: strategic actions and mid-quarter update (8 March 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/719739/000119312523064680/d430920d8k.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "FDIC failed bank list",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/bank-failures/failed-bank-list",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "south-africa-no-default-2020",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-south-africa-no-default-2020",
+      "label": "control",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "south-africa-2020",
+        "name": "Republic of South Africa",
+        "geography": "ZA"
+      },
+      "evaluation_as_of": "2020-03-27",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2021-03-27",
+      "label_available_on": "2021-04-26",
+      "onset": {
+        "observation_start": "2020-02-01",
+        "summary": "The last major agency to hold South Africa at investment grade has cut it to sub-investment grade just as the pandemic forces a hard lockdown. The currency has fallen sharply, non-resident holders are selling local bonds, and the fiscal deficit is set to widen substantially.",
+        "indicators": [
+          {
+            "key": "investment_grade_loss",
+            "description": "Last investment-grade rating from a major agency withdrawn",
+            "observed_on": "2020-03-27",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "nonresident_bond_selling",
+            "description": "Non-residents selling local-currency government bonds",
+            "observed_on": "2020-03-20",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "heavy",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "South Africa continued to service its debt through the evaluation window, funded partly by an IMF rapid facility and domestic markets; it did not miss or restructure a payment despite the downgrade and deep contraction.",
+        "classes": [],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": "Ratings and yields deteriorated, but the sovereign kept meeting obligations, so the declared default outcome did not occur for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "South Africa: Request for Purchase Under the Rapid Financing Instrument (IMF Country Report No. 20/226, July 2020)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/-/media/Files/Publications/CR/2020/English/1ZAFEA2020003.ashx",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "South African Rand to US Dollar Spot Exchange Rate (DEXSFUS)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/DEXSFUS",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "spain-no-default-2009",
+      "split": "train",
+      "window": "2007-2009",
+      "episode_group": "grp-spain-no-default-2009",
+      "label": "control",
+      "risk_type": "sovereign",
+      "target": {
+        "type": "country",
+        "id": "spain-sovereign",
+        "name": "Kingdom of Spain",
+        "geography": "ES"
+      },
+      "evaluation_as_of": "2009-02-15",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2010-08-15",
+      "label_available_on": "2010-09-14",
+      "onset": {
+        "observation_start": "2008-12-01",
+        "summary": "Spain has lost its top credit rating from a major agency as a decade-long housing boom reverses, construction employment collapses and the budget swings from surplus to a large deficit. Bank exposure to property developers is heavy and unemployment is climbing steeply, raising questions about the sovereign's debt path.",
+        "indicators": [
+          {
+            "key": "sovereign_downgrade",
+            "description": "Loss of the top long-term rating from a major agency",
+            "observed_on": "2009-01-19",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "unemployment_trend",
+            "description": "Unemployment rate rising rapidly as construction contracts",
+            "observed_on": "2009-01-31",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "rising",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "Spain continued to service its debt and access primary markets through the evaluation window; it did not miss or restructure a payment despite a severe housing and banking downturn.",
+        "classes": [],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": "Yields and unemployment rose sharply, but the sovereign kept meeting obligations, so the declared default outcome did not occur for the target within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Spain: Staff Report for the 2008 Article IV Consultation (IMF Country Report No. 09/128, April 2009)",
+          "publisher": "International Monetary Fund",
+          "url": "https://www.imf.org/external/pubs/ft/scr/2009/cr09128.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control",
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Harmonised Unemployment Rate: Spain (LRHUTTTTESM156S)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/LRHUTTTTESM156S",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "treasury-market-post-backstop-2020",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-treasury-market-post-backstop-2020",
+      "label": "control",
+      "risk_type": "market_liquidity",
+      "target": {
+        "type": "market",
+        "id": "us-treasury-market-post-backstop-2020",
+        "name": "US Treasury market",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-04-15",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-10-15",
+      "label_available_on": "2020-11-14",
+      "onset": {
+        "observation_start": "2020-03-23",
+        "summary": "Emergency official purchases have pulled the government-bond market back from the seizure of mid-March, but conditions remain fragile. Bid-offer spreads on long-dated bonds, though well below their peak, are still wider than pre-stress norms, primary dealers' capacity to warehouse inventory is stretched against continued selling by foreign holders and levered funds, and the central bank is the marginal buyer holding the market together. The alert is whether disorderly trading returns once official support is scaled back.",
+        "indicators": [
+          {
+            "key": "residual_bid_offer_spread",
+            "description": "Bid-offer spreads on long-dated government bonds remain above pre-stress norms though off their peak",
+            "observed_on": "2020-04-10",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          },
+          {
+            "key": "dealer_inventory_capacity",
+            "description": "Primary-dealer balance-sheet capacity to absorb government bonds remains stretched relative to demand",
+            "observed_on": "2020-04-13",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "official_purchases_marginal_buyer",
+            "description": "Central-bank large-scale purchases remain the marginal buyer stabilising the market",
+            "observed_on": "2020-04-14",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "No renewed disorderly dysfunction returned to the government-bond market through the evaluation window. After the spring interventions, official measures of the market's capacity to absorb large trades had largely recovered toward pre-pandemic ranges, and the central bank sustained market functioning while slowing its Treasury purchases from the emergency spring pace.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "The market had seized in March, but by the observation point official backstops had restored basic functioning; the open question was whether disorderly conditions would recur, and they did not through the horizon, so the declared market-liquidity outcome did not occur for the target.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "BIS Bulletin No. 2: The recent distress in corporate bond markets and the March 2020 turmoil",
+          "publisher": "Bank for International Settlements",
+          "url": "https://www.bis.org/publ/bisbull02.htm",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Federal Reserve announces extensive new measures to support the economy, including government securities purchases (press release, 23 March 2020)",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323a.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Financial Stability Report, November 2020",
+          "publisher": "Board of Governors of the Federal Reserve System",
+          "url": "https://www.federalreserve.gov/publications/files/financial-stability-report-20201109.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "us-banks-covid-resilience",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-us-banks-covid-resilience",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "jpmorgan-chase",
+        "name": "JPMorgan Chase & Co",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-03-20",
+      "evaluation_horizons": [
+        "within_18m"
+      ],
+      "evaluation_end": "2021-09-20",
+      "label_available_on": "2021-10-20",
+      "onset": {
+        "observation_start": "2020-02-20",
+        "summary": "Markets are in free fall as the pandemic shuts economies, credit spreads have blown out and a deep downturn is certain. Large US banks face a sudden surge in corporate credit-line drawdowns and expected loan losses, and their share prices have dropped with the market.",
+        "indicators": [
+          {
+            "key": "credit_line_drawdowns",
+            "description": "Corporate borrowers drawing revolving credit lines at record pace",
+            "observed_on": "2020-03-18",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "surging",
+            "unit": "category"
+          },
+          {
+            "key": "credit_spread_blowout",
+            "description": "Corporate credit spreads widening to crisis-era levels",
+            "observed_on": "2020-03-20",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "extreme",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "No large US bank was placed in resolution or required a capital injection through the evaluation window; entering the shock well capitalised, the largest bank kept lending and supervisory stress analyses confirmed adequate capital.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "The macro shock was extreme, but post-crisis capital and liquidity buffers meant the target neither failed nor took public capital within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2020",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961720000299/corpq12020.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "ICE BofA US Corporate Index Option-Adjusted Spread (BAMLC0A0CM)",
+          "publisher": "Federal Reserve Bank of St. Louis (FRED)",
+          "url": "https://fred.stlouisfed.org/series/BAMLC0A0CM",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-Q for the quarter ended 30 September 2021",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961721000458/jpm-20210930.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "us-covid-recession",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-us-covid-recession",
+      "label": "positive",
+      "risk_type": "recession",
+      "target": {
+        "type": "country",
+        "id": "united-states-2020",
+        "name": "United States",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2020-01-31",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-07-31",
+      "label_available_on": "2020-08-30",
+      "onset": {
+        "observation_start": "2020-01-20",
+        "summary": "A novel respiratory outbreak centred on a large Chinese city has prompted an unprecedented quarantine of tens of millions of people and an international public-health emergency declaration. Global supply chains run through the affected region, early cases are appearing in the United States, and travel and demand disruption are spreading.",
+        "indicators": [
+          {
+            "key": "public_health_emergency",
+            "description": "International public-health emergency of concern declared",
+            "observed_on": "2020-01-30",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "mass_quarantine",
+            "description": "Quarantine imposed on a metropolitan region of tens of millions",
+            "observed_on": "2020-01-23",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-02-01",
+        "actual_end_date": null,
+        "summary": "Activity peaked in February 2020 and collapsed as the pandemic forced shutdowns; the national business-cycle chronology dates the recession from a February 2020 peak to an April 2020 trough, both identified only to the month, making it the sharpest short downturn on record. The start date is stored as the first day of the labeled peak month per the dataset's date-normalization convention.",
+        "classes": [
+          "recession"
+        ],
+        "source_ids": [
+          "s2",
+          "s3"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Statement on the second meeting of the IHR (2005) Emergency Committee on novel coronavirus (30 January 2020)",
+          "publisher": "World Health Organization",
+          "url": "https://www.who.int/news/item/30-01-2020-statement-on-the-second-meeting-of-the-international-health-regulations-(2005)-emergency-committee-regarding-the-outbreak-of-novel-coronavirus-(2019-ncov)",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "NBER business-cycle chronology",
+          "publisher": "National Bureau of Economic Research",
+          "url": "https://www.nber.org/research/business-cycle-dating",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "outcome"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "US national output releases",
+          "publisher": "US Bureau of Economic Analysis",
+          "url": "https://www.bea.gov/data/gdp/gross-domestic-product",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "outcome"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "western-alliance-survives-2023",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-western-alliance-survives-2023",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "western-alliance",
+        "name": "Western Alliance Bancorporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-13",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2023-09-13",
+      "label_available_on": "2023-10-13",
+      "onset": {
+        "observation_start": "2023-03-08",
+        "summary": "A regional commercial bank's shares have plunged in the panic after two peers were closed, on fears about uninsured deposits and unrealised securities losses across mid-size lenders. Depositors are testing balances and the stock has been halted for volatility.",
+        "indicators": [
+          {
+            "key": "share_price_plunge",
+            "description": "Shares fell sharply amid the regional-bank panic",
+            "observed_on": "2023-03-13",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "sharp",
+            "unit": "category"
+          },
+          {
+            "key": "uninsured_deposit_scrutiny",
+            "description": "Investor scrutiny of uninsured-deposit share and securities losses",
+            "observed_on": "2023-03-13",
+            "source_ids": [
+              "s2"
+            ],
+            "value": "elevated",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The bank reported stabilising deposits within days, drew on available contingent funding, and was not placed in resolution through the evaluation window; it stayed independent.",
+        "classes": [],
+        "source_ids": [
+          "s3"
+        ]
+      },
+      "control_rationale": "Contagion put the target under acute pressure, but deposits stabilised and it kept operating, so the declared failure outcome did not occur within the horizon.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 8-K: deposit and liquidity update (13 March 2023)",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1212545/000121254523000103/wal-20230313.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "FDIC Quarterly Banking Profile",
+          "publisher": "Federal Deposit Insurance Corporation",
+          "url": "https://www.fdic.gov/analysis/quarterly-banking-profile/",
+          "accessed": "2026-07-16",
+          "kind": "statistical",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s3",
+          "title": "Form 10-Q for the quarter ended 30 June 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/1212545/000121254523000149/wal-20230630.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "wirecard-insolvency",
+      "split": "train",
+      "window": "2020",
+      "episode_group": "grp-wirecard-insolvency",
+      "label": "positive",
+      "risk_type": "company",
+      "target": {
+        "type": "company",
+        "id": "wirecard",
+        "name": "Wirecard AG",
+        "geography": "DE"
+      },
+      "evaluation_as_of": "2020-06-18",
+      "evaluation_horizons": [
+        "0_6m"
+      ],
+      "evaluation_end": "2020-12-18",
+      "label_available_on": "2021-01-17",
+      "onset": {
+        "observation_start": "2020-04-01",
+        "summary": "A large German payments group has again delayed its audited annual accounts after auditors could not confirm about 1.9 billion euros said to be held in escrow with Asian trustee banks. A special forensic review could not verify large parts of the reported profits, and the shares have dropped precipitously as lenders review credit lines.",
+        "indicators": [
+          {
+            "key": "audit_confirmation_gap",
+            "description": "Auditors unable to confirm roughly 1.9 billion euros of reported cash",
+            "observed_on": "2020-06-18",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "special_review_inconclusive",
+            "description": "A forensic special review could not verify large parts of reported profit",
+            "observed_on": "2020-04-28",
+            "source_ids": [
+              "s2"
+            ],
+            "value": true,
+            "unit": "boolean"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": true,
+        "actual_start_date": "2020-06-25",
+        "actual_end_date": null,
+        "summary": "The company acknowledged the cash likely did not exist and filed for insolvency on 25 June 2020; management was arrested and the group was wound down, one of the largest European accounting scandals.",
+        "classes": [
+          "failure"
+        ],
+        "source_ids": [
+          "s1"
+        ]
+      },
+      "control_rationale": null,
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Fast Track Peer Review on the application of the Guidelines on enforcement of financial information by BaFin and FREP in the context of Wirecard",
+          "publisher": "European Securities and Markets Authority",
+          "url": "https://www.esma.europa.eu/sites/default/files/library/esma42-111-5349_fast_track_peer_review_report_-_wirecard.pdf",
+          "accessed": "2026-07-16",
+          "kind": "institutional",
+          "supports": [
+            "onset",
+            "outcome"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "General Administrative Act prohibiting net short positions in Wirecard AG shares",
+          "publisher": "Federal Financial Supervisory Authority (BaFin)",
+          "url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/EN/Aufsichtsrecht/Verfuegung/vf_190218_leerverkaufsmassnahme_en.html",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    },
+    {
+      "case_id": "zions-survives-2023",
+      "split": "train",
+      "window": "2023",
+      "episode_group": "grp-zions-survives-2023",
+      "label": "control",
+      "risk_type": "banking",
+      "target": {
+        "type": "company",
+        "id": "zions-bancorporation",
+        "name": "Zions Bancorporation",
+        "geography": "US"
+      },
+      "evaluation_as_of": "2023-03-13",
+      "evaluation_horizons": [
+        "6_12m"
+      ],
+      "evaluation_end": "2024-03-13",
+      "label_available_on": "2024-04-12",
+      "onset": {
+        "observation_start": "2022-12-31",
+        "summary": "A regional bank has been swept into the sell-off after two peers were closed, with investors focused on uninsured deposits and unrealised losses on securities held against rising rates. Its shares dropped sharply and depositors are watching closely.",
+        "indicators": [
+          {
+            "key": "securities_book_losses",
+            "description": "Unrealised losses on the securities book after rate rises",
+            "observed_on": "2022-12-31",
+            "source_ids": [
+              "s1"
+            ],
+            "value": true,
+            "unit": "boolean"
+          },
+          {
+            "key": "regional_bank_selloff",
+            "description": "Shares fell sharply in the sector-wide sell-off",
+            "observed_on": "2023-03-13",
+            "source_ids": [
+              "s1"
+            ],
+            "value": "sharp",
+            "unit": "category"
+          }
+        ]
+      },
+      "outcome": {
+        "occurred": false,
+        "actual_start_date": null,
+        "actual_end_date": null,
+        "summary": "The bank kept deposits broadly stable, tapped available term funding, and was not placed in resolution through the evaluation window; it remained an independent going concern.",
+        "classes": [],
+        "source_ids": [
+          "s2"
+        ]
+      },
+      "control_rationale": "The target was under real contagion pressure, but stable core deposits and funding access meant it did not fail within the horizon, so the declared outcome did not occur.",
+      "source_refs": [
+        {
+          "id": "s1",
+          "title": "Form 10-Q for the quarter ended 31 March 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/109380/000010938023000114/zions-20230331.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "onset"
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "Form 10-K for the fiscal year ended 31 December 2023",
+          "publisher": "US Securities and Exchange Commission",
+          "url": "https://www.sec.gov/Archives/edgar/data/109380/000010938024000061/zions-20231231.htm",
+          "accessed": "2026-07-16",
+          "kind": "primary",
+          "supports": [
+            "control"
+          ]
+        }
+      ],
+      "provenance": {
+        "kind": "original_paraphrase",
+        "created_on": "2026-07-16",
+        "review_status": "automated_contract_validation_only"
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "dataset_id": "entity_linking_gold",
+  "schema_version": "v1",
+  "language": "en",
+  "target_catalog": "targets.json",
+  "splits": [
+    {
+      "name": "train",
+      "file": "train.json",
+      "count": 100
+    },
+    {
+      "name": "development",
+      "file": "development.json",
+      "count": 50
+    },
+    {
+      "name": "final_holdout",
+      "file": "final_holdout.json",
+      "count": 50
+    }
+  ],
+  "total_count": 200,
+  "metadata": {
+    "title": "Entity Linking Gold v1",
+    "description": "200 original synthetic English news mentions produced during Stage 8 automated curation, labelled for ADR 0005 stage-2 entity linking, over a catalog of real, authoritatively-sourced company and product targets. Every context is original to this dataset; no publisher prose, article URL, or source attribution is reproduced. Physically split train=100 / development=50 / final_holdout=50 with no leakage_group or document shared across splits, so a tuned threshold and its held-out score never see the same story.",
+    "created_on": "2026-07-16",
+    "provenance": "original_synthetic",
+    "split_isolation": "Each mention has a unique document and leakage_group; the final_holdout scenarios are distinct from train/development and are gated behind allow_holdout."
+  },
+  "labeling": {
+    "guidelines": "ADR 0005 stage-2 labelling: an ORG/PRODUCT mention that refers to a catalog entity is labelled link to that entity's target_id (a brand/subsidiary links to its own target, never to its parent); PERSON/GPE mentions, ordinary-word and place collisions, and organizations/products absent from the catalog are NIL. Assertion status records how the sentence frames the claim (asserted/denied/speculative) and never changes entity identity.",
+    "labelers": [
+      "claude-code-stage8-curator"
+    ],
+    "adjudication": "Single automated curation pass validated against the entity_linking_gold v1 contract (schema, offsets, normalization, fixture-UUID, split isolation, and quota checks). No human dual-review or external adjudication was performed; independent verification is pending per the milestone workflow.",
+    "review_status": "automated_contract_validation_only"
+  },
+  "license": {
+    "id": "CC-BY-4.0",
+    "note": "Original synthetic prose authored for this dataset, released CC-BY-4.0. Company and product names, tickers, and identifiers are factual references to their respective owners and are cited to public authoritative registries; no third-party article text or proprietary dataset is included or relicensed."
+  }
+}
