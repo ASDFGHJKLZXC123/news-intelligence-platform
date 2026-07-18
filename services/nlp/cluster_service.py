@@ -15,7 +15,11 @@ from sqlalchemy.orm import Session
 
 from db.models import Article, ArticleEmbedding, Event, EventArticle, EventRiskFeature, Source
 from packages.config.settings import get_settings
-from services.nlp.clustering import ClusterItem, cluster_by_similarity
+from services.nlp.clustering import (
+    DEFAULT_CLUSTERING_THRESHOLD,
+    ClusterItem,
+    cluster_by_similarity,
+)
 from services.nlp.features import ArticleRecord, compute_event_features
 
 
@@ -31,7 +35,7 @@ class ClusterResult:
 def cluster_unclustered_articles(
     session: Session,
     *,
-    threshold: float = 0.8,
+    threshold: float = DEFAULT_CLUSTERING_THRESHOLD,
     embedding_model: str | None = None,
     embedding_model_version: str | None = None,
 ) -> ClusterResult:

@@ -162,9 +162,11 @@ def test_a_run_from_the_provider_resolver_is_not_a_news_mention() -> None:
 @pytest.mark.parametrize(
     ("score", "band"),
     [
-        (None, LinkBand.NIL),  # nothing matched the surface at all
-        (0.0, LinkBand.NIL),
-        (0.4999, LinkBand.NIL),
+        (None, LinkBand.NIL),  # nothing matched the surface at all -- the only NIL left
+        # The Stage 9 adjudicate threshold is 0.00 and inclusive, so every scored unmatched run
+        # is an adjudicate, however weak its evidence.
+        (0.0, LinkBand.ADJUDICATE),
+        (0.0699, LinkBand.ADJUDICATE),
         (0.50, LinkBand.ADJUDICATE),
         (0.84, LinkBand.ADJUDICATE),
         # An unmatched run at or above the accept threshold is one the tie or brand gate held
@@ -304,16 +306,18 @@ def test_the_linkers_unresolved_runs_are_exactly_what_the_queue_reads_back() -> 
     profile = _profile("Globex Corporation")
     _seed(session, profile, _alias(profile, "Globex"))
 
-    # "Acme" matches nothing in the identity store; "Globex" matches, but scores nothing.
+    # "Acme" matches nothing in the identity store, so it is NIL; "Globex" matches but scores
+    # nothing, which under the Stage 9 bands is an adjudicate rather than a drop. Both are
+    # unresolved -- neither attached an entity -- so the queue holds both.
     unknown = link_mention(session, _mention("Acme"), _context(), persist_run=True)
     known = link_mention(session, _mention("Globex", start_char=40), _context(), persist_run=True)
 
     queue = unresolved_mention_queue(session)
 
-    assert unknown.band is LinkBand.NIL and known.band is LinkBand.NIL
+    assert unknown.band is LinkBand.NIL and known.band is LinkBand.ADJUDICATE
     assert [entry.normalized_surface for entry in queue] == ["acme", "globex"]
     assert {entry.reason for entry in queue} == {unknown.reason, known.reason}
-    assert [entry.band for entry in queue] == [LinkBand.NIL, LinkBand.NIL]
+    assert [entry.band for entry in queue] == [LinkBand.NIL, LinkBand.ADJUDICATE]
     # The run the queue grouped is the one the linker keyed.
     assert session.find_one(EntityResolutionRun, run_key=mention_run_key(_mention("Acme")))
 
@@ -347,10 +351,13 @@ def test_a_profile_that_later_learns_the_alias_drops_out_of_the_queue() -> None:
     _seed(session, profile, _alias(profile, "Globex"))
     linked = link_mention(session, mention, _context(), persist_run=True)
 
-    # The same mention, re-linked in place: the run is updated, not duplicated.
+    # The same mention, re-linked in place: the run is updated, not duplicated. The 0.10 score
+    # clears the Stage 9 accept threshold, so the surface attaches and leaves the queue.
     assert len(session.all_of(EntityResolutionRun)) == 1
     assert linked.candidates[0].entity_id == profile.id
-    assert unresolved_mention_queue(session)[0].confidence_score == 0.10
+    assert linked.matched_entity_id == profile.id
+    assert linked.confidence_score == 0.10
+    assert unresolved_mention_queue(session) == ()
 
 
 def test_the_review_window_is_the_adrs_week() -> None:

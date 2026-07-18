@@ -42,10 +42,11 @@ from workers import entity_linking_tasks
 from workers.celery_app import QUEUE_PIPELINE, celery_app
 
 # The linker's real weights (ADR 0005): ticker .25 + co-mentions .25 + context .20 + url .15
-# + location .05 = 0.90, which clears the 0.85 accept threshold.
+# + location .05 = 0.90, comfortably over the Stage 9 accept threshold of 0.07.
 ACCEPT_SCORE = 0.9
-# Ticker .25 + context .20 + location .05 = 0.50: the bottom of the ambiguous band.
-ADJUDICATE_SCORE = 0.5
+# Location cue only = 0.05: the weakest evidence a candidate can carry, and the one thing that
+# still lands *below* the recalibrated 0.07 accept threshold and so reaches the adjudicator.
+ADJUDICATE_SCORE = 0.05
 
 
 def _store() -> tuple[FakeSession, Any, Any, Any]:
@@ -216,14 +217,20 @@ def test_a_mention_that_matches_nothing_links_to_nothing_and_stays_reviewable() 
 
 
 def _ambiguous_store() -> tuple[FakeSession, Any, Any, Any]:
-    zeta = profile("Zeta Corp", entity_type="company", country="US", primary_ticker="ZTA")
+    """A store whose only evidence is the 0.05 location cue -- below the 0.07 accept threshold.
+
+    No ticker, no context cue word, no known entity type, no co-mention, no matching URL domain:
+    the country match is the single weak signal that fires, which is what puts the mention in the
+    adjudicate band.
+    """
+    zeta = profile("Zeta Corp", country="US")
     feed = source()
     subject = event(country="US")
     item = article(
         feed,
         url="https://wire.example.com/markets",
-        title="Zeta reported revenue",
-        body="Zeta reported revenue for the period. ZTA shares were flat.",
+        title="Zeta named in the note",
+        body="Zeta was named in the note. The note was circulated widely.",
     )
     session = FakeSession(
         zeta,
@@ -244,8 +251,8 @@ def test_an_ambiguous_mention_is_adjudicated_and_persists_the_deterministic_scor
                 mention(
                     "Zeta",
                     article_key=str(item.id),
-                    sentence="Zeta reported revenue for the period.",
-                    next_text="ZTA shares were flat.",
+                    sentence="Zeta was named in the note.",
+                    next_text="The note was circulated widely.",
                 ),
             )
         }
@@ -283,8 +290,8 @@ def test_a_nil_or_failed_adjudication_attaches_nothing(decision: AdjudicationDec
                 mention(
                     "Zeta",
                     article_key=str(item.id),
-                    sentence="Zeta reported revenue for the period.",
-                    next_text="ZTA shares were flat.",
+                    sentence="Zeta was named in the note.",
+                    next_text="The note was circulated widely.",
                 ),
             )
         }
@@ -312,8 +319,8 @@ def test_without_an_adjudicator_an_ambiguous_mention_simply_does_not_link() -> N
                 mention(
                     "Zeta",
                     article_key=str(item.id),
-                    sentence="Zeta reported revenue for the period.",
-                    next_text="ZTA shares were flat.",
+                    sentence="Zeta was named in the note.",
+                    next_text="The note was circulated widely.",
                 ),
             )
         }
@@ -336,8 +343,8 @@ def test_an_infrastructure_failure_in_adjudication_propagates() -> None:
                 mention(
                     "Zeta",
                     article_key=str(item.id),
-                    sentence="Zeta reported revenue for the period.",
-                    next_text="ZTA shares were flat.",
+                    sentence="Zeta was named in the note.",
+                    next_text="The note was circulated widely.",
                 ),
             )
         }
@@ -440,9 +447,9 @@ def test_a_missing_event_is_an_error_not_an_empty_result() -> None:
 
 
 def test_each_mention_gets_the_other_surfaces_as_co_mentions_and_never_its_own() -> None:
-    """The co-mention signal is what carries these mentions over the threshold, so it is real."""
+    """The co-mention signal is worth a real 0.25, and a mention never supplies it to itself."""
 
-    session, subject, item, _acme = _store()
+    session, subject, item, acme = _store()
     mentions = _accepting_mentions(str(item.id))
     extractor = FakeExtractor({str(item.id): mentions})
 
@@ -462,18 +469,18 @@ def test_each_mention_gets_the_other_surfaces_as_co_mentions_and_never_its_own()
         extractor=FakeExtractor({str(item.id): (mentions[0],)}),
     )
 
-    # Alone, the same mention loses the 0.25 co-mention weight and drops out of the accept band.
-    # It linked to nothing, so it carries no confidence -- the deterministic score it *did* earn
-    # is on its audit run, which is what the review queue reads.
-    assert lonely.mentions[0].band is LinkBand.ADJUDICATE
-    assert lonely.mentions[0].confidence_score is None
+    # Alone, the same mention loses exactly the 0.25 co-mention weight. Under the Stage 9 bands
+    # 0.65 still clears accept, so what the co-mention signal moves here is the score, not the
+    # outcome -- and the score is the one the audit run records.
+    assert lonely.mentions[0].band is LinkBand.ACCEPT
+    assert lonely.mentions[0].confidence_score == pytest.approx(ACCEPT_SCORE - 0.25)
     run = next(
         item
         for item in session_two.all_of(EntityResolutionRun)
         if item.target_id.endswith(f"#{mentions[0].start_char}-{mentions[0].end_char}")
     )
     assert float(run.confidence_score) == pytest.approx(ACCEPT_SCORE - 0.25)
-    assert run.matched_entity_id is None
+    assert run.matched_entity_id == acme.id
 
 
 def test_the_result_is_json_serializable() -> None:

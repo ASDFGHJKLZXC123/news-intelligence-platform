@@ -53,7 +53,6 @@ from services.alerts.experimental import (
 )
 from services.analogies.contracts import DEFAULT_MIN_SIMILARITY
 from services.crisis_model.evaluation import evaluate_prediction
-from services.entities.news_linking import ACCEPT_THRESHOLD, ADJUDICATE_THRESHOLD
 
 # The physical files each split-based asset commits that this module may touch: the tuning slices
 # only. The gated ``final_holdout.json`` is deliberately absent -- this cross-dataset module never
@@ -67,10 +66,10 @@ _HOLDOUT_FILENAMES = frozenset(
     {ent.SPLIT_FILES[ent.SPLIT_FINAL_HOLDOUT], alr.SPLIT_FILES[alr.SPLIT_FINAL_HOLDOUT]}
 )
 
-#: The frozen production decision boundaries Stage 9 -- not Stage 8 -- owns (implementation-order.md
-#: §9). Named here so a drift in a production constant fails this governance test loudly.
-FROZEN_LINKING_ACCEPT = 0.85
-FROZEN_LINKING_ADJUDICATE = 0.50
+#: The production decision boundaries Stage 9 -- not Stage 8 -- owns (implementation-order.md §9).
+#: Named here so a drift in a production constant fails this governance test loudly. The entity
+#: accept/adjudicate bands are deliberately absent: Stage 9's freeze recalibrated and applied them,
+#: and ``tests/unit/test_stage9_freeze.py`` is what pins their current values.
 FROZEN_ANALOGY_FLOOR = 0.60
 FROZEN_ALERT_DECISION = 0.50
 
@@ -389,9 +388,8 @@ def test_gold_loader_modules_define_no_threshold_of_their_own():
 
 
 def test_the_frozen_production_thresholds_are_intact_and_owned_by_stage9():
-    # The gold sets are calibrated *against* these values in Stage 9; Stage 8 must never move them.
-    assert ACCEPT_THRESHOLD == FROZEN_LINKING_ACCEPT
-    assert ADJUDICATE_THRESHOLD == FROZEN_LINKING_ADJUDICATE
+    # Stage 8 must never move a production threshold. Stage 9 may -- and for the entity bands it
+    # did, through its freeze -- so only the boundaries Stage 9 left unchanged are pinned here.
     assert DEFAULT_MIN_SIMILARITY == FROZEN_ANALOGY_FLOOR
     assert inspect.signature(evaluate_prediction).parameters["threshold"].default == FROZEN_ALERT_DECISION
 

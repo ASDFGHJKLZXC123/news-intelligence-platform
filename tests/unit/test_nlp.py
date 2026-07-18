@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import datetime
+import inspect
 import uuid
 from unittest.mock import Mock
 
+import pytest
 from sqlalchemy.dialects import postgresql
 
 from db.models import EMBEDDING_DIM, Article, ArticleEmbedding
 from packages.providers.base import EmbeddingResult
 from services.nlp import (
+    DEFAULT_CLUSTERING_THRESHOLD,
     ArticleRecord,
     ClusterItem,
     cluster_by_similarity,
@@ -19,6 +22,7 @@ from services.nlp import (
     exact_duplicate_groups,
 )
 from services.nlp.cluster_service import ClusterResult, cluster_unclustered_articles
+from services.nlp.clustering import ClusteringThresholdError
 from services.nlp.embeddings import embed_unembedded_articles
 from services.nlp.features import event_severity_score, source_diversity_score
 
@@ -42,6 +46,54 @@ def test_cluster_groups_similar_and_separates_dissimilar() -> None:
     assert [0, 1] in clusters
     assert [2] in clusters
     assert len(clusters) == 2
+
+
+def test_default_clustering_threshold_is_080_and_both_functions_use_it() -> None:
+    # A refactor of the live default, not a value change: still 0.80, shared by both entry points.
+    assert DEFAULT_CLUSTERING_THRESHOLD == 0.80
+    assert (
+        inspect.signature(cluster_by_similarity).parameters["threshold"].default
+        is DEFAULT_CLUSTERING_THRESHOLD
+    )
+    assert (
+        inspect.signature(cluster_unclustered_articles).parameters["threshold"].default
+        is DEFAULT_CLUSTERING_THRESHOLD
+    )
+
+
+@pytest.mark.parametrize(
+    "bad", [True, False, float("nan"), float("inf"), float("-inf"), -0.1, 1.1, "0.8", None]
+)
+def test_cluster_by_similarity_rejects_invalid_thresholds(bad: object) -> None:
+    items = [ClusterItem("a", (1.0, 0.0)), ClusterItem("b", (1.0, 0.0))]
+    with pytest.raises(ClusteringThresholdError):
+        cluster_by_similarity(items, threshold=bad)  # type: ignore[arg-type]
+
+
+def test_invalid_threshold_is_rejected_before_any_pair_is_scored() -> None:
+    # Unequal-length vectors make cosine_similarity raise a *plain* ValueError; a bad threshold must
+    # be caught first, so an invalid cutoff surfaces as ClusteringThresholdError, never reaching cosine.
+    mismatched = [ClusterItem("a", (1.0,)), ClusterItem("b", (1.0, 1.0))]
+    with pytest.raises(ClusteringThresholdError):
+        cluster_by_similarity(mismatched, threshold=1.5)
+
+
+def test_cluster_links_at_exact_threshold_and_not_just_below() -> None:
+    # cosine == 1.0 exactly links at threshold 1.0 (inclusive >=); a pair just below 1.0 does not.
+    parallel = [ClusterItem("a", (1.0, 0.0)), ClusterItem("b", (1.0, 0.0))]
+    assert cluster_by_similarity(parallel, threshold=1.0) == [[0, 1]]
+    near = [ClusterItem("a", (1.0, 0.0)), ClusterItem("b", (1.0, 0.001))]
+    assert cluster_by_similarity(near, threshold=1.0) == [[0], [1]]
+
+
+def test_single_link_clustering_is_transitive() -> None:
+    items = [
+        ClusterItem("a", (1.0, 0.0, 0.0)),
+        ClusterItem("b", (1.0, 1.0, 0.0)),  # cos(a,b) == cos(b,c) == 1/sqrt(2) ~ 0.707
+        ClusterItem("c", (0.0, 1.0, 0.0)),  # cos(a,c) == 0
+    ]
+    # A links B, B links C, A does not link C directly -> single-link merges all three.
+    assert cluster_by_similarity(items, threshold=0.7) == [[0, 1, 2]]
 
 
 def test_exact_duplicate_groups_by_content_hash() -> None:

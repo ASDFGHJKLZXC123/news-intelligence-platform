@@ -13,7 +13,12 @@ from services.nlp.assertions import (
     classify_assertion,
 )
 from services.nlp.cluster_service import ClusterResult, cluster_unclustered_articles
-from services.nlp.clustering import ClusterItem, cluster_by_similarity, exact_duplicate_groups
+from services.nlp.clustering import (
+    DEFAULT_CLUSTERING_THRESHOLD,
+    ClusterItem,
+    cluster_by_similarity,
+    exact_duplicate_groups,
+)
 from services.nlp.embedding_text import (
     EMBEDDING_TOKEN_BUDGET,
     build_article_embedding_text,
@@ -50,6 +55,7 @@ from services.nlp.mentions import (
 from services.nlp.similarity import cosine_similarity
 
 __all__ = [
+    "DEFAULT_CLUSTERING_THRESHOLD",
     "DENIED_CUES",
     "EMBEDDING_TOKEN_BUDGET",
     "SPECULATIVE_CUES",

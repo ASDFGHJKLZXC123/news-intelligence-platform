@@ -22,8 +22,10 @@ How a mention is linked:
 3. **Confidence** is the weighted sum of the seven ADR §10.3 signals, scaled by the alias prior
    (Wikidata-sourced evidence carries the ADR's 0.7 multiplier). Alias matching only *gates*
    candidate generation; it contributes no score of its own, so a bare alias match with no
-   supporting signal scores 0.00 and goes to NIL. That is the ADR's design -- the weights are
-   explicitly initial values, to be recalibrated against the labeled-mentions gold set.
+   supporting signal scores 0.00. Stage 9 (``stage9-validation.v1``, §4.2) recalibrated the two
+   band thresholds against the labeled-mentions gold set -- the signal weights stay the ADR's
+   fixed initial values -- to **accept 0.07 / adjudicate 0.00**, so that a 0.00 score now routes
+   to adjudication rather than being dropped, and only a mention with no candidate at all is NIL.
 
 Every returned object is frozen and JSON-serializable (``as_dict``), because the candidate list
 crosses a Celery/LLM boundary in stage 3.
@@ -109,12 +111,20 @@ WIKIDATA_SOURCE: Final = "wikidata"
 WIKIDATA_ALIAS_PRIOR: Final[float] = 0.7
 DEFAULT_ALIAS_PRIOR: Final[float] = 1.0
 
-ACCEPT_THRESHOLD: Final[float] = 0.85
-ADJUDICATE_THRESHOLD: Final[float] = 0.50
+# Stage 9 (``stage9-validation.v1``, §4.2) recalibrated these two band thresholds against the
+# labeled-mentions gold set, from the ADR 0005 initial 0.85 / 0.50 down to 0.07 / 0.00; the ADR 0005
+# signal weight set (``adr0005-stage2-initial.v1``) is unchanged, so the policy version below names
+# the *band* policy only. See ``docs/evaluation/stage9-validation-protocol.md`` and the frozen
+# parameters at ``evaluation/stage9/frozen/parameters.json``.
+ENTITY_LINKING_POLICY_VERSION: Final[str] = "entity-linking-bands.stage9-validation.v1"
+ACCEPT_THRESHOLD: Final[float] = 0.07
+ADJUDICATE_THRESHOLD: Final[float] = 0.00
 
 
 class LinkBand(StrEnum):
-    """ADR 0005 confidence bands: accept >= 0.85, adjudicate 0.50-0.85, reject/NIL < 0.50."""
+    """Confidence bands (Stage 9 ``stage9-validation.v1``): accept >= 0.07, adjudicate 0.00-0.07,
+    NIL < 0.00 -- so every scored candidate is at least adjudicated and only a mention with no
+    candidate at all lands in NIL."""
 
     ACCEPT = "accept"
     ADJUDICATE = "adjudicate"
@@ -355,7 +365,7 @@ def round_score(value: float) -> float:
 
 
 def band_for_score(score: float) -> LinkBand:
-    """ADR 0005 bands, exact at the boundaries: 0.85 accepts, and 0.50 adjudicates."""
+    """Stage 9 bands, exact at the boundaries: 0.07 accepts, and 0.00 adjudicates."""
     if score >= ACCEPT_THRESHOLD:
         return LinkBand.ACCEPT
     if score >= ADJUDICATE_THRESHOLD:
@@ -398,10 +408,10 @@ def decide_band(candidates: Sequence[LinkCandidate]) -> tuple[LinkBand, str]:
 
     * a *tie* at the accept threshold — deterministic evidence that cannot separate two entities
       is not evidence for either of them;
-    * a *brand/product* alias with no signal behind it. Under the ADR's initial weights a score
-      of 0.85 already implies four signals fired, so this gate is a guarantee rather than a
-      frequent event; it is enforced here so that recalibrating the weights (or adding a prior
-      that scores an alias match on its own) cannot quietly start auto-accepting brands.
+    * a *brand/product* alias with no signal behind it. This gate is enforced structurally,
+      independent of the band thresholds, so that the low Stage 9 accept threshold (0.07),
+      recalibrating the weights, or adding a prior that scores an alias match on its own cannot
+      quietly start auto-accepting an unsupported brand.
     """
     if not candidates:
         return LinkBand.NIL, REASON_NO_CANDIDATE

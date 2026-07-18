@@ -95,9 +95,11 @@ PUBLISHED = datetime.datetime(2026, 6, 1, tzinfo=datetime.UTC)
 
 # The real ADR weights, applied to the seeded store below:
 #   Acme  = ticker .25 + co-mentions .25 + context .20 + url .15 + location .05 = 0.90 -> ACCEPT
-#   Zeta  = ticker .25 +                   context .20 +           location .05 = 0.50 -> ADJUDICATE
+#   Zeta  =                                                        location .05 = 0.05 -> ADJUDICATE
+# Zeta is the deliberately weak case: no ticker, no known entity type, no context cue and no
+# matching URL, so its one 0.05 signal stays under the Stage 9 accept threshold of 0.07.
 ACME_SCORE = 0.9
-ZETA_SCORE = 0.5
+ZETA_SCORE = 0.05
 PARENT_EDGE_CONFIDENCE = 0.9
 
 
@@ -144,7 +146,7 @@ def seeded(disposable_db):
 
     with disposable_db() as session:
         acme = _profile(ACME_ID, "Acme Corp", ticker="ACME", website="https://acme.example.com")
-        zeta = _profile(ZETA_ID, "Zeta Corp", ticker="ZTA")
+        zeta = _profile(ZETA_ID, "Zeta Corp", entity_type=None)
         parent = _profile(PARENT_ID, "Example Holdings")
         session.add_all([acme, zeta, parent])
         session.flush()
@@ -186,8 +188,8 @@ def seeded(disposable_db):
         zeta_article = _article(
             source,
             url="https://wire.example.com/markets",
-            title="Zeta reported revenue",
-            body="Zeta reported revenue for the period. ZTA shares were flat.",
+            title="Zeta named in the note",
+            body="Zeta was named in the note. The note was circulated widely.",
         )
         french = _article(
             source,
@@ -212,13 +214,18 @@ def seeded(disposable_db):
 
 
 def _profile(
-    identifier: uuid.UUID, name: str, *, ticker: str | None = None, website: str | None = None
+    identifier: uuid.UUID,
+    name: str,
+    *,
+    ticker: str | None = None,
+    website: str | None = None,
+    entity_type: str | None = "company",
 ) -> EntityProfile:
     return EntityProfile(
         id=identifier,
         canonical_name=name,
         normalized_name=normalize_name(name),
-        entity_type="company",
+        entity_type=entity_type,
         country="US",
         primary_ticker=ticker,
         website=website,
@@ -316,8 +323,8 @@ class FakeExtractor:
                 _mention(
                     "Zeta",
                     article_key=zeta_key,
-                    sentence="Zeta reported revenue for the period.",
-                    next_text="ZTA shares were flat.",
+                    sentence="Zeta was named in the note.",
+                    next_text="The note was circulated widely.",
                     start_char=0,
                     status=status,
                 ),

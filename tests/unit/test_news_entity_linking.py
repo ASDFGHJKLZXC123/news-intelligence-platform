@@ -24,7 +24,7 @@ from services.entities.news_linking import (
     NEWS_MENTION_TARGET_TYPE,
     REASON_ACCEPT_TIE,
     REASON_ACCEPTED,
-    REASON_BELOW_ADJUDICATE,
+    REASON_AMBIGUOUS_BAND,
     REASON_BRAND_GATE,
     REASON_NO_CANDIDATE,
     REDIRECT_AMBIGUOUS,
@@ -265,16 +265,29 @@ def test_signal_weights_are_the_adr_values_and_sum_to_one() -> None:
     ("score", "band"),
     [
         (1.0, LinkBand.ACCEPT),
-        (0.8501, LinkBand.ACCEPT),
-        (ACCEPT_THRESHOLD, LinkBand.ACCEPT),  # exactly 0.85 accepts
-        (0.8499, LinkBand.ADJUDICATE),
-        (ADJUDICATE_THRESHOLD, LinkBand.ADJUDICATE),  # exactly 0.50 adjudicates
-        (0.4999, LinkBand.NIL),
-        (0.0, LinkBand.NIL),
+        (0.85, LinkBand.ACCEPT),
+        (0.0701, LinkBand.ACCEPT),
+        (ACCEPT_THRESHOLD, LinkBand.ACCEPT),  # exactly 0.07 accepts (inclusive)
+        (0.0699, LinkBand.ADJUDICATE),
+        (0.05, LinkBand.ADJUDICATE),
+        (ADJUDICATE_THRESHOLD, LinkBand.ADJUDICATE),  # exactly 0.00 adjudicates (inclusive)
     ],
 )
 def test_confidence_bands_are_exact_at_the_thresholds(score: float, band: LinkBand) -> None:
     assert band_for_score(score) is band
+
+
+def test_no_scored_candidate_falls_below_the_adjudicate_band() -> None:
+    """With the Stage 9 adjudicate threshold at 0.00, every possible score is at least adjudicated.
+
+    NIL is no longer a *score* outcome: it means there was no candidate at all. The two production
+    thresholds bracket the whole score range inclusively.
+    """
+    assert (ACCEPT_THRESHOLD, ADJUDICATE_THRESHOLD) == (0.07, 0.0)
+    assert all(
+        band_for_score(score / 100) is not LinkBand.NIL for score in range(0, 101)
+    )
+    assert decide_band(()) == (LinkBand.NIL, REASON_NO_CANDIDATE)
 
 
 # --- Candidate generation ------------------------------------------------------
@@ -657,7 +670,8 @@ def _without_industry_text(context: ArticleLinkingContext) -> dict[str, Any]:
     }
 
 
-def test_two_signals_land_exactly_on_the_adjudicate_threshold() -> None:
+def test_two_signals_scoring_half_now_clear_the_recalibrated_accept_band() -> None:
+    """0.50 used to be the adjudicate floor; under the Stage 9 bands it auto-accepts."""
     session = FakeSession()
     profile = _profile("Acme Corporation", primary_ticker="ACME")
     _seed(
@@ -672,29 +686,35 @@ def test_two_signals_land_exactly_on_the_adjudicate_threshold() -> None:
     result = link_mention(session, _mention("Acme"), context)
 
     assert result.candidates[0].score == 0.50
-    assert result.band is LinkBand.ADJUDICATE
-    assert result.matched_entity_id is None
-    assert not result.should_attach
+    assert result.band is LinkBand.ACCEPT
+    assert result.reason == REASON_ACCEPTED
+    assert result.matched_entity_id == profile.id
+    assert result.should_attach
 
 
-def test_a_score_below_the_adjudicate_threshold_is_nil() -> None:
+def test_a_single_weak_signal_scores_below_accept_and_is_adjudicated() -> None:
+    """One 0.05 signal is the smallest non-zero score, and it lands inside the adjudicate band."""
     session = FakeSession()
-    profile = _profile("Acme Corporation", website="https://acme.example")
+    profile = _profile(
+        "Acme Corporation",
+        profile_metadata={"wikidata": {"industries": [{"label": "semiconductor"}]}},
+    )
     _seed(session, profile, _alias(profile, "Acme"))
 
     result = link_mention(
-        session,
-        _mention("Acme", sentence=CUE_SENTENCE),
-        _context(url="https://acme.example/news/1", text=CUE_SENTENCE),
+        session, _mention("Acme"), _context(text="A semiconductor supplier reported results.")
     )
 
-    assert result.candidates[0].score == 0.35  # 0.20 mention context + 0.15 URL
-    assert result.band is LinkBand.NIL
-    assert result.reason == REASON_BELOW_ADJUDICATE
-    assert result.confidence_score == 0.35  # still recorded, for calibration
+    assert result.candidates[0].score == 0.05  # industry terms only
+    assert result.band is LinkBand.ADJUDICATE
+    assert result.reason == REASON_AMBIGUOUS_BAND
+    assert result.matched_entity_id is None
+    assert not result.should_attach
+    assert result.confidence_score == 0.05  # still recorded, for calibration
 
 
-def test_a_bare_alias_match_with_no_signal_scores_zero() -> None:
+def test_a_bare_alias_match_with_no_signal_scores_zero_and_is_still_adjudicated() -> None:
+    """A 0.00 score is no longer dropped: the adjudicate threshold is 0.00 and inclusive."""
     session = FakeSession()
     profile = _profile("Acme Corporation")
     _seed(session, profile, _alias(profile, "Acme"))
@@ -702,7 +722,9 @@ def test_a_bare_alias_match_with_no_signal_scores_zero() -> None:
     result = link_mention(session, _mention("Acme"), _context())
 
     assert result.candidates[0].score == 0.0
-    assert result.band is LinkBand.NIL
+    assert result.band is LinkBand.ADJUDICATE
+    assert result.reason == REASON_AMBIGUOUS_BAND
+    assert result.matched_entity_id is None
 
 
 def test_wikidata_sourced_evidence_carries_the_prior_multiplier() -> None:
@@ -715,8 +737,8 @@ def test_wikidata_sourced_evidence_carries_the_prior_multiplier() -> None:
     candidate = result.candidates[0]
     assert candidate.prior_multiplier == WIKIDATA_ALIAS_PRIOR
     assert candidate.signal_score == 1.0
-    assert candidate.score == 0.7
-    assert result.band is LinkBand.ADJUDICATE  # the discount pulls a perfect signal set off accept
+    assert candidate.score == 0.7  # the discount still costs a perfect signal set 0.3
+    assert result.band is LinkBand.ACCEPT
 
 
 def test_the_strongest_evidence_for_one_entity_wins_and_the_rest_is_kept() -> None:
@@ -1260,7 +1282,9 @@ def test_a_resolution_run_is_written_once_per_mention_and_updated_in_place() -> 
     _seed(session, _alias(profile, "Acme"))
     mention = _mention("Acme", sentence=CUE_SENTENCE, start_char=12)
 
-    first = link_mention(session, mention, _context(), persist_run=True)
+    first = link_mention(
+        session, _mention("Acme", start_char=12), _context(), persist_run=True
+    )
     second = link_mention(session, mention, _all_signals_context(), persist_run=True)
 
     runs = session.all_of(EntityResolutionRun)
@@ -1269,15 +1293,18 @@ def test_a_resolution_run_is_written_once_per_mention_and_updated_in_place() -> 
     assert runs[0].target_type == NEWS_MENTION_TARGET_TYPE
     assert runs[0].target_id == f"{ARTICLE}#12-16"
     assert runs[0].input_names == ["Acme"]
-    # The first pass had no supporting context and attached nothing; the second accepted.
-    assert first.matched_entity_id is None
+    # The first pass had only the source-category signal behind it; the second saw the whole
+    # article, and the one run was updated in place to the stronger evidence.
+    assert first.confidence_score == 0.1
+    assert second.confidence_score == 1.0
     assert runs[0].matched_entity_id == profile.id
     assert float(runs[0].confidence_score) == 1.0
 
 
 def test_an_unresolved_mention_persists_its_score_and_explanation_but_no_entity() -> None:
+    """A bare alias match with no signal is adjudicated, so the run keeps a score but no entity."""
     session = FakeSession()
-    profile = _profile("Acme Corporation", entity_type="company")
+    profile = _profile("Acme Corporation")
     _seed(session, profile, _alias(profile, "Acme"))
 
     link_mention(session, _mention("Acme"), _context(), persist_run=True)
@@ -1285,9 +1312,9 @@ def test_an_unresolved_mention_persists_its_score_and_explanation_but_no_entity(
     run = session.all_of(EntityResolutionRun)[0]
     fields = parse_link_explanation(run.explanation)
     assert run.matched_entity_id is None
-    assert float(run.confidence_score) == 0.10
-    assert fields["band"] == LinkBand.NIL.value
-    assert fields["score"] == "0.1000"
+    assert float(run.confidence_score) == 0.0
+    assert fields["band"] == LinkBand.ADJUDICATE.value
+    assert fields["score"] == "0.0000"
     assert fields["alias"] == "legal_name/sec-edgar"
     assert "entity" not in fields
 
@@ -1313,7 +1340,8 @@ def test_linking_a_batch_keeps_document_order_and_one_run_per_mention() -> None:
 
     assert [result.surface for result in results] == ["Acme", "Globex"]
     assert len(session.all_of(EntityResolutionRun)) == 2
-    assert results[0].as_dict()["band"] == LinkBand.NIL.value  # JSON-serializable for stage 3
+    # A bare alias match now routes to adjudication rather than being dropped.
+    assert results[0].as_dict()["band"] == LinkBand.ADJUDICATE.value  # JSON-serializable
 
 
 # --- Redirect depth ------------------------------------------------------------
@@ -1372,7 +1400,7 @@ def test_the_wikidata_discount_of_an_awkward_score_is_rounded_deterministically(
 
     assert candidate.signal_score == 0.35  # 0.20 mention context + 0.15 URL
     assert candidate.score == 0.245
-    assert candidate.band is LinkBand.NIL
+    assert candidate.band is LinkBand.ACCEPT
 
 
 def test_a_perfect_signal_set_is_clamped_to_one() -> None:
@@ -1503,9 +1531,9 @@ def test_a_delimiter_in_an_alias_source_cannot_corrupt_the_persisted_fields() ->
     result = link_mention(session, _mention("Acme"), _context(), persist_run=True)
     fields = parse_link_explanation(session.all_of(EntityResolutionRun)[0].explanation)
 
-    assert fields["band"] == LinkBand.NIL.value
+    assert fields["band"] == LinkBand.ACCEPT.value
     assert fields["score"] == "0.1000"
-    assert fields["reason"] == REASON_BELOW_ADJUDICATE == result.reason
+    assert fields["reason"] == REASON_ACCEPTED == result.reason
     assert fields["alias"] == "legal_name/we ird source"  # sanitized, and still one field
 
 
@@ -1529,8 +1557,9 @@ def test_the_explanation_never_ends_in_a_half_written_field() -> None:
     ("matched", "score", "band"),
     [
         (True, 1.0, LinkBand.ACCEPT),
-        (False, None, LinkBand.NIL),  # no candidate scored at all
-        (False, 0.4999, LinkBand.NIL),
+        (False, None, LinkBand.NIL),  # no candidate scored at all -- the only NIL left
+        (False, 0.0, LinkBand.ADJUDICATE),  # 0.00 is the inclusive adjudicate floor
+        (False, 0.0699, LinkBand.ADJUDICATE),
         (False, ADJUDICATE_THRESHOLD, LinkBand.ADJUDICATE),
         # An unmatched run at accept strength is one a gate held back, not an accept.
         (False, ACCEPT_THRESHOLD, LinkBand.ADJUDICATE),

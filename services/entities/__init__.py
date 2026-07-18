@@ -47,6 +47,7 @@ from services.entities.event_links import (
 from services.entities.news_linking import (
     ACCEPT_THRESHOLD,
     ADJUDICATE_THRESHOLD,
+    ENTITY_LINKING_POLICY_VERSION,
     LINKABLE_ALIAS_TYPES,
     NEWS_MENTION_TARGET_TYPE,
     SIGNAL_WEIGHTS,
@@ -104,6 +105,7 @@ __all__ = [
     "ADJUDICATION_TIER",
     "AUTO_ACCEPTED",
     "DIRECT_MENTION_ROLES",
+    "ENTITY_LINKING_POLICY_VERSION",
     "LIKELY_MATCH",
     "LINKABLE_ALIAS_TYPES",
     "MAX_PARENT_DEPTH",
