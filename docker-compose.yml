@@ -45,7 +45,9 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/1
       CELERY_RESULT_BACKEND: redis://redis:6379/2
     ports:
-      - "8000:8000"
+      # Local stack endpoints are loopback-only by default. A reverse proxy or explicit
+      # production Compose override owns any nonlocal exposure.
+      - "127.0.0.1:${API_HOST_PORT:-8000}:8000"
     depends_on:
       postgres:
         condition: service_healthy

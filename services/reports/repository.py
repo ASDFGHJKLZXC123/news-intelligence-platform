@@ -23,7 +23,7 @@ from __future__ import annotations
 import datetime
 import uuid
 
-from sqlalchemy import Text, cast, func, or_, select
+from sqlalchemy import Text, cast, func, literal, or_, select
 from sqlalchemy.orm import Session
 
 from db.models.core import (
@@ -82,8 +82,14 @@ SECTION_SCAN_LIMIT = 50
 class SQLAlchemyBriefInputRepository:
     """Loads brief inputs from the operational schema. Read-only: it never writes or flushes."""
 
-    def __init__(self, session: Session) -> None:
+    def __init__(
+        self,
+        session: Session,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> None:
         self._session = session
+        self._prediction_backed_outputs_enabled = prediction_backed_outputs_enabled
 
     @property
     def event_scan_limit(self) -> int:
@@ -121,24 +127,32 @@ class SQLAlchemyBriefInputRepository:
             .correlate(Event)
             .scalar_subquery()
         )
-        warning_risk = (
-            select(func.max(RiskWarning.risk_score))
-            .where(RiskWarning.event_id == Event.id, RiskWarning.created_at <= window.end)
-            .correlate(Event)
-            .scalar_subquery()
-        )
-        company_risk = (
-            select(func.max(EventCompany.risk_score))
-            .where(EventCompany.event_id == Event.id, EventCompany.created_at <= window.end)
-            .correlate(Event)
-            .scalar_subquery()
-        )
-        industry_risk = (
-            select(func.max(EventIndustry.risk_score))
-            .where(EventIndustry.event_id == Event.id, EventIndustry.created_at <= window.end)
-            .correlate(Event)
-            .scalar_subquery()
-        )
+        if self._prediction_backed_outputs_enabled:
+            warning_risk = (
+                select(func.max(RiskWarning.risk_score))
+                .where(RiskWarning.event_id == Event.id, RiskWarning.created_at <= window.end)
+                .correlate(Event)
+                .scalar_subquery()
+            )
+            company_risk = (
+                select(func.max(EventCompany.risk_score))
+                .where(EventCompany.event_id == Event.id, EventCompany.created_at <= window.end)
+                .correlate(Event)
+                .scalar_subquery()
+            )
+            industry_risk = (
+                select(func.max(EventIndustry.risk_score))
+                .where(EventIndustry.event_id == Event.id, EventIndustry.created_at <= window.end)
+                .correlate(Event)
+                .scalar_subquery()
+            )
+        else:
+            # Direct event observations remain descriptive inputs. Warning and linked
+            # company/industry scores are predictive/composite inputs and become SQL NULL
+            # literals, so the closed-gate query does not reference those scored columns.
+            warning_risk = literal(None)
+            company_risk = literal(None)
+            industry_risk = literal(None)
 
         stmt = (
             select(
@@ -187,6 +201,9 @@ class SQLAlchemyBriefInputRepository:
         alert to Low: a `severity`-only filter would drop every all-clear the brief exists to
         report. `updated_at` is the change time -- every lifecycle write stamps it.
         """
+        if not self._prediction_backed_outputs_enabled:
+            return ()
+
         severities = tuple(sorted(BRIEF_SEVERITIES))
         stmt = (
             select(
@@ -272,6 +289,13 @@ class SQLAlchemyBriefInputRepository:
         `services.reports.selection.pick_published_version` makes it in the open rather than
         having it silently made by a ``WHERE`` clause.
         """
+        if not self._prediction_backed_outputs_enabled:
+            # Legacy briefs have no durable marker proving every section was generated with
+            # Gate G closed. Excluding them is the only fail-closed way to prevent a prior
+            # executive summary from carrying probabilities or composite-alert language into
+            # today's descriptive-only prompt.
+            return ()
+
         stmt = (
             select(Report.id, Report.brief_date, Report.version, Report.status)
             .where(
@@ -297,6 +321,9 @@ class SQLAlchemyBriefInputRepository:
         Published reports are immutable (report-generation spec), and the surest way to keep
         today's brief from editing yesterday's is to never hand it yesterday's ORM rows.
         """
+        if not self._prediction_backed_outputs_enabled:
+            return ()
+
         stmt = (
             select(
                 ReportSection.section_order,

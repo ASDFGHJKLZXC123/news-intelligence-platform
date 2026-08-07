@@ -16,7 +16,7 @@ from types import SimpleNamespace
 import pytest
 from sqlalchemy.dialects import postgresql
 
-from db.models.core import Report, ReportSection
+from db.models.core import REPORT_CONTENT_POLICY_PREDICTION_BACKED, Report, ReportSection
 from services.reports.composition import CompositionAttempt, DraftBlock, compose_brief
 from services.reports.grounding import (
     GateOutcome,
@@ -649,7 +649,9 @@ def test_persist_daily_brief_fails_a_blocked_gate_and_never_publishes() -> None:
         _disclaimer(2),
         outcome=GateOutcome.BLOCKED,
     )
-    snap = persist_daily_brief(session, blocked)
+    snap = persist_daily_brief(
+        session, blocked, content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED
+    )
     assert snap.status == "failed"
     assert report.status == "failed"
     _assert_never_committed(session)

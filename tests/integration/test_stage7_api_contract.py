@@ -13,8 +13,8 @@ prove lives here, driven through the *real* ``IntelligenceRepository`` over a th
 * ``GET /api/v1/dashboard`` -- the five added blocks read real persisted facts and the
   latest/deduplicated rollups (DISTINCT ON per company/industry), never a fixture backfill.
 * ``GET /api/v1/risk-radar`` / ``/{risk_type}`` / ``/{risk_type}/history`` -- the paginated list,
-  the assembled RiskDetail (spine observation + matched CrisisPrediction + grouped related targets),
-  and the chronological observation series with a real filtered total.
+  the descriptive RiskDetail while Gate G is closed, the explicitly enabled matched-prediction
+  enrichment, grouped related targets, and the chronological series with a real filtered total.
 * ``GET /api/v1/evidence/{claim_id}`` -- the ``claim_evidence -> evidence_items`` join with the
   article cast/left-join still yields a safe summary-first snippet and never article body/raw payload.
 * the accepted latest-per-industry dedup (shape gap 6) still selects one row per industry.
@@ -370,11 +370,7 @@ def _seed(session: Session) -> Seeded:
                 confidence_score=0.82,
                 as_of=_dt(7, 14),
                 model_version="risk-v1",
-                driver_refs=[
-                    {"name": "Deposit outflows"},
-                    {"signal": "credit_spread_zscore"},
-                    {"score": 1.0},
-                ],
+                driver_refs=[{"name": "Observed macro stress"}],
             ),
         ]
     )
@@ -643,6 +639,9 @@ def client(engine: Engine, seeded: Seeded, monkeypatch: pytest.MonkeyPatch) -> I
 
     monkeypatch.setattr(intelligence, "_utc_now", lambda: NOW)
     app.dependency_overrides[get_session] = _session_override
+    # Stage 7's legacy contract scenarios intentionally exercise the diagnostic,
+    # prediction-backed surface. Gate-G-closed scenarios override this fixture explicitly.
+    app.dependency_overrides[intelligence.get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:
@@ -956,10 +955,41 @@ _RISK_DETAIL_KEYS = {
 }
 
 
-def test_risk_detail_assembles_riskdetail_from_spine_and_matched_prediction(
+def test_risk_detail_gate_closed_keeps_descriptive_observation(
     client: TestClient, seeded: Seeded
 ) -> None:
-    body = client.get("/api/v1/risk-radar/sovereign").json()
+    app.dependency_overrides[intelligence.get_crisis_prediction_reads_enabled] = lambda: False
+    try:
+        body = client.get("/api/v1/risk-radar/sovereign").json()
+    finally:
+        app.dependency_overrides[intelligence.get_crisis_prediction_reads_enabled] = lambda: True
+    assert set(body) == {"risk"}
+    risk = body["risk"]
+    assert _RISK_DETAIL_KEYS <= set(risk)
+    # Spine = the latest real sovereign observation (07-14 country/US, 41.5).
+    assert risk["risk_type"] == "sovereign"
+    assert risk["score"] == 41.5
+    assert risk["severity"] == "medium"
+    assert risk["confidence_score"] == 0.82
+    assert risk["as_of"] == "2026-07-14T00:00:00Z"
+    assert risk["model_version"] == "risk-v1"
+    assert (risk["target_type"], risk["target_id"]) == ("country", "US")
+    assert risk["main_drivers"] == ["Observed macro stress"]
+    assert risk["model_rating"] is None
+    assert risk["probability_by_horizon"] == []
+    assert risk["historical_comparisons"] == []
+    assert risk["invalidation_signals"] == []
+
+
+def test_risk_detail_gate_open_assembles_matched_prediction(
+    client: TestClient, seeded: Seeded
+) -> None:
+    app.dependency_overrides[intelligence.get_crisis_prediction_reads_enabled] = lambda: True
+    try:
+        body = client.get("/api/v1/risk-radar/sovereign").json()
+    finally:
+        app.dependency_overrides[intelligence.get_crisis_prediction_reads_enabled] = lambda: True
+
     assert set(body) == {"risk"}
     risk = body["risk"]
     assert _RISK_DETAIL_KEYS <= set(risk)

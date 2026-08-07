@@ -13,10 +13,21 @@ from __future__ import annotations
 import dataclasses
 import datetime
 import uuid
+from typing import Any
 
 import pytest
 
+from db.models.core import (
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+)
 from services.llm.orchestrator import LLMOrchestratorError
+from services.reports.contracts import (
+    LinkedRisk,
+    PriorBriefContext,
+    PriorBriefSection,
+    RiskProvenance,
+)
 from services.reports.generation import (
     DEFAULT_CHANGE_REASON,
     DailyBriefGenerationError,
@@ -38,6 +49,7 @@ from services.reports.prompts import COMPOSITION_SCHEMA
 from services.reports.window import window_for_date
 from tests.unit._report_composition_fixtures import (
     abstain,
+    alert_change,
     brief_context,
     brief_inputs,
     claim,
@@ -140,15 +152,29 @@ class ProgrammableSessionFactory:
 class RecordingOrchestrator:
     """Wraps the real gate orchestrator and logs a marker per compose/ground call."""
 
-    def __init__(self, inner: GateOrchestrator, recorder: list[str]) -> None:
+    def __init__(
+        self,
+        inner: GateOrchestrator,
+        recorder: list[str],
+        *,
+        close_error: BaseException | None = None,
+    ) -> None:
         self.inner = inner
         self.recorder = recorder
+        self.close_count = 0
+        self.close_error = close_error
 
     def run(self, request):  # noqa: ANN001, ANN201 - narrow test seam
         self.recorder.append(
             "compose" if request.requested_schema == COMPOSITION_SCHEMA else "ground"
         )
         return self.inner.run(request)
+
+    def close(self) -> None:
+        self.close_count += 1
+        self.recorder.append("orchestrator:close")
+        if self.close_error is not None:
+            raise self.close_error
 
 
 class RecordingOrchestratorFactory:
@@ -164,13 +190,21 @@ class RecordingOrchestratorFactory:
 
 
 class _Row:
-    def __init__(self, row_id, brief_date, version, change_reason) -> None:  # noqa: ANN001
+    def __init__(
+        self,
+        row_id,
+        brief_date,
+        version,
+        change_reason,
+        content_policy,
+    ) -> None:  # noqa: ANN001
         self.id = row_id
         self.brief_date = brief_date
         self.version = version
         self.change_reason = change_reason
         self.status = ReportStatus.GENERATING.value
         self.generated_by_run_id: uuid.UUID | None = None
+        self.content_policy = content_policy
 
 
 class FakeLifecycleRepo:
@@ -185,6 +219,7 @@ class FakeLifecycleRepo:
         self.rows: dict[uuid.UUID, _Row] = {}
         self.calls: list[tuple] = []
         self.fail_transition_to_failed = False
+        self.persisted_rows: tuple[Any, ...] = ()
         #: The per-run event recorder, so lifecycle ops interleave with compose/ground/commit.
         self.recorder: list[str] | None = None
 
@@ -210,10 +245,17 @@ class FakeLifecycleRepo:
             generated_by_run_id=row.generated_by_run_id,
             created_at=None,
             updated_at=None,
+            content_policy=row.content_policy,
         )
 
     def create_generating_daily_brief(
-        self, *, brief_date, title, change_reason=None, generated_by_run_id=None
+        self,
+        *,
+        brief_date,
+        title,
+        change_reason=None,
+        generated_by_run_id=None,
+        content_policy=None,
     ) -> ReportSnapshot:  # noqa: ANN001
         existing = [r for r in self.rows.values() if r.brief_date == brief_date]
         version = max((r.version for r in existing), default=0) + 1
@@ -223,7 +265,7 @@ class FakeLifecycleRepo:
             if change_reason is None or not change_reason.strip():
                 raise ChangeReasonRequiredError("rerun requires a nonblank change_reason")
             reason = change_reason
-        row = _Row(uuid.uuid4(), brief_date, version, reason)
+        row = _Row(uuid.uuid4(), brief_date, version, reason, content_policy)
         row.generated_by_run_id = generated_by_run_id
         self.rows[row.id] = row
         self.calls.append(("create", version))
@@ -245,6 +287,7 @@ class FakeLifecycleRepo:
         if row.status != ReportStatus.GROUNDING_CHECK.value:
             raise IllegalTransitionError("sections only in grounding_check")
         rows = section_rows_from_gate(gate)
+        self.persisted_rows = rows
         self.calls.append(("persist_sections", len(rows)))
         self._mark("persist_sections")
         return rows
@@ -284,12 +327,28 @@ class FakeLifecycleRepo:
 class _Harness:
     """The wired-up fakes and the coordinator result, for concise assertions."""
 
-    def __init__(self, *, inputs, context, orch=None, lifecycle=None, change_reason=None,  # noqa: ANN001
-                 inputs_builder=None, context_builder=None, session_factory_builder=None) -> None:
+    def __init__(
+        self,
+        *,
+        inputs,
+        context,
+        orch=None,
+        lifecycle=None,
+        change_reason=None,
+        inputs_builder=None,
+        context_builder=None,
+        session_factory_builder=None,
+        prediction_backed_outputs_enabled=False,
+        orchestrator_close_error=None,
+    ) -> None:  # noqa: ANN001
         self.recorder: list[str] = []
         self.windows_seen: list[object] = []
         self.gate_orch = orch or GateOrchestrator()
-        self.rec_orch = RecordingOrchestrator(self.gate_orch, self.recorder)
+        self.rec_orch = RecordingOrchestrator(
+            self.gate_orch,
+            self.recorder,
+            close_error=orchestrator_close_error,
+        )
         self.orch_factory = RecordingOrchestratorFactory(self.rec_orch)
         # ``session_factory_builder`` (recorder -> factory) lets a test inject a session factory that
         # models acquisition/rollback/close faults; the default is the plain recording factory.
@@ -316,6 +375,7 @@ class _Harness:
                 inputs_builder=inputs_builder or _inputs,
                 context_builder=context_builder or (lambda session, i: context),
                 lifecycle_repository_factory=self.lifecycle,
+                prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
             )
         except DailyBriefGenerationError as exc:
             self.error = exc
@@ -335,6 +395,73 @@ class _Harness:
 def _busy_brief(**kwargs):
     inputs, context, _material = single_event_brief(claims=(claim(),), **kwargs)
     return inputs, context
+
+
+def test_default_generation_sanitizes_injected_prediction_inputs_and_stamps_policy() -> None:
+    inputs, context, _material = single_event_brief(
+        claims=(claim(),),
+        alert_changes=(alert_change(),),
+        forecasts_present=True,
+    )
+    prior = PriorBriefContext(
+        report_id=uuid.uuid4(),
+        brief_date=BRIEF_DATE - datetime.timedelta(days=1),
+        version=1,
+        sections=(
+            PriorBriefSection(
+                section_order=1,
+                title="Executive Summary",
+                body="LEGACY_PREDICTION_PROBABILITY_91_PERCENT",
+                claim_ids=(),
+            ),
+        ),
+    )
+    predictive_event = dataclasses.replace(
+        inputs.top_events[0],
+        max_linked_risk=LinkedRisk(
+            score=99.0,
+            provenance=RiskProvenance.EVENT_INDUSTRY,
+        ),
+        ranking_score=99.0,
+    )
+    inputs = dataclasses.replace(
+        inputs,
+        top_events=(predictive_event,),
+        prior_brief=prior,
+    )
+
+    h = _Harness(inputs=inputs, context=context)
+
+    assert h.result is not None and h.result.published is True
+    assert h.lifecycle.only_row().content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+    assert {row.title for row in h.lifecycle.persisted_rows}.isdisjoint({"Forecasts", "Alerts"})
+    persisted_text = "\n".join(row.body for row in h.lifecycle.persisted_rows)
+    assert "LEGACY_PREDICTION_PROBABILITY_91_PERCENT" not in persisted_text
+    prompts = "\n".join(request.prompt for request in h.gate_orch.composition_requests)
+    assert "Bank-run risk" not in prompts
+    assert "LEGACY_PREDICTION_PROBABILITY_91_PERCENT" not in prompts
+    assert "base_case" not in prompts
+    assert "event_industry" not in prompts
+    assert '"max_linked_risk_score": 99.0' not in prompts
+    assert '"risk_provenance": "none"' in prompts
+
+
+def test_explicit_open_generation_preserves_diagnostic_outputs_and_stamps_policy() -> None:
+    inputs, context, _material = single_event_brief(
+        claims=(claim(),),
+        alert_changes=(alert_change(),),
+        forecasts_present=True,
+    )
+
+    h = _Harness(
+        inputs=inputs,
+        context=context,
+        prediction_backed_outputs_enabled=True,
+    )
+
+    assert h.result is not None and h.result.published is True
+    assert h.lifecycle.only_row().content_policy == REPORT_CONTENT_POLICY_PREDICTION_BACKED
+    assert {"Forecasts", "Alerts"} <= {row.title for row in h.lifecycle.persisted_rows}
 
 
 # --------------------------------------------------------------------------------------
@@ -427,6 +554,8 @@ def test_every_opened_session_is_closed_on_the_success_path() -> None:
     inputs, context = _busy_brief()
     h = _Harness(inputs=inputs, context=context)
     assert len(h.session_factory.sessions) == 2  # start + main
+    assert h.rec_orch.close_count == 1
+    assert h.first("ground") < h.first("orchestrator:close") < h.first("s1:commit")
     h.assert_all_sessions_closed()
 
 
@@ -449,6 +578,7 @@ def test_quiet_day_publishes_with_no_llm_call_and_no_run_id() -> None:
     assert "compose" not in h.recorder and "ground" not in h.recorder
     assert "attach" not in h.lifecycle.op_names()
     assert h.result.generated_by_run_id is None
+    assert h.rec_orch.close_count == 1
 
 
 # --------------------------------------------------------------------------------------
@@ -587,7 +717,32 @@ def test_an_unexpected_fault_rolls_back_and_marks_the_same_version_failed() -> N
     assert "persist_sections" not in h.lifecycle.op_names()
     # start + main + a clean failure session, all closed.
     assert len(h.session_factory.sessions) == 3
+    assert h.rec_orch.close_count == 1
     h.assert_all_sessions_closed()
+
+
+def test_model_failure_and_orchestrator_close_failure_are_both_preserved() -> None:
+    inputs, _context = _busy_brief()
+    model_error = RuntimeError("context load exploded")
+    close_error = RuntimeError("provider client close exploded")
+
+    def boom(_session, _inputs):  # noqa: ANN001, ANN202
+        raise model_error
+
+    h = _Harness(
+        inputs=inputs,
+        context=None,
+        context_builder=boom,
+        orchestrator_close_error=close_error,
+    )
+
+    assert isinstance(h.error, DailyBriefGenerationError)
+    assert isinstance(h.error.cause, ExceptionGroup)
+    assert list(h.error.cause.exceptions) == [model_error, close_error]
+    assert h.rec_orch.close_count == 1
+    main = h.session_factory.sessions[1]
+    assert (main.commit_count, main.rollback_count) == (0, 1)
+    assert h.lifecycle.only_row().status == ReportStatus.FAILED.value
 
 
 def test_failure_cleanup_marks_failed_in_a_fresh_transaction_that_commits() -> None:
@@ -722,7 +877,9 @@ def test_main_session_acquisition_failure_marks_the_same_version_failed() -> Non
     h.assert_all_sessions_closed()
 
 
-def test_failure_session_acquisition_failure_surfaces_original_cause_and_acquisition_error() -> None:
+def test_failure_session_acquisition_failure_surfaces_original_cause_and_acquisition_error() -> (
+    None
+):
     # The 3rd session_factory() call (the failure cleanup session) raises. The original pipeline
     # cause is preserved, the acquisition exception becomes cleanup_error, and marked stays False.
     inputs, _context = _busy_brief()
@@ -775,7 +932,9 @@ def test_main_rollback_failure_still_marks_failed_and_surfaces_the_rollback_erro
     assert h.error.cleanup_error is rollback_boom
     assert h.lifecycle.only_row().status == ReportStatus.FAILED.value
     main = h.session_factory.sessions[1]
-    assert main.rollback_count == 1 and main.close_count >= 1  # close attempted after rollback raised
+    assert (
+        main.rollback_count == 1 and main.close_count >= 1
+    )  # close attempted after rollback raised
     h.assert_all_sessions_closed()
 
 
@@ -864,7 +1023,9 @@ def test_failure_transaction_rollback_failure_preserves_every_cause() -> None:
         "failure rollback failed",  # then the failure-session rollback fault
     ]
     failure = h.session_factory.sessions[2]
-    assert failure.rollback_count == 1 and failure.close_count >= 1  # close attempted despite rollback
+    assert (
+        failure.rollback_count == 1 and failure.close_count >= 1
+    )  # close attempted despite rollback
     h.assert_all_sessions_closed()
 
 
@@ -893,7 +1054,9 @@ def test_failure_transaction_close_failure_is_surfaced_after_a_committed_marker(
     h.assert_all_sessions_closed()
 
 
-def test_close_after_a_successful_main_commit_routes_through_the_typed_path_without_rewriting() -> None:
+def test_close_after_a_successful_main_commit_routes_through_the_typed_path_without_rewriting() -> (
+    None
+):
     # A close failure after the report is durably PUBLISHED is a post-durable fault: it raises typed,
     # the reload finds the row terminal and never rewrites it, and marked reflects published != failed.
     inputs, context = _busy_brief()
@@ -920,7 +1083,9 @@ def test_close_after_a_successful_main_commit_routes_through_the_typed_path_with
     h.assert_all_sessions_closed()
 
 
-def test_close_after_a_blocked_gate_commit_finds_the_row_already_failed_and_never_rewrites_it() -> None:
+def test_close_after_a_blocked_gate_commit_finds_the_row_already_failed_and_never_rewrites_it() -> (
+    None
+):
     # A blocked gate durably FAILS the report inside the single main commit (an expected outcome, no
     # raise). A close failure right after is a post-durable fault routed through the typed path: the
     # reload finds the row already terminal `failed`, so it is never rewritten and marked stays True.
@@ -960,7 +1125,9 @@ def test_close_after_a_blocked_gate_commit_finds_the_row_already_failed_and_neve
     main = h.session_factory.sessions[1]
     assert main.commit_count == 1 and main.close_count >= 1  # one main commit; close attempted
     failure = h.session_factory.sessions[2]
-    assert failure.commit_count == 0 and failure.close_count >= 1  # reload only, nothing re-committed
+    assert (
+        failure.commit_count == 0 and failure.close_count >= 1
+    )  # reload only, nothing re-committed
     assert h.session_factory.call_count == 3  # durable start + main + failure cleanup
     h.assert_all_sessions_closed()
 
@@ -990,5 +1157,7 @@ def test_close_after_the_durable_start_commit_marks_the_same_row_failed() -> Non
     assert "compose" not in h.recorder  # _run_main was never entered
     assert h.session_factory.call_count == 2  # durable start (call 0) + failure cleanup (call 1)
     start = h.session_factory.sessions[0]
-    assert start.commit_count == 1 and start.close_count >= 1  # committed durable, then close raised
+    assert (
+        start.commit_count == 1 and start.close_count >= 1
+    )  # committed durable, then close raised
     h.assert_all_sessions_closed()

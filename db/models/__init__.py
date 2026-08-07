@@ -13,6 +13,8 @@ from db.models.core import (
     EMBEDDING_DIM,
     EMBEDDING_MODEL,
     EMBEDDING_MODEL_VERSION,
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
     Alert,
     AlertConditionState,
     AlertRule,
@@ -51,6 +53,7 @@ from db.models.core import (
     GeoIncident,
     GeoIncidentImpact,
     HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
     HumanitarianReport,
     HumanitarianReportEntity,
     IndustryRiskRollup,
@@ -83,6 +86,7 @@ from db.models.core import (
     WatchlistItem,
 )
 from db.models.enums import Horizon, RiskLevel, RiskType, SourceType, risk_level_for_score
+from db.models.pipeline import PipelineRunDetail
 from db.models.risk import (
     CountryDailyRiskSignal,
     CrisisPrediction,
@@ -212,6 +216,9 @@ __all__ = [
     "INGESTION_OBSERVABILITY_TABLES",
     "PROVIDER_DATA_TABLES",
     "PROVIDER_EXPANSION_TABLES",
+    "PipelineRunDetail",
+    "REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY",
+    "REPORT_CONTENT_POLICY_PREDICTION_BACKED",
     "RISK_OUTPUT_TABLES",
     "STAGE1_INTELLIGENCE_TABLES",
     "STAGE2_TABLES",
@@ -252,6 +259,7 @@ __all__ = [
     "GeoIncident",
     "GeoIncidentImpact",
     "HistoricalEpisode",
+    "HistoricalEpisodeEmbedding",
     "Horizon",
     "HumanitarianReport",
     "HumanitarianReportEntity",

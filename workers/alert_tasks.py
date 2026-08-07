@@ -86,6 +86,7 @@ from db.base import SessionLocal
 from db.models import ACTIVE_ALERT_STATES, Alert
 from packages.config import metrics
 from packages.config.logging import get_logger, set_job_id
+from packages.config.settings import get_settings
 from packages.jobs import Stage1Job
 from services.alerts import (
     AlertLifecycleService,
@@ -276,6 +277,19 @@ def run_alert_evaluation(
     dedupe race -- rolls the whole evaluation back and re-raises for Stage1Task to retry, having
     delivered nothing at all.
     """
+    if not get_settings().crisis_prediction_reads_enabled:
+        # Gate G is also an output gate: evaluating these observations can persist a composite
+        # alert and notify it. Return before constructing either the DB session or notifier.
+        return {
+            "status": "skipped",
+            "state": "skipped",
+            "reason": "crisis_prediction_reads_disabled",
+            "evaluated": 0,
+            "outcomes": [],
+            "delivered": 0,
+            "failed": 0,
+        }
+
     run_at = _parse_now(now)
     job = Stage1Job.create(
         RUN_ALERT_EVALUATION, {"observation_count": len(observations)}
@@ -365,6 +379,19 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
     commit costs its own action and nothing else; that action keeps its NULL timestamp, and the
     next sweep finds it owed again.
     """
+    if not get_settings().crisis_prediction_reads_enabled:
+        # Existing persisted alerts may have been produced by the prediction-backed path.
+        # Closed Gate G must not read or deliver them, including scheduled retries.
+        return {
+            "status": "skipped",
+            "state": "skipped",
+            "reason": "crisis_prediction_reads_disabled",
+            "pending_notifications": 0,
+            "pending_all_clears": 0,
+            "delivered": 0,
+            "failed": 0,
+        }
+
     run_at = _parse_now(now)
     job = Stage1Job.create(RUN_ALERT_NOTIFICATION_SWEEP, {}).mark_running()
     set_job_id(job.job_id)

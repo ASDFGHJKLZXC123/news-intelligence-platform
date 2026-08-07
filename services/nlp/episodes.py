@@ -1,35 +1,37 @@
 """Curated historical-episode embedding lifecycle (ADR 0004 + historical-episode spec).
 
-``historical_episodes.onset_embedding`` is NOT NULL, and that is a deliberate constraint, not an
-inconvenience: an episode without a real onset vector would still be *retrievable* if a placeholder
-or zero vector were inserted to satisfy the column, and it would match arbitrary events at
-meaningless similarities. So there is no code path here that writes a row without embedding it
-first. :func:`embed_episode_onset` is the seam a curation script calls to obtain the vector, and
-:func:`upsert_historical_episode` embeds on its own if the caller has not.
+The legacy ``historical_episodes.onset_embedding`` remains NOT NULL during the expand phase, so a
+new episode is written there once for compatibility. Its durable embedding history lives in
+``historical_episode_embeddings``: one append-only row per curated episode version and exact model
+snapshot. Re-embedding never overwrites or relabels an older vector.
 
 Only onset text is ever embedded (see ``services.nlp.embedding_text``). Outcome fields are stored
 on the row and joined in *after* matching, for base rates -- they never enter the vector.
 
-Re-embedding is driven by change, not by a clock. Curation is the only writer of onset text, so
-:func:`upsert_historical_episode` re-embeds exactly when the onset text, the curated ``version``,
-or the model space moved, and leaves the stored vector alone otherwise.
+Changing onset text requires a curated version bump. This makes the sidecar key an honest
+description of its input; silently rewriting onset text under the same version is refused.
 """
 
 from __future__ import annotations
 
 import datetime
+import hashlib
 import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
-from sqlalchemy import or_, select
+from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
-from db.models import EMBEDDING_DIM, HistoricalEpisode
+from db.models import EMBEDDING_DIM, HistoricalEpisode, HistoricalEpisodeEmbedding
 from packages.providers.base import EmbeddingProvider, ensure_finite_vector
 from packages.providers.openai_embeddings import MAX_EMBEDDING_BATCH_SIZE
 from services.nlp.embedding_text import build_episode_onset_text
-from services.nlp.embeddings import embed_texts, resolve_embedding_identity
+from services.nlp.embeddings import (
+    embed_texts,
+    resolve_embedding_identity,
+    snapshot_manifest_sha256_for_identity,
+)
 
 #: Everything curation owns. `onset_embedding`/`model`/`model_version` are derived from the onset
 #: fields, never supplied as curated data, so they are deliberately absent.
@@ -57,6 +59,10 @@ CURATED_FIELDS = (
     "review_due_at",
 )
 
+#: Canonical input builder contract recorded beside every newly generated episode vector. This
+#: exact identifier is also recorded in embedding snapshot manifests.
+EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION = "historical-episode-onset-text.v1"
+
 
 @dataclass(frozen=True)
 class EpisodeEmbedding:
@@ -65,6 +71,7 @@ class EpisodeEmbedding:
     vector: tuple[float, ...]
     model: str
     model_version: str
+    snapshot_manifest_sha256: str | None = None
 
 
 @dataclass(frozen=True)
@@ -109,14 +116,21 @@ def validate_episode_embedding(
         raise ValueError(msg)
     if len(embedding.vector) != EMBEDDING_DIM:
         msg = (
-            f"episode embedding dimension {len(embedding.vector)} != "
-            f"EMBEDDING_DIM {EMBEDDING_DIM}"
+            f"episode embedding dimension {len(embedding.vector)} != EMBEDDING_DIM {EMBEDDING_DIM}"
         )
         raise ValueError(msg)
     # A caller may hand us a vector it built itself (the seeder does). A non-finite component is
     # as unusable as a wrong width, and far quieter: the episode would seed, index, and then never
     # match anything.
     ensure_finite_vector(embedding.vector)
+    expected_manifest = snapshot_manifest_sha256_for_identity(
+        model=model,
+        model_version=model_version,
+    )
+    if embedding.snapshot_manifest_sha256 != expected_manifest:
+        raise ValueError(
+            "episode embedding snapshot manifest does not match the registered model space"
+        )
 
 
 def embed_episode_onset(
@@ -131,12 +145,16 @@ def embed_episode_onset(
     model, model_version = resolve_embedding_identity(
         provider, embedding_model, embedding_model_version
     )
-    text = build_episode_onset_text(
-        onset_summary=onset_summary, onset_indicators=onset_indicators
-    )
+    text = build_episode_onset_text(onset_summary=onset_summary, onset_indicators=onset_indicators)
     result = embed_texts(provider, [text], model=model, model_version=model_version)[0]
     return EpisodeEmbedding(
-        vector=tuple(result.vector), model=model, model_version=model_version
+        vector=tuple(result.vector),
+        model=model,
+        model_version=model_version,
+        snapshot_manifest_sha256=snapshot_manifest_sha256_for_identity(
+            model=model,
+            model_version=model_version,
+        ),
     )
 
 
@@ -149,18 +167,38 @@ def upsert_historical_episode(
     embedding_model: str | None = None,
     embedding_model_version: str | None = None,
 ) -> HistoricalEpisode:
-    """Create or update one curated episode, re-embedding its onset only when that changed."""
+    """Create or update one curated episode and ensure its exact sidecar vector exists."""
     model, model_version = resolve_embedding_identity(
         provider, embedding_model, embedding_model_version
+    )
+    snapshot_manifest_sha256 = snapshot_manifest_sha256_for_identity(
+        model=model,
+        model_version=model_version,
     )
     if embedding is not None:
         validate_episode_embedding(embedding, model=model, model_version=model_version)
 
     existing = _find_episode(session, record)
+    if existing is not None:
+        _validate_episode_revision(existing, record)
+
+    stored_embedding = (
+        None
+        if existing is None
+        else session.get(
+            HistoricalEpisodeEmbedding,
+            (existing.id, model, model_version, record.version),
+        )
+    )
     vector: tuple[float, ...] | None = None
-    if existing is None or _onset_is_stale(
-        existing, record=record, model=model, model_version=model_version
-    ):
+    needs_embedding = existing is None or episode_onset_is_stale(
+        existing,
+        record,
+        model=model,
+        model_version=model_version,
+        embedding=stored_embedding,
+    )
+    if needs_embedding:
         if embedding is not None:
             vector = embedding.vector
         elif provider is not None:
@@ -183,13 +221,32 @@ def upsert_historical_episode(
         episode = HistoricalEpisode()
         if record.episode_id is not None:
             episode.id = record.episode_id
-        session.add(episode)
-    for name in CURATED_FIELDS:
-        setattr(episode, name, getattr(record, name))
-    if vector is not None:
+        for name in CURATED_FIELDS:
+            setattr(episode, name, getattr(record, name))
+        # Compatibility write for the old NOT NULL columns. They are deliberately never changed
+        # on an existing episode; the sidecar below is the source of truth for all new reads.
+        assert vector is not None
         episode.onset_embedding = list(vector)
         episode.model = model
         episode.model_version = model_version
+        session.add(episode)
+        session.flush()
+    else:
+        for name in CURATED_FIELDS:
+            setattr(episode, name, getattr(record, name))
+
+    if needs_embedding:
+        assert vector is not None
+        session.add(
+            _embedding_row(
+                episode,
+                record,
+                vector=vector,
+                model=model,
+                model_version=model_version,
+                snapshot_manifest_sha256=snapshot_manifest_sha256,
+            )
+        )
     session.flush()
     return episode
 
@@ -203,22 +260,26 @@ def refresh_episode_embeddings(
     batch_size: int = MAX_EMBEDDING_BATCH_SIZE,
     limit: int | None = None,
 ) -> int:
-    """Re-embed curated episodes whose stored vector sits outside the configured model space.
-
-    This is the migration path ADR 0004's stored ``model``/``model_version`` exists to make
-    possible: switch the configured space, run this, and every episode is carried across.
-    """
+    """Append the configured sidecar vector for every current episode version missing it."""
     model, model_version = resolve_embedding_identity(
         provider, embedding_model, embedding_model_version
     )
+    snapshot_manifest_sha256 = snapshot_manifest_sha256_for_identity(
+        model=model,
+        model_version=model_version,
+    )
     stmt = (
         select(HistoricalEpisode)
-        .where(
-            or_(
-                HistoricalEpisode.model != model,
-                HistoricalEpisode.model_version != model_version,
-            )
+        .outerjoin(
+            HistoricalEpisodeEmbedding,
+            and_(
+                HistoricalEpisodeEmbedding.historical_episode_id == HistoricalEpisode.id,
+                HistoricalEpisodeEmbedding.model == model,
+                HistoricalEpisodeEmbedding.model_version == model_version,
+                HistoricalEpisodeEmbedding.episode_version == HistoricalEpisode.version,
+            ),
         )
+        .where(HistoricalEpisodeEmbedding.historical_episode_id.is_(None))
         .order_by(HistoricalEpisode.onset_date)
     )
     if limit is not None:
@@ -237,24 +298,64 @@ def refresh_episode_embeddings(
         provider, texts, model=model, model_version=model_version, batch_size=batch_size
     )
     for episode, result in zip(episodes, results, strict=True):
-        episode.onset_embedding = list(result.vector)
-        episode.model = model
-        episode.model_version = model_version
+        session.add(
+            HistoricalEpisodeEmbedding(
+                historical_episode_id=episode.id,
+                model=model,
+                model_version=model_version,
+                episode_version=episode.version,
+                dimension=EMBEDDING_DIM,
+                onset_embedding=list(result.vector),
+                input_sha256=episode_embedding_input_sha256(episode),
+                input_contract_version=EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+                snapshot_manifest_sha256=snapshot_manifest_sha256,
+            )
+        )
     session.flush()
     return len(episodes)
 
 
 def episode_onset_is_stale(
-    existing: HistoricalEpisode, record: EpisodeRecord, *, model: str, model_version: str
+    existing: HistoricalEpisode,
+    record: EpisodeRecord,
+    *,
+    model: str,
+    model_version: str,
+    embedding: HistoricalEpisodeEmbedding | None = None,
 ) -> bool:
-    """Whether ``existing`` needs a new vector for ``record``: onset text, version or space moved.
+    """Whether the exact sidecar vector for ``record`` and the requested space is absent.
 
     The seam a batch curation seeder plans against. It is the same predicate
     :func:`upsert_historical_episode` applies row by row -- exposed, not reimplemented, so a
     planner that batches 100 onset texts into one embeddings request cannot drift out of agreement
     with the writer about which rows need embedding.
     """
-    return _onset_is_stale(existing, record=record, model=model, model_version=model_version)
+    _validate_episode_revision(existing, record)
+    if embedding is None:
+        return True
+    if (
+        embedding.historical_episode_id,
+        embedding.model,
+        embedding.model_version,
+        embedding.episode_version,
+    ) != (existing.id, model, model_version, record.version):
+        return True
+    expected_hash = episode_embedding_input_sha256(record)
+    if embedding.input_sha256 is not None and embedding.input_sha256 != expected_hash:
+        raise ValueError(
+            "stored historical-episode embedding input hash does not match its curated "
+            "episode version; refusing to overwrite an immutable sidecar row"
+        )
+    expected_manifest = snapshot_manifest_sha256_for_identity(
+        model=model,
+        model_version=model_version,
+    )
+    if embedding.snapshot_manifest_sha256 != expected_manifest:
+        raise ValueError(
+            "stored historical-episode embedding snapshot manifest does not match its "
+            "registered model space; refusing to trust or overwrite an immutable sidecar row"
+        )
+    return False
 
 
 def episode_fields_differ(existing: HistoricalEpisode, record: EpisodeRecord) -> bool:
@@ -263,9 +364,7 @@ def episode_fields_differ(existing: HistoricalEpisode, record: EpisodeRecord) ->
     Distinguishes a genuine update from an unchanged re-seed, so an idempotent run can report
     "unchanged" honestly instead of counting every row as written.
     """
-    return any(
-        getattr(existing, name) != getattr(record, name) for name in CURATED_FIELDS
-    )
+    return any(getattr(existing, name) != getattr(record, name) for name in CURATED_FIELDS)
 
 
 def _find_episode(session: Session, record: EpisodeRecord) -> HistoricalEpisode | None:
@@ -276,15 +375,44 @@ def _find_episode(session: Session, record: EpisodeRecord) -> HistoricalEpisode 
     return session.scalars(stmt).first()
 
 
-def _onset_is_stale(
-    existing: HistoricalEpisode, *, record: EpisodeRecord, model: str, model_version: str
-) -> bool:
-    """True when the stored vector no longer describes the curated onset in the pinned space."""
-    if (existing.model, existing.model_version) != (model, model_version):
-        return True
-    if existing.version != record.version:
-        return True
-    return _onset_text(existing) != _onset_text(record)
+def _validate_episode_revision(existing: HistoricalEpisode, record: EpisodeRecord) -> None:
+    """Keep the version in the embedding key honest about changes to its onset input."""
+    if record.version < existing.version:
+        raise ValueError(
+            f"episode version cannot move backward ({record.version} < {existing.version})"
+        )
+    if _onset_text(existing) != _onset_text(record) and record.version <= existing.version:
+        raise ValueError(
+            "episode onset text changed without an episode version bump; increment version "
+            "before generating a new embedding"
+        )
+
+
+def episode_embedding_input_sha256(source: HistoricalEpisode | EpisodeRecord) -> str:
+    """SHA-256 of the exact UTF-8 onset text sent to the embedding provider."""
+    return hashlib.sha256(_onset_text(source).encode("utf-8")).hexdigest()
+
+
+def _embedding_row(
+    episode: HistoricalEpisode,
+    record: EpisodeRecord,
+    *,
+    vector: tuple[float, ...],
+    model: str,
+    model_version: str,
+    snapshot_manifest_sha256: str | None,
+) -> HistoricalEpisodeEmbedding:
+    return HistoricalEpisodeEmbedding(
+        historical_episode_id=episode.id,
+        model=model,
+        model_version=model_version,
+        episode_version=record.version,
+        dimension=EMBEDDING_DIM,
+        onset_embedding=list(vector),
+        input_sha256=episode_embedding_input_sha256(record),
+        input_contract_version=EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+        snapshot_manifest_sha256=snapshot_manifest_sha256,
+    )
 
 
 def _onset_text(source: HistoricalEpisode | EpisodeRecord) -> str:
@@ -295,9 +423,11 @@ def _onset_text(source: HistoricalEpisode | EpisodeRecord) -> str:
 
 __all__ = [
     "CURATED_FIELDS",
+    "EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION",
     "EpisodeEmbedding",
     "EpisodeRecord",
     "embed_episode_onset",
+    "episode_embedding_input_sha256",
     "episode_fields_differ",
     "episode_onset_is_stale",
     "refresh_episode_embeddings",

@@ -5,9 +5,10 @@ RequestIDMiddleware tags every request with a correlation id (honoring an inboun
 ``X-Request-ID``), stores it on ``request.state`` so inner middleware and exception
 handlers can read it, binds it to the logging context, and bumps the request counter.
 
-APIKeyMiddleware is the Stage 1 security stub: mutating methods are local-only by
-default, and once ``API_KEY`` is configured they require a matching ``X-API-Key``
-header before nonlocal exposure. Read-only methods and ``/health`` stay open.
+APIKeyMiddleware is the Stage 1 security stub: mutating methods and internal operator
+reads are local-only by default, and once ``API_KEY`` is configured they require a
+matching ``X-API-Key`` header before nonlocal exposure. Public read-only methods and
+``/health`` stay open.
 
 Every non-2xx JSON response -- whether raised inside a route, produced by request
 validation, returned by the API-key stub, or the result of an unhandled error -- is
@@ -41,6 +42,7 @@ REQUEST_ID_HEADER = "X-Request-ID"
 _MUTATING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 # Paths exempt from the API-key requirement even when mutating.
 _EXEMPT_PATHS = {"/health", "/metrics"}
+_INTERNAL_PREFIX = "/api/v1/internal/"
 
 
 def _is_loopback(host: str | None) -> bool:
@@ -79,9 +81,7 @@ def _status_slug(status_code: int) -> str:
         return f"http_{status_code}"
 
 
-def _error_response(
-    request: Request, *, status_code: int, code: str, message: str
-) -> JSONResponse:
+def _error_response(request: Request, *, status_code: int, code: str, message: str) -> JSONResponse:
     """Build an error-envelope response carrying the request's correlation id.
 
     The id is set both in the body and on the ``X-Request-ID`` header so it is present
@@ -183,19 +183,20 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
 
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
-    """Protect mutating endpoints with an API key once one is configured."""
+    """Protect mutations and internal operator reads once an API key is configured."""
 
     async def dispatch(self, request: Request, call_next) -> Response:
         settings = get_settings()
         path = request.url.path
-        if request.method in _MUTATING_METHODS and path not in _EXEMPT_PATHS:
+        protected = request.method in _MUTATING_METHODS or path.startswith(_INTERNAL_PREFIX)
+        if protected and path not in _EXEMPT_PATHS:
             if settings.api_key:
                 provided = request.headers.get("X-API-Key", "")
                 # Constant-time comparison avoids leaking the key via timing.
                 if not hmac.compare_digest(
                     provided.encode("utf-8"), settings.api_key.encode("utf-8")
                 ):
-                    logger.warning("rejected mutating request: bad api key", extra={"path": path})
+                    logger.warning("rejected protected request: bad api key", extra={"path": path})
                     return _error_response(
                         request, status_code=401, code="unauthorized", message="invalid api key"
                     )
@@ -205,13 +206,13 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                 host = request.client.host if request.client else None
                 if not (settings.is_local and _is_loopback(host)):
                     logger.warning(
-                        "rejected mutating request: no api key and not local loopback",
+                        "rejected protected request: no api key and not local loopback",
                         extra={"path": path},
                     )
                     return _error_response(
                         request,
                         status_code=401,
                         code="unauthorized",
-                        message="mutations require an api key",
+                        message="protected requests require an api key",
                     )
         return await call_next(request)

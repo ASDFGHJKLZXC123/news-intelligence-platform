@@ -6,7 +6,7 @@ articles worth linking, so the caller is whatever produced the event -- not a cl
 
 Nothing is loaded, connected, or configured at import. The spaCy pipeline is loaded on the first
 article batch that has text, the LLM providers and the Redis cache are built inside the task, and
-the session is opened there too. Unit tests replace ``SessionLocal`` and the two build hooks with
+the session is opened there too. Unit tests replace ``SessionLocal`` and the three build hooks with
 fakes, so importing this module costs nothing and reaches nothing.
 
 The task owns the transaction: one commit on success, one rollback on failure. Every write the
@@ -28,6 +28,7 @@ from packages.config.logging import get_logger, set_job_id
 from packages.config.settings import get_settings
 from packages.jobs import Stage1Job
 from services.entities.adjudication import MentionAdjudicator
+from services.entities.descriptive_exposure import persist_descriptive_exposures
 from services.entities.event_linking import (
     EventLinkingResult,
     MentionExtractor,
@@ -51,7 +52,7 @@ def build_mention_extractor() -> MentionExtractor:
     return extract
 
 
-def build_mention_adjudicator(session: Any) -> MentionAdjudicator:
+def build_mention_adjudicator(session: Any, redis_client: Any) -> MentionAdjudicator:
     """The real stage-3 adjudicator, on the settings-backed orchestrator (providers, cache, limiter).
 
     It shares this task's session and does *not* commit on its own: one event is one transaction,
@@ -63,18 +64,35 @@ def build_mention_adjudicator(session: Any) -> MentionAdjudicator:
         build_production_orchestrator(
             settings=get_settings(),
             session=session,
-            redis_client=_redis_client(),
+            redis_client=redis_client,
             commit_on_write=False,
         )
     )
 
 
-def _redis_client() -> Any:
+def build_redis_client() -> Any:
     # Imported and constructed here, never at module import: `from_url` builds a lazy connection
     # pool, so no socket is opened until the orchestrator actually reads the prompt cache.
     import redis
 
     return redis.Redis.from_url(get_settings().redis_url)
+
+
+def _close_errors(*resources: Any) -> tuple[BaseException, ...]:
+    """Close every supplied resource and return all faults without skipping later closes."""
+
+    errors: list[BaseException] = []
+    for resource in resources:
+        if resource is None:
+            continue
+        close = getattr(resource, "close", None)
+        if not callable(close):
+            continue
+        try:
+            close()
+        except BaseException as exc:
+            errors.append(exc)
+    return tuple(errors)
 
 
 @shared_task(name=TASK_NAME, base=Stage1Task, queue=QUEUE_PIPELINE)
@@ -87,35 +105,72 @@ def run_event_entity_linking(event_id: str) -> dict[str, Any]:
     metrics.increment(metrics.JOB_STARTS)
 
     session = SessionLocal()
+    redis_client: Any = None
+    adjudicator: Any = None
     try:
+        redis_client = build_redis_client()
+        adjudicator = build_mention_adjudicator(session, redis_client)
         result = link_event_entities(
             session,
             identifier,
             extractor=build_mention_extractor(),
-            adjudicator=build_mention_adjudicator(session),
+            adjudicator=adjudicator,
         )
+
+        # No provider/cache call occurs after linking. Close both before commit so a
+        # cleanup fault rolls back this attempt instead of causing a retry after success.
+        precommit_cleanup_errors = _close_errors(adjudicator, redis_client)
+        adjudicator = None
+        redis_client = None
+        if precommit_cleanup_errors:
+            raise BaseExceptionGroup(
+                "event entity linking resource cleanup failed",
+                list(precommit_cleanup_errors),
+            )
+
+        exposures = persist_descriptive_exposures(session, identifier)
         session.commit()
         metrics.increment(metrics.JOB_SUCCESSES)
         completed = job.mark_succeeded()
         logger.info("event entity linking completed", extra=_log_fields(result))
-        return {
+        payload = {
             "status": "ok",
             "job_id": completed.job_id,
             "job_key": completed.job_key,
             "state": completed.state.value,
             **result.as_dict(),
+            "descriptive_exposures": exposures.as_dict(),
         }
-    except Exception:
+    except BaseException as cause:
         # Includes an infrastructure/provider failure raised out of the adjudicator: the event is
         # left exactly as it was found, and Stage1Task retries with backoff. A mention is never
         # reported as linked because the call that would have linked it did not happen.
-        session.rollback()
+        cleanup_errors: list[BaseException] = []
+        try:
+            session.rollback()
+        except BaseException as rollback_error:
+            cleanup_errors.append(rollback_error)
+        cleanup_errors.extend(_close_errors(adjudicator, redis_client, session))
+        adjudicator = None
+        redis_client = None
+        set_job_id(None)
         metrics.increment(metrics.JOB_FAILURES)
         logger.exception("event entity linking failed", extra={"event_id": str(identifier)})
+        if cleanup_errors:
+            raise BaseExceptionGroup(
+                "event entity linking and cleanup both failed",
+                [cause, *cleanup_errors],
+            ) from cause
         raise
-    finally:
-        session.close()
+    else:
+        cleanup_errors = _close_errors(session)
         set_job_id(None)
+        if cleanup_errors:
+            raise BaseExceptionGroup(
+                "event entity linking session cleanup failed",
+                list(cleanup_errors),
+            )
+        return payload
 
 
 def _log_fields(result: EventLinkingResult) -> dict[str, Any]:

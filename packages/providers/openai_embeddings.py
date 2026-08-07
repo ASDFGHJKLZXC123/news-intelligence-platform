@@ -127,7 +127,17 @@ class OpenAIEmbeddingProvider(EmbeddingProvider):
         }
 
     def _embed_chunk(self, texts: list[str]) -> list[EmbeddingResult]:
-        body = self._post({"model": self.model_name, "input": texts})
+        # Freeze every response-shaping option that defines the stored vector space. OpenAI's
+        # defaults are convenient for ad-hoc calls, but a future default change must not silently
+        # alter vectors that share one local snapshot identity.
+        body = self._post(
+            {
+                "model": self.model_name,
+                "input": texts,
+                "dimensions": self.dimension,
+                "encoding_format": "float",
+            }
+        )
         return self._parse(body, texts)
 
     def _post(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:

@@ -24,7 +24,7 @@ from services.reports.composition import (
     DraftDegradationCode,
     compose_brief,
 )
-from services.reports.contracts import RiskRadar
+from services.reports.contracts import LinkedRisk, RiskProvenance, RiskRadar
 from services.reports.material import FINAL_DISCLAIMER, SECTION_ORDER, SectionKind
 from services.reports.prompts import COMPOSITION_PROMPT_TEMPLATE_VERSION, COMPOSITION_SCHEMA
 from tests.unit._report_composition_fixtures import (
@@ -51,7 +51,13 @@ EXEC_OK = one_block(108)
 
 def _compose(orchestrator: object, brief: tuple) -> object:
     inputs, context, material = brief
-    return compose_brief(orchestrator, inputs=inputs, context=context, material=material)
+    return compose_brief(
+        orchestrator,
+        inputs=inputs,
+        context=context,
+        material=material,
+        prediction_backed_outputs_enabled=True,
+    )
 
 
 def _section(draft: object, kind: SectionKind) -> object:
@@ -93,7 +99,9 @@ def test_the_run_is_audited_at_t2_requesting_reportcomposition() -> None:
     assert harness.repository.jobs[-1].job_key.startswith("daily_brief_composition:")
 
 
-def test_a_minted_claim_id_is_rejected_at_the_real_contract_boundary_and_degrades_the_section() -> None:
+def test_a_minted_claim_id_is_rejected_at_the_real_contract_boundary_and_degrades_the_section() -> (
+    None
+):
     def respond(request: object) -> dict:
         if request.context.get("section_kind") == "top_event":  # type: ignore[attr-defined]
             return report_payload([(words(150), [str(MINTED_ID)])])
@@ -184,7 +192,8 @@ def test_route_provider_cache_and_trace_telemetry_is_captured() -> None:
 
 def test_a_quiet_day_makes_zero_llm_calls() -> None:
     inputs = brief_inputs(
-        top_events=(), radar=RiskRadar(current=(radar_entry(45.0, "medium"),), previous=(), moves=())
+        top_events=(),
+        radar=RiskRadar(current=(radar_entry(45.0, "medium"),), previous=(), moves=()),
     )
     from services.reports.material import build_brief_material
 
@@ -207,7 +216,9 @@ def test_forecasts_and_alerts_are_deterministic_and_make_no_call() -> None:
     draft = _compose(
         fake,
         single_event_brief(
-            claims=(claim(),), alert_changes=(alert_change(is_all_clear=True),), forecasts_present=True
+            claims=(claim(),),
+            alert_changes=(alert_change(is_all_clear=True),),
+            forecasts_present=True,
         ),
     )
     kinds_called = {r.context["section_kind"] for r in fake.requests}
@@ -218,6 +229,57 @@ def test_forecasts_and_alerts_are_deterministic_and_make_no_call() -> None:
     assert forecasts.attempts == () and alerts.attempts == ()
     assert forecasts.material.forecast_rows and "base_case" in forecasts.rendered
     assert "ALL-CLEAR" in alerts.rendered  # all-clears retained and labelled
+
+
+def test_closed_gate_sanitizes_contaminated_inputs_context_and_material() -> None:
+    inputs, context, material = single_event_brief(
+        claims=(claim(),),
+        alert_changes=(alert_change(),),
+        forecasts_present=True,
+    )
+    predictive_event = dataclasses.replace(
+        inputs.top_events[0],
+        max_linked_risk=LinkedRisk(
+            score=99.0,
+            provenance=RiskProvenance.EVENT_COMPANY,
+        ),
+        ranking_score=99.0,
+    )
+    contaminated_prior = dataclasses.replace(
+        inputs,
+        top_events=(predictive_event,),
+        prior_brief=object(),
+    )
+    material = dataclasses.replace(
+        material,
+        sections=tuple(
+            (
+                dataclasses.replace(section, event=predictive_event)
+                if section.kind is SectionKind.TOP_EVENT
+                else section
+            )
+            for section in material.sections
+        ),
+    )
+    fake = FakeOrchestrator([EXEC_OK, one_block(150)])
+
+    draft = compose_brief(
+        fake,
+        inputs=contaminated_prior,
+        context=context,
+        material=material,
+    )
+
+    assert SectionKind.FORECASTS not in draft.kinds
+    assert SectionKind.ALERTS not in draft.kinds
+    assert [section.order for section in draft.sections] == list(range(1, len(draft.sections) + 1))
+    prompts = "\n".join(request.prompt for request in fake.requests)
+    assert "Bank-run risk" not in prompts
+    assert "PRIOR_BRIEF" not in prompts
+    assert "tail_risk_case" not in prompts
+    assert "event_company" not in prompts
+    assert '"max_linked_risk_score": 99.0' not in prompts
+    assert '"risk_provenance": "none"' in prompts
 
 
 # --------------------------------------------------------------------------------------
@@ -237,7 +299,12 @@ def test_what_changed_renders_signed_moves_with_reversals_first() -> None:
     from services.reports.material import build_brief_material
 
     material = build_brief_material(inputs, brief_context())
-    draft = compose_brief(FakeOrchestrator([one_block(100)]), inputs=inputs, context=brief_context(), material=material)
+    draft = compose_brief(
+        FakeOrchestrator([one_block(100)]),
+        inputs=inputs,
+        context=brief_context(),
+        material=material,
+    )
 
     rendered = _section(draft, SectionKind.WHAT_CHANGED).rendered
     lines = rendered.splitlines()
@@ -247,11 +314,18 @@ def test_what_changed_renders_signed_moves_with_reversals_first() -> None:
 
 
 def test_what_changed_states_missing_comparison_when_no_prior_data() -> None:
-    inputs = brief_inputs(top_events=(), prior_brief=None, radar=RiskRadar(current=(), previous=(), moves=()))
+    inputs = brief_inputs(
+        top_events=(), prior_brief=None, radar=RiskRadar(current=(), previous=(), moves=())
+    )
     from services.reports.material import build_brief_material
 
     material = build_brief_material(inputs, brief_context())
-    draft = compose_brief(FakeOrchestrator([one_block(100)]), inputs=inputs, context=brief_context(), material=material)
+    draft = compose_brief(
+        FakeOrchestrator([one_block(100)]),
+        inputs=inputs,
+        context=brief_context(),
+        material=material,
+    )
     rendered = _section(draft, SectionKind.WHAT_CHANGED).rendered
     assert "previous day" in rendered or "day-over-day movement" in rendered
 

@@ -356,7 +356,14 @@ def test_forecast_scenarios_load_for_selected_events(context_db) -> None:
             )
         session.commit()
 
-        rows = SQLAlchemyBriefContextRepository(session).forecasts_for_events([event_id]).rows
+        rows = (
+            SQLAlchemyBriefContextRepository(
+                session,
+                prediction_backed_outputs_enabled=True,
+            )
+            .forecasts_for_events([event_id])
+            .rows
+        )
 
     assert len(rows) == 4
     assert {r.scenario_name for r in rows} == set(probs)

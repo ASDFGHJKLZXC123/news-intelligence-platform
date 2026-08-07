@@ -133,7 +133,12 @@ def test_the_request_carries_the_configured_model_and_a_bearer_key() -> None:
 
     _provider(handler).embed(["one"])
 
-    assert captured["body"] == {"model": MODEL, "input": ["one"]}
+    assert captured["body"] == {
+        "model": MODEL,
+        "input": ["one"],
+        "dimensions": DIM,
+        "encoding_format": "float",
+    }
     assert captured["auth"] == f"Bearer {API_KEY}"
     assert captured["url"].endswith("/v1/embeddings")
 

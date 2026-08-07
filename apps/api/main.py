@@ -22,6 +22,7 @@ from apps.api.middleware import (
     unhandled_exception_handler,
     validation_exception_handler,
 )
+from apps.api.pipeline import router as pipeline_router
 from apps.api.provider_data import company_research_router
 from apps.api.provider_data import router as provider_data_router
 from apps.api.risk_intelligence import router as risk_intelligence_router
@@ -66,6 +67,7 @@ def create_app() -> FastAPI:
     app.include_router(risk_intelligence_router)
     app.include_router(intelligence_router)
     app.include_router(analogies_router)
+    app.include_router(pipeline_router)
 
     logger.info("api initialized", extra={"env": settings.app_env})
     return app

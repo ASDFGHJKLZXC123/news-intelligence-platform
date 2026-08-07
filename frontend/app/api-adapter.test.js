@@ -378,6 +378,17 @@ test("mappers align with types.ts and apply safe defaults", () => {
   assertAligned("RiskRadarItem", A.mapRiskRadarItem(WIRE.riskRadar[0], WIRE.riskDetail.geopolitical_supply_chain, [], Date.now()));
 });
 
+test("risk detail stays descriptive when prediction-backed fields are gated off", () => {
+  const detail = A.mapRiskDetail(WIRE.riskDetail.banking, "Banking");
+  assert.equal(detail.score, 41);
+  assert.equal(detail.severity, "medium");
+  assert.deepEqual(detail.mainDrivers, ["Deposit outflows"]);
+  assert.equal(detail.modelRating, undefined);
+  assert.deepEqual(detail.probabilityByHorizon, []);
+  assert.deepEqual(detail.historicalComparisons, []);
+  assert.deepEqual(detail.invalidationSignals, []);
+});
+
 test("safe defaults for an unscored live event", () => {
   const e = A.mapEventListItem(WIRE.events[1]);
   assert.equal(e.riskLevel, "low");
@@ -457,11 +468,16 @@ test("reachable snapshot: every field present, blocks merged, metadata attached"
   assert.equal(geo.change24h, 5);
   assert.equal(geo.change7d, 14);
   assert.equal(geo.topDriver, "Gulf shipping escalation");
+  const banking = D.riskRadar.find((r) => r.riskType === "Banking");
+  assert.equal(banking.score, 41);
+  assert.equal(banking.topDriver, "Deposit outflows");
 
   // riskDetails keyed by label; canonical horizons preserved
   assert.ok(D.riskDetails["Geopolitical / Supply Chain"]);
   assert.deepEqual(D.riskDetails["Geopolitical / Supply Chain"].probabilityByHorizon.map((p) => p.horizon), ["0_6m", "within_18m"]);
   assert.deepEqual(D.riskDetails["Geopolitical / Supply Chain"].signals, []); // never fabricated
+  assert.equal(D.riskDetails.Banking.modelRating, undefined);
+  assert.deepEqual(D.riskDetails.Banking.probabilityByHorizon, []);
 
   // riskTrends from REAL history (score arrays), not synthetic curves
   assert.deepEqual(D.riskTrends["Geopolitical / Supply Chain"], [64, 73, 78]);

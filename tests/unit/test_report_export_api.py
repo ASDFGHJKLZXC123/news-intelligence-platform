@@ -16,11 +16,13 @@ import pytest
 from fastapi.testclient import TestClient
 
 from apps.api.intelligence import (
+    get_crisis_prediction_reads_enabled,
     get_report_export_repository,
     get_report_lifecycle_repository,
 )
 from apps.api.main import app
 from db.base import get_session
+from db.models import REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
 from services.reports.exports import ReportExportRepository, SourceAttribution
 from services.reports.lifecycle import ReportSectionSnapshot, ReportSnapshot, SectionBlock
 from services.reports.material import FINAL_DISCLAIMER
@@ -29,7 +31,12 @@ NOW = datetime.datetime(2026, 7, 14, 4, tzinfo=datetime.UTC)
 BRIEF_DATE = datetime.date(2026, 7, 14)
 
 
-def _snap(*, version: int, status: str) -> ReportSnapshot:
+def _snap(
+    *,
+    version: int,
+    status: str,
+    content_policy: str | None = None,
+) -> ReportSnapshot:
     return ReportSnapshot(
         id=uuid.uuid4(),
         user_id=None,
@@ -44,11 +51,16 @@ def _snap(*, version: int, status: str) -> ReportSnapshot:
         generated_by_run_id=None,
         created_at=NOW,
         updated_at=NOW,
+        content_policy=content_policy,
     )
 
 
-def _section(order: int, title: str, body: str, *, claim_ids: tuple[uuid.UUID, ...] = ()) -> ReportSectionSnapshot:
-    blocks = (SectionBlock(text=body, claim_ids=tuple(str(c) for c in claim_ids)),) if claim_ids else ()
+def _section(
+    order: int, title: str, body: str, *, claim_ids: tuple[uuid.UUID, ...] = ()
+) -> ReportSectionSnapshot:
+    blocks = (
+        (SectionBlock(text=body, claim_ids=tuple(str(c) for c in claim_ids)),) if claim_ids else ()
+    )
     return ReportSectionSnapshot(
         id=uuid.uuid4(),
         report_id=uuid.uuid4(),
@@ -87,13 +99,37 @@ class FakeLifecycleRepo:
         self.by_date_calls: list[datetime.date] = []
         self.version_calls: list[tuple[datetime.date, int]] = []
 
-    def latest_published_daily_brief_by_date(self, brief_date: datetime.date) -> ReportSnapshot | None:
+    def latest_published_daily_brief_by_date(
+        self,
+        brief_date: datetime.date,
+        *,
+        content_policy: str | None = None,
+    ) -> ReportSnapshot | None:
         self.by_date_calls.append(brief_date)
+        if (
+            self._by_date is not None
+            and content_policy is not None
+            and self._by_date.content_policy != content_policy
+        ):
+            return None
         return self._by_date
 
-    def daily_brief_version(self, brief_date: datetime.date, version: int) -> ReportSnapshot | None:
+    def daily_brief_version(
+        self,
+        brief_date: datetime.date,
+        version: int,
+        *,
+        content_policy: str | None = None,
+    ) -> ReportSnapshot | None:
         self.version_calls.append((brief_date, version))
-        return self._version_map.get(version)
+        report = self._version_map.get(version)
+        if (
+            report is not None
+            and content_policy is not None
+            and report.content_policy != content_policy
+        ):
+            return None
+        return report
 
     def report_sections(self, report_id: uuid.UUID) -> tuple[ReportSectionSnapshot, ...]:
         return self._sections
@@ -111,6 +147,7 @@ class FakeExportRepo:
 
 @pytest.fixture
 def client() -> Iterator[TestClient]:
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:
@@ -138,7 +175,9 @@ def test_latest_markdown_export(client: TestClient) -> None:
 
     assert resp.status_code == 200
     assert resp.headers["content-type"] == "text/markdown; charset=utf-8"
-    assert resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v3.md"'
+    assert (
+        resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v3.md"'
+    )
     body = resp.text
     assert body.startswith("# Daily Brief — 2026-07-14")
     assert "- Reuters — Bank under pressure — https://news.example/bank" in body
@@ -157,7 +196,10 @@ def test_latest_pdf_export(client: TestClient) -> None:
 
     assert resp.status_code == 200
     assert resp.headers["content-type"] == "application/pdf"
-    assert resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v3.pdf"'
+    assert (
+        resp.headers["content-disposition"]
+        == 'attachment; filename="daily-brief-2026-07-14-v3.pdf"'
+    )
     assert resp.content.startswith(b"%PDF-1.4")
     assert resp.content.rstrip().endswith(b"%%EOF")
 
@@ -172,7 +214,9 @@ def test_specific_version_markdown_export(client: TestClient) -> None:
     resp = client.get("/api/v1/reports/daily-brief/2026-07-14/versions/2/export.md")
 
     assert resp.status_code == 200
-    assert resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v2.md"'
+    assert (
+        resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v2.md"'
+    )
     assert lifecycle.version_calls == [(BRIEF_DATE, 2)]
 
 
@@ -187,7 +231,44 @@ def test_specific_version_pdf_export(client: TestClient) -> None:
 
     assert resp.status_code == 200
     assert resp.headers["content-type"] == "application/pdf"
-    assert resp.headers["content-disposition"] == 'attachment; filename="daily-brief-2026-07-14-v5.pdf"'
+    assert (
+        resp.headers["content-disposition"]
+        == 'attachment; filename="daily-brief-2026-07-14-v5.pdf"'
+    )
+
+
+def test_closed_gate_exports_only_explicit_descriptive_policy(
+    client: TestClient,
+) -> None:
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: False
+    export = FakeExportRepo((_attribution(),))
+    _use(
+        FakeLifecycleRepo(
+            by_date=_snap(version=1, status="published"),
+            sections=(_section(1, "Executive Summary", "Legacy forecast prose."),),
+        ),
+        export,
+    )
+
+    denied = client.get("/api/v1/reports/daily-brief/2026-07-14/export.md")
+    assert denied.status_code == 404
+    assert export.calls == []
+
+    _use(
+        FakeLifecycleRepo(
+            by_date=_snap(
+                version=2,
+                status="published",
+                content_policy=REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+            ),
+            sections=(_section(1, "Executive Summary", "Observed disruption."),),
+        ),
+        export,
+    )
+    allowed = client.get("/api/v1/reports/daily-brief/2026-07-14/export.md")
+
+    assert allowed.status_code == 200
+    assert "Observed disruption." in allowed.text
 
 
 # --------------------------------------------------------------------------------------
@@ -201,20 +282,29 @@ def test_latest_export_is_404_when_no_published_brief_for_date(client: TestClien
     assert client.get("/api/v1/reports/daily-brief/2026-07-14/export.pdf").status_code == 404
 
 
-def test_specific_version_export_is_404_when_that_version_is_not_published(client: TestClient) -> None:
+def test_specific_version_export_is_404_when_that_version_is_not_published(
+    client: TestClient,
+) -> None:
     # A failed and a still-generating version are inspectable via the metadata routes but never
     # exportable: only a published version may be exported.
     lifecycle = FakeLifecycleRepo(
         version_map={2: _snap(version=2, status="failed"), 3: _snap(version=3, status="generating")}
     )
     _use(lifecycle, FakeExportRepo())
-    assert client.get("/api/v1/reports/daily-brief/2026-07-14/versions/2/export.md").status_code == 404
-    assert client.get("/api/v1/reports/daily-brief/2026-07-14/versions/3/export.pdf").status_code == 404
+    assert (
+        client.get("/api/v1/reports/daily-brief/2026-07-14/versions/2/export.md").status_code == 404
+    )
+    assert (
+        client.get("/api/v1/reports/daily-brief/2026-07-14/versions/3/export.pdf").status_code
+        == 404
+    )
 
 
 def test_specific_version_export_is_404_when_version_absent(client: TestClient) -> None:
     _use(FakeLifecycleRepo(version_map={}), FakeExportRepo())
-    assert client.get("/api/v1/reports/daily-brief/2026-07-14/versions/9/export.md").status_code == 404
+    assert (
+        client.get("/api/v1/reports/daily-brief/2026-07-14/versions/9/export.md").status_code == 404
+    )
 
 
 # --------------------------------------------------------------------------------------
@@ -230,8 +320,13 @@ def test_invalid_date_is_422(client: TestClient) -> None:
 
 def test_invalid_version_is_422(client: TestClient) -> None:
     _use(FakeLifecycleRepo(), FakeExportRepo())
-    assert client.get("/api/v1/reports/daily-brief/2026-07-14/versions/0/export.md").status_code == 422
-    assert client.get("/api/v1/reports/daily-brief/2026-07-14/versions/abc/export.pdf").status_code == 422
+    assert (
+        client.get("/api/v1/reports/daily-brief/2026-07-14/versions/0/export.md").status_code == 422
+    )
+    assert (
+        client.get("/api/v1/reports/daily-brief/2026-07-14/versions/abc/export.pdf").status_code
+        == 422
+    )
 
 
 # --------------------------------------------------------------------------------------

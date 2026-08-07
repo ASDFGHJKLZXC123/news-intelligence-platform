@@ -9,6 +9,7 @@ from __future__ import annotations
 import datetime
 import json
 from collections.abc import Mapping
+from dataclasses import replace
 from typing import Any
 
 import httpx
@@ -22,14 +23,25 @@ from services.llm.cache import (
     RedisLLMPromptCache,
     make_llm_request_cache_key,
 )
-from services.llm.contracts import EventExtraction
+from services.llm.contracts import (
+    EventExtraction,
+    list_contract_schemas,
+    llm_contract_json_schema,
+    validate_llm_contract_payload,
+)
 from services.llm.fake_providers import CallableLLMProvider, ScriptedLLMProvider
 from services.llm.http_providers import (
+    LLM_PROVIDER_FAILURE_DIAGNOSTIC_CODES,
     AnthropicMessagesProvider,
+    DeepSeekChatCompletionsProvider,
+    GeminiInteractionsProvider,
     LLMBatchModeUnsupported,
     LLMProviderError,
+    LLMProviderOutputError,
     OpenAIChatCompletionsProvider,
+    _json_schema_example,
     build_providers_by_tier,
+    provider_failure_diagnostic_code,
 )
 from services.llm.limiter import (
     CompositeProviderLimiter,
@@ -320,6 +332,44 @@ class TrackingProvider(ScriptedLLMProvider):
         return super().invoke_batch(requests)
 
 
+class CloseTrackingProvider(TrackingProvider):
+    def __init__(
+        self,
+        scripts: tuple[Mapping[str, Any] | str | Exception | None, ...],
+        *,
+        provider_name: str = "tracking-provider",
+        model_name: str = "tracking-model",
+        close_error: Exception | None = None,
+    ) -> None:
+        super().__init__(
+            scripts,
+            provider_name=provider_name,
+            model_name=model_name,
+        )
+        self.close_count = 0
+        self.close_error = close_error
+
+    def close(self) -> None:
+        self.close_count += 1
+        if self.close_error is not None:
+            raise self.close_error
+
+
+class RecordingLimiter:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, int]] = []
+
+    def consume(
+        self,
+        key: str,
+        tokens: int,
+        *,
+        now: float | None = None,
+    ) -> bool:
+        self.calls.append((key, tokens))
+        return True
+
+
 # --- Cache and limiter ------------------------------------------------------------
 
 
@@ -360,9 +410,26 @@ def test_cache_key_is_stable_for_equivalent_requests() -> None:
         model_version="current",
         mode=LLMInvocationMode.BATCH,
     )
+    changed_adapter_key = make_llm_request_cache_key(
+        request=request,
+        provider_name="gemini",
+        model_name="gemini-3.6-flash",
+        model_version="current",
+        mode=LLMInvocationMode.BATCH,
+        adapter_variant={"thinking_level": "low"},
+    )
+    different_thinking_key = make_llm_request_cache_key(
+        request=request,
+        provider_name="gemini",
+        model_name="gemini-3.6-flash",
+        model_version="current",
+        mode=LLMInvocationMode.BATCH,
+        adapter_variant={"thinking_level": "medium"},
+    )
 
     assert first_key == second_key
     assert first_key != changed_key
+    assert changed_adapter_key != different_thinking_key
 
 
 def test_cache_hit_persists_zero_cost_run() -> None:
@@ -371,6 +438,7 @@ def test_cache_hit_persists_zero_cost_run() -> None:
         provider_name="cache-provider",
         model_name="cache-model",
     )
+    provider.cache_variant = {"report_composition_budget_instruction": "v1"}
     repository = InMemoryLLMRuntimeRepository()
     cache = InMemoryLLMPromptCache(default_ttl_seconds=None)
     request = _make_request(job_key="zero-cost", context={"scenario": "cached"})
@@ -396,6 +464,7 @@ def test_cache_hit_persists_zero_cost_run() -> None:
         model_name=provider.model_name,
         model_version=provider.model_version,
         mode=LLMInvocationMode.BATCH,
+        adapter_variant=provider.cache_variant,
     )
     cache.set(cache_key, _event_payload())
 
@@ -411,6 +480,9 @@ def test_cache_hit_persists_zero_cost_run() -> None:
     assert result.run.cost_usd == 0.0
     assert result.run.status == "cached"
     assert result.run.input_refs["cache_hit"] is True
+    assert result.run.model_params["adapter_params"] == {
+        "report_composition_budget_instruction": "v1"
+    }
     assert provider.invoke_calls == 0
     assert provider.invoke_batch_calls == 0
 
@@ -596,9 +668,7 @@ def test_in_memory_and_redis_prompt_caches(monkeypatch: pytest.MonkeyPatch) -> N
 
 
 def test_in_memory_and_redis_token_bucket_behavior() -> None:
-    in_memory = InMemoryTokenBucketLimiter(
-        capacity=2, refill_per_second=1.0, time_func=lambda: 0.0
-    )
+    in_memory = InMemoryTokenBucketLimiter(capacity=2, refill_per_second=1.0, time_func=lambda: 0.0)
     assert in_memory.consume("a", 2, now=0.0) is True
     assert in_memory.consume("a", 1, now=0.0) is False
     assert in_memory.consume("a", 1, now=2.0) is True
@@ -640,6 +710,38 @@ def test_production_limiter_rejects_unconfigured_provider() -> None:
     )
 
     assert limiter.consume("openai:model", 1, now=0.0) is False
+
+
+def test_orchestrator_limiter_reserves_schema_and_example_overhead() -> None:
+    limiter = RecordingLimiter()
+    provider = TrackingProvider(
+        (_event_payload(),),
+        provider_name="deepseek",
+        model_name="deepseek-v4-flash",
+    )
+    settings = Settings()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=InMemoryLLMRuntimeRepository(),
+        providers_by_tier={"T1": (provider,)},
+        limiter=limiter,
+    )
+    request = _make_request(job_key="structured-limit-reservation")
+
+    orchestrator.run(request)
+
+    schema_text = json.dumps(
+        llm_contract_json_schema("EventExtraction"),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    expected_tokens = (
+        estimate_token_count(request.prompt)
+        + (2 * estimate_token_count(schema_text))
+        + 64
+        + settings.llm_tier_max_output_tokens["T1"]
+    )
+    assert limiter.calls == [("deepseek:deepseek-v4-flash", expected_tokens)]
 
 
 # --- Routing ----------------------------------------------------------------------
@@ -751,16 +853,35 @@ def test_orchestrator_routes_to_the_requested_tier_provider() -> None:
 # --- Pricing ----------------------------------------------------------------------
 
 
-def test_estimate_completion_cost_usd_known_and_missing_provider() -> None:
+@pytest.mark.parametrize(
+    ("provider_name", "model_name", "expected"),
+    [
+        ("anthropic", "claude-haiku-4-5", 3.50),
+        ("gemini", "gemini-3.6-flash", 5.25),
+        ("deepseek", "deepseek-v4-flash", 0.28),
+    ],
+)
+def test_estimate_completion_cost_usd_for_supported_models(
+    provider_name: str,
+    model_name: str,
+    expected: float,
+) -> None:
     settings = Settings()
 
-    expected = estimate_completion_cost_usd(
+    cost = estimate_completion_cost_usd(
         settings=settings,
-        provider_name="anthropic",
-        model_name="claude-haiku-4-5",
+        provider_name=provider_name,
+        model_name=model_name,
         input_tokens=1_000_000,
         output_tokens=500_000,
     )
+
+    assert cost == pytest.approx(expected)
+
+
+def test_estimator_returns_zero_for_manual_unknown_model_but_factory_rejects_it() -> None:
+    settings = Settings()
+
     missing = estimate_completion_cost_usd(
         settings=settings,
         provider_name="unknown",
@@ -769,7 +890,6 @@ def test_estimate_completion_cost_usd_known_and_missing_provider() -> None:
         output_tokens=1,
     )
 
-    assert expected == pytest.approx(3.50)  # $1.00 input + $2.50 output
     assert missing == 0.0
 
 
@@ -846,9 +966,7 @@ def test_estimate_token_count_is_proportional_to_length() -> None:
 
 def test_representative_selection_limits_to_twelve_and_budget() -> None:
     # 20 chars of summary => 5 estimated tokens per article.
-    articles = [
-        {"summary": "s" * 20, "relevance_score": float(index)} for index in range(20)
-    ]
+    articles = [{"summary": "s" * 20, "relevance_score": float(index)} for index in range(20)]
 
     budget_limited = select_representative_articles(
         articles,
@@ -1157,9 +1275,7 @@ def test_abstain_payload_is_accepted() -> None:
 
 
 def test_limiter_denial_marks_nonessential_queue_and_raises_failure() -> None:
-    limiter = InMemoryTokenBucketLimiter(
-        capacity=0, refill_per_second=0.0, time_func=lambda: 0.0
-    )
+    limiter = InMemoryTokenBucketLimiter(capacity=0, refill_per_second=0.0, time_func=lambda: 0.0)
     repository = SpendAwareRepository(spent_usd=20.0)
     provider = TrackingProvider((_event_payload(),), provider_name="limited-provider")
 
@@ -1233,6 +1349,76 @@ def _anthropic_handler(
     return handler
 
 
+def _gemini_handler(captured: dict[str, Any] | None = None) -> Any:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if captured is not None:
+            captured["url"] = str(request.url)
+            captured["headers"] = dict(request.headers)
+            captured["body"] = json.loads(request.content)
+        serialized = json.dumps(_event_payload())
+        split_at = len(serialized) // 2
+        return httpx.Response(
+            200,
+            json={
+                "id": "interaction_1",
+                "model": "gemini-3.6-flash",
+                "status": "completed",
+                "steps": [
+                    {"type": "thought", "signature": "opaque"},
+                    {
+                        "type": "model_output",
+                        "content": [
+                            {"type": "text", "text": serialized[:split_at]},
+                            {"type": "text", "text": serialized[split_at:]},
+                        ],
+                    },
+                ],
+                "usage": {
+                    "total_input_tokens": 80,
+                    "total_output_tokens": 20,
+                    "total_thought_tokens": 12,
+                    "total_cached_tokens": 5,
+                    "total_tool_use_tokens": 0,
+                    "total_tokens": 112,
+                },
+            },
+        )
+
+    return handler
+
+
+def _deepseek_handler(captured: dict[str, Any] | None = None) -> Any:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if captured is not None:
+            captured["url"] = str(request.url)
+            captured["headers"] = dict(request.headers)
+            captured["body"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "id": "deepseek_1",
+                "model": "deepseek-v4-flash",
+                "system_fingerprint": "fp_1",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(_event_payload())},
+                    }
+                ],
+                "usage": {
+                    "prompt_tokens": 70,
+                    "completion_tokens": 25,
+                    "total_tokens": 95,
+                    "prompt_cache_hit_tokens": 30,
+                    "prompt_cache_miss_tokens": 40,
+                    "completion_tokens_details": {"reasoning_tokens": 0},
+                },
+            },
+        )
+
+    return handler
+
+
 def test_anthropic_adapter_forces_the_contract_tool_and_reports_usage() -> None:
     captured: dict[str, Any] = {}
     settings = Settings(anthropic_api_key="anthropic-key")
@@ -1297,8 +1483,673 @@ def test_openai_adapter_requests_json_schema_and_reports_usage() -> None:
     assert (response.input_tokens, response.output_tokens) == (90, 30)
 
 
+def test_gemini_interactions_adapter_requests_structured_json_and_reports_usage() -> None:
+    captured: dict[str, Any] = {}
+    settings = Settings(gemini_api_key="gemini-key")
+    provider = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=4_000,
+        client=_mock_client(_gemini_handler(captured), settings.gemini_base_url),
+    )
+
+    response = provider.invoke(_invocation_request())
+
+    assert captured["url"] == "https://generativelanguage.googleapis.com/v1/interactions"
+    assert captured["headers"]["x-goog-api-key"] == "gemini-key"
+    assert "gemini-key" not in captured["url"]
+    assert captured["body"]["model"] == "gemini-3.6-flash"
+    assert captured["body"]["input"] == "Summarize representative events."
+    assert captured["body"]["store"] is False
+    assert captured["body"]["stream"] is False
+    assert captured["body"]["generation_config"] == {
+        "max_output_tokens": 4_000,
+        "thinking_level": "low",
+    }
+
+    response_format = captured["body"]["response_format"]
+    assert response_format["type"] == "text"
+    assert response_format["mime_type"] == "application/json"
+    schema = response_format["schema"]
+    assert schema["properties"]["schema_name"]["enum"] == ["EventExtraction"]
+    assert "const" not in schema["properties"]["schema_name"]
+    assert "minLength" not in schema["properties"]["prompt_template_version"]
+    assert "default" not in schema["properties"]["no_finding_reason"]
+
+    assert response.provider_name == "gemini"
+    assert response.structured == _event_payload()
+    assert (response.input_tokens, response.output_tokens) == (80, 32)
+    assert response.raw_metadata == {
+        "response_id": "interaction_1",
+        "provider_model": "gemini-3.6-flash",
+        "status": "completed",
+        "thought_tokens": 12,
+        "cached_tokens": 5,
+        "tool_use_tokens": 0,
+        "total_tokens": 112,
+        "thinking_level": "low",
+        "temperature_requested": None,
+        "temperature_sent": False,
+        "temperature_strategy": "provider_default",
+    }
+
+
+@pytest.mark.parametrize(
+    ("response_body", "message"),
+    [
+        (
+            {
+                "status": "incomplete",
+                "steps": [
+                    {
+                        "type": "model_output",
+                        "content": [{"type": "text", "text": "{}"}],
+                    }
+                ],
+            },
+            "status",
+        ),
+        ({"status": "completed", "steps": []}, "model_output"),
+        (
+            {
+                "status": "completed",
+                "steps": [
+                    {
+                        "type": "model_output",
+                        "content": [{"type": "text", "text": "[]"}],
+                    }
+                ],
+            },
+            "JSON object",
+        ),
+    ],
+)
+def test_gemini_adapter_rejects_incomplete_or_unusable_interactions(
+    response_body: dict[str, Any],
+    message: str,
+) -> None:
+    settings = Settings(gemini_api_key="key")
+    provider = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(200, json=response_body),
+            settings.gemini_base_url,
+        ),
+    )
+
+    with pytest.raises(LLMProviderError, match=message):
+        provider.invoke(_invocation_request())
+
+
+def test_gemini_incomplete_interaction_retains_billed_usage() -> None:
+    body = {
+        "id": "interaction_incomplete",
+        "model": "gemini-3.6-flash",
+        "status": "incomplete",
+        "steps": [{"type": "thought"}, {"type": "model_output", "content": []}],
+        "usage": {
+            "total_input_tokens": 80,
+            "total_output_tokens": 20,
+            "total_thought_tokens": 12,
+            "total_tokens": 112,
+        },
+    }
+    settings = Settings(
+        gemini_api_key="key",
+        llm_models={"T1": "gemini-3.6-flash"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={},
+    )
+    provider = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(200, json=body),
+            settings.gemini_base_url,
+        ),
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier={"T1": (provider,)},
+    )
+
+    with pytest.raises(LLMInvocationFailure):
+        orchestrator.run(_make_request(job_key="gemini-incomplete-usage"))
+
+    assert len(repository.llm_runs) == 1
+    failed = repository.llm_runs[0]
+    assert failed.status == "failed"
+    assert (failed.input_tokens, failed.output_tokens) == (80, 32)
+    assert failed.cost_usd == pytest.approx((80 * 1.5 + 32 * 7.5) / 1_000_000)
+    assert failed.model_params["adapter_params"]["thinking_level"] == "low"
+    assert failed.error_details["provider_failure_code"] == "output_incomplete"
+
+    direct = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(200, json=body),
+            settings.gemini_base_url,
+        ),
+    )
+    with pytest.raises(LLMProviderOutputError) as caught:
+        direct.invoke(_invocation_request())
+    assert (caught.value.response.input_tokens, caught.value.response.output_tokens) == (80, 32)
+    assert caught.value.diagnostic_code == "output_incomplete"
+
+
+@pytest.mark.parametrize(
+    ("steps", "message", "diagnostic_code"),
+    [
+        ([], "model_output", "output_missing"),
+        (
+            [{"type": "model_output", "content": [{"type": "text", "text": "{"}]}],
+            "valid JSON",
+            "output_invalid_json",
+        ),
+        (
+            [{"type": "model_output", "content": [{"type": "text", "text": "[]"}]}],
+            "JSON object",
+            "output_not_object",
+        ),
+    ],
+)
+def test_gemini_completed_unusable_interaction_retains_billed_usage(
+    steps: list[dict[str, Any]],
+    message: str,
+    diagnostic_code: str,
+) -> None:
+    body = {
+        "id": "interaction_completed_unusable",
+        "model": "gemini-3.6-flash",
+        "status": "completed",
+        "steps": steps,
+        "usage": {
+            "total_input_tokens": 80,
+            "total_output_tokens": 20,
+            "total_thought_tokens": 12,
+            "total_tokens": 112,
+        },
+    }
+    settings = Settings(
+        gemini_api_key="key",
+        llm_models={"T1": "gemini-3.6-flash"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={},
+    )
+    provider = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(200, json=body),
+            settings.gemini_base_url,
+        ),
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier={"T1": (provider,)},
+    )
+
+    with pytest.raises(LLMInvocationFailure):
+        orchestrator.run(_make_request(job_key=f"gemini-completed-unusable-{message}"))
+
+    assert len(repository.llm_runs) == 1
+    failed = repository.llm_runs[0]
+    assert failed.status == "failed"
+    assert (failed.input_tokens, failed.output_tokens) == (80, 32)
+    assert failed.cost_usd == pytest.approx((80 * 1.5 + 32 * 7.5) / 1_000_000)
+    assert failed.model_params["adapter_params"]["thinking_level"] == "low"
+    assert message in failed.error_details["error"]
+    assert failed.error_details["provider_failure_code"] == diagnostic_code
+
+
+def test_gemini_temperature_translation_is_explicit_and_nonzero_is_refused() -> None:
+    settings = Settings(gemini_api_key="key")
+    current_calls = 0
+
+    captured_current: dict[str, Any] = {}
+
+    def current_handler(request: httpx.Request) -> httpx.Response:
+        nonlocal current_calls
+        current_calls += 1
+        return _gemini_handler(captured_current)(request)
+
+    current = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.6-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(current_handler, settings.gemini_base_url),
+    )
+    request = LLMInvocationRequest(**{**_invocation_request().__dict__, "temperature": 0.0})
+
+    response = current.invoke(request)
+
+    assert current_calls == 1
+    assert "temperature" not in captured_current["body"]["generation_config"]
+    assert "deterministically" in captured_current["body"]["system_instruction"]
+    assert response.raw_metadata["temperature_requested"] == 0.0
+    assert response.raw_metadata["temperature_sent"] is False
+    assert response.raw_metadata["temperature_strategy"] == "deterministic_system_instruction"
+
+    nonzero_request = LLMInvocationRequest(**{**_invocation_request().__dict__, "temperature": 0.7})
+    with pytest.raises(LLMProviderError, match="sampling-parameter support"):
+        current.invoke(nonzero_request)
+    assert current_calls == 1
+
+    future_settings = Settings(
+        gemini_api_key="key",
+        gemini_model_thinking_levels={
+            **settings.gemini_model_thinking_levels,
+            "gemini-future-custom": "low",
+        },
+    )
+    future = GeminiInteractionsProvider(
+        settings=future_settings,
+        model_name="gemini-future-custom",
+        max_output_tokens=2_000,
+        client=_mock_client(current_handler, future_settings.gemini_base_url),
+    )
+    with pytest.raises(LLMProviderError, match="sampling-parameter support"):
+        future.invoke(nonzero_request)
+    assert current_calls == 1
+
+
+def test_gemini_thinking_level_is_model_scoped() -> None:
+    settings = Settings(
+        gemini_api_key="key",
+        gemini_model_thinking_levels={
+            "gemini-3.5-flash-lite": "minimal",
+            "gemini-3.6-flash": "low",
+        },
+    )
+    captured_lite: dict[str, Any] = {}
+    lite = GeminiInteractionsProvider(
+        settings=settings,
+        model_name="gemini-3.5-flash-lite",
+        max_output_tokens=2_000,
+        client=_mock_client(_gemini_handler(captured_lite), settings.gemini_base_url),
+    )
+    lite.invoke(_invocation_request())
+    assert captured_lite["body"]["generation_config"]["thinking_level"] == "minimal"
+
+    with pytest.raises(LLMProviderError, match="thinking-level configuration"):
+        GeminiInteractionsProvider(
+            settings=settings,
+            model_name="gemini-future-custom",
+            max_output_tokens=2_000,
+            client=_mock_client(_gemini_handler(), settings.gemini_base_url),
+        )
+
+
+def test_deepseek_adapter_requests_json_mode_and_reports_usage() -> None:
+    captured: dict[str, Any] = {}
+    settings = Settings(deepseek_api_key="deepseek-key")
+    provider = DeepSeekChatCompletionsProvider(
+        settings=settings,
+        model_name="deepseek-v4-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(_deepseek_handler(captured), settings.deepseek_base_url),
+    )
+    request = LLMInvocationRequest(**{**_invocation_request().__dict__, "temperature": 0.0})
+
+    response = provider.invoke(request)
+
+    assert captured["url"] == "https://api.deepseek.com/chat/completions"
+    assert captured["headers"]["authorization"] == "Bearer deepseek-key"
+    assert captured["body"]["model"] == "deepseek-v4-flash"
+    assert captured["body"]["max_tokens"] == 2_000
+    assert captured["body"]["stream"] is False
+    assert captured["body"]["thinking"] == {"type": "disabled"}
+    assert captured["body"]["response_format"] == {"type": "json_object"}
+    assert captured["body"]["temperature"] == 0.0
+    assert captured["body"]["messages"][1] == {
+        "role": "user",
+        "content": "Summarize representative events.",
+    }
+    system_instruction = captured["body"]["messages"][0]["content"]
+    assert "JSON" in system_instruction
+    assert "EXAMPLE JSON OUTPUT" in system_instruction
+    assert "REPORT COMPOSITION WORD-BUDGET CONTROL" not in system_instruction
+    assert '"schema_name"' in system_instruction
+    assert '"events"' in system_instruction
+    example = json.loads(
+        system_instruction.split(
+            "EXAMPLE JSON OUTPUT (shape only; replace example values with task-specific values):\n",
+            1,
+        )[1]
+    )
+    assert example["events"] == []
+    assert example["no_finding_reason"] == "No qualifying findings were found."
+    validate_llm_contract_payload(
+        schema_name="EventExtraction",
+        payload=example,
+        allowed_ids=(),
+    )
+
+    assert response.provider_name == "deepseek"
+    assert response.structured == _event_payload()
+    assert (response.input_tokens, response.output_tokens) == (70, 25)
+    assert response.raw_metadata == {
+        "response_id": "deepseek_1",
+        "provider_model": "deepseek-v4-flash",
+        "finish_reason": "stop",
+        "system_fingerprint": "fp_1",
+        "total_tokens": 95,
+        "prompt_cache_hit_tokens": 30,
+        "prompt_cache_miss_tokens": 40,
+        "reasoning_tokens": 0,
+        "thinking_mode": "disabled",
+    }
+    assert provider.cache_variant == {"report_composition_budget_instruction": "v3"}
+
+
+def test_deepseek_report_composition_gets_a_provider_only_word_budget_control() -> None:
+    captured: dict[str, Any] = {}
+    payload = {
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "prompt_template_version": "v1",
+        "blocks": [
+            {
+                "text": "A concise claim-backed section.",
+                "claim_ids": ["40000000-0000-4000-8000-000000000002"],
+            }
+        ],
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["body"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "id": "deepseek_composition",
+                "model": "deepseek-v4-pro",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(payload)},
+                    }
+                ],
+                "usage": {
+                    "prompt_tokens": 120,
+                    "completion_tokens": 40,
+                    "total_tokens": 160,
+                },
+            },
+        )
+
+    settings = Settings(deepseek_api_key="deepseek-key")
+    provider = DeepSeekChatCompletionsProvider(
+        settings=settings,
+        model_name="deepseek-v4-pro",
+        max_output_tokens=4_000,
+        client=_mock_client(handler, settings.deepseek_base_url),
+    )
+    request = LLMInvocationRequest(
+        prompt_name="daily_brief_top_event",
+        prompt_version="v1",
+        prompt_template_version="v1",
+        prompt=(
+            "Write approximately 150 words for this section, and keep the whole section "
+            "(all blocks combined) between 120 and 180 words."
+        ),
+        requested_schema="ReportComposition",
+        context={
+            "budget_attempt": 1,
+            "word_budget_target": 150,
+            "word_budget_minimum": 120,
+            "word_budget_maximum": 180,
+        },
+        temperature=0.0,
+    )
+
+    response = provider.invoke(request)
+
+    system_instruction = captured["body"]["messages"][0]["content"]
+    assert "REPORT COMPOSITION WORD-BUDGET CONTROL (v3)" in system_instruction
+    assert "hard acceptance condition" in system_instruction
+    assert "shape-only" in system_instruction
+    assert "do not copy its empty blocks or abstention reason" in system_instruction
+    assert "at least one non-empty block" in system_instruction
+    assert "cover every required fact and concept" in system_instruction
+    assert "preserve the exact supporting claim_ids" in system_instruction
+    assert "120-180 words is the accepted outer range" in system_instruction
+    assert "safer 140-160 word band" in system_instruction
+    assert "150-word target" in system_instruction
+    assert "single corrective budget attempt" not in system_instruction
+    assert "all blocks[].text" in system_instruction
+    assert "maximal run of non-whitespace characters" in system_instruction
+    assert "Do not count JSON syntax or claim_ids" in system_instruction
+    assert "do not add a word-count field" in system_instruction
+    assert captured["body"]["messages"][1] == {
+        "role": "user",
+        "content": request.prompt,
+    }
+    assert response.structured == payload
+    assert response.raw_metadata["report_composition_budget_instruction"] == "v3"
+
+    retry_request = replace(
+        request,
+        prompt=(
+            f"{request.prompt}\n\nYour previous response was 220 words, which is too long. "
+            "Rewrite this section in approximately 150 words."
+        ),
+        context={**request.context, "budget_attempt": 2},
+    )
+    provider.invoke(retry_request)
+
+    retry_instruction = captured["body"]["messages"][0]["content"]
+    assert "single corrective budget attempt" in retry_instruction
+    assert "previous word count and too-short or too-long direction" in retry_instruction
+    assert "Rewrite the full section" in retry_instruction
+    assert "retain every required fact, concept, and exact claim_id" in retry_instruction
+    assert captured["body"]["messages"][1] == {
+        "role": "user",
+        "content": retry_request.prompt,
+    }
+
+
+@pytest.mark.parametrize(
+    ("choice", "message", "diagnostic_code"),
+    [
+        (
+            {
+                "finish_reason": "length",
+                "message": {"content": json.dumps(_event_payload())},
+            },
+            "finish_reason",
+            "output_incomplete",
+        ),
+        (
+            {"finish_reason": "stop", "message": {"content": ""}},
+            "empty JSON-mode",
+            "output_missing",
+        ),
+        (
+            {"finish_reason": "stop", "message": {"content": "{"}},
+            "valid JSON",
+            "output_invalid_json",
+        ),
+        (
+            {"finish_reason": "stop", "message": {"content": "[]"}},
+            "JSON object",
+            "output_not_object",
+        ),
+    ],
+)
+def test_deepseek_adapter_rejects_unusable_output_and_retains_billed_usage(
+    choice: dict[str, Any],
+    message: str,
+    diagnostic_code: str,
+) -> None:
+    settings = Settings(deepseek_api_key="key")
+    provider = DeepSeekChatCompletionsProvider(
+        settings=settings,
+        model_name="deepseek-v4-pro",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(
+                200,
+                json={
+                    "choices": [choice],
+                    "usage": {
+                        "prompt_tokens": 20,
+                        "completion_tokens": 10,
+                        "total_tokens": 30,
+                    },
+                },
+            ),
+            settings.deepseek_base_url,
+        ),
+    )
+
+    with pytest.raises(LLMProviderOutputError, match=message) as caught:
+        provider.invoke(_invocation_request())
+
+    assert caught.value.diagnostic_code == diagnostic_code
+    assert (caught.value.response.input_tokens, caught.value.response.output_tokens) == (20, 10)
+
+
+def test_deepseek_truncated_output_is_billed_by_the_orchestrator() -> None:
+    settings = Settings(
+        deepseek_api_key="deepseek-key",
+        llm_models={"T1": "deepseek-v4-flash"},
+        llm_tier_providers={"T1": "deepseek"},
+        llm_tier_fallbacks={},
+    )
+    provider = DeepSeekChatCompletionsProvider(
+        settings=settings,
+        model_name="deepseek-v4-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {
+                            "finish_reason": "length",
+                            "message": {"content": json.dumps(_event_payload())},
+                        }
+                    ],
+                    "usage": {
+                        "prompt_tokens": 20,
+                        "completion_tokens": 10,
+                        "total_tokens": 30,
+                    },
+                },
+            ),
+            settings.deepseek_base_url,
+        ),
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier={"T1": (provider,)},
+    )
+
+    with pytest.raises(LLMInvocationFailure):
+        orchestrator.run(_make_request(job_key="deepseek-truncated-usage", is_realtime=True))
+
+    failed = repository.llm_runs[0]
+    assert failed.status == "failed"
+    assert (failed.input_tokens, failed.output_tokens) == (20, 10)
+    assert failed.cost_usd == pytest.approx((20 * 0.14 + 10 * 0.28) / 1_000_000)
+    assert failed.error_details["provider_failure_code"] == "output_incomplete"
+
+
+@pytest.mark.parametrize("schema_name", list_contract_schemas())
+def test_deepseek_schema_examples_are_complete_contract_valid_abstentions(
+    schema_name: str,
+) -> None:
+    schema = llm_contract_json_schema(schema_name)
+    example = _json_schema_example(schema)
+
+    assert set(example) == set(schema["properties"])
+    validate_llm_contract_payload(
+        schema_name=schema_name,
+        payload=example,
+        allowed_ids=(),
+    )
+
+
+def test_deepseek_empty_json_output_gets_one_corrective_retry() -> None:
+    settings = Settings(
+        deepseek_api_key="deepseek-key",
+        llm_models={"T1": "deepseek-v4-flash"},
+        llm_tier_providers={"T1": "deepseek"},
+        llm_tier_fallbacks={},
+    )
+    bodies: list[dict[str, Any]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        bodies.append(json.loads(request.content))
+        if len(bodies) == 1:
+            return httpx.Response(
+                200,
+                json={
+                    "id": "deepseek_empty",
+                    "model": "deepseek-v4-flash",
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {"content": ""},
+                        }
+                    ],
+                    "usage": {
+                        "prompt_tokens": 20,
+                        "completion_tokens": 0,
+                        "total_tokens": 20,
+                    },
+                },
+            )
+        return _deepseek_handler()(request)
+
+    provider = DeepSeekChatCompletionsProvider(
+        settings=settings,
+        model_name="deepseek-v4-flash",
+        max_output_tokens=2_000,
+        client=_mock_client(handler, settings.deepseek_base_url),
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier={"T1": (provider,)},
+    )
+    try:
+        result = orchestrator.run(_make_request(job_key="deepseek-empty-retry"))
+    finally:
+        orchestrator.close()
+
+    assert result.run.provider == "deepseek"
+    assert len(bodies) == 2
+    assert "Validation feedback:" in bodies[1]["messages"][1]["content"]
+    assert [run.status for run in repository.llm_runs] == [
+        "validation_failed",
+        "succeeded",
+    ]
+    first_attempt = repository.llm_runs[0]
+    assert (first_attempt.input_tokens, first_attempt.output_tokens) == (20, 0)
+    assert first_attempt.cost_usd == pytest.approx((20 / 1_000_000) * 0.14)
+
+
 def test_live_adapters_reject_async_batch_submission() -> None:
-    settings = Settings(anthropic_api_key="key", openai_api_key="key")
+    settings = Settings(
+        anthropic_api_key="key",
+        openai_api_key="key",
+        gemini_api_key="key",
+        deepseek_api_key="key",
+    )
     providers = (
         AnthropicMessagesProvider(
             settings=settings,
@@ -1311,6 +2162,18 @@ def test_live_adapters_reject_async_batch_submission() -> None:
             model_name="gpt-4.1",
             max_output_tokens=6_000,
             client=_mock_client(_anthropic_handler(), settings.openai_base_url),
+        ),
+        GeminiInteractionsProvider(
+            settings=settings,
+            model_name="gemini-3.6-flash",
+            max_output_tokens=4_000,
+            client=_mock_client(_gemini_handler(), settings.gemini_base_url),
+        ),
+        DeepSeekChatCompletionsProvider(
+            settings=settings,
+            model_name="deepseek-v4-flash",
+            max_output_tokens=4_000,
+            client=_mock_client(_deepseek_handler(), settings.deepseek_base_url),
         ),
     )
 
@@ -1353,11 +2216,100 @@ def test_anthropic_adapter_surfaces_http_and_payload_errors() -> None:
         toolless.invoke(_invocation_request())
 
 
-def test_missing_api_key_is_refused_at_construction() -> None:
+@pytest.mark.parametrize(
+    ("status_code", "diagnostic_code"),
+    [
+        (400, "http_request_rejected"),
+        (401, "http_authentication"),
+        (403, "http_permission"),
+        (404, "http_not_found"),
+        (408, "http_timeout"),
+        (429, "http_rate_limited"),
+        (500, "http_server_error"),
+    ],
+)
+def test_http_failures_carry_only_fixed_diagnostic_codes(
+    status_code: int,
+    diagnostic_code: str,
+) -> None:
+    settings = Settings(anthropic_api_key="key")
+    provider = AnthropicMessagesProvider(
+        settings=settings,
+        model_name="claude-haiku-4-5",
+        max_output_tokens=2_000,
+        client=_mock_client(
+            lambda _request: httpx.Response(
+                status_code,
+                json={"error": "secret-provider-body-marker"},
+            ),
+            settings.anthropic_base_url,
+        ),
+    )
+
+    with pytest.raises(LLMProviderError) as caught:
+        provider.invoke(_invocation_request())
+
+    assert caught.value.diagnostic_code == diagnostic_code
+    assert diagnostic_code in LLM_PROVIDER_FAILURE_DIAGNOSTIC_CODES
+    assert "secret-provider-body-marker" not in diagnostic_code
+
+
+@pytest.mark.parametrize(
+    ("handler", "diagnostic_code"),
+    [
+        (
+            lambda request: (_ for _ in ()).throw(
+                httpx.ReadTimeout("secret-timeout-marker", request=request)
+            ),
+            "transport_timeout",
+        ),
+        (
+            lambda request: (_ for _ in ()).throw(
+                httpx.ConnectError("secret-transport-marker", request=request)
+            ),
+            "transport_error",
+        ),
+        (lambda _request: httpx.Response(200, text="not-json"), "response_non_json"),
+        (lambda _request: httpx.Response(200, json=[]), "response_not_object"),
+    ],
+)
+def test_transport_and_response_failures_have_fixed_diagnostic_codes(
+    handler: Any,
+    diagnostic_code: str,
+) -> None:
+    settings = Settings(anthropic_api_key="key")
+    provider = AnthropicMessagesProvider(
+        settings=settings,
+        model_name="claude-haiku-4-5",
+        max_output_tokens=2_000,
+        client=_mock_client(handler, settings.anthropic_base_url),
+    )
+
+    with pytest.raises(LLMProviderError) as caught:
+        provider.invoke(_invocation_request())
+
+    assert caught.value.diagnostic_code == diagnostic_code
+    assert provider_failure_diagnostic_code(caught.value) == diagnostic_code
+    assert provider_failure_diagnostic_code(RuntimeError("secret-unknown-marker")) == "unclassified"
+
+
+@pytest.mark.parametrize(
+    ("provider_class", "model_name"),
+    [
+        (AnthropicMessagesProvider, "claude-haiku-4-5"),
+        (OpenAIChatCompletionsProvider, "gpt-4.1"),
+        (GeminiInteractionsProvider, "gemini-3.6-flash"),
+        (DeepSeekChatCompletionsProvider, "deepseek-v4-flash"),
+    ],
+)
+def test_missing_api_key_is_refused_at_construction(
+    provider_class: type[Any],
+    model_name: str,
+) -> None:
     with pytest.raises(LLMProviderError, match="API key"):
-        AnthropicMessagesProvider(
-            settings=Settings(anthropic_api_key=""),
-            model_name="claude-haiku-4-5",
+        provider_class(
+            settings=Settings(),
+            model_name=model_name,
             max_output_tokens=2_000,
         )
 
@@ -1382,6 +2334,193 @@ def test_provider_factory_uses_explicit_per_tier_configuration() -> None:
         for tier_providers in providers.values():
             for provider in tier_providers:
                 provider.close()
+
+
+def test_provider_factory_builds_opt_in_gemini_and_deepseek_routes() -> None:
+    settings = Settings(
+        gemini_api_key="gemini-key",
+        deepseek_api_key="deepseek-key",
+        llm_models={"T1": "gemini-3.6-flash"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={"T1": [{"provider": "deepseek", "model": "deepseek-v4-flash"}]},
+    )
+
+    providers = build_providers_by_tier(settings, tiers=(LLMTier.T1,))
+    try:
+        assert [provider.provider_name for provider in providers["T1"]] == [
+            "gemini",
+            "deepseek",
+        ]
+        assert [provider.model_name for provider in providers["T1"]] == [
+            "gemini-3.6-flash",
+            "deepseek-v4-flash",
+        ]
+    finally:
+        for provider in providers["T1"]:
+            provider.close()
+
+
+def test_provider_factory_closes_completed_adapters_when_a_later_route_is_invalid() -> None:
+    settings = Settings(
+        gemini_api_key="gemini-key",
+        llm_models={"T1": "gemini-3.6-flash"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={"T1": [{"provider": "not-a-provider", "model": "not-a-model"}]},
+    )
+    client = _mock_client(_gemini_handler(), settings.gemini_base_url)
+
+    with pytest.raises(LLMProviderError, match="unsupported provider"):
+        build_providers_by_tier(
+            settings,
+            tiers=(LLMTier.T1,),
+            client=client,
+        )
+
+    assert client.is_closed
+
+
+def test_orchestrator_closes_each_provider_once_even_when_routes_share_it() -> None:
+    provider = CloseTrackingProvider((_event_payload(),))
+    orchestrator = LLMOrchestrator(
+        settings=Settings(),
+        repository=InMemoryLLMRuntimeRepository(),
+        providers_by_tier={"T1": (provider,), "T2": (provider,)},
+    )
+
+    orchestrator.close()
+    orchestrator.close()
+
+    assert provider.close_count == 1
+
+
+def test_production_runtime_closes_providers_if_limiter_assembly_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import services.llm.runtime as runtime
+
+    provider = CloseTrackingProvider((_event_payload(),), provider_name="gemini")
+    monkeypatch.setattr(
+        runtime,
+        "build_providers_by_tier",
+        lambda _settings: {"T1": (provider,), "T2": (provider,)},
+    )
+
+    def fail_limiter(**_kwargs: Any) -> None:
+        raise RuntimeError("limiter configuration failed")
+
+    monkeypatch.setattr(runtime, "build_provider_rate_limiter", fail_limiter)
+
+    with pytest.raises(RuntimeError, match="limiter configuration failed"):
+        runtime.build_production_orchestrator(
+            settings=Settings(),
+            session=object(),  # type: ignore[arg-type]
+            redis_client=FakeRedis(),
+        )
+
+    assert provider.close_count == 1
+
+
+def test_limiter_failure_remains_primary_when_provider_cleanup_also_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import services.llm.runtime as runtime
+
+    close_error = RuntimeError("provider close failed")
+    provider = CloseTrackingProvider(
+        (_event_payload(),),
+        provider_name="gemini",
+        close_error=close_error,
+    )
+    monkeypatch.setattr(
+        runtime,
+        "build_providers_by_tier",
+        lambda _settings: {"T1": (provider,)},
+    )
+    limiter_error = RuntimeError("limiter configuration failed")
+
+    def fail_limiter(**_kwargs: Any) -> None:
+        raise limiter_error
+
+    monkeypatch.setattr(runtime, "build_provider_rate_limiter", fail_limiter)
+
+    with pytest.raises(RuntimeError, match="limiter configuration failed") as captured:
+        runtime.build_production_orchestrator(
+            settings=Settings(),
+            session=object(),  # type: ignore[arg-type]
+            redis_client=FakeRedis(),
+        )
+
+    assert captured.value is limiter_error
+    assert provider.close_count == 1
+    assert any("provider close failed" in note for note in limiter_error.__notes__)
+
+
+def test_a_current_deterministic_workload_can_run_on_the_gemini_route() -> None:
+    settings = Settings(
+        gemini_api_key="gemini-key",
+        deepseek_api_key="deepseek-key",
+        llm_models={"T1": "gemini-3.6-flash"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={"T1": [{"provider": "deepseek", "model": "deepseek-v4-flash"}]},
+    )
+    clients = {
+        "gemini": _mock_client(_gemini_handler(), settings.gemini_base_url),
+        "deepseek": _mock_client(_deepseek_handler(), settings.deepseek_base_url),
+    }
+    providers = build_providers_by_tier(
+        settings,
+        tiers=(LLMTier.T1,),
+        clients_by_provider=clients,
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier=providers,
+    )
+    base_request = _make_request(job_key="gemini-temperature-fallback")
+
+    try:
+        result = orchestrator.run(
+            LLMOrchestratorRequest(**{**base_request.__dict__, "temperature": 0.0})
+        )
+
+        assert result.run.provider == "gemini"
+        assert result.degraded_provider is None
+        assert len(repository.llm_runs) == 1
+        assert result.run.model_params["adapter_params"] == {
+            "thinking_level": "low",
+            "temperature_requested": 0.0,
+            "temperature_sent": False,
+            "temperature_strategy": "deterministic_system_instruction",
+        }
+    finally:
+        orchestrator.close()
+
+
+def test_provider_factory_requires_explicit_pricing_for_every_live_model() -> None:
+    unpriced = Settings(
+        gemini_api_key="key",
+        llm_models={"T1": "gemini-custom"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={},
+    )
+    with pytest.raises(LLMProviderError, match="has no token pricing"):
+        build_providers_by_tier(unpriced, tiers=(LLMTier.T1,))
+
+    priced = Settings(
+        gemini_api_key="key",
+        llm_models={"T1": "gemini-custom"},
+        llm_tier_providers={"T1": "gemini"},
+        llm_tier_fallbacks={},
+        gemini_model_thinking_levels={"gemini-custom": "low"},
+        llm_provider_token_price_usd_per_1m={"gemini:gemini-custom": {"input": 0.1, "output": 0.2}},
+    )
+    providers = build_providers_by_tier(priced, tiers=(LLMTier.T1,))
+    try:
+        assert providers["T1"][0].model_name == "gemini-custom"
+    finally:
+        providers["T1"][0].close()
 
 
 def test_configured_cross_vendor_http_fallback_survives_primary_outage() -> None:
@@ -1427,11 +2566,184 @@ def test_configured_cross_vendor_http_fallback_survives_primary_outage() -> None
         provider_client.close()
 
 
+def test_configured_deepseek_fallback_handles_gemini_rate_limit() -> None:
+    def deepseek_handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "id": "deepseek_rate_limit_fallback",
+                "model": "deepseek-v4-pro",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(_event_payload())},
+                    }
+                ],
+                "usage": {"prompt_tokens": 20, "completion_tokens": 10},
+            },
+        )
+
+    settings = Settings(
+        gemini_api_key="gemini-key",
+        deepseek_api_key="deepseek-key",
+        llm_models={"T2": "gemini-3.6-flash"},
+        llm_tier_providers={"T2": "gemini"},
+        llm_tier_fallbacks={"T2": [{"provider": "deepseek", "model": "deepseek-v4-pro"}]},
+    )
+    clients = {
+        "gemini": _mock_client(
+            lambda _request: httpx.Response(429, json={"error": "quota marker"}),
+            settings.gemini_base_url,
+        ),
+        "deepseek": _mock_client(deepseek_handler, settings.deepseek_base_url),
+    }
+    providers = build_providers_by_tier(
+        settings,
+        tiers=(LLMTier.T2,),
+        clients_by_provider=clients,
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier=providers,
+    )
+
+    try:
+        result = orchestrator.run(
+            _make_request(
+                job_key="gemini-rate-limit-fallback",
+                requested_tier=LLMTier.T2,
+                is_realtime=True,
+            )
+        )
+    finally:
+        orchestrator.close()
+
+    assert result.run.provider == "deepseek"
+    assert result.run.model == "deepseek-v4-pro"
+    assert result.degraded_provider == "deepseek"
+    assert repository.llm_runs[0].provider == "gemini"
+    assert repository.llm_runs[0].status == "failed"
+    assert repository.llm_runs[0].error_details["provider_failure_code"] == "http_rate_limited"
+
+
+def test_current_t2_openai_rate_limit_falls_back_to_deepseek_with_safe_audit() -> None:
+    prompt_marker = "private-news-prompt-marker"
+    response_marker = "openai-private-response-marker"
+    openai_key_marker = "openai-private-key-marker"
+    deepseek_key_marker = "deepseek-private-key-marker"
+
+    def deepseek_handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "id": "deepseek_openai_rate_limit_fallback",
+                "model": "deepseek-v4-pro",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(_event_payload())},
+                    }
+                ],
+                "usage": {"prompt_tokens": 20, "completion_tokens": 10},
+            },
+        )
+
+    settings = Settings(
+        openai_api_key=openai_key_marker,
+        deepseek_api_key=deepseek_key_marker,
+        llm_models={"T2": "gpt-4.1"},
+        llm_tier_providers={"T2": "openai"},
+        llm_tier_fallbacks={"T2": [{"provider": "deepseek", "model": "deepseek-v4-pro"}]},
+    )
+    clients = {
+        "openai": _mock_client(
+            lambda _request: httpx.Response(429, json={"error": response_marker}),
+            settings.openai_base_url,
+        ),
+        "deepseek": _mock_client(deepseek_handler, settings.deepseek_base_url),
+    }
+    providers = build_providers_by_tier(
+        settings,
+        tiers=(LLMTier.T2,),
+        clients_by_provider=clients,
+    )
+    repository = InMemoryLLMRuntimeRepository()
+    orchestrator = LLMOrchestrator(
+        settings=settings,
+        repository=repository,
+        providers_by_tier=providers,
+    )
+    request = replace(
+        _make_request(
+            job_key="openai-rate-limit-fallback",
+            requested_tier=LLMTier.T2,
+            is_realtime=True,
+        ),
+        prompt=prompt_marker,
+    )
+
+    try:
+        result = orchestrator.run(request)
+    finally:
+        orchestrator.close()
+
+    failed_run, successful_run = repository.llm_runs
+    assert (failed_run.provider, failed_run.model, failed_run.status) == (
+        "openai",
+        "gpt-4.1",
+        "failed",
+    )
+    assert failed_run.model_params["degraded_provider"] is None
+    assert failed_run.error_message == "provider invocation failure"
+    assert failed_run.error_details["provider_failure_code"] == "http_rate_limited"
+    assert failed_run.raw_output is None
+    assert failed_run.output == {}
+
+    assert successful_run is result.run
+    assert (successful_run.provider, successful_run.model, successful_run.status) == (
+        "deepseek",
+        "deepseek-v4-pro",
+        "succeeded",
+    )
+    assert result.degraded_provider == "deepseek"
+    assert successful_run.model_params["degraded_provider"] == "deepseek"
+    assert successful_run.attempt == 2
+    assert repository.last_job_for_key(request.job.job_key).state == "succeeded"
+
+    audit_payload = json.dumps(
+        [
+            {
+                "error_message": run.error_message,
+                "error_details": run.error_details,
+                "input_refs": run.input_refs,
+                "model_params": run.model_params,
+                "output": run.output,
+                "raw_output": run.raw_output,
+            }
+            for run in repository.llm_runs
+        ],
+        sort_keys=True,
+    )
+    for private_marker in (
+        prompt_marker,
+        response_marker,
+        openai_key_marker,
+        deepseek_key_marker,
+    ):
+        assert private_marker not in audit_payload
+
+
 def test_provider_factory_rejects_an_unsupported_provider_name() -> None:
     settings = Settings(
         anthropic_api_key="key",
         openai_api_key="key",
-        llm_tier_providers={"T1": "deepseek", "T2": "anthropic", "T3": "openai"},
+        llm_tier_providers={
+            "T1": "not-a-provider",
+            "T2": "anthropic",
+            "T3": "openai",
+        },
     )
 
     with pytest.raises(LLMProviderError, match="unsupported provider"):
@@ -1471,9 +2783,7 @@ def test_a_request_without_a_temperature_sends_none_and_records_none() -> None:
         ("openai", "https://api.openai.com/v1/chat/completions"),
     ],
 )
-def test_a_requested_temperature_reaches_both_provider_bodies(
-    provider_name: str, url: str
-) -> None:
+def test_a_requested_temperature_reaches_both_provider_bodies(provider_name: str, url: str) -> None:
     captured: dict[str, Any] = {}
     settings = Settings(anthropic_api_key="anthropic-key", openai_api_key="openai-key")
     if provider_name == "anthropic":
@@ -1521,9 +2831,7 @@ def test_the_orchestrator_persists_the_requested_temperature_on_the_run() -> Non
     )
 
     request = _make_request(job_key="temperature-run")
-    result = orchestrator.run(
-        LLMOrchestratorRequest(**{**request.__dict__, "temperature": 0.0})
-    )
+    result = orchestrator.run(LLMOrchestratorRequest(**{**request.__dict__, "temperature": 0.0}))
 
     # `llm_runs.temperature` is what makes a deterministic run auditable as one.
     assert result.run.temperature == 0.0
@@ -1582,6 +2890,28 @@ def test_an_out_of_range_temperature_is_rejected_before_any_provider_is_called(
         )
 
 
+def test_production_runtime_scopes_limits_to_actually_routed_providers() -> None:
+    settings = Settings(
+        anthropic_api_key="key",
+        openai_api_key="key",
+        # A pre-Gemini/DeepSeek deployment override remains valid because neither new
+        # provider is in the default primary/fallback routes.
+        llm_provider_rpm_limits={"anthropic": 11, "openai": 42},
+    )
+
+    orchestrator = build_production_orchestrator(
+        settings=settings,
+        session=object(),  # type: ignore[arg-type]
+        redis_client=FakeRedis(),
+    )
+
+    limiter = orchestrator._limiter
+    assert isinstance(limiter, CompositeProviderLimiter)
+    assert set(limiter.request_limiters) == {"anthropic", "openai"}
+    assert set(limiter.token_limiters) == {"anthropic", "openai"}
+    orchestrator.close()
+
+
 def test_the_production_orchestrator_can_leave_the_transaction_to_its_caller() -> None:
     """ADR 0005 linking runs the orchestrator inside its own unit of work, so it must not commit."""
 
@@ -1609,6 +2939,8 @@ def test_the_production_orchestrator_can_leave_the_transaction_to_its_caller() -
 
     # The repository is internal to the orchestrator, and the switch it was built with is the
     # whole point of this assertion: the caller's transaction has to survive an audit write.
-    orchestrator._repository.save_llm_run(LLMRun(prompt_name="p", prompt_version="v1", provider="anthropic", model="m"))
+    orchestrator._repository.save_llm_run(
+        LLMRun(prompt_name="p", prompt_version="v1", provider="anthropic", model="m")
+    )
 
     assert (session.commits, session.flushes) == (0, 1)

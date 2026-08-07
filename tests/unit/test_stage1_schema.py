@@ -66,16 +66,17 @@ def test_stage1_tables_compile_as_postgres_ddl(name: str) -> None:
 # --------------------------------------------------------------------------------------
 
 
-def test_article_embeddings_composite_primary_key_and_defaults() -> None:
+def test_embedding_identity_is_explicit_and_part_of_the_primary_key() -> None:
     table = _table("article_embeddings")
     assert {"article_id", "model", "model_version"} == {
         column.name for column in table.primary_key.columns
     }
     assert table.c.model.nullable is False
     assert table.c.model_version.nullable is False
-    # Defaults exist so the migration can backfill pre-existing rows into the new key.
-    assert str(table.c.model.server_default.arg) == m.EMBEDDING_MODEL
-    assert str(table.c.model_version.server_default.arg) == m.EMBEDDING_MODEL_VERSION
+    assert table.c.model.server_default is None
+    assert table.c.model_version.server_default is None
+    assert _table("event_embeddings").c.model.server_default is None
+    assert _table("event_embeddings").c.model_version.server_default is None
 
 
 # --------------------------------------------------------------------------------------
@@ -173,6 +174,45 @@ def test_historical_episode_onset_embedding_has_hnsw_cosine_index() -> None:
     } <= _indexes("historical_episodes")
 
 
+def test_historical_episode_embedding_sidecar_pins_revision_space_and_provenance() -> None:
+    table = _table("historical_episode_embeddings")
+    assert {column.name for column in table.primary_key.columns} == {
+        "historical_episode_id",
+        "model",
+        "model_version",
+        "episode_version",
+    }
+    assert {column.name for column in table.columns} == {
+        "historical_episode_id",
+        "model",
+        "model_version",
+        "episode_version",
+        "dimension",
+        "onset_embedding",
+        "input_sha256",
+        "input_contract_version",
+        "snapshot_manifest_sha256",
+        "created_at",
+    }
+    assert table.c.model.server_default is None
+    assert table.c.model_version.server_default is None
+    assert table.c.episode_version.server_default is None
+    assert table.c.input_sha256.nullable is True  # legacy vectors have no recoverable input bytes
+    assert table.c.input_contract_version.nullable is False
+    assert table.c.snapshot_manifest_sha256.nullable is True
+    assert "ix_historical_episode_embeddings_onset_embedding_hnsw" in _indexes(
+        "historical_episode_embeddings"
+    )
+    assert "USING hnsw (onset_embedding vector_cosine_ops)" in _ddl("historical_episode_embeddings")
+    assert {
+        "ck_historical_episode_embeddings_episode_version_positive",
+        "ck_historical_episode_embeddings_dimension",
+        "ck_historical_episode_embeddings_input_contract",
+        "ck_historical_episode_embeddings_input_sha256",
+        "ck_historical_episode_embeddings_snapshot_manifest_sha256",
+    } <= _constraints("historical_episode_embeddings")
+
+
 def test_historical_episode_outcome_check_uses_array_containment_not_subquery() -> None:
     # Postgres rejects a subquery inside a CHECK constraint, so the enum guard on the
     # outcomes[] array has to be expressed as containment.
@@ -245,15 +285,10 @@ def test_event_analogies_contract() -> None:
         "created_at",
     }
     # The analogy must point at a real curated episode, not a model-minted id.
-    fks = {
-        (fk.parent.name, fk.column.table.name)
-        for fk in table.foreign_keys
-    }
+    fks = {(fk.parent.name, fk.column.table.name) for fk in table.foreign_keys}
     assert ("historical_episode_id", "historical_episodes") in fks
     assert "uq_event_analogies_event_episode" in _constraints("event_analogies")
-    assert "CHECK (similarity_score >= 0 AND similarity_score <= 100)" in _ddl(
-        "event_analogies"
-    )
+    assert "CHECK (similarity_score >= 0 AND similarity_score <= 100)" in _ddl("event_analogies")
 
 
 def test_risk_warnings_contract() -> None:
@@ -330,7 +365,9 @@ def test_existing_llm_destination_tables_gain_numeric_scale_checks() -> None:
         _ddl("events")
     )
     companies = _ddl("event_companies")
-    assert "CHECK (impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100))" in companies
+    assert (
+        "CHECK (impact_score IS NULL OR (impact_score >= 0 AND impact_score <= 100))" in companies
+    )
     assert (
         "CHECK (confidence_score IS NULL OR (confidence_score >= 0 AND confidence_score <= 1))"
         in companies
@@ -405,9 +442,7 @@ def test_alerts_carry_the_adr0010_lifecycle_columns() -> None:
     assert "status" not in table.c
     assert table.c.state.nullable is False
     ddl = _ddl("alerts")
-    assert (
-        "CHECK (state IN ('open', 'escalated', 'downgraded', 'resolved', 'superseded'))" in ddl
-    )
+    assert "CHECK (state IN ('open', 'escalated', 'downgraded', 'resolved', 'superseded'))" in ddl
 
 
 def test_alerts_carry_hysteresis_and_notification_state() -> None:
@@ -501,6 +536,4 @@ def test_report_sections_carry_claim_level_citations() -> None:
     ddl = _ddl("report_sections")
     assert "evidence_refs UUID[]" in ddl
     # The grounding gate records a verdict per section.
-    assert (
-        "CHECK (grounding_status IN ('pending', 'passed', 'failed', 'data_quality_note'))" in ddl
-    )
+    assert "CHECK (grounding_status IN ('pending', 'passed', 'failed', 'data_quality_note'))" in ddl

@@ -60,10 +60,21 @@ def build_orchestrator(session: Any, redis_client: Any) -> Any:
     )
 
 
-def _closed(resource: Any) -> None:
-    close = getattr(resource, "close", None)
-    if callable(close):
-        close()
+def _close_errors(*resources: Any) -> tuple[BaseException, ...]:
+    """Close every supplied resource and return all faults without skipping later closes."""
+
+    errors: list[BaseException] = []
+    for resource in resources:
+        if resource is None:
+            continue
+        close = getattr(resource, "close", None)
+        if not callable(close):
+            continue
+        try:
+            close()
+        except BaseException as exc:
+            errors.append(exc)
+    return tuple(errors)
 
 
 def _identity_regime_tags(values: Sequence[str] | None) -> list[str]:
@@ -142,40 +153,67 @@ def run_event_analogy_rerank(
 
     session = SessionLocal()
     redis_client: Any = None
+    orchestrator: Any = None
     try:
         redis_client = build_redis_client()
+        orchestrator = build_orchestrator(session, redis_client)
         result = generate_event_analogies(
             session,
             identifier,
-            orchestrator=build_orchestrator(session, redis_client),
+            orchestrator=orchestrator,
             regime_tags=regime_tags,
             geographies=geographies,
             industries=industries,
             top_k=top_k,
             min_similarity=min_similarity,
         )
+        precommit_cleanup_errors = _close_errors(orchestrator, redis_client)
+        orchestrator = None
+        redis_client = None
+        if precommit_cleanup_errors:
+            raise BaseExceptionGroup(
+                "event analogy resource cleanup failed",
+                list(precommit_cleanup_errors),
+            )
         # The only commit: the LLM audit rows and the reconciled analogy set land together.
         session.commit()
         metrics.increment(metrics.JOB_SUCCESSES)
         completed = job.mark_succeeded()
         logger.info("event analogy rerank completed", extra=_log_fields(result))
-        return {
+        payload = {
             "status": "ok",
             "job_id": completed.job_id,
             "job_key": completed.job_key,
             "state": completed.state.value,
             **result.as_dict(),
         }
-    except Exception:
+    except BaseException as cause:
         # A retrieval, provider, or contract failure: the event keeps the analogies it already had,
         # and Stage1Task retries with backoff. A stale set is never served as a fresh one, and a
         # failed rerank is never reported as "no reliable analogy".
-        session.rollback()
+        cleanup_errors: list[BaseException] = []
+        try:
+            session.rollback()
+        except BaseException as rollback_error:
+            cleanup_errors.append(rollback_error)
+        cleanup_errors.extend(_close_errors(orchestrator, redis_client, session))
+        orchestrator = None
+        redis_client = None
+        set_job_id(None)
         metrics.increment(metrics.JOB_FAILURES)
         logger.exception("event analogy rerank failed", extra={"event_id": str(identifier)})
+        if cleanup_errors:
+            raise BaseExceptionGroup(
+                "event analogy rerank and cleanup both failed",
+                [cause, *cleanup_errors],
+            ) from cause
         raise
-    finally:
-        if redis_client is not None:
-            _closed(redis_client)
-        session.close()
+    else:
+        cleanup_errors = _close_errors(session)
         set_job_id(None)
+        if cleanup_errors:
+            raise BaseExceptionGroup(
+                "event analogy session cleanup failed",
+                list(cleanup_errors),
+            )
+        return payload

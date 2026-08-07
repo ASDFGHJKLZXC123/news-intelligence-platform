@@ -17,9 +17,14 @@ from apps.api.intelligence import (
     DashboardMetricCounts,
     EventCompanyView,
     EventListRow,
+    get_crisis_prediction_reads_enabled,
     get_intelligence_repository,
 )
 from apps.api.main import app
+from db.models.core import (
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+)
 
 NOW = datetime.datetime(2026, 6, 20, 12, 0, tzinfo=datetime.UTC)
 TODAY = datetime.date(2026, 6, 20)
@@ -223,8 +228,16 @@ class FakeIntelligenceRepository:
     def count_open_alerts(self) -> int:
         return 2
 
-    def dashboard_metric_counts(self, *, now: datetime.datetime) -> Any:
-        self.received["dashboard_metric_counts"] = {"now": now}
+    def dashboard_metric_counts(
+        self,
+        *,
+        now: datetime.datetime,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> Any:
+        self.received["dashboard_metric_counts"] = {
+            "now": now,
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled,
+        }
         return DashboardMetricCounts(
             events_today=5,
             high_risk_events=2,
@@ -244,7 +257,15 @@ class FakeIntelligenceRepository:
             )
         ]
 
-    def event_map(self, *, limit: int) -> list[Any]:
+    def event_map(
+        self,
+        *,
+        limit: int,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> list[Any]:
+        self.received["event_map_policy"] = {
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled
+        }
         return [
             DashboardMapPoint(
                 location_name="Washington, D.C.",
@@ -325,8 +346,12 @@ class FakeIntelligenceRepository:
         status: str | None = None,
         limit: int,
         offset: int,
+        prediction_backed_outputs_enabled: bool = False,
     ) -> tuple[list[Any], int]:
         self.received["list_events"] = {"limit": limit, "offset": offset}
+        self.received["list_events_policy"] = {
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled,
+        }
         return [
             EventListRow(
                 event=self.event,
@@ -339,7 +364,15 @@ class FakeIntelligenceRepository:
             )
         ], self.total
 
-    def get_event_detail(self, event_id: uuid.UUID) -> tuple[Any, list[Any], list[Any], list[Any], list[Any]]:
+    def get_event_detail(
+        self,
+        event_id: uuid.UUID,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> tuple[Any, list[Any], list[Any], list[Any], list[Any]]:
+        self.received["get_event_detail"] = {
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled
+        }
         return (
             self.event,
             [
@@ -375,8 +408,19 @@ class FakeIntelligenceRepository:
         self.received["list_companies"] = {"limit": limit, "offset": offset}
         return [self.company], self.total
 
-    def get_company(self, identifier: str) -> tuple[Any, Any]:
-        return self.company, self.company_rollup
+    def get_company(
+        self,
+        identifier: str,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> tuple[Any, Any]:
+        self.received["get_company"] = {
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled
+        }
+        return (
+            self.company,
+            self.company_rollup if prediction_backed_outputs_enabled else None,
+        )
 
     def list_industries(self, *, limit: int, offset: int) -> tuple[list[Any], int]:
         self.received["list_industries"] = {"limit": limit, "offset": offset}
@@ -458,7 +502,16 @@ class FakeIntelligenceRepository:
             )
         ], self.total
 
-    def list_reports(self, *, user_id: uuid.UUID | None, limit: int) -> list[tuple[Any, list[Any]]]:
+    def list_reports(
+        self,
+        *,
+        user_id: uuid.UUID | None,
+        limit: int,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> list[tuple[Any, list[Any]]]:
+        self.received["list_reports_policy"] = {
+            "prediction_backed_outputs_enabled": prediction_backed_outputs_enabled
+        }
         return [
             (
                 SimpleNamespace(
@@ -477,6 +530,7 @@ class FakeIntelligenceRepository:
                     generated_by_run_id=uuid.uuid4(),
                     created_at=NOW,
                     updated_at=NOW,
+                    content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
                 ),
                 [
                     SimpleNamespace(
@@ -491,6 +545,10 @@ class FakeIntelligenceRepository:
                 ],
             )
         ]
+
+    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
+        self.received["claim_policy"] = {"claim_id": claim_id}
+        return False
 
     def list_jobs(self, *, state: str | None, limit: int, offset: int) -> tuple[list[Any], int]:
         self.received["list_jobs"] = {"limit": limit, "offset": offset}
@@ -534,6 +592,17 @@ class FakeIntelligenceRepository:
 @pytest.fixture
 def client() -> Iterator[TestClient]:
     app.dependency_overrides[get_intelligence_repository] = FakeIntelligenceRepository
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
+    try:
+        yield TestClient(app, client=("127.0.0.1", 5000))
+    finally:
+        app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def prediction_client() -> Iterator[TestClient]:
+    app.dependency_overrides[get_intelligence_repository] = FakeIntelligenceRepository
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:
@@ -569,9 +638,10 @@ def test_frontend_query_endpoints_return_database_shaped_payloads(client: TestCl
     assert responses["/api/v1/dashboard"].json()["summary"]["overall_risk_level"] == "medium"
     assert responses["/api/v1/events"].json()["items"][0]["id"] == str(EVENT_ID)
     assert responses["/api/v1/geo/events"].json()["items"][0]["event"]["id"] == str(EVENT_ID)
-    assert responses[f"/api/v1/companies/{COMPANY_ID}"].json()["company"]["risk_rollup"][
-        "top_driver"
-    ] == "supply chain disruption"
+    assert (
+        responses[f"/api/v1/companies/{COMPANY_ID}"].json()["company"]["risk_rollup"]["top_driver"]
+        == "supply chain disruption"
+    )
     assert responses["/api/v1/reports"].json()["items"][0]["sections"][0]["title"] == "Overview"
 
 
@@ -712,7 +782,13 @@ def test_dashboard_has_five_new_blocks_and_preserves_existing(client: TestClient
     assert isinstance(body["risk_scores"], list)
     assert body["alerts"]["open_count"] == 2
     # All five new top-level blocks exist and are lists.
-    for block in ("metrics", "upcoming_triggers", "event_map", "company_ranking", "industry_summary"):
+    for block in (
+        "metrics",
+        "upcoming_triggers",
+        "event_map",
+        "company_ranking",
+        "industry_summary",
+    ):
         assert isinstance(body[block], list), block
 
 
@@ -811,9 +887,91 @@ _CONSUMED_LIST_ENDPOINTS = [
 ]
 
 
-def _client_with(repo: FakeIntelligenceRepository) -> TestClient:
+def _client_with(
+    repo: FakeIntelligenceRepository, *, prediction_reads_enabled: bool = True
+) -> TestClient:
     app.dependency_overrides[get_intelligence_repository] = lambda: repo
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: prediction_reads_enabled
     return TestClient(app, client=("127.0.0.1", 5000))
+
+
+def test_gate_g_closed_withholds_prediction_backed_api_outputs_without_reading_them() -> None:
+    repo = FakeIntelligenceRepository()
+
+    def forbidden_read(*_args: Any, **_kwargs: Any) -> Any:
+        raise AssertionError("closed Gate G attempted a prediction-backed repository read")
+
+    repo.latest_daily_summary = forbidden_read  # type: ignore[method-assign]
+    repo.count_open_alerts = forbidden_read  # type: ignore[method-assign]
+    repo.company_ranking = forbidden_read  # type: ignore[method-assign]
+    repo.dashboard_industry_summary = forbidden_read  # type: ignore[method-assign]
+    repo.list_industries = forbidden_read  # type: ignore[method-assign]
+    repo.get_industry = forbidden_read  # type: ignore[method-assign]
+    repo.list_alerts = forbidden_read  # type: ignore[method-assign]
+    try:
+        closed = _client_with(repo, prediction_reads_enabled=False)
+
+        dashboard = closed.get("/api/v1/dashboard").json()
+        assert dashboard["summary"] is None
+        assert dashboard["alerts"] == {"open_count": 0}
+        assert dashboard["company_ranking"] == []
+        assert dashboard["industry_summary"] == []
+        assert dashboard["risk_scores"][0]["score"] == 41.5
+        assert dashboard["upcoming_triggers"]
+        assert (
+            repo.received["dashboard_metric_counts"]["prediction_backed_outputs_enabled"] is False
+        )
+        assert repo.received["event_map_policy"]["prediction_backed_outputs_enabled"] is False
+
+        event = closed.get("/api/v1/events").json()["items"][0]
+        company = event["companies"][0]
+        industry = event["industries"][0]
+        assert company["display_name"] == "Example Semiconductors"
+        assert company["exposure_explanation"] is None
+        assert company["impact_direction"] is None
+        assert company["impact_score"] is None
+        assert company["risk_score"] is None
+        assert industry["industry_id"] == "semiconductors"
+        assert industry["impact_direction"] is None
+        assert industry["impact_score"] is None
+        assert industry["risk_score"] is None
+        assert industry["opportunity_score"] is None
+        assert repo.received["list_events_policy"]["prediction_backed_outputs_enabled"] is False
+
+        company_detail = closed.get(f"/api/v1/companies/{COMPANY_ID}").json()["company"]
+        assert company_detail["display_name"] == "Example Semiconductors"
+        assert "risk_rollup" not in company_detail
+        assert repo.received["get_company"]["prediction_backed_outputs_enabled"] is False
+
+        assert closed.get("/api/v1/industries").json()["items"] == []
+        assert closed.get("/api/v1/industries/semiconductors").status_code == 404
+        assert closed.get("/api/v1/alerts").json()["items"] == []
+
+        # The fake's only report is explicitly prediction-backed, so even an alternate
+        # repository implementation that returned it is filtered again at the endpoint.
+        reports = closed.get("/api/v1/reports").json()
+        assert reports == {"items": [], "count": 0}
+        assert repo.received["list_reports_policy"]["prediction_backed_outputs_enabled"] is False
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_gate_g_closed_report_listing_accepts_only_explicit_descriptive_policy() -> None:
+    repo = FakeIntelligenceRepository()
+    rows = repo.list_reports(
+        user_id=None,
+        limit=50,
+        prediction_backed_outputs_enabled=False,
+    )
+    rows[0][0].content_policy = REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+    repo.list_reports = lambda **_kwargs: rows  # type: ignore[method-assign]
+    try:
+        payload = _client_with(repo, prediction_reads_enabled=False).get("/api/v1/reports").json()
+    finally:
+        app.dependency_overrides.clear()
+
+    assert payload["count"] == 1
+    assert payload["items"][0]["sections"][0]["title"] == "Overview"
 
 
 @pytest.mark.parametrize(("path", "method"), _CONSUMED_LIST_ENDPOINTS)
@@ -915,8 +1073,64 @@ def test_risk_detail_returns_riskdetail_envelope_not_raw_observations(client: Te
     assert risk["target_id"] == "US"
 
 
-def test_risk_detail_model_rating_serializes_every_crisisrating_field(client: TestClient) -> None:
-    rating = client.get("/api/v1/risk-radar/sovereign").json()["risk"]["model_rating"]
+def test_risk_detail_gate_closed_never_reads_or_serializes_crisis_prediction() -> None:
+    repo = FakeIntelligenceRepository()
+
+    def fail_prediction_read(**_: Any) -> Any:
+        raise AssertionError("closed Gate G must not query CrisisPrediction")
+
+    repo.latest_crisis_prediction = fail_prediction_read  # type: ignore[method-assign]
+    try:
+        risk = (
+            _client_with(repo, prediction_reads_enabled=False)
+            .get("/api/v1/risk-radar/sovereign")
+            .json()["risk"]
+        )
+    finally:
+        app.dependency_overrides.clear()
+
+    assert risk["score"] == 41.5
+    assert risk["severity"] == "medium"
+    assert risk["main_drivers"] == ["macro"]
+    assert risk["model_rating"] is None
+    assert risk["probability_by_horizon"] == []
+    assert risk["historical_comparisons"] == []
+    assert risk["invalidation_signals"] == []
+    assert "latest_crisis_prediction" not in repo.received
+
+
+def test_historical_gate_closed_never_reads_or_serializes_crisis_prediction() -> None:
+    repo = FakeIntelligenceRepository()
+
+    def fail_historical_read(**_: Any) -> Any:
+        raise AssertionError("closed Gate G must not query CrisisPrediction history")
+
+    repo.list_historical = fail_historical_read  # type: ignore[method-assign]
+    try:
+        response = _client_with(repo, prediction_reads_enabled=False).get("/api/v1/historical")
+    finally:
+        app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    assert response.json() == {"items": [], "count": 0}
+
+
+def test_historical_gate_open_returns_crisis_prediction_rows() -> None:
+    repo = FakeIntelligenceRepository()
+    try:
+        response = _client_with(repo, prediction_reads_enabled=True).get("/api/v1/historical")
+    finally:
+        app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    assert response.json()["count"] == 1
+    assert response.json()["items"][0]["risk_type"] == "sovereign"
+
+
+def test_risk_detail_model_rating_serializes_every_crisisrating_field(
+    prediction_client: TestClient,
+) -> None:
+    rating = prediction_client.get("/api/v1/risk-radar/sovereign").json()["risk"]["model_rating"]
     assert set(rating) == {
         "target_type",
         "target_id",
@@ -942,8 +1156,12 @@ def test_risk_detail_model_rating_serializes_every_crisisrating_field(client: Te
     assert rating["what_could_reduce_risk"] == ["IMF backstop confirmed", "FX reserves rebuild"]
 
 
-def test_risk_detail_horizons_use_canonical_tokens_from_the_prediction(client: TestClient) -> None:
-    horizons = client.get("/api/v1/risk-radar/sovereign").json()["risk"]["probability_by_horizon"]
+def test_risk_detail_horizons_use_canonical_tokens_from_the_prediction(
+    prediction_client: TestClient,
+) -> None:
+    horizons = prediction_client.get("/api/v1/risk-radar/sovereign").json()["risk"][
+        "probability_by_horizon"
+    ]
     assert horizons == [
         {"horizon": "0_6m", "probability": 0.10},
         {"horizon": "6_12m", "probability": 0.15},
@@ -953,9 +1171,9 @@ def test_risk_detail_horizons_use_canonical_tokens_from_the_prediction(client: T
 
 
 def test_risk_detail_drivers_analogies_and_invalidation_are_real_and_skip_unlabeled(
-    client: TestClient,
+    prediction_client: TestClient,
 ) -> None:
-    risk = client.get("/api/v1/risk-radar/sovereign").json()["risk"]
+    risk = prediction_client.get("/api/v1/risk-radar/sovereign").json()["risk"]
     # Labeled drivers only (name, then signal); the score-only entry is skipped, not renamed.
     assert risk["main_drivers"] == ["Deposit outflows", "credit_spread_zscore"]
     # Historical comparisons are the real analogy titles.
@@ -973,14 +1191,18 @@ def test_risk_detail_related_ids_split_by_target_and_drop_unsupported(client: Te
     assert risk["related_industry_ids"] == ["semiconductors"]
     assert risk["related_company_ids"] == [str(COMPANY_ID)]
     # `country` targets have no RiskDetail field: they are dropped, not forced onto a list.
-    for ids in (risk["related_event_ids"], risk["related_industry_ids"], risk["related_company_ids"]):
+    for ids in (
+        risk["related_event_ids"],
+        risk["related_industry_ids"],
+        risk["related_company_ids"],
+    ):
         assert "US" not in ids
 
 
 def test_risk_detail_matches_prediction_to_the_chosen_observation_target() -> None:
     repo = FakeIntelligenceRepository()
     try:
-        _client_with(repo).get("/api/v1/risk-radar/sovereign")
+        _client_with(repo, prediction_reads_enabled=True).get("/api/v1/risk-radar/sovereign")
     finally:
         app.dependency_overrides.clear()
     # The prediction lookup is handed the observation's own target so it can prefer a matching row.
@@ -995,7 +1217,11 @@ def test_risk_detail_null_model_rating_when_no_prediction() -> None:
     repo = FakeIntelligenceRepository()
     repo.latest_crisis_prediction = lambda **_: None  # type: ignore[method-assign]
     try:
-        risk = _client_with(repo).get("/api/v1/risk-radar/sovereign").json()["risk"]
+        risk = (
+            _client_with(repo, prediction_reads_enabled=True)
+            .get("/api/v1/risk-radar/sovereign")
+            .json()["risk"]
+        )
     finally:
         app.dependency_overrides.clear()
     # No prediction: model_rating/horizons/analogies/invalidation collapse to null/[] -- never stubbed.
@@ -1029,7 +1255,9 @@ def test_risk_detail_404_when_no_observation() -> None:
 def test_risk_history_uses_pagination_envelope_and_real_total() -> None:
     repo = FakeIntelligenceRepository()
     try:
-        resp = _client_with(repo).get("/api/v1/risk-radar/sovereign/history?days=30&limit=7&offset=3")
+        resp = _client_with(repo).get(
+            "/api/v1/risk-radar/sovereign/history?days=30&limit=7&offset=3"
+        )
     finally:
         app.dependency_overrides.clear()
     assert resp.status_code == 200

@@ -517,20 +517,52 @@ class SpySession(FakeSession):
         self.closed += 1
 
 
+class CloseTrackingAdjudicator(FakeAdjudicator):
+    def __init__(self, close_error: BaseException | None = None) -> None:
+        super().__init__()
+        self.close_count = 0
+        self.close_error = close_error
+
+    def close(self) -> None:
+        self.close_count += 1
+        if self.close_error is not None:
+            raise self.close_error
+
+
+class CloseTrackingRedis:
+    def __init__(self, close_error: BaseException | None = None) -> None:
+        self.close_count = 0
+        self.close_error = close_error
+
+    def close(self) -> None:
+        self.close_count += 1
+        if self.close_error is not None:
+            raise self.close_error
+
+
 @pytest.fixture
 def task_session(monkeypatch: pytest.MonkeyPatch) -> SpySession:
     session, subject, item, acme = _store()
     spy = SpySession(*session.items)
     spy.event, spy.article, spy.entity = subject, item, acme
+    spy.adjudicator = CloseTrackingAdjudicator()
+    spy.redis_client = CloseTrackingRedis()
 
     monkeypatch.setattr(entity_linking_tasks, "SessionLocal", lambda: spy)
+    monkeypatch.setattr(
+        entity_linking_tasks,
+        "build_redis_client",
+        lambda: spy.redis_client,
+    )
     monkeypatch.setattr(
         entity_linking_tasks,
         "build_mention_extractor",
         lambda: FakeExtractor({str(item.id): _accepting_mentions(str(item.id))}),
     )
     monkeypatch.setattr(
-        entity_linking_tasks, "build_mention_adjudicator", lambda _session: FakeAdjudicator()
+        entity_linking_tasks,
+        "build_mention_adjudicator",
+        lambda _session, _redis_client: spy.adjudicator,
     )
     return spy
 
@@ -551,6 +583,8 @@ def test_the_task_links_one_event_and_commits_once(task_session: SpySession) -> 
     assert payload["links_persisted"] == 3
     assert payload["event_id"] == str(task_session.event.id)
     assert (task_session.commits, task_session.rollbacks, task_session.closed) == (1, 0, 1)
+    assert task_session.adjudicator.close_count == 1
+    assert task_session.redis_client.close_count == 1
     assert task_session.all_of(EventEntity)[0].entity_profile_id == task_session.entity.id
 
 
@@ -559,7 +593,7 @@ def test_a_failure_rolls_back_closes_and_propagates_for_the_retry(
 ) -> None:
     """Stage1Task's autoretry is what handles this, so the task must not swallow the failure."""
 
-    def explode(_session: Any) -> Any:
+    def explode(_session: Any, _redis_client: Any) -> Any:
         raise RuntimeError("provider unreachable")
 
     monkeypatch.setattr(entity_linking_tasks, "build_mention_adjudicator", explode)
@@ -567,6 +601,57 @@ def test_a_failure_rolls_back_closes_and_propagates_for_the_retry(
     with pytest.raises(RuntimeError, match="provider unreachable"):
         entity_linking_tasks.run_event_entity_linking(str(task_session.event.id))
 
+    assert (task_session.commits, task_session.rollbacks, task_session.closed) == (0, 1, 1)
+    assert task_session.redis_client.close_count == 1
+
+
+def test_a_linking_failure_also_closes_the_built_adjudicator(
+    task_session: SpySession, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def explode(*_args: Any, **_kwargs: Any) -> Any:
+        raise RuntimeError("linking failed")
+
+    monkeypatch.setattr(entity_linking_tasks, "link_event_entities", explode)
+
+    with pytest.raises(RuntimeError, match="linking failed"):
+        entity_linking_tasks.run_event_entity_linking(str(task_session.event.id))
+
+    assert task_session.adjudicator.close_count == 1
+    assert task_session.redis_client.close_count == 1
+    assert (task_session.commits, task_session.rollbacks, task_session.closed) == (0, 1, 1)
+
+
+def test_cleanup_faults_do_not_hide_the_linking_failure_or_skip_session_close(
+    task_session: SpySession, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    linking_error = RuntimeError("linking failed")
+    adjudicator_close_error = RuntimeError("adjudicator close failed")
+    redis_close_error = RuntimeError("redis close failed")
+    adjudicator = CloseTrackingAdjudicator(adjudicator_close_error)
+    redis_client = CloseTrackingRedis(redis_close_error)
+
+    monkeypatch.setattr(entity_linking_tasks, "build_redis_client", lambda: redis_client)
+    monkeypatch.setattr(
+        entity_linking_tasks,
+        "build_mention_adjudicator",
+        lambda _session, _redis_client: adjudicator,
+    )
+
+    def explode(*_args: Any, **_kwargs: Any) -> Any:
+        raise linking_error
+
+    monkeypatch.setattr(entity_linking_tasks, "link_event_entities", explode)
+
+    with pytest.raises(BaseExceptionGroup) as captured:
+        entity_linking_tasks.run_event_entity_linking(str(task_session.event.id))
+
+    assert list(captured.value.exceptions) == [
+        linking_error,
+        adjudicator_close_error,
+        redis_close_error,
+    ]
+    assert adjudicator.close_count == 1
+    assert redis_client.close_count == 1
     assert (task_session.commits, task_session.rollbacks, task_session.closed) == (0, 1, 1)
 
 

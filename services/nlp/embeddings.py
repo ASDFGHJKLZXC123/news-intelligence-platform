@@ -14,6 +14,7 @@ every text after the gap with the wrong vector.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from pathlib import Path
 
 from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
@@ -26,6 +27,59 @@ from packages.providers.openai_embeddings import (
     OpenAIEmbeddingProvider,
 )
 from services.nlp.embedding_text import build_article_embedding_text, build_event_embedding_text
+from services.nlp.snapshot_registry import (
+    DEFAULT_REGISTRY_PATH,
+    SNAPSHOT_ID_PATTERN,
+    EmbeddingSnapshotError,
+    SnapshotRecord,
+    active_snapshot,
+    require_registered_snapshot,
+)
+
+
+def validate_production_embedding_identity(
+    settings: Settings,
+) -> SnapshotRecord | None:
+    """Fail before a live write unless its vector space has source-controlled probe evidence."""
+
+    if not settings.embedding_require_registered_snapshot:
+        return None
+    record = active_snapshot(
+        model=settings.embedding_model,
+        dimension=EMBEDDING_DIM,
+        registry_path=DEFAULT_REGISTRY_PATH,
+    )
+    if record.snapshot_id != settings.embedding_model_version:
+        raise EmbeddingSnapshotError(
+            "configured embedding model version "
+            f"{settings.embedding_model_version!r} is not the active snapshot "
+            f"{record.snapshot_id!r}"
+        )
+    return record
+
+
+def snapshot_manifest_sha256_for_identity(
+    *,
+    model: str,
+    model_version: str,
+    dimension: int = EMBEDDING_DIM,
+    registry_path: Path = DEFAULT_REGISTRY_PATH,
+) -> str | None:
+    """Resolve provenance for a snapshot-shaped identity; legacy/test labels return ``None``.
+
+    A name in the canonical ``nip-es1-*`` namespace is a claim that source-controlled probe
+    evidence exists.  Such a claim must resolve successfully instead of being accepted as an
+    arbitrary string.
+    """
+
+    if SNAPSHOT_ID_PATTERN.fullmatch(model_version) is None:
+        return None
+    return require_registered_snapshot(
+        model=model,
+        model_version=model_version,
+        dimension=dimension,
+        registry_path=registry_path,
+    ).manifest_sha256
 
 
 def build_embedding_provider(
@@ -33,6 +87,7 @@ def build_embedding_provider(
 ) -> OpenAIEmbeddingProvider:
     """Build the production adapter in the configured model space at the column's dimension."""
     settings = settings or get_settings()
+    validate_production_embedding_identity(settings)
     return OpenAIEmbeddingProvider(
         api_key=settings.openai_api_key,
         base_url=settings.openai_base_url,
@@ -221,5 +276,7 @@ __all__ = [
     "embed_unembedded_articles",
     "embed_unembedded_events",
     "resolve_embedding_identity",
+    "snapshot_manifest_sha256_for_identity",
+    "validate_production_embedding_identity",
     "validate_embedding_result",
 ]

@@ -41,7 +41,9 @@ makes no direct LLM provider calls.
 
 On every path the Redis client is closed (if it was opened) and the logging job context is
 cleared. Closing is best-effort: a Redis pool-cleanup failure is logged and swallowed so it can
-never mask the already-determined report/job disposition or trigger a spurious retry.
+never mask the already-determined report/job disposition or trigger a spurious retry. The one
+exception is a ``SoftTimeLimitExceeded`` raised *by* the close -- that is the worker being torn
+down rather than a cleanup fault, so it propagates (the job context is still cleared).
 """
 
 from __future__ import annotations
@@ -50,6 +52,7 @@ import datetime
 from typing import Any
 
 from celery import shared_task
+from celery.exceptions import SoftTimeLimitExceeded
 
 from db.base import SessionLocal
 from packages.config import metrics
@@ -236,8 +239,9 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
     redis_client: Any = None
     try:
         redis_client = build_redis_client()
+        settings = get_settings()
         orchestrator_factory = build_generation_orchestrator_factory(
-            settings=get_settings(), redis_client=redis_client
+            settings=settings, redis_client=redis_client
         )
         # The coordinator owns the session: `SessionLocal` is handed in as the factory and this
         # task opens/commits nothing itself. A blocked gate comes back as a result (not an
@@ -246,6 +250,7 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
             resolved,
             session_factory=SessionLocal,
             orchestrator_factory=orchestrator_factory,
+            prediction_backed_outputs_enabled=settings.crisis_prediction_reads_enabled,
         )
         return _finish(job, result)
     except Exception as cause:  # noqa: BLE001 -- failure metric + structured log, then re-raise
@@ -260,13 +265,23 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
         # original generation exception, must not make Stage1Task retry an already-terminal report,
         # and must not add a contradictory failure metric: log it and swallow it. The job context is
         # then cleared unconditionally so no job_id leaks into a later task on this worker thread.
-        if redis_client is not None:
-            try:
-                _close(redis_client)
-            except Exception:  # noqa: BLE001 -- pool cleanup fault is non-fatal, logged not raised
-                logger.warning(
-                    "failed to close redis client after daily brief generation",
-                    exc_info=True,
-                    extra={"brief_date": resolved.isoformat()},
-                )
-        set_job_id(None)
+        try:
+            if redis_client is not None:
+                try:
+                    _close(redis_client)
+                except SoftTimeLimitExceeded:
+                    # Not a pool-cleanup fault: the worker is being torn down, and Celery raises
+                    # this in whatever frame happens to be executing -- including this one.
+                    # Swallowing it would let the task return normally and burn the graceful
+                    # window before the hard kill; run as a daily-pipeline stage it would also
+                    # hide the timeout from the coordinator whose unwind durably fails the date.
+                    raise
+                except Exception:  # noqa: BLE001 -- cleanup fault is non-fatal: logged, not raised
+                    logger.warning(
+                        "failed to close redis client after daily brief generation",
+                        exc_info=True,
+                        extra={"brief_date": resolved.isoformat()},
+                    )
+        finally:
+            # Still unconditional: the re-raise above must not leak this thread's job context.
+            set_job_id(None)

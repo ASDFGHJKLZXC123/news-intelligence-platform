@@ -20,7 +20,16 @@ class Base(DeclarativeBase):
 _settings = get_settings()
 
 # ``pool_pre_ping`` keeps health checks honest against recycled/stale connections.
-engine = create_engine(_settings.database_url, pool_pre_ping=True, future=True)
+engine = create_engine(
+    _settings.database_url,
+    pool_pre_ping=True,
+    pool_timeout=_settings.database_pool_timeout_seconds,
+    connect_args={
+        "connect_timeout": _settings.database_connect_timeout_seconds,
+        "options": f"-c statement_timeout={_settings.database_statement_timeout_ms}",
+    },
+    future=True,
+)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 

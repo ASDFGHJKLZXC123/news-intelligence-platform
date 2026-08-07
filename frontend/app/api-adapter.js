@@ -287,9 +287,9 @@
     };
   }
 
-  // -> RiskDetail (types.ts) from /risk-radar/{risk_type}. signals & leadingIndicators
-  // are [] because no persisted row carries their required fields (backend truth rule);
-  // this makes riskDetails `partial`. Horizons stay the canonical 0_6m/6_12m/12_18m/within_18m.
+  // -> RiskDetail (types.ts) from /risk-radar/{risk_type}. model_rating and its derived
+  // arrays may be null/empty while Gate G is closed; observation-backed fields still map.
+  // signals & leadingIndicators remain [] because no persisted row carries their required fields.
   function mapRiskDetail(w, label) {
     return {
       riskType: label,

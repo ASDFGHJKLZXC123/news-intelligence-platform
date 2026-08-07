@@ -79,9 +79,12 @@ def disposable_database(prefix: str) -> Iterator[str]:
     try:
         with admin.connect() as conn:
             conn.execute(text(f'CREATE DATABASE "{name}"'))
-    except Exception:  # pragma: no cover - environment problem, not a test failure
+    except Exception as exc:  # mandatory coverage: fail loudly, never skip
         admin.dispose()
-        pytest.skip(f"cannot create a disposable database on {HOST}:{PORT}")
+        pytest.fail(
+            f"could not CREATE disposable Stage 6 database on {HOST}:{PORT} "
+            f"({type(exc).__name__}); mandatory integration coverage fails rather than skips"
+        )
 
     try:
         yield name

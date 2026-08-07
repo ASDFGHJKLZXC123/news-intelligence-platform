@@ -29,6 +29,17 @@ USER_ID = uuid.uuid4()
 NOW = datetime.datetime(2026, 7, 13, 12, 0, tzinfo=datetime.UTC)
 
 
+@pytest.fixture(autouse=True)
+def _prediction_outputs_enabled(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Legacy alert-worker tests exercise the diagnostic/open Gate-G path explicitly."""
+
+    monkeypatch.setattr(
+        alert_tasks,
+        "get_settings",
+        lambda: SimpleNamespace(crisis_prediction_reads_enabled=True),
+    )
+
+
 class CommitFailed(RuntimeError):
     """A commit the database refused, injected where the ordering matters."""
 
@@ -149,6 +160,47 @@ def test_alert_evaluation_is_not_beat_scheduled_but_the_sweep_is() -> None:
     assert "workers.alert_tasks.run_alert_evaluation" not in scheduled
 
 
+@pytest.mark.parametrize(
+    ("task", "args", "zero_field"),
+    [
+        (
+            alert_tasks.run_alert_evaluation,
+            ([_observation_payload(risk_score=40)],),
+            "evaluated",
+        ),
+        (alert_tasks.run_pending_alert_notification_sweep, (), "pending_notifications"),
+    ],
+)
+def test_gate_g_closed_skips_alert_tasks_before_db_or_notifier(
+    monkeypatch: pytest.MonkeyPatch,
+    task: Any,
+    args: tuple[Any, ...],
+    zero_field: str,
+) -> None:
+    monkeypatch.setattr(
+        alert_tasks,
+        "get_settings",
+        lambda: SimpleNamespace(crisis_prediction_reads_enabled=False),
+    )
+    monkeypatch.setattr(
+        alert_tasks,
+        "SessionLocal",
+        lambda: (_ for _ in ()).throw(AssertionError("closed gate opened a DB session")),
+    )
+    monkeypatch.setattr(
+        alert_tasks,
+        "build_notifier",
+        lambda: (_ for _ in ()).throw(AssertionError("closed gate built a notifier")),
+    )
+
+    result = task(*args, now=_iso(NOW))
+
+    assert result["status"] == "skipped"
+    assert result["state"] == "skipped"
+    assert result["reason"] == "crisis_prediction_reads_disabled"
+    assert result[zero_field] == 0
+
+
 # --------------------------------------------------------------------------------------
 # observation_from_payload
 # --------------------------------------------------------------------------------------
@@ -174,9 +226,7 @@ def test_observation_from_payload_builds_a_typed_observation() -> None:
 def test_run_alert_evaluation_opens_an_alert_and_delivers_the_notification(monkeypatch) -> None:
     repository, notifier, sessions = _install_fakes(monkeypatch)
 
-    result = alert_tasks.run_alert_evaluation(
-        [_observation_payload(risk_score=40)], now=_iso(NOW)
-    )
+    result = alert_tasks.run_alert_evaluation([_observation_payload(risk_score=40)], now=_iso(NOW))
 
     assert result["status"] == "ok"
     assert result["evaluated"] == 1
@@ -307,9 +357,7 @@ def test_run_alert_evaluation_delivers_an_explicit_all_clear_on_resolution(monke
     """
     repository, notifier, _sessions = _install_fakes(monkeypatch)
 
-    opened = alert_tasks.run_alert_evaluation(
-        [_observation_payload(risk_score=40)], now=_iso(NOW)
-    )
+    opened = alert_tasks.run_alert_evaluation([_observation_payload(risk_score=40)], now=_iso(NOW))
     assert opened["outcomes"][0]["kind"] == "created"
 
     downgrade_at = NOW + datetime.timedelta(hours=1)
@@ -346,9 +394,7 @@ def test_run_alert_evaluation_leaves_all_clear_unacknowledged_when_delivery_fail
 
     alert_tasks.run_alert_evaluation([_observation_payload(risk_score=40)], now=_iso(NOW))
     downgrade_at = NOW + datetime.timedelta(hours=1)
-    alert_tasks.run_alert_evaluation(
-        [_observation_payload(risk_score=10)], now=_iso(downgrade_at)
-    )
+    alert_tasks.run_alert_evaluation([_observation_payload(risk_score=10)], now=_iso(downgrade_at))
     resolve_at = downgrade_at + datetime.timedelta(days=7, seconds=1)
     result = alert_tasks.run_alert_evaluation(
         [_observation_payload(risk_score=10)], now=_iso(resolve_at)

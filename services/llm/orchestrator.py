@@ -22,6 +22,10 @@ from services.llm.adapters import (
     LLMProviderAdapter,
 )
 from services.llm.cache import PromptCache, make_llm_request_cache_key
+from services.llm.http_providers import (
+    LLMRetryableProviderOutputError,
+    provider_failure_diagnostic_code,
+)
 from services.llm.limiter import TokenBucketLimiter
 from services.llm.policy import (
     LLMBudgetPolicy,
@@ -121,6 +125,50 @@ class LLMOrchestrator:
         self._cache = cache
         self._limiter = limiter
         self._policy = LLMBudgetPolicy(settings)
+        self._closed = False
+
+    def close(self) -> None:
+        """Close provider-owned HTTP clients when this runtime's unit of work ends."""
+
+        if self._closed:
+            return
+        self._closed = True
+        errors: list[Exception] = []
+        seen: set[int] = set()
+        for tier_providers in self._providers_by_tier.values():
+            for provider in tier_providers:
+                if id(provider) in seen:
+                    continue
+                seen.add(id(provider))
+                close = getattr(provider, "close", None)
+                if not callable(close):
+                    continue
+                try:
+                    close()
+                except Exception as exc:  # noqa: BLE001
+                    errors.append(exc)
+        if errors:
+            raise ExceptionGroup("failed to close LLM provider clients", errors)
+
+    def __enter__(self) -> LLMOrchestrator:
+        return self
+
+    def __exit__(
+        self,
+        _exc_type: object,
+        cause: BaseException | None,
+        _traceback: object,
+    ) -> None:
+        if cause is None:
+            self.close()
+            return
+        try:
+            self.close()
+        except BaseException as cleanup_error:
+            raise BaseExceptionGroup(
+                "LLM orchestration and provider cleanup both failed",
+                [cause, cleanup_error],
+            ) from cause
 
     @staticmethod
     def _utc_now() -> datetime.datetime:
@@ -131,9 +179,7 @@ class LLMOrchestrator:
         return uuid.uuid4().hex
 
     def _providers_for_tier(self, tier: LLMTier) -> tuple[LLMProviderAdapter, ...]:
-        return self._providers_by_tier.get(tier.value, ()) or self._providers_by_tier.get(
-            "T1", ()
-        )
+        return self._providers_by_tier.get(tier.value, ()) or self._providers_by_tier.get("T1", ())
 
     @staticmethod
     def _article_text(article: dict[str, Any]) -> str:
@@ -272,6 +318,31 @@ class LLMOrchestrator:
                 # accept a `datetime.date`.
                 output_payload = contract.to_normalized_payload()
 
+        adapter_params = {
+            key: response.raw_metadata[key]
+            for key in (
+                "temperature_requested",
+                "temperature_sent",
+                "temperature_strategy",
+                "thinking_mode",
+                "thinking_level",
+                "report_composition_budget_instruction",
+            )
+            if key in response.raw_metadata
+        }
+        model_params: dict[str, Any] = {
+            "tier": routing_tier.value,
+            "mode": mode.value,
+            "queue": queue,
+            "degraded_provider": degraded_provider,
+            "degraded_reasons": list(route_degraded_reasons),
+        }
+        if adapter_params:
+            # Canonical parameters sometimes need an explicit provider translation (for
+            # example, Gemini's deterministic-instruction replacement for temperature 0).
+            # Persist it so the audit row never implies that an unsupported wire field was sent.
+            model_params["adapter_params"] = adapter_params
+
         return LLMRun(
             prompt_name=request.prompt_name,
             prompt_version=request.prompt_version,
@@ -279,13 +350,7 @@ class LLMOrchestrator:
             prompt_hash=cache_hash,
             provider=provider.provider_name,
             model=provider.model_name,
-            model_params={
-                "tier": routing_tier.value,
-                "mode": mode.value,
-                "queue": queue,
-                "degraded_provider": degraded_provider,
-                "degraded_reasons": list(route_degraded_reasons),
-            },
+            model_params=model_params,
             temperature=request.temperature,
             seed=None,
             status=status,
@@ -323,7 +388,9 @@ class LLMOrchestrator:
         # whitelist that admits no IDs, not a missing whitelist.
         return contracts.validate_llm_payload(payload=payload, allowed_ids=list(allowed_ids))
 
-    def _invoke(self, provider: LLMProviderAdapter, request: LLMInvocationRequest) -> LLMInvocationResponse:
+    def _invoke(
+        self, provider: LLMProviderAdapter, request: LLMInvocationRequest
+    ) -> LLMInvocationResponse:
         if request.mode == LLMInvocationMode.BATCH:
             if not provider.supports_mode(LLMInvocationMode.BATCH):
                 raise LLMInvocationFailure(
@@ -373,6 +440,8 @@ class LLMOrchestrator:
         cache_payload: Mapping[str, Any],
         provider: LLMProviderAdapter,
     ) -> LLMInvocationResponse:
+        adapter_variant = getattr(provider, "cache_variant", None)
+        raw_metadata = dict(adapter_variant) if isinstance(adapter_variant, Mapping) else {}
         return LLMInvocationResponse(
             text=json.dumps(cache_payload, sort_keys=True, separators=(",", ":")),
             provider_name=provider.provider_name,
@@ -381,6 +450,7 @@ class LLMOrchestrator:
             input_tokens=0,
             output_tokens=0,
             structured=dict(cache_payload),
+            raw_metadata=raw_metadata,
         )
 
     def run(self, request: LLMOrchestratorRequest) -> LLMOrchestratorResult:
@@ -446,6 +516,7 @@ class LLMOrchestrator:
                     model_name=provider.model_name,
                     model_version=provider.model_version,
                     mode=decision.mode,
+                    adapter_variant=getattr(provider, "cache_variant", None),
                 )
                 cache_hit = False
 
@@ -460,11 +531,20 @@ class LLMOrchestrator:
                 else:
                     latency_ms = 0
                     if self._limiter is not None:
-                        # Reserve the possible response as well as estimated input so the
-                        # client-side TPM ceiling cannot be exceeded by model output.
+                        # Every live adapter sends the contract schema in addition to the user
+                        # prompt. DeepSeek also sends a schema-derived example. Reserve twice
+                        # the schema estimate plus small instruction overhead so the local TPM
+                        # ceiling covers the full structured request as well as possible output.
+                        schema_text = json.dumps(
+                            contracts.llm_contract_json_schema(working_request.requested_schema),
+                            sort_keys=True,
+                            separators=(",", ":"),
+                        )
                         token_cost = max(
                             1,
                             estimate_token_count(working_request.prompt)
+                            + (2 * estimate_token_count(schema_text))
+                            + 64
                             + self._policy.output_token_budget(decision.tier),
                         )
                         allowed = self._limiter.consume(
@@ -510,7 +590,61 @@ class LLMOrchestrator:
                     try:
                         response = self._invoke(provider, working_request)
                         latency_ms = int((time.monotonic() - start) * 1000)
+                    except LLMRetryableProviderOutputError as exc:
+                        latency_ms = int((time.monotonic() - start) * 1000)
+                        response = exc.response
+                        self._repository.save_llm_run(
+                            self._build_run(
+                                request=request,
+                                routing_tier=decision.tier,
+                                mode=decision.mode,
+                                queue=decision.queue,
+                                degraded_provider=degraded_provider,
+                                route_degraded_reasons=decision.degraded_reasons,
+                                cache_hash=cache_key,
+                                trace_id=trace_id,
+                                provider=provider,
+                                status="validation_failed",
+                                attempt=call_attempt,
+                                response=response,
+                                started_at=started_at,
+                                completed_at=self._utc_now(),
+                                latency_ms=latency_ms,
+                                cache_hit=False,
+                                cost_usd=self._estimate_cost(
+                                    settings=self._settings,
+                                    provider=provider,
+                                    response=response,
+                                    cache_hit=False,
+                                    mode=decision.mode,
+                                ),
+                                error_message="provider returned retryable structured output",
+                                error_details={
+                                    "provider": provider.provider_name,
+                                    "mode": decision.mode.value,
+                                    "error": str(exc),
+                                    "provider_failure_code": provider_failure_diagnostic_code(exc),
+                                },
+                            )
+                        )
+                        last_error = str(exc)
+                        if retry == 0:
+                            working_request = self._with_feedback(
+                                working_request,
+                                "Return one non-empty JSON object matching the requested schema.",
+                            )
+                            continue
+                        break
                     except Exception as exc:  # noqa: BLE001
+                        latency_ms = int((time.monotonic() - start) * 1000)
+                        billed_response = getattr(exc, "response", None)
+                        if not isinstance(billed_response, LLMInvocationResponse):
+                            billed_response = LLMInvocationResponse(
+                                text="",
+                                provider_name=provider.provider_name,
+                                model_name=provider.model_name,
+                                model_version=provider.model_version,
+                            )
                         self._repository.save_llm_run(
                             self._build_run(
                                 request=request,
@@ -524,22 +658,24 @@ class LLMOrchestrator:
                                 provider=provider,
                                 status="failed",
                                 attempt=call_attempt,
-                                response=LLMInvocationResponse(
-                                    text="",
-                                    provider_name=provider.provider_name,
-                                    model_name=provider.model_name,
-                                    model_version=provider.model_version,
-                                ),
+                                response=billed_response,
                                 started_at=started_at,
                                 completed_at=self._utc_now(),
-                                latency_ms=0,
+                                latency_ms=latency_ms,
                                 cache_hit=False,
-                                cost_usd=0.0,
+                                cost_usd=self._estimate_cost(
+                                    settings=self._settings,
+                                    provider=provider,
+                                    response=billed_response,
+                                    cache_hit=False,
+                                    mode=decision.mode,
+                                ),
                                 error_message="provider invocation failure",
                                 error_details={
                                     "provider": provider.provider_name,
                                     "mode": decision.mode.value,
                                     "error": str(exc),
+                                    "provider_failure_code": provider_failure_diagnostic_code(exc),
                                 },
                             )
                         )

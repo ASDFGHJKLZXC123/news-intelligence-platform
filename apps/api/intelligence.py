@@ -22,12 +22,13 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import Select, Text, and_, case, cast, func, or_, select
+from sqlalchemy import Select, Text, and_, any_, case, cast, func, or_, select
 from sqlalchemy.orm import Session, aliased
 
 from db.base import get_session
 from db.models import (
     ACTIVE_ALERT_STATES,
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
     Alert,
     Article,
     Claim,
@@ -54,6 +55,7 @@ from db.models import (
     WatchlistItem,
     risk_level_for_score,
 )
+from packages.config.settings import get_settings
 from services.alerts import AlertLifecycleService, SQLAlchemyAlertRepository
 from services.alerts.supersession import SupersessionError, supersede_with_broader_alert
 from services.reports.context import (
@@ -204,7 +206,7 @@ class EventListRow:
     locations: tuple[EventLocation, ...]
 
 
-def _event_risk_expr() -> tuple[Any, Any]:
+def _event_risk_expr(*, prediction_backed_outputs_enabled: bool = False) -> tuple[Any, Any]:
     """SQL ``(risk_score, confidence_score)`` for an event, from persisted sources only.
 
     ``risk_score`` prefers the latest ``RiskScoreObservation`` targeting the event itself
@@ -236,19 +238,24 @@ def _event_risk_expr() -> tuple[Any, Any]:
         .correlate(Event)
         .scalar_subquery()
     )
-    company_risk = (
-        select(func.max(EventCompany.risk_score))
-        .where(EventCompany.event_id == Event.id)
-        .correlate(Event)
-        .scalar_subquery()
-    )
-    industry_risk = (
-        select(func.max(EventIndustry.risk_score))
-        .where(EventIndustry.event_id == Event.id)
-        .correlate(Event)
-        .scalar_subquery()
-    )
-    risk_score = func.coalesce(latest_score, func.greatest(company_risk, industry_risk))
+    if prediction_backed_outputs_enabled:
+        company_risk = (
+            select(func.max(EventCompany.risk_score))
+            .where(EventCompany.event_id == Event.id)
+            .correlate(Event)
+            .scalar_subquery()
+        )
+        industry_risk = (
+            select(func.max(EventIndustry.risk_score))
+            .where(EventIndustry.event_id == Event.id)
+            .correlate(Event)
+            .scalar_subquery()
+        )
+        risk_score = func.coalesce(latest_score, func.greatest(company_risk, industry_risk))
+    else:
+        # Direct RiskScoreObservation rows remain visible descriptive observations. Persisted
+        # event-company/industry scores are prediction-backed rollups and are not referenced.
+        risk_score = latest_score
     return risk_score, latest_confidence
 
 
@@ -268,7 +275,7 @@ def _risk_level_case(risk_score: Any) -> Any:
     )
 
 
-def _event_status_case() -> Any:
+def _event_status_case(*, composite_alerts_enabled: bool = False) -> Any:
     """The derived :class:`EventStatus` as SQL, from persisted lifecycle facts only.
 
     Deterministic and total, evaluated top-down: ``resolved`` when the event's alerting
@@ -277,31 +284,35 @@ def _event_status_case() -> Any:
     the record was revised after creation; else ``new``. The identical expression is used for
     the ``status`` filter and for serialization, so they cannot diverge.
     """
-    resolved_alert = (
-        select(Alert.id)
-        .where(Alert.related_event_id == Event.id, Alert.state == _RESOLVED_ALERT_STATE)
-        .correlate(Event)
-        .exists()
-    )
-    active_alert = (
-        select(Alert.id)
-        .where(Alert.related_event_id == Event.id, Alert.state.in_(ACTIVE_ALERT_STATES))
-        .correlate(Event)
-        .exists()
-    )
-    return case(
-        (and_(resolved_alert, ~active_alert), EventStatus.RESOLVED.value),
-        (
-            and_(
-                Event.last_seen_at.isnot(None),
-                Event.first_seen_at.isnot(None),
-                Event.last_seen_at > Event.first_seen_at,
+    lifecycle_cases: list[tuple[Any, str]] = []
+    if composite_alerts_enabled:
+        resolved_alert = (
+            select(Alert.id)
+            .where(Alert.related_event_id == Event.id, Alert.state == _RESOLVED_ALERT_STATE)
+            .correlate(Event)
+            .exists()
+        )
+        active_alert = (
+            select(Alert.id)
+            .where(Alert.related_event_id == Event.id, Alert.state.in_(ACTIVE_ALERT_STATES))
+            .correlate(Event)
+            .exists()
+        )
+        lifecycle_cases.append((and_(resolved_alert, ~active_alert), EventStatus.RESOLVED.value))
+    lifecycle_cases.extend(
+        [
+            (
+                and_(
+                    Event.last_seen_at.isnot(None),
+                    Event.first_seen_at.isnot(None),
+                    Event.last_seen_at > Event.first_seen_at,
+                ),
+                EventStatus.DEVELOPING.value,
             ),
-            EventStatus.DEVELOPING.value,
-        ),
-        (Event.updated_at > Event.created_at, EventStatus.UPDATED.value),
-        else_=EventStatus.NEW.value,
+            (Event.updated_at > Event.created_at, EventStatus.UPDATED.value),
+        ]
     )
+    return case(*lifecycle_cases, else_=EventStatus.NEW.value)
 
 
 def _event_company_filter(company: str) -> Any:
@@ -360,32 +371,56 @@ def _event_company_view(link: EventCompany, company: Company) -> EventCompanyVie
     )
 
 
-def _serialize_event_company(view: EventCompanyView) -> dict[str, Any]:
+def _serialize_event_company(
+    view: EventCompanyView,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> dict[str, Any]:
     return {
         "company_id": str(view.company_id),
         "display_name": view.display_name,
         "primary_ticker": view.primary_ticker,
         "exchange": view.exchange,
         "industry": view.industry,
-        "impact_direction": view.impact_direction,
-        "impact_score": _json_value(view.impact_score),
-        "risk_score": _json_value(view.risk_score),
+        "impact_direction": (view.impact_direction if prediction_backed_outputs_enabled else None),
+        "impact_score": (
+            _json_value(view.impact_score) if prediction_backed_outputs_enabled else None
+        ),
+        "risk_score": (_json_value(view.risk_score) if prediction_backed_outputs_enabled else None),
         "confidence_score": _json_value(view.confidence_score),
-        "exposure_explanation": view.exposure_explanation,
+        "exposure_explanation": (
+            view.exposure_explanation if prediction_backed_outputs_enabled else None
+        ),
     }
 
 
-def _serialize_event_industry(industry: EventIndustry) -> dict[str, Any]:
+def _serialize_event_industry(
+    industry: EventIndustry,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> dict[str, Any]:
     return {
         "industry_id": industry.industry_id,
-        "impact_direction": industry.impact_direction,
-        "impact_score": _json_value(industry.impact_score),
-        "risk_score": _json_value(industry.risk_score),
-        "opportunity_score": _json_value(industry.opportunity_score),
+        "impact_direction": (
+            industry.impact_direction if prediction_backed_outputs_enabled else None
+        ),
+        "impact_score": (
+            _json_value(industry.impact_score) if prediction_backed_outputs_enabled else None
+        ),
+        "risk_score": (
+            _json_value(industry.risk_score) if prediction_backed_outputs_enabled else None
+        ),
+        "opportunity_score": (
+            _json_value(industry.opportunity_score) if prediction_backed_outputs_enabled else None
+        ),
     }
 
 
-def _serialize_event_list_item(row: EventListRow) -> dict[str, Any]:
+def _serialize_event_list_item(
+    row: EventListRow,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> dict[str, Any]:
     """One expanded event-list item: event core + derived scores/status + embedded identities."""
     risk_score = _json_value(row.risk_score)
     payload = _serialize_event(row.event)
@@ -397,15 +432,29 @@ def _serialize_event_list_item(row: EventListRow) -> dict[str, Any]:
             "risk_level": None if risk_score is None else risk_level_for_score(risk_score).value,
             "confidence_score": _json_value(row.confidence_score),
             "status": row.status,
-            "companies": [_serialize_event_company(view) for view in row.companies],
-            "industries": [_serialize_event_industry(industry) for industry in row.industries],
+            "companies": [
+                _serialize_event_company(
+                    view,
+                    prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+                )
+                for view in row.companies
+            ],
+            "industries": [
+                _serialize_event_industry(
+                    industry,
+                    prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+                )
+                for industry in row.industries
+            ],
             "locations": [_serialize_event_location(location) for location in row.locations],
         }
     )
     return payload
 
 
-def _serialize_event_location(location: EventLocation, event: Event | None = None) -> dict[str, Any]:
+def _serialize_event_location(
+    location: EventLocation, event: Event | None = None
+) -> dict[str, Any]:
     payload = {
         "id": str(location.id),
         "event_id": str(location.event_id),
@@ -665,7 +714,11 @@ def _serialize_risk_detail(
     }
 
 
-def _serialize_daily_summary(summary: DailyIntelligenceSummary | None) -> dict[str, Any] | None:
+def _serialize_daily_summary(
+    summary: DailyIntelligenceSummary | None,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> dict[str, Any] | None:
     if summary is None:
         return None
     return {
@@ -675,7 +728,11 @@ def _serialize_daily_summary(summary: DailyIntelligenceSummary | None) -> dict[s
         "confidence_score": _json_value(summary.confidence_score),
         "summary": summary.summary,
         "key_points": summary.key_points,
-        "model_rating_prediction_id": _json_value(summary.model_rating_prediction_id),
+        "model_rating_prediction_id": (
+            _json_value(summary.model_rating_prediction_id)
+            if prediction_backed_outputs_enabled
+            else None
+        ),
         "generated_by_run_id": _json_value(summary.generated_by_run_id),
         "created_at": _iso(summary.created_at),
     }
@@ -725,7 +782,30 @@ def _serialize_watchlist_item(item: WatchlistItem) -> dict[str, Any]:
     }
 
 
-def _serialize_report(report: Report, sections: list[ReportSection] | None = None) -> dict[str, Any]:
+_PREDICTION_BACKED_REPORT_SECTION_TITLES = frozenset({"forecasts", "alerts"})
+
+
+def _prediction_safe_report_sections(
+    sections: Sequence[Any],
+    *,
+    prediction_backed_outputs_enabled: bool,
+) -> tuple[Any, ...]:
+    """Drop legacy deterministic forecast/alert sections while Gate G is closed."""
+    if prediction_backed_outputs_enabled:
+        return tuple(sections)
+    return tuple(
+        section
+        for section in sections
+        if section.title.strip().casefold() not in _PREDICTION_BACKED_REPORT_SECTION_TITLES
+    )
+
+
+def _serialize_report(
+    report: Report,
+    sections: list[ReportSection] | None = None,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> dict[str, Any]:
     payload = {
         "id": str(report.id),
         # The daily brief is global; only user-scoped reports carry an owner.
@@ -744,6 +824,10 @@ def _serialize_report(report: Report, sections: list[ReportSection] | None = Non
         "updated_at": _iso(report.updated_at),
     }
     if sections is not None:
+        visible_sections = _prediction_safe_report_sections(
+            sections,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
         payload["sections"] = [
             {
                 "id": str(section.id),
@@ -755,13 +839,16 @@ def _serialize_report(report: Report, sections: list[ReportSection] | None = Non
                 "evidence_refs": [str(value) for value in section.evidence_refs or []],
                 "grounding_status": section.grounding_status,
             }
-            for section in sections
+            for section in visible_sections
         ]
     return payload
 
 
 def _serialize_brief_snapshot(
-    report: ReportSnapshot, sections: tuple[ReportSectionSnapshot, ...] | None = None
+    report: ReportSnapshot,
+    sections: tuple[ReportSectionSnapshot, ...] | None = None,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
 ) -> dict[str, Any]:
     """Serialize a detached daily-brief snapshot from the lifecycle repository.
 
@@ -788,6 +875,10 @@ def _serialize_brief_snapshot(
         "updated_at": _iso(report.updated_at),
     }
     if sections is not None:
+        visible_sections = _prediction_safe_report_sections(
+            sections,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
         payload["sections"] = [
             {
                 "id": str(section.id),
@@ -802,7 +893,7 @@ def _serialize_brief_snapshot(
                 "evidence_refs": [str(ref) for ref in section.evidence_refs],
                 "grounding_status": section.grounding_status,
             }
-            for section in sections
+            for section in visible_sections
         ]
     return payload
 
@@ -1087,9 +1178,7 @@ class IntelligenceRepository:
         predicates are identical by construction (api-adapter-contract: real ``total``).
         """
         return int(
-            self.session.execute(
-                select(func.count()).select_from(filtered.subquery())
-            ).scalar_one()
+            self.session.execute(select(func.count()).select_from(filtered.subquery())).scalar_one()
         )
 
     def latest_daily_summary(self) -> DailyIntelligenceSummary | None:
@@ -1105,7 +1194,12 @@ class IntelligenceRepository:
         stmt = select(func.count(Alert.id)).where(Alert.state.in_(ACTIVE_ALERT_STATES))
         return int(self.session.execute(stmt).scalar_one())
 
-    def dashboard_metric_counts(self, *, now: datetime.datetime) -> DashboardMetricCounts:
+    def dashboard_metric_counts(
+        self,
+        *,
+        now: datetime.datetime,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> DashboardMetricCounts:
         """The dashboard's four real bounded counts, one fixed COUNT read each (no per-row work).
 
         "Today" is the UTC calendar day of ``now`` (the injected clock seam), bounding the event's
@@ -1122,7 +1216,9 @@ class IntelligenceRepository:
                 select(func.count(Event.id)).where(activity >= day_start, activity < day_end)
             ).scalar_one()
         )
-        risk_score_expr, _ = _event_risk_expr()
+        risk_score_expr, _ = _event_risk_expr(
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled
+        )
         high_risk_events = int(
             self.session.execute(
                 select(func.count(Event.id)).where(risk_score_expr > HIGH_RISK_EVENT_THRESHOLD)
@@ -1145,9 +1241,7 @@ class IntelligenceRepository:
             affected_companies=affected_companies,
         )
 
-    def upcoming_triggers(
-        self, *, now: datetime.datetime, limit: int
-    ) -> list[EventTimelineItem]:
+    def upcoming_triggers(self, *, now: datetime.datetime, limit: int) -> list[EventTimelineItem]:
         """Genuinely future timeline entries -- the one persisted forward-looking schedule the data
         model carries. Ordered by ``(timestamp, id)`` and bounded; empty when nothing is scheduled.
         """
@@ -1159,7 +1253,12 @@ class IntelligenceRepository:
         )
         return list(self.session.execute(stmt).scalars().all())
 
-    def event_map(self, *, limit: int) -> list[DashboardMapPoint]:
+    def event_map(
+        self,
+        *,
+        limit: int,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> list[DashboardMapPoint]:
         """Real geocoded event locations aggregated into map points, in one bounded read.
 
         A single query joins each ``EventLocation`` (with real coordinates) to its ``Event`` and
@@ -1168,7 +1267,9 @@ class IntelligenceRepository:
         of how many locations or events are on the page. Locations without coordinates cannot be
         placed and are excluded. Bounded by ``limit`` source rows (declared truncation).
         """
-        risk_score_expr, _ = _event_risk_expr()
+        risk_score_expr, _ = _event_risk_expr(
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled
+        )
         rows = self.session.execute(
             select(
                 EventLocation.location_name,
@@ -1339,9 +1440,7 @@ class IntelligenceRepository:
             .order_by(RiskScoreObservation.target_type, RiskScoreObservation.target_id)
             .limit(limit)
         )
-        return [
-            (row.target_type, row.target_id) for row in self.session.execute(stmt).all()
-        ]
+        return [(row.target_type, row.target_id) for row in self.session.execute(stmt).all()]
 
     def risk_observation_history(
         self, *, risk_type: str, cutoff: datetime.datetime, limit: int, offset: int
@@ -1379,6 +1478,7 @@ class IntelligenceRepository:
         status: str | None = None,
         limit: int,
         offset: int,
+        prediction_backed_outputs_enabled: bool = False,
     ) -> tuple[list[EventListRow], int]:
         """One expanded event-list page: count + page + a fixed set of bulk attachments.
 
@@ -1391,8 +1491,10 @@ class IntelligenceRepository:
         recent coverage time (``last_seen_at``, falling back to ``created_at``) with inclusive
         UTC day boundaries; the caller validates ``date_from <= date_to``.
         """
-        risk_score_expr, confidence_expr = _event_risk_expr()
-        status_expr = _event_status_case()
+        risk_score_expr, confidence_expr = _event_risk_expr(
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled
+        )
+        status_expr = _event_status_case(composite_alerts_enabled=prediction_backed_outputs_enabled)
         base = select(Event)
         if country:
             base = base.where(func.upper(Event.country) == country.upper())
@@ -1405,7 +1507,8 @@ class IntelligenceRepository:
             activity = func.coalesce(Event.last_seen_at, Event.created_at)
             if date_from is not None:
                 base = base.where(
-                    activity >= datetime.datetime.combine(date_from, datetime.time.min, tzinfo=datetime.UTC)
+                    activity
+                    >= datetime.datetime.combine(date_from, datetime.time.min, tzinfo=datetime.UTC)
                 )
             if date_to is not None:
                 base = base.where(
@@ -1432,12 +1535,16 @@ class IntelligenceRepository:
             .limit(limit)
             .offset(offset)
         )
-        page = [
-            (row[0], row[1], row[2], row[3]) for row in self.session.execute(page_stmt).all()
-        ]
+        page = [(row[0], row[1], row[2], row[3]) for row in self.session.execute(page_stmt).all()]
         event_ids = [event.id for event, *_ in page]
-        companies = self._load_event_companies(event_ids)
-        industries = self._load_event_industries(event_ids)
+        companies = self._load_event_companies(
+            event_ids,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
+        industries = self._load_event_industries(
+            event_ids,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
         locations = self._load_event_locations(event_ids)
         rows = [
             EventListRow(
@@ -1454,7 +1561,10 @@ class IntelligenceRepository:
         return rows, total
 
     def _load_event_companies(
-        self, event_ids: list[uuid.UUID]
+        self,
+        event_ids: list[uuid.UUID],
+        *,
+        prediction_backed_outputs_enabled: bool = False,
     ) -> dict[uuid.UUID, list[EventCompanyView]]:
         """Every page event's company links joined to company identity, in one bulk read.
 
@@ -1463,16 +1573,20 @@ class IntelligenceRepository:
         """
         if not event_ids:
             return {}
+        order: list[Any] = [EventCompany.event_id]
+        if prediction_backed_outputs_enabled:
+            order.extend(
+                [
+                    EventCompany.risk_score.desc().nullslast(),
+                    EventCompany.impact_score.desc().nullslast(),
+                ]
+            )
+        order.append(EventCompany.company_id)
         rows = self.session.execute(
             select(EventCompany, Company)
             .join(Company, Company.id == EventCompany.company_id)
             .where(EventCompany.event_id.in_(event_ids))
-            .order_by(
-                EventCompany.event_id,
-                EventCompany.risk_score.desc().nullslast(),
-                EventCompany.impact_score.desc().nullslast(),
-                EventCompany.company_id,
-            )
+            .order_by(*order)
         ).all()
         grouped: dict[uuid.UUID, list[EventCompanyView]] = {}
         for link, company in rows:
@@ -1480,19 +1594,20 @@ class IntelligenceRepository:
         return grouped
 
     def _load_event_industries(
-        self, event_ids: list[uuid.UUID]
+        self,
+        event_ids: list[uuid.UUID],
+        *,
+        prediction_backed_outputs_enabled: bool = False,
     ) -> dict[uuid.UUID, list[EventIndustry]]:
         if not event_ids:
             return {}
+        order: list[Any] = [EventIndustry.event_id]
+        if prediction_backed_outputs_enabled:
+            order.append(EventIndustry.risk_score.desc().nullslast())
+        order.append(EventIndustry.industry_id)
         rows = (
             self.session.execute(
-                select(EventIndustry)
-                .where(EventIndustry.event_id.in_(event_ids))
-                .order_by(
-                    EventIndustry.event_id,
-                    EventIndustry.risk_score.desc().nullslast(),
-                    EventIndustry.industry_id,
-                )
+                select(EventIndustry).where(EventIndustry.event_id.in_(event_ids)).order_by(*order)
             )
             .scalars()
             .all()
@@ -1528,6 +1643,8 @@ class IntelligenceRepository:
     def get_event_detail(
         self,
         event_id: uuid.UUID,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
     ) -> tuple[
         Event | None,
         list[EventTimelineItem],
@@ -1549,7 +1666,10 @@ class IntelligenceRepository:
         )
         # The detail companies embed name/ticker via the same bulk identity join the list uses,
         # so the adapter never issues a per-company UUID lookup.
-        companies = self._load_event_companies([event_id]).get(event_id, [])
+        companies = self._load_event_companies(
+            [event_id],
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        ).get(event_id, [])
         industries = list(
             self.session.execute(select(EventIndustry).where(EventIndustry.event_id == event_id))
             .scalars()
@@ -1607,15 +1727,24 @@ class IntelligenceRepository:
         stmt = base.order_by(Company.display_name, Company.id).limit(limit).offset(offset)
         return list(self.session.execute(stmt).scalars().all()), total
 
-    def get_company(self, identifier: str) -> tuple[Company | None, CompanyRiskRollup | None]:
+    def get_company(
+        self,
+        identifier: str,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> tuple[Company | None, CompanyRiskRollup | None]:
         company_id = _uuid_or_none(identifier)
         if company_id is not None:
             company_stmt = select(Company).where(Company.id == company_id)
         else:
-            company_stmt = select(Company).where(func.upper(Company.primary_ticker) == identifier.upper())
+            company_stmt = select(Company).where(
+                func.upper(Company.primary_ticker) == identifier.upper()
+            )
         company = self.session.execute(company_stmt).scalars().first()
         if company is None:
             return None, None
+        if not prediction_backed_outputs_enabled:
+            return company, None
         rollup = (
             self.session.execute(
                 select(CompanyRiskRollup)
@@ -1639,9 +1768,7 @@ class IntelligenceRepository:
             .subquery()
         )
         latest = aliased(IndustryRiskRollup, latest_sq)
-        total = int(
-            self.session.execute(select(func.count()).select_from(latest_sq)).scalar_one()
-        )
+        total = int(self.session.execute(select(func.count()).select_from(latest_sq)).scalar_one())
         # `industry_id` is unique in the deduplicated set: a stable tie-breaker under equal `as_of`.
         rollups = (
             self.session.execute(
@@ -1664,7 +1791,9 @@ class IntelligenceRepository:
         )
         return self.session.execute(stmt).scalars().first()
 
-    def list_historical(self, *, target_type: str | None, risk_type: str | None, limit: int) -> list[CrisisPrediction]:
+    def list_historical(
+        self, *, target_type: str | None, risk_type: str | None, limit: int
+    ) -> list[CrisisPrediction]:
         stmt = select(CrisisPrediction).order_by(CrisisPrediction.as_of_date.desc()).limit(limit)
         if target_type:
             stmt = stmt.where(CrisisPrediction.target_type == target_type)
@@ -1692,13 +1821,25 @@ class IntelligenceRepository:
         if user_id is not None:
             base = base.where(WatchlistItem.user_id == user_id)
         total = self._count(base)
-        stmt = base.order_by(WatchlistItem.created_at.desc(), WatchlistItem.id).limit(limit).offset(offset)
+        stmt = (
+            base.order_by(WatchlistItem.created_at.desc(), WatchlistItem.id)
+            .limit(limit)
+            .offset(offset)
+        )
         return list(self.session.execute(stmt).scalars().all()), total
 
-    def list_reports(self, *, user_id: uuid.UUID | None, limit: int) -> list[tuple[Report, list[ReportSection]]]:
+    def list_reports(
+        self,
+        *,
+        user_id: uuid.UUID | None,
+        limit: int,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> list[tuple[Report, list[ReportSection]]]:
         stmt = select(Report).order_by(Report.created_at.desc()).limit(limit)
         if user_id is not None:
             stmt = stmt.where(Report.user_id == user_id)
+        if not prediction_backed_outputs_enabled:
+            stmt = stmt.where(Report.content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY)
         # Daily briefs are versioned and global; the default listing serves only the latest
         # PUBLISHED version per brief_date -- never a generating/failed/superseded one
         # (report-generation spec, "Lifecycle and versioning"; the dedicated
@@ -1707,16 +1848,17 @@ class IntelligenceRepository:
         # user-scoped path: daily briefs are user_id IS NULL, so a user_id filter already
         # excludes them.
         newer_published = aliased(Report)
-        has_newer_published = (
-            select(newer_published.id)
-            .where(
-                newer_published.report_type == DAILY_BRIEF_REPORT_TYPE,
-                newer_published.brief_date == Report.brief_date,
-                newer_published.status == PUBLISHED_STATUS,
-                newer_published.version > Report.version,
-            )
-            .exists()
+        has_newer_published = select(newer_published.id).where(
+            newer_published.report_type == DAILY_BRIEF_REPORT_TYPE,
+            newer_published.brief_date == Report.brief_date,
+            newer_published.status == PUBLISHED_STATUS,
+            newer_published.version > Report.version,
         )
+        if not prediction_backed_outputs_enabled:
+            has_newer_published = has_newer_published.where(
+                newer_published.content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+            )
+        has_newer_published = has_newer_published.exists()
         stmt = stmt.where(
             or_(
                 Report.report_type != DAILY_BRIEF_REPORT_TYPE,
@@ -1736,10 +1878,27 @@ class IntelligenceRepository:
             .scalars()
             .all()
         )
-        sections_by_report: dict[uuid.UUID, list[ReportSection]] = {report.id: [] for report in reports}
+        sections_by_report: dict[uuid.UUID, list[ReportSection]] = {
+            report.id: [] for report in reports
+        }
         for section in sections:
             sections_by_report[section.report_id].append(section)
         return [(report, sections_by_report[report.id]) for report in reports]
+
+    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
+        """Whether a published, explicitly descriptive-only report exposes ``claim_id``."""
+
+        stmt = (
+            select(ReportSection.id)
+            .join(Report, Report.id == ReportSection.report_id)
+            .where(
+                Report.status == PUBLISHED_STATUS,
+                Report.content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+                claim_id == any_(ReportSection.evidence_refs),
+            )
+            .limit(1)
+        )
+        return self.session.execute(stmt).scalars().first() is not None
 
     def get_claim(self, claim_id: uuid.UUID) -> Claim | None:
         return self.session.get(Claim, claim_id)
@@ -1864,9 +2023,7 @@ class IntelligenceRepository:
             base = base.where(Source.active.is_(active))
         total = self._count(base)
         sources = list(
-            self.session.execute(
-                base.order_by(Source.name, Source.id).limit(limit).offset(offset)
-            )
+            self.session.execute(base.order_by(Source.name, Source.id).limit(limit).offset(offset))
             .scalars()
             .all()
         )
@@ -1904,6 +2061,14 @@ def get_intelligence_repository(
 
 
 RepositoryDep = Annotated[IntelligenceRepository, Depends(get_intelligence_repository)]
+
+
+def get_crisis_prediction_reads_enabled() -> bool:
+    """Return the explicit Gate G switch for public CrisisPrediction reads."""
+    return get_settings().crisis_prediction_reads_enabled
+
+
+CrisisPredictionReadsDep = Annotated[bool, Depends(get_crisis_prediction_reads_enabled)]
 
 
 def get_report_lifecycle_repository(session: SessionDep) -> ReportLifecycleRepository:
@@ -1968,7 +2133,10 @@ BriefEnqueuerDep = Annotated[Callable[[datetime.date], QueuedBrief], Depends(get
 
 
 @router.get("/api/v1/dashboard")
-def get_dashboard(repo: RepositoryDep) -> dict[str, Any]:
+def get_dashboard(
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
     """The whole-snapshot dashboard (api-adapter-contract, shape gap 2).
 
     Retains ``summary``/``risk_scores``/``alerts`` and adds the five fixture-compatible blocks
@@ -1979,21 +2147,43 @@ def get_dashboard(repo: RepositoryDep) -> dict[str, Any]:
     no query multiplies with data size.
     """
     now = _utc_now()
-    summary = repo.latest_daily_summary()
-    open_alerts = repo.count_open_alerts()
-    counts = repo.dashboard_metric_counts(now=now)
+    # DailyIntelligenceSummary predates the durable report content-policy marker. Even a
+    # row with no prediction FK may contain model-generated predictive prose, so closed Gate G
+    # neither reads nor serializes it.
+    visible_summary = repo.latest_daily_summary() if crisis_prediction_reads_enabled else None
+    open_alerts = repo.count_open_alerts() if crisis_prediction_reads_enabled else 0
+    counts = repo.dashboard_metric_counts(
+        now=now,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
     triggers = repo.upcoming_triggers(now=now, limit=UPCOMING_TRIGGER_LIMIT)
-    map_points = repo.event_map(limit=MAP_LOCATION_ROW_LIMIT)
-    ranking = repo.company_ranking(limit=COMPANY_RANKING_LIMIT)
-    industry_summary = repo.dashboard_industry_summary(limit=INDUSTRY_SUMMARY_LIMIT)
+    map_points = repo.event_map(
+        limit=MAP_LOCATION_ROW_LIMIT,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
+    ranking = (
+        repo.company_ranking(limit=COMPANY_RANKING_LIMIT) if crisis_prediction_reads_enabled else []
+    )
+    industry_summary = (
+        repo.dashboard_industry_summary(limit=INDUSTRY_SUMMARY_LIMIT)
+        if crisis_prediction_reads_enabled
+        else []
+    )
     return {
-        "summary": _serialize_daily_summary(summary),
+        "summary": _serialize_daily_summary(
+            visible_summary,
+            prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+        ),
         "risk_scores": [
             _serialize_risk_score(score)
             for score in repo.list_risk_scores(risk_type=None, target_type=None, limit=12)
         ],
         "alerts": {"open_count": open_alerts},
-        "metrics": _dashboard_metrics(counts, open_alerts=open_alerts, summary=summary),
+        "metrics": _dashboard_metrics(
+            counts,
+            open_alerts=open_alerts,
+            summary=visible_summary,
+        ),
         "upcoming_triggers": [_serialize_upcoming_trigger(item) for item in triggers],
         "event_map": [_serialize_event_map_point(point) for point in map_points],
         "company_ranking": [
@@ -2006,6 +2196,7 @@ def get_dashboard(repo: RepositoryDep) -> dict[str, Any]:
 @router.get("/api/v1/events")
 def list_events(
     repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
     q: str | None = None,
     country: str | None = None,
     event_type: str | None = None,
@@ -2039,15 +2230,32 @@ def list_events(
         status=status.value if status is not None else None,
         limit=limit,
         offset=offset,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
     )
     return _page(
-        [_serialize_event_list_item(row) for row in rows], total=total, limit=limit, offset=offset
+        [
+            _serialize_event_list_item(
+                row,
+                prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+            )
+            for row in rows
+        ],
+        total=total,
+        limit=limit,
+        offset=offset,
     )
 
 
 @router.get("/api/v1/events/{event_id}")
-def get_event(event_id: uuid.UUID, repo: RepositoryDep) -> dict[str, Any]:
-    event, timeline, companies, industries, locations = repo.get_event_detail(event_id)
+def get_event(
+    event_id: uuid.UUID,
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    event, timeline, companies, industries, locations = repo.get_event_detail(
+        event_id,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
     if event is None:
         raise HTTPException(status_code=404, detail="event not found")
     return {
@@ -2064,8 +2272,20 @@ def get_event(event_id: uuid.UUID, repo: RepositoryDep) -> dict[str, Any]:
             for item in timeline
         ],
         # Company identity (name/ticker) is embedded, so the adapter reads no bare UUIDs.
-        "companies": [_serialize_event_company(company) for company in companies],
-        "industries": [_serialize_event_industry(industry) for industry in industries],
+        "companies": [
+            _serialize_event_company(
+                company,
+                prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+            )
+            for company in companies
+        ],
+        "industries": [
+            _serialize_event_industry(
+                industry,
+                prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+            )
+            for industry in industries
+        ],
         "locations": [_serialize_event_location(location) for location in locations],
     }
 
@@ -2130,35 +2350,43 @@ def get_risk_radar_history(
 
 
 @router.get("/api/v1/risk-radar/{risk_type}")
-def get_risk_radar_detail(risk_type: str, repo: RepositoryDep) -> dict[str, Any]:
+def get_risk_radar_detail(
+    risk_type: str,
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
     """The RiskDetail for one risk_type (api-adapter-contract, shape gap 5), not raw observations.
 
     The latest real observation is the required spine: without one this is a 404 (no fixture/zero
-    substitute). A matching real CrisisPrediction (same risk_type, target preferred) adds the
-    horizon probabilities, full ``model_rating`` and drivers/analogies/invalidation signals; a
-    field with no real source stays ``[]``/``null``. A fixed three bounded reads -- latest
-    observation, matching prediction, distinct related targets -- with no N+1.
+    substitute). While Gate G is closed, no CrisisPrediction query runs and prediction-backed
+    fields stay ``[]``/``null``; the observation still supplies the descriptive score, severity,
+    metadata, and drivers. When explicitly enabled, a matching prediction (same risk_type, target
+    preferred) adds horizon probabilities, full ``model_rating`` and
+    drivers/analogies/invalidation signals.
     """
     observation = repo.latest_risk_observation(risk_type=risk_type)
     if observation is None:
         raise HTTPException(status_code=404, detail="no risk observation for that risk type")
-    prediction = repo.latest_crisis_prediction(
-        risk_type=risk_type,
-        target_type=observation.target_type,
-        target_id=observation.target_id,
-    )
-    related = repo.related_risk_targets(
-        risk_type=risk_type, limit=RISK_DETAIL_RELATED_TARGET_LIMIT
-    )
+    prediction: CrisisPrediction | None = None
+    if crisis_prediction_reads_enabled:
+        prediction = repo.latest_crisis_prediction(
+            risk_type=risk_type,
+            target_type=observation.target_type,
+            target_id=observation.target_id,
+        )
+    related = repo.related_risk_targets(risk_type=risk_type, limit=RISK_DETAIL_RELATED_TARGET_LIMIT)
     return {"risk": _serialize_risk_detail(observation, prediction, related)}
 
 
 @router.get("/api/v1/industries")
 def list_industries(
     repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
     limit: int = Query(default=50, ge=1, le=250),
     offset: int = Query(default=0, ge=0),
 ) -> dict[str, Any]:
+    if not crisis_prediction_reads_enabled:
+        return _page([], total=0, limit=limit, offset=offset)
     rollups, total = repo.list_industries(limit=limit, offset=offset)
     return _page(
         [_serialize_industry_rollup(rollup) for rollup in rollups],
@@ -2169,7 +2397,13 @@ def list_industries(
 
 
 @router.get("/api/v1/industries/{industry_id}")
-def get_industry(industry_id: str, repo: RepositoryDep) -> dict[str, Any]:
+def get_industry(
+    industry_id: str,
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    if not crisis_prediction_reads_enabled:
+        raise HTTPException(status_code=404, detail="industry not found")
     rollup = repo.get_industry(industry_id)
     if rollup is None:
         raise HTTPException(status_code=404, detail="industry not found")
@@ -2197,8 +2431,15 @@ def list_companies(
 
 
 @router.get("/api/v1/companies/{company_id}")
-def get_company(company_id: str, repo: RepositoryDep) -> dict[str, Any]:
-    company, rollup = repo.get_company(company_id)
+def get_company(
+    company_id: str,
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    company, rollup = repo.get_company(
+        company_id,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
     if company is None:
         raise HTTPException(status_code=404, detail="company not found")
     return {"company": _serialize_company(company, rollup)}
@@ -2207,10 +2448,14 @@ def get_company(company_id: str, repo: RepositoryDep) -> dict[str, Any]:
 @router.get("/api/v1/historical")
 def list_historical(
     repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
     target_type: str | None = None,
     risk_type: str | None = None,
     limit: int = Query(default=50, ge=1, le=250),
 ) -> dict[str, Any]:
+    """List prediction history only while the explicit Gate G read switch is open."""
+    if not crisis_prediction_reads_enabled:
+        return {"items": [], "count": 0}
     predictions = repo.list_historical(target_type=target_type, risk_type=risk_type, limit=limit)
     return {
         "items": [
@@ -2235,11 +2480,14 @@ def list_historical(
 @router.get("/api/v1/alerts")
 def list_alerts(
     repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
     user_id: str | None = None,
     status: str | None = None,
     limit: int = Query(default=50, ge=1, le=250),
     offset: int = Query(default=0, ge=0),
 ) -> dict[str, Any]:
+    if not crisis_prediction_reads_enabled:
+        return _page([], total=0, limit=limit, offset=offset)
     alerts, total = repo.list_alerts(
         user_id=_uuid_or_none(user_id), status=status, limit=limit, offset=offset
     )
@@ -2272,12 +2520,18 @@ def _require_alert_for_write(session: Session, alert_id: uuid.UUID) -> None:
 
 
 @router.post("/api/v1/alerts/{alert_id}/acknowledge")
-def acknowledge_alert(alert_id: uuid.UUID, session: SessionDep) -> dict[str, Any]:
+def acknowledge_alert(
+    alert_id: uuid.UUID,
+    session: SessionDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
     """Record that a notification for this alert was actually delivered (ADR 0010).
 
     Escalations re-notify by design, so this always records the *latest* delivery -- there is
     no terminal-state conflict here, only "does this alert exist".
     """
+    if not crisis_prediction_reads_enabled:
+        raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
     _require_alert_for_write(session, alert_id)
     service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
     try:
@@ -2290,7 +2544,11 @@ def acknowledge_alert(alert_id: uuid.UUID, session: SessionDep) -> dict[str, Any
 
 
 @router.post("/api/v1/alerts/{alert_id}/acknowledge-all-clear")
-def acknowledge_alert_all_clear(alert_id: uuid.UUID, session: SessionDep) -> dict[str, Any]:
+def acknowledge_alert_all_clear(
+    alert_id: uuid.UUID,
+    session: SessionDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
     """Record that the all-clear for this alert was delivered (ADR 0010).
 
     An all-clear is sent once and only for a *resolved* alert: acknowledging one on a live
@@ -2299,6 +2557,8 @@ def acknowledge_alert_all_clear(alert_id: uuid.UUID, session: SessionDep) -> dic
     already-acknowledged resolution is not an error: it is reported back as a no-op so a
     retried request is idempotent.
     """
+    if not crisis_prediction_reads_enabled:
+        raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
     _require_alert_for_write(session, alert_id)
     service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
     try:
@@ -2317,6 +2577,7 @@ def supersede_alert(
     alert_id: uuid.UUID,
     request: SupersedeAlertRequest,
     session: SessionDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> dict[str, Any]:
     """Replace this alert (and any additional narrower alerts named) with a broader one.
 
@@ -2327,6 +2588,8 @@ def supersede_alert(
     a narrower alert that is actually the broader alert's own dedupe key are all 409s -- the
     named alerts exist, but the replacement as asked for is not a valid one.
     """
+    if not crisis_prediction_reads_enabled:
+        raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
     narrower_ids = [str(alert_id), *request.additional_narrower_alert_ids]
     repository = SQLAlchemyAlertRepository(session)
     try:
@@ -2364,12 +2627,32 @@ def list_watchlist(
 @router.get("/api/v1/reports")
 def list_reports(
     repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
     user_id: str | None = None,
     limit: int = Query(default=50, ge=1, le=250),
 ) -> dict[str, Any]:
-    rows = repo.list_reports(user_id=_uuid_or_none(user_id), limit=limit)
+    rows = repo.list_reports(
+        user_id=_uuid_or_none(user_id),
+        limit=limit,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
+    if not crisis_prediction_reads_enabled:
+        # Defense in depth for alternate repository implementations: a closed endpoint never
+        # trusts section names or prose and accepts only the durable descriptive policy.
+        rows = [
+            (report, sections)
+            for report, sections in rows
+            if getattr(report, "content_policy", None) == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        ]
     return {
-        "items": [_serialize_report(report, sections) for report, sections in rows],
+        "items": [
+            _serialize_report(
+                report,
+                sections,
+                prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+            )
+            for report, sections in rows
+        ],
         "count": len(rows),
     }
 
@@ -2381,35 +2664,92 @@ def list_reports(
 # --------------------------------------------------------------------------------------
 
 
-def _brief_with_sections(repo: ReportLifecycleRepository, report: ReportSnapshot) -> dict[str, Any]:
-    return _serialize_brief_snapshot(report, repo.report_sections(report.id))
+def _brief_with_sections(
+    repo: ReportLifecycleRepository,
+    report: ReportSnapshot,
+    *,
+    prediction_backed_outputs_enabled: bool,
+) -> dict[str, Any]:
+    if (
+        not prediction_backed_outputs_enabled
+        and report.content_policy != REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+    ):
+        raise HTTPException(status_code=404, detail="no descriptive-only daily brief")
+    return _serialize_brief_snapshot(
+        report,
+        repo.report_sections(report.id),
+        prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+    )
 
 
 @router.get("/api/v1/reports/daily-brief/latest")
-def get_daily_brief_latest(repo: LifecycleRepoDep) -> dict[str, Any]:
-    report = repo.latest_published_daily_brief()
+def get_daily_brief_latest(
+    repo: LifecycleRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    report = repo.latest_published_daily_brief(
+        content_policy=(
+            None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        )
+    )
     if report is None:
         raise HTTPException(status_code=404, detail="no published daily brief")
-    return {"report": _brief_with_sections(repo, report)}
+    return {
+        "report": _brief_with_sections(
+            repo,
+            report,
+            prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+        )
+    }
 
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}")
-def get_daily_brief_by_date(brief_date: datetime.date, repo: LifecycleRepoDep) -> dict[str, Any]:
-    report = repo.latest_published_daily_brief_by_date(brief_date)
+def get_daily_brief_by_date(
+    brief_date: datetime.date,
+    repo: LifecycleRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    report = repo.latest_published_daily_brief_by_date(
+        brief_date,
+        content_policy=(
+            None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        ),
+    )
     if report is None:
         raise HTTPException(status_code=404, detail="no published daily brief for that date")
-    return {"report": _brief_with_sections(repo, report)}
+    return {
+        "report": _brief_with_sections(
+            repo,
+            report,
+            prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+        )
+    }
 
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}/versions")
-def list_daily_brief_versions(brief_date: datetime.date, repo: LifecycleRepoDep) -> dict[str, Any]:
-    versions = repo.daily_brief_versions(brief_date)
+def list_daily_brief_versions(
+    brief_date: datetime.date,
+    repo: LifecycleRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
+    versions = repo.daily_brief_versions(
+        brief_date,
+        content_policy=(
+            None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        ),
+    )
     if not versions:
         raise HTTPException(status_code=404, detail="no daily brief for that date")
     # Newest first, bounded (the repository fails loud past its version bound). Metadata only:
     # each entry carries status/stale/change_reason so a prior version is fully inspectable.
     return {
-        "items": [_serialize_brief_snapshot(report) for report in versions],
+        "items": [
+            _serialize_brief_snapshot(
+                report,
+                prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+            )
+            for report in versions
+        ],
         "count": len(versions),
     }
 
@@ -2419,11 +2759,24 @@ def get_daily_brief_version(
     brief_date: datetime.date,
     version: Annotated[int, Path(ge=1)],
     repo: LifecycleRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> dict[str, Any]:
-    report = repo.daily_brief_version(brief_date, version)
+    report = repo.daily_brief_version(
+        brief_date,
+        version,
+        content_policy=(
+            None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        ),
+    )
     if report is None:
         raise HTTPException(status_code=404, detail="no such daily brief version")
-    return {"report": _brief_with_sections(repo, report)}
+    return {
+        "report": _brief_with_sections(
+            repo,
+            report,
+            prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+        )
+    }
 
 
 # --------------------------------------------------------------------------------------
@@ -2458,12 +2811,21 @@ def _export_response(
     report: ReportSnapshot,
     *,
     pdf: bool,
+    prediction_backed_outputs_enabled: bool,
 ) -> Response:
     """Render a published brief to Markdown or PDF with a safe, deterministic download filename.
 
     Reads only: the ordered sections, the distinct cited claims, and one bulk attribution query.
     """
-    sections = lifecycle_repo.report_sections(report.id)
+    if (
+        not prediction_backed_outputs_enabled
+        and report.content_policy != REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+    ):
+        raise HTTPException(status_code=404, detail="no descriptive-only daily brief to export")
+    sections = _prediction_safe_report_sections(
+        lifecycle_repo.report_sections(report.id),
+        prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+    )
     attributions = export_repo.source_attributions_for_report(collect_claim_refs(sections))
     if pdf:
         content: bytes = render_pdf(report, sections, attributions)
@@ -2480,18 +2842,50 @@ def _export_response(
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}/export.md")
 def export_daily_brief_latest_markdown(
-    brief_date: datetime.date, repo: LifecycleRepoDep, export_repo: ExportRepoDep
+    brief_date: datetime.date,
+    repo: LifecycleRepoDep,
+    export_repo: ExportRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> Response:
-    report = _published_or_404(repo.latest_published_daily_brief_by_date(brief_date))
-    return _export_response(repo, export_repo, report, pdf=False)
+    report = _published_or_404(
+        repo.latest_published_daily_brief_by_date(
+            brief_date,
+            content_policy=(
+                None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+            ),
+        )
+    )
+    return _export_response(
+        repo,
+        export_repo,
+        report,
+        pdf=False,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
 
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}/export.pdf")
 def export_daily_brief_latest_pdf(
-    brief_date: datetime.date, repo: LifecycleRepoDep, export_repo: ExportRepoDep
+    brief_date: datetime.date,
+    repo: LifecycleRepoDep,
+    export_repo: ExportRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> Response:
-    report = _published_or_404(repo.latest_published_daily_brief_by_date(brief_date))
-    return _export_response(repo, export_repo, report, pdf=True)
+    report = _published_or_404(
+        repo.latest_published_daily_brief_by_date(
+            brief_date,
+            content_policy=(
+                None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+            ),
+        )
+    )
+    return _export_response(
+        repo,
+        export_repo,
+        report,
+        pdf=True,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
 
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}/versions/{version}/export.md")
@@ -2500,9 +2894,24 @@ def export_daily_brief_version_markdown(
     version: Annotated[int, Path(ge=1)],
     repo: LifecycleRepoDep,
     export_repo: ExportRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> Response:
-    report = _published_or_404(repo.daily_brief_version(brief_date, version))
-    return _export_response(repo, export_repo, report, pdf=False)
+    report = _published_or_404(
+        repo.daily_brief_version(
+            brief_date,
+            version,
+            content_policy=(
+                None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+            ),
+        )
+    )
+    return _export_response(
+        repo,
+        export_repo,
+        report,
+        pdf=False,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
 
 
 @router.get("/api/v1/reports/daily-brief/{brief_date}/versions/{version}/export.pdf")
@@ -2511,13 +2920,32 @@ def export_daily_brief_version_pdf(
     version: Annotated[int, Path(ge=1)],
     repo: LifecycleRepoDep,
     export_repo: ExportRepoDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
 ) -> Response:
-    report = _published_or_404(repo.daily_brief_version(brief_date, version))
-    return _export_response(repo, export_repo, report, pdf=True)
+    report = _published_or_404(
+        repo.daily_brief_version(
+            brief_date,
+            version,
+            content_policy=(
+                None if crisis_prediction_reads_enabled else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+            ),
+        )
+    )
+    return _export_response(
+        repo,
+        export_repo,
+        report,
+        pdf=True,
+        prediction_backed_outputs_enabled=crisis_prediction_reads_enabled,
+    )
 
 
 @router.get("/api/v1/evidence/{claim_id}")
-def get_evidence(claim_id: uuid.UUID, repo: RepositoryDep) -> dict[str, Any]:
+def get_evidence(
+    claim_id: uuid.UUID,
+    repo: RepositoryDep,
+    crisis_prediction_reads_enabled: CrisisPredictionReadsDep,
+) -> dict[str, Any]:
     """Resolve one claim id (from ``report_sections.evidence_refs``) to its evidence for the drawer.
 
     A malformed id is rejected at routing (422 via the typed ``uuid.UUID`` path param); an unknown
@@ -2525,6 +2953,12 @@ def get_evidence(claim_id: uuid.UUID, repo: RepositoryDep) -> dict[str, Any]:
     article evidence, a <= 200-char snippet plus canonical link/title/source attribution -- never
     article full text or raw payload.
     """
+    if not crisis_prediction_reads_enabled and not repo.claim_is_referenced_by_descriptive_report(
+        claim_id
+    ):
+        # Unknown and legacy-only IDs share the same response so this check cannot be used
+        # to enumerate claims from prediction-backed reports.
+        raise HTTPException(status_code=404, detail="claim not found")
     claim = repo.get_claim(claim_id)
     if claim is None:
         raise HTTPException(status_code=404, detail="claim not found")
@@ -2701,6 +3135,7 @@ __all__ = [
     "QueuedBrief",
     "enqueue_generate_daily_brief",
     "get_brief_enqueuer",
+    "get_crisis_prediction_reads_enabled",
     "get_intelligence_repository",
     "get_report_export_repository",
     "get_report_lifecycle_repository",

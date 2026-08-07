@@ -37,6 +37,7 @@ from db.models.core import (
     EventAnalogy,
     EventEmbedding,
     HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
     Job,
     LLMRun,
 )
@@ -52,6 +53,10 @@ from services.llm.cache import InMemoryLLMPromptCache
 from services.llm.fake_providers import CallableLLMProvider
 from services.llm.orchestrator import LLMOrchestrator
 from services.llm.repository import SQLAlchemyLLMRuntimeRepository
+from services.nlp.episodes import (
+    EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+    episode_embedding_input_sha256,
+)
 
 pytestmark = pytest.mark.integration
 
@@ -60,7 +65,15 @@ DISPOSABLE_DB_PREFIX = "nip_analogy_p_"
 
 # The closed set of tables this pipeline writes: the corpus it reads, the analogies it reconciles,
 # and the audit rows the orchestrator persists into the same transaction.
-ANALOGY_MODELS = (Event, EventEmbedding, HistoricalEpisode, EventAnalogy, LLMRun, Job)
+ANALOGY_MODELS = (
+    Event,
+    EventEmbedding,
+    HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
+    EventAnalogy,
+    LLMRun,
+    Job,
+)
 
 MODEL = "text-embedding-3-small"
 VERSION = "current"
@@ -115,7 +128,9 @@ def disposable_db(require_postgres: None):
         admin.dispose()
 
 
-def _episode(episode_id: uuid.UUID, *, similarity: float, regime_tags: list[str]) -> HistoricalEpisode:
+def _episode(
+    episode_id: uuid.UUID, *, similarity: float, regime_tags: list[str]
+) -> HistoricalEpisode:
     return HistoricalEpisode(
         id=episode_id,
         name=f"episode {episode_id}",
@@ -126,6 +141,7 @@ def _episode(episode_id: uuid.UUID, *, similarity: float, regime_tags: list[str]
         onset_embedding=_vector(similarity),
         model=MODEL,
         model_version=VERSION,
+        version=1,
         outcome_summary="The bank failed and was placed into receivership.",
         outcomes=["failure"],
         resolution_mechanism="FDIC systemic risk exception",
@@ -133,6 +149,20 @@ def _episode(episode_id: uuid.UUID, *, similarity: float, regime_tags: list[str]
         affected_industries=["banking"],
         regime_tags=regime_tags,
         is_counterexample=False,
+    )
+
+
+def _episode_embedding(episode: HistoricalEpisode) -> HistoricalEpisodeEmbedding:
+    return HistoricalEpisodeEmbedding(
+        historical_episode_id=episode.id,
+        model=episode.model,
+        model_version=episode.model_version,
+        episode_version=episode.version,
+        dimension=EMBEDDING_DIM,
+        onset_embedding=episode.onset_embedding,
+        input_sha256=episode_embedding_input_sha256(episode),
+        input_contract_version=EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+        snapshot_manifest_sha256=None,
     )
 
 
@@ -159,14 +189,15 @@ def seeded(disposable_db):
                 embedding=_vector(1.0),
             )
         )
-        session.add_all(
-            (
-                _episode(SVB_ID, similarity=0.95, regime_tags=list(CURRENT_REGIME)),
-                _episode(CONTINENTAL_ID, similarity=0.90, regime_tags=list(CURRENT_REGIME)),
-                # Shares none of the current regime's tags: item 2 flags it, item 3 must caveat it.
-                _episode(LTCM_ID, similarity=0.85, regime_tags=["pre_QE"]),
-            )
+        episodes = (
+            _episode(SVB_ID, similarity=0.95, regime_tags=list(CURRENT_REGIME)),
+            _episode(CONTINENTAL_ID, similarity=0.90, regime_tags=list(CURRENT_REGIME)),
+            # Shares none of the current regime's tags: item 2 flags it, item 3 must caveat it.
+            _episode(LTCM_ID, similarity=0.85, regime_tags=["pre_QE"]),
         )
+        session.add_all(episodes)
+        session.flush()
+        session.add_all([_episode_embedding(episode) for episode in episodes])
         session.commit()
     return disposable_db
 
@@ -216,9 +247,7 @@ def _run(session: Any, decide: Any) -> Any:
 
 
 def _durable(session: Any) -> dict[uuid.UUID, EventAnalogy]:
-    rows = session.execute(
-        select(EventAnalogy).where(EventAnalogy.event_id == EVENT_ID)
-    ).scalars()
+    rows = session.execute(select(EventAnalogy).where(EventAnalogy.event_id == EVENT_ID)).scalars()
     return {row.historical_episode_id: row for row in rows}
 
 

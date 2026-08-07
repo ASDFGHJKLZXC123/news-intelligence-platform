@@ -26,6 +26,28 @@ QUEUE_PIPELINE = "pipeline"
 TASK_MAX_RETRIES = 3
 TASK_RETRY_BACKOFF_MAX = 600
 
+# --- Daily pipeline task time budget ---------------------------------------------------
+# These override the global `task_soft_time_limit`/`task_time_limit` below for exactly one task,
+# `workers.pipeline_tasks.run_daily_pipeline`. Unlike every other task here, the daily coordinator
+# runs all seven stages in-process -- including per-event LLM calls -- so the global 120s/180s
+# ceiling would SIGKILL it mid-stage and no realistic date could ever reach `succeeded`. They are
+# applied on that task's `@shared_task` decorator (the same way `queue=` is), so nothing else
+# inherits the wider budget.
+#
+# Two relationships are load-bearing and must be preserved together:
+#   * the 5-minute gap between soft and hard is the graceful window in which the run unwinds after
+#     `SoftTimeLimitExceeded` and the task records a durable failure. That window is only enough
+#     because both layers that catch broadly re-raise the signal instead of absorbing it -- the
+#     per-item stage adapter (`workers.pipeline_stages`) and the per-stage coordinator, from the
+#     single `workers.pipeline_tasks.PIPELINE_FATAL_EXCEPTIONS` definition. What it has to cover
+#     is one in-flight provider call returning plus one `mark_failed` write, not another stage or
+#     another fan-out item; and
+#   * `services.pipeline.sqlalchemy_store.PIPELINE_RUNNING_LEASE` (35 min) must stay strictly
+#     above the hard limit, so a still-running worker's RUNNING lease can never expire underneath
+#     it and hand the date to a replacement attempt while the original is still writing.
+PIPELINE_TASK_SOFT_TIME_LIMIT = 1500  # seconds (25 min); raises SoftTimeLimitExceeded
+PIPELINE_TASK_TIME_LIMIT = 1800  # seconds (30 min); hard kill ceiling
+
 
 class EasternDailyCrontab(crontab):
     """A ``crontab`` whose fields are evaluated in America/New_York, not the app timezone.
@@ -192,6 +214,10 @@ celery_app = Celery(
         # 0004 nor the episode spec schedules an embedding run, and the trigger is what ingestion
         # or clustering just produced, not a clock.
         "workers.embedding_tasks",
+        # Embedded-article clustering. Independently callable and deliberately not scheduled:
+        # successful article embedding is its trigger, and the future pipeline coordinator owns
+        # that ordering.
+        "workers.clustering_tasks",
         # Historical-episode analogy rerank (ADR 0004 + the episode spec). Registered so a worker
         # can execute it per event, and deliberately not in BEAT_SCHEDULE for the same reason as
         # the embedding tasks it follows: an event is worth reranking once it has been embedded,
@@ -201,6 +227,9 @@ celery_app = Celery(
         # coordinator, and unlike the tasks above it *does* have a Beat entry
         # (REPORT_BEAT_SCHEDULE): the brief is a clock-triggered artifact, one per ET calendar day.
         "workers.report_tasks",
+        # Manual non-crisis daily coordinator. Registered on the pipeline queue but deliberately
+        # absent from BEAT_SCHEDULE: an authenticated operator/API request is its only trigger.
+        "workers.pipeline_tasks",
     ],
 )
 
@@ -231,6 +260,9 @@ celery_app.conf.update(
         }
     },
     # --- Time limits ------------------------------------------------------------
+    # Fleet-wide defaults for single-purpose tasks. The one long-running exception, the daily
+    # pipeline coordinator, carries PIPELINE_TASK_SOFT_TIME_LIMIT/PIPELINE_TASK_TIME_LIMIT on its
+    # own decorator; see the comment on those constants above.
     task_soft_time_limit=120,  # raises SoftTimeLimitExceeded for graceful cleanup
     task_time_limit=180,  # hard kill ceiling
     worker_prefetch_multiplier=1,

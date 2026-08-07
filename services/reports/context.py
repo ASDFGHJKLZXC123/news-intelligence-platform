@@ -49,13 +49,7 @@ _T = TypeVar("_T")
 #: read-only mappings, all the way down. Every value a consumer can reach through a normalized
 #: `evidence_refs`/`source_refs` has this shape, so a composer cannot mutate one in place.
 ImmutableJSON: TypeAlias = (
-    str
-    | int
-    | float
-    | bool
-    | None
-    | tuple["ImmutableJSON", ...]
-    | Mapping[str, "ImmutableJSON"]
+    str | int | float | bool | None | tuple["ImmutableJSON", ...] | Mapping[str, "ImmutableJSON"]
 )
 
 
@@ -110,6 +104,7 @@ class BoundedRead(Generic[_T]):
     def of(cls, fetched: Sequence[_T], limit: int) -> BoundedRead[_T]:
         """Build from an over-read of up to ``limit + 1`` rows: keep ``limit``, flag the rest."""
         return cls(rows=tuple(fetched[:limit]), limit=limit, truncated=len(fetched) > limit)
+
 
 # --------------------------------------------------------------------------------------
 # Vocabularies the loaders join on
@@ -814,9 +809,7 @@ class BriefContextRepository(Protocol):
     whether the scan's backstop clipped anything -- never left to infer it from a row count.
     """
 
-    def evidence_for_events(
-        self, event_ids: Sequence[uuid.UUID]
-    ) -> BoundedRead[EvidenceRow]: ...
+    def evidence_for_events(self, event_ids: Sequence[uuid.UUID]) -> BoundedRead[EvidenceRow]: ...
 
     def analogies_for_events(
         self, event_ids: Sequence[uuid.UUID]
@@ -868,7 +861,10 @@ def _scan_truncation_notes(
 
 
 def build_brief_context(
-    repository: BriefContextRepository, events: Sequence[SelectedEvent]
+    repository: BriefContextRepository,
+    events: Sequence[SelectedEvent],
+    *,
+    prediction_backed_outputs_enabled: bool = False,
 ) -> BriefContext:
     """Load and reduce every context the selected events support.
 
@@ -883,11 +879,21 @@ def build_brief_context(
 
     evidence_read = repository.evidence_for_events(event_ids)
     analogy_read = repository.analogies_for_events(event_ids)
-    forecast_read = repository.forecasts_for_events(event_ids)
+    # Gate G is a read boundary, not merely a rendering preference. When it is closed the
+    # ForecastScenario repository method is never called, so probabilities/provenance cannot
+    # enter memory, a prompt, a deterministic section, or a persisted report by accident.
+    forecast_read: BoundedRead[ForecastScenarioRow]
+    if prediction_backed_outputs_enabled:
+        forecast_read = repository.forecasts_for_events(event_ids)
+    else:
+        forecast_read = BoundedRead(rows=(), limit=0, truncated=False)
 
     evidence, evidence_notes = build_evidence_context(evidence_read.rows)
     analogies, analogy_notes = build_analogy_context(analogy_read.rows, events)
-    forecasts, forecast_notes = select_event_forecasts(forecast_read.rows, events)
+    if prediction_backed_outputs_enabled:
+        forecasts, forecast_notes = select_event_forecasts(forecast_read.rows, events)
+    else:
+        forecasts, forecast_notes = (), ()
 
     return BriefContext(
         evidence=evidence,

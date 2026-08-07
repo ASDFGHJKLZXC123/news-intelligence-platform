@@ -46,7 +46,15 @@ from typing import NoReturn
 
 from sqlalchemy.orm import Session
 
-from services.reports.composition import compose_brief
+from db.models.core import (
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+)
+from services.reports.composition import (
+    compose_brief,
+    descriptive_only_context,
+    descriptive_only_inputs,
+)
 from services.reports.context import BriefContext, build_brief_context
 from services.reports.context_repository import SQLAlchemyBriefContextRepository
 from services.reports.contracts import BriefInputs
@@ -139,12 +147,35 @@ class DailyBriefGenerationResult:
     generated_by_run_id: uuid.UUID | None
 
 
-def _production_inputs_builder(session: Session, window: BriefWindow) -> BriefInputs:
-    return build_brief_inputs(SQLAlchemyBriefInputRepository(session), window)
+def _production_inputs_builder(
+    session: Session,
+    window: BriefWindow,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> BriefInputs:
+    return build_brief_inputs(
+        SQLAlchemyBriefInputRepository(
+            session,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        ),
+        window,
+    )
 
 
-def _production_context_builder(session: Session, inputs: BriefInputs) -> BriefContext:
-    return build_brief_context(SQLAlchemyBriefContextRepository(session), inputs.top_events)
+def _production_context_builder(
+    session: Session,
+    inputs: BriefInputs,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> BriefContext:
+    return build_brief_context(
+        SQLAlchemyBriefContextRepository(
+            session,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        ),
+        inputs.top_events,
+        prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+    )
 
 
 def build_generation_orchestrator_factory(
@@ -179,9 +210,10 @@ def generate_daily_brief(
     orchestrator_factory: OrchestratorFactory,
     change_reason: str | None = None,
     title: str | None = None,
-    inputs_builder: InputsBuilder = _production_inputs_builder,
-    context_builder: ContextBuilder = _production_context_builder,
+    inputs_builder: InputsBuilder | None = None,
+    context_builder: ContextBuilder | None = None,
     lifecycle_repository_factory: LifecycleRepositoryFactory = ReportLifecycleRepository,
+    prediction_backed_outputs_enabled: bool = False,
 ) -> DailyBriefGenerationResult:
     """Generate, ground, and durably publish-or-fail one daily brief for ``brief_date``.
 
@@ -194,6 +226,20 @@ def generate_daily_brief(
 
     window = window_for_date(brief_date)
     reason = change_reason if (change_reason and change_reason.strip()) else DEFAULT_CHANGE_REASON
+    resolved_inputs_builder = inputs_builder or (
+        lambda session, brief_window: _production_inputs_builder(
+            session,
+            brief_window,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
+    )
+    resolved_context_builder = context_builder or (
+        lambda session, inputs: _production_context_builder(
+            session,
+            inputs,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
+    )
 
     # 1. Durable start: allocate the next version `generating` and COMMIT it on its own, so the
     #    report is externally observable and no later failure can erase the row. A close failure
@@ -205,6 +251,11 @@ def generate_daily_brief(
         change_reason=reason,
         session_factory=session_factory,
         lifecycle_repository_factory=lifecycle_repository_factory,
+        content_policy=(
+            REPORT_CONTENT_POLICY_PREDICTION_BACKED
+            if prediction_backed_outputs_enabled
+            else REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
+        ),
     )
     if start_close_error is not None:
         _mark_failed_or_raise(
@@ -235,9 +286,10 @@ def generate_daily_brief(
             window=window,
             session=session,
             orchestrator_factory=orchestrator_factory,
-            inputs_builder=inputs_builder,
-            context_builder=context_builder,
+            inputs_builder=resolved_inputs_builder,
+            context_builder=resolved_context_builder,
             lifecycle_repository_factory=lifecycle_repository_factory,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
         )
     except Exception as cause:  # noqa: BLE001 -- re-raised, typed, after a durable failure marker
         # Abandon the main transaction: roll back and close, both attempted, neither escaping raw.
@@ -272,6 +324,7 @@ def _durable_start(
     change_reason: str,
     session_factory: SessionFactory,
     lifecycle_repository_factory: LifecycleRepositoryFactory,
+    content_policy: str,
 ) -> tuple[ReportSnapshot, BaseException | None]:
     """Allocate the `generating` version, commit it alone, and return the durable snapshot.
 
@@ -291,6 +344,7 @@ def _durable_start(
             title=title,
             change_reason=change_reason,
             generated_by_run_id=None,  # not known until the gate; attached later, pre-publish
+            content_policy=content_policy,
         )
         session.commit()
     except Exception:
@@ -308,19 +362,52 @@ def _run_main(
     inputs_builder: InputsBuilder,
     context_builder: ContextBuilder,
     lifecycle_repository_factory: LifecycleRepositoryFactory,
+    prediction_backed_outputs_enabled: bool,
 ) -> DailyBriefGenerationResult:
     """The composed-and-grounded body, committed exactly once. Never marks anything itself."""
 
     orchestrator = orchestrator_factory(session)  # built for THIS session: audit rows share it
-    inputs = inputs_builder(session, window)
-    context = context_builder(session, inputs)
-    material = build_brief_material(inputs, context)
-    draft = compose_brief(orchestrator, inputs=inputs, context=context, material=material)
+    try:
+        inputs = inputs_builder(session, window)
+        context = context_builder(session, inputs)
+        if not prediction_backed_outputs_enabled:
+            # The durable report marker promises the *whole* composition path was descriptive.
+            # Enforce that promise after injected/custom builders too; a caller cannot smuggle
+            # alert/prior-report prose or forecast probabilities into a descriptive_only.v1 row.
+            inputs = descriptive_only_inputs(inputs)
+            context = descriptive_only_context(context)
+        material = build_brief_material(
+            inputs,
+            context,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
+        draft = compose_brief(
+            orchestrator,
+            inputs=inputs,
+            context=context,
+            material=material,
+            prediction_backed_outputs_enabled=prediction_backed_outputs_enabled,
+        )
 
-    repo = lifecycle_repository_factory(session)
-    # Advance to the gate after composition and before grounding, per the spec's lifecycle order.
-    repo.transition(report.id, ReportStatus.GROUNDING_CHECK)
-    gate = run_grounding_gate(orchestrator, inputs=inputs, context=context, draft=draft)
+        repo = lifecycle_repository_factory(session)
+        # Advance to the gate after composition and before grounding, per the lifecycle order.
+        repo.transition(report.id, ReportStatus.GROUNDING_CHECK)
+        gate = run_grounding_gate(orchestrator, inputs=inputs, context=context, draft=draft)
+    except BaseException as cause:
+        close = getattr(orchestrator, "close", None)
+        if callable(close):
+            try:
+                close()
+            except BaseException as cleanup_error:
+                raise BaseExceptionGroup(
+                    "daily brief model work and orchestrator cleanup both failed",
+                    [cause, cleanup_error],
+                ) from cause
+        raise
+    else:
+        close = getattr(orchestrator, "close", None)
+        if callable(close):
+            close()
 
     sections = repo.persist_sections(report.id, gate)
 

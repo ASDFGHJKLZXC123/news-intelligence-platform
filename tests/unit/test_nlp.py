@@ -21,7 +21,11 @@ from services.nlp import (
     cosine_similarity,
     exact_duplicate_groups,
 )
-from services.nlp.cluster_service import ClusterResult, cluster_unclustered_articles
+from services.nlp.cluster_service import (
+    ClusterResult,
+    IncompleteEmbeddingCoverageError,
+    cluster_unclustered_articles,
+)
 from services.nlp.clustering import ClusteringThresholdError
 from services.nlp.embeddings import embed_unembedded_articles
 from services.nlp.features import event_severity_score, source_diversity_score
@@ -148,6 +152,21 @@ def test_cluster_query_pins_one_model_version_instead_of_selecting_newest() -> N
     assert "article_embeddings.model_version = 'current'" in sql
     assert "'next'" not in sql
     assert "DISTINCT ON" not in sql
+
+
+def test_cluster_refuses_partial_coverage_in_the_selected_model_space() -> None:
+    article = Article(id=uuid.uuid4(), title="Missing vector")
+    session = Mock()
+    session.execute.return_value.all.return_value = [(article, None, 0.8)]
+
+    with pytest.raises(IncompleteEmbeddingCoverageError, match="no embedding.*pinned-v2"):
+        cluster_unclustered_articles(
+            session,
+            embedding_model="text-embedding-3-small",
+            embedding_model_version="pinned-v2",
+        )
+
+    assert session.add.call_count == 0
 
 
 def test_embedding_write_persists_provider_model_identity() -> None:

@@ -1,0 +1,154 @@
+{
+  "schema": "llm-quality-canary-cases.v1",
+  "cases": [
+    {
+      "case_id": "entity.mercury-context.v1",
+      "workload": "entity_adjudication",
+      "tier": "T1",
+      "mention": {
+        "surface": "Mercury",
+        "context": "The Pentagon awarded Mercury (NASDAQ: MRCY) a radar-processing contract."
+      },
+      "candidates": [
+        {
+          "id": "10000000-0000-4000-8000-000000000001",
+          "canonical_name": "Mercury Systems",
+          "ticker": "MRCY",
+          "industry": "aerospace; defense",
+          "country": "US"
+        },
+        {
+          "id": "10000000-0000-4000-8000-000000000002",
+          "canonical_name": "Mercury General",
+          "ticker": "MCY",
+          "industry": "insurance",
+          "country": "US"
+        }
+      ],
+      "expected": {
+        "selected_id": "10000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "case_id": "grounding.mixed-verdicts.v1",
+      "workload": "claim_grounding",
+      "tier": "T1",
+      "block_text": "Northstar cut its benchmark rate by 25 basis points to 4.75%. Annual inflation fell to 2.0% in July.",
+      "claims": [
+        {
+          "id": "20000000-0000-4000-8000-000000000001",
+          "text": "Northstar lowered its benchmark rate from 5.00% to 4.75%.",
+          "publisher": "Example Financial Wire",
+          "url": "https://example.test/northstar-rate-decision",
+          "excerpt": "Northstar lowered the benchmark rate from 5.00 percent to 4.75 percent, a quarter-point reduction."
+        },
+        {
+          "id": "20000000-0000-4000-8000-000000000002",
+          "text": "Annual inflation was 3.2% in July.",
+          "publisher": "Example Statistics Bureau",
+          "url": "https://example.test/northstar-inflation",
+          "excerpt": "The statistics bureau reported annual inflation of 3.2 percent in July, unchanged from June."
+        }
+      ],
+      "expected": {
+        "verdicts": {
+          "20000000-0000-4000-8000-000000000001": "supported",
+          "20000000-0000-4000-8000-000000000002": "unsupported"
+        }
+      }
+    },
+    {
+      "case_id": "analogy.structure-over-vector.v1",
+      "workload": "analogy_rerank",
+      "tier": "T2",
+      "event": {
+        "id": "30000000-0000-4000-8000-000000000001",
+        "title": "Regional lender faces rapid deposit withdrawals",
+        "summary": "A regional lender with concentrated uninsured business deposits disclosed long-duration securities losses and then experienced rapid depositor withdrawals.",
+        "event_type": "banking_stress",
+        "country": "US",
+        "region": "North America",
+        "first_seen_at": "2026-07-30",
+        "regime_tags": ["high-rates", "tight-financial-conditions"]
+      },
+      "candidates": [
+        {
+          "id": "30000000-0000-4000-8000-000000000002",
+          "name": "Synthetic episode A",
+          "episode_type": "banking_crisis",
+          "onset_date": "2011-04-01",
+          "onset_summary": "A regional lender relied on concentrated uninsured business deposits, carried unrealized losses on long-duration securities, and began seeing rapid withdrawals.",
+          "onset_indicators": {
+            "funding": "concentrated uninsured deposits",
+            "balance_sheet": "long-duration securities losses",
+            "transmission": "rapid depositor withdrawals"
+          },
+          "geography": "US",
+          "affected_industries": ["banking"],
+          "regime_tags": ["high-rates", "tight-financial-conditions"],
+          "similarity": 0.71
+        },
+        {
+          "id": "30000000-0000-4000-8000-000000000003",
+          "name": "Synthetic episode B",
+          "episode_type": "operational_disruption",
+          "onset_date": "2018-09-01",
+          "onset_summary": "A bank mobile application became unavailable for several hours, while deposits, funding, liquidity, and capital remained stable.",
+          "onset_indicators": {
+            "mechanism": "mobile application outage",
+            "funding": "stable",
+            "capital": "stable"
+          },
+          "geography": "US",
+          "affected_industries": ["banking"],
+          "regime_tags": ["high-rates", "tight-financial-conditions"],
+          "similarity": 0.94
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "30000000-0000-4000-8000-000000000002"
+        ]
+      }
+    },
+    {
+      "case_id": "composition.rate-decision.v1",
+      "workload": "report_composition",
+      "tier": "T2",
+      "event": {
+        "id": "40000000-0000-4000-8000-000000000001",
+        "title": "Northstar central bank delivers first rate cut in nine months",
+        "hotness_score": 72.0,
+        "max_linked_risk_score": 58.0,
+        "developing": false
+      },
+      "claims": [
+        {
+          "id": "40000000-0000-4000-8000-000000000002",
+          "text": "On July 30, Northstar Central Bank cut its benchmark rate from 5.00% to 4.75%, its first cut in nine months.",
+          "publisher": "Example Central Bank Desk",
+          "url": "https://example.test/northstar-policy-decision",
+          "excerpt": "On July 30, Northstar Central Bank cut its benchmark rate from 5.00 percent to 4.75 percent, the first reduction in nine months."
+        },
+        {
+          "id": "40000000-0000-4000-8000-000000000003",
+          "text": "Inflation had eased for three months, but policy remained restrictive and future decisions would depend on incoming data.",
+          "publisher": "Example Monetary Bulletin",
+          "url": "https://example.test/northstar-policy-guidance",
+          "excerpt": "Inflation had eased for three months, while officials described policy as restrictive and said future decisions would depend on incoming data."
+        }
+      ],
+      "budget": {
+        "target": 150,
+        "minimum": 120,
+        "maximum": 180
+      },
+      "expected": {
+        "required_claim_ids": [
+          "40000000-0000-4000-8000-000000000002",
+          "40000000-0000-4000-8000-000000000003"
+        ]
+      }
+    }
+  ]
+}

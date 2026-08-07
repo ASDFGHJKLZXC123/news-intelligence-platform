@@ -12,9 +12,11 @@ from __future__ import annotations
 import datetime
 import json
 import uuid
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
+from celery.exceptions import SoftTimeLimitExceeded
 
 from packages.config import metrics
 from packages.config.logging import job_id_var
@@ -57,6 +59,21 @@ class FakeRedisCloseRaises:
     def close(self) -> None:
         self.close_attempts += 1
         raise RuntimeError("redis pool close failed")
+
+
+class FakeRedisCloseTimesOut:
+    """A Redis client whose ``close`` is interrupted by the worker's soft time limit.
+
+    Celery raises ``SoftTimeLimitExceeded`` in whatever frame is executing when the limit lands,
+    including the cleanup one. That is not a pool-cleanup fault, so it must not be swallowed.
+    """
+
+    def __init__(self) -> None:
+        self.close_attempts = 0
+
+    def close(self) -> None:
+        self.close_attempts += 1
+        raise SoftTimeLimitExceeded
 
 
 class SessionFactorySpy:
@@ -234,6 +251,22 @@ def test_it_passes_an_explicit_date_and_the_coordinator_owns_the_session(
     assert call["orchestrator_factory"] is state["orchestrator_factory"]
     assert state["factory_kwargs"]["redis_client"] is state["redis"]
     assert "settings" in state["factory_kwargs"]
+    assert call["prediction_backed_outputs_enabled"] is False
+
+
+def test_worker_threads_an_explicit_open_gate_to_generation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = _install(monkeypatch)
+    monkeypatch.setattr(
+        report_tasks,
+        "get_settings",
+        lambda: SimpleNamespace(crisis_prediction_reads_enabled=True),
+    )
+
+    report_tasks.run_daily_brief_generation("2026-07-14")
+
+    assert state["calls"][0]["prediction_backed_outputs_enabled"] is True
 
 
 def test_a_none_argument_derives_the_date_from_the_cutoff(
@@ -424,3 +457,21 @@ def test_a_redis_close_failure_does_not_mask_the_original_generation_error(
     assert metrics.get(metrics.JOB_FAILURES) == 1  # one failure for the generation error...
     assert metrics.get(metrics.JOB_SUCCESSES) == 0  # ...not an extra one for the cleanup
     assert job_id_var.get() is None  # job context cleared even when both faults occur
+
+
+# --- A soft time limit is a teardown signal, not a cleanup fault ------------------------
+def test_a_soft_time_limit_during_redis_close_is_not_swallowed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    redis_client = FakeRedisCloseTimesOut()
+    _install(monkeypatch, redis_client=redis_client)
+
+    # Swallowing this would return a published payload from a worker that is out of time, and,
+    # run as a daily-pipeline stage, would hide the timeout from the coordinator's unwind.
+    with pytest.raises(SoftTimeLimitExceeded):
+        report_tasks.run_daily_brief_generation("2026-07-14")
+
+    assert redis_client.close_attempts == 1
+    assert metrics.get(metrics.JOB_SUCCESSES) == 1  # the brief itself did publish before the limit
+    assert metrics.get(metrics.JOB_FAILURES) == 0  # no invented failure for the interrupted close
+    assert job_id_var.get() is None  # the job context is still cleared on the way out

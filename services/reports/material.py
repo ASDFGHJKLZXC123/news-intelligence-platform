@@ -375,7 +375,12 @@ def _what_changed_notes(inputs: BriefInputs, rows: Sequence[ChangeRow]) -> tuple
     return tuple(notes)
 
 
-def build_brief_material(inputs: BriefInputs, context: BriefContext) -> BriefMaterial:
+def build_brief_material(
+    inputs: BriefInputs,
+    context: BriefContext,
+    *,
+    prediction_backed_outputs_enabled: bool = False,
+) -> BriefMaterial:
     """Lay out one brief's sections: which exist, in what order, and their exact rows.
 
     Sections are *omitted* rather than emptied when their data is missing (ADR 0009: "affected
@@ -438,14 +443,16 @@ def build_brief_material(inputs: BriefInputs, context: BriefContext) -> BriefMat
         add(SectionKind.HISTORICAL_PARALLELS, "Historical Parallels", analogies=parallels)
 
     # 5. Forecasts -- table only.
-    forecast_rows = _forecast_rows(context.forecasts, inputs.top_events)
-    if forecast_rows:
-        add(SectionKind.FORECASTS, "Forecasts", forecast_rows=forecast_rows)
+    if prediction_backed_outputs_enabled:
+        forecast_rows = _forecast_rows(context.forecasts, inputs.top_events)
+        if forecast_rows:
+            add(SectionKind.FORECASTS, "Forecasts", forecast_rows=forecast_rows)
 
     # 6. Alerts -- list only, all-clears kept.
-    alert_rows = _alert_rows(inputs.executive_summary.alert_state_changes)
-    if alert_rows:
-        add(SectionKind.ALERTS, "Alerts", alert_rows=alert_rows)
+    if prediction_backed_outputs_enabled:
+        alert_rows = _alert_rows(inputs.executive_summary.alert_state_changes)
+        if alert_rows:
+            add(SectionKind.ALERTS, "Alerts", alert_rows=alert_rows)
 
     # 7. What changed since yesterday -- always, even when the answer is "we cannot tell".
     change_rows = _change_rows(inputs)

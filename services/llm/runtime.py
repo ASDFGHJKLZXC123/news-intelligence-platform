@@ -31,16 +31,57 @@ def build_production_orchestrator(
     halfway through cannot leave half an event committed behind a successful-looking retry.
     """
 
+    providers_by_tier = build_providers_by_tier(settings)
+    routed_provider_names = {
+        provider.provider_name
+        for tier_providers in providers_by_tier.values()
+        for provider in tier_providers
+    }
+    try:
+        limiter = build_provider_rate_limiter(
+            redis_client=redis_client,
+            # Environment JSON overrides replace an entire mapping. Scope construction to
+            # routes that can actually run so adding an unrouted provider does not break an
+            # older deployment override, while a routed provider missing either limit still
+            # fails closed through the limiter's positive-limit validation.
+            rpm_limits={
+                name: settings.llm_provider_rpm_limits.get(name, 0)
+                for name in routed_provider_names
+            },
+            tpm_limits={
+                name: settings.llm_provider_tpm_limits.get(name, 0)
+                for name in routed_provider_names
+            },
+        )
+    except Exception as limiter_error:
+        cleanup_errors: list[Exception] = []
+        seen: set[int] = set()
+        for tier_providers in providers_by_tier.values():
+            for provider in tier_providers:
+                if id(provider) in seen:
+                    continue
+                seen.add(id(provider))
+                close = getattr(provider, "close", None)
+                if callable(close):
+                    try:
+                        close()
+                    except Exception as cleanup_error:  # noqa: BLE001
+                        cleanup_errors.append(cleanup_error)
+        if cleanup_errors:
+            limiter_error.add_note(
+                "provider cleanup also failed: "
+                + "; ".join(
+                    f"{type(error).__name__}: {error}" for error in cleanup_errors
+                )
+            )
+        raise
+
     return LLMOrchestrator(
         settings=settings,
         repository=SQLAlchemyLLMRuntimeRepository(session, commit_on_write=commit_on_write),
-        providers_by_tier=build_providers_by_tier(settings),
+        providers_by_tier=providers_by_tier,
         cache=RedisLLMPromptCache(redis_client=redis_client),
-        limiter=build_provider_rate_limiter(
-            redis_client=redis_client,
-            rpm_limits=settings.llm_provider_rpm_limits,
-            tpm_limits=settings.llm_provider_tpm_limits,
-        ),
+        limiter=limiter,
     )
 
 

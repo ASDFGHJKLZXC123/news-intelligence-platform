@@ -31,7 +31,7 @@ from __future__ import annotations
 import datetime
 import uuid
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import Any, Final, Protocol
 
@@ -40,7 +40,7 @@ from services.llm.contracts import ReportComposition
 from services.llm.orchestrator import LLMOrchestratorError, LLMOrchestratorRequest
 from services.llm.policy import LLMTier
 from services.reports.context import BriefContext, ClaimContext
-from services.reports.contracts import BriefInputs, RiskKey
+from services.reports.contracts import BriefInputs, LinkedRisk, RiskKey, RiskProvenance
 from services.reports.material import BriefMaterial, SectionKind, SectionMaterial
 from services.reports.prompts import (
     COMPOSITION_PROMPT_TEMPLATE_VERSION,
@@ -56,6 +56,7 @@ from services.reports.prompts import (
     build_risk_commentary_prompt,
     build_top_event_prompt,
 )
+from services.reports.selection import ranking_score
 
 #: Composition is a reasoning task, not an extraction: T2 (ADR 0008). Essential and deterministic,
 #: with routing inputs that cannot escalate past it -- T3 is reached only by a high/critical risk
@@ -428,6 +429,9 @@ def _run_attempt(
             "section_kind": section_kind.value,
             "allowed_claim_ids": list(allowed_ids),
             "budget_attempt": attempt,
+            "word_budget_target": budget.target,
+            "word_budget_minimum": budget.minimum,
+            "word_budget_maximum": budget.maximum,
             "grounding_regeneration": regeneration,
         },
     )
@@ -553,7 +557,9 @@ def _compose_generated(
         )
     except (LLMOrchestratorError, ReportCompositionError) as exc:
         return _degraded_section(
-            material, code=DraftDegradationCode.COMPOSITION_FAILED, detail=f"composition failed: {exc}"
+            material,
+            code=DraftDegradationCode.COMPOSITION_FAILED,
+            detail=f"composition failed: {exc}",
         )
 
     attempts: list[CompositionAttempt] = [telemetry]
@@ -564,14 +570,11 @@ def _compose_generated(
 
     # One budget retry: a new, separately audited invocation with concise feedback appended to a
     # fresh prompt (distinct from the orchestrator's own schema-validation retry).
-    retry_prompt = (
-        f"{base_prompt}\n\n"
-        + budget_feedback(
-            target=budget.target,
-            minimum=budget.minimum,
-            maximum=budget.maximum,
-            actual=telemetry.word_count,
-        )
+    retry_prompt = f"{base_prompt}\n\n" + budget_feedback(
+        target=budget.target,
+        minimum=budget.minimum,
+        maximum=budget.maximum,
+        actual=telemetry.word_count,
     )
     try:
         retry_blocks, retry_telemetry = _run_attempt(
@@ -852,6 +855,7 @@ def compose_brief(
     inputs: BriefInputs,
     context: BriefContext,
     material: BriefMaterial,
+    prediction_backed_outputs_enabled: bool = False,
 ) -> BriefDraft:
     """Compose one daily brief into an immutable, ungrounded draft.
 
@@ -860,16 +864,97 @@ def compose_brief(
     no grounding; a quiet day makes zero LLM calls, and any failure degrades one section rather
     than the brief.
     """
+    if not prediction_backed_outputs_enabled:
+        # Defense in depth at the pure boundary too: executive-summary/risk prompts consume
+        # BriefInputs directly, so filtering only the deterministic sections would still let
+        # injected alert or legacy-prior prose reach a model call.
+        inputs = descriptive_only_inputs(inputs)
+        context = descriptive_only_context(context)
 
+    visible_material = tuple(
+        section
+        for section in material.sections
+        if prediction_backed_outputs_enabled
+        or section.kind not in {SectionKind.FORECASTS, SectionKind.ALERTS}
+    )
+    if not prediction_backed_outputs_enabled:
+        safe_events = {event.event_id: event for event in inputs.top_events}
+        sanitized_material: list[SectionMaterial] = []
+        for section in visible_material:
+            if section.kind is SectionKind.TOP_EVENT:
+                if section.event is None:
+                    continue
+                safe_event = safe_events.get(section.event.event_id)
+                if safe_event is None:
+                    continue
+                section = replace(section, event=safe_event)
+            sanitized_material.append(section)
+        visible_material = tuple(sanitized_material)
+    # Defense in depth: even a caller that accidentally hands a legacy material object to a
+    # closed-gate composer cannot render its forecast probabilities or composite-alert rows.
+    # Re-number after withholding so lifecycle persistence still receives contiguous ordering.
+    visible_material = tuple(
+        replace(section, order=index) for index, section in enumerate(visible_material, start=1)
+    )
     sections = tuple(
         _compose_section(orchestrator, inputs=inputs, context=context, material=material_section)
-        for material_section in material.sections
+        for material_section in visible_material
     )
     return BriefDraft(
         brief_date=inputs.window.brief_date,
         is_quiet_day=inputs.is_quiet_day,
         sections=sections,
     )
+
+
+def descriptive_only_inputs(inputs: BriefInputs) -> BriefInputs:
+    """Strip prediction-backed values from even adversarial custom-builder inputs."""
+
+    allowed_provenance = {
+        RiskProvenance.EVENT_OBSERVATION,
+        RiskProvenance.NONE,
+    }
+    sanitized_events = [
+        (
+            event
+            if event.max_linked_risk.provenance in allowed_provenance
+            else replace(
+                event,
+                max_linked_risk=LinkedRisk(
+                    score=0.0,
+                    provenance=RiskProvenance.NONE,
+                ),
+                ranking_score=ranking_score(event.hotness_score, 0.0),
+            )
+        )
+        for event in inputs.top_events
+    ]
+    sanitized_events.sort(
+        key=lambda event: (
+            -event.ranking_score,
+            -event.credibility_sum,
+            str(event.event_id),
+        )
+    )
+    top_events = tuple(
+        replace(event, rank=rank) for rank, event in enumerate(sanitized_events, start=1)
+    )
+    return replace(
+        inputs,
+        top_events=top_events,
+        executive_summary=replace(
+            inputs.executive_summary,
+            alert_state_changes=(),
+            top_events=top_events[:2],
+        ),
+        prior_brief=None,
+    )
+
+
+def descriptive_only_context(context: BriefContext) -> BriefContext:
+    """Withhold forecast scenarios while retaining evidence and historical observations."""
+
+    return replace(context, forecasts=())
 
 
 __all__ = [
@@ -894,4 +979,6 @@ __all__ = [
     "compose_section",
     "composition_job",
     "count_words",
+    "descriptive_only_context",
+    "descriptive_only_inputs",
 ]

@@ -23,6 +23,7 @@ from db.models import (
     Event,
     EventEmbedding,
     HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
 )
 from packages.providers.base import EmbeddingResult
 from packages.providers.openai_embeddings import MAX_EMBEDDING_BATCH_SIZE
@@ -31,9 +32,11 @@ from services.nlp.embeddings import (
     embed_unembedded_events,
 )
 from services.nlp.episodes import (
+    EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
     EpisodeEmbedding,
     EpisodeRecord,
     embed_episode_onset,
+    episode_embedding_input_sha256,
     refresh_episode_embeddings,
     upsert_historical_episode,
 )
@@ -137,6 +140,29 @@ def _record(**overrides: Any) -> EpisodeRecord:
     }
     fields.update(overrides)
     return EpisodeRecord(**fields)
+
+
+def _stored_embedding(
+    episode: HistoricalEpisode,
+    *,
+    model: str = MODEL,
+    model_version: str = VERSION,
+    episode_version: int | None = None,
+    input_sha256: str | None = None,
+) -> HistoricalEpisodeEmbedding:
+    return HistoricalEpisodeEmbedding(
+        historical_episode_id=episode.id,
+        model=model,
+        model_version=model_version,
+        episode_version=episode.version if episode_version is None else episode_version,
+        dimension=EMBEDDING_DIM,
+        onset_embedding=[0.1] * EMBEDDING_DIM,
+        input_sha256=(
+            episode_embedding_input_sha256(episode) if input_sha256 is None else input_sha256
+        ),
+        input_contract_version=EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+        snapshot_manifest_sha256=None,
+    )
 
 
 # --- articles -------------------------------------------------------------------------
@@ -252,10 +278,18 @@ def test_a_new_episode_is_embedded_before_insertion_never_with_a_placeholder() -
 
     episode = upsert_historical_episode(session, _record(), provider=provider)
 
-    session.add.assert_called_once()
+    assert session.add.call_count == 2
+    parent, stored = [call.args[0] for call in session.add.call_args_list]
+    assert parent is episode
+    assert isinstance(stored, HistoricalEpisodeEmbedding)
     assert len(episode.onset_embedding) == EMBEDDING_DIM
     assert set(episode.onset_embedding) != {0.0}  # a zero vector would match anything
     assert (episode.model, episode.model_version) == (MODEL, VERSION)
+    assert stored.onset_embedding == episode.onset_embedding
+    assert stored.episode_version == episode.version == 1
+    assert stored.input_sha256 == episode_embedding_input_sha256(episode)
+    assert stored.input_contract_version == EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION
+    assert stored.snapshot_manifest_sha256 is None
     assert len(provider.calls) == 1
 
 
@@ -303,6 +337,7 @@ def test_an_unchanged_episode_is_not_re_embedded() -> None:
     provider = RecordingProvider()
     session = Mock()
     session.scalars.return_value.first.return_value = existing
+    session.get.return_value = _stored_embedding(existing)
 
     episode = upsert_historical_episode(session, _record(), provider=provider)
 
@@ -316,31 +351,78 @@ def test_an_unchanged_episode_is_not_re_embedded() -> None:
     [
         {"onset_summary": "A different onset, rewritten by the curator."},
         {"onset_indicators": {"uninsured_deposit_pct": 55}},
-        {"version": 2},
     ],
 )
-def test_a_changed_onset_or_version_re_embeds(change: dict[str, Any]) -> None:
+def test_an_onset_change_without_a_version_bump_is_refused(change: dict[str, Any]) -> None:
     existing = _episode()
     provider = RecordingProvider()
     session = Mock()
     session.scalars.return_value.first.return_value = existing
 
-    episode = upsert_historical_episode(session, _record(**change), provider=provider)
+    with pytest.raises(ValueError, match="without an episode version bump"):
+        upsert_historical_episode(session, _record(**change), provider=provider)
 
-    assert len(provider.calls) == 1
-    assert episode.onset_embedding == [0.25] * EMBEDDING_DIM  # the freshly embedded vector
+    assert provider.calls == []
+    session.add.assert_not_called()
 
 
-def test_an_episode_stored_in_another_model_space_is_re_embedded() -> None:
-    existing = _episode(model="text-embedding-3-large")
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"version": 2},
+        {
+            "version": 2,
+            "onset_summary": "A different onset, rewritten by the curator.",
+        },
+    ],
+)
+def test_a_version_bump_appends_a_vector_without_overwriting_the_legacy_one(
+    change: dict[str, Any],
+) -> None:
+    existing = _episode()
     provider = RecordingProvider()
     session = Mock()
     session.scalars.return_value.first.return_value = existing
+    session.get.return_value = None
+
+    episode = upsert_historical_episode(session, _record(**change), provider=provider)
+
+    assert len(provider.calls) == 1
+    assert episode.onset_embedding == [0.1] * EMBEDDING_DIM
+    assert (episode.model, episode.model_version) == (MODEL, VERSION)
+    stored = session.add.call_args.args[0]
+    assert isinstance(stored, HistoricalEpisodeEmbedding)
+    assert stored.episode_version == 2
+    assert stored.onset_embedding == [0.25] * EMBEDDING_DIM
+
+
+def test_a_new_model_snapshot_appends_without_relabelling_the_legacy_vector() -> None:
+    existing = _episode()
+    provider = RecordingProvider(model_version="v2")
+    session = Mock()
+    session.scalars.return_value.first.return_value = existing
+    session.get.return_value = None
 
     episode = upsert_historical_episode(session, _record(), provider=provider)
 
     assert len(provider.calls) == 1
     assert (episode.model, episode.model_version) == (MODEL, VERSION)
+    assert episode.onset_embedding == [0.1] * EMBEDDING_DIM
+    stored = session.add.call_args.args[0]
+    assert isinstance(stored, HistoricalEpisodeEmbedding)
+    assert (stored.model, stored.model_version) == (MODEL, "v2")
+
+
+def test_a_sidecar_input_hash_mismatch_is_refused_instead_of_overwritten() -> None:
+    existing = _episode()
+    session = Mock()
+    session.scalars.return_value.first.return_value = existing
+    session.get.return_value = _stored_embedding(existing, input_sha256="f" * 64)
+
+    with pytest.raises(ValueError, match="input hash"):
+        upsert_historical_episode(session, _record(), provider=RecordingProvider())
+
+    session.add.assert_not_called()
 
 
 def test_no_outcome_text_ever_reaches_the_embedded_episode_text() -> None:
@@ -366,21 +448,27 @@ def test_no_outcome_text_ever_reaches_the_embedded_episode_text() -> None:
     assert episode.outcome_summary == record.outcome_summary
 
 
-def test_refresh_re_embeds_only_episodes_outside_the_configured_space() -> None:
-    stale = _episode(model="text-embedding-3-large")
+def test_refresh_appends_only_missing_current_revision_sidecars() -> None:
+    stale = _episode()
     provider = RecordingProvider()
     session = _session([stale])
 
     assert refresh_episode_embeddings(session, provider) == 1
 
-    assert stale.onset_embedding == [0.25] * EMBEDDING_DIM
+    assert stale.onset_embedding == [0.1] * EMBEDDING_DIM
     assert (stale.model, stale.model_version) == (MODEL, VERSION)
+    stored = session.add.call_args.args[0]
+    assert isinstance(stored, HistoricalEpisodeEmbedding)
+    assert stored.onset_embedding == [0.25] * EMBEDDING_DIM
+    assert stored.input_sha256 == episode_embedding_input_sha256(stale)
     assert provider.texts == [
         'Concentrated uninsured deposits face rapid withdrawals.\n\n{"uninsured_deposit_pct":94}'
     ]
     sql = _sql(session.scalars.call_args.args[0])
-    assert f"historical_episodes.model != '{MODEL}'" in sql
-    assert f"historical_episodes.model_version != '{VERSION}'" in sql
+    assert "historical_episode_embeddings.episode_version = historical_episodes.version" in sql
+    assert f"historical_episode_embeddings.model = '{MODEL}'" in sql
+    assert f"historical_episode_embeddings.model_version = '{VERSION}'" in sql
+    assert "historical_episode_embeddings.historical_episode_id IS NULL" in sql
 
 
 def test_refresh_is_a_noop_when_every_episode_is_current() -> None:

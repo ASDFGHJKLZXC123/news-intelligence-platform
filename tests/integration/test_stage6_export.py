@@ -31,6 +31,7 @@ from pypdf import PdfReader
 from sqlalchemy import Engine, create_engine, func, select
 from sqlalchemy.orm import Session
 
+from apps.api.intelligence import get_crisis_prediction_reads_enabled
 from apps.api.main import app
 from db.base import get_session
 from db.models.core import (
@@ -110,6 +111,7 @@ def client(engine: Engine) -> Iterator[TestClient]:
             yield session
 
     app.dependency_overrides[get_session] = _session_override
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:

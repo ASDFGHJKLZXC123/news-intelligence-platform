@@ -6,15 +6,17 @@ never written to logs (see ``packages.config.logging``).
 
 from __future__ import annotations
 
+import os
 import re
 from functools import lru_cache
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 # Config is the lowest layer and must not import the provider package, so the QID shape is
 # checked here directly; ``packages.providers`` re-validates every QID it is handed.
 _WIKIDATA_QID_PATTERN = re.compile(r"^Q[1-9][0-9]*$")
+_GEMINI_THINKING_LEVELS = frozenset({"minimal", "low", "medium", "high"})
 
 
 def _split_csv(value: str) -> list[str]:
@@ -42,14 +44,36 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        """Keep test processes isolated from developer secrets and live routing in ``.env``."""
+
+        del cls, settings_cls
+        if os.environ.get("APP_ENV", "").casefold() == "test":
+            return init_settings, env_settings, file_secret_settings
+        return init_settings, env_settings, dotenv_settings, file_secret_settings
+
     # --- Application -----------------------------------------------------------
     app_name: str = "news-intelligence-api"
     app_env: str = Field(default="local", description="local | dev | staging | prod")
     debug: bool = False
     log_level: str = "INFO"
+    # Gate G remains closed until prediction-backed public reads receive explicit approval.
+    # Model generation and persistence are intentionally independent of this read switch.
+    crisis_prediction_reads_enabled: bool = False
 
     # --- Datastores ------------------------------------------------------------
     database_url: str = "postgresql+psycopg2://news:news@localhost:5432/news"
+    database_connect_timeout_seconds: int = 3
+    database_pool_timeout_seconds: int = 3
+    database_statement_timeout_ms: int = 5_000
     redis_url: str = "redis://localhost:6379/0"
 
     # --- Celery ----------------------------------------------------------------
@@ -109,6 +133,10 @@ class Settings(BaseSettings):
     # different model/version pairs is undefined (ADR 0004).
     embedding_model: str = "text-embedding-3-small"
     embedding_model_version: str = "current"
+    # New production writes fail closed on the legacy/unverifiable ``current`` label. Tests and
+    # explicitly isolated migration tooling may opt out, but a live adapter must use a captured,
+    # source-registered snapshot identity.
+    embedding_require_registered_snapshot: bool = True
 
     # Mention extraction (ADR 0005 stage 1). The transformer pipeline is an explicit
     # deployment prerequisite (``python -m spacy download en_core_web_trf``): nothing in
@@ -126,6 +154,8 @@ class Settings(BaseSettings):
     # API secrets are read from the environment only.
     anthropic_api_key: str = ""
     openai_api_key: str = ""
+    gemini_api_key: str = ""
+    deepseek_api_key: str = ""
 
     # Budgeting controls for the orchestrator and runtime cost ceilings.
     llm_monthly_budget_usd: float = 10.0
@@ -159,16 +189,31 @@ class Settings(BaseSettings):
     anthropic_base_url: str = "https://api.anthropic.com"
     anthropic_api_version: str = "2023-06-01"
     openai_base_url: str = "https://api.openai.com"
+    gemini_base_url: str = "https://generativelanguage.googleapis.com"
+    deepseek_base_url: str = "https://api.deepseek.com"
     llm_request_timeout_seconds: float = 60.0
 
-    # Provider request/throughput guardrails.
+    # Interactions API thinking tokens share ``max_output_tokens`` with visible JSON. Keep the
+    # cheap T1 model at its minimal default and leave enough T2 budget for the composed report.
+    # A routed model absent from this map fails adapter construction before a network call.
+    gemini_model_thinking_levels: dict[str, str] = {
+        "gemini-3.5-flash-lite": "minimal",
+        "gemini-3.6-flash": "low",
+    }
+
+    # Application-side request/throughput guardrails. Gemini quotas vary by project/model/tier,
+    # while DeepSeek publishes account-level concurrency rather than fixed RPM/TPM values.
     llm_provider_rpm_limits: dict[str, int] = {
         "openai": 60,
         "anthropic": 60,
+        "gemini": 60,
+        "deepseek": 60,
     }
     llm_provider_tpm_limits: dict[str, int] = {
         "openai": 120_000,
         "anthropic": 30_000,
+        "gemini": 120_000,
+        "deepseek": 120_000,
     }
 
     # Provider pricing in USD per 1M tokens (input/output). Sub-cent precision matters:
@@ -194,6 +239,24 @@ class Settings(BaseSettings):
         "openai:text-embedding-3-small": {
             "input": 0.02,
             "output": 0.00,
+        },
+        "gemini:gemini-3.6-flash": {
+            "input": 1.50,
+            "output": 7.50,
+        },
+        "gemini:gemini-3.5-flash-lite": {
+            "input": 0.30,
+            "output": 2.50,
+        },
+        # DeepSeek publishes separate cache-hit and cache-miss input rates. The generic
+        # accounting contract has one input rate, so use the conservative cache-miss price.
+        "deepseek:deepseek-v4-flash": {
+            "input": 0.14,
+            "output": 0.28,
+        },
+        "deepseek:deepseek-v4-pro": {
+            "input": 0.435,
+            "output": 0.87,
         },
     }
 
@@ -246,6 +309,17 @@ class Settings(BaseSettings):
             raise ValueError(msg)
         return value
 
+    @field_validator(
+        "database_connect_timeout_seconds",
+        "database_pool_timeout_seconds",
+        "database_statement_timeout_ms",
+    )
+    @classmethod
+    def _validate_database_timeout(cls, value: int) -> int:
+        if value < 1:
+            raise ValueError("database timeouts must be positive")
+        return value
+
     @field_validator("ner_model")
     @classmethod
     def _validate_ner_model(cls, value: str) -> str:
@@ -273,6 +347,25 @@ class Settings(BaseSettings):
             msg = "ENTITY_LINK_MAX_CANDIDATES must keep at least one candidate"
             raise ValueError(msg)
         return value
+
+    @field_validator("gemini_model_thinking_levels")
+    @classmethod
+    def _validate_gemini_model_thinking_levels(cls, value: dict[str, str]) -> dict[str, str]:
+        """Only send documented Interactions thinking levels for explicitly named models."""
+
+        normalized: dict[str, str] = {}
+        for raw_model, raw_level in value.items():
+            model = raw_model.strip()
+            level = raw_level.strip().casefold()
+            if not model:
+                raise ValueError("GEMINI_MODEL_THINKING_LEVELS contains an empty model id")
+            if level not in _GEMINI_THINKING_LEVELS:
+                allowed = ", ".join(sorted(_GEMINI_THINKING_LEVELS))
+                raise ValueError(
+                    f"GEMINI_MODEL_THINKING_LEVELS for {model!r} must be one of: {allowed}"
+                )
+            normalized[model] = level
+        return normalized
 
     @property
     def identity_watchlist_names(self) -> list[str]:

@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from packages.config import metrics
-from workers import tasks
+from workers import pipeline_tasks, tasks
 from workers.celery_app import (
+    PIPELINE_TASK_SOFT_TIME_LIMIT,
+    PIPELINE_TASK_TIME_LIMIT,
     QUEUE_DEFAULT,
     QUEUE_INGESTION,
     QUEUE_PIPELINE,
@@ -31,6 +33,19 @@ def test_retry_backoff_and_time_limits() -> None:
     assert star["retry_backoff"] is True
     assert star["retry_backoff_max"] == TASK_RETRY_BACKOFF_MAX
     assert celery_app.conf.task_soft_time_limit < celery_app.conf.task_time_limit
+
+
+def test_only_the_daily_pipeline_task_overrides_the_global_time_limits() -> None:
+    pipeline_task = celery_app.tasks[pipeline_tasks.TASK_NAME]
+    sample_other_task = celery_app.tasks["workers.tasks.noop"]
+
+    assert PIPELINE_TASK_SOFT_TIME_LIMIT < PIPELINE_TASK_TIME_LIMIT
+    assert PIPELINE_TASK_SOFT_TIME_LIMIT > celery_app.conf.task_soft_time_limit
+    assert pipeline_task.soft_time_limit == PIPELINE_TASK_SOFT_TIME_LIMIT
+    assert pipeline_task.time_limit == PIPELINE_TASK_TIME_LIMIT
+    # `None` is how a task says "inherit the fleet-wide ceiling"; the override must not leak.
+    assert sample_other_task.soft_time_limit is None
+    assert sample_other_task.time_limit is None
 
 
 def test_noop_tasks_carry_retry_backoff_defaults() -> None:

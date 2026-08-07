@@ -124,6 +124,7 @@ def test_produced_sections_follow_the_canonical_relative_order() -> None:
             radar=_radar(current=[_entry(RiskKey("country", "US", "banking"), 60.0, "high", NOW)]),
         ),
         BriefContext(),
+        prediction_backed_outputs_enabled=True,
     )
     positions = {section.kind: i for i, section in enumerate(material.sections)}
     ordered_present = [k for k in SECTION_ORDER if k in positions]
@@ -214,6 +215,7 @@ def test_alerts_list_preserves_resolved_all_clears() -> None:
     material = build_brief_material(
         _inputs(alert_changes=[_alert(is_all_clear=True), _alert(is_all_clear=False)]),
         BriefContext(),
+        prediction_backed_outputs_enabled=True,
     )
     (section,) = material.of_kind(SectionKind.ALERTS)
     all_clears = [row for row in section.alert_rows if row.is_all_clear]
@@ -315,11 +317,49 @@ def test_forecasts_section_is_table_rows_only() -> None:
     material = build_brief_material(
         _inputs(top_events=[event]),
         BriefContext(forecasts=(forecast,)),
+        prediction_backed_outputs_enabled=True,
     )
     (section,) = material.of_kind(SectionKind.FORECASTS)
     assert section.forecast_rows
     assert section.prose == ""
     assert not hasattr(section.forecast_rows[0], "narrative")
+
+
+def test_closed_gate_omits_forecast_and_alert_material_but_keeps_observations() -> None:
+    event = _selected()
+    forecast = EventForecast(
+        event_id=event.event_id,
+        scenario_set_id=uuid.uuid4(),
+        scenarios=(
+            ForecastScenarioRow(
+                event_id=event.event_id,
+                scenario_set_id=uuid.uuid4(),
+                scenario_name="tail_risk_case",
+                probability=0.91,
+                risk_score=95.0,
+                severity="critical",
+                horizon="0_6m",
+                confidence=0.9,
+                evidence_refs=None,
+                created_at=NOW,
+            ),
+        ),
+        created_at=NOW,
+    )
+
+    material = build_brief_material(
+        _inputs(
+            top_events=[event],
+            alert_changes=[_alert(is_all_clear=False)],
+        ),
+        BriefContext(forecasts=(forecast,)),
+    )
+
+    assert material.of_kind(SectionKind.FORECASTS) == ()
+    assert material.of_kind(SectionKind.ALERTS) == ()
+    assert material.of_kind(SectionKind.TOP_EVENT)
+    assert material.of_kind(SectionKind.WHAT_CHANGED)
+    assert material.disclaimer.prose == FINAL_DISCLAIMER
 
 
 def test_forecast_row_evidence_refs_are_deep_frozen() -> None:
@@ -343,7 +383,11 @@ def test_forecast_row_evidence_refs_are_deep_frozen() -> None:
         ),
         created_at=NOW,
     )
-    material = build_brief_material(_inputs(top_events=[event]), BriefContext(forecasts=(forecast,)))
+    material = build_brief_material(
+        _inputs(top_events=[event]),
+        BriefContext(forecasts=(forecast,)),
+        prediction_backed_outputs_enabled=True,
+    )
     (section,) = material.of_kind(SectionKind.FORECASTS)
     refs = section.forecast_rows[0].evidence_refs
     assert isinstance(refs, Mapping)

@@ -92,6 +92,12 @@ ALERT_STATES = ("open", "escalated", "downgraded", "resolved", "superseded")
 ACTIVE_ALERT_STATES = ("open", "escalated", "downgraded")
 REPORT_STATUSES = ("generating", "grounding_check", "published", "failed")
 GROUNDING_STATUSES = ("pending", "passed", "failed", "data_quality_note")
+REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY = "descriptive_only.v1"
+REPORT_CONTENT_POLICY_PREDICTION_BACKED = "prediction_backed.v1"
+REPORT_CONTENT_POLICIES = (
+    REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+)
 
 
 def _sql_enum(values: tuple[str, ...]) -> str:
@@ -167,12 +173,8 @@ class ArticleEmbedding(Base):
     article_id: Mapped[uuid.UUID] = mapped_column(
         Uuid, ForeignKey("articles.id", ondelete="CASCADE"), primary_key=True
     )
-    model: Mapped[str] = mapped_column(
-        String(128), nullable=False, server_default=EMBEDDING_MODEL, primary_key=True
-    )
-    model_version: Mapped[str] = mapped_column(
-        String(64), nullable=False, server_default=EMBEDDING_MODEL_VERSION, primary_key=True
-    )
+    model: Mapped[str] = mapped_column(String(128), nullable=False, primary_key=True)
+    model_version: Mapped[str] = mapped_column(String(64), nullable=False, primary_key=True)
     dimension: Mapped[int] = mapped_column(Integer, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM), nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
@@ -269,7 +271,7 @@ class EventEmbedding(Base):
         Uuid, ForeignKey("events.id", ondelete="CASCADE"), primary_key=True
     )
     model: Mapped[str] = mapped_column(String(128), primary_key=True)
-    model_version: Mapped[str] = mapped_column(String(64), primary_key=True, server_default="")
+    model_version: Mapped[str] = mapped_column(String(64), nullable=False, primary_key=True)
     dimension: Mapped[int] = mapped_column(Integer, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM), nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
@@ -1433,9 +1435,7 @@ class HistoricalEpisode(Base):
     model: Mapped[str] = mapped_column(
         String(128), nullable=False, server_default="text-embedding-3-small"
     )
-    model_version: Mapped[str] = mapped_column(
-        String(64), nullable=False, server_default="current"
-    )
+    model_version: Mapped[str] = mapped_column(String(64), nullable=False, server_default="current")
     outcome_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     outcomes: Mapped[list[str] | None] = mapped_column(ARRAY(Text), nullable=True)
     resolution_mechanism: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -1495,6 +1495,65 @@ class HistoricalEpisode(Base):
             "ix_historical_episodes_affected_industries",
             "affected_industries",
             postgresql_using="gin",
+        ),
+    )
+
+
+class HistoricalEpisodeEmbedding(Base):
+    """One immutable onset vector for a curated episode revision and model snapshot.
+
+    ``historical_episodes`` keeps its original embedding columns during the expand phase so old
+    code and old rows remain valid. New readers use this sidecar instead: its key makes both the
+    curated episode revision and the exact model snapshot explicit, so producing a new vector
+    never overwrites or relabels an older one.
+    """
+
+    __tablename__ = "historical_episode_embeddings"
+
+    historical_episode_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid,
+        ForeignKey("historical_episodes.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    model: Mapped[str] = mapped_column(String(128), nullable=False, primary_key=True)
+    model_version: Mapped[str] = mapped_column(String(64), nullable=False, primary_key=True)
+    episode_version: Mapped[int] = mapped_column(Integer, nullable=False, primary_key=True)
+    dimension: Mapped[int] = mapped_column(Integer, nullable=False)
+    onset_embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM), nullable=False)
+    input_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    input_contract_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    snapshot_manifest_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "episode_version >= 1",
+            name="ck_historical_episode_embeddings_episode_version_positive",
+        ),
+        CheckConstraint(
+            f"dimension = {EMBEDDING_DIM}",
+            name="ck_historical_episode_embeddings_dimension",
+        ),
+        CheckConstraint(
+            "input_contract_version <> ''",
+            name="ck_historical_episode_embeddings_input_contract",
+        ),
+        CheckConstraint(
+            "input_sha256 IS NULL OR input_sha256 ~ '^[0-9a-f]{64}$'",
+            name="ck_historical_episode_embeddings_input_sha256",
+        ),
+        CheckConstraint(
+            "snapshot_manifest_sha256 IS NULL OR snapshot_manifest_sha256 ~ '^[0-9a-f]{64}$'",
+            name="ck_historical_episode_embeddings_snapshot_manifest_sha256",
+        ),
+        Index(
+            "ix_historical_episode_embeddings_onset_embedding_hnsw",
+            "onset_embedding",
+            postgresql_using="hnsw",
+            postgresql_with={"m": 16, "ef_construction": 64},
+            postgresql_ops={"onset_embedding": "vector_cosine_ops"},
         ),
     )
 
@@ -2000,7 +2059,12 @@ class EnergyDisruptionEvent(Base):
 
     __table_args__ = (
         UniqueConstraint("provider", "external_id", name="uq_energy_disruption_events_provider_id"),
-        Index("ix_energy_disruption_events_region_commodity_started", "region", "commodity", "started_at"),
+        Index(
+            "ix_energy_disruption_events_region_commodity_started",
+            "region",
+            "commodity",
+            "started_at",
+        ),
     )
 
 
@@ -2094,7 +2158,9 @@ class DailyIntelligenceSummary(Base):
     __tablename__ = "daily_intelligence_summaries"
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
-    summary_date: Mapped[datetime.date] = mapped_column(Date, nullable=False, unique=True, index=True)
+    summary_date: Mapped[datetime.date] = mapped_column(
+        Date, nullable=False, unique=True, index=True
+    )
     overall_risk_level: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
     confidence_score: Mapped[float | None] = mapped_column(Numeric, nullable=True)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
@@ -2300,7 +2366,9 @@ class Alert(Base):
             "state <> 'superseded' OR superseded_by IS NOT NULL",
             name="ck_alerts_superseded_has_target",
         ),
-        CheckConstraint("superseded_by IS NULL OR superseded_by <> id", name="ck_alerts_no_self_supersede"),
+        CheckConstraint(
+            "superseded_by IS NULL OR superseded_by <> id", name="ck_alerts_no_self_supersede"
+        ),
         # Flapping is structurally impossible: one live alert per dedupe key.
         Index(
             "uq_alerts_active_dedupe_key",
@@ -2372,7 +2440,9 @@ class Report(Base):
         Uuid, ForeignKey("events.id", ondelete="SET NULL"), nullable=True, index=True
     )
     title: Mapped[str] = mapped_column(Text, nullable=False)
-    status: Mapped[str] = mapped_column(String(32), nullable=False, server_default="generating", index=True)
+    status: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default="generating", index=True
+    )
     version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
     change_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     stale: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
@@ -2380,6 +2450,10 @@ class Report(Base):
     generated_by_run_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("llm_runs.id", ondelete="SET NULL"), nullable=True, index=True
     )
+    # NULL means legacy/unclassified and therefore cannot be served while Gate G is closed.
+    # New generators stamp one of the versioned policies so output authorization is durable
+    # and independent of section-title heuristics.
+    content_policy: Mapped[str | None] = mapped_column(String(32), nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
@@ -2389,6 +2463,10 @@ class Report(Base):
 
     __table_args__ = (
         CheckConstraint(f"status IN ({_sql_enum(REPORT_STATUSES)})", name="ck_reports_status"),
+        CheckConstraint(
+            f"content_policy IS NULL OR content_policy IN ({_sql_enum(REPORT_CONTENT_POLICIES)})",
+            name="ck_reports_content_policy",
+        ),
         CheckConstraint("version >= 1", name="ck_reports_version_positive"),
         # A report is a daily brief (keyed by brief_date) or an event report (keyed by
         # event_id), never both. Neither is allowed: reports predating this split carry

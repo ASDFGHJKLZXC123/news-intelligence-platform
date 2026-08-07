@@ -1,0 +1,513 @@
+\set ON_ERROR_STOP on
+
+-- Values are imported from the process environment so passwords never appear in
+-- this checked-in template or in psql command-line arguments.
+\getenv app_database NIP_APP_DATABASE
+\getenv app_schema NIP_APP_SCHEMA
+\getenv migration_role NIP_MIGRATION_ROLE
+\getenv migration_password NIP_MIGRATION_PASSWORD
+\getenv runtime_role NIP_RUNTIME_ROLE
+\getenv runtime_password NIP_RUNTIME_PASSWORD
+
+SELECT current_database() = :'app_database' AS database_matches \gset
+\if :database_matches
+\else
+  \echo 'role provisioning refused: connected database does not match APP_DATABASE_NAME'
+  SELECT 1 / 0;
+\endif
+
+SELECT current_user IN (:'migration_role', :'runtime_role') AS connected_as_managed_role \gset
+\if :connected_as_managed_role
+  \echo 'role provisioning refused: the administrative connection uses a managed role'
+  SELECT 1 / 0;
+\endif
+
+-- Quarantine migration-owned SECURITY DEFINER routines in a committed phase
+-- before refusing the run. This prevents a failed audit from rolling back the
+-- ACL cleanup and leaving an unsafe routine executable.
+SELECT EXISTS (
+    SELECT 1 FROM pg_roles WHERE rolname = :'migration_role'
+) AS migration_role_exists \gset
+\if :migration_role_exists
+  BEGIN;
+  SELECT format(
+      'REVOKE ALL PRIVILEGES ON ROUTINE %s FROM PUBLIC CASCADE',
+      routines.oid::regprocedure
+  )
+  FROM pg_proc routines
+  JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+  JOIN pg_roles owners ON owners.oid = routines.proowner
+  WHERE namespaces.nspname = :'app_schema'
+    AND owners.rolname = :'migration_role'
+    AND routines.prokind IN ('f', 'p')
+    AND routines.prosecdef
+  \gexec
+  SELECT format(
+      'REVOKE ALL PRIVILEGES ON ROUTINE %s FROM %I CASCADE',
+      routines.oid::regprocedure,
+      runtime_roles.rolname
+  )
+  FROM pg_proc routines
+  JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+  JOIN pg_roles owners ON owners.oid = routines.proowner
+  JOIN pg_roles runtime_roles ON runtime_roles.rolname = :'runtime_role'
+  WHERE namespaces.nspname = :'app_schema'
+    AND owners.rolname = :'migration_role'
+    AND routines.prokind IN ('f', 'p')
+    AND routines.prosecdef
+  \gexec
+  COMMIT;
+\endif
+
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_proc routines
+    JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+    JOIN pg_roles runtime_roles ON runtime_roles.rolname = :'runtime_role'
+    WHERE namespaces.nspname = :'app_schema'
+      AND routines.prosecdef
+      AND has_function_privilege(runtime_roles.oid, routines.oid, 'EXECUTE')
+) AS runtime_can_execute_security_definer \gset
+\if :runtime_can_execute_security_definer
+  \echo 'role provisioning refused: runtime can execute a SECURITY DEFINER routine'
+  SELECT 1 / 0;
+\endif
+
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_proc routines
+    JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+    JOIN pg_roles owners ON owners.oid = routines.proowner
+    WHERE namespaces.nspname = :'app_schema'
+      AND owners.rolname = :'migration_role'
+      AND routines.prosecdef
+) AS migration_security_definer_exists \gset
+\if :migration_security_definer_exists
+  \echo 'role provisioning refused: migration-owned SECURITY DEFINER routine requires review'
+  SELECT 1 / 0;
+\endif
+
+SELECT
+    EXISTS (
+        SELECT 1
+        FROM pg_database databases
+        JOIN pg_roles owners ON owners.oid = databases.datdba
+        WHERE databases.datname = current_database()
+          AND owners.rolname = :'runtime_role'
+    )
+    OR EXISTS (
+        SELECT 1
+        FROM pg_namespace schemas
+        JOIN pg_roles owners ON owners.oid = schemas.nspowner
+        WHERE owners.rolname = :'runtime_role'
+    )
+    OR EXISTS (
+        SELECT 1
+        FROM pg_class relations
+        JOIN pg_roles owners ON owners.oid = relations.relowner
+        WHERE owners.rolname = :'runtime_role'
+    )
+    OR EXISTS (
+        SELECT 1
+        FROM pg_proc routines
+        JOIN pg_roles owners ON owners.oid = routines.proowner
+        WHERE owners.rolname = :'runtime_role'
+    )
+    OR EXISTS (
+        SELECT 1
+        FROM pg_type types
+        JOIN pg_roles owners ON owners.oid = types.typowner
+        WHERE owners.rolname = :'runtime_role'
+    ) AS runtime_owns_database_objects \gset
+\if :runtime_owns_database_objects
+  \echo 'role provisioning refused: runtime role owns objects in the target database'
+  SELECT 1 / 0;
+\endif
+
+-- A role membership can restore privileges even after NOINHERIT (via SET ROLE).
+-- Refuse ambiguous pre-existing roles instead of silently leaving that escape hatch.
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_auth_members memberships
+    JOIN pg_roles managed_roles
+      ON managed_roles.oid IN (memberships.member, memberships.roleid)
+    WHERE managed_roles.rolname IN (:'migration_role', :'runtime_role')
+) AS managed_role_has_memberships \gset
+\if :managed_role_has_memberships
+  \echo 'role provisioning refused: a managed role already has role memberships'
+  SELECT 1 / 0;
+\endif
+
+BEGIN;
+
+SELECT format(
+    'CREATE ROLE %I LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD %L',
+    :'migration_role',
+    :'migration_password'
+)
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'migration_role')
+\gexec
+
+SELECT format(
+    'CREATE ROLE %I LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD %L',
+    :'runtime_role',
+    :'runtime_password'
+)
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'runtime_role')
+\gexec
+
+-- Re-assert the non-privileged flags and rotate credentials on every run. This
+-- makes the operation idempotent while also making credential rotation explicit.
+SELECT format(
+    'ALTER ROLE %I WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD %L',
+    :'migration_role',
+    :'migration_password'
+)
+\gexec
+SELECT format(
+    'ALTER ROLE %I WITH LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD %L',
+    :'runtime_role',
+    :'runtime_password'
+)
+\gexec
+
+-- Provisioning an already-populated database is only safe when application
+-- relations are already migration-owned. Extension-owned relations are exempt:
+-- managed platforms commonly install those through a privileged control plane.
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_class objects
+    JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+    JOIN pg_roles owners ON owners.oid = objects.relowner
+    WHERE namespaces.nspname = :'app_schema'
+      AND objects.relkind IN ('r', 'p', 'v', 'm', 'S', 'f')
+      AND owners.rolname <> :'migration_role'
+      AND NOT EXISTS (
+          SELECT 1
+          FROM pg_depend dependencies
+          WHERE dependencies.classid = 'pg_class'::regclass
+            AND dependencies.objid = objects.oid
+            AND dependencies.deptype = 'e'
+      )
+) AS application_relations_have_other_owner \gset
+\if :application_relations_have_other_owner
+  \echo 'role provisioning refused: application relations are not owned by the migration role'
+  SELECT 1 / 0;
+\endif
+
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON DATABASE %I FROM %I CASCADE',
+    :'app_database',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'REVOKE CREATE, TEMPORARY ON DATABASE %I FROM PUBLIC CASCADE',
+    :'app_database'
+) \gexec
+SELECT format(
+    'GRANT CONNECT, CREATE, TEMPORARY ON DATABASE %I TO %I',
+    :'app_database',
+    :'migration_role'
+) \gexec
+SELECT format('GRANT CONNECT ON DATABASE %I TO %I', :'app_database', :'runtime_role') \gexec
+
+SELECT format(
+    'CREATE SCHEMA IF NOT EXISTS %I AUTHORIZATION %I',
+    :'app_schema',
+    :'migration_role'
+) \gexec
+SELECT format('ALTER SCHEMA %I OWNER TO %I', :'app_schema', :'migration_role') \gexec
+SELECT format('REVOKE CREATE ON SCHEMA %I FROM PUBLIC CASCADE', :'app_schema') \gexec
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON SCHEMA %I FROM %I CASCADE',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format('GRANT USAGE ON SCHEMA %I TO %I', :'app_schema', :'runtime_role') \gexec
+
+-- Remove every direct runtime table/sequence privilege (including grant
+-- options), but leave extension/admin PUBLIC ACL policy under its owner. PUBLIC
+-- is normalized only for migration-owned application relations.
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA %I FROM %I CASCADE',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON TABLE %s FROM PUBLIC CASCADE',
+    objects.oid::regclass
+)
+FROM pg_class objects
+JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+JOIN pg_roles owners ON owners.oid = objects.relowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND objects.relkind IN ('r', 'p', 'v', 'm', 'f')
+\gexec
+SELECT format(
+    'GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE %s TO %I',
+    objects.oid::regclass,
+    :'runtime_role'
+)
+FROM pg_class objects
+JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+JOIN pg_roles owners ON owners.oid = objects.relowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND objects.relkind IN ('r', 'p', 'v', 'm', 'f')
+  AND objects.relname <> 'alembic_version'
+\gexec
+
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON TABLE %I.%I FROM PUBLIC CASCADE',
+    :'app_schema',
+    'alembic_version'
+)
+WHERE to_regclass(format('%I.%I', :'app_schema', 'alembic_version')) IS NOT NULL
+\gexec
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON TABLE %I.%I FROM %I CASCADE',
+    :'app_schema',
+    'alembic_version',
+    :'runtime_role'
+)
+WHERE to_regclass(format('%I.%I', :'app_schema', 'alembic_version')) IS NOT NULL
+\gexec
+
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA %I FROM %I CASCADE',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON SEQUENCE %s FROM PUBLIC CASCADE',
+    objects.oid::regclass
+)
+FROM pg_class objects
+JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+JOIN pg_roles owners ON owners.oid = objects.relowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND objects.relkind = 'S'
+\gexec
+SELECT format(
+    'GRANT USAGE, SELECT ON SEQUENCE %s TO %I',
+    objects.oid::regclass,
+    :'runtime_role'
+)
+FROM pg_class objects
+JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+JOIN pg_roles owners ON owners.oid = objects.relowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND objects.relkind = 'S'
+\gexec
+
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_class objects
+    JOIN pg_namespace namespaces ON namespaces.oid = objects.relnamespace
+    JOIN pg_roles owners ON owners.oid = objects.relowner
+    JOIN LATERAL aclexplode(objects.relacl) privileges ON true
+    JOIN pg_roles grantees ON grantees.oid = privileges.grantee
+    WHERE namespaces.nspname = :'app_schema'
+      AND owners.rolname <> :'migration_role'
+      AND grantees.rolname = :'runtime_role'
+) AS external_relation_has_direct_runtime_acl \gset
+\if :external_relation_has_direct_runtime_acl
+  \echo 'role provisioning refused: non-migrator relation has a direct runtime grant'
+  SELECT 1 / 0;
+\endif
+
+-- Routines owned by an administrator or an extension stay under that owner's
+-- ACL policy. Only migration-owned routines are normalized and granted.
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON ROUTINE %s FROM PUBLIC CASCADE',
+    routines.oid::regprocedure
+)
+FROM pg_proc routines
+JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+JOIN pg_roles owners ON owners.oid = routines.proowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND routines.prokind IN ('f', 'p')
+\gexec
+SELECT format(
+    'REVOKE ALL PRIVILEGES ON ROUTINE %s FROM %I CASCADE',
+    routines.oid::regprocedure,
+    :'runtime_role'
+)
+FROM pg_proc routines
+JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+JOIN pg_roles owners ON owners.oid = routines.proowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND routines.prokind IN ('f', 'p')
+\gexec
+SELECT format(
+    'GRANT EXECUTE ON ROUTINE %s TO %I',
+    routines.oid::regprocedure,
+    :'runtime_role'
+)
+FROM pg_proc routines
+JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+JOIN pg_roles owners ON owners.oid = routines.proowner
+WHERE namespaces.nspname = :'app_schema'
+  AND owners.rolname = :'migration_role'
+  AND routines.prokind IN ('f', 'p')
+  AND NOT routines.prosecdef
+\gexec
+
+-- Reset every schema-scoped default ACL that can carry privileges to runtime,
+-- plus the global defaults that PostgreSQL merges into per-schema defaults.
+-- Then build only the defaults required by the application.
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON TABLES FROM PUBLIC CASCADE',
+    :'migration_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON TABLES FROM %I CASCADE',
+    :'migration_role',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON SEQUENCES FROM PUBLIC CASCADE',
+    :'migration_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON SEQUENCES FROM %I CASCADE',
+    :'migration_role',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON FUNCTIONS FROM PUBLIC CASCADE',
+    :'migration_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON FUNCTIONS FROM %I CASCADE',
+    :'migration_role',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON TYPES FROM %I CASCADE',
+    :'migration_role',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON TABLES FROM PUBLIC CASCADE',
+    :'migration_role',
+    :'app_schema'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON TABLES FROM %I CASCADE',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON SEQUENCES FROM PUBLIC CASCADE',
+    :'migration_role',
+    :'app_schema'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON SEQUENCES FROM %I CASCADE',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON FUNCTIONS FROM PUBLIC CASCADE',
+    :'migration_role',
+    :'app_schema'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON FUNCTIONS FROM %I CASCADE',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I REVOKE ALL PRIVILEGES ON TYPES FROM %I CASCADE',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I REVOKE ALL PRIVILEGES ON SCHEMAS FROM %I CASCADE',
+    :'migration_role',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO %I',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER DEFAULT PRIVILEGES FOR ROLE %I IN SCHEMA %I GRANT USAGE, SELECT ON SEQUENCES TO %I',
+    :'migration_role',
+    :'app_schema',
+    :'runtime_role'
+) \gexec
+SELECT format(
+    'ALTER ROLE %I IN DATABASE %I SET search_path = %I, pg_catalog',
+    :'migration_role',
+    :'app_database',
+    :'app_schema'
+) \gexec
+SELECT format(
+    'ALTER ROLE %I IN DATABASE %I SET search_path = %I, pg_catalog',
+    :'runtime_role',
+    :'app_database',
+    :'app_schema'
+) \gexec
+
+SELECT
+    has_database_privilege(:'runtime_role', current_database(), 'CREATE')
+    OR has_database_privilege(:'runtime_role', current_database(), 'TEMPORARY')
+    OR EXISTS (
+        SELECT 1
+        FROM pg_namespace schemas
+        WHERE schemas.nspname !~ '^pg_'
+          AND schemas.nspname <> 'information_schema'
+          AND has_schema_privilege(:'runtime_role', schemas.oid, 'CREATE')
+    ) AS runtime_retains_ddl_privilege \gset
+\if :runtime_retains_ddl_privilege
+  \echo 'role provisioning refused: runtime role retains database or schema DDL privileges'
+  SELECT 1 / 0;
+\endif
+
+-- SECURITY DEFINER is never part of the blanket runtime routine policy. Also
+-- fail if an administrator/extension routine has a direct runtime ACL: those
+-- grants must be reviewed and managed by its owner, not silently preserved.
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_proc routines
+    JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+    WHERE namespaces.nspname = :'app_schema'
+      AND routines.prosecdef
+      AND has_function_privilege(:'runtime_role', routines.oid, 'EXECUTE')
+) AS exposed_security_definer \gset
+\if :exposed_security_definer
+  \echo 'role provisioning refused: runtime can execute a SECURITY DEFINER routine'
+  SELECT 1 / 0;
+\endif
+
+SELECT EXISTS (
+    SELECT 1
+    FROM pg_proc routines
+    JOIN pg_namespace namespaces ON namespaces.oid = routines.pronamespace
+    JOIN pg_roles owners ON owners.oid = routines.proowner
+    JOIN LATERAL aclexplode(routines.proacl) privileges ON true
+    JOIN pg_roles grantees ON grantees.oid = privileges.grantee
+    WHERE namespaces.nspname = :'app_schema'
+      AND owners.rolname <> :'migration_role'
+      AND grantees.rolname = :'runtime_role'
+      AND privileges.privilege_type = 'EXECUTE'
+) AS external_routine_has_direct_runtime_acl \gset
+\if :external_routine_has_direct_runtime_acl
+  \echo 'role provisioning refused: non-migrator routine has a direct runtime grant'
+  SELECT 1 / 0;
+\endif
+
+COMMIT;

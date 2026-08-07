@@ -50,8 +50,6 @@ from db.models import STAGE1_INTELLIGENCE_TABLES
 from db.models.core import (
     ACTIVE_ALERT_STATES,
     ALERT_STATES,
-    EMBEDDING_MODEL,
-    EMBEDDING_MODEL_VERSION,
     GROUNDING_STATUSES,
     LLM_RUN_STATUSES,
     REPORT_STATUSES,
@@ -64,6 +62,11 @@ branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
 _TABLES = [model.__table__ for model in STAGE1_INTELLIGENCE_TABLES]
+
+# Historical literals, not imports from the live runtime settings. A future embedding snapshot
+# must not cause a database upgrading through 0013 to relabel legacy vectors as that new space.
+_LEGACY_EMBEDDING_MODEL = "text-embedding-3-small"
+_LEGACY_EMBEDDING_MODEL_VERSION = "current"
 
 
 def _in(values: Sequence[str]) -> str:
@@ -169,14 +172,14 @@ def _upgrade_article_embeddings() -> None:
     op.execute(
         sa.text(
             "UPDATE article_embeddings SET model_version = :version WHERE model_version IS NULL"
-        ).bindparams(version=EMBEDDING_MODEL_VERSION)
+        ).bindparams(version=_LEGACY_EMBEDDING_MODEL_VERSION)
     )
     op.alter_column(
         "article_embeddings",
         "model",
         existing_type=sa.String(length=128),
         existing_nullable=False,
-        server_default=EMBEDDING_MODEL,
+        server_default=_LEGACY_EMBEDDING_MODEL,
     )
     op.alter_column(
         "article_embeddings",
@@ -184,7 +187,7 @@ def _upgrade_article_embeddings() -> None:
         existing_type=sa.String(length=64),
         existing_nullable=True,
         nullable=False,
-        server_default=EMBEDDING_MODEL_VERSION,
+        server_default=_LEGACY_EMBEDDING_MODEL_VERSION,
     )
     # article_id was the whole key, so it is unique -- widening it cannot collide.
     op.drop_constraint("article_embeddings_pkey", "article_embeddings", type_="primary")
@@ -380,8 +383,7 @@ def _upgrade_alerts() -> None:
     # ck_alerts_superseded_has_target. Reopen it rather than drop the row.
     op.execute(
         sa.text(
-            "UPDATE alerts SET state = 'open' "
-            "WHERE state = 'superseded' AND superseded_by IS NULL"
+            "UPDATE alerts SET state = 'open' WHERE state = 'superseded' AND superseded_by IS NULL"
         )
     )
 

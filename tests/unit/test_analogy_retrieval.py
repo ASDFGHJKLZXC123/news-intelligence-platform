@@ -239,7 +239,9 @@ def test_the_ranking_statement_cannot_see_any_outcome_column() -> None:
 def test_ranking_orders_by_pgvector_cosine_distance_with_a_deterministic_tie_break() -> None:
     sql = _ranking_sql(_query())
 
-    assert "onset_embedding <=> " in sql  # cosine distance operator, no manual normalization
+    assert (
+        "historical_episode_embeddings.onset_embedding <=> " in sql
+    )  # cosine distance operator, no manual normalization
     assert (
         "ORDER BY distance ASC, historical_episodes.onset_date ASC, historical_episodes.id ASC"
         in sql
@@ -252,8 +254,11 @@ def test_hard_filters_run_before_the_nearest_neighbour_ordering() -> None:
     where, _, order_by = sql.partition("ORDER BY")
 
     assert "historical_episodes.episode_type IN ('banking_stress')" in where
-    assert f"historical_episodes.model = '{MODEL}'" in where
-    assert f"historical_episodes.model_version = '{VERSION}'" in where
+    assert f"historical_episode_embeddings.model = '{MODEL}'" in where
+    assert f"historical_episode_embeddings.model_version = '{VERSION}'" in where
+    assert "historical_episode_embeddings.episode_version = historical_episodes.version" in where
+    assert "historical_episode_embeddings.historical_episode_id = historical_episodes.id" in where
+    assert f"historical_episodes.model = '{MODEL}'" not in where
     assert "distance" in order_by
 
 
@@ -602,9 +607,7 @@ def test_an_episode_type_override_cannot_widen_the_search_to_another_family() ->
 def test_an_episode_type_override_may_narrow_within_the_events_own_family() -> None:
     session = FakeSession(event=_event(event_type="banking_stress"), vector=VECTOR, ranking=[])
 
-    result = retrieve_analogies_for_event(
-        session, EVENT_ID, episode_types=["banking_stress"]
-    )
+    result = retrieve_analogies_for_event(session, EVENT_ID, episode_types=["banking_stress"])
 
     assert result.episode_types == ("banking_stress",)
 

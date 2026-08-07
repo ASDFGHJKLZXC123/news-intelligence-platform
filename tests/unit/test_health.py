@@ -6,9 +6,13 @@ Redis. The middleware (request id, API-key stub) is exercised through the real a
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from fastapi.testclient import TestClient
 
+from apps.api import deps
 from apps.api.deps import (
+    WORKER_INSPECT_TIMEOUT_SECONDS,
     ComponentStatus,
     check_config,
     check_database,
@@ -119,6 +123,28 @@ def test_real_db_and_redis_checks_are_exception_safe() -> None:
     assert redis_status.name == "redis"
 
 
+def test_redis_health_probe_bounds_connect_and_response_waits(monkeypatch) -> None:
+    captured: dict[str, object] = {}
+
+    class Client:
+        def ping(self) -> None:
+            return None
+
+        def close(self) -> None:
+            return None
+
+    def from_url(url: str, **kwargs):
+        captured.update({"url": url, **kwargs})
+        return Client()
+
+    monkeypatch.setattr("redis.Redis.from_url", from_url)
+
+    assert check_redis().ok is True
+    assert captured["socket_connect_timeout"] == 2
+    assert captured["socket_timeout"] == 2
+    assert captured["retry_on_timeout"] is False
+
+
 def test_config_check_requires_celery_result_backend(monkeypatch) -> None:
     monkeypatch.setenv("CELERY_RESULT_BACKEND", "")
     get_settings.cache_clear()
@@ -139,6 +165,143 @@ def test_worker_config_check_requires_result_backend(monkeypatch) -> None:
         assert "result backend" in status.detail
     finally:
         get_settings.cache_clear()
+
+
+def test_worker_check_requires_live_workers_covering_every_configured_queue(monkeypatch) -> None:
+    seen_timeouts: list[float] = []
+
+    def inspect_queues(timeout_seconds: float) -> object:
+        seen_timeouts.append(timeout_seconds)
+        return {
+            "worker-name-is-not-exposed": [
+                {"name": "default"},
+                {"name": "ingestion"},
+                {"name": "pipeline"},
+            ]
+        }
+
+    monkeypatch.setattr(deps, "_inspect_active_worker_queues", inspect_queues)
+
+    status = check_worker_config()
+
+    assert status == ComponentStatus(
+        name="worker",
+        ok=True,
+        detail="reachable; live_workers=1; queues=default,ingestion,pipeline",
+    )
+    assert seen_timeouts == [WORKER_INSPECT_TIMEOUT_SECONDS]
+    assert "worker-name-is-not-exposed" not in status.detail
+
+
+def test_worker_check_degrades_when_no_worker_replies(monkeypatch) -> None:
+    monkeypatch.setattr(deps, "_inspect_active_worker_queues", lambda _timeout: None)
+
+    status = check_worker_config()
+
+    assert status == ComponentStatus(name="worker", ok=False, detail="no valid live worker replies")
+
+
+def test_worker_check_degrades_when_a_configured_queue_has_no_consumer(monkeypatch) -> None:
+    monkeypatch.setattr(
+        deps,
+        "_inspect_active_worker_queues",
+        lambda _timeout: {"worker-a": [{"name": "default"}, {"name": "ingestion"}]},
+    )
+
+    status = check_worker_config()
+
+    assert status == ComponentStatus(
+        name="worker",
+        ok=False,
+        detail="live workers missing required queues: pipeline",
+    )
+    assert "worker-a" not in status.detail
+
+
+def test_worker_check_sanitizes_probe_failures(monkeypatch) -> None:
+    def fail(_timeout: float) -> object:
+        raise ConnectionError("redis://user:secret@internal-broker:6379/1")
+
+    monkeypatch.setattr(deps, "_inspect_active_worker_queues", fail)
+
+    status = check_worker_config()
+
+    assert status == ComponentStatus(name="worker", ok=False, detail="ConnectionError")
+    assert "secret" not in status.detail
+    assert "internal-broker" not in status.detail
+
+
+def test_worker_check_rejects_malformed_queue_replies(monkeypatch) -> None:
+    monkeypatch.setattr(
+        deps,
+        "_inspect_active_worker_queues",
+        lambda _timeout: {"worker-a": [{"routing_key": "default"}]},
+    )
+
+    status = check_worker_config()
+
+    assert status == ComponentStatus(name="worker", ok=False, detail="no valid live worker replies")
+
+
+def test_live_worker_probe_bounds_connection_retries_and_closes(monkeypatch) -> None:
+    replies = {"worker-a": [{"name": "default"}]}
+    connection_kwargs: dict[str, object] = {}
+    inspect_kwargs: dict[str, object] = {}
+    ensure_kwargs: list[dict[str, object]] = []
+
+    class FakeConnection:
+        closed = False
+
+        def ensure(self, _obj, fun, **kwargs):
+            ensure_kwargs.append(kwargs)
+            return fun
+
+        def close(self) -> None:
+            self.closed = True
+
+    connection = FakeConnection()
+
+    class FakeInspector:
+        def active_queues(self) -> object:
+            # Model pidbox's retry-enabled publication after the probe has wrapped this
+            # connection. Even an explicit larger value must be pinned to zero.
+            operation = connection.ensure(object(), lambda: replies, max_retries=99)
+            return operation()
+
+    class FakeControl:
+        def inspect(self, **kwargs):
+            inspect_kwargs.update(kwargs)
+            return FakeInspector()
+
+    def connection_for_write(**kwargs):
+        connection_kwargs.update(kwargs)
+        return connection
+
+    fake_app = SimpleNamespace(
+        conf=SimpleNamespace(broker_transport_options={"visibility_timeout": 30}),
+        connection_for_write=connection_for_write,
+        control=FakeControl(),
+    )
+    monkeypatch.setattr("workers.celery_app.celery_app", fake_app)
+
+    result = deps._inspect_active_worker_queues(WORKER_INSPECT_TIMEOUT_SECONDS)
+
+    assert result == replies
+    assert connection.closed is True
+    assert connection_kwargs["connect_timeout"] == WORKER_INSPECT_TIMEOUT_SECONDS
+    transport_options = connection_kwargs["transport_options"]
+    assert isinstance(transport_options, dict)
+    assert transport_options["visibility_timeout"] == 30
+    assert transport_options["max_retries"] == 0
+    assert transport_options["connect_retries_timeout"] == WORKER_INSPECT_TIMEOUT_SECONDS
+    assert transport_options["socket_connect_timeout"] == WORKER_INSPECT_TIMEOUT_SECONDS
+    assert transport_options["socket_timeout"] == WORKER_INSPECT_TIMEOUT_SECONDS
+    assert inspect_kwargs == {
+        "timeout": WORKER_INSPECT_TIMEOUT_SECONDS,
+        "limit": deps.WORKER_INSPECT_MAX_REPLIES,
+        "connection": connection,
+    }
+    assert ensure_kwargs[0]["max_retries"] == 0
 
 
 def test_metrics_endpoint_reports_counters() -> None:

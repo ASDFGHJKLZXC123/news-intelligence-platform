@@ -22,6 +22,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 from db.models.core import (
+    REPORT_CONTENT_POLICY_PREDICTION_BACKED,
     Article,
     Claim,
     ClaimEvidence,
@@ -214,7 +215,9 @@ def test_full_publish_sequence_persists_and_never_commits(engine) -> None:
 
     with CountingSession(engine) as session:
         _seed_claims(session, claim_id)
-        snap = persist_daily_brief(session, gate)
+        snap = persist_daily_brief(
+            session, gate, content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED
+        )
         # The repository flushes but issues no commit/rollback of its own.
         assert session.commit_calls == 0
         assert session.rollback_calls == 0
@@ -274,7 +277,11 @@ def test_a_published_version_is_byte_for_byte_immutable_through_regeneration(eng
     v1_claim, v2_claim = uuid.uuid4(), uuid.uuid4()
     with Session(engine) as session:
         _seed_claims(session, v1_claim)
-        v1 = persist_daily_brief(session, _passing_gate(brief_date, "First body.", v1_claim))
+        v1 = persist_daily_brief(
+            session,
+            _passing_gate(brief_date, "First body.", v1_claim),
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+        )
         session.commit()
 
     with Session(engine) as session:
@@ -288,6 +295,7 @@ def test_a_published_version_is_byte_for_byte_immutable_through_regeneration(eng
             session,
             _passing_gate(brief_date, "A completely different second body.", v2_claim),
             change_reason="reprocessed upstream event",
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
         )
         session.commit()
 
@@ -313,11 +321,20 @@ def test_latest_published_ignores_a_higher_failed_or_in_flight_version(engine) -
     pub_claim = uuid.uuid4()
     with Session(engine) as session:
         _seed_claims(session, pub_claim)
-        persist_daily_brief(session, _passing_gate(brief_date, "Published one.", pub_claim))
+        persist_daily_brief(
+            session,
+            _passing_gate(brief_date, "Published one.", pub_claim),
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+        )
         session.commit()
 
     with Session(engine) as session:  # version 2: blocked -> failed
-        v2 = persist_daily_brief(session, _blocked_gate(brief_date), change_reason="rerun")
+        v2 = persist_daily_brief(
+            session,
+            _blocked_gate(brief_date),
+            change_reason="rerun",
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
+        )
         session.commit()
     assert v2.status == "failed"
 
@@ -418,7 +435,9 @@ def test_stale_marking_follows_the_citation_join_and_spares_unrelated_rows(engin
     # A published brief that cites the event's claim.
     with Session(engine) as session:
         citing = persist_daily_brief(
-            session, _passing_gate(datetime.date(2026, 7, 14), "Cites the claim.", claim_id)
+            session,
+            _passing_gate(datetime.date(2026, 7, 14), "Cites the claim.", claim_id),
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
         )
         session.commit()
 
@@ -427,7 +446,9 @@ def test_stale_marking_follows_the_citation_join_and_spares_unrelated_rows(engin
     with Session(engine) as session:
         _seed_claims(session, unrelated_claim)
         unrelated = persist_daily_brief(
-            session, _passing_gate(datetime.date(2026, 7, 15), "Unrelated.", unrelated_claim)
+            session,
+            _passing_gate(datetime.date(2026, 7, 15), "Unrelated.", unrelated_claim),
+            content_policy=REPORT_CONTENT_POLICY_PREDICTION_BACKED,
         )
         session.commit()
 

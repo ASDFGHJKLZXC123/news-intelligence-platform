@@ -44,6 +44,7 @@ from sqlalchemy.orm import Session
 
 from db.models.core import (
     GROUNDING_STATUSES,
+    REPORT_CONTENT_POLICIES,
     REPORT_STATUSES,
     Claim,
     ClaimEvidence,
@@ -186,6 +187,9 @@ class ReportSnapshot:
     generated_by_run_id: uuid.UUID | None
     created_at: datetime.datetime | None
     updated_at: datetime.datetime | None
+    # NULL identifies legacy/unclassified reports. Gate-G-closed readers accept only the
+    # explicit descriptive-only marker; they never infer policy from titles or prose.
+    content_policy: str | None = None
 
 
 @dataclass(frozen=True)
@@ -410,7 +414,9 @@ def _canonical_evidence_refs(raw: object) -> tuple[uuid.UUID, ...]:
                     "a persisted section has an evidence ref that is not a UUID"
                 ) from exc
         else:
-            raise CannotPublishError("a persisted section has an evidence ref of an unexpected type")
+            raise CannotPublishError(
+                "a persisted section has an evidence ref of an unexpected type"
+            )
     return tuple(refs)
 
 
@@ -434,6 +440,7 @@ class ReportLifecycleRepository:
         title: str,
         change_reason: str | None = None,
         generated_by_run_id: uuid.UUID | None = None,
+        content_policy: str | None = None,
     ) -> ReportSnapshot:
         """Create the next version of a daily brief in ``generating``, allocating under a lock.
 
@@ -445,6 +452,8 @@ class ReportLifecycleRepository:
         ``SELECT ... FOR UPDATE`` could have locked. Dropping a supplied reason on version 1 (rather
         than rejecting it) is what lets two from-scratch reruns race cleanly to versions 1 and 2.
         """
+        if content_policy is not None and content_policy not in REPORT_CONTENT_POLICIES:
+            raise ValueError(f"unknown report content policy: {content_policy}")
 
         self._acquire_subject_lock(_daily_subject_token(brief_date))
         current_max = self._session.execute(
@@ -467,6 +476,7 @@ class ReportLifecycleRepository:
             change_reason=reason,
             stale=False,
             generated_by_run_id=generated_by_run_id,
+            content_policy=content_policy,
         )
         self._session.add(report)
         try:
@@ -494,7 +504,9 @@ class ReportLifecycleRepository:
     @staticmethod
     def _resolve_change_reason(version: int, change_reason: str | None) -> str | None:
         if version == 1:
-            return None  # the first version has no prior to change from; a supplied reason is dropped
+            return (
+                None  # the first version has no prior to change from; a supplied reason is dropped
+            )
         if change_reason is None or not change_reason.strip():
             raise ChangeReasonRequiredError(
                 f"version {version} is a rerun and requires a nonblank change_reason"
@@ -521,9 +533,7 @@ class ReportLifecycleRepository:
         self._session.flush()
         return _report_snapshot(report)
 
-    def attach_generated_by_run_id(
-        self, report_id: uuid.UUID, run_id: uuid.UUID
-    ) -> ReportSnapshot:
+    def attach_generated_by_run_id(self, report_id: uuid.UUID, run_id: uuid.UUID) -> ReportSnapshot:
         """Record which LLM run produced a report, once, while it is still pre-publish.
 
         A report is created ``generating`` before any model runs, so its ``generated_by_run_id`` is
@@ -612,9 +622,7 @@ class ReportLifecycleRepository:
         self._session.flush()
         return self.report_sections(report_id)
 
-    def _assert_evidence_refs_are_claims(
-        self, rows: tuple[ReportSectionRow, ...]
-    ) -> None:
+    def _assert_evidence_refs_are_claims(self, rows: tuple[ReportSectionRow, ...]) -> None:
         """Require every distinct evidence ref to be a real Claim id before any section is written.
 
         ``ReportSection.evidence_refs`` is ``ARRAY(UUID)`` with no foreign key, so a UUID that came
@@ -637,9 +645,7 @@ class ReportLifecycleRepository:
                 f"{len(missing)} evidence ref(s) are not Claim ids and cannot be cited: {listed}"
             )
 
-    def publish(
-        self, report_id: uuid.UUID, gate_result: GroundingGateResult
-    ) -> ReportSnapshot:
+    def publish(self, report_id: uuid.UUID, gate_result: GroundingGateResult) -> ReportSnapshot:
         """Publish a grounded report, fail-closed. Content is never recomposed or altered here.
 
         Refuses unless the gate passed, every section is publishable, and the fixed disclaimer is
@@ -688,7 +694,9 @@ class ReportLifecycleRepository:
             )
             .where(ReportSection.report_id == report_id)
             .order_by(ReportSection.section_order)
-            .limit(SECTION_LIST_LIMIT + 1)  # over-read by one: an overflow must fail loud, not truncate
+            .limit(
+                SECTION_LIST_LIMIT + 1
+            )  # over-read by one: an overflow must fail loud, not truncate
         ).all()
         if len(persisted) > SECTION_LIST_LIMIT:
             raise ReportReadOverflowError(
@@ -731,10 +739,7 @@ class ReportLifecycleRepository:
         if ids:
             reports = (
                 self._session.execute(
-                    select(Report)
-                    .where(Report.id.in_(ids))
-                    .order_by(Report.id)
-                    .with_for_update()
+                    select(Report).where(Report.id.in_(ids)).order_by(Report.id).with_for_update()
                 )
                 .scalars()
                 .all()
@@ -795,7 +800,10 @@ class ReportLifecycleRepository:
         return _report_snapshot(report) if report is not None else None
 
     def latest_published_daily_brief_by_date(
-        self, brief_date: datetime.date
+        self,
+        brief_date: datetime.date,
+        *,
+        content_policy: str | None = None,
     ) -> ReportSnapshot | None:
         """The highest-version published brief for a date -- the one served by default.
 
@@ -803,52 +811,60 @@ class ReportLifecycleRepository:
         still returned and stays the served one until a *newer* version is published.
         """
 
-        stmt = (
-            select(Report)
-            .where(
-                Report.report_type == DAILY_BRIEF_REPORT_TYPE,
-                Report.brief_date == brief_date,
-                Report.status == PUBLISHED_STATUS,
-            )
-            .order_by(Report.version.desc())
-            .limit(1)
+        stmt = select(Report).where(
+            Report.report_type == DAILY_BRIEF_REPORT_TYPE,
+            Report.brief_date == brief_date,
+            Report.status == PUBLISHED_STATUS,
         )
+        if content_policy is not None:
+            stmt = stmt.where(Report.content_policy == content_policy)
+        stmt = stmt.order_by(Report.version.desc()).limit(1)
         report = self._session.execute(stmt).scalars().first()
         return _report_snapshot(report) if report is not None else None
 
-    def latest_published_daily_brief(self) -> ReportSnapshot | None:
+    def latest_published_daily_brief(
+        self,
+        *,
+        content_policy: str | None = None,
+    ) -> ReportSnapshot | None:
         """The most recent published brief overall: newest ``brief_date``, then highest version."""
 
-        stmt = (
-            select(Report)
-            .where(
-                Report.report_type == DAILY_BRIEF_REPORT_TYPE,
-                Report.status == PUBLISHED_STATUS,
-            )
-            .order_by(Report.brief_date.desc(), Report.version.desc())
-            .limit(1)
+        stmt = select(Report).where(
+            Report.report_type == DAILY_BRIEF_REPORT_TYPE,
+            Report.status == PUBLISHED_STATUS,
         )
+        if content_policy is not None:
+            stmt = stmt.where(Report.content_policy == content_policy)
+        stmt = stmt.order_by(Report.brief_date.desc(), Report.version.desc()).limit(1)
         report = self._session.execute(stmt).scalars().first()
         return _report_snapshot(report) if report is not None else None
 
     def daily_brief_version(
-        self, brief_date: datetime.date, version: int
+        self,
+        brief_date: datetime.date,
+        version: int,
+        *,
+        content_policy: str | None = None,
     ) -> ReportSnapshot | None:
         """One specific version of a brief, whatever its status."""
 
-        stmt = (
-            select(Report)
-            .where(
-                Report.report_type == DAILY_BRIEF_REPORT_TYPE,
-                Report.brief_date == brief_date,
-                Report.version == version,
-            )
-            .limit(1)
+        stmt = select(Report).where(
+            Report.report_type == DAILY_BRIEF_REPORT_TYPE,
+            Report.brief_date == brief_date,
+            Report.version == version,
         )
+        if content_policy is not None:
+            stmt = stmt.where(Report.content_policy == content_policy)
+        stmt = stmt.limit(1)
         report = self._session.execute(stmt).scalars().first()
         return _report_snapshot(report) if report is not None else None
 
-    def daily_brief_versions(self, brief_date: datetime.date) -> tuple[ReportSnapshot, ...]:
+    def daily_brief_versions(
+        self,
+        brief_date: datetime.date,
+        *,
+        content_policy: str | None = None,
+    ) -> tuple[ReportSnapshot, ...]:
         """Every version of a brief, newest first. Bounded, totally ordered, fail-loud on overflow.
 
         Over-reads by one and raises :class:`ReportReadOverflowError` if more than
@@ -856,15 +872,13 @@ class ReportLifecycleRepository:
         whole history. Exactly ``VERSION_LIST_LIMIT`` versions is returned in full, not refused.
         """
 
-        stmt = (
-            select(Report)
-            .where(
-                Report.report_type == DAILY_BRIEF_REPORT_TYPE,
-                Report.brief_date == brief_date,
-            )
-            .order_by(Report.version.desc())
-            .limit(VERSION_LIST_LIMIT + 1)
+        stmt = select(Report).where(
+            Report.report_type == DAILY_BRIEF_REPORT_TYPE,
+            Report.brief_date == brief_date,
         )
+        if content_policy is not None:
+            stmt = stmt.where(Report.content_policy == content_policy)
+        stmt = stmt.order_by(Report.version.desc()).limit(VERSION_LIST_LIMIT + 1)
         reports = self._session.execute(stmt).scalars().all()
         if len(reports) > VERSION_LIST_LIMIT:
             raise ReportReadOverflowError(
@@ -915,8 +929,14 @@ def persist_daily_brief(
     *,
     title: str | None = None,
     change_reason: str | None = None,
+    content_policy: str,
 ) -> ReportSnapshot:
     """Create, ground-check, persist, and publish-or-fail one daily brief from its gate result.
+
+    ``content_policy`` is deliberately required: while Gate G is closed, a brief stamped
+    ``prediction_backed.v1`` is withheld from ``/reports``, so the caller — not a silent
+    default — must decide how each brief is classified (the production generator derives it
+    from ``prediction_backed_outputs_enabled``).
 
     The one sequence the generator calls: allocate a ``generating`` version, advance it to
     ``grounding_check``, write the gate's sections, then publish if the gate passed or fail if it
@@ -931,6 +951,7 @@ def persist_daily_brief(
         title=title or default_daily_brief_title(gate_result.brief_date),
         change_reason=change_reason,
         generated_by_run_id=generated_by_run_id_for(gate_result),
+        content_policy=content_policy,
     )
     repo.transition(report.id, ReportStatus.GROUNDING_CHECK)
     repo.persist_sections(report.id, gate_result)
@@ -965,6 +986,7 @@ def _report_snapshot(report: Report) -> ReportSnapshot:
         generated_by_run_id=report.generated_by_run_id,
         created_at=report.created_at,
         updated_at=report.updated_at,
+        content_policy=report.content_policy,
     )
 
 

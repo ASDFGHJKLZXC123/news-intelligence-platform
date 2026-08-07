@@ -23,12 +23,13 @@ from apps.api.intelligence import (
     QueuedBrief,
     enqueue_generate_daily_brief,
     get_brief_enqueuer,
+    get_crisis_prediction_reads_enabled,
     get_intelligence_repository,
     get_report_lifecycle_repository,
 )
 from apps.api.main import app
 from db.base import get_session
-from db.models import Event
+from db.models import REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY, Event
 from services.reports.lifecycle import ReportSectionSnapshot, ReportSnapshot, SectionBlock
 
 NOW = datetime.datetime(2026, 7, 14, 10, 30, tzinfo=datetime.UTC)
@@ -48,6 +49,7 @@ def _snap(
     change_reason: str | None = None,
     rid: uuid.UUID | None = None,
     brief_date: datetime.date = BRIEF_DATE,
+    content_policy: str | None = None,
 ) -> ReportSnapshot:
     return ReportSnapshot(
         id=rid or uuid.uuid4(),
@@ -63,6 +65,7 @@ def _snap(
         generated_by_run_id=None,
         created_at=NOW,
         updated_at=NOW,
+        content_policy=content_policy,
     )
 
 
@@ -107,17 +110,56 @@ class FakeLifecycleRepo:
         self._version_map = version_map or {}
         self._sections = sections
 
-    def latest_published_daily_brief(self) -> ReportSnapshot | None:
+    def latest_published_daily_brief(
+        self, *, content_policy: str | None = None
+    ) -> ReportSnapshot | None:
+        if (
+            self._latest is not None
+            and content_policy is not None
+            and self._latest.content_policy != content_policy
+        ):
+            return None
         return self._latest
 
-    def latest_published_daily_brief_by_date(self, brief_date: datetime.date) -> ReportSnapshot | None:
+    def latest_published_daily_brief_by_date(
+        self,
+        brief_date: datetime.date,
+        *,
+        content_policy: str | None = None,
+    ) -> ReportSnapshot | None:
+        if (
+            self._by_date is not None
+            and content_policy is not None
+            and self._by_date.content_policy != content_policy
+        ):
+            return None
         return self._by_date
 
-    def daily_brief_versions(self, brief_date: datetime.date) -> tuple[ReportSnapshot, ...]:
-        return self._versions
+    def daily_brief_versions(
+        self,
+        brief_date: datetime.date,
+        *,
+        content_policy: str | None = None,
+    ) -> tuple[ReportSnapshot, ...]:
+        if content_policy is None:
+            return self._versions
+        return tuple(report for report in self._versions if report.content_policy == content_policy)
 
-    def daily_brief_version(self, brief_date: datetime.date, version: int) -> ReportSnapshot | None:
-        return self._version_map.get(version)
+    def daily_brief_version(
+        self,
+        brief_date: datetime.date,
+        version: int,
+        *,
+        content_policy: str | None = None,
+    ) -> ReportSnapshot | None:
+        report = self._version_map.get(version)
+        if (
+            report is not None
+            and content_policy is not None
+            and report.content_policy != content_policy
+        ):
+            return None
+        return report
 
     def report_sections(self, report_id: uuid.UUID) -> tuple[ReportSectionSnapshot, ...]:
         return self._sections
@@ -126,6 +168,7 @@ class FakeLifecycleRepo:
 @pytest.fixture
 def client() -> Iterator[TestClient]:
     # Loopback client so the API-key middleware admits mutations (local, no key configured).
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:
@@ -174,6 +217,32 @@ def test_latest_returns_the_published_snapshot_with_ordered_sections(client: Tes
 def test_latest_is_404_when_no_brief_is_published(client: TestClient) -> None:
     _use_lifecycle(FakeLifecycleRepo(latest=None))
     assert client.get("/api/v1/reports/daily-brief/latest").status_code == 404
+
+
+def test_closed_gate_serves_only_explicit_descriptive_report_policy(
+    client: TestClient,
+) -> None:
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: False
+    legacy = FakeLifecycleRepo(
+        latest=_snap(version=1, status="published"),
+        sections=(_section(1, "Executive Summary", "Legacy probability prose."),),
+    )
+    _use_lifecycle(legacy)
+    assert client.get("/api/v1/reports/daily-brief/latest").status_code == 404
+
+    descriptive = FakeLifecycleRepo(
+        latest=_snap(
+            version=2,
+            status="published",
+            content_policy=REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
+        ),
+        sections=(_section(1, "Executive Summary", "Observed disruption continued."),),
+    )
+    _use_lifecycle(descriptive)
+    response = client.get("/api/v1/reports/daily-brief/latest")
+
+    assert response.status_code == 200
+    assert response.json()["report"]["sections"][0]["body"] == "Observed disruption continued."
 
 
 def test_by_date_returns_latest_published_for_that_date(client: TestClient) -> None:
@@ -262,14 +331,28 @@ def test_non_positive_version_is_422(client: TestClient) -> None:
 
 
 class FakeEvidenceRepo:
-    def __init__(self, claim: Any, links: tuple[EvidenceDrawerLink, ...]) -> None:
+    def __init__(
+        self,
+        claim: Any,
+        links: tuple[EvidenceDrawerLink, ...],
+        *,
+        descriptive_reference: bool = False,
+    ) -> None:
         self._claim = claim
         self._links = links
+        self._descriptive_reference = descriptive_reference
+        self.claim_reads = 0
+        self.link_reads = 0
+
+    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
+        return self._descriptive_reference
 
     def get_claim(self, claim_id: uuid.UUID) -> Any:
+        self.claim_reads += 1
         return self._claim
 
     def claim_evidence_links(self, claim_id: uuid.UUID) -> tuple[EvidenceDrawerLink, ...]:
+        self.link_reads += 1
         return self._links
 
 
@@ -364,6 +447,34 @@ def test_evidence_drawer_shape_carries_real_support_types_and_a_safe_snippet(
 def test_evidence_drawer_missing_claim_is_404(client: TestClient) -> None:
     app.dependency_overrides[get_intelligence_repository] = lambda: FakeEvidenceRepo(None, ())
     assert client.get(f"/api/v1/evidence/{uuid.uuid4()}").status_code == 404
+
+
+def test_closed_gate_evidence_requires_a_published_descriptive_report_reference(
+    client: TestClient,
+) -> None:
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: False
+    claim_id = uuid.uuid4()
+    claim = SimpleNamespace(
+        id=claim_id,
+        claim_text="Observed port closure.",
+        claim_type="assertion",
+        confidence_score=decimal.Decimal("0.9"),
+    )
+    denied = FakeEvidenceRepo(claim, (), descriptive_reference=False)
+    app.dependency_overrides[get_intelligence_repository] = lambda: denied
+
+    assert client.get(f"/api/v1/evidence/{claim_id}").status_code == 404
+    assert denied.claim_reads == 0
+    assert denied.link_reads == 0
+
+    allowed = FakeEvidenceRepo(claim, (), descriptive_reference=True)
+    app.dependency_overrides[get_intelligence_repository] = lambda: allowed
+    response = client.get(f"/api/v1/evidence/{claim_id}")
+
+    assert response.status_code == 200
+    assert response.json()["claim"]["text"] == "Observed port closure."
+    assert allowed.claim_reads == 1
+    assert allowed.link_reads == 1
 
 
 def test_evidence_drawer_malformed_uuid_is_422_at_routing(client: TestClient) -> None:

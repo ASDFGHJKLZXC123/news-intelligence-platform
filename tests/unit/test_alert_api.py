@@ -19,6 +19,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
+from apps.api.intelligence import get_crisis_prediction_reads_enabled
 from apps.api.main import app
 from db.base import get_session
 from db.models.core import Alert
@@ -99,6 +100,8 @@ def client(alerts_store: dict[uuid.UUID, Any]) -> Iterator[TestClient]:
         yield session
 
     app.dependency_overrides[get_session] = _fake_get_session
+    # These legacy lifecycle-contract tests exercise the explicit diagnostic/open Gate-G path.
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:

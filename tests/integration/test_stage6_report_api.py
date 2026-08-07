@@ -33,7 +33,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session
 
-from apps.api.intelligence import QueuedBrief, get_brief_enqueuer
+from apps.api.intelligence import (
+    QueuedBrief,
+    get_brief_enqueuer,
+    get_crisis_prediction_reads_enabled,
+)
 from apps.api.main import app
 from db.base import get_session
 from db.models.core import (
@@ -127,6 +131,7 @@ def client(engine: Engine, enqueuer: _RecordingEnqueuer) -> Iterator[TestClient]
 
     app.dependency_overrides[get_session] = _session_override
     app.dependency_overrides[get_brief_enqueuer] = lambda: enqueuer
+    app.dependency_overrides[get_crisis_prediction_reads_enabled] = lambda: True
     try:
         yield TestClient(app, client=("127.0.0.1", 5000))
     finally:

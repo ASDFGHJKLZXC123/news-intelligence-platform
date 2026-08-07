@@ -29,10 +29,11 @@ class GenerationFailed(RuntimeError):
 
 
 class FakeSession:
-    def __init__(self) -> None:
+    def __init__(self, close_error: BaseException | None = None) -> None:
         self.commits = 0
         self.rollbacks = 0
         self.closed = False
+        self.close_error = close_error
 
     def commit(self) -> None:
         self.commits += 1
@@ -42,14 +43,30 @@ class FakeSession:
 
     def close(self) -> None:
         self.closed = True
+        if self.close_error is not None:
+            raise self.close_error
 
 
 class FakeRedis:
-    def __init__(self) -> None:
+    def __init__(self, close_error: BaseException | None = None) -> None:
         self.closed = False
+        self.close_error = close_error
 
     def close(self) -> None:
         self.closed = True
+        if self.close_error is not None:
+            raise self.close_error
+
+
+class FakeOrchestrator:
+    def __init__(self, close_error: BaseException | None = None) -> None:
+        self.close_count = 0
+        self.close_error = close_error
+
+    def close(self) -> None:
+        self.close_count += 1
+        if self.close_error is not None:
+            raise self.close_error
 
 
 def _result(status: AnalogyStatus = AnalogyStatus.MATCHED) -> EventAnalogyResult:
@@ -72,6 +89,7 @@ def _install(
     generate: Any = None,
 ) -> tuple[FakeSession, FakeRedis, list[dict[str, Any]]]:
     session, redis_client = FakeSession(), FakeRedis()
+    orchestrator = FakeOrchestrator()
     calls: list[dict[str, Any]] = []
 
     def _generate(session_arg: Any, event_id: uuid.UUID, **kwargs: Any) -> EventAnalogyResult:
@@ -82,7 +100,7 @@ def _install(
 
     monkeypatch.setattr(analogy_tasks, "SessionLocal", lambda: session)
     monkeypatch.setattr(analogy_tasks, "build_redis_client", lambda: redis_client)
-    monkeypatch.setattr(analogy_tasks, "build_orchestrator", lambda _s, _r: object())
+    monkeypatch.setattr(analogy_tasks, "build_orchestrator", lambda _s, _r: orchestrator)
     monkeypatch.setattr(analogy_tasks, "generate_event_analogies", _generate)
     metrics.reset()
     return session, redis_client, calls
@@ -109,13 +127,14 @@ def test_the_rerank_has_no_beat_entry() -> None:
 def test_a_successful_run_commits_once_and_closes_everything(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    session, redis_client, _calls = _install(monkeypatch)
+    session, redis_client, calls = _install(monkeypatch)
 
     payload = analogy_tasks.run_event_analogy_rerank(str(EVENT_ID))
 
     assert (session.commits, session.rollbacks) == (1, 0)
     assert session.closed is True
     assert redis_client.closed is True
+    assert calls[0]["orchestrator"].close_count == 1
     assert payload["status"] == "ok"
     assert payload["state"] == "succeeded"
     assert metrics.get(metrics.JOB_SUCCESSES) == 1
@@ -128,7 +147,7 @@ def test_a_failed_run_rolls_back_and_never_commits(monkeypatch: pytest.MonkeyPat
     def _raise() -> EventAnalogyResult:
         raise GenerationFailed("provider exhausted")
 
-    session, redis_client, _calls = _install(monkeypatch, generate=_raise)
+    session, redis_client, calls = _install(monkeypatch, generate=_raise)
 
     with pytest.raises(GenerationFailed):
         analogy_tasks.run_event_analogy_rerank(str(EVENT_ID))
@@ -136,7 +155,46 @@ def test_a_failed_run_rolls_back_and_never_commits(monkeypatch: pytest.MonkeyPat
     assert (session.commits, session.rollbacks) == (0, 1)
     assert session.closed is True
     assert redis_client.closed is True
+    assert calls[0]["orchestrator"].close_count == 1
     assert metrics.get(metrics.JOB_FAILURES) == 1
+
+
+def test_cleanup_faults_do_not_hide_generation_failure_or_skip_session_close(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    generation_error = GenerationFailed("provider exhausted")
+    orchestrator_close_error = RuntimeError("orchestrator close failed")
+    redis_close_error = RuntimeError("redis close failed")
+    session_close_error = RuntimeError("session close failed")
+    session = FakeSession(session_close_error)
+    redis_client = FakeRedis(redis_close_error)
+    orchestrator = FakeOrchestrator(orchestrator_close_error)
+
+    monkeypatch.setattr(analogy_tasks, "SessionLocal", lambda: session)
+    monkeypatch.setattr(analogy_tasks, "build_redis_client", lambda: redis_client)
+    monkeypatch.setattr(
+        analogy_tasks,
+        "build_orchestrator",
+        lambda _session, _redis_client: orchestrator,
+    )
+
+    def fail_generation(*_args: Any, **_kwargs: Any) -> Any:
+        raise generation_error
+
+    monkeypatch.setattr(analogy_tasks, "generate_event_analogies", fail_generation)
+
+    with pytest.raises(BaseExceptionGroup) as captured:
+        analogy_tasks.run_event_analogy_rerank(str(EVENT_ID))
+
+    assert list(captured.value.exceptions) == [
+        generation_error,
+        orchestrator_close_error,
+        redis_close_error,
+        session_close_error,
+    ]
+    assert session.rollbacks == 1 and session.closed is True
+    assert orchestrator.close_count == 1
+    assert redis_client.closed is True
 
 
 def test_the_orchestrator_shares_the_tasks_session_and_never_commits_on_its_own() -> None:

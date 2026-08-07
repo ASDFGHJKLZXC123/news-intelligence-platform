@@ -26,6 +26,7 @@ from __future__ import annotations
 import datetime
 import uuid
 from dataclasses import dataclass, field
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -125,6 +126,11 @@ def harness(alerts_db: None, monkeypatch) -> Harness:
 
     monkeypatch.setattr(alert_tasks, "SessionLocal", session_factory)
     monkeypatch.setattr(alert_tasks, "build_notifier", lambda: state.notifier)
+    monkeypatch.setattr(
+        alert_tasks,
+        "get_settings",
+        lambda: SimpleNamespace(crisis_prediction_reads_enabled=True),
+    )
     return state
 
 

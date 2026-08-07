@@ -29,11 +29,21 @@ from sqlalchemy.engine import make_url
 from sqlalchemy.orm import sessionmaker
 
 from db.base import Base
-from db.models.core import EMBEDDING_DIM, Event, EventEmbedding, HistoricalEpisode
+from db.models.core import (
+    EMBEDDING_DIM,
+    Event,
+    EventEmbedding,
+    HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
+)
 from packages.config.settings import get_settings
 from services.analogies import (
     RetrievalStatus,
     retrieve_analogies_for_event,
+)
+from services.nlp.episodes import (
+    EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+    episode_embedding_input_sha256,
 )
 
 pytestmark = pytest.mark.integration
@@ -42,7 +52,12 @@ pytestmark = pytest.mark.integration
 DISPOSABLE_DB_PREFIX = "nip_analogy_it_"
 
 # The closed set of tables retrieval reads. `historical_episodes` self-references for nesting.
-ANALOGY_MODELS = (Event, EventEmbedding, HistoricalEpisode)
+ANALOGY_MODELS = (
+    Event,
+    EventEmbedding,
+    HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
+)
 
 MODEL = "text-embedding-3-small"
 VERSION = "current"
@@ -131,7 +146,22 @@ def _episode(
         onset_embedding=_vector(similarity),
         model=model,
         model_version=VERSION,
+        version=1,
         **defaults,
+    )
+
+
+def _episode_embedding(episode: HistoricalEpisode) -> HistoricalEpisodeEmbedding:
+    return HistoricalEpisodeEmbedding(
+        historical_episode_id=episode.id,
+        model=episode.model,
+        model_version=episode.model_version,
+        episode_version=episode.version,
+        dimension=EMBEDDING_DIM,
+        onset_embedding=episode.onset_embedding,
+        input_sha256=episode_embedding_input_sha256(episode),
+        input_contract_version=EPISODE_EMBEDDING_INPUT_CONTRACT_VERSION,
+        snapshot_manifest_sha256=None,
     )
 
 
@@ -154,48 +184,49 @@ def seeded(disposable_db):
                 embedding=EVENT_VECTOR,
             )
         )
-        session.add_all(
-            [
-                # The parent arc: the nearest vector in the corpus, and never ranked.
-                _episode(
-                    PARENT_ID,
-                    similarity=0.99,
-                    name="2023 regional banking stress",
-                    onset_summary="Deposit flight spreads across mid-sized US lenders.",
-                    outcome_summary="Three lenders failed; the arc was contained by March.",
-                    outcomes=["systemic_crisis"],
-                    resolution_mechanism="Systemic risk exception",
-                ),
-                # A child of that arc: the top-ranked match, in the current regime.
-                _episode(
-                    CHILD_ID,
-                    similarity=0.95,
-                    name="Silicon Valley Bank",
-                    parent_episode_id=PARENT_ID,
-                    outcome_summary="The bank failed and was placed into receivership.",
-                    outcomes=["failure", "bailout"],
-                    resolution_mechanism="FDIC systemic risk exception",
-                ),
-                # A standalone counterexample from another regime, and another geography.
-                _episode(
-                    STANDALONE_ID,
-                    similarity=0.80,
-                    name="1866 Overend Gurney",
-                    geography="United Kingdom",
-                    affected_industries=["banking", "Insurance"],
-                    regime_tags=["pre_fiat"],
-                    is_counterexample=True,
-                    outcome_summary="The panic subsided without a systemic collapse.",
-                    outcomes=["contained"],
-                    resolution_mechanism="Lender of last resort",
-                ),
-                # Nearer than either match, and excluded: wrong family, wrong model space, and
-                # (for the last) simply too far away once similarity is measured.
-                _episode(WRONG_FAMILY_ID, similarity=0.99, episode_type="pandemic"),
-                _episode(WRONG_MODEL_ID, similarity=0.99, model="text-embedding-3-large"),
-                _episode(DISTANT_ID, similarity=0.30, outcomes=["recovery"]),
-            ]
-        )
+        episodes = [
+            # The parent arc: the nearest vector in the corpus, and never ranked.
+            _episode(
+                PARENT_ID,
+                similarity=0.99,
+                name="2023 regional banking stress",
+                onset_summary="Deposit flight spreads across mid-sized US lenders.",
+                outcome_summary="Three lenders failed; the arc was contained by March.",
+                outcomes=["systemic_crisis"],
+                resolution_mechanism="Systemic risk exception",
+            ),
+            # A child of that arc: the top-ranked match, in the current regime.
+            _episode(
+                CHILD_ID,
+                similarity=0.95,
+                name="Silicon Valley Bank",
+                parent_episode_id=PARENT_ID,
+                outcome_summary="The bank failed and was placed into receivership.",
+                outcomes=["failure", "bailout"],
+                resolution_mechanism="FDIC systemic risk exception",
+            ),
+            # A standalone counterexample from another regime, and another geography.
+            _episode(
+                STANDALONE_ID,
+                similarity=0.80,
+                name="1866 Overend Gurney",
+                geography="United Kingdom",
+                affected_industries=["banking", "Insurance"],
+                regime_tags=["pre_fiat"],
+                is_counterexample=True,
+                outcome_summary="The panic subsided without a systemic collapse.",
+                outcomes=["contained"],
+                resolution_mechanism="Lender of last resort",
+            ),
+            # Nearer than either match, and excluded: wrong family, wrong model space, and
+            # (for the last) simply too far away once similarity is measured.
+            _episode(WRONG_FAMILY_ID, similarity=0.99, episode_type="pandemic"),
+            _episode(WRONG_MODEL_ID, similarity=0.99, model="text-embedding-3-large"),
+            _episode(DISTANT_ID, similarity=0.30, outcomes=["recovery"]),
+        ]
+        session.add_all(episodes)
+        session.flush()
+        session.add_all([_episode_embedding(episode) for episode in episodes])
         session.commit()
 
     return disposable_db

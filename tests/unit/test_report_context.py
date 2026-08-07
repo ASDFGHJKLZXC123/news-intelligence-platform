@@ -22,7 +22,10 @@ from services.reports.context import (
     SourceExcerpt,
     build_brief_context,
 )
+from services.reports.context_repository import SQLAlchemyBriefContextRepository
 from services.reports.contracts import DataQuality, LinkedRisk, RiskProvenance, SelectedEvent
+from services.reports.repository import SQLAlchemyBriefInputRepository
+from services.reports.window import window_for_date
 
 UTC = datetime.UTC
 
@@ -166,7 +169,11 @@ def test_no_scan_truncation_emits_no_scan_notes() -> None:
         analogies=BoundedRead.of([_analogy(event_id)], limit=200),
         forecasts=BoundedRead.of(list(_forecast_set(event_id)), limit=500),
     )
-    context = build_brief_context(repo, [_selected(event_id)])
+    context = build_brief_context(
+        repo,
+        [_selected(event_id)],
+        prediction_backed_outputs_enabled=True,
+    )
     codes = {note.code for note in context.data_quality_notes}
     assert DataQuality.EVIDENCE_SCAN_TRUNCATED not in codes
     assert DataQuality.ANALOGY_SCAN_TRUNCATED not in codes
@@ -182,7 +189,11 @@ def test_evidence_scan_truncation_is_declared() -> None:
         analogies=BoundedRead.of([_analogy(event_id)], limit=200),
         forecasts=BoundedRead.of(list(_forecast_set(event_id)), limit=500),
     )
-    context = build_brief_context(repo, [_selected(event_id)])
+    context = build_brief_context(
+        repo,
+        [_selected(event_id)],
+        prediction_backed_outputs_enabled=True,
+    )
     note = next(
         n for n in context.data_quality_notes if n.code is DataQuality.EVIDENCE_SCAN_TRUNCATED
     )
@@ -196,10 +207,12 @@ def test_analogy_scan_truncation_is_declared() -> None:
         analogies=BoundedRead(rows=(_analogy(event_id),), limit=200, truncated=True),
         forecasts=BoundedRead.of(list(_forecast_set(event_id)), limit=500),
     )
-    context = build_brief_context(repo, [_selected(event_id)])
-    assert any(
-        n.code is DataQuality.ANALOGY_SCAN_TRUNCATED for n in context.data_quality_notes
+    context = build_brief_context(
+        repo,
+        [_selected(event_id)],
+        prediction_backed_outputs_enabled=True,
     )
+    assert any(n.code is DataQuality.ANALOGY_SCAN_TRUNCATED for n in context.data_quality_notes)
 
 
 def test_forecast_scan_truncation_is_declared() -> None:
@@ -209,10 +222,12 @@ def test_forecast_scan_truncation_is_declared() -> None:
         analogies=BoundedRead.of([_analogy(event_id)], limit=200),
         forecasts=BoundedRead(rows=_forecast_set(event_id), limit=500, truncated=True),
     )
-    context = build_brief_context(repo, [_selected(event_id)])
-    assert any(
-        n.code is DataQuality.FORECAST_SCAN_TRUNCATED for n in context.data_quality_notes
+    context = build_brief_context(
+        repo,
+        [_selected(event_id)],
+        prediction_backed_outputs_enabled=True,
     )
+    assert any(n.code is DataQuality.FORECAST_SCAN_TRUNCATED for n in context.data_quality_notes)
 
 
 def test_no_events_short_circuits_without_touching_the_repository() -> None:
@@ -231,3 +246,47 @@ def test_no_events_short_circuits_without_touching_the_repository() -> None:
     assert context.analogies == ()
     assert context.forecasts == ()
     assert context.data_quality_notes == ()
+
+
+def test_closed_gate_loads_descriptive_context_but_never_reads_forecasts() -> None:
+    event_id = uuid.uuid4()
+
+    class _NoForecastReads(_FakeContextRepository):
+        def forecasts_for_events(self, event_ids):  # noqa: ANN001, ANN201
+            raise AssertionError("closed Gate G queried forecast scenarios")
+
+    repo = _NoForecastReads(
+        evidence=BoundedRead.of([_evidence_row(event_id)], limit=2_000),
+        analogies=BoundedRead.of([_analogy(event_id)], limit=200),
+        forecasts=BoundedRead.of(list(_forecast_set(event_id)), limit=500),
+    )
+
+    context = build_brief_context(
+        repo,
+        [_selected(event_id)],
+    )
+
+    assert context.evidence
+    assert context.analogies
+    assert context.forecasts == ()
+    assert not any(
+        note.code in {DataQuality.NO_FORECAST, DataQuality.FORECAST_SCAN_TRUNCATED}
+        for note in context.data_quality_notes
+    )
+
+
+def test_sql_repositories_default_closed_without_forecast_alert_or_prior_reads() -> None:
+    class _ExplodingSession:
+        def execute(self, statement):  # noqa: ANN001, ANN201
+            raise AssertionError("closed repository executed a prediction-backed query")
+
+    session = _ExplodingSession()
+    event_id = uuid.uuid4()
+    context_repo = SQLAlchemyBriefContextRepository(session)  # type: ignore[arg-type]
+    input_repo = SQLAlchemyBriefInputRepository(session)  # type: ignore[arg-type]
+    window = window_for_date(datetime.date(2026, 7, 14))
+
+    assert context_repo.forecasts_for_events([event_id]).rows == ()
+    assert input_repo.alert_state_changes(window) == ()
+    assert input_repo.prior_brief_versions(window.brief_date - datetime.timedelta(days=1)) == ()
+    assert input_repo.brief_sections(uuid.uuid4()) == ()

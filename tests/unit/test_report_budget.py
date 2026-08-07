@@ -157,7 +157,16 @@ def test_a_first_violation_is_fixed_on_the_second_and_both_attempts_are_retained
     assert section.is_generated
     assert section.budget.word_count == 150
     assert [a.word_count for a in section.attempts] == [220, 150]
-    assert len(fake.requests_for("top_event")) == 2
+    requests = fake.requests_for("top_event")
+    assert len(requests) == 2
+    assert [request.context["budget_attempt"] for request in requests] == [1, 2]
+    assert all(request.context["word_budget_target"] == 150 for request in requests)
+    assert all(request.context["word_budget_minimum"] == 120 for request in requests)
+    assert all(request.context["word_budget_maximum"] == 180 for request in requests)
+    assert "previous response was 220 words" in requests[1].prompt
+    assert "too long" in requests[1].prompt
+    assert "between 120 and 180 words" in requests[1].prompt
+    assert "Cite only the claim_ids already provided" in requests[1].prompt
 
 
 def test_a_second_violation_degrades_and_never_makes_a_third_call() -> None:

@@ -8,9 +8,10 @@ is integration-tested.
 
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import and_, select
 from sqlalchemy.orm import Session
 
 from db.models import Article, ArticleEmbedding, Event, EventArticle, EventRiskFeature, Source
@@ -30,6 +31,11 @@ class ClusterResult:
     events_created: int
     articles_clustered: int
     features_emitted: int
+    event_ids: tuple[uuid.UUID, ...] = ()
+
+
+class IncompleteEmbeddingCoverageError(RuntimeError):
+    """At least one unclustered article is absent from the requested vector space."""
 
 
 def cluster_unclustered_articles(
@@ -49,19 +55,32 @@ def cluster_unclustered_articles(
     )
     stmt = (
         select(Article, ArticleEmbedding.embedding, Source.authority_score)
-        .join(ArticleEmbedding, ArticleEmbedding.article_id == Article.id)
+        .outerjoin(
+            ArticleEmbedding,
+            and_(
+                ArticleEmbedding.article_id == Article.id,
+                ArticleEmbedding.model == model,
+                ArticleEmbedding.model_version == model_version,
+            ),
+        )
         .join(Source, Source.id == Article.source_id)
         .outerjoin(EventArticle, EventArticle.article_id == Article.id)
-        .where(
-            EventArticle.article_id.is_(None),
-            ArticleEmbedding.model == model,
-            ArticleEmbedding.model_version == model_version,
-        )
+        .where(EventArticle.article_id.is_(None))
         .order_by(Article.fetched_at)
     )
     rows = session.execute(stmt).all()
     if not rows:
         return ClusterResult(0, 0, 0)
+
+    missing = [str(article.id) for article, embedding, _authority in rows if embedding is None]
+    if missing:
+        preview = ", ".join(missing[:5])
+        suffix = "" if len(missing) <= 5 else f", ... (+{len(missing) - 5} more)"
+        raise IncompleteEmbeddingCoverageError(
+            f"{len(missing)} unclustered article(s) have no embedding in "
+            f"{model}@{model_version}: {preview}{suffix}; refusing to report an empty or "
+            "partial clustering success"
+        )
 
     articles_by_key: dict[str, Article] = {}
     items: list[ClusterItem] = []
@@ -83,6 +102,7 @@ def cluster_unclustered_articles(
     events_created = 0
     articles_clustered = 0
     features_emitted = 0
+    event_ids: list[uuid.UUID] = []
     for group in cluster_by_similarity(items, threshold):
         group_keys = [items[index].key for index in group]
         features = compute_event_features([records_by_key[key] for key in group_keys])
@@ -100,6 +120,7 @@ def cluster_unclustered_articles(
         )
         session.add(event)
         session.flush()
+        event_ids.append(event.id)
 
         for key in group_keys:
             session.add(EventArticle(event_id=event.id, article_id=articles_by_key[key].id))
@@ -121,4 +142,9 @@ def cluster_unclustered_articles(
         features_emitted += 1
 
     session.flush()
-    return ClusterResult(events_created, articles_clustered, features_emitted)
+    return ClusterResult(
+        events_created,
+        articles_clustered,
+        features_emitted,
+        event_ids=tuple(event_ids),
+    )

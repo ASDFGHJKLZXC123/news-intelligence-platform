@@ -10,14 +10,34 @@ venv/
 htmlcov/
 .cache/
 
+# Dependency resolution is owned by requirements.txt / requirements-dev.txt.
+uv.lock
+
+# Local database recovery artifacts
+backups/
+*.dump
+*.dump.sha256
+*.sql.gz
+*.backup
+*.bak
+
 # Environment / secrets
 .env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
 
 # OS
 .DS_Store
 
-# Local planning and implementation documentation (intentionally not published)
-/docs/
+# Local planning and implementation documentation (intentionally not published).
+# Operational runbooks are release artifacts and must remain visible to version control.
+/docs/*
+!/docs/operations/
 /BUILDING_PLAN.md
 /backend_platform_building_plan.md
 /build.md

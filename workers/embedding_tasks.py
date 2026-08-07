@@ -34,6 +34,7 @@ from services.nlp.embeddings import (
     embed_unembedded_events,
 )
 from services.nlp.episodes import refresh_episode_embeddings
+from services.nlp.snapshot_registry import SnapshotVerification, verify_snapshot
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.embedding_tasks")
@@ -46,6 +47,19 @@ TASK_EPISODE_EMBEDDING_REFRESH = "workers.embedding_tasks.run_episode_embedding_
 def build_provider() -> OpenAIEmbeddingProvider:
     """The production adapter, built per task run. Unit tests replace this hook with a fake."""
     return build_embedding_provider(get_settings())
+
+
+def _verify_live_snapshot(
+    provider: OpenAIEmbeddingProvider,
+) -> SnapshotVerification | None:
+    """Replay fixed probes around a live backfill so one run cannot straddle alias drift."""
+
+    if not isinstance(provider, OpenAIEmbeddingProvider):
+        return None
+    settings = get_settings()
+    if not settings.embedding_require_registered_snapshot:
+        return None
+    return verify_snapshot(provider, provider.model_version)
 
 
 def _run(
@@ -63,7 +77,9 @@ def _run(
     provider: OpenAIEmbeddingProvider | None = None
     try:
         provider = build_provider()
+        before = _verify_live_snapshot(provider)
         count = work(session, provider)
+        after = _verify_live_snapshot(provider)
         session.commit()
         metrics.increment(metrics.JOB_SUCCESSES)
         completed = job.mark_succeeded()
@@ -74,6 +90,14 @@ def _run(
             "job_key": completed.job_key,
             "state": completed.state.value,
             count_key: count,
+            "snapshot_verification": (
+                None
+                if before is None or after is None
+                else {
+                    "before": before.as_dict(),
+                    "after": after.as_dict(),
+                }
+            ),
         }
     except Exception:
         # Includes a provider fault raised mid-batch: nothing is left half-written, and the

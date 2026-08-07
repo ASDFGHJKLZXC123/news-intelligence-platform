@@ -1,7 +1,7 @@
 """Health and metrics endpoints.
 
 ``/health`` verifies the four Stage 1 concerns — configuration, PostgreSQL, Redis, and
-worker (Celery) configuration — via dependency functions and reports an aggregate
+bounded live Celery worker/queue availability — via dependency functions and reports an aggregate
 status. It returns 200 with a component report when healthy and 503 when any critical
 component is degraded, so it doubles as a readiness probe. The dependency functions are
 injected via FastAPI ``Depends`` so tests can override them without a live database or

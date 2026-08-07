@@ -21,7 +21,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import OperationalError
 
 from db import base as db_base
-from db.models import EMBEDDING_DIM, HistoricalEpisode
+from db.models import EMBEDDING_DIM, HistoricalEpisode, HistoricalEpisodeEmbedding
 from db.seed import episode_seed, seed
 from db.seed.episode_seed import (
     INSERT,
@@ -90,14 +90,30 @@ class FakeSession:
 
     def __init__(self) -> None:
         self.rows: dict[uuid.UUID, HistoricalEpisode] = {}
-        self.added: list[HistoricalEpisode] = []
+        self.embeddings: dict[tuple[uuid.UUID, str, str, int], HistoricalEpisodeEmbedding] = {}
+        self.added: list[Any] = []
         self.flushes = 0
 
-    def get(self, _model: Any, primary_key: uuid.UUID) -> HistoricalEpisode | None:
-        return self.rows.get(primary_key)
+    def get(self, model: Any, primary_key: Any) -> Any:
+        if model is HistoricalEpisode:
+            return self.rows.get(primary_key)
+        if model is HistoricalEpisodeEmbedding:
+            return self.embeddings.get(primary_key)
+        raise AssertionError(f"unexpected model lookup: {model}")
 
-    def add(self, row: HistoricalEpisode) -> None:
-        self.rows[row.id] = row
+    def add(self, row: Any) -> None:
+        if isinstance(row, HistoricalEpisode):
+            self.rows[row.id] = row
+        elif isinstance(row, HistoricalEpisodeEmbedding):
+            key = (
+                row.historical_episode_id,
+                row.model,
+                row.model_version,
+                row.episode_version,
+            )
+            self.embeddings[key] = row
+        else:
+            raise AssertionError(f"unexpected row type: {type(row)}")
         self.added.append(row)
 
     def flush(self) -> None:
@@ -164,11 +180,16 @@ def test_seeding_writes_every_row_with_a_real_vector(corpus):
 
     assert summary.inserted == 100
     assert len(session.rows) == 100
+    assert len(session.embeddings) == 100
     for row in session.rows.values():
         assert row.model == MODEL and row.model_version == VERSION
         assert len(row.onset_embedding) == EMBEDDING_DIM
         # onset_embedding is NOT NULL, and a zero/placeholder vector would still be *retrievable*.
         assert any(row.onset_embedding)
+        stored = session.embeddings[(row.id, MODEL, VERSION, row.version)]
+        assert len(stored.onset_embedding) == EMBEDDING_DIM
+        assert stored.input_sha256 is not None
+        assert stored.snapshot_manifest_sha256 is None
 
 
 def test_rows_are_written_with_their_curated_ids_and_curated_fields(corpus):
@@ -185,7 +206,8 @@ def test_rows_are_written_with_their_curated_ids_and_curated_fields(corpus):
 def test_parents_are_inserted_before_their_children(corpus):
     session, _, _ = _seed(corpus)
 
-    position = {row.id: index for index, row in enumerate(session.added)}
+    parents = [row for row in session.added if isinstance(row, HistoricalEpisode)]
+    position = {row.id: index for index, row in enumerate(parents)}
     children = [e for e in corpus.episodes if e.parent_episode_id is not None]
     assert children
     for child in children:
@@ -244,6 +266,8 @@ def test_only_the_rows_whose_onset_moved_are_re_embedded(corpus):
 
     row = session.rows[changed.episode_id]
     assert row.version == changed.version + 1
+    assert (changed.episode_id, MODEL, VERSION, changed.version) in session.embeddings
+    assert (changed.episode_id, MODEL, VERSION, changed.version + 1) in session.embeddings
     assert session.rows[outcome_only.episode_id].outcome_summary.endswith("Corrected.")
 
 
@@ -258,7 +282,12 @@ def test_a_model_space_change_re_embeds_everything(corpus):
     assert summary.re_embedded == 100
     assert summary.unchanged == 100  # the curated fields did not move; only the vector space did
     assert provider.request_sizes == [96, 4]
-    assert all(row.model_version == "v2" for row in session.rows.values())
+    # The compatibility columns retain their original vector identity; v2 is appended.
+    assert all(row.model_version == VERSION for row in session.rows.values())
+    assert all(
+        (row.id, MODEL, "v2", row.version) in session.embeddings for row in session.rows.values()
+    )
+    assert len(session.embeddings) == 200
 
 
 def test_seeding_without_a_provider_refuses_to_write_a_placeholder_vector(corpus):
@@ -281,12 +310,37 @@ def test_the_planner_agrees_with_the_writer_about_staleness(corpus):
     episode = corpus.by_slug["svb-deposit-run-2023"]
     row = session.rows[episode.episode_id]
 
-    assert not episode_onset_is_stale(row, episode.to_record(), model=MODEL, model_version=VERSION)
+    stored = session.embeddings[(row.id, MODEL, VERSION, row.version)]
+    assert not episode_onset_is_stale(
+        row,
+        episode.to_record(),
+        model=MODEL,
+        model_version=VERSION,
+        embedding=stored,
+    )
     moved = dataclasses.replace(episode, version=episode.version + 1)
     assert episode_onset_is_stale(row, moved.to_record(), model=MODEL, model_version=VERSION)
-    assert episode_onset_is_stale(
-        row, episode.to_record(), model=MODEL, model_version="v2"
+    assert episode_onset_is_stale(row, episode.to_record(), model=MODEL, model_version="v2")
+
+
+def test_an_onset_edit_without_a_curated_version_bump_is_rejected(corpus):
+    session, _, _ = _seed(corpus)
+    changed = corpus.by_slug["svb-deposit-run-2023"]
+    edited = dataclasses.replace(
+        corpus,
+        episodes=tuple(
+            dataclasses.replace(
+                episode,
+                onset_summary=episode.onset_summary + " Silent same-version edit.",
+            )
+            if episode.episode_id == changed.episode_id
+            else episode
+            for episode in corpus.episodes
+        ),
     )
+
+    with pytest.raises(ValueError, match="without an episode version bump"):
+        plan_episode_seed(session, edited)
 
 
 # --- the CLI -------------------------------------------------------------------------------
@@ -341,8 +395,14 @@ def test_seeding_without_an_api_key_fails_with_an_actionable_message(monkeypatch
 def test_the_cli_commits_once_on_success(monkeypatch, corpus):
     session = Mock()
     provider = Mock()
+    verifications: list[Any] = []
     monkeypatch.setattr(seed, "SessionLocal", lambda: session)
     monkeypatch.setattr(seed, "build_provider", lambda: provider)
+    monkeypatch.setattr(
+        seed,
+        "_verify_live_snapshot",
+        lambda value: verifications.append(value),
+    )
     monkeypatch.setattr(
         seed,
         "seed_episode_corpus",
@@ -359,6 +419,7 @@ def test_the_cli_commits_once_on_success(monkeypatch, corpus):
     summary = seed.seed_episodes(allow_unreviewed=True)
 
     assert summary.inserted == 100
+    assert verifications == [provider, provider]
     session.commit.assert_called_once()
     session.rollback.assert_not_called()
     session.close.assert_called_once()
@@ -475,9 +536,7 @@ def test_an_explicitly_unreviewed_seed_is_recorded_as_one(corpus):
 
 
 def test_a_human_reviewed_corpus_seeds_with_the_gate_enforced(corpus):
-    reviewed = dataclasses.replace(
-        corpus, episodes=tuple(_reviewed(e) for e in corpus.episodes)
-    )
+    reviewed = dataclasses.replace(corpus, episodes=tuple(_reviewed(e) for e in corpus.episodes))
 
     summary = seed_episode_corpus(FakeSession(), reviewed, RecordingProvider())
 

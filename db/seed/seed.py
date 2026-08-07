@@ -50,6 +50,7 @@ from services.analogies.corpus import (
     unreviewed_episodes,
 )
 from services.nlp.embeddings import build_embedding_provider
+from services.nlp.snapshot_registry import SnapshotVerification, verify_snapshot
 
 logger = get_logger("db.seed")
 
@@ -64,7 +65,9 @@ def validate_only() -> dict[str, object]:
     """Load and validate the corpus and gold set. No database, no network, no API key."""
     corpus, gold = load_corpus_and_gold()
     report = quota_report(corpus, gold)
-    logger.info("corpus validated", extra={"episodes": corpus.quotas.total, "pairs": len(gold.pairs)})
+    logger.info(
+        "corpus validated", extra={"episodes": corpus.quotas.total, "pairs": len(gold.pairs)}
+    )
     return report
 
 
@@ -74,6 +77,19 @@ def build_provider() -> OpenAIEmbeddingProvider:
     if not settings.openai_api_key:
         raise SystemExit(_NO_API_KEY)
     return build_embedding_provider(settings)
+
+
+def _verify_live_snapshot(
+    provider: OpenAIEmbeddingProvider,
+) -> SnapshotVerification | None:
+    """Replay fixed probes around the seed so a batch cannot span hosted-alias drift."""
+
+    if not isinstance(provider, OpenAIEmbeddingProvider):
+        return None
+    settings = get_settings()
+    if not settings.embedding_require_registered_snapshot:
+        return None
+    return verify_snapshot(provider, provider.model_version)
 
 
 def seed_episodes(
@@ -102,9 +118,11 @@ def seed_episodes(
         session = SessionLocal()
         stack.callback(session.close)
         try:
+            _verify_live_snapshot(provider)
             summary = seed_episode_corpus(
                 session, corpus, provider, batch_size=batch_size, allow_unreviewed=allow_unreviewed
             )
+            _verify_live_snapshot(provider)
             if summary.written == 0 and summary.unchanged == 0:
                 # Cannot happen with a validated corpus, and would mean a silent no-op if it did.
                 raise RuntimeError("seed processed no episodes; refusing to report success")

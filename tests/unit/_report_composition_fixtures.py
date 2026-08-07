@@ -288,7 +288,13 @@ def single_event_brief(
     )
     forecasts = (forecast(),) if forecasts_present else ()
     context = brief_context(evidence=evidence, analogies=analogy_ctx, forecasts=forecasts)
-    material = build_brief_material(inputs, context)
+    # This fixture models the explicit diagnostic/open path; closed-boundary tests pass the
+    # resulting contaminated material to the fail-closed composer adversarially.
+    material = build_brief_material(
+        inputs,
+        context,
+        prediction_backed_outputs_enabled=True,
+    )
     return inputs, context, material
 
 
@@ -315,9 +321,7 @@ def one_block(word_count: int, *, claim_id: uuid.UUID = CLAIM_ID) -> dict[str, A
     return report_payload([(words(word_count), [str(claim_id)])])
 
 
-def multi_block(
-    counts: list[int], *, claim_id: uuid.UUID = CLAIM_ID
-) -> dict[str, Any]:
+def multi_block(counts: list[int], *, claim_id: uuid.UUID = CLAIM_ID) -> dict[str, Any]:
     return report_payload([(words(count), [str(claim_id)]) for count in counts])
 
 

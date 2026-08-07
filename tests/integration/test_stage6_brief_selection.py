@@ -137,7 +137,9 @@ def selection_db() -> Iterator[_SelectionDB]:
 # --------------------------------------------------------------------------------------
 
 
-def test_migration_adds_hotness_without_disturbing_existing_events(selection_db: _SelectionDB) -> None:
+def test_migration_adds_hotness_without_disturbing_existing_events(
+    selection_db: _SelectionDB,
+) -> None:
     engine = selection_db.engine
     command.downgrade(_ALEMBIC, "0015")
     with engine.begin() as conn:
@@ -162,7 +164,10 @@ def test_migration_adds_hotness_without_disturbing_existing_events(selection_db:
 
 
 def test_the_hotness_check_constraint_is_live(selection_db: _SelectionDB) -> None:
-    with selection_db.engine.begin() as conn, pytest.raises(Exception, match="ck_events_hotness_score"):
+    with (
+        selection_db.engine.begin() as conn,
+        pytest.raises(Exception, match="ck_events_hotness_score"),
+    ):
         conn.execute(
             text(
                 "INSERT INTO events (id, title, hotness_score) "
@@ -359,7 +364,10 @@ def test_repository_loads_the_windows_events_with_risk_and_credibility(
 ) -> None:
     ids = _seed(selection_db.engine)
     with Session(selection_db.engine) as session:
-        rows = SQLAlchemyBriefInputRepository(session).events_in_window(WINDOW)
+        rows = SQLAlchemyBriefInputRepository(
+            session,
+            prediction_backed_outputs_enabled=True,
+        ).events_in_window(WINDOW)
 
     by_id = {row.event_id: row for row in rows}
     # The window predicate is `(previous cutoff, cutoff]`: the stale event is excluded.
@@ -382,7 +390,10 @@ def test_repository_loads_the_windows_events_with_risk_and_credibility(
 def test_repository_finds_an_all_clear_by_its_peak_severity(selection_db: _SelectionDB) -> None:
     _seed(selection_db.engine)
     with Session(selection_db.engine) as session:
-        changes = SQLAlchemyBriefInputRepository(session).alert_state_changes(WINDOW)
+        changes = SQLAlchemyBriefInputRepository(
+            session,
+            prediction_backed_outputs_enabled=True,
+        ).alert_state_changes(WINDOW)
 
     titles = {change.title for change in changes}
     # The Critical alert's stand-down is found even though its live severity reads 'low'.
@@ -396,7 +407,10 @@ def test_repository_returns_every_version_and_selection_picks_the_published_one(
     ids = _seed(selection_db.engine)
     yesterday = BRIEF_DATE - datetime.timedelta(days=1)
     with Session(selection_db.engine) as session:
-        versions = SQLAlchemyBriefInputRepository(session).prior_brief_versions(yesterday)
+        versions = SQLAlchemyBriefInputRepository(
+            session,
+            prediction_backed_outputs_enabled=True,
+        ).prior_brief_versions(yesterday)
 
     assert {version.version for version in versions} == {1, 2, 3}
     assert ids["report_v2"] in {version.report_id for version in versions}
@@ -405,7 +419,13 @@ def test_repository_returns_every_version_and_selection_picks_the_published_one(
 def test_end_to_end_selection_over_the_live_schema(selection_db: _SelectionDB) -> None:
     ids = _seed(selection_db.engine)
     with Session(selection_db.engine) as session:
-        inputs = build_brief_inputs(SQLAlchemyBriefInputRepository(session), WINDOW)
+        inputs = build_brief_inputs(
+            SQLAlchemyBriefInputRepository(
+                session,
+                prediction_backed_outputs_enabled=True,
+            ),
+            WINDOW,
+        )
 
     # `risky` outranks `hot`: 0.6*45 + 0.4*88 = 62.2 against 0.6*90 + 0.4*0 = 54.
     assert [event.event_id for event in inputs.top_events] == [ids["risky"], ids["hot"]]

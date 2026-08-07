@@ -185,9 +185,7 @@ def test_provider_domain_tables_have_provenance_columns() -> None:
         assert {"schema_version", "raw_document_asset_id", "retrieved_at"} <= {
             column.name for column in table.columns
         }
-        assert f"ix_{table_name}_raw_document_asset_id" in {
-            index.name for index in table.indexes
-        }
+        assert f"ix_{table_name}_raw_document_asset_id" in {index.name for index in table.indexes}
         assert any(
             fk.column.table.name == "raw_document_assets"
             for fk in table.c.raw_document_asset_id.foreign_keys
@@ -479,6 +477,7 @@ def test_application_columns_match_plan() -> None:
         "stale",
         "confidence_score",
         "generated_by_run_id",
+        "content_policy",
         "created_at",
         "updated_at",
     }
@@ -735,8 +734,7 @@ def test_provider_expansion_metadata_columns_keep_database_name() -> None:
 
 def test_macro_observations_have_series_date_identity() -> None:
     constraints = {
-        constraint.name
-        for constraint in Base.metadata.tables["macro_observations"].constraints
+        constraint.name for constraint in Base.metadata.tables["macro_observations"].constraints
     }
     assert "uq_macro_observations_series_date_realtime" in constraints
     assert "ix_macro_observations_series_date" in {

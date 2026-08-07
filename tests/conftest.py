@@ -16,13 +16,26 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# Load `.env` the way Compose and Settings do, without overriding a real environment
-# variable: explicit env > .env > the defaults below.
-load_dotenv(_PROJECT_ROOT / ".env", override=False)
+# Tests may reuse local infrastructure coordinates, but never import provider keys, application
+# credentials, or production routing from a developer's `.env`. This keeps unit tests offline and
+# makes their defaults independent of whether local live-provider setup has been completed.
+_INFRA_DOTENV_KEYS = {
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "POSTGRES_DB",
+    "POSTGRES_HOST_PORT",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "CELERY_BROKER_URL",
+    "CELERY_RESULT_BACKEND",
+}
+for _key, _value in dotenv_values(_PROJECT_ROOT / ".env").items():
+    if _key in _INFRA_DOTENV_KEYS and _value is not None:
+        os.environ.setdefault(_key, _value)
 
 
 def _compose_database_url() -> str:
@@ -41,8 +54,9 @@ def _compose_database_url() -> str:
     return f"postgresql+psycopg2://{user}:{password}@localhost:{port}/{database}"
 
 
-# Ensure a deterministic, local-only configuration for the whole test session.
-os.environ.setdefault("APP_ENV", "test")
+# Ensure a deterministic, local-only configuration for the whole test session. ``Settings`` uses
+# this marker to skip its own dotenv source, so secrets cannot re-enter after this file is loaded.
+os.environ["APP_ENV"] = "test"
 os.environ.setdefault("LOG_LEVEL", "INFO")
 os.environ.setdefault("DATABASE_URL", _compose_database_url())
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")

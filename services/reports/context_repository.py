@@ -63,8 +63,14 @@ FORECAST_SCAN_LIMIT = 500
 class SQLAlchemyBriefContextRepository:
     """Loads the composition context from the operational schema. Read-only: never writes."""
 
-    def __init__(self, session: Session) -> None:
+    def __init__(
+        self,
+        session: Session,
+        *,
+        prediction_backed_outputs_enabled: bool = False,
+    ) -> None:
         self._session = session
+        self._prediction_backed_outputs_enabled = prediction_backed_outputs_enabled
 
     def evidence_for_events(self, event_ids: Sequence[uuid.UUID]) -> BoundedRead[EvidenceRow]:
         """Supportive, article-linked claims for the selected events.
@@ -159,9 +165,7 @@ class SQLAlchemyBriefContextRepository:
         ]
         return BoundedRead.of(fetched, EVIDENCE_SCAN_LIMIT)
 
-    def analogies_for_events(
-        self, event_ids: Sequence[uuid.UUID]
-    ) -> BoundedRead[AnalogyContext]:
+    def analogies_for_events(self, event_ids: Sequence[uuid.UUID]) -> BoundedRead[AnalogyContext]:
         """Persisted `event_analogies` for the selected events, joined to their episodes.
 
         Only *persisted* analogies. This does not run retrieval: a brief regenerated next month
@@ -239,7 +243,7 @@ class SQLAlchemyBriefContextRepository:
         probabilities sum to 0.6. If the scan bound is ever reached the read is flagged
         truncated, because clipping the tail can sever a set and make it look half-written.
         """
-        if not event_ids:
+        if not self._prediction_backed_outputs_enabled or not event_ids:
             return BoundedRead.of((), FORECAST_SCAN_LIMIT)
 
         stmt = (

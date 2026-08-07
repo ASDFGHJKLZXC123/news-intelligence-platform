@@ -182,6 +182,13 @@ class MentionAdjudicator:
     def __init__(self, orchestrator: _Orchestrator) -> None:
         self._orchestrator = orchestrator
 
+    def close(self) -> None:
+        """Release provider clients owned by the underlying production orchestrator."""
+
+        close = getattr(self._orchestrator, "close", None)
+        if callable(close):
+            close()
+
     def adjudicate(self, mention: EntityMention, result: MentionLinkResult) -> MentionAdjudication:
         """Adjudicate one ambiguous mention. Never called for ACCEPT or NIL, and it enforces that."""
 

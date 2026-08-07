@@ -28,6 +28,11 @@ dist/
 coverage.xml
 htmlcov/
 
+# Local database recovery artifacts
+backups/
+*.dump
+*.dump.sha256
+
 # Frontend is managed by a separate plan and is not part of backend images.
 frontend/
 frontend/screenshots/

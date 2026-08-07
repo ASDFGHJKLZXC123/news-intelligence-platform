@@ -13,9 +13,17 @@ from packages.config.settings import Settings
 def test_defaults_are_local_and_conservative() -> None:
     settings = Settings()
     assert settings.is_local  # APP_ENV=test (set in conftest) counts as local
+    assert settings.crisis_prediction_reads_enabled is False
     # CORS must not be a wildcard by default.
     assert "*" not in settings.cors_origins_list
     assert settings.cors_origins_list  # non-empty allow-list
+
+
+def test_crisis_prediction_reads_require_explicit_environment_opt_in(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("CRISIS_PREDICTION_READS_ENABLED", "true")
+    assert Settings().crisis_prediction_reads_enabled is True
 
 
 def test_cors_origins_parsing() -> None:
@@ -43,8 +51,12 @@ def test_api_key_empty_by_default() -> None:
 
 def test_provider_settings_defaults_are_safe() -> None:
     settings = Settings()
+    assert settings.database_connect_timeout_seconds == 3
+    assert settings.database_pool_timeout_seconds == 3
+    assert settings.database_statement_timeout_ms == 5_000
     assert settings.embedding_model == "text-embedding-3-small"
     assert settings.embedding_model_version == "current"
+    assert settings.embedding_require_registered_snapshot is True
     assert settings.fred_api_key == ""
     assert "configure SEC_USER_AGENT" in settings.sec_user_agent
     assert settings.gdelt_base_url == "https://api.gdeltproject.org/api/v2"
@@ -61,6 +73,19 @@ def test_provider_settings_defaults_are_safe() -> None:
     assert settings.wikidata_sparql_endpoint == "https://query.wikidata.org/sparql"
     assert "configure WIKIDATA_USER_AGENT" in settings.wikidata_user_agent
     assert settings.wikidata_timeout_seconds == 30.0
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "database_connect_timeout_seconds",
+        "database_pool_timeout_seconds",
+        "database_statement_timeout_ms",
+    ],
+)
+def test_database_timeouts_must_be_positive(field: str) -> None:
+    with pytest.raises(ValidationError, match="database timeouts must be positive"):
+        Settings(**{field: 0})
 
 
 def test_provider_settings_env_overrides(monkeypatch) -> None:
@@ -106,6 +131,8 @@ def test_stage2_llm_settings_default_values() -> None:
 
     assert settings.anthropic_api_key == ""
     assert settings.openai_api_key == ""
+    assert settings.gemini_api_key == ""
+    assert settings.deepseek_api_key == ""
     assert settings.llm_monthly_budget_usd == 10.0
     assert settings.llm_budget_enforced is True
 
@@ -131,10 +158,26 @@ def test_stage2_llm_settings_default_values() -> None:
     assert settings.anthropic_base_url == "https://api.anthropic.com"
     assert settings.anthropic_api_version == "2023-06-01"
     assert settings.openai_base_url == "https://api.openai.com"
+    assert settings.gemini_base_url == "https://generativelanguage.googleapis.com"
+    assert settings.deepseek_base_url == "https://api.deepseek.com"
     assert settings.llm_request_timeout_seconds == 60.0
+    assert settings.gemini_model_thinking_levels == {
+        "gemini-3.5-flash-lite": "minimal",
+        "gemini-3.6-flash": "low",
+    }
 
-    assert settings.llm_provider_rpm_limits == {"openai": 60, "anthropic": 60}
-    assert settings.llm_provider_tpm_limits == {"openai": 120_000, "anthropic": 30_000}
+    assert settings.llm_provider_rpm_limits == {
+        "openai": 60,
+        "anthropic": 60,
+        "gemini": 60,
+        "deepseek": 60,
+    }
+    assert settings.llm_provider_tpm_limits == {
+        "openai": 120_000,
+        "anthropic": 30_000,
+        "gemini": 120_000,
+        "deepseek": 120_000,
+    }
     assert settings.llm_provider_token_price_usd_per_1m["anthropic:claude-haiku-4-5"] == {
         "input": 1.00,
         "output": 5.00,
@@ -146,6 +189,22 @@ def test_stage2_llm_settings_default_values() -> None:
     assert settings.llm_provider_token_price_usd_per_1m["openai:gpt-4.1"] == {
         "input": 2.00,
         "output": 8.00,
+    }
+    assert settings.llm_provider_token_price_usd_per_1m["gemini:gemini-3.6-flash"] == {
+        "input": 1.50,
+        "output": 7.50,
+    }
+    assert settings.llm_provider_token_price_usd_per_1m["gemini:gemini-3.5-flash-lite"] == {
+        "input": 0.30,
+        "output": 2.50,
+    }
+    assert settings.llm_provider_token_price_usd_per_1m["deepseek:deepseek-v4-flash"] == {
+        "input": 0.14,
+        "output": 0.28,
+    }
+    assert settings.llm_provider_token_price_usd_per_1m["deepseek:deepseek-v4-pro"] == {
+        "input": 0.435,
+        "output": 0.87,
     }
     assert settings.llm_batch_discount_multiplier == 0.5
 
@@ -168,6 +227,8 @@ def test_stage2_llm_settings_default_values() -> None:
 def test_stage2_llm_settings_env_overrides(monkeypatch) -> None:
     monkeypatch.setenv("ANTHROPIC_API_KEY", "anthropic-test-key")
     monkeypatch.setenv("OPENAI_API_KEY", "openai-test-key")
+    monkeypatch.setenv("GEMINI_API_KEY", "gemini-test-key")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "deepseek-test-key")
     monkeypatch.setenv("LLM_MONTHLY_BUDGET_USD", "11.25")
     monkeypatch.setenv("LLM_BUDGET_ENFORCED", "false")
     monkeypatch.setenv("LLM_MODELS", json.dumps({"T1": "x1", "T2": "x2", "T3": "x3"}))
@@ -181,7 +242,13 @@ def test_stage2_llm_settings_env_overrides(monkeypatch) -> None:
     )
     monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://example.test/anthropic")
     monkeypatch.setenv("OPENAI_BASE_URL", "https://example.test/openai")
+    monkeypatch.setenv("GEMINI_BASE_URL", "https://example.test/gemini")
+    monkeypatch.setenv("DEEPSEEK_BASE_URL", "https://example.test/deepseek")
     monkeypatch.setenv("LLM_REQUEST_TIMEOUT_SECONDS", "12.5")
+    monkeypatch.setenv(
+        "GEMINI_MODEL_THINKING_LEVELS",
+        json.dumps({"gemini-test": "HIGH"}),
+    )
     monkeypatch.setenv("LLM_PROVIDER_RPM_LIMITS", json.dumps({"openai": 42, "anthropic": 11}))
     monkeypatch.setenv("LLM_PROVIDER_TPM_LIMITS", json.dumps({"openai": 1000, "anthropic": 2000}))
     monkeypatch.setenv(
@@ -202,16 +269,19 @@ def test_stage2_llm_settings_env_overrides(monkeypatch) -> None:
 
     assert settings.anthropic_api_key == "anthropic-test-key"
     assert settings.openai_api_key == "openai-test-key"
+    assert settings.gemini_api_key == "gemini-test-key"
+    assert settings.deepseek_api_key == "deepseek-test-key"
     assert settings.llm_monthly_budget_usd == 11.25
     assert settings.llm_budget_enforced is False
     assert settings.llm_models == {"T1": "x1", "T2": "x2", "T3": "x3"}
     assert settings.llm_tier_providers == {"T1": "anthropic", "T2": "openai", "T3": "openai"}
-    assert settings.llm_tier_fallbacks == {
-        "T1": [{"provider": "openai", "model": "fallback"}]
-    }
+    assert settings.llm_tier_fallbacks == {"T1": [{"provider": "openai", "model": "fallback"}]}
     assert settings.anthropic_base_url == "https://example.test/anthropic"
     assert settings.openai_base_url == "https://example.test/openai"
+    assert settings.gemini_base_url == "https://example.test/gemini"
+    assert settings.deepseek_base_url == "https://example.test/deepseek"
     assert settings.llm_request_timeout_seconds == 12.5
+    assert settings.gemini_model_thinking_levels == {"gemini-test": "high"}
     assert settings.llm_provider_rpm_limits == {"openai": 42, "anthropic": 11}
     assert settings.llm_provider_tpm_limits == {"openai": 1000, "anthropic": 2000}
     assert settings.llm_provider_token_price_usd_per_1m["provider:test"] == {
@@ -221,6 +291,12 @@ def test_stage2_llm_settings_env_overrides(monkeypatch) -> None:
     assert settings.llm_tier_context_token_limits == {"T1": 1000, "T2": 2000, "T3": 3000}
     assert settings.llm_tier_max_output_tokens == {"T1": 100, "T2": 200, "T3": 300}
     assert settings.llm_t2_top_n == 12
+
+
+@pytest.mark.parametrize("level", ["", "none", "disabled", "extreme"])
+def test_gemini_thinking_level_rejects_unsupported_values(level: str) -> None:
+    with pytest.raises(ValidationError, match="GEMINI_MODEL_THINKING_LEVELS"):
+        Settings(gemini_model_thinking_levels={"gemini-test": level})
 
 
 # --- Entity identity refresh configuration (ADR 0006) ---------------------------------

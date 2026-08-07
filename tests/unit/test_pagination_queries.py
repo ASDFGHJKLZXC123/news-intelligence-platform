@@ -69,9 +69,7 @@ class _RecordingSession:
 def _sql(statement: Any) -> str:
     """Compile a statement to concrete PostgreSQL text with literal values inlined."""
     return str(
-        statement.compile(
-            dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}
-        )
+        statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
     ).lower()
 
 
@@ -118,6 +116,7 @@ def test_list_events_counts_before_paging_with_identical_filters() -> None:
         industry="semiconductors",
         limit=5,
         offset=15,
+        prediction_backed_outputs_enabled=True,
     )
 
     # total is the COUNT scalar, independent of the single-row page.
@@ -157,15 +156,42 @@ def test_list_events_empty_page_issues_no_attachment_queries() -> None:
     session = _RecordingSession(scalar_returns=[9], row_returns=[[]])
     repo = IntelligenceRepository(session)
 
-    rows, total = repo.list_events(
-        q=None, country=None, event_type=None, limit=50, offset=1000
-    )
+    rows, total = repo.list_events(q=None, country=None, event_type=None, limit=50, offset=1000)
 
     assert rows == []
     assert total == 9
     # Just the count and the (empty) page -- the three attachment reads are skipped.
     assert len(session.statements) == 2
     assert "offset 1000" in _sql(session.statements[1])
+
+
+def test_list_events_defaults_to_descriptive_risk_and_no_alert_status_query() -> None:
+    event = SimpleNamespace(id=uuid.uuid4())
+    session = _RecordingSession(
+        scalar_returns=[1],
+        row_returns=[
+            [(event, decimal.Decimal("60"), decimal.Decimal("0.8"), "developing")],
+            [_company_bulk_row(event.id)],
+            [SimpleNamespace(event_id=event.id)],
+            [SimpleNamespace(event_id=event.id)],
+        ],
+    )
+
+    IntelligenceRepository(session).list_events(
+        q=None,
+        country=None,
+        event_type=None,
+        risk_level="high",
+        status="developing",
+        limit=5,
+        offset=0,
+    )
+
+    for sql in (_sql(session.statements[0]), _sql(session.statements[1])):
+        assert "risk_score_observations" in sql
+        assert "alerts" not in sql
+        assert "event_companies.risk_score" not in sql
+        assert "event_industries.risk_score" not in sql
 
 
 def test_list_events_attachment_query_count_is_constant_as_page_grows() -> None:
@@ -255,7 +281,10 @@ def test_dashboard_metric_counts_issue_four_bounded_count_reads() -> None:
     repo = IntelligenceRepository(session)
     now = datetime.datetime(2026, 6, 20, 9, 30, tzinfo=datetime.UTC)
 
-    counts = repo.dashboard_metric_counts(now=now)
+    counts = repo.dashboard_metric_counts(
+        now=now,
+        prediction_backed_outputs_enabled=True,
+    )
 
     assert (
         counts.events_today,
@@ -282,6 +311,18 @@ def test_dashboard_metric_counts_issue_four_bounded_count_reads() -> None:
     assert "count(distinct" in companies_sql and "event_companies" in companies_sql
 
 
+def test_dashboard_metric_counts_default_high_risk_read_is_descriptive_only() -> None:
+    session = _RecordingSession(scalar_returns=[12, 3, 5, 7], row_returns=[])
+    repo = IntelligenceRepository(session)
+
+    repo.dashboard_metric_counts(now=datetime.datetime(2026, 6, 20, 9, 30, tzinfo=datetime.UTC))
+
+    high_sql = _sql(session.statements[1])
+    assert "risk_score_observations" in high_sql
+    assert "event_companies.risk_score" not in high_sql
+    assert "event_industries.risk_score" not in high_sql
+
+
 def test_upcoming_triggers_is_one_future_bounded_ordered_read() -> None:
     item = SimpleNamespace(id=uuid.uuid4())
     session = _RecordingSession(scalar_returns=[], row_returns=[[item]])
@@ -304,23 +345,35 @@ def test_event_map_aggregates_projects_and_dedups_in_one_bounded_read() -> None:
     lat, lon = decimal.Decimal("38.9"), decimal.Decimal("-77.0")
     rows = [
         SimpleNamespace(
-            location_name="DC", latitude=lat, longitude=lon,
-            event_id=e1, event_type="policy", risk_score=decimal.Decimal("70"),
+            location_name="DC",
+            latitude=lat,
+            longitude=lon,
+            event_id=e1,
+            event_type="policy",
+            risk_score=decimal.Decimal("70"),
         ),
         SimpleNamespace(
-            location_name="DC", latitude=lat, longitude=lon,
-            event_id=e2, event_type="policy", risk_score=decimal.Decimal("80"),
+            location_name="DC",
+            latitude=lat,
+            longitude=lon,
+            event_id=e2,
+            event_type="policy",
+            risk_score=decimal.Decimal("80"),
         ),
         # Same event as the first row (a second location row): must not double-count.
         SimpleNamespace(
-            location_name="DC", latitude=lat, longitude=lon,
-            event_id=e1, event_type="policy", risk_score=decimal.Decimal("70"),
+            location_name="DC",
+            latitude=lat,
+            longitude=lon,
+            event_id=e1,
+            event_type="policy",
+            risk_score=decimal.Decimal("70"),
         ),
     ]
     session = _RecordingSession(scalar_returns=[], row_returns=[rows])
     repo = IntelligenceRepository(session)
 
-    points = repo.event_map(limit=500)
+    points = repo.event_map(limit=500, prediction_backed_outputs_enabled=True)
 
     # One aggregation read: no per-location or per-event follow-up query.
     assert len(session.statements) == 1
@@ -446,9 +499,7 @@ def test_related_risk_targets_is_one_distinct_bounded_ordered_read() -> None:
     sql = _sql(session.statements[0])
     assert "distinct" in sql
     assert "risk_score_observations.risk_type = 'sovereign'" in sql
-    assert (
-        "order by risk_score_observations.target_type, risk_score_observations.target_id" in sql
-    )
+    assert "order by risk_score_observations.target_type, risk_score_observations.target_id" in sql
     assert "limit 500" in sql
 
 
@@ -500,3 +551,40 @@ def test_list_industries_dedups_latest_per_industry_under_item2_envelope() -> No
     assert "distinct on (industry_risk_rollups.industry_id)" in count_sql
     assert "distinct on (industry_risk_rollups.industry_id)" in page_sql
     assert "limit 50" in page_sql and "offset 5" in page_sql
+
+
+def test_report_listing_defaults_to_explicit_descriptive_content_policy() -> None:
+    session = _RecordingSession(scalar_returns=[], row_returns=[[]])
+
+    rows = IntelligenceRepository(session).list_reports(user_id=None, limit=50)
+
+    assert rows == []
+    sql = _sql(session.statements[0])
+    assert "reports.content_policy = 'descriptive_only.v1'" in sql
+
+
+def test_report_listing_open_diagnostic_mode_does_not_filter_content_policy() -> None:
+    session = _RecordingSession(scalar_returns=[], row_returns=[[]])
+
+    IntelligenceRepository(session).list_reports(
+        user_id=None,
+        limit=50,
+        prediction_backed_outputs_enabled=True,
+    )
+
+    assert "reports.content_policy =" not in _sql(session.statements[0])
+
+
+def test_evidence_policy_lookup_requires_published_descriptive_report_reference() -> None:
+    session = _RecordingSession(scalar_returns=[], row_returns=[[]])
+
+    allowed = IntelligenceRepository(session).claim_is_referenced_by_descriptive_report(
+        uuid.uuid4()
+    )
+
+    assert allowed is False
+    sql = _sql(session.statements[0])
+    assert "join reports" in sql
+    assert "reports.status = 'published'" in sql
+    assert "reports.content_policy = 'descriptive_only.v1'" in sql
+    assert "any (report_sections.evidence_refs)" in sql

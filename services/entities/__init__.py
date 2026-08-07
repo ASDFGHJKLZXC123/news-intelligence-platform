@@ -23,6 +23,12 @@ from services.entities.adjudication import (
     build_adjudication_prompt,
     record_adjudication,
 )
+from services.entities.descriptive_exposure import (
+    DIRECT_MENTION_EXPLANATION,
+    DescriptiveExposureResult,
+    normalize_industry_id,
+    persist_descriptive_exposures,
+)
 from services.entities.event_linking import (
     EventLinkingResult,
     EventNotFoundError,
@@ -104,6 +110,7 @@ __all__ = [
     "ADJUDICATION_TEMPERATURE",
     "ADJUDICATION_TIER",
     "AUTO_ACCEPTED",
+    "DIRECT_MENTION_EXPLANATION",
     "DIRECT_MENTION_ROLES",
     "ENTITY_LINKING_POLICY_VERSION",
     "LIKELY_MATCH",
@@ -125,6 +132,7 @@ __all__ = [
     "AdjudicationNotApplicableError",
     "AliasEvidence",
     "ArticleLinkingContext",
+    "DescriptiveExposureResult",
     "EntityResolutionRequest",
     "EntityResolutionResult",
     "EntityResolver",
@@ -161,8 +169,10 @@ __all__ = [
     "link_mention",
     "link_mentions",
     "merge_roles",
+    "normalize_industry_id",
     "parent_exposures",
     "persist_event_entity_link",
+    "persist_descriptive_exposures",
     "record_adjudication",
     "resolve_entity",
     "risk_eligible_event_links",

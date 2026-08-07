@@ -26,12 +26,16 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from db.models.core import HistoricalEpisode
+from db.models.core import HistoricalEpisode, HistoricalEpisodeEmbedding
 from packages.providers.base import EmbeddingProvider
 from packages.providers.openai_embeddings import MAX_EMBEDDING_BATCH_SIZE
 from services.analogies.corpus import CuratedEpisode, EpisodeCorpus, unreviewed_episodes
 from services.nlp.embedding_text import build_episode_onset_text
-from services.nlp.embeddings import embed_texts, resolve_embedding_identity
+from services.nlp.embeddings import (
+    embed_texts,
+    resolve_embedding_identity,
+    snapshot_manifest_sha256_for_identity,
+)
 from services.nlp.episodes import (
     EpisodeEmbedding,
     EpisodeRecord,
@@ -101,8 +105,7 @@ class EpisodeSeedPlan:
         """The chunk sizes this plan will send. A fresh 100-row corpus is (96, 4), not 100 calls."""
         pending = len(self.to_embed)
         return tuple(
-            min(self.batch_size, pending - start)
-            for start in range(0, pending, self.batch_size)
+            min(self.batch_size, pending - start) for start in range(0, pending, self.batch_size)
         )
 
     def counts(self) -> dict[str, int]:
@@ -196,13 +199,19 @@ def plan_episode_seed(
         existing = session.get(HistoricalEpisode, episode.episode_id)
         if existing is None:
             items.append(
-                EpisodeSeedItem(
-                    episode=episode, record=record, action=INSERT, needs_embedding=True
-                )
+                EpisodeSeedItem(episode=episode, record=record, action=INSERT, needs_embedding=True)
             )
             continue
+        stored_embedding = session.get(
+            HistoricalEpisodeEmbedding,
+            (existing.id, model, model_version, record.version),
+        )
         stale = episode_onset_is_stale(
-            existing, record, model=model, model_version=model_version
+            existing,
+            record,
+            model=model,
+            model_version=model_version,
+            embedding=stored_embedding,
         )
         changed = episode_fields_differ(existing, record)
         items.append(
@@ -221,11 +230,17 @@ def plan_episode_seed(
     )
 
 
-def embed_plan(plan: EpisodeSeedPlan, provider: EmbeddingProvider) -> dict[uuid.UUID, EpisodeEmbedding]:
+def embed_plan(
+    plan: EpisodeSeedPlan, provider: EmbeddingProvider
+) -> dict[uuid.UUID, EpisodeEmbedding]:
     """Embed exactly the rows the plan says need a vector, in chunks of at most 96 (ADR 0004)."""
     pending = plan.to_embed
     if not pending:
         return {}
+    snapshot_manifest_sha256 = snapshot_manifest_sha256_for_identity(
+        model=plan.model,
+        model_version=plan.model_version,
+    )
     results = embed_texts(
         provider,
         [item.onset_text() for item in pending],
@@ -235,7 +250,10 @@ def embed_plan(plan: EpisodeSeedPlan, provider: EmbeddingProvider) -> dict[uuid.
     )
     return {
         item.episode_id: EpisodeEmbedding(
-            vector=tuple(result.vector), model=plan.model, model_version=plan.model_version
+            vector=tuple(result.vector),
+            model=plan.model,
+            model_version=plan.model_version,
+            snapshot_manifest_sha256=snapshot_manifest_sha256,
         )
         for item, result in zip(pending, results, strict=True)
     }

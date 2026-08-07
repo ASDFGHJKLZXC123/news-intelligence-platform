@@ -30,10 +30,15 @@ import uuid
 from collections.abc import Iterable, Sequence
 from typing import Any
 
-from sqlalchemy import Select, func, literal, select
+from sqlalchemy import Select, and_, func, literal, select
 from sqlalchemy.orm import Session, aliased
 
-from db.models.core import Event, EventEmbedding, HistoricalEpisode
+from db.models.core import (
+    Event,
+    EventEmbedding,
+    HistoricalEpisode,
+    HistoricalEpisodeEmbedding,
+)
 from services.analogies.compatibility import (
     episode_types_for_event_type,
     partition_episode_types,
@@ -84,17 +89,23 @@ def _ranking_statement(query: AnalogyQuery) -> Select[Any]:
     # Matching runs at leaf granularity (spec, "Boundary rule"): an episode that parents another
     # row is an arc, not an event-sized comparable. Standalone and child rows both stay.
     is_parent = select(child.id).where(child.parent_episode_id == HistoricalEpisode.id).exists()
-    distance = HistoricalEpisode.onset_embedding.cosine_distance(list(query.vector)).label(
+    distance = HistoricalEpisodeEmbedding.onset_embedding.cosine_distance(list(query.vector)).label(
         "distance"
     )
 
     statement = (
         select(*_RANKING_COLUMNS, distance)
+        .join(
+            HistoricalEpisodeEmbedding,
+            and_(
+                HistoricalEpisodeEmbedding.historical_episode_id == HistoricalEpisode.id,
+                HistoricalEpisodeEmbedding.model == query.model,
+                HistoricalEpisodeEmbedding.model_version == query.model_version,
+                HistoricalEpisodeEmbedding.episode_version == HistoricalEpisode.version,
+            ),
+        )
         .where(
             HistoricalEpisode.episode_type.in_(sorted(query.episode_types)),
-            # One vector space only: comparing across models is undefined (ADR 0004).
-            HistoricalEpisode.model == query.model,
-            HistoricalEpisode.model_version == query.model_version,
             ~is_parent,
         )
         .order_by(
@@ -341,8 +352,7 @@ def retrieve_analogies_for_event(
         return AnalogyRetrievalResult(
             status=RetrievalStatus.UNSUPPORTED_EVENT_TYPE,
             message=(
-                f"{NO_RELIABLE_ANALOGY}: event type {event.event_type!r} "
-                "maps to no episode family"
+                f"{NO_RELIABLE_ANALOGY}: event type {event.event_type!r} maps to no episode family"
             ),
             episode_types=(),
             model=model,

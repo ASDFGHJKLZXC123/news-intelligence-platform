@@ -19,6 +19,7 @@ def make_llm_request_cache_key(
     model_name: str,
     model_version: str,
     mode: LLMInvocationMode,
+    adapter_variant: Mapping[str, Any] | None = None,
 ) -> str:
     """Compute deterministic SHA-256 key for a request/provider mode tuple."""
 
@@ -39,6 +40,10 @@ def make_llm_request_cache_key(
         "context": request.context,
         "metadata": request.metadata,
         "temperature": request.temperature,
+        # Provider controls such as Gemini thinking level are configured on the adapter rather
+        # than the canonical request, but they still change the generated response. Replaying a
+        # medium-thinking result after switching to low would erase that operational decision.
+        "adapter_variant": dict(adapter_variant or {}),
     }
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
