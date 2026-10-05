@@ -1,0 +1,81 @@
+CAPTURE saved-event-source- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - button "Saved":
+    - text: Saved
+  - button "Refresh detail":
+    - text: Refresh detail
+  - generic: Grouped story
+  - 'heading "Synthetic: Agency approves browser verification project" [level=1]'
+  - paragraph: The agency confirmed the browser verification project was approved.
+  - button "Saved" [pressed]:
+    - text: Saved
+  - heading "Recorded status" [level=3]
+  - generic: All current articles
+  - generic: "1"
+  - generic: Updated
+  - generic: Oct 3, 2026, 06:00:57 PM PDT
+  - generic: Event type
+  - generic: Not recorded
+  - generic: Region
+  - generic: Not recorded
+  - generic: 1 recorded sources
+  - heading "Article and source detail" [level=3]
+  - paragraph: These sources show current coverage for this saved story. No daily update is selected.
+  - 'button "Synthetic: Agency approves browser verification project Synthetic item 6 technology feed · Sep 30, 2026, 05:00:57 PM PDT Current event coverage"':
+    - strong: "Synthetic: Agency approves browser verification project"
+    - generic: Synthetic item 6 technology feed · Sep 30, 2026, 05:00:57 PM PDT
+    - generic: Current event coverage
+  - generic "Local access"- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Briefs" [level=1]
+  - generic: Stored personal reports by date and immutable version.
+  - button "Refresh display" [disabled]:
+    - text: Refresh display
+  - generic: Reading brief history

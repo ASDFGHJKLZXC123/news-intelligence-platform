@@ -1,0 +1,11 @@
+{
+  "user_instruction": "Retry this test.",
+  "recorded_at": "2026-09-20T07:11:41Z",
+  "verification_id": "98db64a8-cc44-4984-a1f4-181ba5803fe1",
+  "previous_verification_id": "8cf55cfa-8162-436b-bb14-2430636fdd34",
+  "allowance_usd": "0.25",
+  "article_count": 1,
+  "max_paid_dispatches": 10,
+  "scope": "one fresh retry of same selected article and models; corrected process TLS trust; no fallback or recurring activation",
+  "execution_started": false
+}

@@ -1,0 +1,31 @@
+{
+  "app_port": 58118,
+  "container_id": "8c88ce5f34abf5f80e18b51a69900b8f7342834bcda4a5314160fa4394bbd700",
+  "credential_fields_blank": [
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "FRED_API_KEY",
+    "EIA_API_KEY",
+    "NASA_FIRMS_MAP_KEY",
+    "API_KEY"
+  ],
+  "databases": {
+    "browser": {
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "name": "nip_phase4b_browser_ac0f466f5808",
+      "oid": 19677
+    },
+    "manual": {
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "name": "nip_phase4b_manual_ac0f466f5808",
+      "oid": 19678
+    }
+  },
+  "empty_migrated_databases_then_supported_workspace_setup": true,
+  "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+  "paid_activation": false,
+  "redis_celery_beat_created": false,
+  "synthetic_fixture": "phase-2-offline-workflow-v1"
+}

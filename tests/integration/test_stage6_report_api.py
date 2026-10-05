@@ -47,11 +47,21 @@ from db.models.core import (
     Event,
     EventArticle,
     EvidenceItem,
+    Job,
     LLMRun,
     Report,
     ReportSection,
     Source,
     User,
+)
+from db.models.personal import (
+    PersonalArticleRevision,
+    PersonalBriefSnapshot,
+    PersonalClaimPreparation,
+    PersonalProfileRevision,
+    PersonalRun,
+    PersonalWorkspace,
+    PersonalWriterMode,
 )
 from tests.integration._stage6_db import (
     disposable_database,
@@ -71,6 +81,8 @@ PUB_AT = datetime.datetime(2026, 7, 14, 4, tzinfo=UTC)
 #: FK-closed set of tables these endpoints touch. `users`/`llm_runs` are FK targets only (no rows).
 _API_TABLES = [
     User.__table__,
+    Job.__table__,
+    PersonalWriterMode.__table__,
     LLMRun.__table__,
     Source.__table__,
     Article.__table__,
@@ -81,6 +93,14 @@ _API_TABLES = [
     ClaimEvidence.__table__,
     Report.__table__,
     ReportSection.__table__,
+    # The global evidence reader uses the personal preparation sidecar solely to exclude personal
+    # support pairs. These FK-closed dependencies make this partial schema match that read path.
+    PersonalWorkspace.__table__,
+    PersonalProfileRevision.__table__,
+    PersonalRun.__table__,
+    PersonalBriefSnapshot.__table__,
+    PersonalArticleRevision.__table__,
+    PersonalClaimPreparation.__table__,
 ]
 
 
@@ -105,9 +125,14 @@ class _RecordingEnqueuer:
     def __init__(self) -> None:
         self.dates: list[datetime.date] = []
 
-    def __call__(self, brief_date: datetime.date) -> QueuedBrief:
+    def __call__(
+        self, brief_date: datetime.date, *, task_id: uuid.UUID, legacy_job_id: uuid.UUID
+    ) -> QueuedBrief:
         self.dates.append(brief_date)
-        return QueuedBrief(task_id="task-int", task_name="generate_daily_brief", queue="pipeline")
+        assert task_id == legacy_job_id
+        return QueuedBrief(
+            task_id=str(task_id), task_name="generate_daily_brief", queue="pipeline"
+        )
 
 
 @pytest.fixture
@@ -124,6 +149,10 @@ def client(engine: Engine, enqueuer: _RecordingEnqueuer) -> Iterator[TestClient]
     The enqueue seam is overridden so no broker is ever contacted. Loopback client so the API-key
     middleware admits the reprocess/generate mutations (local env, no key configured).
     """
+
+    with Session(engine) as setup:
+        setup.add(PersonalWriterMode(singleton=True, mode="legacy"))
+        setup.commit()
 
     def _session_override() -> Iterator[Session]:
         with Session(engine) as session:
@@ -503,7 +532,7 @@ def test_generate_daily_brief_enqueues_through_the_app_without_a_broker(
     )
     assert resp.status_code == 202
     body = resp.json()
-    assert body["task_id"] == "task-int"
+    assert body["task_id"] == body["job_id"]
     assert body["queue"] == "pipeline"
     assert body["brief_date"] == "2026-07-14"
     # The endpoint hands the broker seam a canonical calendar date, and no broker was contacted.

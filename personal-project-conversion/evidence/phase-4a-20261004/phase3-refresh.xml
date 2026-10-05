@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="101" time="172.664" timestamp="2026-10-04T02:22:22.668914-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_bounds_upgrade" name="test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once" time="2.503" /><testcase classname="tests.integration.test_personal_brief_api" name="test_personal_brief_routes_stay_on_exact_generated_snapshot" time="2.457" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_fresh_captured_source_is_composed_grounded_and_published" time="1.597" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_all_feed_failure_is_failed_and_cannot_publish_as_quiet" time="1.484" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_provider_failure_stays_retryable_and_retry_publishes_new_version" time="1.592" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_personal_snapshot_freezes_policy_and_legacy_absence_never_adopts_new_default" time="1.498" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_failed_personal_grounding_regeneration_cannot_publish[provider]" time="1.513" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_failed_personal_grounding_regeneration_cannot_publish[budget]" time="1.639" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_partial_capture_remains_partial_across_explicit_retry" time="1.435" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_published_bookkeeping_recovery_reuses_report_without_model_calls" time="1.495"><failure message="services.personal.processing.PersonalOwnershipLost: personal write refused because attempt ownership changed">def test_published_bookkeeping_recovery_reuses_report_without_model_calls() -&gt; None:
+        with migrated_disposable_engine() as engine:
+            now = datetime.datetime(2026, 9, 10, 18, tzinfo=UTC)
+            run_id, token, _, _ = _prepared_snapshot(
+                engine,
+                now=now,
+                coverage={
+                    "feeds_attempted": 1,
+                    "feeds_succeeded": 1,
+                    "feeds_failed": 0,
+                    "feed_failures": [],
+                    "articles_captured": 1,
+                },
+            )
+            first = generate_personal_brief(
+                run_id,
+                token,
+                session_factory=lambda: Session(engine),
+                orchestrator_factory=_orchestrator,
+            )
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                job = session.get(Job, run.job_id)
+                run.state = "running"
+                run.result = None
+                run.error = None
+                job.state = "running"
+                session.commit()
+&gt;           recovered = generate_personal_brief(
+                run_id,
+                token,
+                session_factory=lambda: Session(engine),
+                orchestrator_factory=lambda *_: pytest.fail("recovery recomposed a published report"),
+            )
+
+tests/integration/test_personal_brief_generation.py:756: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/briefs.py:631: in generate_personal_brief
+    run = lock_owned_run(start_session, run_id, ownership_token)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/personal/runs.py:331: in lock_owned_run
+    verify_control(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+control = &lt;db.models.processing.PersonalWriterMode object at 0x113357550&gt;
+run = &lt;db.models.personal.PersonalRun object at 0x114cce850&gt;
+token = UUID('10446abb-a4b1-4c21-9722-a70586adca05')
+now = datetime.datetime(2026, 9, 10, 18, 0, tzinfo=datetime.timezone.utc)
+allow_queued = False, generation = None
+
+    def verify_control(
+        control: PersonalWriterMode,
+        run: PersonalRun,
+        token: uuid.UUID,
+        *,
+        now: dt.datetime,
+        allow_queued: bool = False,
+        generation: int | None = None,
+    ) -&gt; None:
+        require_mode(control, "personal")
+        expected_token = control.delivery_token if run.state == "queued" else control.ownership_token
+        if (
+            control.active_run_id != run.id
+            or control.active_attempt != run.attempt
+            or control.generation != run.fencing_generation
+            or (generation is not None and control.generation != generation)
+            or run.ownership_token != token
+            or expected_token != token
+            or run.state not in ({"queued", "running"} if allow_queued else {"running"})
+        ):
+&gt;           raise PersonalOwnershipLost("personal write refused because attempt ownership changed")
+E           services.personal.processing.PersonalOwnershipLost: personal write refused because attempt ownership changed
+
+services/personal/processing.py:162: PersonalOwnershipLost</failure></testcase><testcase classname="tests.integration.test_personal_brief_generation" name="test_main_session_acquisition_failure_marks_reserved_report_failed" time="1.585" /><testcase classname="tests.integration.test_personal_coordinator" name="test_actual_coordinator_captures_groups_claims_and_publishes_from_empty_tables" time="1.686" /><testcase classname="tests.integration.test_personal_coordinator" name="test_all_feed_failure_is_durable_and_explicit_retry_uses_same_run" time="1.640" /><testcase classname="tests.integration.test_personal_coordinator" name="test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles" time="1.521" /><testcase classname="tests.integration.test_personal_coordinator" name="test_grouping_and_all_seven_observations_commit_atomically_then_retry_resumes" time="1.665" /><testcase classname="tests.integration.test_personal_coordinator" name="test_duplicate_feed_item_does_not_consume_the_last_pending_capacity_slot" time="1.498" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_01_twenty_admitted_ten_pending_and_twenty_frozen" time="1.747" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_02_concurrent_duplicate_capture_and_rolled_back_admission" time="1.629" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_03_round_robin_order_survives_new_sessions" time="1.679" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_03_older_capture_batch_precedes_newer_and_unknown_dates_follow_known" time="1.735" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_04_retained_candidate_survives_rotation_and_disabled_source" time="1.577" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_05_full_two_thousand_queue_pauses_without_requesting_unknown_input" time="9.689" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[False]" time="3.114" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[True]" time="1.592" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_06_midnight_retry_keeps_run_identity_and_charges_actual_admission_day" time="1.692" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_06_lower_daily_ceiling_applies_now_and_frozen_run_ceiling_cannot_grow" time="1.670" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers" time="3.162" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_14_failed_retry_scope_and_exhausted_failure_are_never_implicitly_transferred" time="1.802" /><testcase classname="tests.integration.test_personal_daily_bounds" name="test_p3_13_existing_raw_from_disabled_feed_stays_readable_and_outside_new_scope" time="1.596" /><testcase classname="tests.integration.test_personal_item5_composed" name="test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost" time="1.586"><failure message="services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed">role = 'embedding'
+factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_7b124d91921e429f9592b27ca6612a1e), autoflush=False, expire_on_commit=False)
+
+    def observe_send(role, factory):
+        payload = calls[-1][1]
+        with factory() as session:
+            row = session.scalar(
+                select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+            )
+            run = session.get(PersonalRun, row.run_id)
+            route = PaidRoute.from_mapping(model_route()[role], role=role)
+            assert row.workspace_id == run.workspace_id == workspace_id
+            assert str(row.run_id) == delivery["args"][0]
+&gt;           assert str(run.ownership_token) == delivery["args"][1]
+E           AssertionError: assert 'fcc6af1b-a96...-1c9258240b73' == '448da4dc-b91...-bc335e7c368f'
+E             
+E             - 448da4dc-b919-4181-9ed1-bc335e7c368f
+E             + fcc6af1b-a96e-42e6-9fa0-1c9258240b73
+
+tests/integration/test_personal_item5_composed.py:105: AssertionError
+
+The above exception was the direct cause of the following exception:
+
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x1158c4c20&gt;
+
+    def test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost(
+        monkeypatch,
+    ):
+        with migrated_disposable_engine() as engine:
+            workspace_id, profile_id, _ = _configured_workspace(engine, route=model_route())
+            observed_requests = []
+            delivery = {}
+    
+            def observe_send(role, factory):
+                payload = calls[-1][1]
+                with factory() as session:
+                    row = session.scalar(
+                        select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+                    )
+                    run = session.get(PersonalRun, row.run_id)
+                    route = PaidRoute.from_mapping(model_route()[role], role=role)
+                    assert row.workspace_id == run.workspace_id == workspace_id
+                    assert str(row.run_id) == delivery["args"][0]
+                    assert str(run.ownership_token) == delivery["args"][1]
+                    assert row.attempt == run.attempt == 1
+                    assert run.profile_revision_id == profile_id and run.scopes_frozen_at is not None
+                    assert row.role == role and row.route == route.to_mapping()
+                    assert row.input_token_bound == conservative_payload_token_bound(payload)
+                    assert row.output_token_bound == (0 if role == "embedding" else 1000)
+                    assert row.reserved_usd == route.cost(row.input_token_bound, row.output_token_bound)
+                    assert row.actual_usd is None and row.dispatch_attempt_at is not None
+                    if role == "generation":
+                        snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                        assert snapshot.run_id == run.id and snapshot.profile_revision_id == profile_id
+                        assert snapshot.model_route == model_route()
+                    observed_requests.append(row.id)
+    
+            factory, calls, delegates = _runtime(monkeypatch, engine, on_send=observe_send)
+            deliveries = _capture_production_delivery(monkeypatch, factory)
+            with _client(engine) as client:
+                response = client.post("/api/v1/personal/runs")
+                assert response.status_code == 202, response.text
+                assert len(deliveries) == 1
+                delivery["args"] = deliveries[0][1]
+                assert response.json()["run"]["id"] == delivery["args"][0]
+                assert response.json()["run"]["profile_revision_id"] == str(profile_id)
+                assert response.json()["run"]["state"] == "queued"
+    
+            task = celery_app.tasks[deliveries[0][0]]
+            assert task.name == worker.TASK_NAME and task.run == worker.run_personal_daily_task.run
+&gt;           result = task.run(*delivery["args"])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_item5_composed.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+workers/personal_tasks.py:853: in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workers/personal_tasks.py:830: in execute_personal_task
+    return execute(
+services/personal/runner.py:303: in execute_personal_task
+    result = run_personal_daily(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_id = UUID('6aa14605-31d0-4e76-ae32-5aae603b1724')
+ownership_token = UUID('fcc6af1b-a96e-42e6-9fa0-1c9258240b73')
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_7b124d91921e429f9592b27ca6612a1e), autoflush=False, expire_on_commit=False)
+rss_provider_factory = &lt;function execute_personal_task.&lt;locals&gt;.rss_factory at 0x114ead6c0&gt;
+embedding_provider = &lt;packages.providers.openai_embeddings.OpenAIEmbeddingProvider object at 0x113424830&gt;
+orchestrator_factory = &lt;function execute_personal_task.&lt;locals&gt;.orchestrator_factory at 0x114eadbc0&gt;
+now = datetime.datetime(2026, 10, 4, 9, 23, 25, 69757, tzinfo=datetime.timezone.utc)
+clock = &lt;function run_personal_daily.&lt;locals&gt;.&lt;lambda&gt; at 0x114ead080&gt;
+ai_block_reason = None
+paid_block_reason = &lt;function execute_personal_task.&lt;locals&gt;.&lt;lambda&gt; at 0x114eaf4c0&gt;
+generation = None
+on_acquired = &lt;function execute_personal_task.&lt;locals&gt;.acquired at 0x114eae8e0&gt;
+rotate_token = True
+
+    def run_personal_daily(
+        run_id: uuid.UUID,
+        ownership_token: uuid.UUID,
+        *,
+        session_factory: SessionFactory,
+        rss_provider_factory: RSSProviderFactory,
+        embedding_provider: EmbeddingProvider,
+        orchestrator_factory: OrchestratorFactory,
+        now: datetime.datetime,
+        clock: Clock | None = None,
+        ai_block_reason: str | None = None,
+        paid_block_reason: Callable[[], str | None] | None = None,
+        generation: int | None = None,
+        on_acquired: Callable[[PersonalRun], None] | None = None,
+        rotate_token: bool = False,
+    ) -&gt; PersonalCoordinatorResult:
+        """Run all personal stages, fencing every write transaction by owner token and mode."""
+    
+        now = _utc(now)
+        clock = clock or (lambda: datetime.datetime.now(datetime.UTC))
+        try:
+            check_budget()
+            with session_factory() as session:
+                run = acquire_run(
+                    session,
+                    run_id,
+                    ownership_token,
+                    now=now,
+                    generation=generation,
+                    rotate_token=rotate_token,
+                )
+                ownership_token = run.ownership_token
+                recover_published = _published_recovery_available(session, run)
+                existing_coverage = dict(run.coverage or {})
+                existing_article_count = len(run.enrichment_article_ids)
+                ai_reason = ai_block_reason or _ai_reason(_profile(session, run))
+                for disabled_stage in (
+                    "entity_linking",
+                    "event_embeddings",
+                    "historical_analogies",
+                    "forecasting",
+                ):
+                    _stage(run, disabled_stage, "disabled", reason="disabled_by_profile")
+                scopes_frozen = run.scopes_frozen_at is not None
+                session.commit()
+                session.refresh(run)
+                session.expunge(run)
+    
+            if on_acquired is not None:
+                on_acquired(run)
+            check_budget()
+    
+            if recover_published:
+                report = generate_personal_brief(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    orchestrator_factory=orchestrator_factory,
+                )
+                return PersonalCoordinatorResult(
+                    run_id=run_id,
+                    report=report,
+                    feeds_attempted=int(existing_coverage.get("feeds_attempted") or 0),
+                    feeds_succeeded=int(existing_coverage.get("feeds_succeeded") or 0),
+                    feeds_failed=int(existing_coverage.get("feeds_failed") or 0),
+                    articles_captured=int(existing_coverage.get("articles_captured") or 0),
+                    articles_admitted=existing_article_count,
+                    events_observed=len(report.selected_event_ids),
+                    claims_supported=0,
+                )
+    
+            if scopes_frozen:
+                check_budget()
+                with session_factory() as session:
+                    run = lock_owned_run(session, run_id, ownership_token)
+                    coverage = dict(run.coverage or {})
+                    article_ids = tuple(run.enrichment_article_ids)
+                    admitted_ids = tuple(run.admitted_article_ids)
+                    session.rollback()
+            else:
+                # Existing pending work gets the first admission slots. Capture then fills freed
+                # pending capacity, and a second pass uses any admission allowance still available.
+                _admit_pending(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    admitted_at=_utc(clock()),
+                )
+                coverage = _capture_selected_feeds(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    provider_factory=rss_provider_factory,
+                    clock=clock,
+                )
+                if coverage["feeds_attempted"] &gt; 0 and coverage["feeds_succeeded"] == 0:
+                    _mark_stage_failure(
+                        run_id,
+                        ownership_token,
+                        session_factory=session_factory,
+                        code="all_feeds_failed",
+                    )
+                    raise PersonalCoordinatorError("all configured personal feeds failed")
+                admitted_ids = _admit_pending(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    admitted_at=_utc(clock()),
+                )
+                article_ids = _freeze_enrichment_scope(
+                    run_id,
+                    ownership_token,
+                    admitted_ids,
+                    session_factory=session_factory,
+                    now=_utc(clock()),
+                    ai_block_reason=ai_reason,
+                )
+    
+            if ai_reason is not None:
+                _finish_raw(run_id, ownership_token, session_factory=session_factory, reason=ai_reason)
+                return PersonalCoordinatorResult(
+                    run_id=run_id,
+                    report=None,
+                    feeds_attempted=int(coverage.get("feeds_attempted") or 0),
+                    feeds_succeeded=int(coverage.get("feeds_succeeded") or 0),
+                    feeds_failed=int(coverage.get("feeds_failed") or 0),
+                    articles_captured=int(coverage.get("articles_captured") or 0),
+                    articles_admitted=len(admitted_ids),
+                    events_observed=0,
+                    claims_supported=0,
+                )
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                embedded = embed_unembedded_articles(
+                    session,
+                    _UnlockedEmbeddingProvider(embedding_provider, session, run_id, ownership_token),
+                    embedding_model=embedding_provider.model_name,
+                    embedding_model_version=embedding_provider.model_version,
+                    article_ids=article_ids,
+                )
+                _stage(run, "embedding", "succeeded", articles_embedded=embedded)
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                clustered = cluster_unclustered_articles(
+                    session,
+                    embedding_model=embedding_provider.model_name,
+                    embedding_model_version=embedding_provider.model_version,
+                    article_ids=article_ids,
+                )
+                for capture in session.scalars(
+                    select(PersonalCapture).where(
+                        PersonalCapture.processing_run_id == run.id,
+                        PersonalCapture.article_id.in_(article_ids),
+                    )
+                ):
+                    if (
+                        session.scalar(
+                            select(EventArticle.event_id)
+                            .where(EventArticle.article_id == capture.article_id)
+                            .limit(1)
+                        )
+                        is not None
+                    ):
+                        capture.enrichment_state = "grouped"
+                _stage(
+                    run,
+                    "grouping",
+                    "succeeded",
+                    events_created=clustered.events_created,
+                    articles_clustered=clustered.articles_clustered,
+                )
+                # record_event_observations refreshes the locked identity-map row. Flush the JSON
+                # stage update first so that refresh cannot replace it with the prior database value.
+                session.flush()
+                observations = record_event_observations(session, run.id, ownership_token)
+                _stage(run, "observations", "succeeded", events_observed=len(observations))
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                preparations = prepare_article_claims(session, run.id, ownership_token)
+                supported = sum(item.status == "supported" for item in preparations)
+                _stage(
+                    run,
+                    "claim_preparation",
+                    "succeeded",
+                    supported=supported,
+                    abstained=sum(item.status == "abstained" for item in preparations),
+                )
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                route = (_profile(session, run).settings or {}).get("model_route")
+                if not isinstance(route, dict) or not route:
+                    raise RuntimeError("personal profile has no explicit model route")
+                snapshot = freeze_brief_snapshot(
+                    session,
+                    run.id,
+                    ownership_token,
+                    model_route=route,
+                    prepared_at=_utc(clock()),
+                )
+                _stage(run, "snapshot", "succeeded", snapshot_id=str(snapshot.id))
+                session.commit()
+    
+            report = generate_personal_brief(
+                run_id,
+                ownership_token,
+                session_factory=session_factory,
+                orchestrator_factory=orchestrator_factory,
+                paid_block_reason=paid_block_reason,
+            )
+            return PersonalCoordinatorResult(
+                run_id=run_id,
+                report=report,
+                feeds_attempted=int(coverage.get("feeds_attempted") or 0),
+                feeds_succeeded=int(coverage.get("feeds_succeeded") or 0),
+                feeds_failed=int(coverage.get("feeds_failed") or 0),
+                articles_captured=int(coverage.get("articles_captured") or 0),
+                articles_admitted=len(admitted_ids),
+                events_observed=len(observations),
+                claims_supported=supported,
+            )
+        except RuntimeCancelled:
+            with bind_budget(None):
+                _mark_stage_failure(
+                    run_id, ownership_token, session_factory=session_factory, code="runtime_cancelled"
+                )
+            raise
+        except PersonalCoordinatorError:
+            raise
+        except Exception as exc:
+            try:
+                propagate_fatal(exc)
+            except RuntimeCancelled:
+                with bind_budget(None):
+                    _mark_stage_failure(
+                        run_id,
+                        ownership_token,
+                        session_factory=session_factory,
+                        code="runtime_cancelled",
+                    )
+                raise
+            from services.personal.spending import PaidWorkBlocked
+    
+            if isinstance(exc, PaidWorkBlocked) and exc.code in {
+                "allowance_reached",
+                "ai_disabled",
+                "configuration_missing",
+            }:
+                _finish_raw(run_id, ownership_token, session_factory=session_factory, reason=exc.code)
+                check_budget()
+                with session_factory() as session:
+                    deferred = session.get(PersonalRun, run_id)
+                    retained = deferred.coverage or {}
+                    return PersonalCoordinatorResult(
+                        run_id=run_id,
+                        report=None,
+                        feeds_attempted=int(retained.get("feeds_attempted") or 0),
+                        feeds_succeeded=int(retained.get("feeds_succeeded") or 0),
+                        feeds_failed=int(retained.get("feeds_failed") or 0),
+                        articles_captured=int(retained.get("articles_captured") or 0),
+                        articles_admitted=len(deferred.admitted_article_ids),
+                        events_observed=len(deferred.event_ids),
+                        claims_supported=0,
+                    )
+            _mark_stage_failure(
+                run_id,
+                ownership_token,
+                session_factory=session_factory,
+                code="personal_workflow_failed",
+            )
+&gt;           raise PersonalCoordinatorError("personal daily workflow failed") from exc
+E           services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed
+
+services/personal/coordinator.py:1065: PersonalCoordinatorError</failure></testcase><testcase classname="tests.integration.test_personal_item5_composed" name="test_missing_route_api_run_keeps_raw_reader_available_without_paid_dispatch" time="1.713" /><testcase classname="tests.integration.test_personal_item5_composed" name="test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[scope_not_frozen]" time="1.581" /><testcase classname="tests.integration.test_personal_item5_composed" name="test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[route_changed]" time="1.538" /><testcase classname="tests.integration.test_personal_item5_composed" name="test_reserved_dispatch_rejects_rotated_owner_and_retains_original_obligation" time="1.371" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_registered_ordinary_worker_publishes_through_durable_guard[None]" time="1.782" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_registered_ordinary_worker_publishes_through_durable_guard[embedding_retry]" time="2.547" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_registered_ordinary_worker_publishes_through_durable_guard[schema_retry]" time="1.807" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[False-True-True-1-ai_disabled]" time="1.349" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-False-True-1-paid_runtime_disabled]" time="1.554" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-False-1-configuration_missing]" time="1.528" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0-allowance_reached]" time="1.682" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0.0000001-allowance_reached]" time="1.461" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_generation_allowance_block_keeps_report_unpublished" time="1.537" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_gate_off_raw_articles_transfer_to_a_later_assisted_run" time="1.932" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_api_queued_other_run_obligation_competes_with_ordinary_worker" time="1.842" /><testcase classname="tests.integration.test_personal_paid_worker" name="test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty" time="2.000" /><testcase classname="tests.integration.test_personal_phase2" name="test_owner_selection_today_sources_and_saved_persistence_on_migrated_database" time="1.339" /><testcase classname="tests.integration.test_personal_phase2" name="test_report_link_trigger_rejects_unlinked_personal_report" time="1.383" /><testcase classname="tests.integration.test_personal_phase2" name="test_nonempty_personal_downgrade_refuses_data_loss" time="2.182"><failure message="AssertionError: assert 'Paid usage and unresolved reservations must be retained' in 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n'&#10; +  where 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n' = CompletedProcess(args=['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-m', 'al...untimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n').stderr">def test_nonempty_personal_downgrade_refuses_data_loss() -&gt; None:
+        with migrated_disposable_engine() as engine:
+            with Session(engine) as session:
+                ensure_workspace(session)
+                session.commit()
+            env = dict(os.environ)
+            env["DATABASE_URL"] = engine.url.render_as_string(hide_password=False)
+            result = subprocess.run(
+                [sys.executable, "-m", "alembic", "downgrade", "0019"],
+                cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+            assert result.returncode != 0
+&gt;           assert "Paid usage and unresolved reservations must be retained" in result.stderr
+E           AssertionError: assert 'Paid usage and unresolved reservations must be retained' in 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n'
+E            +  where 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n' = CompletedProcess(args=['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-m', 'al...untimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n').stderr
+
+tests/integration/test_personal_phase2.py:314: AssertionError</failure></testcase><testcase classname="tests.integration.test_personal_phase3_closeout" name="test_two_concurrent_http_retries_rotate_one_attempt_and_preserve_frozen_admissions" time="1.436" /><testcase classname="tests.integration.test_personal_phase3_closeout" name="test_http_old_caller_dates_cannot_backdate_run_or_reopen_same_day_admission" time="1.413" /><testcase classname="tests.integration.test_personal_phase3_closeout" name="test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]" time="1.929" /><testcase classname="tests.integration.test_personal_phase3_closeout" name="test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]" time="1.784" /><testcase classname="tests.integration.test_personal_phase3_closeout" name="test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]" time="1.667" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]" time="1.695" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-False-ai_disabled]" time="1.521" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-True-configuration_missing]" time="1.594" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_grouped_article_replaces_raw_card_and_original_detail_remains_readable" time="1.592" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_partial_feed_failure_does_not_claim_a_disabled_provider_failed" time="1.567" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_budget_block_retains_readable_transferable_articles_without_repeated_admission" time="1.720" /><testcase classname="tests.integration.test_personal_reading_bounds" name="test_required_provider_failure_stays_failed_with_retained_raw_content" time="1.659" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_same_date_start_is_idempotent_under_concurrency" time="1.504" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_la_logical_date_retry_preserves_scope_and_stops_after_three_attempts" time="1.705" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_preloaded_stale_run_and_writer_mode_cannot_reclaim_ownership" time="1.336" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_seven_observations_survive_terminal_failure_before_snapshot" time="1.519" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_article_scope_cannot_be_owned_by_two_active_or_retryable_runs" time="1.531" /><testcase classname="tests.integration.test_personal_run_claim_snapshot" name="test_fresh_articles_produce_exact_claim_evidence_paths_and_snapshot_rejects_bad_span" time="1.669" /><testcase classname="tests.integration.test_personal_settings" name="test_settings_revisions_preserve_run_scope_and_reject_timezone_change" time="1.729" /><testcase classname="tests.integration.test_personal_settings" name="test_settings_api_is_explicit_and_raw_readiness_survives_missing_ai_configuration" time="1.514" /><testcase classname="tests.integration.test_personal_settings" name="test_draft_feed_is_inactive_until_explicit_settings_save_and_never_reactivates_legacy_source" time="1.477" /><testcase classname="tests.integration.test_personal_spending" name="test_competing_reservations_and_explicit_next_date_share_one_month_allowance" time="1.537" /><testcase classname="tests.integration.test_personal_spending" name="test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent" time="1.613" /><testcase classname="tests.integration.test_personal_spending" name="test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month" time="1.558" /><testcase classname="tests.integration.test_personal_spending" name="test_explicit_month_handoff_fences_prior_owner_and_cancel_only_before_send" time="1.410" /><testcase classname="tests.integration.test_personal_spending" name="test_month_handoff_revalidates_retained_next_bucket_cost_before_send" time="1.472" /><testcase classname="tests.integration.test_personal_spending" name="test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run" time="1.688" /><testcase classname="tests.integration.test_personal_spending" name="test_independent_commit_survives_business_rollback_without_row_lock_deadlock" time="1.476" /><testcase classname="tests.integration.test_personal_spending" name="test_dispatch_handoff_fences_concurrent_ownership_changes[retry]" time="1.688" /><testcase classname="tests.integration.test_personal_spending" name="test_dispatch_handoff_fences_concurrent_ownership_changes[finish]" time="1.699" /><testcase classname="tests.integration.test_personal_spending" name="test_legacy_costs_import_once_and_unknown_blocks_paid_enablement" time="1.364" /><testcase classname="tests.integration.test_personal_spending" name="test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count" time="1.478" /><testcase classname="tests.integration.test_personal_spending" name="test_provider_embedding_retry_has_separate_durable_reservations" time="1.480" /><testcase classname="tests.integration.test_personal_spending" name="test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit" time="1.508" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration" time="1.524" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import" time="1.491" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_spending_metadata_without_active_profile_or_paid_records_is_explicit" time="1.408" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_same_period_charges_retain_both_price_revisions_for_the_same_provider_and_model" time="1.531" /><testcase classname="tests.integration.test_personal_worker" name="test_registered_worker_task_runs_actual_offline_coordinator_and_publishes" time="1.637" /><testcase classname="tests.integration.test_personal_worker" name="test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry" time="1.440"><failure message="AssertionError: assert {'code': 'wor...ryable': True} == {'code': 'wor...e available.'}&#10;  &#10;  Omitting 2 identical items, use -vv to show&#10;  Left contains 1 more item:&#10;  {'retryable': True}&#10;  Use -v to get more diff">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x10e2af070&gt;
+
+    def test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -&gt; None:
+        with migrated_disposable_engine() as engine:
+            run_id, token, workspace_id = _queued_run(engine)
+            _patch_runtime(monkeypatch, engine, fixture_path="")
+    
+            with pytest.raises(ValueError, match="PERSONAL_OFFLINE_FIXTURE_PATH"):
+                personal_tasks.run_personal_daily_task.run(str(run_id), str(token))
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                assert run.state == "failed"
+&gt;               assert run.error == {
+                    "code": "worker_setup_failed",
+                    "message": "Personal update could not start; an explicit retry may be available.",
+                }
+E               AssertionError: assert {'code': 'wor...ryable': True} == {'code': 'wor...e available.'}
+E                 
+E                 Omitting 2 identical items, use -vv to show
+E                 Left contains 1 more item:
+E                 {'retryable': True}
+E                 Use -v to get more diff
+
+tests/integration/test_personal_worker.py:354: AssertionError</failure></testcase><testcase classname="tests.integration.test_personal_worker" name="test_worker_returns_partial_state_for_partial_offline_capture" time="1.608" /><testcase classname="tests.integration.test_personal_worker" name="test_raw_worker_needs_no_model_route_credentials_or_fixture" time="1.527" /><testcase classname="tests.integration.test_personal_worker" name="test_ordinary_live_profile_cannot_start_outside_dedicated_smoke" time="1.507" /><testcase classname="tests.integration.test_personal_worker" name="test_dedicated_live_run_cannot_consume_an_ordinary_retry_attempt" time="1.438" /><testcase classname="tests.integration.test_personal_worker" name="test_dedicated_live_smoke_uses_real_http_adapters_and_guarded_full_workflow[False]" time="1.634" /><testcase classname="tests.integration.test_personal_worker" name="test_dedicated_live_smoke_uses_real_http_adapters_and_guarded_full_workflow[True]" time="1.609" /><testcase classname="tests.integration.test_personal_worker" name="test_live_smoke_preflight_rejects_unsupported_or_ambiguous_paid_routes" time="0.010" /><testcase classname="tests.integration.test_personal_worker" name="test_live_smoke_restart_with_bound_ledger_fails_before_database_or_io" time="0.010" /><testcase classname="tests.integration.test_personal_worker" name="test_live_smoke_fresh_database_guard_includes_claim_and_evidence_tables" time="1.592" /><testcase classname="tests.integration.test_personal_writer_mode" name="test_personal_mode_rejects_pipeline_queue_and_direct_ingestion_before_provider" time="1.415" /><testcase classname="tests.integration.test_personal_writer_mode" name="test_legacy_direct_writer_holds_mode_lock_through_provider_and_commit" time="1.665" /><testcase classname="tests.integration.test_personal_writer_mode" name="test_manual_report_job_is_durable_and_a_transient_worker_failure_retries" time="1.339" /></testsuite></testsuites>

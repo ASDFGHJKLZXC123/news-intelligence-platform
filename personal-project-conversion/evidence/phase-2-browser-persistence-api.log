@@ -1,0 +1,212 @@
+{"timestamp": "2026-09-09T06:59:00.997838+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [90643]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57798 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57824 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57826 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57820 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57824 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57818 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57820 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57826 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57825 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57816 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57824 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57818 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57824 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57816 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57818 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57853 - "OPTIONS /api/v1/personal/workspace/owner HTTP/1.1" 200 OK
+{"timestamp": "2026-09-09T06:59:36.478640+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "ddfc18fd-37c5-4773-8586-18f697f0e821", "path": "/api/v1/personal/workspace/owner"}
+INFO:     127.0.0.1:57853 - "PUT /api/v1/personal/workspace/owner HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:57880 - "PUT /api/v1/personal/workspace/owner HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57884 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57880 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57883 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57990 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57989 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57988 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57990 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57988 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57989 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58004 - "OPTIONS /api/v1/personal/saved/entries/b43e4be2-e935-4784-b246-5d0cb3c6819b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58004 - "DELETE /api/v1/personal/saved/entries/b43e4be2-e935-4784-b246-5d0cb3c6819b HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:58008 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58004 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58007 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58008 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58004 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58007 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58015 - "OPTIONS /api/v1/personal/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58015 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:58022 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58021 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58015 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58015 - "GET /api/v1/personal/runs/fda6c6b9-d734-4a61-aea3-c972981943eb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58022 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58015 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58021 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58039 - "POST /api/v1/personal/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58043 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58039 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58039 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d/sources?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb&limit=10&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58155 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58156 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.md HTTP/1.1" 200 OK
+{"timestamp": "2026-09-09T07:05:44.358388+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.358526+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.358578+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.358888+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "FFTM dropped", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.359308+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "GDEF dropped", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.359357+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.363017+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added gid0 to subset", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.363065+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added first four glyphs to subset", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.363122+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closing glyph list over 'glyf': 73 glyphs before", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.363157+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.445326+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.445432+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closed glyph list over 'glyf': 73 glyphs after", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.445465+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.445529+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.446852+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Retaining 73 glyphs", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.447401+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.447437+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hhea subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.447461+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.447486+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.448307+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hmtx subsetted", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.458759+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap subsetted", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.458832+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "loca subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.458943+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post subsetted", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.458973+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "gasp subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.458999+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name subsetting not needed", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.467775+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf subsetted", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.469578+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.470745+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 Unicode ranges pruned: [0, 1, 31]", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.470848+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 CodePage ranges pruned: [0]", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.471215+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+{"timestamp": "2026-09-09T07:05:44.472458+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name pruned", "request_id": "3f06b4df-ef20-4a32-abb6-a5d5353a320c"}
+INFO:     127.0.0.1:58157 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.pdf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58159 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/claims/bb6a002e-a71d-53de-8d14-ddbdb5936d93/evidence HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63319 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63321 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63315 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63320 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63321 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63319 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63313 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63311 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63320 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63315 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63321 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63321 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63315 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d/sources?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb&limit=10&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63416 - "OPTIONS /api/v1/personal/saved/8b20ea66-60c4-4d8c-a431-2bdf8366af9d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63416 - "PUT /api/v1/personal/saved/8b20ea66-60c4-4d8c-a431-2bdf8366af9d HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [90643]
+{"timestamp": "2026-09-09T18:31:12.203581+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [39520]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63447 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63468 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63470 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63464 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63469 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63468 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63470 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63462 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63460 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63464 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63468 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63469 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63469 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63468 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d/sources?run_id=fda6c6b9-d734-4a61-aea3-c972981943eb&limit=10&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63489 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63488 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63487 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+{"timestamp": "2026-09-09T18:31:45.668849+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "396821dc-73c9-4602-aed2-c5b968cd33b5", "path": "/api/v1/personal/saved/8b20ea66-60c4-4d8c-a431-2bdf8366af9d"}
+INFO:     127.0.0.1:63497 - "DELETE /api/v1/personal/saved/8b20ea66-60c4-4d8c-a431-2bdf8366af9d HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:63504 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63505 - "GET /api/v1/personal/events/8b20ea66-60c4-4d8c-a431-2bdf8366af9d/sources?limit=10&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63570 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63569 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63567 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63567 - "DELETE /api/v1/personal/saved/8b20ea66-60c4-4d8c-a431-2bdf8366af9d HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:63570 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63569 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63567 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63567 - "GET /api/v1/personal/briefs?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63589 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63598 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/claims/bb6a002e-a71d-53de-8d14-ddbdb5936d93/evidence HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63646 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.md HTTP/1.1" 200 OK
+{"timestamp": "2026-09-09T18:34:23.195636+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.195803+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.195858+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.196236+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "FFTM dropped", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.197586+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "GDEF dropped", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.197697+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.201688+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added gid0 to subset", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.201732+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added first four glyphs to subset", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.201788+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closing glyph list over 'glyf': 73 glyphs before", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.201815+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.201970+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.202050+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closed glyph list over 'glyf': 73 glyphs after", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.202070+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.202130+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.203418+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Retaining 73 glyphs", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.203886+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.203910+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hhea subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.203932+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.203963+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.204915+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hmtx subsetted", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.214247+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap subsetted", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.214304+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "loca subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.214398+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post subsetted", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.214421+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "gasp subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.214444+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name subsetting not needed", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.221244+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf subsetted", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.221487+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.221631+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 Unicode ranges pruned: [0, 1, 31]", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.221708+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 CodePage ranges pruned: [0]", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.222050+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+{"timestamp": "2026-09-09T18:34:23.222196+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name pruned", "request_id": "92ef72b7-3495-4f59-91a5-bb17bad8650d"}
+INFO:     127.0.0.1:63646 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.pdf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63678 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.md HTTP/1.1" 200 OK
+{"timestamp": "2026-09-09T18:35:42.301263+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.301388+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.301439+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.301467+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "FFTM dropped", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.301489+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "GDEF dropped", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.301529+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.304826+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added gid0 to subset", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.304872+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added first four glyphs to subset", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.304940+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closing glyph list over 'glyf': 73 glyphs before", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.304969+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.305038+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.305100+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closed glyph list over 'glyf': 73 glyphs after", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.305120+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004C', 'uni004E', 'uni004F', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.305177+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.306496+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Retaining 73 glyphs", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.306974+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.306999+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hhea subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.307019+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.307050+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.307913+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hmtx subsetted", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.317157+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap subsetted", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.317198+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "loca subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.317315+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post subsetted", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.317337+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "gasp subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.317358+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name subsetting not needed", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.323833+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf subsetted", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.324045+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.324154+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 Unicode ranges pruned: [0, 1, 31]", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.324224+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 CodePage ranges pruned: [0]", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.324581+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+{"timestamp": "2026-09-09T18:35:42.324708+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name pruned", "request_id": "fd57155e-610d-4cfa-b177-396c3ee222bc"}
+INFO:     127.0.0.1:63678 - "GET /api/v1/personal/briefs/50cf2f44-9282-4bde-a145-60f2de5aede0/export.pdf HTTP/1.1" 200 OK

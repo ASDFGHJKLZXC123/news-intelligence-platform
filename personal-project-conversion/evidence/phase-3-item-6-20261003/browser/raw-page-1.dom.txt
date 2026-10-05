@@ -1,0 +1,260 @@
+CAPTURE raw-page-1- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Today" [level=1]
+  - generic: Readable results for 2026-09-30 · America/Los_Angeles
+  - button "Refresh display":
+    - text: Refresh display
+  - button "Request today’s update":
+    - text: Request today’s update
+  - status:
+    - strong: A newer update did not finish cleanly
+    - generic: Partially failed
+    - paragraph: Run date 2026-10-01. The update is available with incomplete feed coverage.
+    - generic: Last status read Oct 3, 2026, 06:00:58 PM PDT
+    - button "Retry this run"
+  - region "Retained RSS articles":
+    - generic: Readable without AI
+    - heading "Retained RSS articles · 26" [level=2]
+    - button "Refresh articles"
+    - paragraph: Admitted articles awaiting grouping stay readable here. Grouped articles appear in their story and remain accessible by their original article link.
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 08" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 10:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/8?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 06" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 12:00:57 PM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/6?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 11" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 07:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/11?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 11" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 07:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/11?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 10" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 08:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/10?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 12" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 06:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/12?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 02" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 04:00:57 PM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/2?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 07" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 11:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/7?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 10" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 08:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/10?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 policy: retained raw article 12" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 06:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/12?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 04" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 02:00:57 PM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/4?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic item 6 technology: retained raw article 05" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 01:00:57 PM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: The update is available with incomplete feed coverage."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/5?utm_source=item6
+    - generic "Results pages":
+      - generic: 1–12 of 26
+      - button "Previous" [disabled]
+      - button "Next"
+  - generic: 2026-09-30
+  - heading "Displayed update" [level=3]
+  - generic: Succeeded
+  - generic: Attempt 1 of 3
+  - generic: Last successful update
+  - generic: Oct 3, 2026, 06:00:57 PM PDT
+  - generic: Run ID
+  - generic: 5604c516-d77a-4ca3-b15f-cfbb4fc49509
+  - generic: Settings revision
+  - generic: "5"
+  - generic: Article selection frozen
+  - generic: Sep 30, 2026, 06:01:13 PM PDT
+  - heading "Capture coverage" [level=3]
+  - generic: Capture started
+  - generic: Sep 30, 2026, 06:01:08 PM PDT
+  - generic: Capture ended
+  - generic: Sep 30, 2026, 06:01:11 PM PDT
+  - generic: Feeds configured
+  - generic: "1"
+  - generic: Feeds succeeded
+  - generic: "1"
+  - generic: Feeds failed
+  - generic: "0"
+  - generic: Feeds paused
+  - generic: "0"
+  - generic: Articles admitted
+  - generic: "1"
+  - generic: Pending items
+  - generic: 0 of 2000 capacity
+  - generic: Selected for enrichment
+  - generic: "1"
+  - generic: Grouped articles
+  - generic: "1"
+  - generic: Scope
+  - generic: Succeeded
+  - generic: Capture
+  - generic: Succeeded
+  - generic: Grouping
+  - generic: Succeeded
+  - generic: Snapshot
+  - generic: Succeeded
+  - generic: Admission
+  - generic: Succeeded
+  - generic: Embedding
+  - generic: Succeeded
+  - generic: Forecasting
+  - generic: Disabled · Disabled by profile
+  - generic: Observations
+  - generic: Succeeded
+  - generic: Entity Linking
+  - generic: Disabled · Disabled by profile
+  - generic: Event Embeddings
+  - generic: Disabled · Disabled by profile
+  - generic: Claim Preparation
+  - generic: Succeeded
+  - generic: Historical Analogies
+  - generic: Disabled · Disabled by profile
+  - generic: Search stored stories
+  - textbox "Search stored stories":
+    - /placeholder: Title or summary
+  - generic: Update
+  - combobox "Update":
+    - option "Latest readable result" [selected]
+    - option "2026-10-01 · Partially failed · attempt 1"
+    - option "2026-09-30 · Succeeded · attempt 1"
+  - checkbox "Saved only"
+  - generic: Saved only
+  - button "Apply"
+  - button "Reset"
+  - generic: Stored results
+  - heading "1 grouped story" [level=2]
+  - article:
+    - generic: Grouped story
+    - 'heading "Synthetic: Agency approves browser verification project" [level=2]'
+    - paragraph: The agency confirmed the browser verification project was approved.
+    - generic: 1 feed sources
+    - generic: 1 articles
+    - generic: Latest known publication Sep 30, 2026, 05:00:57 PM PDT
+    - button "Saved" [pressed]:
+      - text: Saved
+  - generic "Local access"

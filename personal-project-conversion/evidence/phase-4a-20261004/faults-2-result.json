@@ -1,0 +1,12 @@
+{
+  "exit_code": 0,
+  "inventory_unchanged": true,
+  "protected_unchanged": true,
+  "source_drift": [
+    "services/ingestion/http_provider.py",
+    "services/personal/cli.py",
+    "services/personal/rss_runtime.py",
+    "services/personal/runner.py",
+    "tests/unit/test_personal_runtime_process.py"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "container_id": "78365ec05b42690e4d723a92ff0d953eab3afeefd3a2c01c0689879662d4244d",
+  "container_name": "nip-phase2-live-20260919_8cf55cfa",
+  "database_name": "nip_phase2_live_20260919_8cf55cfa",
+  "state_dir": "/tmp/nip-phase2-live-20260919_8cf55cfa",
+  "evidence_dir": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-2-live-20260919",
+  "verification_id": "8cf55cfa-8162-436b-bb14-2430636fdd34",
+  "created_at": "2026-09-20T06:54:42.980274+00:00",
+  "port": 63406
+}

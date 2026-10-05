@@ -245,6 +245,7 @@ export type EvidenceSource = {
   url?: string;
   publishedAt?: string;
   credibilityScore?: number;
+  excerpt?: string;
   relatedClaims: string[];
 };
 
@@ -364,6 +365,8 @@ export type EventCard = {
   primaryLocation?: string;
   sourceCount: number;
   articleCount: number;
+  earliestPublishedAt?: string;
+  latestPublishedAt?: string;
   firstSeenAt: string;
   lastUpdatedAt: string;
   whyItMatters: string;
@@ -493,14 +496,20 @@ export type AdapterBlockQuality = {
   shown?: number;
 };
 
-/** Snapshot-level runtime metadata. `mode` is "api" when the backend was
-    reachable (block-by-block merge) or "demo" for the full fixture fallback. */
+/** Snapshot-level runtime metadata. Real mode never reads fixtures; demo is an
+    explicit read-only fixture display. */
 export type AdapterRuntime = {
-  mode: "api" | "demo";
+  mode: "real" | "demo";
   apiBase: string;
   now: string;
   degraded: boolean;
+  loading?: boolean;
+  requestFailed?: boolean;
+  stale?: boolean;
   reason?: string;
+  sampleAsOf?: string;
+  fetchAttemptedAt?: string | null;
+  lastSuccessfulFetchAt?: string | null;
   truncated?: { endpoint: string; total: number; shown: number }[];
 };
 

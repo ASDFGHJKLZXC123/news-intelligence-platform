@@ -1,0 +1,76 @@
+CAPTURE raw-detail-known-final- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - article:
+    - generic: Retained RSS article
+    - generic: Disabled by profile
+    - 'heading "Synthetic item 6 technology: retained raw article 08" [level=2]'
+    - generic: Synthetic item 6 technology feed
+    - generic: Published Oct 1, 2026, 10:00:57 AM PDT
+    - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+    - generic: Captured
+    - generic: Oct 1, 2026, 06:01:12 PM PDT
+    - generic: Admitted
+    - generic: Oct 1, 2026, 06:01:14 PM PDT
+    - paragraph: "Processing: The update is available with incomplete feed coverage."
+    - link "Open original source":
+      - /url: https://offline.personal.test/item6/technology/8?utm_source=item6- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Saved" [level=1]
+  - generic: Stories saved for your local profile.
+  - button "Refresh display" [disabled]:
+    - text: Refresh display
+  - generic: Reading saved stories
+  - generic: Read-only · all owners and item types
+  - heading "Legacy saved items" [level=3]
+  - paragraph: These records remain in their original owner and item-type groups. Personal saving does not reassign or convert them.
+  - text: No legacy saved items.
+  - generic "Local access"

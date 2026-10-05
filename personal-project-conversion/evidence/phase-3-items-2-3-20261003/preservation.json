@@ -1,0 +1,42 @@
+{
+  "baseline_file_count": 831,
+  "unchanged_baseline_file_count": 827,
+  "changed_baseline_files": [
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/evidence/phase-3.md",
+    "services/personal/spending.py",
+    "tests/integration/test_daily_pipeline_vertical_slice.py"
+  ],
+  "added_scoped_files": [
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/README.md",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-files.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-spending-resources.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-spending.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-status.txt",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-vertical-resources.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-vertical.diff",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/baseline-vertical.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/checks.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/diff-check.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/final-integration-resources.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/final-integration.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/interim-integration-resources.json",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/interim-integration.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/lint.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/spending-change.diff",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/unit.log",
+    "personal-project-conversion/evidence/phase-3-items-2-3-20261003/verify.py",
+    "tests/integration/test_personal_spending_metadata.py"
+  ],
+  "unexpected_changes": [],
+  "delivered_source_sha256": {
+    "personal-project-conversion/03-bounded-daily-use.md": "77eca17b8687b64a0709af7f90b33ae17df71b5b6ffbb8050a9b665a4d655d99",
+    "personal-project-conversion/evidence/phase-3.md": "db9c4eeff6540261a9dbc617e17864ede5d9aa1a080c04c8be349d58d4a3f3ee",
+    "services/personal/spending.py": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+    "tests/integration/test_daily_pipeline_vertical_slice.py": "6685d7a3fa1f9f78def3f0734e867df3a62f969a8ff4fd055522de0ce39be281",
+    "tests/integration/test_personal_spending_metadata.py": "e6f58434f2d84d59eda5abee5703556e9eb85fe6f7b2237022154bed44a880b4"
+  },
+  "retention_guard_unchanged": true,
+  "ordinary_worker_unchanged": true,
+  "historical_stage6_selection_tests_unchanged": true
+}

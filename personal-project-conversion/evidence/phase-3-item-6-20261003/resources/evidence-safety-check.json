@@ -1,0 +1,6 @@
+{
+  "old_throwaway_key_absent": true,
+  "docker_environment_not_retained": true,
+  "database_credentials_omitted_from_safe_manifests": true,
+  "no_resource_mutations": true
+}

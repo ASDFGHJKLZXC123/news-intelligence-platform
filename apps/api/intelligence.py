@@ -22,7 +22,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import Select, Text, and_, any_, case, cast, func, or_, select
+from sqlalchemy import Select, Text, and_, any_, case, cast, exists, func, or_, select
 from sqlalchemy.orm import Session, aliased
 
 from db.base import get_session
@@ -46,6 +46,7 @@ from db.models import (
     IndustryRiskRollup,
     Job,
     LLMRun,
+    PersonalClaimPreparation,
     Report,
     ReportSection,
     RiskLevel,
@@ -55,6 +56,7 @@ from db.models import (
     WatchlistItem,
     risk_level_for_score,
 )
+from db.models.personal import PERSONAL_REPORT_TYPE
 from packages.config.settings import get_settings
 from services.alerts import AlertLifecycleService, SQLAlchemyAlertRepository
 from services.alerts.supersession import SupersessionError, supersede_with_broader_alert
@@ -77,6 +79,13 @@ from services.reports.lifecycle import (
 )
 from services.reports.repository import DAILY_BRIEF_REPORT_TYPE, EVENT_RISK_TARGET_TYPE
 from services.reports.selection import PUBLISHED_STATUS
+from services.writer_mode import (
+    LegacyWriterModeConflict,
+    mark_legacy_daily_brief_delivery_failed,
+    queue_legacy_daily_brief,
+    require_legacy_maintenance_mode,
+    require_legacy_writer_mode,
+)
 
 router = APIRouter(tags=["intelligence"])
 
@@ -1860,10 +1869,11 @@ class IntelligenceRepository:
             )
         has_newer_published = has_newer_published.exists()
         stmt = stmt.where(
+            Report.report_type != PERSONAL_REPORT_TYPE,
             or_(
                 Report.report_type != DAILY_BRIEF_REPORT_TYPE,
                 and_(Report.status == PUBLISHED_STATUS, ~has_newer_published),
-            )
+            ),
         )
         reports = list(self.session.execute(stmt).scalars().all())
         if not reports:
@@ -1885,17 +1895,22 @@ class IntelligenceRepository:
             sections_by_report[section.report_id].append(section)
         return [(report, sections_by_report[report.id]) for report in reports]
 
-    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
-        """Whether a published, explicitly descriptive-only report exposes ``claim_id``."""
+    def claim_is_referenced_by_descriptive_report(
+        self, claim_id: uuid.UUID, *, descriptive_only: bool = True
+    ) -> bool:
+        """Whether a published legacy report is allowed to expose ``claim_id``."""
 
+        filters = [
+            Report.status == PUBLISHED_STATUS,
+            Report.report_type != PERSONAL_REPORT_TYPE,
+            claim_id == any_(ReportSection.evidence_refs),
+        ]
+        if descriptive_only:
+            filters.append(Report.content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY)
         stmt = (
             select(ReportSection.id)
             .join(Report, Report.id == ReportSection.report_id)
-            .where(
-                Report.status == PUBLISHED_STATUS,
-                Report.content_policy == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY,
-                claim_id == any_(ReportSection.evidence_refs),
-            )
+            .where(*filters)
             .limit(1)
         )
         return self.session.execute(stmt).scalars().first() is not None
@@ -1912,10 +1927,31 @@ class IntelligenceRepository:
         article body/summary never cross the boundary whole: only ``left(col, MAX+1)`` and the true
         column length are read, from which a deterministic <= ``MAX_EXCERPT_CHARS`` snippet is
         derived (summary first, then body). ``raw_ref``/``metadata`` are never selected. All
-        support types are returned (supports/contradicts/...); nothing is filtered or fabricated.
+        Legacy support types are returned (supports/contradicts/...). Support pairs created by the
+        personal workflow are excluded because their immutable citation surface is report-scoped.
         """
         summary_head = func.left(Article.summary, MAX_EXCERPT_CHARS + 1)
         body_head = func.left(Article.body, MAX_EXCERPT_CHARS + 1)
+        personal_owned_evidence = exists(
+            select(PersonalClaimPreparation.id).where(
+                PersonalClaimPreparation.claim_id == ClaimEvidence.claim_id,
+                PersonalClaimPreparation.evidence_item_id == ClaimEvidence.evidence_item_id,
+                # CORE-01 creates only a ``supports`` pair. A legacy contradiction or other
+                # independently authored relationship may share the same claim/evidence IDs and
+                # must remain visible under its own support type.
+                ClaimEvidence.support_type == "supports",
+                or_(
+                    PersonalClaimPreparation.validation["support_created_by_personal"].astext
+                    == "true",
+                    # Rows made by the first Phase 2 implementation predate the explicit
+                    # support-pair marker. A newly-created evidence item could not already have a
+                    # legacy ClaimEvidence pair while the single writer fence was held, so this
+                    # retained marker is a safe compatibility signal for those rows.
+                    PersonalClaimPreparation.validation["evidence_created_by_personal"].astext
+                    == "true",
+                ),
+            )
+        )
         stmt = (
             select(
                 ClaimEvidence.support_type,
@@ -1946,7 +1982,7 @@ class IntelligenceRepository:
                 ),
             )
             .outerjoin(Source, Source.id == Article.source_id)
-            .where(ClaimEvidence.claim_id == claim_id)
+            .where(ClaimEvidence.claim_id == claim_id, ~personal_owned_evidence)
             .order_by(
                 EvidenceItem.published_at.desc().nullslast(),
                 EvidenceItem.id,
@@ -2107,10 +2143,13 @@ class QueuedBrief:
     queue: str
 
 
-def enqueue_generate_daily_brief(brief_date: datetime.date) -> QueuedBrief:
+def enqueue_generate_daily_brief(
+    brief_date: datetime.date, *, task_id: uuid.UUID, legacy_job_id: uuid.UUID
+) -> QueuedBrief:
     """Enqueue the accepted ``generate_daily_brief`` Celery task (ADR 0009) by name, asynchronously.
 
-    Opens no database and no Redis and never calls the coordinator: it hands the canonical
+    Opens no database and no Redis and never calls the coordinator: after the API has committed a
+    durable queue row, it hands the canonical
     ``YYYY-MM-DD`` to the broker on ``QUEUE_PIPELINE`` and returns the task identity. The
     coordinator (run by the worker) allocates a *new* version through its existing lifecycle
     semantics; this never mutates or reuses a prior report. Imported lazily so importing this
@@ -2120,16 +2159,19 @@ def enqueue_generate_daily_brief(brief_date: datetime.date) -> QueuedBrief:
     from workers.report_tasks import TASK_NAME
 
     async_result = celery_app.send_task(
-        TASK_NAME, args=[brief_date.isoformat()], queue=QUEUE_PIPELINE
+        TASK_NAME,
+        args=[brief_date.isoformat(), str(legacy_job_id)],
+        queue=QUEUE_PIPELINE,
+        task_id=str(task_id),
     )
     return QueuedBrief(task_id=str(async_result.id), task_name=TASK_NAME, queue=QUEUE_PIPELINE)
 
 
-def get_brief_enqueuer() -> Callable[[datetime.date], QueuedBrief]:
+def get_brief_enqueuer() -> Callable[..., QueuedBrief]:
     return enqueue_generate_daily_brief
 
 
-BriefEnqueuerDep = Annotated[Callable[[datetime.date], QueuedBrief], Depends(get_brief_enqueuer)]
+BriefEnqueuerDep = Annotated[Callable[..., QueuedBrief], Depends(get_brief_enqueuer)]
 
 
 @router.get("/api/v1/dashboard")
@@ -2532,6 +2574,10 @@ def acknowledge_alert(
     """
     if not crisis_prediction_reads_enabled:
         raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
+    try:
+        require_legacy_writer_mode(session, lock=True)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     _require_alert_for_write(session, alert_id)
     service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
     try:
@@ -2559,6 +2605,10 @@ def acknowledge_alert_all_clear(
     """
     if not crisis_prediction_reads_enabled:
         raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
+    try:
+        require_legacy_writer_mode(session, lock=True)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     _require_alert_for_write(session, alert_id)
     service = AlertLifecycleService(SQLAlchemyAlertRepository(session))
     try:
@@ -2590,6 +2640,10 @@ def supersede_alert(
     """
     if not crisis_prediction_reads_enabled:
         raise HTTPException(status_code=404, detail=f"alert {alert_id} not found")
+    try:
+        require_legacy_writer_mode(session, lock=True)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     narrower_ids = [str(alert_id), *request.additional_narrower_alert_ids]
     repository = SQLAlchemyAlertRepository(session)
     try:
@@ -2644,6 +2698,11 @@ def list_reports(
             for report, sections in rows
             if getattr(report, "content_policy", None) == REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY
         ]
+    rows = [
+        (report, sections)
+        for report, sections in rows
+        if report.report_type != PERSONAL_REPORT_TYPE
+    ]
     return {
         "items": [
             _serialize_report(
@@ -2963,6 +3022,10 @@ def get_evidence(
     if claim is None:
         raise HTTPException(status_code=404, detail="claim not found")
     links = repo.claim_evidence_links(claim_id)
+    if crisis_prediction_reads_enabled and not links:
+        # Gate G may expose standalone legacy claims, but a claim whose only support was prepared
+        # by the personal workflow remains inside the report-scoped personal citation namespace.
+        raise HTTPException(status_code=404, detail="claim not found")
     return {
         "claim": {
             "id": str(claim.id),
@@ -3088,21 +3151,35 @@ class GenerateDailyBriefRequest(BaseModel):
 
 @router.post("/api/v1/internal/jobs/generate-daily-brief", status_code=202)
 def generate_daily_brief_job(
-    request: GenerateDailyBriefRequest, enqueue: BriefEnqueuerDep
+    request: GenerateDailyBriefRequest, session: SessionDep, enqueue: BriefEnqueuerDep
 ) -> dict[str, Any]:
     """Queue the accepted ``generate_daily_brief`` task for one ``brief_date``; return 202 (ADR 0009).
 
-    Asynchronous only: it enqueues on the pipeline queue and returns the task identity. It opens no
-    database and no Redis, and never runs the coordinator inline -- the worker does that and mints a
-    *new* version through the lifecycle's existing semantics, never reusing a prior report.
+    Asynchronous only: it commits a durable queued legacy job before publishing that exact identity
+    to the pipeline queue, then returns the task identity. It opens no Redis and never runs the
+    coordinator inline. The queued row prevents personal-mode activation during broker handoff;
+    the worker owns generation and mints a new version through the existing lifecycle semantics.
     """
-    queued = enqueue(request.brief_date)
+    task_id = uuid.uuid4()
+    try:
+        job = queue_legacy_daily_brief(session, brief_date=request.brief_date, task_id=task_id)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    try:
+        queued = enqueue(request.brief_date, task_id=task_id, legacy_job_id=job.id)
+    except Exception as exc:
+        mark_legacy_daily_brief_delivery_failed(session, job.id)
+        raise HTTPException(
+            status_code=503,
+            detail="daily brief job could not be delivered to the worker",
+        ) from exc
     return {
         "status": "queued",
         "task_id": queued.task_id,
         "task_name": queued.task_name,
         "queue": queued.queue,
         "brief_date": request.brief_date.isoformat(),
+        "job_id": str(job.id),
     }
 
 
@@ -3119,6 +3196,10 @@ def reprocess_event(
     """
     if session.get(Event, event_id) is None:
         raise HTTPException(status_code=404, detail=f"event {event_id} not found")
+    try:
+        require_legacy_maintenance_mode(session)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     count = repo.mark_published_reports_stale_for_event(event_id)
     session.commit()
     return {"event_id": str(event_id), "dependent_published_report_count": count}

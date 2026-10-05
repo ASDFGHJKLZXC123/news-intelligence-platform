@@ -1,0 +1,24 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_api_delivery_helper_uses_exact_pipeline_queue ______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ae6bbb0>
+
+    def test_api_delivery_helper_uses_exact_pipeline_queue(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        deliveries: list[dict[str, Any]] = []
+    
+        class FakeTask:
+            @staticmethod
+            def apply_async(*, args: list[str], queue: str, task_id: str) -> _AsyncResult:
+                deliveries.append({"args": args, "queue": queue, "task_id": task_id})
+                return _AsyncResult()
+    
+>       monkeypatch.setattr(pipeline_api, "run_daily_pipeline_task", FakeTask())
+E       AttributeError: <module 'apps.api.pipeline' from '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/apps/api/pipeline.py'> has no attribute 'run_daily_pipeline_task'
+
+tests/unit/test_pipeline_runtime.py:656: AttributeError
+=========================== short test summary info ============================
+FAILED tests/unit/test_pipeline_runtime.py::test_api_delivery_helper_uses_exact_pipeline_queue
+1 failed in 1.02s

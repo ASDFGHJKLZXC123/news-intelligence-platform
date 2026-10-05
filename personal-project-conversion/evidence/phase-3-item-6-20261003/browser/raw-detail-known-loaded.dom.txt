@@ -1,0 +1,41 @@
+CAPTURE raw-detail-known-loaded- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - generic: Reading article[
+  {
+    level: 'warn',
+    message: 'You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/',
+    timestamp: '2026-10-04T01:02:19.950Z',
+    url: 'https://unpkg.com/@babel/standalone@7.29.0/babel.min.js'
+  },
+  {
+    level: 'warn',
+    message: 'You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/',
+    timestamp: '2026-10-04T01:03:10.062Z',
+    url: 'https://unpkg.com/@babel/standalone@7.29.0/babel.min.js'
+  }
+]

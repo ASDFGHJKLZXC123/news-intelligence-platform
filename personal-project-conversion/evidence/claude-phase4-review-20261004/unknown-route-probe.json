@@ -1,0 +1,72 @@
+{
+  "method": "Fresh in-process FastAPI TestClient routing probe; no lifespan entered or live services used",
+  "socket_connect_attempts": [],
+  "results": [
+    {
+      "transport": "subprocess",
+      "method": "GET",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "subprocess",
+      "method": "POST",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "subprocess",
+      "method": "PUT",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "subprocess",
+      "method": "DELETE",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "celery",
+      "method": "GET",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "POST",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "PUT",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "DELETE",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    }
+  ],
+  "all_responses_json_errors": true,
+  "status_parity": false
+}

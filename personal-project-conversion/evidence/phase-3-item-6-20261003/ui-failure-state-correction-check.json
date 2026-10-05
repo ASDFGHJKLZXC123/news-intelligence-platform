@@ -1,0 +1,30 @@
+{
+  "observed_at": "2026-10-04T01:13:37.225490+00:00",
+  "files": [
+    {
+      "path": "frontend/app/page-personal.jsx",
+      "before_sha256": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d",
+      "after_sha256": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b"
+    },
+    {
+      "path": "frontend/app/personal-foundation.test.js",
+      "before_sha256": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca",
+      "after_sha256": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0"
+    }
+  ],
+  "baseline": {
+    "command": "node --test --test-name-pattern=failed capture|failed provider|disabled or blocked|Today implements frontend/app/personal-foundation.test.js",
+    "exit_code": 1,
+    "passed": 2,
+    "failed": 2,
+    "log": "ui-failure-state-regression-before.log"
+  },
+  "affected_verification": {
+    "command": "node --test frontend/app/personal-foundation.test.js frontend/app/api-adapter.test.js",
+    "exit_code": 0,
+    "log": "ui-failure-state-regression-after.log"
+  },
+  "scope": "Only failed/partially failed grouped-empty explanation and warning icon; existing disabled/blocked classifier and healthy quiet/filter branches preserved",
+  "browser_reverification": "PASS: capture-failure-corrected/provider-failure-corrected plus saved-after-correction/brief-after-correction native outputs after revised script loaded",
+  "independent_scoped_review": "See independent-review.md and independent-checks.json"
+}

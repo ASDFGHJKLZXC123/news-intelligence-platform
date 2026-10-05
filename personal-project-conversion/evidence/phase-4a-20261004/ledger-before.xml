@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.442" timestamp="2026-10-04T01:15:56.044766-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_phase4a_ledger" name="test_paid_reservation_rejects_a_run_without_global_personal_ownership" time="1.999"><failure message="Failed: DID NOT RAISE PaidWorkBlocked">def test_paid_reservation_rejects_a_run_without_global_personal_ownership():
+        # Existing monetary component fixture creates business rows but leaves legacy mode active.
+        # Possessing a run token is insufficient authority to dispatch in the other durable mode.
+        with migrated_disposable_engine() as engine:
+            _, ledgers = seed(engine, dates=1)
+&gt;           with pytest.raises(PaidWorkBlocked):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE PaidWorkBlocked
+
+tests/integration/test_personal_phase4a_ledger.py:17: Failed</failure></testcase></testsuite></testsuites>

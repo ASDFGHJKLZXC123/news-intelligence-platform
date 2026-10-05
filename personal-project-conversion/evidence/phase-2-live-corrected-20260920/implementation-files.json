@@ -1,0 +1,10 @@
+{
+  "personal-project-conversion/02-personal-workflow.md": "e7d1f32fe97e283cc73fa5e4183848b484d794722ae90a0bab1f0cded46361c7",
+  "services/personal/briefs.py": "461cd183e7b79fd512c8ab25cb10e97ae406c9b87df6a49b373a01f562ee3f14",
+  "services/personal/snapshots.py": "fd82bcca1e8cea9aa865434e437feef6d98314235b3172d7a3a01a4e1c987607",
+  "services/reports/composition.py": "3bec88188f71e0726c7f2b1c0143b303560ab7ff59314971451c03cfcc2f421f",
+  "services/reports/contracts.py": "5cc1f7c5ba444ef0099ca4cf5ae4e29e52b1a4a825a6052340c731e4c9bf88f4",
+  "services/reports/prompts.py": "2888611a5c0d103842a1dd4b39d83657dea476eac9ce593a630d9bfee74e6ef0",
+  "tests/integration/test_personal_brief_generation.py": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147",
+  "tests/unit/test_personal_composition_policy.py": "13a80af3442176eb38e12cd3929da2f2e0eca67b8b3dab888d96eb741cef1a7e"
+}

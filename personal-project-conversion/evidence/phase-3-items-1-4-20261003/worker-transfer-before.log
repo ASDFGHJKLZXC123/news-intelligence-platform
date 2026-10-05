@@ -1,0 +1,27 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_gate_off_raw_articles_transfer_to_a_later_assisted_run __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1063afbb0>
+
+    def test_gate_off_raw_articles_transfer_to_a_later_assisted_run(monkeypatch):
+        with migrated_disposable_engine() as engine:
+            run_id, token, workspace_id, _ = _queued(engine)
+            factory, calls, _ = _runtime(monkeypatch, engine, gate=False)
+            first = worker.run_personal_daily_task.run(str(run_id), str(token))
+            assert first["status"] == "succeeded" and not first["published"] and not calls
+            with factory() as session:
+                workspace = session.get(PersonalWorkspace, workspace_id)
+                next_run = create_daily_run(session, workspace, now=dt.datetime.now(dt.UTC) + dt.timedelta(days=1))
+                next_id, next_token = next_run.run.id, next_run.run.ownership_token
+                session.commit()
+            factory, calls, _ = _runtime(monkeypatch, engine)
+            second = worker.run_personal_daily_task.run(str(next_id), str(next_token))
+            assert second["status"] == "succeeded" and second["published"]
+>           assert second["articles_admitted"] == 0 and second["events_observed"] == 1
+E           assert (0 == 0 and 0 == 1)
+
+tests/integration/test_personal_paid_worker.py:244: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_paid_worker.py::test_gate_off_raw_articles_transfer_to_a_later_assisted_run
+1 failed in 4.34s

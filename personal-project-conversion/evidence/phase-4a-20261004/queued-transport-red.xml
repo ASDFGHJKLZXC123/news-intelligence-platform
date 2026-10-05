@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="4" time="6.683" timestamp="2026-10-04T02:32:50.552234-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[celery-create]" time="1.747" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[celery-retry]" time="1.521" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[subprocess-create]" time="1.530"><failure message="AssertionError: assert 'celery' == 'subprocess'&#10;  &#10;  - subprocess&#10;  + celery">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112522c30&gt;
+operation = 'create', transport = 'subprocess'
+
+    @pytest.mark.parametrize("operation", ["create", "retry"])
+    @pytest.mark.parametrize("transport", ["celery", "subprocess"])
+    def test_queued_claim_records_selected_transport_before_any_delivery(
+        monkeypatch, operation, transport
+    ):
+        from packages.config.settings import get_settings
+    
+        monkeypatch.setenv("PERSONAL_PROCESSING_MODE", "personal")
+        monkeypatch.setenv("PERSONAL_PROCESSING_TRANSPORT", "celery")
+        get_settings.cache_clear()
+        try:
+            with migrated_disposable_engine() as engine:
+                with Session(engine) as session:
+                    workspace = _setup(session)
+                    now = dt.datetime.now(dt.UTC)
+                    if operation == "retry":
+                        prior = create_daily_run(session, workspace, now=now)
+                        run_id, token = prior.run.id, prior.run.ownership_token
+                        session.commit()
+                        assert mark_delivery_failed(session, run_id, token, now=now)
+                        session.commit()
+                    monkeypatch.setenv("PERSONAL_PROCESSING_TRANSPORT", transport)
+                    get_settings.cache_clear()
+                    decision = (
+                        create_daily_run(session, workspace, now=now)
+                        if operation == "create"
+                        else retry_run(session, workspace, run_id, now=now)
+                    )
+                    run_id = decision.run.id
+                    session.commit()
+                # Observe the durable queued record from a separate request before any
+                # record_delivery, supervisor callback or child has been invoked.
+                with Session(engine) as observer:
+                    run = observer.get(PersonalRun, run_id)
+                    assert run.state == "queued" and run.started_at is None
+&gt;                   assert run.delivery_transport == transport
+E                   AssertionError: assert 'celery' == 'subprocess'
+E                     
+E                     - subprocess
+E                     + celery
+
+tests/integration/test_personal_processing_control.py:373: AssertionError</failure></testcase><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[subprocess-retry]" time="1.485"><failure message="AssertionError: assert 'celery' == 'subprocess'&#10;  &#10;  - subprocess&#10;  + celery">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112508e20&gt;
+operation = 'retry', transport = 'subprocess'
+
+    @pytest.mark.parametrize("operation", ["create", "retry"])
+    @pytest.mark.parametrize("transport", ["celery", "subprocess"])
+    def test_queued_claim_records_selected_transport_before_any_delivery(
+        monkeypatch, operation, transport
+    ):
+        from packages.config.settings import get_settings
+    
+        monkeypatch.setenv("PERSONAL_PROCESSING_MODE", "personal")
+        monkeypatch.setenv("PERSONAL_PROCESSING_TRANSPORT", "celery")
+        get_settings.cache_clear()
+        try:
+            with migrated_disposable_engine() as engine:
+                with Session(engine) as session:
+                    workspace = _setup(session)
+                    now = dt.datetime.now(dt.UTC)
+                    if operation == "retry":
+                        prior = create_daily_run(session, workspace, now=now)
+                        run_id, token = prior.run.id, prior.run.ownership_token
+                        session.commit()
+                        assert mark_delivery_failed(session, run_id, token, now=now)
+                        session.commit()
+                    monkeypatch.setenv("PERSONAL_PROCESSING_TRANSPORT", transport)
+                    get_settings.cache_clear()
+                    decision = (
+                        create_daily_run(session, workspace, now=now)
+                        if operation == "create"
+                        else retry_run(session, workspace, run_id, now=now)
+                    )
+                    run_id = decision.run.id
+                    session.commit()
+                # Observe the durable queued record from a separate request before any
+                # record_delivery, supervisor callback or child has been invoked.
+                with Session(engine) as observer:
+                    run = observer.get(PersonalRun, run_id)
+                    assert run.state == "queued" and run.started_at is None
+&gt;                   assert run.delivery_transport == transport
+E                   AssertionError: assert 'celery' == 'subprocess'
+E                     
+E                     - subprocess
+E                     + celery
+
+tests/integration/test_personal_processing_control.py:373: AssertionError</failure></testcase></testsuite></testsuites>

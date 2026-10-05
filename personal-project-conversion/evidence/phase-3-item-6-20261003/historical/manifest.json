@@ -1,0 +1,240 @@
+{
+  "evidence_kind": "historical_actual_chrome_browser_outputs",
+  "observed_date": "2026-09-20",
+  "consolidated_date": "2026-10-03",
+  "observation_timezone": "America/Los_Angeles",
+  "source_session": {
+    "path": "/Users/f8fq/.codex/sessions/2026/09/20/rollout-2026-09-20T15-41-05-01a0c0fa-efac-7f83-8231-8928b4629fe1.jsonl",
+    "sha256": "c83402c379a72d259102652dc65230c7861e10fa1a800f1f05b4a1c98952d025",
+    "thread_id": "01a0c0fa-efac-7f83-8231-8928b4629fe1"
+  },
+  "frontend_origin": "http://127.0.0.1:61410",
+  "api_origin": "http://127.0.0.1:59751",
+  "frontend_url": "http://127.0.0.1:61410/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59751",
+  "mode": "Real with actual local API/PostgreSQL and labeled synthetic retained RSS inputs",
+  "fixture": {
+    "source_name": "Synthetic Phase 2 acceptance feed",
+    "source_url": "https://offline.personal.test/feed.xml",
+    "provider": "FakeRSSProvider",
+    "seed_script": "scripts/seed-personal-phase3-browser.py",
+    "run_id": "1f658636-2151-45f0-be64-bf579a0703b3",
+    "captured": 4,
+    "admitted": 2,
+    "pending_observed_in_browser": 2,
+    "paid_dispatches": 0
+  },
+  "source_limitations": [
+    "Inspected-file hashes identify retained source at consolidation, not the executable revision pinned when the old browser ran.",
+    "No complete historical source hash manifest or retained historical API/database value export accompanies these browser observations.",
+    "Old fixture titles describe intended seed roles; publication ordering admitted the Technology reading remains in backlog item. Its actual browser state is admitted raw.",
+    "Unknown publication time was observed for a pending item, not an admitted raw article.",
+    "The last Settings navigation output is only Reading settings, so it proves no final loaded-state check.",
+    "These are historical observations, not fresh current-source browser proof."
+  ],
+  "observations": [
+    {
+      "session_line": 662,
+      "timestamp_utc": "2026-09-20T23:06:42.200Z",
+      "function_call_id": "call_r9XRDH8KI3gON0z86dPrz0gR",
+      "action": "Initial Real-mode Today; raw readability and coverage",
+      "original_output_text_sha256": "89c6a0809c2f623f662a6fc65fd9d82c74a68ebb86165af98f721b88ebe8f456",
+      "artifacts": [
+        {
+          "path": "01-today-before-wording.txt",
+          "sha256": "ec3b779e5391a3932c17b30fd86c7aa15525f319e83503e754fa3b3703a5e139",
+          "bytes": 4246
+        }
+      ]
+    },
+    {
+      "session_line": 674,
+      "timestamp_utc": "2026-09-20T23:07:14.891Z",
+      "function_call_id": "call_gTbQUOo7XwldHuzNCfuuwXk9",
+      "action": "Clicked first Read retained article; initial loading snapshot",
+      "original_output_text_sha256": "e38febb4e0229c59187da8ab9f9d8b136e5d7c0d3b34597929b0024672d86b90",
+      "artifacts": [
+        {
+          "path": "02-raw-detail-loading.txt",
+          "sha256": "e38febb4e0229c59187da8ab9f9d8b136e5d7c0d3b34597929b0024672d86b90",
+          "bytes": 454
+        },
+        {
+          "path": "02-raw-detail-loading.jpg",
+          "sha256": "78672595ed772e76a750970737e69fc24bad7f93d0afc380df3c715e090e4f6a",
+          "bytes": 23982
+        }
+      ]
+    },
+    {
+      "session_line": 685,
+      "timestamp_utc": "2026-09-20T23:07:21.456Z",
+      "function_call_id": "call_swNKsq9PVGZ75vRo4Hpd6tPx",
+      "action": "Loaded retained article detail; error-log inspection",
+      "original_output_text_sha256": "aaa488ae3c4b5fce0318b91f7c72c300148cdd3ae81c7fc6c7d7d04c7dbcb137",
+      "artifacts": [
+        {
+          "path": "03-raw-detail-loaded.txt",
+          "sha256": "fd5c8bc8a12c897e36dbd983054bc30b3094971fdeda84b7a8f499ae428efc39",
+          "bytes": 998
+        },
+        {
+          "path": "03-raw-detail-loaded-console.txt",
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "bytes": 2
+        }
+      ]
+    },
+    {
+      "session_line": 718,
+      "timestamp_utc": "2026-09-20T23:08:07.294Z",
+      "function_call_id": "call_tBzvJeaKjLJFxCkejusUqylS",
+      "action": "Loaded settings, collection, backlog, zero spending and reset",
+      "original_output_text_sha256": "e14caadb39201778230501b18243614e56bc481f64bd01861a005a360681f35c",
+      "artifacts": [
+        {
+          "path": "04-settings-initial.txt",
+          "sha256": "e14caadb39201778230501b18243614e56bc481f64bd01861a005a360681f35c",
+          "bytes": 6262
+        }
+      ]
+    },
+    {
+      "session_line": 780,
+      "timestamp_utc": "2026-09-20T23:10:05.107Z",
+      "function_call_id": "call_vqtFrV1kYP7chiZ4MMLcWiYF",
+      "action": "Reload after lowering daily limit and deselecting synthetic source",
+      "original_output_text_sha256": "1ad29ef9208753621a28fc592c003d6eb838eff81ff00c3e8016a3095c97a1f6",
+      "artifacts": [
+        {
+          "path": "05-settings-reload-disabled-feed.txt",
+          "sha256": "1ad29ef9208753621a28fc592c003d6eb838eff81ff00c3e8016a3095c97a1f6",
+          "bytes": 6292
+        }
+      ]
+    },
+    {
+      "session_line": 787,
+      "timestamp_utc": "2026-09-20T23:10:22.439Z",
+      "function_call_id": "call_pyh2VBHjHPfkXpZMbrLc2sSo",
+      "action": "Re-enabled source; retained backlog becomes eligible",
+      "original_output_text_sha256": "11b956f47d8b370d97d177e73221719c9751962e7750f3d8ea3c99e630193319",
+      "artifacts": [
+        {
+          "path": "06-settings-reenabled-feed.txt",
+          "sha256": "11b956f47d8b370d97d177e73221719c9751962e7750f3d8ea3c99e630193319",
+          "bytes": 6740
+        }
+      ]
+    },
+    {
+      "session_line": 820,
+      "timestamp_utc": "2026-09-20T23:11:15.161Z",
+      "function_call_id": "call_49BA6c8BHsKdILmXUE8Af538",
+      "action": "Returned to Today; original frozen run revision retained",
+      "original_output_text_sha256": "e41868e9d4e208ebd67a17103451be20f12568f752a24ddba00311d5993ec7ba",
+      "artifacts": [
+        {
+          "path": "07-today-frozen-run.txt",
+          "sha256": "1978b1ba71e9f068ad61127ded9f1bebcd50b35234a6dfc3339540ce99f2f403",
+          "bytes": 4270
+        },
+        {
+          "path": "07-today-frozen-run-console.txt",
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "bytes": 2
+        },
+        {
+          "path": "07-today-frozen-run.jpg",
+          "sha256": "5ca65733c8aec8f74d9c68fa3b73dbf6312a92917f530b845e9bddc121d0744a",
+          "bytes": 135262
+        }
+      ]
+    },
+    {
+      "session_line": 1024,
+      "timestamp_utc": "2026-09-20T23:19:38.380Z",
+      "function_call_id": "call_iceNuoYFEARf6LrRIq7Uj1zi",
+      "action": "Final Grouping is disabled wording, native image and warn/error logs",
+      "original_output_text_sha256": "ecb8533d72051b26f09331f1a1d204e2addad933a89f13ba2a611bb908d3b51e",
+      "artifacts": [
+        {
+          "path": "08-today-final-wording.txt",
+          "sha256": "ee33e98a4648bb8dcacd44c9cdb91c2af1ca731664a5aa553e76eef72e24e0be",
+          "bytes": 4183
+        },
+        {
+          "path": "08-today-final-wording-console.txt",
+          "sha256": "804ddbfd32b8513786ec9d3777fa33b0df91afdd4cc35c56f5fad0600bf5fd73",
+          "bytes": 857
+        },
+        {
+          "path": "08-today-final-wording.jpg",
+          "sha256": "3b9dae7e22c5036e288f206313689d6668b098feca7b819077a9ed308395c94c",
+          "bytes": 133101
+        }
+      ]
+    },
+    {
+      "session_line": 1053,
+      "timestamp_utc": "2026-09-20T23:20:14.143Z",
+      "function_call_id": "call_tyHCgJqws9Ic1cgdZWqD85R1",
+      "action": "Final Settings navigation; only loading output, not final loaded verification",
+      "original_output_text_sha256": "3aa9b186a578690b95a127c3160ec50af5f87cfc168a11ff971c1008e9774ac6",
+      "artifacts": [
+        {
+          "path": "09-settings-navigation-loading.txt",
+          "sha256": "3aa9b186a578690b95a127c3160ec50af5f87cfc168a11ff971c1008e9774ac6",
+          "bytes": 646
+        }
+      ]
+    }
+  ],
+  "reviewed_files": [
+    {
+      "path": "scripts/seed-personal-phase3-browser.py",
+      "sha256_at_consolidation": "11ea5d2b3deb9fc7566012c7f9178dba740860751b6bff2086d0ce644c2f3ad9"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/browser-seed.json",
+      "sha256_at_consolidation": "93e0c8c76236667ee79601e5d5a1bdc220c59e4d493d77ae4779bbc37552d29a"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/independent-intake-review.md",
+      "sha256_at_consolidation": "d191a2647812ad8a91581132c38277f4344750cac915e7e543c4350693eb023c"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/independent-ledger-review.md",
+      "sha256_at_consolidation": "3230e885162f87bc09c9e72c0f2e5a330b7b7338c193d1a86e1dd1397f3850e4"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/postgres-ownership.json",
+      "sha256_at_consolidation": "fdf2a8d2989ad5f12c99ca980ed22e266df2882ce90477dc978ec6face105c63"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/frontend-ownership.json",
+      "sha256_at_consolidation": "aa413532132e23bb16404ae350da999c166e4821afc10e911afef52fb0d9744e"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-20260920/spending-implementation.md",
+      "sha256_at_consolidation": "7896de76ead38220c189d51c54b0d1a454f95deab852ae71ce2b933d639338f2"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-items-2-3-20261003/README.md",
+      "sha256_at_consolidation": "6f6f8c9038940bdb01314f9a325fceea69147328810479848ae0676c13090101"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-items-1-4-20261003/README.md",
+      "sha256_at_consolidation": "62ab1140a09576e0a5e24a24e68499201bca63191a0194eeb5d66016850396c1"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/README.md",
+      "sha256_at_consolidation": "02ecd44289a13cc0575887f9a33915218f0c5b1e97fec5c22af9eced08a42e0d"
+    }
+  ],
+  "exclusions": [
+    "tool-call arguments",
+    "launcher log containing a throwaway access key",
+    "whole session records",
+    "provider credentials"
+  ]
+}

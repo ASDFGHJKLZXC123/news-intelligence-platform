@@ -1,0 +1,5 @@
+{
+  "error": "Private harness manifest intentionally omits API key; scrub key must come from exact owned API environment instead.",
+  "resource_mutations": [],
+  "resource_capture_started": false
+}

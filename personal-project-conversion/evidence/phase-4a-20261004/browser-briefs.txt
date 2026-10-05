@@ -1,0 +1,88 @@
+Browser tab: 1, Title: "SIGNAL � AI News Intelligence", URL: "http://127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/brief/6d7d39ee-9d84-4b12-88d0-f30c35104d49".
+0 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/brief/6d7d39ee-9d84-4b12-88d0-f30c35104d49
+	2 container root
+		3 container
+			4 image
+			5 text SIGNAL
+			6 text PERSONAL DESK
+			7 container Today
+				8 image
+				9 text Today 1
+			10 container
+				11 image
+				12 text Saved
+			13 container
+				14 image
+				15 text Briefs
+			16 container
+				17 image
+				18 text Settings
+		19 container
+			20 button Toggle sidebar
+				21 image
+			22 button Search stories
+				23 image
+				24 text Search stories�
+				25 text &#8984;K
+			26 container Display data mode
+				27 checkbox Real, Value: 1
+				28 checkbox Demo, Value: 0
+			29 button Description: Toggle theme, Help: Switch to light mode
+				30 image
+		31 container
+			32 button Briefs
+				33 image
+				34 text Briefs
+			35 button Refresh this version
+				36 image
+				37 text Refresh this version
+			38 text 2026-10-04  � VERSION  1 PUBLISHED
+			39 heading Personal News Brief � 2026-10-04, Value: 1
+				40 text Personal News Brief � 2026-10-04
+			41 text Exact report  6d7d39ee-9d84-4b12-88d0-f30c35104d49
+			42 link Description: Markdown, Value: 127.0.0.1:59731/api/v1/personal/briefs/6d7d39ee-9d84-4b12-88d0-f30c35104d49/export.md
+			43 link Description: PDF, Value: 127.0.0.1:59731/api/v1/personal/briefs/6d7d39ee-9d84-4b12-88d0-f30c35104d49/export.pdf
+			44 image
+			45 heading Input snapshot, Value: 3
+				46 text Input snapshot
+			47 text Snapshot ID 3371ca5a-dfc1-411a-8958-9ad34557f917 Selected stories 1 Created Oct 4, 2026, 01:38:28 AM PDT
+			48 image
+			49 heading Capture coverage, Value: 3
+				50 text Capture coverage
+			51 text Capture started Oct 4, 2026, 01:38:28 AM PDT Capture ended Oct 4, 2026, 01:38:28 AM PDT Feeds configured 1 Feeds succeeded 1 Feeds failed 0 Feeds paused 0 Pending items 0 of 2000 capacity
+			52 image
+			53 heading Executive Summary, Value: 3
+				54 text Executive Summary
+			55 text The configured feed reports that the agency approved the coastal resilience project. This brief records the approval as a source-reported assertion from the captured article. The retained excerpt attributes the statement to the agency and does not add a reason, budget, schedule, or predicted outcome. Coverage in this snapshot comes from one configured source, so the report does not treat repetition as corroboration. The item appears because it matched the personal source and phrase settings. No independent verification, risk estimate, historical comparison, or forecast is supplied. The available evidence supports only the reported approval and its attribution within this captured source record.
+			56 image
+			57 heading Agency approves coastal resilience project, Value: 3
+				58 text Agency approves coastal resilience project
+			59 text The leading item in this personal snapshot is the reported approval of a coastal resilience project. The configured feed says the agency confirmed that approval, and the brief preserves that attribution. The source record does not state a budget, schedule, implementation milestone, motive, or expected effect, so this section adds none of those details. It also does not turn the source statement into an independently verified fact. Coverage is limited to the retained article from one selected feed. No second source in this run corroborates the assertion. The supported reading is therefore narrow: the captured publisher reports an agency confirmation that the project was approved, with no further conclusion about delivery or impact. The record offers no basis for additional interpretation.
+			60 image
+			61 heading What Changed Since Yesterday, Value: 3
+				62 text What Changed Since Yesterday
+			63 text No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported.
+No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.
+			64 image
+			65 heading Data Quality, Value: 3
+				66 text Data Quality
+			67 text [capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained, 0 feeds failed, and 0 feeds were paused at pending capacity.
+[no_risk_observations] Personal Phase 2 does not compute or narrate risk scores.
+[no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2 workflow.
+[no_prior_brief] No prior personal brief is injected into this immutable snapshot.
+[no_prior_comparison] No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.
+			68 image
+			69 heading Disclaimer, Value: 3
+				70 text Disclaimer
+			71 text This system provides probabilistic analysis based on public information, data signals, and model-assisted reasoning. It is for informational purposes only and does not constitute investment, legal, or financial advice.
+			72 image
+			73 text 1 REPORT-SCOPED CLAIMS
+			74 heading Citations, Value: 3
+				75 text Citations
+			76 button Agency approves coastal resilience project Open evidence from report 6d7d39ee-9d84-4b12-88d0-f30c35104d49
+				77 text Agency approves coastal resilience project
+				78 container
+					79 text Open evidence from report  6d7d39ee-9d84-4b12-88d0-f30c35104d49
+				80 image
+
+The focused UI element is 0 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/brief/6d7d39ee-9d84-4b12-88d0-f30c35104d49

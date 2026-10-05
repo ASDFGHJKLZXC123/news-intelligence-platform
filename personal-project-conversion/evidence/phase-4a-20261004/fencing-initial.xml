@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="0.330" timestamp="2026-10-04T01:20:18.462394-07:00" hostname="Mac"><testcase classname="" name="tests.integration.test_personal_processing_control" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_processing_control.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_personal_processing_control.py:12: in &lt;module&gt;
+    from db.models import Event, PersonalRun, PersonalWriterMode, Report, Source
+db/models/__init__.py:89: in &lt;module&gt;
+    from db.models.personal import (
+E   ImportError: cannot import name 'PersonalWriterMode' from 'db.models.personal' (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/models/personal.py)</error></testcase><testcase classname="" name="tests.integration.test_personal_phase4a_ledger" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_phase4a_ledger.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_personal_phase4a_ledger.py:5: in &lt;module&gt;
+    from services.personal.spending import PaidWorkBlocked
+services/personal/__init__.py:9: in &lt;module&gt;
+    from services.personal.repository import PersonalRepository
+services/personal/repository.py:16: in &lt;module&gt;
+    from db.models import (
+db/models/__init__.py:89: in &lt;module&gt;
+    from db.models.personal import (
+E   ImportError: cannot import name 'PersonalWriterMode' from 'db.models.personal' (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/models/personal.py)</error></testcase></testsuite></testsuites>

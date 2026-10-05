@@ -1,0 +1,14 @@
+{
+  "original_check": "FAIL: added-file scan omitted initial .cache exclusion and mislabeled 87 old pip-audit cache files as added",
+  "baseline_cache_paths": 0,
+  "cache_count": 87,
+  "cache_latest_mtime_utc": "2026-06-18T00:09:30.538772+00:00",
+  "started_at_utc": "2026-10-04T02:33:45.065067+00:00",
+  "correction": "Match initial baseline .cache exclusion; all compared baseline files remain hash-checked. Existing cache files untouched.",
+  "classification": "Verifier mismatch, not source/preservation failure.",
+  "second_check": {
+    "original": "FAIL: assumed capitalized Docker No such response",
+    "actual": "docker inspect removed ID returns exit1, stdout[], lowercase error: no such object with exact recorded ID",
+    "correction": "Verify exit failure, empty JSON array, exact ID and lowercase error; no actual resource/preservation failure"
+  }
+}

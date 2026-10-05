@@ -80,6 +80,9 @@ class DataQuality(StrEnum):
     NO_FORECAST = "no_forecast"
     FORECAST_SET_INVALID = "forecast_set_invalid"
     NO_PRIOR_COMPARISON = "no_prior_comparison"
+    #: Personal workflow capture accounting. Always rendered so a quiet result can be
+    #: distinguished from an all-feed failure and partial coverage remains visible.
+    CAPTURE_COVERAGE = "capture_coverage"
 
 
 @dataclass(frozen=True)
@@ -130,7 +133,7 @@ class SelectedEvent:
     rank: int
     event_id: uuid.UUID
     title: str
-    hotness_score: float
+    hotness_score: float | None
     max_linked_risk: LinkedRisk
     ranking_score: float
     credibility_sum: float
@@ -297,6 +300,13 @@ class ExecutiveSummaryInputs:
     largest_risk_move: RiskMove | None
 
 
+class CompositionPolicy(StrEnum):
+    """Versioned prose rules, retained with inputs through grounding regeneration."""
+
+    LEGACY = "legacy_daily_brief.v1"
+    PERSONAL_DESCRIPTIVE = "personal_descriptive.v1"
+
+
 @dataclass(frozen=True)
 class BriefInputs:
     """Everything the composition stage needs to write one daily brief, and nothing it does not."""
@@ -307,6 +317,7 @@ class BriefInputs:
     risk_radar: RiskRadar
     prior_brief: PriorBriefContext | None
     data_quality_notes: tuple[DataQualityNote, ...]
+    composition_policy: CompositionPolicy = CompositionPolicy.LEGACY
 
     @property
     def is_quiet_day(self) -> bool:

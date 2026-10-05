@@ -1,0 +1,35 @@
+
+==================================== ERRORS ====================================
+____ ERROR collecting tests/integration/test_personal_processing_control.py ____
+ImportError while importing test module '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_processing_control.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_personal_processing_control.py:12: in <module>
+    from db.models import Event, PersonalRun, PersonalWriterMode, Report, Source
+db/models/__init__.py:89: in <module>
+    from db.models.personal import (
+E   ImportError: cannot import name 'PersonalWriterMode' from 'db.models.personal' (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/models/personal.py)
+______ ERROR collecting tests/integration/test_personal_phase4a_ledger.py ______
+ImportError while importing test module '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_phase4a_ledger.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_personal_phase4a_ledger.py:5: in <module>
+    from services.personal.spending import PaidWorkBlocked
+services/personal/__init__.py:9: in <module>
+    from services.personal.repository import PersonalRepository
+services/personal/repository.py:16: in <module>
+    from db.models import (
+db/models/__init__.py:89: in <module>
+    from db.models.personal import (
+E   ImportError: cannot import name 'PersonalWriterMode' from 'db.models.personal' (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/models/personal.py)
+=========================== short test summary info ============================
+ERROR tests/integration/test_personal_processing_control.py
+ERROR tests/integration/test_personal_phase4a_ledger.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+2 errors in 0.33s

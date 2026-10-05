@@ -1,0 +1,7 @@
+{
+  "first_result": "assertion on newly authored verify.py initial hash",
+  "changed_user_protected_files": [],
+  "cause": "The task-owned verification helper was enhanced after initial initialization; it is not a pre-existing user file.",
+  "correction": "Compare user protected files against original snapshot and all protected files including helper against accepted frozen-source snapshot. Baseline file manifest still requires every unauthorized file unchanged.",
+  "production_changes": []
+}

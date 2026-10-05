@@ -1,0 +1,8 @@
+{
+  "changes_since_final_formatted_runtime_start": [],
+  "cleanup_source_drift": [],
+  "preserved_final_start_identity": "actual-final-formatted-source-before.json",
+  "protected_files_and_index_unchanged": true,
+  "source_identity": "cleanup-source-after.json",
+  "staged_diff_unchanged": true
+}

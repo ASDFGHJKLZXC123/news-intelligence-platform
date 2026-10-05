@@ -1,0 +1,16 @@
+{"timestamp": "2026-10-05T00:22:59.329777+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [48928]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:58118 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60607 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60610 - "GET /api/v1/personal/today HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60622 - "GET /api/v1/personal/unknown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60641 - "GET /api/v1/personal/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60642 - "GET /api/v1/personal/saved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60643 - "GET /api/v1/personal/briefs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60644 - "GET /api/v1/personal/spending HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [48928]

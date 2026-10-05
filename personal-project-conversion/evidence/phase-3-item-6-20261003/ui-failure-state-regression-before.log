@@ -1,0 +1,50 @@
+✔ Today implements server filters, previous-run selection, quiet results, and explicit retry (0.730708ms)
+✔ disabled or blocked grouping never presents a healthy quiet update (0.70675ms)
+✖ failed capture without grouping is explained before healthy quiet results (0.598291ms)
+✖ failed provider before grouping is explained without hiding retained raw articles (0.373166ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71.218208
+
+✖ failing tests:
+
+test at frontend/app/personal-foundation.test.js:238:1
+✖ failed capture without grouping is explained before healthy quiet results (0.598291ms)
+  AssertionError [ERR_ASSERTION]: a failed capture must not fall through to a healthy quiet result
+      at TestContext.<anonymous> (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/frontend/app/personal-foundation.test.js:245:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at frontend/app/personal-foundation.test.js:252:1
+✖ failed provider before grouping is explained without hiding retained raw articles (0.373166ms)
+  AssertionError [ERR_ASSERTION]: a provider failure must not fall through to a healthy quiet result
+      at TestContext.<anonymous> (/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/frontend/app/personal-foundation.test.js:259:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

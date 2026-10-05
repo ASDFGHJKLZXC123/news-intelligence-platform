@@ -1,0 +1,299 @@
+................................FFFFF................................... [ 18%]
+........................................................................ [ 37%]
+........................................................................ [ 56%]
+........................................................................ [ 75%]
+........................................................................ [ 94%]
+......................                                                   [100%]
+=================================== FAILURES ===================================
+______ test_non_finite_spending_is_rejected_before_workspace_writes[inf] _______
+
+value = inf
+
+    @pytest.mark.parametrize("value", [math.inf, -math.inf, math.nan, "Infinity", "NaN"])
+    def test_non_finite_spending_is_rejected_before_workspace_writes(value: object) -> None:
+        source_id = uuid.uuid4()
+        with pytest.raises(ValidationError, match="finite"):
+            WorkspaceSetupRequest.model_validate(
+                {
+                    "selected_source_ids": [str(source_id)],
+                    "execution_profile": "assisted",
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                }
+            )
+    
+        class NoDatabaseCalls:
+            def execute(self, *_args, **_kwargs):  # noqa: ANN202
+                raise AssertionError("configuration validation reached the database")
+    
+        with pytest.raises(ValueError, match="finite"):
+>           configure_profile(
+                NoDatabaseCalls(),  # type: ignore[arg-type]
+                SimpleNamespace(id=uuid.uuid4()),
+                selected_source_ids=[source_id],
+                execution_profile="assisted",
+                settings={
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                },
+            )
+
+tests/unit/test_personal_contracts.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/workspace.py:199: in configure_profile
+    lock_processing_control(session)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <tests.unit.test_personal_contracts.test_non_finite_spending_is_rejected_before_workspace_writes.<locals>.NoDatabaseCalls object at 0x10f562e40>
+lock = 'exclusive'
+
+    def lock_processing_control(session: Session, *, lock: str = "exclusive") -> PersonalWriterMode:
+        statement = select(PersonalWriterMode).where(PersonalWriterMode.singleton.is_(True))
+        if lock == "exclusive":
+            statement = statement.with_for_update()
+        elif lock == "business":
+            statement = statement.with_for_update(key_share=True)  # FOR NO KEY UPDATE
+        elif lock == "dispatch":
+            statement = statement.with_for_update(read=True, key_share=True)  # FOR KEY SHARE
+        elif lock != "read":
+            raise ValueError("unsupported processing lock")
+>       control = session.scalar(statement.execution_options(populate_existing=True))
+                  ^^^^^^^^^^^^^^
+E       AttributeError: 'NoDatabaseCalls' object has no attribute 'scalar'
+
+services/personal/processing.py:68: AttributeError
+______ test_non_finite_spending_is_rejected_before_workspace_writes[-inf] ______
+
+value = -inf
+
+    @pytest.mark.parametrize("value", [math.inf, -math.inf, math.nan, "Infinity", "NaN"])
+    def test_non_finite_spending_is_rejected_before_workspace_writes(value: object) -> None:
+        source_id = uuid.uuid4()
+        with pytest.raises(ValidationError, match="finite"):
+            WorkspaceSetupRequest.model_validate(
+                {
+                    "selected_source_ids": [str(source_id)],
+                    "execution_profile": "assisted",
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                }
+            )
+    
+        class NoDatabaseCalls:
+            def execute(self, *_args, **_kwargs):  # noqa: ANN202
+                raise AssertionError("configuration validation reached the database")
+    
+        with pytest.raises(ValueError, match="finite"):
+>           configure_profile(
+                NoDatabaseCalls(),  # type: ignore[arg-type]
+                SimpleNamespace(id=uuid.uuid4()),
+                selected_source_ids=[source_id],
+                execution_profile="assisted",
+                settings={
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                },
+            )
+
+tests/unit/test_personal_contracts.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/workspace.py:199: in configure_profile
+    lock_processing_control(session)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <tests.unit.test_personal_contracts.test_non_finite_spending_is_rejected_before_workspace_writes.<locals>.NoDatabaseCalls object at 0x10f562510>
+lock = 'exclusive'
+
+    def lock_processing_control(session: Session, *, lock: str = "exclusive") -> PersonalWriterMode:
+        statement = select(PersonalWriterMode).where(PersonalWriterMode.singleton.is_(True))
+        if lock == "exclusive":
+            statement = statement.with_for_update()
+        elif lock == "business":
+            statement = statement.with_for_update(key_share=True)  # FOR NO KEY UPDATE
+        elif lock == "dispatch":
+            statement = statement.with_for_update(read=True, key_share=True)  # FOR KEY SHARE
+        elif lock != "read":
+            raise ValueError("unsupported processing lock")
+>       control = session.scalar(statement.execution_options(populate_existing=True))
+                  ^^^^^^^^^^^^^^
+E       AttributeError: 'NoDatabaseCalls' object has no attribute 'scalar'
+
+services/personal/processing.py:68: AttributeError
+______ test_non_finite_spending_is_rejected_before_workspace_writes[nan] _______
+
+value = nan
+
+    @pytest.mark.parametrize("value", [math.inf, -math.inf, math.nan, "Infinity", "NaN"])
+    def test_non_finite_spending_is_rejected_before_workspace_writes(value: object) -> None:
+        source_id = uuid.uuid4()
+        with pytest.raises(ValidationError, match="finite"):
+            WorkspaceSetupRequest.model_validate(
+                {
+                    "selected_source_ids": [str(source_id)],
+                    "execution_profile": "assisted",
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                }
+            )
+    
+        class NoDatabaseCalls:
+            def execute(self, *_args, **_kwargs):  # noqa: ANN202
+                raise AssertionError("configuration validation reached the database")
+    
+        with pytest.raises(ValueError, match="finite"):
+>           configure_profile(
+                NoDatabaseCalls(),  # type: ignore[arg-type]
+                SimpleNamespace(id=uuid.uuid4()),
+                selected_source_ids=[source_id],
+                execution_profile="assisted",
+                settings={
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                },
+            )
+
+tests/unit/test_personal_contracts.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/workspace.py:199: in configure_profile
+    lock_processing_control(session)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <tests.unit.test_personal_contracts.test_non_finite_spending_is_rejected_before_workspace_writes.<locals>.NoDatabaseCalls object at 0x10f561a90>
+lock = 'exclusive'
+
+    def lock_processing_control(session: Session, *, lock: str = "exclusive") -> PersonalWriterMode:
+        statement = select(PersonalWriterMode).where(PersonalWriterMode.singleton.is_(True))
+        if lock == "exclusive":
+            statement = statement.with_for_update()
+        elif lock == "business":
+            statement = statement.with_for_update(key_share=True)  # FOR NO KEY UPDATE
+        elif lock == "dispatch":
+            statement = statement.with_for_update(read=True, key_share=True)  # FOR KEY SHARE
+        elif lock != "read":
+            raise ValueError("unsupported processing lock")
+>       control = session.scalar(statement.execution_options(populate_existing=True))
+                  ^^^^^^^^^^^^^^
+E       AttributeError: 'NoDatabaseCalls' object has no attribute 'scalar'
+
+services/personal/processing.py:68: AttributeError
+____ test_non_finite_spending_is_rejected_before_workspace_writes[Infinity] ____
+
+value = 'Infinity'
+
+    @pytest.mark.parametrize("value", [math.inf, -math.inf, math.nan, "Infinity", "NaN"])
+    def test_non_finite_spending_is_rejected_before_workspace_writes(value: object) -> None:
+        source_id = uuid.uuid4()
+        with pytest.raises(ValidationError, match="finite"):
+            WorkspaceSetupRequest.model_validate(
+                {
+                    "selected_source_ids": [str(source_id)],
+                    "execution_profile": "assisted",
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                }
+            )
+    
+        class NoDatabaseCalls:
+            def execute(self, *_args, **_kwargs):  # noqa: ANN202
+                raise AssertionError("configuration validation reached the database")
+    
+        with pytest.raises(ValueError, match="finite"):
+>           configure_profile(
+                NoDatabaseCalls(),  # type: ignore[arg-type]
+                SimpleNamespace(id=uuid.uuid4()),
+                selected_source_ids=[source_id],
+                execution_profile="assisted",
+                settings={
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                },
+            )
+
+tests/unit/test_personal_contracts.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/workspace.py:199: in configure_profile
+    lock_processing_control(session)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <tests.unit.test_personal_contracts.test_non_finite_spending_is_rejected_before_workspace_writes.<locals>.NoDatabaseCalls object at 0x10f562120>
+lock = 'exclusive'
+
+    def lock_processing_control(session: Session, *, lock: str = "exclusive") -> PersonalWriterMode:
+        statement = select(PersonalWriterMode).where(PersonalWriterMode.singleton.is_(True))
+        if lock == "exclusive":
+            statement = statement.with_for_update()
+        elif lock == "business":
+            statement = statement.with_for_update(key_share=True)  # FOR NO KEY UPDATE
+        elif lock == "dispatch":
+            statement = statement.with_for_update(read=True, key_share=True)  # FOR KEY SHARE
+        elif lock != "read":
+            raise ValueError("unsupported processing lock")
+>       control = session.scalar(statement.execution_options(populate_existing=True))
+                  ^^^^^^^^^^^^^^
+E       AttributeError: 'NoDatabaseCalls' object has no attribute 'scalar'
+
+services/personal/processing.py:68: AttributeError
+______ test_non_finite_spending_is_rejected_before_workspace_writes[NaN] _______
+
+value = 'NaN'
+
+    @pytest.mark.parametrize("value", [math.inf, -math.inf, math.nan, "Infinity", "NaN"])
+    def test_non_finite_spending_is_rejected_before_workspace_writes(value: object) -> None:
+        source_id = uuid.uuid4()
+        with pytest.raises(ValidationError, match="finite"):
+            WorkspaceSetupRequest.model_validate(
+                {
+                    "selected_source_ids": [str(source_id)],
+                    "execution_profile": "assisted",
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                }
+            )
+    
+        class NoDatabaseCalls:
+            def execute(self, *_args, **_kwargs):  # noqa: ANN202
+                raise AssertionError("configuration validation reached the database")
+    
+        with pytest.raises(ValueError, match="finite"):
+>           configure_profile(
+                NoDatabaseCalls(),  # type: ignore[arg-type]
+                SimpleNamespace(id=uuid.uuid4()),
+                selected_source_ids=[source_id],
+                execution_profile="assisted",
+                settings={
+                    "model_route": {"mode": "live"},
+                    "authorized_spend_usd": value,
+                },
+            )
+
+tests/unit/test_personal_contracts.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/workspace.py:199: in configure_profile
+    lock_processing_control(session)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = <tests.unit.test_personal_contracts.test_non_finite_spending_is_rejected_before_workspace_writes.<locals>.NoDatabaseCalls object at 0x10f561a90>
+lock = 'exclusive'
+
+    def lock_processing_control(session: Session, *, lock: str = "exclusive") -> PersonalWriterMode:
+        statement = select(PersonalWriterMode).where(PersonalWriterMode.singleton.is_(True))
+        if lock == "exclusive":
+            statement = statement.with_for_update()
+        elif lock == "business":
+            statement = statement.with_for_update(key_share=True)  # FOR NO KEY UPDATE
+        elif lock == "dispatch":
+            statement = statement.with_for_update(read=True, key_share=True)  # FOR KEY SHARE
+        elif lock != "read":
+            raise ValueError("unsupported processing lock")
+>       control = session.scalar(statement.execution_options(populate_existing=True))
+                  ^^^^^^^^^^^^^^
+E       AttributeError: 'NoDatabaseCalls' object has no attribute 'scalar'
+
+services/personal/processing.py:68: AttributeError
+=========================== short test summary info ============================
+FAILED tests/unit/test_personal_contracts.py::test_non_finite_spending_is_rejected_before_workspace_writes[inf]
+FAILED tests/unit/test_personal_contracts.py::test_non_finite_spending_is_rejected_before_workspace_writes[-inf]
+FAILED tests/unit/test_personal_contracts.py::test_non_finite_spending_is_rejected_before_workspace_writes[nan]
+FAILED tests/unit/test_personal_contracts.py::test_non_finite_spending_is_rejected_before_workspace_writes[Infinity]
+FAILED tests/unit/test_personal_contracts.py::test_non_finite_spending_is_rejected_before_workspace_writes[NaN]
+5 failed, 377 passed in 6.65s

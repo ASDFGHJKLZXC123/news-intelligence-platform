@@ -1,0 +1,116 @@
+{
+  "status": "PASS",
+  "scope": "Historical evidence extraction and validation; no fresh browser action",
+  "source_session_sha256_matches": true,
+  "manifest_artifact_hashes_match": true,
+  "dom_observation_count": 9,
+  "native_screenshot_count": 3,
+  "native_screenshots_visually_inspected": true,
+  "native_screenshots_contain_no_credentials": true,
+  "historical_throwaway_key_absent_from_all_consolidated_files": true,
+  "raw_tool_arguments_or_whole_session_not_copied": true,
+  "relative_readme_links_valid": true,
+  "expected_actual_record_parsed": true,
+  "validation_tooling_note": "Initial in-memory validator escaped a regex incorrectly and failed before writing results; corrected credential/link patterns passed. No extracted artifact was changed.",
+  "files": [
+    {
+      "path": "01-today-before-wording.txt",
+      "sha256": "ec3b779e5391a3932c17b30fd86c7aa15525f319e83503e754fa3b3703a5e139",
+      "bytes": 4246
+    },
+    {
+      "path": "02-raw-detail-loading.jpg",
+      "sha256": "78672595ed772e76a750970737e69fc24bad7f93d0afc380df3c715e090e4f6a",
+      "bytes": 23982
+    },
+    {
+      "path": "02-raw-detail-loading.txt",
+      "sha256": "e38febb4e0229c59187da8ab9f9d8b136e5d7c0d3b34597929b0024672d86b90",
+      "bytes": 454
+    },
+    {
+      "path": "03-raw-detail-loaded-console.txt",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bytes": 2
+    },
+    {
+      "path": "03-raw-detail-loaded.txt",
+      "sha256": "fd5c8bc8a12c897e36dbd983054bc30b3094971fdeda84b7a8f499ae428efc39",
+      "bytes": 998
+    },
+    {
+      "path": "04-settings-initial.txt",
+      "sha256": "e14caadb39201778230501b18243614e56bc481f64bd01861a005a360681f35c",
+      "bytes": 6262
+    },
+    {
+      "path": "05-settings-reload-disabled-feed.txt",
+      "sha256": "1ad29ef9208753621a28fc592c003d6eb838eff81ff00c3e8016a3095c97a1f6",
+      "bytes": 6292
+    },
+    {
+      "path": "06-settings-reenabled-feed.txt",
+      "sha256": "11b956f47d8b370d97d177e73221719c9751962e7750f3d8ea3c99e630193319",
+      "bytes": 6740
+    },
+    {
+      "path": "07-today-frozen-run-console.txt",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bytes": 2
+    },
+    {
+      "path": "07-today-frozen-run.jpg",
+      "sha256": "5ca65733c8aec8f74d9c68fa3b73dbf6312a92917f530b845e9bddc121d0744a",
+      "bytes": 135262
+    },
+    {
+      "path": "07-today-frozen-run.txt",
+      "sha256": "1978b1ba71e9f068ad61127ded9f1bebcd50b35234a6dfc3339540ce99f2f403",
+      "bytes": 4270
+    },
+    {
+      "path": "08-today-final-wording-console.txt",
+      "sha256": "804ddbfd32b8513786ec9d3777fa33b0df91afdd4cc35c56f5fad0600bf5fd73",
+      "bytes": 857
+    },
+    {
+      "path": "08-today-final-wording.jpg",
+      "sha256": "3b9dae7e22c5036e288f206313689d6668b098feca7b819077a9ed308395c94c",
+      "bytes": 133101
+    },
+    {
+      "path": "08-today-final-wording.txt",
+      "sha256": "ee33e98a4648bb8dcacd44c9cdb91c2af1ca731664a5aa553e76eef72e24e0be",
+      "bytes": 4183
+    },
+    {
+      "path": "09-settings-navigation-loading.txt",
+      "sha256": "3aa9b186a578690b95a127c3160ec50af5f87cfc168a11ff971c1008e9774ac6",
+      "bytes": 646
+    },
+    {
+      "path": "README.md",
+      "sha256": "523c0849aea5a8d3efe7f2d192ca8e5be4b0e6b0e375ced362bd0ab7b8521b2d",
+      "bytes": 8211
+    },
+    {
+      "path": "expected-actual.json",
+      "sha256": "10f4beebd20df46c8cab5a07d4a465f7572b59636090722927222591baa8c34e",
+      "bytes": 5118
+    },
+    {
+      "path": "extract_historical.py",
+      "sha256": "6745313867f6ba03bd4649a15dbbd5bf4c72ece4a8f78fb798d64514e796b4e5",
+      "bytes": 8849
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "1d48d7a18645323a494b847cb6f5e721a7fb0433048af71a7874e3df0d0eabc1",
+      "bytes": 10182
+    }
+  ],
+  "scoped_ruff_check": "PASS",
+  "scoped_ruff_format_check": "PASS after formatting only the new extraction script",
+  "extract_script_syntax": "PASS",
+  "git_diff_check_scoped": "PASS"
+}

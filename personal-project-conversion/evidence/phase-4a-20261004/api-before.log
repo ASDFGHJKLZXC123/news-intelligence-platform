@@ -1,0 +1,135 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_________________ test_subprocess_health_does_not_probe_celery _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1062a5e00>
+
+    def test_subprocess_health_does_not_probe_celery(monkeypatch):
+        settings = Settings(_env_file=None, app_env="test", personal_processing_transport="subprocess", personal_processing_mode="personal")
+        monkeypatch.setattr(deps, "get_settings", lambda: settings)
+        monkeypatch.setattr(deps, "_check_personal_launcher", lambda: deps.ComponentStatus("launcher", True, "ready"), raising=False)
+        monkeypatch.setattr(deps, "_inspect_active_worker_queues", lambda *_: pytest.fail("personal health must not construct a Celery broker"))
+>       result = deps.check_worker_config()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_personal_phase4a_api.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+apps/api/deps.py:271: in check_worker_config
+    return _check_worker_runtime(_inspect_active_worker_queues)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/deps.py:238: in _check_worker_runtime
+    replies = probe(WORKER_INSPECT_TIMEOUT_SECONDS)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_ = (1.0,)
+
+>   monkeypatch.setattr(deps, "_inspect_active_worker_queues", lambda *_: pytest.fail("personal health must not construct a Celery broker"))
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: personal health must not construct a Celery broker
+
+tests/unit/test_personal_phase4a_api.py:18: Failed
+________________ test_subprocess_config_does_not_require_broker ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1062a7bb0>
+
+    def test_subprocess_config_does_not_require_broker(monkeypatch):
+        settings = Settings(_env_file=None, app_env="test", personal_processing_transport="subprocess", personal_processing_mode="personal", celery_broker_url="", celery_result_backend="")
+        monkeypatch.setattr(deps, "get_settings", lambda: settings)
+>       assert deps.check_config().ok
+E       AssertionError: assert False
+E        +  where False = ComponentStatus(name='config', ok=False, detail='celery_broker_url missing; celery_result_backend missing').ok
+E        +    where ComponentStatus(name='config', ok=False, detail='celery_broker_url missing; celery_result_backend missing') = <function check_config at 0x106cb6160>()
+E        +      where <function check_config at 0x106cb6160> = deps.check_config
+
+tests/unit/test_personal_phase4a_api.py:26: AssertionError
+_ test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides0] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1076afad0>
+overrides = {'personal_bind_host': '0.0.0.0'}
+
+    @pytest.mark.parametrize("overrides", [
+        {"personal_bind_host": "0.0.0.0"},
+        {"personal_app_workers": 2},
+        {"personal_processing_mode": "legacy"},
+    ])
+    def test_subprocess_config_blocks_public_multiworker_or_mode_mismatch(monkeypatch, overrides):
+        settings = Settings(_env_file=None, app_env="test", personal_processing_transport="subprocess", personal_processing_mode="personal", **{k: v for k,v in overrides.items() if k != "personal_processing_mode"})
+        if "personal_processing_mode" in overrides:
+            settings = settings.model_copy(update=overrides)
+        monkeypatch.setattr(deps, "get_settings", lambda: settings)
+>       assert not deps.check_config().ok
+E       AssertionError: assert not True
+E        +  where True = ComponentStatus(name='config', ok=True, detail='ok').ok
+E        +    where ComponentStatus(name='config', ok=True, detail='ok') = <function check_config at 0x106cb6160>()
+E        +      where <function check_config at 0x106cb6160> = deps.check_config
+
+tests/unit/test_personal_phase4a_api.py:39: AssertionError
+_ test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides1] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10770de10>
+overrides = {'personal_app_workers': 2}
+
+    @pytest.mark.parametrize("overrides", [
+        {"personal_bind_host": "0.0.0.0"},
+        {"personal_app_workers": 2},
+        {"personal_processing_mode": "legacy"},
+    ])
+    def test_subprocess_config_blocks_public_multiworker_or_mode_mismatch(monkeypatch, overrides):
+        settings = Settings(_env_file=None, app_env="test", personal_processing_transport="subprocess", personal_processing_mode="personal", **{k: v for k,v in overrides.items() if k != "personal_processing_mode"})
+        if "personal_processing_mode" in overrides:
+            settings = settings.model_copy(update=overrides)
+        monkeypatch.setattr(deps, "get_settings", lambda: settings)
+>       assert not deps.check_config().ok
+E       AssertionError: assert not True
+E        +  where True = ComponentStatus(name='config', ok=True, detail='ok').ok
+E        +    where ComponentStatus(name='config', ok=True, detail='ok') = <function check_config at 0x106cb6160>()
+E        +      where <function check_config at 0x106cb6160> = deps.check_config
+
+tests/unit/test_personal_phase4a_api.py:39: AssertionError
+_ test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides2] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10770e140>
+overrides = {'personal_processing_mode': 'legacy'}
+
+    @pytest.mark.parametrize("overrides", [
+        {"personal_bind_host": "0.0.0.0"},
+        {"personal_app_workers": 2},
+        {"personal_processing_mode": "legacy"},
+    ])
+    def test_subprocess_config_blocks_public_multiworker_or_mode_mismatch(monkeypatch, overrides):
+        settings = Settings(_env_file=None, app_env="test", personal_processing_transport="subprocess", personal_processing_mode="personal", **{k: v for k,v in overrides.items() if k != "personal_processing_mode"})
+        if "personal_processing_mode" in overrides:
+            settings = settings.model_copy(update=overrides)
+        monkeypatch.setattr(deps, "get_settings", lambda: settings)
+>       assert not deps.check_config().ok
+E       AssertionError: assert not True
+E        +  where True = ComponentStatus(name='config', ok=True, detail='ok').ok
+E        +    where ComponentStatus(name='config', ok=True, detail='ok') = <function check_config at 0x106cb6160>()
+E        +      where <function check_config at 0x106cb6160> = deps.check_config
+
+tests/unit/test_personal_phase4a_api.py:39: AssertionError
+______________ test_importing_api_shell_does_not_construct_celery ______________
+
+    def test_importing_api_shell_does_not_construct_celery():
+        result = subprocess.run([sys.executable, "-c", "import sys; import apps.api.main; assert 'workers.celery_app' not in sys.modules; assert 'celery' not in sys.modules"], capture_output=True, text=True, timeout=15)
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"timestamp": "2026-10-04T08:12:54.547315+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+E         Traceback (most recent call last):
+E           File "<string>", line 1, in <module>
+E             import sys; import apps.api.main; assert 'workers.celery_app' not in sys.modules; assert 'celery' not in sys.modules
+E                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         AssertionError
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-c', "im...n sys.modules\n                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n').returncode
+
+tests/unit/test_personal_phase4a_api.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_personal_phase4a_api.py::test_subprocess_health_does_not_probe_celery
+FAILED tests/unit/test_personal_phase4a_api.py::test_subprocess_config_does_not_require_broker
+FAILED tests/unit/test_personal_phase4a_api.py::test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides0]
+FAILED tests/unit/test_personal_phase4a_api.py::test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides1]
+FAILED tests/unit/test_personal_phase4a_api.py::test_subprocess_config_blocks_public_multiworker_or_mode_mismatch[overrides2]
+FAILED tests/unit/test_personal_phase4a_api.py::test_importing_api_shell_does_not_construct_celery
+6 failed in 1.42s

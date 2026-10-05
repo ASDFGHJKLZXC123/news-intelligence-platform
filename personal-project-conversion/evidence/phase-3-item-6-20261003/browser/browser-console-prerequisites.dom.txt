@@ -1,0 +1,43 @@
+CAPTURE browser-console-prerequisites[
+  {
+    level: 'warn',
+    message: 'You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/',
+    timestamp: '2026-10-04T01:02:19.950Z',
+    url: 'https://unpkg.com/@babel/standalone@7.29.0/babel.min.js'
+  },
+  {
+    level: 'warn',
+    message: 'You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/',
+    timestamp: '2026-10-04T01:03:10.062Z',
+    url: 'https://unpkg.com/@babel/standalone@7.29.0/babel.min.js'
+  }
+][
+  'https://fonts.googleapis.com',
+  'https://fonts.gstatic.com',
+  'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap',
+  'https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Widgets/widgets.css',
+  'app/styles.css?v=personal-workflow-7',
+  'https://unpkg.com/react@18.3.1/umd/react.development.js',
+  'https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js',
+  'https://unpkg.com/@babel/standalone@7.29.0/babel.min.js',
+  'https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Cesium.js',
+  'app/api-adapter.js?v=personal-workflow-7',
+  'app/data.js?v=stage7-6b-1',
+  'app/icons.js',
+  'app/data-quality.js?v=stage7-7-1',
+  'app/globe-runtime.js?v=map-optimized-2',
+  'app/tweaks-panel.jsx?v=frontend-polish-2',
+  'app/components.jsx?v=frontend-polish-3',
+  'app/shell.jsx?v=personal-workflow-7',
+  'app/widgets.jsx?v=company-row-actions-1',
+  'app/page-dashboard.jsx?v=frontend-polish-1',
+  'app/page-events.jsx?v=search-dedupe-1',
+  'app/page-geo-intel.jsx?v=company-logos-1',
+  'app/page-event-detail.jsx?v=company-logos-1',
+  'app/page-risk.jsx?v=frontend-polish-3',
+  'app/page-entities.jsx?v=company-research-1',
+  'app/page-alerts-admin.jsx',
+  'app/page-misc.jsx?v=company-logos-1',
+  'app/page-personal.jsx?v=personal-workflow-7',
+  'app/main.jsx?v=personal-workflow-7'
+]

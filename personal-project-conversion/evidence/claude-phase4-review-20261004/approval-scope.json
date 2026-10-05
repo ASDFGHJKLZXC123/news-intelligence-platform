@@ -1,0 +1,15 @@
+{
+  "state": "approved and launched",
+  "destination": "Anthropic through existing authenticated Claude Code account",
+  "payload": "current source/tests/config/frontend/conversion contracts and exact Phase4A/4B evidence from current dirty checkout",
+  "excluded": "private environment .env variants, Git/auth internals, runtime caches, private key files, unrelated earlier dated evidence folders",
+  "tools": "Read, Glob, Grep only; no Bash/Edit/Write/MCP/browser",
+  "source_mutation": false,
+  "paid_project_activation": false,
+  "verification_method": "independent source and retained-evidence inspection; any fresh tests will be separately labeled",
+  "block_reason": "Potential sensitive egress of unpublished project source/evidence; reviewer requires explicit payload-and-destination approval",
+  "initial_state": "not launched; automatic approval review rejected execution pending explicit payload/destination authorization",
+  "explicit_human_approval": "Approved.",
+  "approval_context": "Human approved the displayed current source/tests/configuration/Phase4A-4B evidence payload to Anthropic via authenticated Claude Code, with sensitive files excluded and read-only tools",
+  "approval_recorded_utc": "2026-10-05T01:03:47.845109+00:00"
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "CreatedAt": "2026-09-20T22:50:40Z",
+    "Driver": "local",
+    "Labels": {
+      "com.docker.volume.anonymous": ""
+    },
+    "Mountpoint": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+    "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+    "Options": null,
+    "Scope": "local",
+    "container_references": [
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6 nip-phase3-tests-02ea38048d"
+    ]
+  },
+  {
+    "CreatedAt": "2026-09-20T23:02:15Z",
+    "Driver": "local",
+    "Labels": {
+      "com.docker.volume.anonymous": ""
+    },
+    "Mountpoint": "/var/lib/docker/volumes/8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b/_data",
+    "Name": "8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b",
+    "Options": null,
+    "Scope": "local",
+    "container_references": [
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5 nip-personal-phase2-offline-pg-p3_browser_20260920_a"
+    ]
+  },
+  {
+    "CreatedAt": "2026-09-20T23:02:21Z",
+    "Driver": "local",
+    "Labels": {
+      "com.docker.volume.anonymous": ""
+    },
+    "Mountpoint": "/var/lib/docker/volumes/61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf/_data",
+    "Name": "61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf",
+    "Options": null,
+    "Scope": "local",
+    "container_references": [
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73 nip-personal-phase2-offline-redis-p3_browser_20260920_a"
+    ]
+  }
+]

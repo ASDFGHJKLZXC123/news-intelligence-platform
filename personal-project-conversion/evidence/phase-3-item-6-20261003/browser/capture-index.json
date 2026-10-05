@@ -1,0 +1,1045 @@
+{
+  "schema": "item6-native-browser-captures.v2",
+  "session_id": "01a10467-132b-7ff2-a698-47b6023248c8",
+  "session_sha256": "0d0c8750ec614b546f0284ec3d8f5d7b5a81f18d3c7691b981e40f366b341cab",
+  "source": "native function_call_output only; no function call arguments",
+  "captures": [
+    {
+      "label": "settings-pre-run-reload",
+      "session_line": 221,
+      "observed_at": "2026-10-04T00:58:42.644Z",
+      "call_id": "call_X5eephgnyryc3ptDrN9GeHLm",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-pre-run-reload.dom.txt",
+      "dom_sha256": "1c9baae785b84b95d43bc61fd37e219c0a36e82513fe9844727f2e01b66ef0a5",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_X5eephgnyryc3ptDrN9GeHLm-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "settings-source-limit-rejected",
+      "session_line": 286,
+      "observed_at": "2026-10-04T01:00:37.006Z",
+      "call_id": "call_OFH8I1g7pRNfZNwq3C8K0GXY",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-source-limit-rejected.dom.txt",
+      "dom_sha256": "e805c25f221cc60b3013201007f436830d2d8c068ca4cb708f0ee6dc260521ba",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_OFH8I1g7pRNfZNwq3C8K0GXY-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "settings-allowlist-saved",
+      "session_line": 291,
+      "observed_at": "2026-10-04T01:00:43.873Z",
+      "call_id": "call_8wE6kcAgSY8Zsdz2EkmywKkp",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-allowlist-saved.dom.txt",
+      "dom_sha256": "e4924430718ae376d25f6776184d612469385beeb5521ae32352a4dddd801bb8",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "settings-raw-counts",
+      "session_line": 317,
+      "observed_at": "2026-10-04T01:01:31.172Z",
+      "call_id": "call_XOmoQ4mjRTcp4JVjLhpFFWDS",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-raw-counts.dom.txt",
+      "dom_sha256": "8d54ab767c0ad8c67c5892ed3b6a73190ba2aa5b898676e532837df00b083059",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "capture-entry-boundary",
+      "session_line": 324,
+      "observed_at": "2026-10-04T01:01:53.447Z",
+      "call_id": "call_rYiVO7neQJNMwDaMOxSztZRC",
+      "label_ordinal_within_call": 1,
+      "dom": "capture-entry-boundary.dom.txt",
+      "dom_sha256": "851116a6e98a2b7f7e4bc5166b36699e55652fa0a8b9a37b676fa76d8ce6b22e",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "disabled-source-retained",
+      "session_line": 324,
+      "observed_at": "2026-10-04T01:01:53.447Z",
+      "call_id": "call_rYiVO7neQJNMwDaMOxSztZRC",
+      "label_ordinal_within_call": 2,
+      "dom": "disabled-source-retained.dom.txt",
+      "dom_sha256": "a7b00dca369f86b2f1be71340aaf31a255947ecd9a046593476fa9193ef03c4a",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "settings-disabled-reload",
+      "session_line": 331,
+      "observed_at": "2026-10-04T01:02:20.110Z",
+      "call_id": "call_d04FoYkn9bQZ44Fzl0xbeyxB",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-disabled-reload.dom.txt",
+      "dom_sha256": "2d44700d5485fc923bb4c377726065a2d02e05545b18fb10ad683fe1628b2dbd",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-page-1",
+      "session_line": 352,
+      "observed_at": "2026-10-04T01:02:54.728Z",
+      "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+      "label_ordinal_within_call": 1,
+      "dom": "raw-page-1.dom.txt",
+      "dom_sha256": "7d4441a1aa6ff8a184919f1886328d7fa3d6709bde1248e3f31f0b947de34536",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_6hMYAEsy1LO5cCPUSA49lhvi-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-page-2",
+      "session_line": 352,
+      "observed_at": "2026-10-04T01:02:54.728Z",
+      "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+      "label_ordinal_within_call": 2,
+      "dom": "raw-page-2.dom.txt",
+      "dom_sha256": "049ff6db6f00d510fe921e1dff8cb55eab28ac9048807a9b1706140c84c063e4",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_6hMYAEsy1LO5cCPUSA49lhvi-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-page-3",
+      "session_line": 352,
+      "observed_at": "2026-10-04T01:02:54.728Z",
+      "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+      "label_ordinal_within_call": 3,
+      "dom": "raw-page-3.dom.txt",
+      "dom_sha256": "123c65b451fdfac74fadbfb59c0975b58a686983807d785aa7a82820b2f7276e",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_6hMYAEsy1LO5cCPUSA49lhvi-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-pagination-repeat",
+      "session_line": 362,
+      "observed_at": "2026-10-04T01:03:11.805Z",
+      "call_id": "call_jdUdxrWM8PPLeFqz3JK67Y4k",
+      "label_ordinal_within_call": 1,
+      "dom": "raw-pagination-repeat.dom.txt",
+      "dom_sha256": "c6e7e96783c4463df2ec640ecf0026efd3cc6892491b2e189dab608a444ec3c9",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_jdUdxrWM8PPLeFqz3JK67Y4k-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-detail-known-time",
+      "session_line": 362,
+      "observed_at": "2026-10-04T01:03:11.805Z",
+      "call_id": "call_jdUdxrWM8PPLeFqz3JK67Y4k",
+      "label_ordinal_within_call": 2,
+      "dom": "raw-detail-known-time.dom.txt",
+      "dom_sha256": "32370d7ca3eba77fdef90cd72b606b9ae35cafc6be22061994ff87493701e58f",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_jdUdxrWM8PPLeFqz3JK67Y4k-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-detail-known-loaded",
+      "session_line": 387,
+      "observed_at": "2026-10-04T01:03:39.024Z",
+      "call_id": "call_y8ujf1ssecvcRmZj3rZu9xmF",
+      "label_ordinal_within_call": 1,
+      "dom": "raw-detail-known-loaded.dom.txt",
+      "dom_sha256": "60efe12742db5ae8830f2b3ea8af3c4333cc9b7a67785e1f67fe605fb0798780",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-detail-known-final",
+      "session_line": 394,
+      "observed_at": "2026-10-04T01:03:47.947Z",
+      "call_id": "call_nikjU3XC1gfYSPwvqP0UJzpe",
+      "label_ordinal_within_call": 1,
+      "dom": "raw-detail-known-final.dom.txt",
+      "dom_sha256": "0cd60369e33e1206e16950ad395a1b1a44eac771207d5ee24e4483f98cb6c1d7",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_nikjU3XC1gfYSPwvqP0UJzpe-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "saved-ai-disabled",
+      "session_line": 418,
+      "observed_at": "2026-10-04T01:04:24.378Z",
+      "call_id": "call_kPKqDEsddQONLbVlRPfJlaFf",
+      "label_ordinal_within_call": 1,
+      "dom": "saved-ai-disabled.dom.txt",
+      "dom_sha256": "fad0cda2de48d4cb436b27f852465a31533382143221517a5ad279cd5f4ce4f7",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "saved-event-source",
+      "session_line": 430,
+      "observed_at": "2026-10-04T01:04:35.436Z",
+      "call_id": "call_ACpfahzXzDuVwRvt21aOsf4W",
+      "label_ordinal_within_call": 1,
+      "dom": "saved-event-source.dom.txt",
+      "dom_sha256": "fa5604a6956414263fcf4e1b8c06b483163540fa528a37603d74c2c8e642a201",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "briefs-ai-disabled",
+      "session_line": 446,
+      "observed_at": "2026-10-04T01:04:51.834Z",
+      "call_id": "call_StDrWIYpBkMkYJYEVfRx7tiG",
+      "label_ordinal_within_call": 1,
+      "dom": "briefs-ai-disabled.dom.txt",
+      "dom_sha256": "c8c842a25dfa0af9a52be6ee4c0370fda041ffbb53939929991f963933a9cd85",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "brief-detail-ai-disabled",
+      "session_line": 463,
+      "observed_at": "2026-10-04T01:05:05.616Z",
+      "call_id": "call_dMizy3LwtwwYubx3cxdINrSw",
+      "label_ordinal_within_call": 1,
+      "dom": "brief-detail-ai-disabled.dom.txt",
+      "dom_sha256": "50d9f5cca900c98d290218264e3e67390df03ef80479589741455c3f14f855d9",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_dMizy3LwtwwYubx3cxdINrSw-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "capture-failure-visible",
+      "session_line": 490,
+      "observed_at": "2026-10-04T01:05:46.423Z",
+      "call_id": "call_XO7l7h3nYzbRCpNM9EdxhlFr",
+      "label_ordinal_within_call": 1,
+      "dom": "capture-failure-visible.dom.txt",
+      "dom_sha256": "4ba5239df923c0282cc2942c2dca5a3614c50ffbea708b7cff52844bee427f35",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_XO7l7h3nYzbRCpNM9EdxhlFr-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "capture-failure-stage-detail",
+      "session_line": 504,
+      "observed_at": "2026-10-04T01:06:00.304Z",
+      "call_id": "call_yqi9k9PpYZUKQq9brcXVAByd",
+      "label_ordinal_within_call": 1,
+      "dom": "capture-failure-stage-detail.dom.txt",
+      "dom_sha256": "87133a370adc79aedfd740fc756f509ac8fd84b20613bc44932b8fc9df637d67",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "provider-failure-stage-detail",
+      "session_line": 527,
+      "observed_at": "2026-10-04T01:06:35.111Z",
+      "call_id": "call_P15jOKnIAEZ1watv1um0hIr2",
+      "label_ordinal_within_call": 1,
+      "dom": "provider-failure-stage-detail.dom.txt",
+      "dom_sha256": "ea81f60fbc8bc327afeea0ed63f2d661194c8a0693538230038325c04f63c711",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "raw-detail-unknown-truncated",
+      "session_line": 539,
+      "observed_at": "2026-10-04T01:06:51.169Z",
+      "call_id": "call_Id6V3e2vJTGeBl0fj8sEIPhE",
+      "label_ordinal_within_call": 1,
+      "dom": "raw-detail-unknown-truncated.dom.txt",
+      "dom_sha256": "e3a848ce1bf6ffd2f1feeb4f0886a9e780d63c0cafc3de09882d3b5ec0ccb009",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_Id6V3e2vJTGeBl0fj8sEIPhE-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "grouped-article-direct-link",
+      "session_line": 546,
+      "observed_at": "2026-10-04T01:06:59.660Z",
+      "call_id": "call_ANcsmbu5QJK5wHZ0tzwcFsEi",
+      "label_ordinal_within_call": 1,
+      "dom": "grouped-article-direct-link.dom.txt",
+      "dom_sha256": "d558f7c2e247c5a82e77058dbda0042ae9e5f096c4c45e7af59ea16540e18130",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "spending-nonzero-gate-off",
+      "session_line": 565,
+      "observed_at": "2026-10-04T01:07:25.749Z",
+      "call_id": "call_LHbcLJGcfLwMj6uEmasDmOJH",
+      "label_ordinal_within_call": 1,
+      "dom": "spending-nonzero-gate-off.dom.txt",
+      "dom_sha256": "fc59ade9ae95f0fa6453fa7beaa3ae7b965fe1ad6d54ec24722c011387952994",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "settings-model-price-metadata",
+      "session_line": 582,
+      "observed_at": "2026-10-04T01:08:07.534Z",
+      "call_id": "call_dDSFg7McYQNhyjr2sfVQbAaG",
+      "label_ordinal_within_call": 1,
+      "dom": "settings-model-price-metadata.dom.txt",
+      "dom_sha256": "6dc3b2980c6efb4b2744c890d6e68c6eb0abea879d2913f4afcf1300aff6a5c1",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_dDSFg7McYQNhyjr2sfVQbAaG-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "spending-screenshot",
+      "session_line": 582,
+      "observed_at": "2026-10-04T01:08:07.534Z",
+      "call_id": "call_dDSFg7McYQNhyjr2sfVQbAaG",
+      "label_ordinal_within_call": 2,
+      "dom": "spending-screenshot.dom.txt",
+      "dom_sha256": "3a157c97daa5adea90a20e07d888605859a154db3c01bb1cd1c7c48003a9a987",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_dDSFg7McYQNhyjr2sfVQbAaG-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "allowance-reached-visible",
+      "session_line": 605,
+      "observed_at": "2026-10-04T01:09:00.006Z",
+      "call_id": "call_Pi008fiPQRmDqFMYpXexy3gG",
+      "label_ordinal_within_call": 1,
+      "dom": "allowance-reached-visible.dom.txt",
+      "dom_sha256": "bc8fd1701ba3608941d38f99af544b62975eb4e62c88d1e4d66f830e617de7f6",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_Pi008fiPQRmDqFMYpXexy3gG-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "missing-configuration-visible",
+      "session_line": 617,
+      "observed_at": "2026-10-04T01:09:27.371Z",
+      "call_id": "call_lisoDyeGnQUDy5jmArSKvsko",
+      "label_ordinal_within_call": 1,
+      "dom": "missing-configuration-visible.dom.txt",
+      "dom_sha256": "3d66a5183ba4f5e6e339d8917c0050b5dc77da498289748cc6eaa151d837395f",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "ai-disabled-explicit",
+      "session_line": 624,
+      "observed_at": "2026-10-04T01:09:38.470Z",
+      "call_id": "call_SSyRR4oKXkMIlM8CX87vqb5T",
+      "label_ordinal_within_call": 1,
+      "dom": "ai-disabled-explicit.dom.txt",
+      "dom_sha256": "3ec6cdfd8866bd0e518b444dbb0eac3062de5e68cea76380d76fcb4fb3fbd607",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "gate-off-feature-readiness",
+      "session_line": 666,
+      "observed_at": "2026-10-04T01:10:54.030Z",
+      "call_id": "call_ganzV4Oluc6ijTvElq2VzwaN",
+      "label_ordinal_within_call": 1,
+      "dom": "gate-off-feature-readiness.dom.txt",
+      "dom_sha256": "2a78ad4b6d43f5b5987b64c6c4ff13c5ff9988e7ac2a7413f78940bf06fd3808",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "saved-ai-blocked",
+      "session_line": 666,
+      "observed_at": "2026-10-04T01:10:54.030Z",
+      "call_id": "call_ganzV4Oluc6ijTvElq2VzwaN",
+      "label_ordinal_within_call": 2,
+      "dom": "saved-ai-blocked.dom.txt",
+      "dom_sha256": "fa1587f767bef32fa5c7369e99fd10441476d60f72c178786d5d80f3f604ab4d",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "saved-event-ai-blocked",
+      "session_line": 666,
+      "observed_at": "2026-10-04T01:10:54.030Z",
+      "call_id": "call_ganzV4Oluc6ijTvElq2VzwaN",
+      "label_ordinal_within_call": 3,
+      "dom": "saved-event-ai-blocked.dom.txt",
+      "dom_sha256": "083645c1c2a550a4aa464169ab7bb93dd1f31f820a494422bb957e10b811a755",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "brief-ai-blocked",
+      "session_line": 673,
+      "observed_at": "2026-10-04T01:11:05.632Z",
+      "call_id": "call_p6i4L2s0fk9Jsm3byktbz6sP",
+      "label_ordinal_within_call": 1,
+      "dom": "brief-ai-blocked.dom.txt",
+      "dom_sha256": "8aac5478bed0441d705b87109d58ea1b08eef9c0c663e448cdb875b621b2d358",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "browser-console-prerequisites",
+      "session_line": 673,
+      "observed_at": "2026-10-04T01:11:05.632Z",
+      "call_id": "call_p6i4L2s0fk9Jsm3byktbz6sP",
+      "label_ordinal_within_call": 2,
+      "dom": "browser-console-prerequisites.dom.txt",
+      "dom_sha256": "528fa5e1780c03b6b6cab4b2b7b429b3c335d307261e6621cac88916c8e9a274",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "capture-failure-corrected",
+      "session_line": 918,
+      "observed_at": "2026-10-04T01:20:17.729Z",
+      "call_id": "call_88hAlLGtkDHFpqXZlZ2bTEWn",
+      "label_ordinal_within_call": 1,
+      "dom": "capture-failure-corrected.dom.txt",
+      "dom_sha256": "84fa0c60b8455266a1586283546825dbd32843123fb0582d013e3cedaa0b111f",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_88hAlLGtkDHFpqXZlZ2bTEWn-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "provider-failure-corrected",
+      "session_line": 925,
+      "observed_at": "2026-10-04T01:20:30.193Z",
+      "call_id": "call_3aCxzKLdz2Ixh07Y7coRkU5m",
+      "label_ordinal_within_call": 1,
+      "dom": "provider-failure-corrected.dom.txt",
+      "dom_sha256": "6c88862484e3446cb0017f7737bc363f3bd79c383f1bf971ddf6a19d2ee660c8",
+      "screenshots": [],
+      "function_call_image_refs": [
+        "call_3aCxzKLdz2Ixh07Y7coRkU5m-image-1.jpg"
+      ],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "saved-after-correction",
+      "session_line": 948,
+      "observed_at": "2026-10-04T01:20:50.265Z",
+      "call_id": "call_s9LmWtNchSW6vySfsQ6ALHCl",
+      "label_ordinal_within_call": 1,
+      "dom": "saved-after-correction.dom.txt",
+      "dom_sha256": "9ebc15be190f6cabc7b42d50cb6246eddfe840100e11440305e1ec9a3ce661e4",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "brief-after-correction",
+      "session_line": 970,
+      "observed_at": "2026-10-04T01:21:15.380Z",
+      "call_id": "call_9CY17PJCIRjP8kYvLHatO46q",
+      "label_ordinal_within_call": 1,
+      "dom": "brief-after-correction.dom.txt",
+      "dom_sha256": "57f117dc03683c21ad9a3ebafae7c7256ae0375c6de58cbe9a9484b5aebcfe2c",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    },
+    {
+      "label": "console-after-correction",
+      "session_line": 970,
+      "observed_at": "2026-10-04T01:21:15.380Z",
+      "call_id": "call_9CY17PJCIRjP8kYvLHatO46q",
+      "label_ordinal_within_call": 2,
+      "dom": "console-after-correction.dom.txt",
+      "dom_sha256": "3a012e0617a15cca2dd558698456e60d04aae12892b78b67cf2268250e1bb800",
+      "screenshots": [],
+      "function_call_image_refs": [],
+      "snapshot_state": "requires_content_inspection",
+      "screenshot_label_attribution": "unassigned_function_call_scope"
+    }
+  ],
+  "function_calls": [
+    {
+      "call_id": "call_X5eephgnyryc3ptDrN9GeHLm",
+      "session_line": 221,
+      "observed_at": "2026-10-04T00:58:42.644Z",
+      "embedded_labels": [
+        "settings-pre-run-reload"
+      ],
+      "images": [
+        "call_X5eephgnyryc3ptDrN9GeHLm-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_X5eephgnyryc3ptDrN9GeHLm-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_OFH8I1g7pRNfZNwq3C8K0GXY",
+      "session_line": 286,
+      "observed_at": "2026-10-04T01:00:37.006Z",
+      "embedded_labels": [
+        "settings-source-limit-rejected"
+      ],
+      "images": [
+        "call_OFH8I1g7pRNfZNwq3C8K0GXY-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_OFH8I1g7pRNfZNwq3C8K0GXY-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_8wE6kcAgSY8Zsdz2EkmywKkp",
+      "session_line": 291,
+      "observed_at": "2026-10-04T01:00:43.873Z",
+      "embedded_labels": [
+        "settings-allowlist-saved"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_8wE6kcAgSY8Zsdz2EkmywKkp-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_XOmoQ4mjRTcp4JVjLhpFFWDS",
+      "session_line": 317,
+      "observed_at": "2026-10-04T01:01:31.172Z",
+      "embedded_labels": [
+        "settings-raw-counts"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_XOmoQ4mjRTcp4JVjLhpFFWDS-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_rYiVO7neQJNMwDaMOxSztZRC",
+      "session_line": 324,
+      "observed_at": "2026-10-04T01:01:53.447Z",
+      "embedded_labels": [
+        "capture-entry-boundary",
+        "disabled-source-retained"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_rYiVO7neQJNMwDaMOxSztZRC-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_d04FoYkn9bQZ44Fzl0xbeyxB",
+      "session_line": 331,
+      "observed_at": "2026-10-04T01:02:20.110Z",
+      "embedded_labels": [
+        "settings-disabled-reload"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_d04FoYkn9bQZ44Fzl0xbeyxB-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+      "session_line": 352,
+      "observed_at": "2026-10-04T01:02:54.728Z",
+      "embedded_labels": [
+        "raw-page-1",
+        "raw-page-2",
+        "raw-page-3"
+      ],
+      "images": [
+        "call_6hMYAEsy1LO5cCPUSA49lhvi-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_6hMYAEsy1LO5cCPUSA49lhvi-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_jdUdxrWM8PPLeFqz3JK67Y4k",
+      "session_line": 362,
+      "observed_at": "2026-10-04T01:03:11.805Z",
+      "embedded_labels": [
+        "raw-pagination-repeat",
+        "raw-detail-known-time"
+      ],
+      "images": [
+        "call_jdUdxrWM8PPLeFqz3JK67Y4k-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_jdUdxrWM8PPLeFqz3JK67Y4k-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_y8ujf1ssecvcRmZj3rZu9xmF",
+      "session_line": 387,
+      "observed_at": "2026-10-04T01:03:39.024Z",
+      "embedded_labels": [
+        "raw-detail-known-loaded"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_y8ujf1ssecvcRmZj3rZu9xmF-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_nikjU3XC1gfYSPwvqP0UJzpe",
+      "session_line": 394,
+      "observed_at": "2026-10-04T01:03:47.947Z",
+      "embedded_labels": [
+        "raw-detail-known-final"
+      ],
+      "images": [
+        "call_nikjU3XC1gfYSPwvqP0UJzpe-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_nikjU3XC1gfYSPwvqP0UJzpe-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_kPKqDEsddQONLbVlRPfJlaFf",
+      "session_line": 418,
+      "observed_at": "2026-10-04T01:04:24.378Z",
+      "embedded_labels": [
+        "saved-ai-disabled"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_kPKqDEsddQONLbVlRPfJlaFf-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_ACpfahzXzDuVwRvt21aOsf4W",
+      "session_line": 430,
+      "observed_at": "2026-10-04T01:04:35.436Z",
+      "embedded_labels": [
+        "saved-event-source"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_ACpfahzXzDuVwRvt21aOsf4W-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_StDrWIYpBkMkYJYEVfRx7tiG",
+      "session_line": 446,
+      "observed_at": "2026-10-04T01:04:51.834Z",
+      "embedded_labels": [
+        "briefs-ai-disabled"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_StDrWIYpBkMkYJYEVfRx7tiG-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_dMizy3LwtwwYubx3cxdINrSw",
+      "session_line": 463,
+      "observed_at": "2026-10-04T01:05:05.616Z",
+      "embedded_labels": [
+        "brief-detail-ai-disabled"
+      ],
+      "images": [
+        "call_dMizy3LwtwwYubx3cxdINrSw-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_dMizy3LwtwwYubx3cxdINrSw-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_XO7l7h3nYzbRCpNM9EdxhlFr",
+      "session_line": 490,
+      "observed_at": "2026-10-04T01:05:46.423Z",
+      "embedded_labels": [
+        "capture-failure-visible"
+      ],
+      "images": [
+        "call_XO7l7h3nYzbRCpNM9EdxhlFr-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_XO7l7h3nYzbRCpNM9EdxhlFr-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_yqi9k9PpYZUKQq9brcXVAByd",
+      "session_line": 504,
+      "observed_at": "2026-10-04T01:06:00.304Z",
+      "embedded_labels": [
+        "capture-failure-stage-detail"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_yqi9k9PpYZUKQq9brcXVAByd-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_P15jOKnIAEZ1watv1um0hIr2",
+      "session_line": 527,
+      "observed_at": "2026-10-04T01:06:35.111Z",
+      "embedded_labels": [
+        "provider-failure-stage-detail"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_P15jOKnIAEZ1watv1um0hIr2-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_Id6V3e2vJTGeBl0fj8sEIPhE",
+      "session_line": 539,
+      "observed_at": "2026-10-04T01:06:51.169Z",
+      "embedded_labels": [
+        "raw-detail-unknown-truncated"
+      ],
+      "images": [
+        "call_Id6V3e2vJTGeBl0fj8sEIPhE-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_Id6V3e2vJTGeBl0fj8sEIPhE-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_ANcsmbu5QJK5wHZ0tzwcFsEi",
+      "session_line": 546,
+      "observed_at": "2026-10-04T01:06:59.660Z",
+      "embedded_labels": [
+        "grouped-article-direct-link"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_ANcsmbu5QJK5wHZ0tzwcFsEi-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_LHbcLJGcfLwMj6uEmasDmOJH",
+      "session_line": 565,
+      "observed_at": "2026-10-04T01:07:25.749Z",
+      "embedded_labels": [
+        "spending-nonzero-gate-off"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_LHbcLJGcfLwMj6uEmasDmOJH-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_dDSFg7McYQNhyjr2sfVQbAaG",
+      "session_line": 582,
+      "observed_at": "2026-10-04T01:08:07.534Z",
+      "embedded_labels": [
+        "settings-model-price-metadata",
+        "spending-screenshot"
+      ],
+      "images": [
+        "call_dDSFg7McYQNhyjr2sfVQbAaG-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_dDSFg7McYQNhyjr2sfVQbAaG-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_Pi008fiPQRmDqFMYpXexy3gG",
+      "session_line": 605,
+      "observed_at": "2026-10-04T01:09:00.006Z",
+      "embedded_labels": [
+        "allowance-reached-visible"
+      ],
+      "images": [
+        "call_Pi008fiPQRmDqFMYpXexy3gG-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_Pi008fiPQRmDqFMYpXexy3gG-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_lisoDyeGnQUDy5jmArSKvsko",
+      "session_line": 617,
+      "observed_at": "2026-10-04T01:09:27.371Z",
+      "embedded_labels": [
+        "missing-configuration-visible"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_lisoDyeGnQUDy5jmArSKvsko-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_SSyRR4oKXkMIlM8CX87vqb5T",
+      "session_line": 624,
+      "observed_at": "2026-10-04T01:09:38.470Z",
+      "embedded_labels": [
+        "ai-disabled-explicit"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_SSyRR4oKXkMIlM8CX87vqb5T-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_ganzV4Oluc6ijTvElq2VzwaN",
+      "session_line": 666,
+      "observed_at": "2026-10-04T01:10:54.030Z",
+      "embedded_labels": [
+        "gate-off-feature-readiness",
+        "saved-ai-blocked",
+        "saved-event-ai-blocked"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_ganzV4Oluc6ijTvElq2VzwaN-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_p6i4L2s0fk9Jsm3byktbz6sP",
+      "session_line": 673,
+      "observed_at": "2026-10-04T01:11:05.632Z",
+      "embedded_labels": [
+        "brief-ai-blocked",
+        "browser-console-prerequisites"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_p6i4L2s0fk9Jsm3byktbz6sP-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_88hAlLGtkDHFpqXZlZ2bTEWn",
+      "session_line": 918,
+      "observed_at": "2026-10-04T01:20:17.729Z",
+      "embedded_labels": [
+        "capture-failure-corrected"
+      ],
+      "images": [
+        "call_88hAlLGtkDHFpqXZlZ2bTEWn-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_88hAlLGtkDHFpqXZlZ2bTEWn-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_3aCxzKLdz2Ixh07Y7coRkU5m",
+      "session_line": 925,
+      "observed_at": "2026-10-04T01:20:30.193Z",
+      "embedded_labels": [
+        "provider-failure-corrected"
+      ],
+      "images": [
+        "call_3aCxzKLdz2Ixh07Y7coRkU5m-image-1.jpg"
+      ],
+      "unlabeled_prefix": "call_3aCxzKLdz2Ixh07Y7coRkU5m-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_s9LmWtNchSW6vySfsQ6ALHCl",
+      "session_line": 948,
+      "observed_at": "2026-10-04T01:20:50.265Z",
+      "embedded_labels": [
+        "saved-after-correction"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_s9LmWtNchSW6vySfsQ6ALHCl-unlabeled-prefix.txt"
+    },
+    {
+      "call_id": "call_9CY17PJCIRjP8kYvLHatO46q",
+      "session_line": 970,
+      "observed_at": "2026-10-04T01:21:15.380Z",
+      "embedded_labels": [
+        "brief-after-correction",
+        "console-after-correction"
+      ],
+      "images": [],
+      "unlabeled_prefix": "call_9CY17PJCIRjP8kYvLHatO46q-unlabeled-prefix.txt"
+    }
+  ],
+  "images": [
+    {
+      "file": "call_X5eephgnyryc3ptDrN9GeHLm-image-1.jpg",
+      "sha256": "512e0571b4cb617ff29d1439eb43455b5339dea3ea891d79b010d2e7ea14c1c2",
+      "call_id": "call_X5eephgnyryc3ptDrN9GeHLm",
+      "session_line": 221,
+      "observed_at": "2026-10-04T00:58:42.644Z",
+      "embedded_labels": [
+        "settings-pre-run-reload"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_OFH8I1g7pRNfZNwq3C8K0GXY-image-1.jpg",
+      "sha256": "be28024658ed2a789834afb9a5ab6732e9ab45370ca9da09fba118f35a9abb14",
+      "call_id": "call_OFH8I1g7pRNfZNwq3C8K0GXY",
+      "session_line": 286,
+      "observed_at": "2026-10-04T01:00:37.006Z",
+      "embedded_labels": [
+        "settings-source-limit-rejected"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_6hMYAEsy1LO5cCPUSA49lhvi-image-1.jpg",
+      "sha256": "d29c00119049f5882dd07135b388b7b3dcf81df68ee056c80fc7d94121e9ba53",
+      "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+      "session_line": 352,
+      "observed_at": "2026-10-04T01:02:54.728Z",
+      "embedded_labels": [
+        "raw-page-1",
+        "raw-page-2",
+        "raw-page-3"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_jdUdxrWM8PPLeFqz3JK67Y4k-image-1.jpg",
+      "sha256": "a8dbd7d853968ad31dc48eb3881d6b8264754dc857c83b8d6ed5ecb8608c79de",
+      "call_id": "call_jdUdxrWM8PPLeFqz3JK67Y4k",
+      "session_line": 362,
+      "observed_at": "2026-10-04T01:03:11.805Z",
+      "embedded_labels": [
+        "raw-pagination-repeat",
+        "raw-detail-known-time"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_nikjU3XC1gfYSPwvqP0UJzpe-image-1.jpg",
+      "sha256": "052eb7f064bcf6d373f4201d26757c8bd52934c10434118f8894e15ec12abbc0",
+      "call_id": "call_nikjU3XC1gfYSPwvqP0UJzpe",
+      "session_line": 394,
+      "observed_at": "2026-10-04T01:03:47.947Z",
+      "embedded_labels": [
+        "raw-detail-known-final"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_dMizy3LwtwwYubx3cxdINrSw-image-1.jpg",
+      "sha256": "c53af695fd4b01a0989c06d138e98a52b1d68c74fde4c240b827c1aa05e7c36a",
+      "call_id": "call_dMizy3LwtwwYubx3cxdINrSw",
+      "session_line": 463,
+      "observed_at": "2026-10-04T01:05:05.616Z",
+      "embedded_labels": [
+        "brief-detail-ai-disabled"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_XO7l7h3nYzbRCpNM9EdxhlFr-image-1.jpg",
+      "sha256": "1f61e115188a4822464bc81b249e8f18e8550d849f347da89c93aa6025a6fbad",
+      "call_id": "call_XO7l7h3nYzbRCpNM9EdxhlFr",
+      "session_line": 490,
+      "observed_at": "2026-10-04T01:05:46.423Z",
+      "embedded_labels": [
+        "capture-failure-visible"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_Id6V3e2vJTGeBl0fj8sEIPhE-image-1.jpg",
+      "sha256": "8628ef42a09bc7f3ccc54444e5e61d2b50f45e29fa1254b2e27fe7e4feea45e0",
+      "call_id": "call_Id6V3e2vJTGeBl0fj8sEIPhE",
+      "session_line": 539,
+      "observed_at": "2026-10-04T01:06:51.169Z",
+      "embedded_labels": [
+        "raw-detail-unknown-truncated"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_dDSFg7McYQNhyjr2sfVQbAaG-image-1.jpg",
+      "sha256": "c8e75bdfe9b8cc460fbaf149439ce8f6daa30392b23d2dc9eda1a2f3b174e8c3",
+      "call_id": "call_dDSFg7McYQNhyjr2sfVQbAaG",
+      "session_line": 582,
+      "observed_at": "2026-10-04T01:08:07.534Z",
+      "embedded_labels": [
+        "settings-model-price-metadata",
+        "spending-screenshot"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_Pi008fiPQRmDqFMYpXexy3gG-image-1.jpg",
+      "sha256": "03758f85b4490ce3088e6c4f6f372e05659059e01b9c8df3427476f4fc7f22db",
+      "call_id": "call_Pi008fiPQRmDqFMYpXexy3gG",
+      "session_line": 605,
+      "observed_at": "2026-10-04T01:09:00.006Z",
+      "embedded_labels": [
+        "allowance-reached-visible"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_88hAlLGtkDHFpqXZlZ2bTEWn-image-1.jpg",
+      "sha256": "5c048f215143a139097c1db8a570e93ab17a43c2afd8d44e95547582291c690c",
+      "call_id": "call_88hAlLGtkDHFpqXZlZ2bTEWn",
+      "session_line": 918,
+      "observed_at": "2026-10-04T01:20:17.729Z",
+      "embedded_labels": [
+        "capture-failure-corrected"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    },
+    {
+      "file": "call_3aCxzKLdz2Ixh07Y7coRkU5m-image-1.jpg",
+      "sha256": "873289e03be5a19892e79b0df4400f2036aca1f7633f3095f614c4e54059fb4f",
+      "call_id": "call_3aCxzKLdz2Ixh07Y7coRkU5m",
+      "session_line": 925,
+      "observed_at": "2026-10-04T01:20:30.193Z",
+      "embedded_labels": [
+        "provider-failure-corrected"
+      ],
+      "scope": "native_function_call_output",
+      "label_attribution": "unassigned",
+      "snapshot_moment_qualification": "The image is retained from this function-call output. It is not a separate screenshot for each embedded label, and a preceding DOM label may represent an earlier/loading state. Verify image content before attributing a completed UI state."
+    }
+  ],
+  "previous_extraction_files": "Older extraction files may remain on disk. Only files referenced by this v2 index describe the complete current extraction; call-scope images replace prior label-attributed image names."
+}

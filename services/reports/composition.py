@@ -40,7 +40,13 @@ from services.llm.contracts import ReportComposition
 from services.llm.orchestrator import LLMOrchestratorError, LLMOrchestratorRequest
 from services.llm.policy import LLMTier
 from services.reports.context import BriefContext, ClaimContext
-from services.reports.contracts import BriefInputs, LinkedRisk, RiskKey, RiskProvenance
+from services.reports.contracts import (
+    BriefInputs,
+    CompositionPolicy,
+    LinkedRisk,
+    RiskKey,
+    RiskProvenance,
+)
 from services.reports.material import BriefMaterial, SectionKind, SectionMaterial
 from services.reports.prompts import (
     COMPOSITION_PROMPT_TEMPLATE_VERSION,
@@ -48,13 +54,18 @@ from services.reports.prompts import (
     COMPOSITION_SCHEMA,
     EXECUTIVE_SUMMARY_PROMPT_NAME,
     HISTORICAL_PARALLELS_PROMPT_NAME,
+    PERSONAL_COMPOSITION_PROMPT_VERSION,
+    PERSONAL_EXECUTIVE_SUMMARY_PROMPT_NAME,
+    PERSONAL_TOP_EVENT_PROMPT_NAME,
     RISK_COMMENTARY_PROMPT_NAME,
     TOP_EVENT_PROMPT_NAME,
     budget_feedback,
     build_executive_summary_prompt,
     build_historical_parallels_prompt,
+    build_personal_source_prompt,
     build_risk_commentary_prompt,
     build_top_event_prompt,
+    personal_budget_feedback,
 )
 from services.reports.selection import ranking_score
 
@@ -108,6 +119,11 @@ EXECUTIVE_SUMMARY_BUDGET: Final = WordBudget(target=120, minimum=96, maximum=120
 TOP_EVENT_BUDGET: Final = WordBudget(target=150, minimum=120, maximum=180)
 RISK_COMMENTARY_BUDGET: Final = WordBudget(target=60, minimum=48, maximum=72)
 HISTORICAL_PARALLELS_BUDGET: Final = WordBudget(target=100, minimum=80, maximum=120)
+# A formatting floor of one word rejects empty prose; it is not a substantive-quality verdict.
+# Personal targets guide concision, while source support and the shared grounding gate control
+# content. Sparse sources must not be padded to satisfy the legacy narrative-length minimums.
+PERSONAL_EXECUTIVE_SUMMARY_BUDGET: Final = WordBudget(target=60, minimum=1, maximum=120)
+PERSONAL_TOP_EVENT_BUDGET: Final = WordBudget(target=90, minimum=1, maximum=180)
 
 
 # --------------------------------------------------------------------------------------
@@ -396,6 +412,7 @@ def _run_attempt(
     attempt: int,
     budget: WordBudget,
     regeneration: bool = False,
+    policy: CompositionPolicy = CompositionPolicy.LEGACY,
 ) -> tuple[tuple[DraftBlock, ...], CompositionAttempt]:
     """Run one composition invocation through the orchestrator and measure its budget.
 
@@ -406,7 +423,11 @@ def _run_attempt(
     request = LLMOrchestratorRequest(
         job=composition_job(brief_date),
         prompt_name=prompt_name,
-        prompt_version=COMPOSITION_PROMPT_VERSION,
+        prompt_version=(
+            PERSONAL_COMPOSITION_PROMPT_VERSION
+            if policy is CompositionPolicy.PERSONAL_DESCRIPTIVE
+            else COMPOSITION_PROMPT_VERSION
+        ),
         prompt_template_version=COMPOSITION_PROMPT_TEMPLATE_VERSION,
         requested_schema=COMPOSITION_SCHEMA,
         prompt=prompt,
@@ -433,6 +454,11 @@ def _run_attempt(
             "word_budget_minimum": budget.minimum,
             "word_budget_maximum": budget.maximum,
             "grounding_regeneration": regeneration,
+            **(
+                {"composition_policy": policy.value}
+                if policy is CompositionPolicy.PERSONAL_DESCRIPTIVE
+                else {}
+            ),
         },
     )
     outcome = orchestrator.run(request)
@@ -517,6 +543,7 @@ def _compose_generated(
     prompt_name: str,
     build_prompt: Any,
     feedback: str | None = None,
+    policy: CompositionPolicy = CompositionPolicy.LEGACY,
 ) -> DraftSection:
     """Compose one prose section: fail-closed whitelist, one budget retry, then degrade.
 
@@ -554,6 +581,7 @@ def _compose_generated(
             attempt=1,
             budget=budget,
             regeneration=regeneration,
+            policy=policy,
         )
     except (LLMOrchestratorError, ReportCompositionError) as exc:
         return _degraded_section(
@@ -570,11 +598,15 @@ def _compose_generated(
 
     # One budget retry: a new, separately audited invocation with concise feedback appended to a
     # fresh prompt (distinct from the orchestrator's own schema-validation retry).
-    retry_prompt = f"{base_prompt}\n\n" + budget_feedback(
-        target=budget.target,
-        minimum=budget.minimum,
-        maximum=budget.maximum,
-        actual=telemetry.word_count,
+    retry_prompt = f"{base_prompt}\n\n" + (
+        personal_budget_feedback(maximum=budget.maximum, actual=telemetry.word_count)
+        if policy is CompositionPolicy.PERSONAL_DESCRIPTIVE
+        else budget_feedback(
+            target=budget.target,
+            minimum=budget.minimum,
+            maximum=budget.maximum,
+            actual=telemetry.word_count,
+        )
     )
     try:
         retry_blocks, retry_telemetry = _run_attempt(
@@ -588,6 +620,7 @@ def _compose_generated(
             attempt=2,
             budget=budget,
             regeneration=regeneration,
+            policy=policy,
         )
     except (LLMOrchestratorError, ReportCompositionError) as exc:
         return _degraded_section(
@@ -721,6 +754,8 @@ def _compose_section(
 ) -> DraftSection:
     kind = material.kind
     brief_date = inputs.window.brief_date
+    policy = CompositionPolicy(inputs.composition_policy)
+    personal = policy is CompositionPolicy.PERSONAL_DESCRIPTIVE
 
     if kind is SectionKind.EXECUTIVE_SUMMARY:
         events_with_claims = [
@@ -733,17 +768,31 @@ def _compose_section(
             brief_date=brief_date,
             material=material,
             claims=claims,
-            budget=EXECUTIVE_SUMMARY_BUDGET,
-            prompt_name=EXECUTIVE_SUMMARY_PROMPT_NAME,
+            budget=PERSONAL_EXECUTIVE_SUMMARY_BUDGET if personal else EXECUTIVE_SUMMARY_BUDGET,
+            prompt_name=(
+                PERSONAL_EXECUTIVE_SUMMARY_PROMPT_NAME
+                if personal
+                else EXECUTIVE_SUMMARY_PROMPT_NAME
+            ),
             feedback=feedback,
-            build_prompt=lambda budget: build_executive_summary_prompt(
-                alert_changes=inputs.executive_summary.alert_state_changes,
-                events_with_claims=events_with_claims,
-                largest_move=inputs.executive_summary.largest_risk_move,
-                prior_brief=inputs.prior_brief,
-                target=budget.target,
-                minimum=budget.minimum,
-                maximum=budget.maximum,
+            policy=policy,
+            build_prompt=lambda budget: (
+                build_personal_source_prompt(
+                    events_with_claims=events_with_claims,
+                    executive_summary=True,
+                    target=budget.target,
+                    maximum=budget.maximum,
+                )
+                if personal
+                else build_executive_summary_prompt(
+                    alert_changes=inputs.executive_summary.alert_state_changes,
+                    events_with_claims=events_with_claims,
+                    largest_move=inputs.executive_summary.largest_risk_move,
+                    prior_brief=inputs.prior_brief,
+                    target=budget.target,
+                    minimum=budget.minimum,
+                    maximum=budget.maximum,
+                )
             ),
         )
 
@@ -761,15 +810,25 @@ def _compose_section(
             brief_date=brief_date,
             material=material,
             claims=claims,
-            budget=TOP_EVENT_BUDGET,
-            prompt_name=TOP_EVENT_PROMPT_NAME,
+            budget=PERSONAL_TOP_EVENT_BUDGET if personal else TOP_EVENT_BUDGET,
+            prompt_name=PERSONAL_TOP_EVENT_PROMPT_NAME if personal else TOP_EVENT_PROMPT_NAME,
             feedback=feedback,
-            build_prompt=lambda budget: build_top_event_prompt(
-                event=event,
-                claims=claims,
-                target=budget.target,
-                minimum=budget.minimum,
-                maximum=budget.maximum,
+            policy=policy,
+            build_prompt=lambda budget: (
+                build_personal_source_prompt(
+                    events_with_claims=[(event, claims)],
+                    executive_summary=False,
+                    target=budget.target,
+                    maximum=budget.maximum,
+                )
+                if personal
+                else build_top_event_prompt(
+                    event=event,
+                    claims=claims,
+                    target=budget.target,
+                    minimum=budget.minimum,
+                    maximum=budget.maximum,
+                )
             ),
         )
 
@@ -924,7 +983,7 @@ def descriptive_only_inputs(inputs: BriefInputs) -> BriefInputs:
                     score=0.0,
                     provenance=RiskProvenance.NONE,
                 ),
-                ranking_score=ranking_score(event.hotness_score, 0.0),
+                ranking_score=ranking_score(event.hotness_score or 0.0, 0.0),
             )
         )
         for event in inputs.top_events

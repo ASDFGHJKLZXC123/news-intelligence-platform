@@ -1,0 +1,75 @@
+CAPTURE brief-ai-blocked- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - button "Briefs":
+    - text: Briefs
+  - button "Refresh this version":
+    - text: Refresh this version
+  - generic: 2026-09-30 · version 1
+  - generic: Published
+  - heading "Personal News Brief — 2026-09-30" [level=1]
+  - paragraph: Exact report 5c80b023-8f29-423c-b014-19d02afa2988
+  - link "Markdown":
+    - /url: http://127.0.0.1:56430/api/v1/personal/briefs/5c80b023-8f29-423c-b014-19d02afa2988/export.md
+    - text: Markdown
+  - link "PDF":
+    - /url: http://127.0.0.1:56430/api/v1/personal/briefs/5c80b023-8f29-423c-b014-19d02afa2988/export.pdf
+    - text: PDF
+  - heading "Input snapshot" [level=3]
+  - generic: Snapshot ID
+  - generic: bf577ffe-8248-4d3f-82ba-e50a9bf7532c
+  - generic: Selected stories
+  - generic: "1"
+  - generic: Created
+  - generic: Oct 3, 2026, 06:00:57 PM PDT
+  - heading "Capture coverage" [level=3]
+  - generic: Capture started
+  - generic: Sep 30, 2026, 06:01:08 PM PDT
+  - generic: Capture ended
+  - generic: Sep 30, 2026, 06:01:11 PM PDT
+  - generic: Feeds configured
+  - generic: "1"
+  - generic: Feeds succeeded
+  - generic: "1"
+  - generic: Feeds failed
+  - generic: "0"
+  - generic: Feeds paused
+  - generic: "0"
+  - generic: Pending items
+  - generic: 0 of 2000 capacity
+  - heading "Executive Summary" [level=3]
+  - paragraph: "Synthetic offline brief: the agency confirmed this verification project was approved."
+  - 'heading "Synthetic: Agency approves browser verification project" [level=3]'
+  - paragraph: "Synthetic grouped story: the agency confirmed approval of the verification project."
+  - heading "What Changed Since Yesterday" [level=3]
+  - paragraph: No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.
+  - heading "Data Quality" [level=3]
+  - paragraph: "[capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained, 0 feeds failed, and 0 feeds were paused at pending capacity. [no_risk_observations] Personal Phase 2 does not compute or narrate risk scores. [no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2 workflow. [no_prior_brief] No prior personal brief is injected into this immutable snapshot. [no_prior_comparison] No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured."
+  - heading "Disclaimer" [level=3]
+  - paragraph: This system provides probabilistic analysis based on public information, data signals, and model-assisted reasoning. It is for informational purposes only and does not constitute investment, legal, or financial advice.
+  - generic: 1 report-scoped claims
+  - heading "Citations" [level=3]
+  - 'button "Synthetic: Agency approves browser verification project Open evidence from report 5c80b023-8f29-423c-b014-19d02afa2988"':
+    - strong: "Synthetic: Agency approves browser verification project"
+    - generic: Open evidence from report 5c80b023-8f29-423c-b014-19d02afa2988

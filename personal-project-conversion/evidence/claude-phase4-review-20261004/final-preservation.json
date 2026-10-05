@@ -1,0 +1,30 @@
+{
+  "checked_utc": "2026-10-05T01:18:47.963346+00:00",
+  "original_file_count": 1994,
+  "new_original_paths_outside_audit_folder": [],
+  "missing_original_paths": [],
+  "changed_original_paths": [],
+  "observed_original_symlinks": [],
+  "new_original_symlink_paths": [],
+  "missing_original_symlink_paths": [],
+  "actual_claude_tool_counts": {
+    "Glob": 11,
+    "Read": 77,
+    "Grep": 38
+  },
+  "unexpected_tools": [],
+  "observed_tool_targets_outside_snapshot": [],
+  "tool_errors": [
+    "Search failed \u2014 ripgrep rejected the pattern, glob, or file type without searching:\nrg: regex parse error:\n    (?:src=\"(?!app/|https?:)[^\"]+\"|href=\"(?!app/|https?:|#)[^\"]+\"|fetch\\([\"'](?!/api)[^\"']+)\n            ^^^\nerror: look-around, including look"
+  ],
+  "protected_Git_controls": {
+    "head_unchanged": true,
+    "branch_unchanged": true,
+    "index_unchanged": true,
+    "staged_diff_unchanged": true
+  },
+  "exact_temporary_snapshot_removed": true,
+  "private_files_excluded": true,
+  "tests_executed_by_claude": false,
+  "passed": true
+}

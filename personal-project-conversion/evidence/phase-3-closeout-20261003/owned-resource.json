@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-10-04T02:37:05.963733+00:00",
+  "creation_command": [
+    "docker",
+    "run",
+    "-d",
+    "--pull",
+    "never",
+    "--name",
+    "nip-closeout-da4fa3ec5cf5",
+    "--label",
+    "nip.closeout.owner=da4fa3ec5cf54e58b2003c999cb50405",
+    "--label",
+    "nip.closeout.purpose=phase3-closeout",
+    "-p",
+    "127.0.0.1::5432",
+    "--tmpfs",
+    "/var/lib/postgresql/data:rw",
+    "-e",
+    "POSTGRES_USER=news",
+    "-e",
+    "POSTGRES_PASSWORD=news",
+    "-e",
+    "POSTGRES_DB=nip_closeout_base_da4fa3ec5cf5",
+    "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "postgres",
+    "-c",
+    "log_statement=ddl"
+  ],
+  "database": "nip_closeout_base_da4fa3ec5cf5",
+  "docker_created": "2026-10-04T02:37:05.599361012Z",
+  "id": "1c96158e480703c30fc60e9ba947705fcfeb6795b912c242dcbdd536fb30f13e",
+  "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+  "mounts": [],
+  "name": "nip-closeout-da4fa3ec5cf5",
+  "owner": "da4fa3ec5cf54e58b2003c999cb50405",
+  "port": 52537,
+  "tmpfs": {
+    "/var/lib/postgresql/data": "rw"
+  },
+  "url": "postgresql+psycopg2://news:news@127.0.0.1:52537/nip_closeout_base_da4fa3ec5cf5"
+}

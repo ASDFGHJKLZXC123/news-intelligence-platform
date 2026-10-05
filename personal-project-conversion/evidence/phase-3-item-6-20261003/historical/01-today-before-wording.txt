@@ -1,0 +1,119 @@
+- complementary:
+  - navigation:
+    - generic "Today":
+    - generic "Saved":
+    - generic "Briefs":
+    - generic "Settings":
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Today" [level=1]
+  - generic: Readable results for 2026-09-20 · America/Los_Angeles
+  - button "Refresh display":
+    - text: Refresh display
+  - button "Request today’s update":
+    - text: Request today’s update
+  - region "Retained RSS articles":
+    - generic: Readable without AI
+    - heading "Retained RSS articles · 2" [level=2]
+    - button "Refresh articles"
+    - paragraph: Admitted articles awaiting grouping stay readable here. Grouped articles appear in their story and remain accessible by their original article link.
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic: Agency publishes a policy update" [level=2]'
+      - generic: Synthetic Phase 2 acceptance feed
+      - generic: Published Sep 20, 2026, 03:06:03 PM PDT
+      - paragraph: A retained RSS summary with an authentic fixture URL; AI is disabled.
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/phase3/1
+    - article:
+      - generic: Retained RSS article
+      - generic: Disabled by profile
+      - 'heading "Synthetic: Technology reading remains in backlog" [level=2]'
+      - generic: Synthetic Phase 2 acceptance feed
+      - generic: Published Sep 20, 2026, 02:06:03 PM PDT
+      - paragraph: Durably retained pending candidate, not admitted or enriched.
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/phase3/2
+  - generic: 2026-09-20
+  - heading "Displayed update" [level=3]
+  - generic: Succeeded
+  - generic: Attempt 1 of 3
+  - generic: Last successful update
+  - generic: Sep 20, 2026, 04:06:03 PM PDT
+  - generic: Run ID
+  - generic: 1f658636-2151-45f0-be64-bf579a0703b3
+  - generic: Settings revision
+  - generic: "3"
+  - generic: Article selection frozen
+  - generic: Sep 20, 2026, 04:06:03 PM PDT
+  - heading "Capture coverage" [level=3]
+  - generic: Capture started
+  - generic: Sep 20, 2026, 04:06:03 PM PDT
+  - generic: Capture ended
+  - generic: Sep 20, 2026, 04:06:03 PM PDT
+  - generic: Feeds configured
+  - generic: "1"
+  - generic: Feeds succeeded
+  - generic: "1"
+  - generic: Feeds failed
+  - generic: "0"
+  - generic: Feeds paused
+  - generic: "0"
+  - generic: Articles admitted
+  - generic: "2"
+  - generic: Pending items
+  - generic: 2 of 2000 capacity
+  - generic: Selected for enrichment
+  - generic: "0"
+  - generic: Grouped articles
+  - generic: "0"
+  - generic: Scope
+  - generic: Succeeded
+  - generic: Report
+  - generic: Disabled · Disabled by profile
+  - generic: Capture
+  - generic: Succeeded
+  - generic: Grouping
+  - generic: Disabled · Disabled by profile
+  - generic: Snapshot
+  - generic: Disabled · Disabled by profile
+  - generic: Admission
+  - generic: Succeeded
+  - generic: Embedding
+  - generic: Disabled · Disabled by profile
+  - generic: Forecasting
+  - generic: Disabled · Disabled by profile
+  - generic: Entity Linking
+  - generic: Disabled · Disabled by profile
+  - generic: Event Embeddings
+  - generic: Disabled · Disabled by profile
+  - generic: Claim Preparation
+  - generic: Disabled · Disabled by profile
+  - generic: Historical Analogies
+  - generic: Disabled · Disabled by profile
+  - generic: Search stored stories
+  - textbox "Search stored stories":
+    - /placeholder: Title or summary
+  - generic: Update
+  - combobox "Update":
+    - option "Latest readable result" [selected]
+    - option "2026-09-20 · Succeeded · attempt 1"
+  - checkbox "Saved only"
+  - generic: Saved only
+  - button "Apply"
+  - button "Reset"
+  - generic: No stories matched this update
+  - generic: The stored update is readable and its capture coverage is shown above. A complete capture failure is reported as a failure, not a quiet result.
+  - generic "Local access"

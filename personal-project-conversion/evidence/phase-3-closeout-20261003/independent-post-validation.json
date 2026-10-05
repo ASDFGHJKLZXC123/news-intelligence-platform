@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "recorded_at_utc": "2026-10-04T03:09:45.509398+00:00",
+  "acceptance": {
+    "pass": 14,
+    "pending": 0,
+    "fail": 0
+  },
+  "baseline_files": 1280,
+  "local_links_and_anchors_checked": 357,
+  "broken_links": [],
+  "scope_README_status": "complete \u2014 local/synthetic engineering acceptance and independent review PASS.",
+  "final_sha256": {
+    "final-check.json": "25e5936ca8af30594c93040eea8b11d274bd92f45c198544868036d675d07d3f",
+    "README.md": "6223630f2daf5031e62a493c4f693578ee0236789ff1ebdf9d09431d1ea7bfad",
+    "independent-final-check.json": "8996f344ecca76625ddb44a8fb469d3c1fdd86fd803aa46db8a29b92b899639f",
+    "independent-review.md": "d418d2efd1fafcdb2d5d3516ea7eabb05a07cea6c8e298d6e239daa9c30c6178",
+    "static-checks.json": "996a35512d378711797cbe002ad32473a6571d54c9037dd7627fb583121f4c4e"
+  },
+  "all_final_proof_artifact_hashes_match": true,
+  "source_and_status_document_hashes_unchanged": true,
+  "owned_absence_preexisting20_preservation_and_boundaries_confirmed": true,
+  "pinned_independent_review_files_not_mutated": true,
+  "readback_preflight": {
+    "first_check": "expected different exact README capitalization/wording",
+    "actual": "complete \u2014 local/synthetic engineering acceptance and independent review PASS.",
+    "resolution": "verify actual final Complete/engineering-acceptance/independent-PASS state; no documentation defect or evidence mutation"
+  },
+  "qualification": "All acceptance is local/synthetic; real paid remains off and Phase4/5 unstarted. Independent5 overlaps current100. Separate post-validation file avoids circular proof-hash rewrites."
+}

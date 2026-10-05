@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="8" time="15.943" timestamp="2026-10-04T01:22:19.862819-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_rss_response_cannot_insert_capture_or_fail_replacement" time="2.515" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_embedding_response_cannot_insert_vectors_events_or_fail_replacement" time="2.295" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_composition_response_cannot_publish_or_fail_newer_attempt" time="2.033" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_paid_usage_reconciles_accounting_only_after_takeover" time="1.708"><failure message="sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;uq_personal_profiles_revision&quot;&#10;DETAIL:  Key (workspace_id, revision)=(bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b, 1) already exists.&#10;&#10;[SQL: INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phrases, execution_profile, settings, schema_revision) VALUES (%(id)s::UUID, %(workspace_id)s::UUID, %(revision)s, %(selected_source_ids)s::UUID[], %(include_phrases)s::TEXT[], %(exclude_phrases)s::TEXT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at]&#10;[parameters: {'id': UUID('ea59f789-20c6-4142-bb9a-6a1987abfef0'), 'workspace_id': UUID('bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b'), 'revision': 1, 'selected_source_ids': [UUID('4957e4f2-1623-40b7-a1c1-f22d234c33e2')], 'include_phrases': [], 'exclude_phrases': [], 'execution_profile': 'assisted', 'settings': '{&quot;ai_enabled&quot;: true, &quot;monthly_allowance_usd&quot;: &quot;1&quot;, &quot;run_allowance_usd&quot;: &quot;1&quot;, &quot;model_route&quot;: {&quot;mode&quot;: &quot;live&quot;, &quot;generation&quot;: {&quot;provider&quot;: &quot;openai&quot;, &quot;mo ... (520 characters truncated) ... nput_usd_per_million_tokens&quot;: &quot;10&quot;, &quot;output_usd_per_million_tokens&quot;: &quot;0&quot;, &quot;max_input_tokens&quot;: 8192, &quot;max_output_tokens&quot;: 0, &quot;deadline_seconds&quot;: 30}}}', 'schema_revision': 'personal-profile.v2'}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)">self = &lt;sqlalchemy.engine.base.Connection object at 0x10e44e150&gt;
+dialect = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3cb250&gt;
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e495a50&gt;
+statement = &lt;sqlalchemy.dialects.postgresql.base.PGCompiler object at 0x10e3ca990&gt;
+parameters = [{'id': UUID('ea59f789-20c6-4142-bb9a-6a1987abfef0'), 'workspace_id': UUID('bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b'), 'revision': 1, 'selected_source_ids': [UUID('4957e4f2-1623-40b7-a1c1-f22d234c33e2')], ...}]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -&gt; CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+&gt;                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1969: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3cb250&gt;
+cursor = &lt;cursor object at 0x10e610f40; closed: -1&gt;
+statement = 'INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phr...XT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at'
+parameters = {'id': UUID('ea59f789-20c6-4142-bb9a-6a1987abfef0'), 'workspace_id': UUID('bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b'), 'revision': 1, 'selected_source_ids': [UUID('4957e4f2-1623-40b7-a1c1-f22d234c33e2')], ...}
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e495a50&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "uq_personal_profiles_revision"
+E       DETAIL:  Key (workspace_id, revision)=(bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b, 1) already exists.
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: UniqueViolation
+
+The above exception was the direct cause of the following exception:
+
+    def test_late_paid_usage_reconciles_accounting_only_after_takeover():
+        with migrated_disposable_engine() as engine:
+&gt;           factory, ledger = _paid_owner(engine)
+                              ^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_phase4a_faults.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_personal_phase4a_faults.py:214: in _paid_owner
+    session.flush()
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1421: in execute
+    return meth(
+.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3cb250&gt;
+cursor = &lt;cursor object at 0x10e610f40; closed: -1&gt;
+statement = 'INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phr...XT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at'
+parameters = {'id': UUID('ea59f789-20c6-4142-bb9a-6a1987abfef0'), 'workspace_id': UUID('bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b'), 'revision': 1, 'selected_source_ids': [UUID('4957e4f2-1623-40b7-a1c1-f22d234c33e2')], ...}
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e495a50&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "uq_personal_profiles_revision"
+E       DETAIL:  Key (workspace_id, revision)=(bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b, 1) already exists.
+E       
+E       [SQL: INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phrases, execution_profile, settings, schema_revision) VALUES (%(id)s::UUID, %(workspace_id)s::UUID, %(revision)s, %(selected_source_ids)s::UUID[], %(include_phrases)s::TEXT[], %(exclude_phrases)s::TEXT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at]
+E       [parameters: {'id': UUID('ea59f789-20c6-4142-bb9a-6a1987abfef0'), 'workspace_id': UUID('bc451ded-d1e5-4ca0-a84c-e6fdb7ab958b'), 'revision': 1, 'selected_source_ids': [UUID('4957e4f2-1623-40b7-a1c1-f22d234c33e2')], 'include_phrases': [], 'exclude_phrases': [], 'execution_profile': 'assisted', 'settings': '{"ai_enabled": true, "monthly_allowance_usd": "1", "run_allowance_usd": "1", "model_route": {"mode": "live", "generation": {"provider": "openai", "mo ... (520 characters truncated) ... nput_usd_per_million_tokens": "10", "output_usd_per_million_tokens": "0", "max_input_tokens": 8192, "max_output_tokens": 0, "deadline_seconds": 30}}}', 'schema_revision': 'personal-profile.v2'}]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: IntegrityError</failure></testcase><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_connection_failure_stops_dispatch_and_reconnect_cannot_restore_old_owner" time="1.472"><failure message="sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint &quot;uq_personal_profiles_revision&quot;&#10;DETAIL:  Key (workspace_id, revision)=(b52101df-84c1-4648-a5be-616771f9762e, 1) already exists.&#10;&#10;[SQL: INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phrases, execution_profile, settings, schema_revision) VALUES (%(id)s::UUID, %(workspace_id)s::UUID, %(revision)s, %(selected_source_ids)s::UUID[], %(include_phrases)s::TEXT[], %(exclude_phrases)s::TEXT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at]&#10;[parameters: {'id': UUID('b497623c-a488-4f2d-aa72-d89b05e9468d'), 'workspace_id': UUID('b52101df-84c1-4648-a5be-616771f9762e'), 'revision': 1, 'selected_source_ids': [UUID('5a959f6a-b8ee-4fe1-87eb-68578061aaa8')], 'include_phrases': [], 'exclude_phrases': [], 'execution_profile': 'assisted', 'settings': '{&quot;ai_enabled&quot;: true, &quot;monthly_allowance_usd&quot;: &quot;1&quot;, &quot;run_allowance_usd&quot;: &quot;1&quot;, &quot;model_route&quot;: {&quot;mode&quot;: &quot;live&quot;, &quot;generation&quot;: {&quot;provider&quot;: &quot;openai&quot;, &quot;mo ... (520 characters truncated) ... nput_usd_per_million_tokens&quot;: &quot;10&quot;, &quot;output_usd_per_million_tokens&quot;: &quot;0&quot;, &quot;max_input_tokens&quot;: 8192, &quot;max_output_tokens&quot;: 0, &quot;deadline_seconds&quot;: 30}}}', 'schema_revision': 'personal-profile.v2'}]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)">self = &lt;sqlalchemy.engine.base.Connection object at 0x10deb2210&gt;
+dialect = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3c9590&gt;
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e496050&gt;
+statement = &lt;sqlalchemy.dialects.postgresql.base.PGCompiler object at 0x10e5c0910&gt;
+parameters = [{'id': UUID('b497623c-a488-4f2d-aa72-d89b05e9468d'), 'workspace_id': UUID('b52101df-84c1-4648-a5be-616771f9762e'), 'revision': 1, 'selected_source_ids': [UUID('5a959f6a-b8ee-4fe1-87eb-68578061aaa8')], ...}]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -&gt; CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+&gt;                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1969: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3c9590&gt;
+cursor = &lt;cursor object at 0x10e611a80; closed: -1&gt;
+statement = 'INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phr...XT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at'
+parameters = {'id': UUID('b497623c-a488-4f2d-aa72-d89b05e9468d'), 'workspace_id': UUID('b52101df-84c1-4648-a5be-616771f9762e'), 'revision': 1, 'selected_source_ids': [UUID('5a959f6a-b8ee-4fe1-87eb-68578061aaa8')], ...}
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e496050&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "uq_personal_profiles_revision"
+E       DETAIL:  Key (workspace_id, revision)=(b52101df-84c1-4648-a5be-616771f9762e, 1) already exists.
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: UniqueViolation
+
+The above exception was the direct cause of the following exception:
+
+    def test_connection_failure_stops_dispatch_and_reconnect_cannot_restore_old_owner():
+        with migrated_disposable_engine() as engine:
+&gt;           factory, ledger = _paid_owner(engine)
+                              ^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_phase4a_faults.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_personal_phase4a_faults.py:214: in _paid_owner
+    session.flush()
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4353: in flush
+    self._flush(objects)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4488: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:122: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4449: in _flush
+    flush_context.execute()
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:465: in execute
+    rec.execute(self)
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:641: in execute
+    util.preloaded.orm_persistence.save_obj(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:94: in save_obj
+    _emit_insert_statements(
+.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1234: in _emit_insert_statements
+    result = connection.execute(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1421: in execute
+    return meth(
+.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGDialect_psycopg2 object at 0x10e3c9590&gt;
+cursor = &lt;cursor object at 0x10e611a80; closed: -1&gt;
+statement = 'INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phr...XT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at'
+parameters = {'id': UUID('b497623c-a488-4f2d-aa72-d89b05e9468d'), 'workspace_id': UUID('b52101df-84c1-4648-a5be-616771f9762e'), 'revision': 1, 'selected_source_ids': [UUID('5a959f6a-b8ee-4fe1-87eb-68578061aaa8')], ...}
+context = &lt;sqlalchemy.dialects.postgresql.psycopg2.PGExecutionContext_psycopg2 object at 0x10e496050&gt;
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+&gt;       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "uq_personal_profiles_revision"
+E       DETAIL:  Key (workspace_id, revision)=(b52101df-84c1-4648-a5be-616771f9762e, 1) already exists.
+E       
+E       [SQL: INSERT INTO personal_profile_revisions (id, workspace_id, revision, selected_source_ids, include_phrases, exclude_phrases, execution_profile, settings, schema_revision) VALUES (%(id)s::UUID, %(workspace_id)s::UUID, %(revision)s, %(selected_source_ids)s::UUID[], %(include_phrases)s::TEXT[], %(exclude_phrases)s::TEXT[], %(execution_profile)s, %(settings)s::JSONB, %(schema_revision)s) RETURNING personal_profile_revisions.created_at]
+E       [parameters: {'id': UUID('b497623c-a488-4f2d-aa72-d89b05e9468d'), 'workspace_id': UUID('b52101df-84c1-4648-a5be-616771f9762e'), 'revision': 1, 'selected_source_ids': [UUID('5a959f6a-b8ee-4fe1-87eb-68578061aaa8')], 'include_phrases': [], 'exclude_phrases': [], 'execution_profile': 'assisted', 'settings': '{"ai_enabled": true, "monthly_allowance_usd": "1", "run_allowance_usd": "1", "model_route": {"mode": "live", "generation": {"provider": "openai", "mo ... (520 characters truncated) ... nput_usd_per_million_tokens": "10", "output_usd_per_million_tokens": "0", "max_input_tokens": 8192, "max_output_tokens": 0, "deadline_seconds": 30}}}', 'schema_revision': 'personal-profile.v2'}]
+E       (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: IntegrityError</failure></testcase><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_stale_launcher_terminal_write_cannot_replace_newer_success" time="1.691" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_total_three_attempts_survives_dispatch_failures_and_expired_recovery" time="1.547" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_terminal_run_with_unconfirmed_child_blocks_mode_switch_until_owned_exit" time="1.776" /></testsuite></testsuites>

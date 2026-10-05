@@ -1,0 +1,125 @@
+{"timestamp": "2026-10-05T00:15:33.046321+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [43368]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:58118 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59887 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59896 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59901 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59898 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59901 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59900 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59897 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59898 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59896 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59901 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59899 - "GET /api/v1/personal/briefs/7f15314c-4b68-45cd-80a9-a4d35add8870 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59973 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59979 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59983 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59985 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59982 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59980 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59983 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59985 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59979 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59980 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59982 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59980 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59982 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59984 - "GET /api/v1/personal/articles?limit=12&offset=0&ungrouped=true&interest_only=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60005 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:60007 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60006 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60005 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60008 - "GET /api/v1/personal/articles?limit=12&offset=0&ungrouped=true&interest_only=true HTTP/1.1" 200 OK
+{"articles_admitted": 1, "articles_captured": 1, "claims_supported": 2, "events_observed": 1, "feeds_attempted": 1, "feeds_failed": 0, "feeds_succeeded": 1, "fixture_label": "Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls", "published": true, "report_id": "76078893-1fd8-4386-b1d6-14c87995706c", "run_id": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5", "status": "succeeded"}
+INFO:     127.0.0.1:60008 - "GET /api/v1/personal/runs/9c3515f8-1d29-4fa9-9263-75dd4d8d63e5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60006 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60008 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60007 - "GET /api/v1/personal/articles?limit=12&offset=0&ungrouped=true&interest_only=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60005 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60170 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60173 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60175 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60172 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60174 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60171 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60173 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60170 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60175 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60172 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60174 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60171 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60172 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60171 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60174 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60174 - "GET /api/v1/personal/articles?limit=12&offset=0&ungrouped=true&interest_only=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60204 - "PUT /api/v1/personal/saved/db7c8654-1b14-454e-a3b3-2a0702da4a4b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60206 - "GET /api/v1/personal/runs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60204 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60205 - "GET /api/v1/personal/events?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60207 - "GET /api/v1/personal/briefs?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60214 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60213 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60212 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60217 - "GET /api/v1/personal/briefs/76078893-1fd8-4386-b1d6-14c87995706c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60461 - "GET /api/v1/personal/briefs/76078893-1fd8-4386-b1d6-14c87995706c/export.md HTTP/1.1" 200 OK
+{"timestamp": "2026-10-05T00:21:00.732366+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.732569+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.732682+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.733576+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "FFTM dropped", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.734035+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "GDEF dropped", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.734156+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.738446+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added gid0 to subset", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.738948+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Added first four glyphs to subset", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740180+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closing glyph list over 'glyf': 71 glyphs before", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740405+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004E', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740545+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 81, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740737+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Closed glyph list over 'glyf': 71 glyphs after", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740760+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph names: ['.notdef', '.null', 'nonmarkingreturn', 'uni0000', 'uni0020', 'uni0022', 'uni0027', 'uni002B', 'uni002C', 'uni002D', 'uni002E', 'uni002F', 'uni0030', 'uni0031', 'uni0032', 'uni0033', 'uni0034', 'uni0035', 'uni0036', 'uni0037', 'uni0038', 'uni0039', 'uni003A', 'uni003B', 'uni0041', 'uni0042', 'uni0043', 'uni0044', 'uni0045', 'uni0046', 'uni0048', 'uni0049', 'uni004E', 'uni0050', 'uni0051', 'uni0052', 'uni0053', 'uni0054', 'uni0055', 'uni0056', 'uni0057', 'uni0059', 'uni005B', 'uni005D', 'uni005F', 'uni0061', 'uni0062', 'uni0063', 'uni0064', 'uni0065', 'uni0066', 'uni0067', 'uni0068', 'uni0069', 'uni006A', 'uni006B', 'uni006C', 'uni006D', 'uni006E', 'uni006F', 'uni0070', 'uni0072', 'uni0073', 'uni0074', 'uni0075', 'uni0076', 'uni0077', 'uni0078', 'uni0079', 'uni00B7', 'uni2014']", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.740823+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Glyph IDs:   [0, 1, 2, 3, 35, 37, 42, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 68, 69, 70, 71, 72, 73, 75, 76, 81, 83, 84, 85, 86, 87, 88, 89, 90, 92, 94, 96, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 117, 118, 119, 120, 121, 122, 123, 124, 186, 8215]", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.742215+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "Retaining 71 glyphs", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.742837+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.742866+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hhea subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.742889+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "maxp subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.742915+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.743983+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "hmtx subsetted", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.754142+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "cmap subsetted", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.754251+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "loca subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.754369+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "post subsetted", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.754400+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "gasp subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.754425+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name subsetting not needed", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.761862+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf subsetted", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.762107+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "head pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.762624+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 Unicode ranges pruned: [0, 1, 31]", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.762738+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "OS/2 CodePage ranges pruned: [0]", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.763119+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "glyf pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+{"timestamp": "2026-10-05T00:21:00.763298+00:00", "level": "INFO", "logger": "fontTools.subset", "message": "name pruned", "request_id": "3021dc48-e225-4b06-b2b6-095e9146a386"}
+INFO:     127.0.0.1:60471 - "GET /api/v1/personal/briefs/76078893-1fd8-4386-b1d6-14c87995706c/export.pdf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60505 - "GET /saved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60509 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60511 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60509 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60508 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60510 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60506 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60511 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60505 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60509 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60510 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60508 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60509 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60510 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60508 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60589 - "GET /api/v1/personal/unknown HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [43368]

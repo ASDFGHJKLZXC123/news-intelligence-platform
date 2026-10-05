@@ -35,6 +35,7 @@ from services.nlp.embeddings import (
 )
 from services.nlp.episodes import refresh_episode_embeddings
 from services.nlp.snapshot_registry import SnapshotVerification, verify_snapshot
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.embedding_tasks")
@@ -76,6 +77,7 @@ def _run(
     session = SessionLocal()
     provider: OpenAIEmbeddingProvider | None = None
     try:
+        require_legacy_writer_mode(session, lock=True)
         provider = build_provider()
         before = _verify_live_snapshot(provider)
         count = work(session, provider)

@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "inventory_unchanged": true,
+  "protected_unchanged": true,
+  "source_drift": [
+    "tests/integration/test_personal_processing_control.py"
+  ]
+}

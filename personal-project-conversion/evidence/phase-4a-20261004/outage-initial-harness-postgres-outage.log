@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<string>", line 21, in <module>
+    run=lock_owned_run(s,ledger.run_id,ledger.ownership_token);source=s.scalar(select(Source));article=Article(guid='synthetic-frozen-outage-1',title='Synthetic frozen outage input',url='https://fixture.invalid/outage-1',source_id=source.id);s.add(article);s.flush();run.admitted_article_ids=[article.id];run.enrichment_article_ids=[article.id];frozen={'scopes_frozen_at':run.scopes_frozen_at.isoformat(),'admitted':list(map(str,run.admitted_article_ids)),'enrichment':list(map(str,run.enrichment_article_ids))};s.commit()
+                                                                                                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in __init__
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 596, in _initialize_instance
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 122, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 594, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 2179, in _declarative_constructor
+    raise TypeError(
+        "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+    )
+TypeError: 'guid' is an invalid keyword argument for Article

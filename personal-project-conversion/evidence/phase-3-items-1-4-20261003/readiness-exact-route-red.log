@@ -1,0 +1,82 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_v2_readiness_checks_exact_stored_route_before_public_redaction[fallback] _
+
+extra = 'fallback'
+
+    @pytest.mark.parametrize("extra", ["fallback", "route_extra", "role_extra"])
+    def test_v2_readiness_checks_exact_stored_route_before_public_redaction(extra):
+        route = synthetic_route()
+        if extra == "fallback":
+            route["fallbacks"] = [{"provider": "anthropic", "model": "hidden-model"}]
+        elif extra == "route_extra":
+            route["unexpected"] = "not-an-execution-setting"
+        else:
+            route["generation"]["unexpected"] = "not-an-execution-setting"
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=runtime()
+        )
+>       assert features["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 're...reason': None} == {'state': 'bl...tion_missing'}
+E         
+E         Differing items:
+E         {'state': 'ready'} != {'state': 'blocked'}
+E         {'reason': None} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:227: AssertionError
+_ test_v2_readiness_checks_exact_stored_route_before_public_redaction[route_extra] _
+
+extra = 'route_extra'
+
+    @pytest.mark.parametrize("extra", ["fallback", "route_extra", "role_extra"])
+    def test_v2_readiness_checks_exact_stored_route_before_public_redaction(extra):
+        route = synthetic_route()
+        if extra == "fallback":
+            route["fallbacks"] = [{"provider": "anthropic", "model": "hidden-model"}]
+        elif extra == "route_extra":
+            route["unexpected"] = "not-an-execution-setting"
+        else:
+            route["generation"]["unexpected"] = "not-an-execution-setting"
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=runtime()
+        )
+>       assert features["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 're...reason': None} == {'state': 'bl...tion_missing'}
+E         
+E         Differing items:
+E         {'state': 'ready'} != {'state': 'blocked'}
+E         {'reason': None} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:227: AssertionError
+_ test_v2_readiness_checks_exact_stored_route_before_public_redaction[role_extra] _
+
+extra = 'role_extra'
+
+    @pytest.mark.parametrize("extra", ["fallback", "route_extra", "role_extra"])
+    def test_v2_readiness_checks_exact_stored_route_before_public_redaction(extra):
+        route = synthetic_route()
+        if extra == "fallback":
+            route["fallbacks"] = [{"provider": "anthropic", "model": "hidden-model"}]
+        elif extra == "route_extra":
+            route["unexpected"] = "not-an-execution-setting"
+        else:
+            route["generation"]["unexpected"] = "not-an-execution-setting"
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=runtime()
+        )
+>       assert features["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 're...reason': None} == {'state': 'bl...tion_missing'}
+E         
+E         Differing items:
+E         {'state': 'ready'} != {'state': 'blocked'}
+E         {'reason': None} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:227: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_personal_runtime_readiness.py::test_v2_readiness_checks_exact_stored_route_before_public_redaction[fallback]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_v2_readiness_checks_exact_stored_route_before_public_redaction[route_extra]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_v2_readiness_checks_exact_stored_route_before_public_redaction[role_extra]
+3 failed, 34 deselected in 1.00s

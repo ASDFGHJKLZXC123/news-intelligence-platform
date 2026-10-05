@@ -1,0 +1,22 @@
+{
+  "baseline_file_count": 1927,
+  "changed_baseline_files": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "personal-project-conversion/05-validation-and-release.md",
+    "personal-project-conversion/README.md"
+  ],
+  "missing_baseline_files": [],
+  "unexpected_changes": [],
+  "checks": {
+    "git_head": true,
+    "branch": true,
+    "git_index": true,
+    "staged_diff": true
+  },
+  "protected_env_unchanged": true,
+  "selected_preferences_unchanged": true,
+  "historical_evidence_unchanged": true,
+  "no_shared_resources_touched": true,
+  "passed": true
+}

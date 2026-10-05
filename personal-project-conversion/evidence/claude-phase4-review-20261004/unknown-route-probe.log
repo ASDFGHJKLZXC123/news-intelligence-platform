@@ -1,0 +1,83 @@
+{"timestamp": "2026-10-05T01:15:13.422206+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-10-05T01:15:13.423654+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-10-05T01:15:13.479824+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 404 Not Found\""}
+{"timestamp": "2026-10-05T01:15:13.481290+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 405 Method Not Allowed\""}
+{"timestamp": "2026-10-05T01:15:13.482523+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: PUT http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 405 Method Not Allowed\""}
+{"timestamp": "2026-10-05T01:15:13.483630+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 405 Method Not Allowed\""}
+{"timestamp": "2026-10-05T01:15:13.484618+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-10-05T01:15:13.532776+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 404 Not Found\""}
+{"timestamp": "2026-10-05T01:15:13.534340+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 404 Not Found\""}
+{"timestamp": "2026-10-05T01:15:13.535639+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: PUT http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 404 Not Found\""}
+{"timestamp": "2026-10-05T01:15:13.536927+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://127.0.0.1:8123/api/v1/personal/unknown \"HTTP/1.1 404 Not Found\""}
+{
+  "method": "Fresh in-process FastAPI TestClient routing probe; no lifespan entered or live services used",
+  "socket_connect_attempts": [],
+  "results": [
+    {
+      "transport": "subprocess",
+      "method": "GET",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "subprocess",
+      "method": "POST",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "subprocess",
+      "method": "PUT",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "subprocess",
+      "method": "DELETE",
+      "path": "/api/v1/personal/unknown",
+      "status": 405,
+      "content_type": "application/json",
+      "error_code": "method_not_allowed"
+    },
+    {
+      "transport": "celery",
+      "method": "GET",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "POST",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "PUT",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    },
+    {
+      "transport": "celery",
+      "method": "DELETE",
+      "path": "/api/v1/personal/unknown",
+      "status": 404,
+      "content_type": "application/json",
+      "error_code": "not_found"
+    }
+  ],
+  "all_responses_json_errors": true,
+  "status_parity": false
+}

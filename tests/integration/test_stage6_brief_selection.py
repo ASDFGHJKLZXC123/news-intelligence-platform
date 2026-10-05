@@ -20,6 +20,9 @@ Database hygiene (per the Stage 6 workflow rules), enforced structurally:
   structurally impossible: the fixture refuses to proceed unless the target is the disposable db.
 - The override and the disposable database are both torn down in ``finally``, so a crash cannot
   leave the process pointed at, or a database on, the server.
+- The two historical migration tests own separate ``nip_stage6_hotness_<hex>`` databases
+  capped at 0016. Their subprocess migrations receive explicit test mode and database URLs,
+  so exercising 0015/0016 never rolls back through newer retained personal records.
 """
 
 from __future__ import annotations
@@ -27,8 +30,11 @@ from __future__ import annotations
 import contextlib
 import datetime
 import os
+import subprocess
+import sys
 import uuid
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from alembic import command
@@ -71,6 +77,7 @@ pytestmark = pytest.mark.integration
 
 _ALEMBIC = Config("alembic.ini")
 _SEL_PREFIX = "nip_stage6_sel_"
+_HOTNESS_PREFIX = "nip_stage6_hotness_"
 
 BRIEF_DATE = datetime.date(2026, 7, 14)
 WINDOW = window_for_date(BRIEF_DATE)
@@ -132,16 +139,54 @@ def selection_db() -> Iterator[_SelectionDB]:
                 engine.dispose()
 
 
+def _historical_hotness_migration(database: _SelectionDB, action: str, revision: str) -> None:
+    """Migrate only a uniquely owned database at the reversible 0015/0016 boundary."""
+    assert database.name.startswith(_HOTNESS_PREFIX)
+    assert database.engine.url.database == database.name != FORBIDDEN_DB
+    assert action in {"upgrade", "downgrade"}
+    assert revision in {"0015", "0016"}
+    result = subprocess.run(
+        [sys.executable, "-m", "alembic", action, revision],
+        cwd=Path(__file__).resolve().parents[2],
+        env={**os.environ, "APP_ENV": "test", "DATABASE_URL": url_for(database.name)},
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    if result.returncode:
+        raise RuntimeError(
+            f"owned hotness migration {action} {revision} failed\n"
+            f"{result.stdout[-2000:]}\n{result.stderr[-6000:]}"
+        )
+    with database.engine.connect() as conn:
+        assert conn.scalar(text("SELECT current_database()")) == database.name
+        assert conn.scalar(text("SELECT version_num FROM alembic_version")) == revision
+
+
+@pytest.fixture
+def historical_hotness_db() -> Iterator[_SelectionDB]:
+    """Bootstrap only through 0016; retain the head fixture for current-schema selection."""
+    require_disposable_postgres()
+    with disposable_database(_HOTNESS_PREFIX) as name:
+        engine = create_engine(url_for(name))
+        database = _SelectionDB(engine, name)
+        try:
+            _historical_hotness_migration(database, "upgrade", "0016")
+            yield database
+        finally:
+            engine.dispose()
+
+
 # --------------------------------------------------------------------------------------
 # Migration 0016
 # --------------------------------------------------------------------------------------
 
 
 def test_migration_adds_hotness_without_disturbing_existing_events(
-    selection_db: _SelectionDB,
+    historical_hotness_db: _SelectionDB,
 ) -> None:
-    engine = selection_db.engine
-    command.downgrade(_ALEMBIC, "0015")
+    engine = historical_hotness_db.engine
+    _historical_hotness_migration(historical_hotness_db, "downgrade", "0015")
     with engine.begin() as conn:
         assert "hotness_score" not in {c["name"] for c in inspect(conn).get_columns("events")}
         conn.execute(
@@ -151,7 +196,7 @@ def test_migration_adds_hotness_without_disturbing_existing_events(
             )
         )
 
-    command.upgrade(_ALEMBIC, "0016")
+    _historical_hotness_migration(historical_hotness_db, "upgrade", "0016")
 
     with engine.connect() as conn:
         row = conn.execute(
@@ -176,16 +221,16 @@ def test_the_hotness_check_constraint_is_live(selection_db: _SelectionDB) -> Non
         )
 
 
-def test_migration_is_reversible(selection_db: _SelectionDB) -> None:
-    engine = selection_db.engine
-    command.downgrade(_ALEMBIC, "0015")
+def test_migration_is_reversible(historical_hotness_db: _SelectionDB) -> None:
+    engine = historical_hotness_db.engine
+    _historical_hotness_migration(historical_hotness_db, "downgrade", "0015")
     with engine.connect() as conn:
         inspector = inspect(conn)
         assert "hotness_score" not in {c["name"] for c in inspector.get_columns("events")}
         assert "ix_events_updated_at_hotness" not in {
             i["name"] for i in inspector.get_indexes("events")
         }
-    command.upgrade(_ALEMBIC, "head")
+    _historical_hotness_migration(historical_hotness_db, "upgrade", "0016")
     with engine.connect() as conn:
         inspector = inspect(conn)
         assert "hotness_score" in {c["name"] for c in inspector.get_columns("events")}

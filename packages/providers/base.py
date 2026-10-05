@@ -100,7 +100,7 @@ class RSSItem:
     guid: str
     title: str
     url: str
-    published_at: datetime.datetime
+    published_at: datetime.datetime | None
     summary: str = ""
     source: str = ""
     provider_name: str = "unknown"
@@ -109,7 +109,7 @@ class RSSItem:
     evidence_refs: tuple[str, ...] = field(default_factory=tuple)
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "published_at", ensure_utc(self.published_at))
+        object.__setattr__(self, "published_at", ensure_optional_utc(self.published_at))
         object.__setattr__(self, "source_refs", tuple(self.source_refs))
         object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))
 

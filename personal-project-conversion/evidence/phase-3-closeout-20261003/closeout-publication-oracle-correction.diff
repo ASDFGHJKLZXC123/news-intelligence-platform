@@ -1,0 +1,18 @@
+--- before/tests/integration/test_personal_phase3_closeout.py
++++ after/tests/integration/test_personal_phase3_closeout.py
+@@ -490,12 +490,14 @@
+                         "grouping",
+                         "claim_preparation",
+                         "snapshot",
+-                        "report",
+                     )
+                 )
+                 report = session.get(Report, run.report_id)
+                 snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                 assert report.status == "published" and snapshot.profile_revision_id == profile_id
++                assert run.result["published"] is True and run.result["gate_outcome"] == "pass"
++                assert run.result["report_id"] == str(report.id)
++                assert run.result["snapshot_id"] == str(snapshot.id)
+                 payload = snapshot.input_payload
+                 encoded = json.dumps(
+                     payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False

@@ -1,0 +1,41 @@
+{
+  "oid_boundary": "Original CREATE records did not record OIDs; October 3 item-2/3 before/after inventories pin the exact name/OID pairs freshly matched here.",
+  "records": [
+    {
+      "completed_at_ms": 1789944641078,
+      "exit_code": 0,
+      "item_id": "exec-6fb26cb9-a4d8-4dae-a573-45ac72f57d57",
+      "original_command_sha256": "202f3b61a133d36dc9e15b5711cd0b6309c6a6102a31bdecc9b3b20fde6241d8",
+      "redacted_command": "/bin/zsh\n-lc\n.venv/bin/python -c 'import json, pathlib, subprocess, uuid; p=pathlib.Path(\"personal-project-conversion/evidence/phase-3-20260920\"); p.mkdir(exist_ok=True); ids=subprocess.check_output([\"docker\",\"ps\",\"-aq\"],text=True).split(); before=json.loads(subprocess.check_output([\"docker\",\"inspect\",*ids],text=True)); (p/\"containers-before.json\").write_text(json.dumps([{\"Id\":x[\"Id\"],\"Name\":x[\"Name\"],\"StartedAt\":x[\"State\"][\"StartedAt\"],\"Running\":x[\"State\"][\"Running\"]} for x in before],indent=2)); name=\"nip-phase3-tests-\"+uuid.uuid4().hex[:10]; cid=subprocess.check_output([\"docker\",\"run\",\"-d\",\"--name\",name,\"--label\",\"nip.phase3.owned=\"+name,\"-e\",\"POSTGRES_USER=news\",\"-e\",\"POSTGRES_PASSWORD=[redacted]\",\"-e\",\"POSTGRES_DB=postgres\",\"-p\",\"127.0.0.1::5432\",\"news-intelligence-platform-postgres:latest\"],text=True).strip(); state=json.loads(subprocess.check_output([\"docker\",\"inspect\",cid],text=True))[0]; port=int(state[\"NetworkSettings\"][\"Ports\"][\"5432/tcp\"][0][\"HostPort\"]); manifest={\"container_id\":cid,\"container_name\":name,\"port\":port,\"image\":state[\"Image\"],\"created\":state[\"Created\"]}; (p/\"postgres-ownership.json\").write_text(json.dumps(manifest,indent=2)); print(json.dumps(manifest))'",
+      "rollout_line": 246,
+      "started_at_ms": 1789944640704,
+      "status": "completed",
+      "stdout": "{\"container_id\": \"1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\", \"container_name\": \"nip-phase3-tests-02ea38048d\", \"port\": 58553, \"image\": \"sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c\", \"created\": \"2026-09-20T22:50:40.739020472Z\"}\n"
+    },
+    {
+      "completed_at_ms": 1789945973100,
+      "exit_code": 1,
+      "item_id": "exec-4bc82638-d472-432e-83b0-9addc476c682",
+      "original_command_sha256": "c5ec6a0fd1a78d4810d0e5d2c11e4d730eb0c253f5a0d29a3066064db830fd97",
+      "redacted_command": "/bin/zsh\n-lc\nAPP_ENV=test OPENAI_API_KEY= ANTHROPIC_API_KEY= GEMINI_API_KEY= DEEPSEEK_API_KEY= .venv/bin/python -c 'import json,pathlib,subprocess,os,uuid; from sqlalchemy import create_engine,text; p=pathlib.Path(\"personal-project-conversion/evidence/phase-3-20260920\"); m=json.loads((p/\"postgres-ownership.json\").read_text()); name=\"nip_phase3_full_\"+uuid.uuid4().hex[:12]; url=\"postgresql+psycopg2://[synthetic-role]:[redacted]@127.0.0.1:\"+str(m[\"port\"])+\"/\"+name; admin=create_engine(url.rsplit(\"/\",1)[0]+\"/postgres\",isolation_level=\"AUTOCOMMIT\"); conn=admin.connect(); conn.execute(text(\"CREATE DATABASE \"+name)); conn.close(); admin.dispose(); m[\"database_name\"]=name; m[\"database_url\"]=url; (p/\"full-suite-database.json\").write_text(json.dumps(m,indent=2)); env={**os.environ,\"DATABASE_URL\":url,\"POSTGRES_HOST_PORT\":str(m[\"port\"]),\"REQUIRE_POSTGRES\":\"1\"}; log=(p/\"full-integration.log\").open(\"w\"); migration=subprocess.run([\".venv/bin/python\",\"-m\",\"alembic\",\"upgrade\",\"head\"],env=env,stdout=log,stderr=subprocess.STDOUT); assert migration.returncode==0; result=subprocess.run([\".venv/bin/python\",\"-m\",\"pytest\",\"-q\",\"tests/integration\"],env=env,stdout=log,stderr=subprocess.STDOUT); print(\"full_integration_exit\",result.returncode); raise SystemExit(result.returncode)'",
+      "rollout_line": 866,
+      "started_at_ms": 1789945792304,
+      "status": "failed",
+      "stdout": "full_integration_exit 1\n"
+    },
+    {
+      "completed_at_ms": 1789946583031,
+      "exit_code": 1,
+      "item_id": "exec-25bd1f6c-91ac-49e2-b22d-3c4a9bbe071e",
+      "original_command_sha256": "75f959b5cc0de2d4f78525942fe9dbf42bce750a0179a997b2b2e4de217d0db1",
+      "redacted_command": "/bin/zsh\n-lc\n.venv/bin/python -c '\nimport json, os, subprocess, sys, uuid\nfrom pathlib import Path\nfrom sqlalchemy import create_engine, text\nroot = Path.cwd()\nevidence = root / \"personal-project-conversion/evidence/phase-3-20260920\"\nowned = json.loads((evidence / \"postgres-ownership.json\").read_text())\ninfo = json.loads(subprocess.check_output([\"docker\", \"inspect\", owned[\"container_id\"]]))[0]\nassert info[\"Name\"] == \"/\" + owned[\"container_name\"]\nassert info[\"Created\"] == owned[\"created\"] and info[\"Image\"] == owned[\"image\"]\nassert info[\"State\"][\"Running\"]\nname = \"nip_phase3_final_\" + uuid.uuid4().hex[:12]\nurl = \"postgresql+psycopg2://[synthetic-role]:[redacted]@127.0.0.1:58553/\" + name\nadmin = create_engine(\"postgresql+psycopg2://[synthetic-role]:[redacted]@127.0.0.1:58553/postgres\", isolation_level=\"AUTOCOMMIT\")\nwith admin.connect() as connection:\n    assert not connection.execute(text(\"SELECT datname FROM pg_database WHERE datname LIKE '\\''nip_stage7_%'\\''\")).all()\n    connection.exec_driver_sql('\\''CREATE DATABASE \"'\\'' + name + '\\''\"'\\'')\nadmin.dispose()\n(evidence / \"final-suite-database.json\").write_text(json.dumps({**owned, \"database_name\": name, \"database_url\": url}, indent=2))\nenv = {**os.environ, \"APP_ENV\": \"test\", \"REQUIRE_POSTGRES\": \"1\", \"POSTGRES_HOST_PORT\": \"58553\", \"DATABASE_URL\": url, \"REQUIRE_DATABASE_ROLE_HARDENING\": \"1\", \"POSTGRES_TOOL_CONTAINER\": owned[\"container_id\"], \"POSTGRES_TOOL_CONTAINER_ADMIN_ROLE\": \"news\", \"OPENAI_API_KEY\": \"\", \"GEMINI_API_KEY\": \"\", \"GOOGLE_API_KEY\": \"\", \"ANTHROPIC_API_KEY\": \"\"}\nwith (evidence / \"full-integration-final.log\").open(\"w\") as output:\n    migration = subprocess.run([sys.executable, \"-m\", \"alembic\", \"upgrade\", \"head\"], env=env, stdout=output, stderr=subprocess.STDOUT)\n    assert migration.returncode == 0\n    result = subprocess.run([sys.executable, \"-m\", \"pytest\", \"-q\", \"tests/integration\"], env=env, stdout=output, stderr=subprocess.STDOUT)\nprint(json.dumps({\"exit_code\": result.returncode, \"log\": str(evidence / \"full-integration-final.log\")}), flush=True)\nsys.exit(result.returncode)\n'",
+      "rollout_line": 1062,
+      "started_at_ms": 1789946366933,
+      "status": "failed",
+      "stdout": "{\"exit_code\": 1, \"log\": \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-20260920/full-integration-final.log\"}\n"
+    }
+  ],
+  "session_id": "01a0c0fa-efac-7f83-8231-8928b4629fe1",
+  "session_path": "/Users/f8fq/.codex/sessions/2026/09/20/rollout-2026-09-20T15-41-05-01a0c0fa-efac-7f83-8231-8928b4629fe1.jsonl",
+  "session_sha256": "c83402c379a72d259102652dc65230c7861e10fa1a800f1f05b4a1c98952d025"
+}

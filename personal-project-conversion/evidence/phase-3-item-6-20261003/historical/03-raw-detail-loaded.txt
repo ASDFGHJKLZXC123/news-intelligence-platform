@@ -1,0 +1,31 @@
+- complementary:
+  - navigation:
+    - generic "Today":
+    - generic "Saved":
+    - generic "Briefs":
+    - generic "Settings":
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - article:
+    - generic: Retained RSS article
+    - generic: Disabled by profile
+    - 'heading "Synthetic: Agency publishes a policy update" [level=2]'
+    - generic: Synthetic Phase 2 acceptance feed
+    - generic: Published Sep 20, 2026, 03:06:03 PM PDT
+    - paragraph: A retained RSS summary with an authentic fixture URL; AI is disabled.
+    - generic: Captured
+    - generic: Sep 20, 2026, 04:06:03 PM PDT
+    - generic: Admitted
+    - generic: Sep 20, 2026, 04:06:03 PM PDT
+    - link "Open original source":
+      - /url: https://offline.personal.test/phase3/1

@@ -1,0 +1,115 @@
+{
+  "all_owned_process_birth_identities_absent": true,
+  "app_process_groups": {
+    "app": [],
+    "app_before_final_default_fix": [],
+    "app_before_first_verified_restart": [],
+    "app_before_restart": [],
+    "app_initial": []
+  },
+  "app_processes": {
+    "app": {
+      "current_birth": null,
+      "matching_process_absent": true,
+      "pid": 52617,
+      "recorded_birth": "Sun Oct  4 17:28:06 2026",
+      "stopped_utc": "2026-10-05T00:33:20.886942+00:00",
+      "verified_stop": true
+    },
+    "app_before_final_default_fix": {
+      "current_birth": null,
+      "matching_process_absent": true,
+      "pid": 42262,
+      "recorded_birth": "Sun Oct  4 17:13:57 2026",
+      "stopped_utc": "2026-10-05T00:14:46.113167+00:00",
+      "verified_stop": true
+    },
+    "app_before_first_verified_restart": {
+      "current_birth": null,
+      "matching_process_absent": true,
+      "pid": 43368,
+      "recorded_birth": "Sun Oct  4 17:15:31 2026",
+      "stopped_utc": "2026-10-05T00:22:58.156636+00:00",
+      "verified_stop": true
+    },
+    "app_before_restart": {
+      "current_birth": null,
+      "matching_process_absent": true,
+      "pid": 48928,
+      "recorded_birth": "Sun Oct  4 17:22:58 2026",
+      "stopped_utc": "2026-10-05T00:28:06.001062+00:00",
+      "verified_stop": true
+    },
+    "app_initial": {
+      "current_birth": null,
+      "matching_process_absent": true,
+      "pid": 32409,
+      "recorded_birth": "Sun Oct  4 17:01:30 2026",
+      "stopped_utc": "2026-10-05T00:13:55.685922+00:00",
+      "verified_stop": true
+    }
+  },
+  "child_processes": [
+    {
+      "current_birth": null,
+      "database_key": "browser",
+      "durable_exit_confirmed": true,
+      "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+      "matching_process_absent": true,
+      "pid": 44107,
+      "recorded_birth": "Sun Oct  4 17:16:35 2026"
+    },
+    {
+      "current_birth": null,
+      "database_key": "browser_initial",
+      "durable_exit_confirmed": true,
+      "identity": "79021327-88d0-44c1-bfce-14d596f65008",
+      "matching_process_absent": true,
+      "pid": 33135,
+      "recorded_birth": "Sun Oct  4 17:02:04 2026"
+    },
+    {
+      "current_birth": null,
+      "database_key": "manual",
+      "durable_exit_confirmed": true,
+      "identity": "80b4980e-35d3-4264-826c-5dfc3ff1fd41",
+      "matching_process_absent": true,
+      "pid": 43852,
+      "recorded_birth": "Sun Oct  4 17:16:08 2026"
+    },
+    {
+      "current_birth": null,
+      "database_key": "manual_initial",
+      "durable_exit_confirmed": true,
+      "identity": "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3",
+      "matching_process_absent": true,
+      "pid": 33119,
+      "recorded_birth": "Sun Oct  4 17:02:02 2026"
+    },
+    {
+      "current_birth": null,
+      "database_key": "restored",
+      "durable_exit_confirmed": true,
+      "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+      "matching_process_absent": true,
+      "pid": 44107,
+      "recorded_birth": "Sun Oct  4 17:16:35 2026"
+    }
+  ],
+  "completed_utc": "2026-10-05T00:34:07.265295+00:00",
+  "network_guard_removed": true,
+  "no_signal_sent_to_unowned_process": true,
+  "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+  "ports": {
+    "application": {
+      "connection_result": 61,
+      "listener_absent": true,
+      "port": 58118
+    },
+    "owned_postgresql": {
+      "connection_result": 61,
+      "listener_absent": true,
+      "port": 57825
+    }
+  }
+}

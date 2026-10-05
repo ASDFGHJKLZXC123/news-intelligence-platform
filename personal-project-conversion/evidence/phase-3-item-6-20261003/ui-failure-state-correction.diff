@@ -1,0 +1,77 @@
+--- frontend/app/page-personal.jsx (dirty before item6 correction)
++++ frontend/app/page-personal.jsx (after item6 correction)
+@@ -308,7 +308,14 @@
+ 
+ function personalGroupingEmptyState(run) {
+   const grouping = run && run.stageResults && run.stageResults.grouping;
+-  if (!grouping || !["disabled", "blocked"].includes(grouping.status)) return null;
++  if (!grouping || !["disabled", "blocked"].includes(grouping.status)) {
++    if (run && ["failed", "partially_failed"].includes(run.state)) return {
++      title: "Grouped stories unavailable",
++      hint: (run.state === "failed" ? "This update failed" : "This update did not finish cleanly") + "; grouped stories are unavailable. Any retained RSS articles remain readable above.",
++      failed: true,
++    };
++    return null;
++  }
+   return {
+     title: grouping.status === "disabled" ? "Grouping is disabled" : "Grouped stories unavailable",
+     hint: (grouping.status === "disabled" ? "AI grouping was disabled for this update." : "AI grouping could not run for this update.") + " Any retained RSS articles remain readable above.",
+@@ -503,7 +510,7 @@
+       {loading && !page.items.length ? <Card><EmptyState icon={Icon.refresh} title="Reading stored results" /></Card>
+         : error && !displayed ? <Card><EmptyState icon={Icon.warn} title="Stored results are unavailable" hint="The workspace and update status could not be confirmed. Retry the display after the local API is available." action={<button className="btn btn-sm" type="button" onClick={() => load({ initial: true })}>Retry display</button>} /></Card>
+         : !displayed ? <Card><EmptyState icon={Icon.events} title="No grouped update yet" hint={canStart ? "Request an update to collect RSS articles from the selected feeds. Grouping and briefs depend on AI readiness." : "Initialize and configure the workspace, then request today’s update."} /></Card>
+-        : page.total === 0 && groupingEmptyState ? <Card><EmptyState icon={Icon.info} title={groupingEmptyState.title} hint={groupingEmptyState.hint} /></Card>
++        : page.total === 0 && groupingEmptyState ? <Card><EmptyState icon={groupingEmptyState.failed ? Icon.warn : Icon.info} title={groupingEmptyState.title} hint={groupingEmptyState.hint} /></Card>
+         : page.total === 0 && !query && !savedOnly ? <Card><EmptyState icon={Icon.check} title="No stories matched this update" hint="The stored update is readable and its capture coverage is shown above. A complete capture failure is reported as a failure, not a quiet result." /></Card>
+         : page.total === 0 ? <Card><EmptyState icon={Icon.search} title="No stories match these filters" hint="Reset the filters or choose another update." /></Card>
+         : <div className="stack">
+--- frontend/app/personal-foundation.test.js (dirty before item6 correction)
++++ frontend/app/personal-foundation.test.js (after item6 correction)
+@@ -233,6 +233,47 @@
+   assert.match(describe({ stageResults: { grouping: { status: "disabled" } } }).hint, /RSS articles remain readable/);
+   assert.equal(describe({ stageResults: { grouping: { status: "succeeded" } } }), null);
+   assert.equal(describe(null), null);
++});
++
++test("failed capture without grouping is explained before healthy quiet results", () => {
++  const describe = vm.runInNewContext("(" + functionSource(PERSONAL, "personalGroupingEmptyState") + ")");
++  const result = describe({
++    state: "failed", error: { code: "all_feeds_failed" },
++    counts: { admitted: 1, selectedForEnrichment: 0, grouped: 0 },
++    stageResults: { capture: { status: "failed", feedsSucceeded: 0, feedsFailed: 2 } },
++  });
++  assert.ok(result, "a failed capture must not fall through to a healthy quiet result");
++  assert.equal(result.title, "Grouped stories unavailable");
++  assert.match(result.hint, /update failed/i);
++  assert.match(result.hint, /retained RSS articles remain readable/i);
++  assert.equal(result.failed, true);
++});
++
++test("failed provider before grouping is explained without hiding retained raw articles", () => {
++  const describe = vm.runInNewContext("(" + functionSource(PERSONAL, "personalGroupingEmptyState") + ")");
++  const result = describe({
++    state: "failed", error: { code: "personal_workflow_failed" },
++    counts: { admitted: 9, selectedForEnrichment: 9, grouped: 0 },
++    stageResults: { capture: { status: "succeeded" }, workflow: { status: "failed", code: "personal_workflow_failed" } },
++  });
++  assert.ok(result, "a provider failure must not fall through to a healthy quiet result");
++  assert.equal(result.title, "Grouped stories unavailable");
++  assert.match(result.hint, /update failed/i);
++  assert.equal(result.failed, true);
++  assert.equal(describe({ state: "succeeded", stageResults: { grouping: { status: "succeeded" } } }), null);
++  assert.equal(describe({ state: "succeeded", stageResults: {} }), null);
++});
++
++test("partial failure stays truthful while disabled and successful grouping keep their states", () => {
++  const describe = vm.runInNewContext("(" + functionSource(PERSONAL, "personalGroupingEmptyState") + ")");
++  const partial = describe({ state: "partially_failed", stageResults: { grouping: { status: "succeeded" } } });
++  assert.equal(partial.title, "Grouped stories unavailable");
++  assert.match(partial.hint, /did not finish cleanly/);
++  assert.equal(partial.failed, true);
++  assert.equal(describe({ state: "partially_failed", stageResults: { grouping: { status: "disabled" } } }).title, "Grouping is disabled");
++  assert.equal(describe({ state: "succeeded", stageResults: { grouping: { status: "succeeded" } } }), null);
++  assert.match(PERSONAL, /groupingEmptyState\.failed \? Icon\.warn : Icon\.info/);
++  assert.match(PERSONAL, /title="No stories match these filters"/);
+ });
+ 
+ test("personal page loads before the router and legacy prototype files remain included", () => {

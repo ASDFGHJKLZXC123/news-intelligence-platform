@@ -1,0 +1,8 @@
+{
+  "args": [
+    "retry",
+    "7ef07384-9f27-4fdf-82ba-eae2f633f9d1"
+  ],
+  "exit_code": 0,
+  "worker_and_scheduler_stopped": true
+}

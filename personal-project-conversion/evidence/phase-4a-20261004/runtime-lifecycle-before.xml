@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="7.637" timestamp="2026-10-04T01:51:28.361667-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_child_normal_shutdown_is_bounded_and_durable" time="2.132"><failure message="Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child">tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_child_normal_shutdow0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x110f0ba60&gt;
+
+    def test_real_child_normal_shutdown_is_bounded_and_durable(tmp_path, record_property):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _ = _queued_run(engine)
+            supervisor, children = _supervisor(engine, "graceful", tmp_path)
+            try:
+                supervisor.launch(run_id, token, _generation(engine, run_id))
+&gt;               proof = _running(engine, run_id, children[0], tmp_path)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_runtime_lifecycle.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+engine = Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_2b3b79965d6c4611b56256bd2fb7eda0)
+run_id = UUID('4bfe72c8-ee29-409b-b5c1-eaea1275a2da')
+process = &lt;Popen: returncode: 1 args: ['/Users/f8fq/coding projects/Unfinished/news-in...&gt;
+tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_child_normal_shutdow0')
+
+    def _running(engine, run_id, process, tmp_path):
+        bound = time.monotonic() + 10
+        while time.monotonic() &lt; bound:
+            if process.poll() is not None:
+&gt;               pytest.fail("child exited before durable running claim: " + (tmp_path / "child.log").read_text())
+E               Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child
+
+tests/integration/test_personal_runtime_lifecycle.py:83: Failed</failure></testcase><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_child_ignores_graceful_then_watchdog_kills_owned_group" time="1.596"><failure message="Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child">tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_child_ignores_gracef0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x111283060&gt;
+
+    def test_real_child_ignores_graceful_then_watchdog_kills_owned_group(tmp_path, record_property):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _ = _queued_run(engine)
+            supervisor, children = _supervisor(engine, "ignore_graceful", tmp_path)
+            try:
+                supervisor.launch(run_id, token, _generation(engine, run_id))
+&gt;               proof = _running(engine, run_id, children[0], tmp_path)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_runtime_lifecycle.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+engine = Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_f8eccad758524efeb59e6be2597e6a5c)
+run_id = UUID('d51d3600-91ca-42d1-ba93-3cb740e0c505')
+process = &lt;Popen: returncode: 1 args: ['/Users/f8fq/coding projects/Unfinished/news-in...&gt;
+tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_child_ignores_gracef0')
+
+    def _running(engine, run_id, process, tmp_path):
+        bound = time.monotonic() + 10
+        while time.monotonic() &lt; bound:
+            if process.poll() is not None:
+&gt;               pytest.fail("child exited before durable running claim: " + (tmp_path / "child.log").read_text())
+E               Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child
+
+tests/integration/test_personal_runtime_lifecycle.py:83: Failed</failure></testcase><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_launcher_loss_keeps_original_child_deadlines_and_requires_recovery" time="1.594"><failure message="FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_launcher_loss_keeps_0/child.log'">tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_launcher_loss_keeps_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x111302160&gt;
+
+    def test_real_launcher_loss_keeps_original_child_deadlines_and_requires_recovery(tmp_path, record_property):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _ = _queued_run(engine)
+            generation = _generation(engine, run_id)
+            env = _environment(engine, "ignore_graceful")
+            with (tmp_path / "launcher.log").open("w") as log:
+                launcher = subprocess.Popen([sys.executable, "-m", FAULT_MODULE, "--launcher", str(run_id), str(token), str(generation)], cwd=ROOT, env=env, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True, shell=False)
+            child_pid = None
+            birth = None
+            try:
+&gt;               proof = _running(engine, run_id, launcher, tmp_path)  # Probe belongs to real child, launcher remains alive.
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_runtime_lifecycle.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_personal_runtime_lifecycle.py:83: in _running
+    pytest.fail("child exited before durable running claim: " + (tmp_path / "child.log").read_text())
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_launcher_loss_keeps_0/child.log')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_launcher_loss_keeps_0/child.log'
+
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_old_child_after_handoff_recovery_cannot_mutate_replacement" time="1.631"><failure message="Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child">tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_old_child_after_hand0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x1112e4540&gt;
+
+    def test_real_old_child_after_handoff_recovery_cannot_mutate_replacement(tmp_path, record_property):
+        with migrated_disposable_engine() as engine:
+            run_id, old_token, _ = _queued_run(engine)
+            old_generation = _generation(engine, run_id)
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                assert (run.lease_expires_at - run.queued_at).total_seconds() == 120
+                recover_expired_owner(session, run_id, now=run.lease_expires_at + dt.timedelta(seconds=1))
+                workspace, _ = get_workspace(session)
+                replacement = retry_run(session, workspace, run_id, now=dt.datetime.now(dt.UTC))
+                new_token = replacement.run.ownership_token
+                new_generation = replacement.run.fencing_generation
+                session.commit()
+            env = _environment(engine, "graceful")
+            env["PERSONAL_CHILD_IDENTITY"], env["PERSONAL_LAUNCHER_ID"] = str(uuid.uuid4()), str(uuid.uuid4())
+            old = subprocess.Popen([sys.executable, "-m", FAULT_MODULE, str(run_id), str(old_token), str(old_generation)], cwd=ROOT, env=env, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True, shell=False)
+            assert old.wait(timeout=10) == 1
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                assert run.state == "queued" and run.ownership_token == new_token and run.fencing_generation == new_generation
+                assert run.attempt == 2 and not run.stage_results.get("lifecycle_probe")
+            supervisor, children = _supervisor(engine, "graceful", tmp_path)
+            try:
+                supervisor.launch(run_id, new_token, new_generation)
+&gt;               proof = _running(engine, run_id, children[0], tmp_path)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_runtime_lifecycle.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+engine = Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_cf26299248a7409e9d696bf10a9ab76f)
+run_id = UUID('4df05052-736d-4c1d-960a-62b365bf138c')
+process = &lt;Popen: returncode: 1 args: ['/Users/f8fq/coding projects/Unfinished/news-in...&gt;
+tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-243/test_real_old_child_after_hand0')
+
+    def _running(engine, run_id, process, tmp_path):
+        bound = time.monotonic() + 10
+        while time.monotonic() &lt; bound:
+            if process.poll() is not None:
+&gt;               pytest.fail("child exited before durable running claim: " + (tmp_path / "child.log").read_text())
+E               Failed: child exited before durable running claim: /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python: No module named tests.integration._personal_runtime_fault_child
+
+tests/integration/test_personal_runtime_lifecycle.py:83: Failed</failure></testcase></testsuite></testsuites>

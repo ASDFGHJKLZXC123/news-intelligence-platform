@@ -1,0 +1,676 @@
+;
+; Archive created at 2026-09-20 06:58:07 UTC
+;     dbname: nip_phase2_live_20260919_8cf55cfa
+;     TOC Entries: 665
+;     Compression: gzip
+;     Dump Version: 1.15-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 16.15 (Debian 16.15-1.pgdg12+2)
+;     Dumped by pg_dump version: 16.15 (Debian 16.15-1.pgdg12+2)
+;
+;
+; Selected TOC Entries:
+;
+3; 3079 17312 EXTENSION - postgis 
+5817; 0 0 COMMENT - EXTENSION postgis 
+2; 3079 16390 EXTENSION - vector 
+5818; 0 0 COMMENT - EXTENSION vector 
+968; 1255 19528 FUNCTION public validate_personal_report_links() news
+217; 1259 16385 TABLE public alembic_version news
+294; 1259 19203 TABLE public alert_condition_states news
+283; 1259 18880 TABLE public alert_rules news
+284; 1259 18900 TABLE public alerts news
+220; 1259 16748 TABLE public article_embeddings news
+219; 1259 16730 TABLE public articles news
+269; 1259 18535 TABLE public claim_evidence news
+268; 1259 18520 TABLE public claims news
+261; 1259 18393 TABLE public companies news
+262; 1259 18418 TABLE public company_aliases news
+263; 1259 18436 TABLE public company_identifiers news
+278; 1259 18797 TABLE public company_risk_rollups news
+249; 1259 17206 TABLE public country_context_snapshots news
+225; 1259 16827 TABLE public country_daily_risk_signals news
+248; 1259 17188 TABLE public country_indicator_observations news
+247; 1259 17174 TABLE public country_indicator_series news
+228; 1259 16857 TABLE public crisis_prediction_evaluations news
+227; 1259 16849 TABLE public crisis_predictions news
+280; 1259 18829 TABLE public daily_intelligence_summaries news
+255; 1259 17295 TABLE public energy_disruption_events news
+254; 1259 17281 TABLE public energy_market_snapshots news
+288; 1259 19037 TABLE public entity_aliases news
+244; 1259 17117 TABLE public entity_identifiers news
+243; 1259 17100 TABLE public entity_profiles news
+289; 1259 19055 TABLE public entity_redirects news
+245; 1259 17134 TABLE public entity_relationships news
+246; 1259 17157 TABLE public entity_resolution_runs news
+292; 1259 19137 TABLE public event_analogies news
+222; 1259 16776 TABLE public event_articles news
+272; 1259 18591 TABLE public event_companies news
+270; 1259 18555 TABLE public event_embeddings news
+271; 1259 18569 TABLE public event_entities news
+273; 1259 18614 TABLE public event_industries news
+275; 1259 18648 TABLE public event_locations news
+226; 1259 16835 TABLE public event_risk_features news
+274; 1259 18632 TABLE public event_timeline_items news
+221; 1259 16762 TABLE public events news
+267; 1259 18507 TABLE public evidence_items news
+291; 1259 19108 TABLE public forecast_scenarios news
+253; 1259 17265 TABLE public geo_incident_impacts news
+252; 1259 17248 TABLE public geo_incidents news
+276; 1259 18666 TABLE public geocoding_cache news
+295; 1259 19214 TABLE public historical_episode_embeddings news
+290; 1259 19078 TABLE public historical_episodes news
+251; 1259 17230 TABLE public humanitarian_report_entities news
+250; 1259 17218 TABLE public humanitarian_reports news
+279; 1259 18816 TABLE public industry_risk_rollups news
+224; 1259 16813 TABLE public jobs news
+223; 1259 16794 TABLE public llm_runs news
+233; 1259 16937 TABLE public macro_observations news
+232; 1259 16923 TABLE public macro_series news
+234; 1259 16954 TABLE public macro_signal_snapshots news
+305; 1259 19463 TABLE public personal_article_revisions news
+303; 1259 19403 TABLE public personal_brief_snapshots news
+301; 1259 19342 TABLE public personal_captures news
+306; 1259 19488 TABLE public personal_claim_preparations news
+298; 1259 19271 TABLE public personal_profile_revisions news
+304; 1259 19433 TABLE public personal_report_links news
+302; 1259 19381 TABLE public personal_run_event_observations news
+300; 1259 19303 TABLE public personal_runs news
+297; 1259 19253 TABLE public personal_workspaces news
+299; 1259 19295 TABLE public personal_writer_mode news
+296; 1259 19233 TABLE public pipeline_run_details news
+229; 1259 16871 TABLE public provider_runs news
+266; 1259 18493 TABLE public raw_document_assets news
+231; 1259 16904 TABLE public raw_ingestion_items news
+286; 1259 19002 TABLE public report_sections news
+285; 1259 18961 TABLE public reports news
+277; 1259 18781 TABLE public risk_score_observations news
+293; 1259 19166 TABLE public risk_warnings news
+240; 1259 17049 TABLE public sanctions_aliases news
+239; 1259 17027 TABLE public sanctions_entities news
+241; 1259 17065 TABLE public sanctions_identifiers news
+238; 1259 17016 TABLE public sanctions_lists news
+242; 1259 17081 TABLE public sanctions_matches news
+287; 1259 19019 TABLE public saved_searches news
+235; 1259 16970 TABLE public sec_companies news
+237; 1259 16999 TABLE public sec_company_facts news
+236; 1259 16981 TABLE public sec_filings news
+264; 1259 18454 TABLE public securities news
+230; 1259 16887 TABLE public source_cursors news
+265; 1259 18473 TABLE public source_health_snapshots news
+218; 1259 16718 TABLE public sources news
+281; 1259 18851 TABLE public users news
+282; 1259 18862 TABLE public watchlist_items news
+5726; 0 16385 TABLE DATA public alembic_version news
+5798; 0 19203 TABLE DATA public alert_condition_states news
+5787; 0 18880 TABLE DATA public alert_rules news
+5788; 0 18900 TABLE DATA public alerts news
+5729; 0 16748 TABLE DATA public article_embeddings news
+5728; 0 16730 TABLE DATA public articles news
+5773; 0 18535 TABLE DATA public claim_evidence news
+5772; 0 18520 TABLE DATA public claims news
+5765; 0 18393 TABLE DATA public companies news
+5766; 0 18418 TABLE DATA public company_aliases news
+5767; 0 18436 TABLE DATA public company_identifiers news
+5782; 0 18797 TABLE DATA public company_risk_rollups news
+5758; 0 17206 TABLE DATA public country_context_snapshots news
+5734; 0 16827 TABLE DATA public country_daily_risk_signals news
+5757; 0 17188 TABLE DATA public country_indicator_observations news
+5756; 0 17174 TABLE DATA public country_indicator_series news
+5737; 0 16857 TABLE DATA public crisis_prediction_evaluations news
+5736; 0 16849 TABLE DATA public crisis_predictions news
+5784; 0 18829 TABLE DATA public daily_intelligence_summaries news
+5764; 0 17295 TABLE DATA public energy_disruption_events news
+5763; 0 17281 TABLE DATA public energy_market_snapshots news
+5792; 0 19037 TABLE DATA public entity_aliases news
+5753; 0 17117 TABLE DATA public entity_identifiers news
+5752; 0 17100 TABLE DATA public entity_profiles news
+5793; 0 19055 TABLE DATA public entity_redirects news
+5754; 0 17134 TABLE DATA public entity_relationships news
+5755; 0 17157 TABLE DATA public entity_resolution_runs news
+5796; 0 19137 TABLE DATA public event_analogies news
+5731; 0 16776 TABLE DATA public event_articles news
+5776; 0 18591 TABLE DATA public event_companies news
+5774; 0 18555 TABLE DATA public event_embeddings news
+5775; 0 18569 TABLE DATA public event_entities news
+5777; 0 18614 TABLE DATA public event_industries news
+5779; 0 18648 TABLE DATA public event_locations news
+5735; 0 16835 TABLE DATA public event_risk_features news
+5778; 0 18632 TABLE DATA public event_timeline_items news
+5730; 0 16762 TABLE DATA public events news
+5771; 0 18507 TABLE DATA public evidence_items news
+5795; 0 19108 TABLE DATA public forecast_scenarios news
+5762; 0 17265 TABLE DATA public geo_incident_impacts news
+5761; 0 17248 TABLE DATA public geo_incidents news
+5780; 0 18666 TABLE DATA public geocoding_cache news
+5799; 0 19214 TABLE DATA public historical_episode_embeddings news
+5794; 0 19078 TABLE DATA public historical_episodes news
+5760; 0 17230 TABLE DATA public humanitarian_report_entities news
+5759; 0 17218 TABLE DATA public humanitarian_reports news
+5783; 0 18816 TABLE DATA public industry_risk_rollups news
+5733; 0 16813 TABLE DATA public jobs news
+5732; 0 16794 TABLE DATA public llm_runs news
+5742; 0 16937 TABLE DATA public macro_observations news
+5741; 0 16923 TABLE DATA public macro_series news
+5743; 0 16954 TABLE DATA public macro_signal_snapshots news
+5809; 0 19463 TABLE DATA public personal_article_revisions news
+5807; 0 19403 TABLE DATA public personal_brief_snapshots news
+5805; 0 19342 TABLE DATA public personal_captures news
+5810; 0 19488 TABLE DATA public personal_claim_preparations news
+5802; 0 19271 TABLE DATA public personal_profile_revisions news
+5808; 0 19433 TABLE DATA public personal_report_links news
+5806; 0 19381 TABLE DATA public personal_run_event_observations news
+5804; 0 19303 TABLE DATA public personal_runs news
+5801; 0 19253 TABLE DATA public personal_workspaces news
+5803; 0 19295 TABLE DATA public personal_writer_mode news
+5800; 0 19233 TABLE DATA public pipeline_run_details news
+5738; 0 16871 TABLE DATA public provider_runs news
+5770; 0 18493 TABLE DATA public raw_document_assets news
+5740; 0 16904 TABLE DATA public raw_ingestion_items news
+5790; 0 19002 TABLE DATA public report_sections news
+5789; 0 18961 TABLE DATA public reports news
+5781; 0 18781 TABLE DATA public risk_score_observations news
+5797; 0 19166 TABLE DATA public risk_warnings news
+5749; 0 17049 TABLE DATA public sanctions_aliases news
+5748; 0 17027 TABLE DATA public sanctions_entities news
+5750; 0 17065 TABLE DATA public sanctions_identifiers news
+5747; 0 17016 TABLE DATA public sanctions_lists news
+5751; 0 17081 TABLE DATA public sanctions_matches news
+5791; 0 19019 TABLE DATA public saved_searches news
+5744; 0 16970 TABLE DATA public sec_companies news
+5746; 0 16999 TABLE DATA public sec_company_facts news
+5745; 0 16981 TABLE DATA public sec_filings news
+5768; 0 18454 TABLE DATA public securities news
+5739; 0 16887 TABLE DATA public source_cursors news
+5769; 0 18473 TABLE DATA public source_health_snapshots news
+5727; 0 16718 TABLE DATA public sources news
+4704; 0 17631 TABLE DATA public spatial_ref_sys news
+5785; 0 18851 TABLE DATA public users news
+5786; 0 18862 TABLE DATA public watchlist_items news
+4944; 2606 16389 CONSTRAINT public alembic_version alembic_version_pkc news
+5399; 2606 19211 CONSTRAINT public alert_condition_states alert_condition_states_pkey news
+5314; 2606 18889 CONSTRAINT public alert_rules alert_rules_pkey news
+5321; 2606 18921 CONSTRAINT public alerts alerts_pkey news
+4956; 2606 16755 CONSTRAINT public article_embeddings article_embeddings_pkey news
+4950; 2606 16738 CONSTRAINT public articles articles_pkey news
+4952; 2606 16740 CONSTRAINT public articles articles_url_hash_key news
+5240; 2606 18542 CONSTRAINT public claim_evidence claim_evidence_pkey news
+5236; 2606 18527 CONSTRAINT public claims claims_pkey news
+5182; 2606 18402 CONSTRAINT public companies companies_pkey news
+5194; 2606 18426 CONSTRAINT public company_aliases company_aliases_pkey news
+5200; 2606 18444 CONSTRAINT public company_identifiers company_identifiers_pkey news
+5286; 2606 18805 CONSTRAINT public company_risk_rollups company_risk_rollups_pkey news
+5123; 2606 17213 CONSTRAINT public country_context_snapshots country_context_snapshots_pkey news
+4972; 2606 16834 CONSTRAINT public country_daily_risk_signals country_daily_risk_signals_pkey news
+5115; 2606 17195 CONSTRAINT public country_indicator_observations country_indicator_observations_pkey news
+5107; 2606 17182 CONSTRAINT public country_indicator_series country_indicator_series_pkey news
+4979; 2606 16864 CONSTRAINT public crisis_prediction_evaluations crisis_prediction_evaluations_pkey news
+4977; 2606 16856 CONSTRAINT public crisis_predictions crisis_predictions_pkey news
+5299; 2606 18836 CONSTRAINT public daily_intelligence_summaries daily_intelligence_summaries_pkey news
+5169; 2606 17303 CONSTRAINT public energy_disruption_events energy_disruption_events_pkey news
+5160; 2606 17288 CONSTRAINT public energy_market_snapshots energy_market_snapshots_pkey news
+5360; 2606 19045 CONSTRAINT public entity_aliases entity_aliases_pkey news
+5088; 2606 17124 CONSTRAINT public entity_identifiers entity_identifiers_pkey news
+5078; 2606 17108 CONSTRAINT public entity_profiles entity_profiles_pkey news
+5080; 2606 17110 CONSTRAINT public entity_profiles entity_profiles_primary_cik_key news
+5082; 2606 17112 CONSTRAINT public entity_profiles entity_profiles_primary_lei_key news
+5366; 2606 19063 CONSTRAINT public entity_redirects entity_redirects_pkey news
+5094; 2606 17141 CONSTRAINT public entity_relationships entity_relationships_pkey news
+5101; 2606 17164 CONSTRAINT public entity_resolution_runs entity_resolution_runs_pkey news
+5103; 2606 17166 CONSTRAINT public entity_resolution_runs entity_resolution_runs_run_key_key news
+5387; 2606 19145 CONSTRAINT public event_analogies event_analogies_pkey news
+4962; 2606 16783 CONSTRAINT public event_articles event_articles_pkey news
+5251; 2606 18601 CONSTRAINT public event_companies event_companies_pkey news
+5244; 2606 18562 CONSTRAINT public event_embeddings event_embeddings_pkey news
+5247; 2606 18578 CONSTRAINT public event_entities event_entities_pkey news
+5255; 2606 18624 CONSTRAINT public event_industries event_industries_pkey news
+5264; 2606 18655 CONSTRAINT public event_locations event_locations_pkey news
+4974; 2606 16842 CONSTRAINT public event_risk_features event_risk_features_pkey news
+5259; 2606 18639 CONSTRAINT public event_timeline_items event_timeline_items_pkey news
+4959; 2606 16774 CONSTRAINT public events events_pkey news
+5229; 2606 18514 CONSTRAINT public evidence_items evidence_items_pkey news
+5380; 2606 19121 CONSTRAINT public forecast_scenarios forecast_scenarios_pkey news
+5155; 2606 17272 CONSTRAINT public geo_incident_impacts geo_incident_impacts_pkey news
+5143; 2606 17255 CONSTRAINT public geo_incidents geo_incidents_pkey news
+5271; 2606 18673 CONSTRAINT public geocoding_cache geocoding_cache_pkey news
+5403; 2606 19226 CONSTRAINT public historical_episode_embeddings historical_episode_embeddings_pkey news
+5372; 2606 19096 CONSTRAINT public historical_episodes historical_episodes_pkey news
+5136; 2606 17237 CONSTRAINT public humanitarian_report_entities humanitarian_report_entities_pkey news
+5129; 2606 17225 CONSTRAINT public humanitarian_reports humanitarian_reports_pkey news
+5293; 2606 18824 CONSTRAINT public industry_risk_rollups industry_risk_rollups_pkey news
+4968; 2606 16826 CONSTRAINT public jobs jobs_job_key_key news
+4970; 2606 16824 CONSTRAINT public jobs jobs_pkey news
+4966; 2606 16810 CONSTRAINT public llm_runs llm_runs_pkey news
+5013; 2606 16944 CONSTRAINT public macro_observations macro_observations_pkey news
+5006; 2606 16931 CONSTRAINT public macro_series macro_series_pkey news
+5018; 2606 16961 CONSTRAINT public macro_signal_snapshots macro_signal_snapshots_pkey news
+5455; 2606 19470 CONSTRAINT public personal_article_revisions personal_article_revisions_pkey news
+5446; 2606 19410 CONSTRAINT public personal_brief_snapshots personal_brief_snapshots_pkey news
+5448; 2606 19412 CONSTRAINT public personal_brief_snapshots personal_brief_snapshots_run_id_key news
+5435; 2606 19349 CONSTRAINT public personal_captures personal_captures_pkey news
+5460; 2606 19498 CONSTRAINT public personal_claim_preparations personal_claim_preparations_pkey news
+5418; 2606 19281 CONSTRAINT public personal_profile_revisions personal_profile_revisions_pkey news
+5451; 2606 19439 CONSTRAINT public personal_report_links personal_report_links_pkey news
+5442; 2606 19389 CONSTRAINT public personal_run_event_observations personal_run_event_observations_pkey news
+5427; 2606 19316 CONSTRAINT public personal_runs personal_runs_job_id_key news
+5429; 2606 19314 CONSTRAINT public personal_runs personal_runs_pkey news
+5413; 2606 19262 CONSTRAINT public personal_workspaces personal_workspaces_pkey news
+5415; 2606 19264 CONSTRAINT public personal_workspaces personal_workspaces_singleton_key news
+5422; 2606 19302 CONSTRAINT public personal_writer_mode personal_writer_mode_pkey news
+5406; 2606 19243 CONSTRAINT public pipeline_run_details pipeline_run_details_pkey news
+4985; 2606 16881 CONSTRAINT public provider_runs provider_runs_pkey news
+4987; 2606 16883 CONSTRAINT public provider_runs provider_runs_run_key_key news
+5225; 2606 18500 CONSTRAINT public raw_document_assets raw_document_assets_pkey news
+4998; 2606 16913 CONSTRAINT public raw_ingestion_items raw_ingestion_items_idempotency_key_key news
+5000; 2606 16911 CONSTRAINT public raw_ingestion_items raw_ingestion_items_pkey news
+5350; 2606 19010 CONSTRAINT public report_sections report_sections_pkey news
+5345; 2606 18976 CONSTRAINT public reports reports_pkey news
+5282; 2606 18789 CONSTRAINT public risk_score_observations risk_score_observations_pkey news
+5397; 2606 19177 CONSTRAINT public risk_warnings risk_warnings_pkey news
+5061; 2606 17055 CONSTRAINT public sanctions_aliases sanctions_aliases_pkey news
+5055; 2606 17035 CONSTRAINT public sanctions_entities sanctions_entities_pkey news
+5067; 2606 17071 CONSTRAINT public sanctions_identifiers sanctions_identifiers_pkey news
+5044; 2606 17023 CONSTRAINT public sanctions_lists sanctions_lists_pkey news
+5074; 2606 17089 CONSTRAINT public sanctions_matches sanctions_matches_pkey news
+5356; 2606 19026 CONSTRAINT public saved_searches saved_searches_pkey news
+5025; 2606 16978 CONSTRAINT public sec_companies sec_companies_pkey news
+5038; 2606 17006 CONSTRAINT public sec_company_facts sec_company_facts_pkey news
+5031; 2606 16990 CONSTRAINT public sec_filings sec_filings_accession_number_key news
+5033; 2606 16988 CONSTRAINT public sec_filings sec_filings_pkey news
+5209; 2606 18462 CONSTRAINT public securities securities_pkey news
+4990; 2606 16895 CONSTRAINT public source_cursors source_cursors_pkey news
+5219; 2606 18481 CONSTRAINT public source_health_snapshots source_health_snapshots_pkey news
+4946; 2606 16729 CONSTRAINT public sources sources_feed_url_key news
+4948; 2606 16727 CONSTRAINT public sources sources_pkey news
+5401; 2606 19213 CONSTRAINT public alert_condition_states uq_alert_condition_states_dedupe_key news
+5319; 2606 18891 CONSTRAINT public alert_rules uq_alert_rules_user_rule_target news
+5190; 2606 18404 CONSTRAINT public companies uq_companies_entity_profile news
+5192; 2606 18406 CONSTRAINT public companies uq_companies_primary_ticker_exchange news
+5198; 2606 18428 CONSTRAINT public company_aliases uq_company_aliases_company_alias_source news
+5204; 2606 18446 CONSTRAINT public company_identifiers uq_company_identifiers_company_type_value_provider news
+5291; 2606 18807 CONSTRAINT public company_risk_rollups uq_company_risk_rollups_company_as_of news
+5127; 2606 17215 CONSTRAINT public country_context_snapshots uq_country_context_snapshots_country_date news
+5121; 2606 17197 CONSTRAINT public country_indicator_observations uq_country_indicator_observations_series_country_date news
+5113; 2606 17184 CONSTRAINT public country_indicator_series uq_country_indicator_series_provider_indicator news
+5178; 2606 17305 CONSTRAINT public energy_disruption_events uq_energy_disruption_events_provider_id news
+5167; 2606 17290 CONSTRAINT public energy_market_snapshots uq_energy_market_snapshots_provider_region_commodity_date news
+5364; 2606 19047 CONSTRAINT public entity_aliases uq_entity_aliases_entity_normalized_alias_source news
+5092; 2606 17126 CONSTRAINT public entity_identifiers uq_entity_identifiers_profile_type_value_provider news
+5370; 2606 19065 CONSTRAINT public entity_redirects uq_entity_redirects_old_new_effective_date news
+5099; 2606 17143 CONSTRAINT public entity_relationships uq_entity_relationships_parent_child_type_provider news
+5392; 2606 19147 CONSTRAINT public event_analogies uq_event_analogies_event_episode news
+5234; 2606 18516 CONSTRAINT public evidence_items uq_evidence_items_source news
+5385; 2606 19123 CONSTRAINT public forecast_scenarios uq_forecast_scenarios_set_scenario_name news
+5158; 2606 17274 CONSTRAINT public geo_incident_impacts uq_geo_incident_impacts_incident_type news
+5153; 2606 17257 CONSTRAINT public geo_incidents uq_geo_incidents_provider_id news
+5275; 2606 18675 CONSTRAINT public geocoding_cache uq_geocoding_cache_provider_query news
+5141; 2606 17239 CONSTRAINT public humanitarian_report_entities uq_humanitarian_report_entities_report_type_name news
+5134; 2606 17227 CONSTRAINT public humanitarian_reports uq_humanitarian_reports_provider_id news
+5297; 2606 18826 CONSTRAINT public industry_risk_rollups uq_industry_risk_rollups_industry_as_of news
+5015; 2606 16946 CONSTRAINT public macro_observations uq_macro_observations_series_date_realtime news
+5008; 2606 16933 CONSTRAINT public macro_series uq_macro_series_provider_series_id news
+5020; 2606 16963 CONSTRAINT public macro_signal_snapshots uq_macro_signal_snapshots_country_date news
+5457; 2606 19472 CONSTRAINT public personal_article_revisions uq_personal_article_revision_run_article news
+5437; 2606 19351 CONSTRAINT public personal_captures uq_personal_capture_run_source_url news
+5439; 2606 19353 CONSTRAINT public personal_captures uq_personal_capture_workspace_url news
+5462; 2606 19500 CONSTRAINT public personal_claim_preparations uq_personal_claim_preparation_identity news
+5444; 2606 19391 CONSTRAINT public personal_run_event_observations uq_personal_observation_revision news
+5420; 2606 19283 CONSTRAINT public personal_profile_revisions uq_personal_profiles_revision news
+5453; 2606 19441 CONSTRAINT public personal_report_links uq_personal_reports_workspace_date_version news
+5431; 2606 19318 CONSTRAINT public personal_runs uq_personal_runs_workspace_date news
+5408; 2606 19247 CONSTRAINT public pipeline_run_details uq_pipeline_run_details_celery_task_id news
+5410; 2606 19245 CONSTRAINT public pipeline_run_details uq_pipeline_run_details_process_date news
+5227; 2606 18502 CONSTRAINT public raw_document_assets uq_raw_document_assets_provider_type_external_hash news
+5352; 2606 19012 CONSTRAINT public report_sections uq_report_sections_report_order news
+5284; 2606 18791 CONSTRAINT public risk_score_observations uq_risk_score_observations_target_type_risk_as_of_model news
+5063; 2606 17057 CONSTRAINT public sanctions_aliases uq_sanctions_aliases_entity_alias_type news
+5057; 2606 17037 CONSTRAINT public sanctions_entities uq_sanctions_entities_provider_list_uid news
+5069; 2606 17073 CONSTRAINT public sanctions_identifiers uq_sanctions_identifiers_entity_type_value news
+5046; 2606 17025 CONSTRAINT public sanctions_lists uq_sanctions_lists_provider_code news
+5076; 2606 17091 CONSTRAINT public sanctions_matches uq_sanctions_matches_target_entity_method news
+5358; 2606 19028 CONSTRAINT public saved_searches uq_saved_searches_user_name news
+5040; 2606 17008 CONSTRAINT public sec_company_facts uq_sec_company_facts_identity news
+5211; 2606 18464 CONSTRAINT public securities uq_securities_ticker_exchange_mic news
+4992; 2606 16897 CONSTRAINT public source_cursors uq_source_cursors_provider_key news
+5310; 2606 18872 CONSTRAINT public watchlist_items uq_watchlist_items_user_type_item news
+5306; 2606 18860 CONSTRAINT public users users_pkey news
+5312; 2606 18870 CONSTRAINT public watchlist_items watchlist_items_pkey news
+5315; 1259 18897 INDEX public ix_alert_rules_target news
+5316; 1259 18899 INDEX public ix_alert_rules_user_enabled news
+5317; 1259 18898 INDEX public ix_alert_rules_user_id news
+5322; 1259 18958 INDEX public ix_alerts_alert_rule_id news
+5323; 1259 18954 INDEX public ix_alerts_alert_type news
+5324; 1259 18956 INDEX public ix_alerts_dedupe_key news
+5325; 1259 18959 INDEX public ix_alerts_related_company_id news
+5326; 1259 18955 INDEX public ix_alerts_related_event_id news
+5327; 1259 18951 INDEX public ix_alerts_related_industry_id news
+5328; 1259 18949 INDEX public ix_alerts_severity news
+5329; 1259 18957 INDEX public ix_alerts_severity_created news
+5330; 1259 18950 INDEX public ix_alerts_state news
+5331; 1259 18948 INDEX public ix_alerts_state_updated news
+5332; 1259 18960 INDEX public ix_alerts_superseded_by news
+5333; 1259 18953 INDEX public ix_alerts_user_id news
+5334; 1259 18952 INDEX public ix_alerts_user_state_created news
+4957; 1259 16761 INDEX public ix_article_embeddings_embedding_hnsw news
+4953; 1259 16746 INDEX public ix_articles_content_hash news
+4954; 1259 16747 INDEX public ix_articles_source_id news
+5241; 1259 18553 INDEX public ix_claim_evidence_evidence_item news
+5242; 1259 18554 INDEX public ix_claim_evidence_support_type news
+5237; 1259 18534 INDEX public ix_claims_claim_type news
+5238; 1259 18533 INDEX public ix_claims_created_by_run_id news
+5183; 1259 18413 INDEX public ix_companies_active news
+5184; 1259 18416 INDEX public ix_companies_country news
+5185; 1259 18417 INDEX public ix_companies_country_industry news
+5186; 1259 18414 INDEX public ix_companies_industry news
+5187; 1259 18415 INDEX public ix_companies_primary_ticker_exchange news
+5188; 1259 18412 INDEX public ix_companies_sector news
+5195; 1259 18435 INDEX public ix_company_aliases_company_id news
+5196; 1259 18434 INDEX public ix_company_aliases_normalized_alias news
+5201; 1259 18453 INDEX public ix_company_identifiers_company_id news
+5202; 1259 18452 INDEX public ix_company_identifiers_type_value news
+5287; 1259 18813 INDEX public ix_company_risk_rollups_company_as_of news
+5288; 1259 18814 INDEX public ix_company_risk_rollups_company_id news
+5289; 1259 18815 INDEX public ix_company_risk_rollups_risk_score news
+5124; 1259 17217 INDEX public ix_country_context_snapshots_country_code news
+5125; 1259 17216 INDEX public ix_country_context_snapshots_country_date news
+5116; 1259 17204 INDEX public ix_country_indicator_observations_country_code news
+5117; 1259 17203 INDEX public ix_country_indicator_observations_country_date news
+5118; 1259 18740 INDEX public ix_country_indicator_observations_raw_document_asset_id news
+5119; 1259 17205 INDEX public ix_country_indicator_observations_series_date news
+5108; 1259 17186 INDEX public ix_country_indicator_series_provider news
+5109; 1259 17187 INDEX public ix_country_indicator_series_provider_indicator news
+5110; 1259 18733 INDEX public ix_country_indicator_series_raw_document_asset_id news
+5111; 1259 17185 INDEX public ix_country_indicator_series_topic news
+4980; 1259 16870 INDEX public ix_crisis_prediction_evaluations_prediction_id news
+5300; 1259 18848 INDEX public ix_daily_intelligence_summaries_generated_by_run_id news
+5301; 1259 18850 INDEX public ix_daily_intelligence_summaries_model_rating_prediction_id news
+5302; 1259 18849 INDEX public ix_daily_intelligence_summaries_overall_risk_level news
+5303; 1259 18847 INDEX public ix_daily_intelligence_summaries_summary_date news
+5170; 1259 17311 INDEX public ix_energy_disruption_events_commodity news
+5171; 1259 17308 INDEX public ix_energy_disruption_events_event_type news
+5172; 1259 17309 INDEX public ix_energy_disruption_events_provider news
+5173; 1259 18768 INDEX public ix_energy_disruption_events_raw_document_asset_id news
+5174; 1259 17306 INDEX public ix_energy_disruption_events_region news
+5175; 1259 17307 INDEX public ix_energy_disruption_events_region_commodity_started news
+5176; 1259 17310 INDEX public ix_energy_disruption_events_started_at news
+5161; 1259 17293 INDEX public ix_energy_market_snapshots_commodity news
+5162; 1259 17291 INDEX public ix_energy_market_snapshots_provider news
+5163; 1259 18761 INDEX public ix_energy_market_snapshots_raw_document_asset_id news
+5164; 1259 17294 INDEX public ix_energy_market_snapshots_region news
+5165; 1259 17292 INDEX public ix_energy_market_snapshots_region_commodity_date news
+5361; 1259 19054 INDEX public ix_entity_aliases_entity_id news
+5362; 1259 19053 INDEX public ix_entity_aliases_normalized_alias news
+5089; 1259 17132 INDEX public ix_entity_identifiers_entity_profile_id news
+5090; 1259 17133 INDEX public ix_entity_identifiers_type_value news
+5083; 1259 17113 INDEX public ix_entity_profiles_country news
+5084; 1259 17116 INDEX public ix_entity_profiles_entity_type news
+5085; 1259 17115 INDEX public ix_entity_profiles_normalized_name news
+5086; 1259 17114 INDEX public ix_entity_profiles_primary_ticker news
+5367; 1259 19076 INDEX public ix_entity_redirects_new_entity_id news
+5368; 1259 19077 INDEX public ix_entity_redirects_old_entity_id news
+5095; 1259 17156 INDEX public ix_entity_relationships_child_entity_id news
+5096; 1259 17155 INDEX public ix_entity_relationships_parent_entity_id news
+5097; 1259 17154 INDEX public ix_entity_relationships_type news
+5104; 1259 17172 INDEX public ix_entity_resolution_runs_matched_entity_id news
+5105; 1259 17173 INDEX public ix_entity_resolution_runs_target news
+5388; 1259 19163 INDEX public ix_event_analogies_event_id news
+5389; 1259 19164 INDEX public ix_event_analogies_historical_episode_id news
+5390; 1259 19165 INDEX public ix_event_analogies_llm_run_id news
+5252; 1259 18612 INDEX public ix_event_companies_company news
+5253; 1259 19198 INDEX public ix_event_companies_scores news
+5245; 1259 18568 INDEX public ix_event_embeddings_embedding_hnsw news
+5248; 1259 18589 INDEX public ix_event_entities_entity news
+5249; 1259 18590 INDEX public ix_event_entities_impact news
+5256; 1259 18631 INDEX public ix_event_industries_industry news
+5257; 1259 19196 INDEX public ix_event_industries_scores news
+5265; 1259 18661 INDEX public ix_event_locations_country_code news
+5266; 1259 18664 INDEX public ix_event_locations_country_region news
+5267; 1259 18662 INDEX public ix_event_locations_event_id news
+5268; 1259 18665 INDEX public ix_event_locations_geom_gist news
+5269; 1259 18663 INDEX public ix_event_locations_region news
+4975; 1259 16848 INDEX public ix_event_risk_features_event_id news
+5260; 1259 18646 INDEX public ix_event_timeline_event_timestamp news
+5261; 1259 18647 INDEX public ix_event_timeline_items_event_id news
+5262; 1259 18645 INDEX public ix_event_timeline_items_importance news
+4960; 1259 16775 INDEX public ix_events_updated_at_hotness news
+5230; 1259 18517 INDEX public ix_evidence_items_published_at news
+5231; 1259 18519 INDEX public ix_evidence_items_publisher_published news
+5232; 1259 18518 INDEX public ix_evidence_items_source news
+5381; 1259 19135 INDEX public ix_forecast_scenarios_event_id news
+5382; 1259 19136 INDEX public ix_forecast_scenarios_llm_run_id news
+5383; 1259 19134 INDEX public ix_forecast_scenarios_scenario_set_id news
+5156; 1259 17280 INDEX public ix_geo_incident_impacts_geo_incident_id news
+5144; 1259 17259 INDEX public ix_geo_incidents_country_code news
+5145; 1259 17262 INDEX public ix_geo_incidents_country_observed news
+5146; 1259 17258 INDEX public ix_geo_incidents_incident_type news
+5147; 1259 17261 INDEX public ix_geo_incidents_observed_at news
+5148; 1259 17264 INDEX public ix_geo_incidents_provider news
+5149; 1259 18754 INDEX public ix_geo_incidents_raw_document_asset_id news
+5150; 1259 17260 INDEX public ix_geo_incidents_region news
+5151; 1259 17263 INDEX public ix_geo_incidents_type_observed news
+5272; 1259 18677 INDEX public ix_geocoding_cache_geom_gist news
+5273; 1259 18676 INDEX public ix_geocoding_cache_normalized_query news
+5404; 1259 19232 INDEX public ix_historical_episode_embeddings_onset_embedding_hnsw news
+5373; 1259 19105 INDEX public ix_historical_episodes_affected_industries news
+5374; 1259 19104 INDEX public ix_historical_episodes_episode_type news
+5375; 1259 19106 INDEX public ix_historical_episodes_onset_date news
+5376; 1259 19102 INDEX public ix_historical_episodes_onset_embedding_hnsw news
+5377; 1259 19107 INDEX public ix_historical_episodes_parent_episode_id news
+5378; 1259 19103 INDEX public ix_historical_episodes_regime_tags news
+5137; 1259 17247 INDEX public ix_humanitarian_report_entities_country_code news
+5138; 1259 17245 INDEX public ix_humanitarian_report_entities_normalized_name news
+5139; 1259 17246 INDEX public ix_humanitarian_report_entities_report_id news
+5130; 1259 17228 INDEX public ix_humanitarian_reports_provider news
+5131; 1259 17229 INDEX public ix_humanitarian_reports_published_at news
+5132; 1259 18747 INDEX public ix_humanitarian_reports_raw_document_asset_id news
+5294; 1259 18827 INDEX public ix_industry_risk_rollups_industry_as_of news
+5295; 1259 18828 INDEX public ix_industry_risk_rollups_risk_score news
+4963; 1259 16812 INDEX public ix_llm_runs_status_created news
+4964; 1259 16811 INDEX public ix_llm_runs_trace_id news
+5009; 1259 18691 INDEX public ix_macro_observations_raw_document_asset_id news
+5010; 1259 16952 INDEX public ix_macro_observations_series_date news
+5011; 1259 16953 INDEX public ix_macro_observations_series_uuid news
+5001; 1259 16935 INDEX public ix_macro_series_country news
+5002; 1259 16936 INDEX public ix_macro_series_provider news
+5003; 1259 16934 INDEX public ix_macro_series_provider_series_id news
+5004; 1259 18684 INDEX public ix_macro_series_raw_document_asset_id news
+5016; 1259 16969 INDEX public ix_macro_signal_snapshots_country_date news
+5432; 1259 19380 INDEX public ix_personal_captures_pending news
+5433; 1259 19379 INDEX public ix_personal_captures_run_id news
+5458; 1259 19526 INDEX public ix_personal_claim_preparations_run_status news
+5416; 1259 19289 INDEX public ix_personal_profile_revisions_workspace_id news
+5449; 1259 19462 INDEX public ix_personal_reports_workspace_date news
+5440; 1259 19402 INDEX public ix_personal_run_event_observations_run_id news
+5423; 1259 19340 INDEX public ix_personal_runs_state news
+5424; 1259 19341 INDEX public ix_personal_runs_workspace_date news
+5425; 1259 19339 INDEX public ix_personal_runs_workspace_id news
+5411; 1259 19270 INDEX public ix_personal_workspaces_owner_id news
+4981; 1259 16886 INDEX public ix_provider_runs_provider news
+4982; 1259 16885 INDEX public ix_provider_runs_provider_status news
+4983; 1259 16884 INDEX public ix_provider_runs_status news
+5220; 1259 18504 INDEX public ix_raw_document_assets_asset_type news
+5221; 1259 18506 INDEX public ix_raw_document_assets_content_hash news
+5222; 1259 18503 INDEX public ix_raw_document_assets_provider news
+5223; 1259 18505 INDEX public ix_raw_document_assets_provider_type news
+4993; 1259 16920 INDEX public ix_raw_ingestion_items_payload_hash news
+4994; 1259 16921 INDEX public ix_raw_ingestion_items_provider news
+4995; 1259 16922 INDEX public ix_raw_ingestion_items_provider_run_id news
+4996; 1259 16919 INDEX public ix_raw_ingestion_items_provider_type news
+5348; 1259 19018 INDEX public ix_report_sections_report_id news
+5336; 1259 18995 INDEX public ix_reports_brief_date news
+5337; 1259 18996 INDEX public ix_reports_event_id news
+5338; 1259 18993 INDEX public ix_reports_generated_by_run_id news
+5339; 1259 18992 INDEX public ix_reports_report_type news
+5340; 1259 19001 INDEX public ix_reports_report_type_status_created news
+5341; 1259 18999 INDEX public ix_reports_status news
+5342; 1259 18998 INDEX public ix_reports_user_id news
+5343; 1259 18997 INDEX public ix_reports_user_status_created news
+5276; 1259 18796 INDEX public ix_risk_score_observations_level news
+5277; 1259 18795 INDEX public ix_risk_score_observations_risk_as_of news
+5278; 1259 18794 INDEX public ix_risk_score_observations_risk_type news
+5279; 1259 18793 INDEX public ix_risk_score_observations_target_as_of news
+5280; 1259 18792 INDEX public ix_risk_score_observations_target_type news
+5393; 1259 19193 INDEX public ix_risk_warnings_alert_id news
+5394; 1259 19194 INDEX public ix_risk_warnings_event_id news
+5395; 1259 19195 INDEX public ix_risk_warnings_llm_run_id news
+5058; 1259 17063 INDEX public ix_sanctions_aliases_normalized_alias news
+5059; 1259 17064 INDEX public ix_sanctions_aliases_sanctions_entity_id news
+5047; 1259 17046 INDEX public ix_sanctions_entities_country news
+5048; 1259 17047 INDEX public ix_sanctions_entities_entity_type news
+5049; 1259 17045 INDEX public ix_sanctions_entities_normalized_name news
+5050; 1259 17044 INDEX public ix_sanctions_entities_provider news
+5051; 1259 17048 INDEX public ix_sanctions_entities_provider_list news
+5052; 1259 18726 INDEX public ix_sanctions_entities_raw_document_asset_id news
+5053; 1259 17043 INDEX public ix_sanctions_entities_sanctions_list_id news
+5064; 1259 17079 INDEX public ix_sanctions_identifiers_sanctions_entity_id news
+5065; 1259 17080 INDEX public ix_sanctions_identifiers_type_value news
+5041; 1259 17026 INDEX public ix_sanctions_lists_provider news
+5042; 1259 18719 INDEX public ix_sanctions_lists_raw_document_asset_id news
+5070; 1259 17099 INDEX public ix_sanctions_matches_review_status news
+5071; 1259 17098 INDEX public ix_sanctions_matches_sanctions_entity_id news
+5072; 1259 17097 INDEX public ix_sanctions_matches_target news
+5353; 1259 19034 INDEX public ix_saved_searches_user_created news
+5354; 1259 19035 INDEX public ix_saved_searches_user_id news
+5021; 1259 16980 INDEX public ix_sec_companies_cik news
+5022; 1259 18698 INDEX public ix_sec_companies_raw_document_asset_id news
+5023; 1259 16979 INDEX public ix_sec_companies_ticker news
+5034; 1259 17015 INDEX public ix_sec_company_facts_company_concept news
+5035; 1259 17014 INDEX public ix_sec_company_facts_company_id news
+5036; 1259 18712 INDEX public ix_sec_company_facts_raw_document_asset_id news
+5026; 1259 16997 INDEX public ix_sec_filings_company_form_date news
+5027; 1259 16998 INDEX public ix_sec_filings_company_id news
+5028; 1259 16996 INDEX public ix_sec_filings_form_type news
+5029; 1259 18705 INDEX public ix_sec_filings_raw_document_asset_id news
+5205; 1259 18471 INDEX public ix_securities_company_active news
+5206; 1259 18470 INDEX public ix_securities_company_id news
+5207; 1259 18472 INDEX public ix_securities_ticker_exchange news
+4988; 1259 16903 INDEX public ix_source_cursors_provider_key news
+5212; 1259 18488 INDEX public ix_source_health_provider_checked news
+5213; 1259 18491 INDEX public ix_source_health_snapshots_checked_at news
+5214; 1259 18489 INDEX public ix_source_health_snapshots_provider news
+5215; 1259 18492 INDEX public ix_source_health_snapshots_source_id news
+5216; 1259 18487 INDEX public ix_source_health_snapshots_status news
+5217; 1259 18490 INDEX public ix_source_health_status_checked news
+5304; 1259 18861 INDEX public ix_users_email news
+5307; 1259 18879 INDEX public ix_watchlist_items_user_id news
+5308; 1259 18878 INDEX public ix_watchlist_items_user_type news
+5335; 1259 18947 INDEX public uq_alerts_active_dedupe_key news
+5346; 1259 19527 INDEX public uq_reports_type_brief_date_version news
+5347; 1259 18994 INDEX public uq_reports_type_event_version news
+5576; 2620 19535 TRIGGER public personal_brief_snapshots ck_personal_brief_snapshots_personal_report_identity news
+5577; 2620 19531 TRIGGER public personal_report_links ck_personal_report_links_personal_report_identity news
+5575; 2620 19533 TRIGGER public personal_runs ck_personal_runs_personal_report_identity news
+5574; 2620 19529 TRIGGER public reports ck_reports_personal_report_identity news
+5519; 2606 18892 FK CONSTRAINT public alert_rules alert_rules_user_id_fkey news
+5520; 2606 18927 FK CONSTRAINT public alerts alerts_alert_rule_id_fkey news
+5521; 2606 18937 FK CONSTRAINT public alerts alerts_related_company_id_fkey news
+5522; 2606 18932 FK CONSTRAINT public alerts alerts_related_event_id_fkey news
+5523; 2606 18942 FK CONSTRAINT public alerts alerts_superseded_by_fkey news
+5524; 2606 18922 FK CONSTRAINT public alerts alerts_user_id_fkey news
+5464; 2606 16756 FK CONSTRAINT public article_embeddings article_embeddings_article_id_fkey news
+5463; 2606 16741 FK CONSTRAINT public articles articles_source_id_fkey news
+5505; 2606 18543 FK CONSTRAINT public claim_evidence claim_evidence_claim_id_fkey news
+5506; 2606 18548 FK CONSTRAINT public claim_evidence claim_evidence_evidence_item_id_fkey news
+5504; 2606 18528 FK CONSTRAINT public claims claims_created_by_run_id_fkey news
+5499; 2606 18407 FK CONSTRAINT public companies companies_entity_profile_id_fkey news
+5500; 2606 18429 FK CONSTRAINT public company_aliases company_aliases_company_id_fkey news
+5501; 2606 18447 FK CONSTRAINT public company_identifiers company_identifiers_company_id_fkey news
+5515; 2606 18808 FK CONSTRAINT public company_risk_rollups company_risk_rollups_company_id_fkey news
+5491; 2606 17198 FK CONSTRAINT public country_indicator_observations country_indicator_observations_series_id_fkey news
+5468; 2606 16865 FK CONSTRAINT public crisis_prediction_evaluations crisis_prediction_evaluations_prediction_id_fkey news
+5516; 2606 18842 FK CONSTRAINT public daily_intelligence_summaries daily_intelligence_summaries_generated_by_run_id_fkey news
+5517; 2606 18837 FK CONSTRAINT public daily_intelligence_summaries daily_intelligence_summaries_model_rating_prediction_id_fkey news
+5530; 2606 19048 FK CONSTRAINT public entity_aliases entity_aliases_entity_id_fkey news
+5486; 2606 17127 FK CONSTRAINT public entity_identifiers entity_identifiers_entity_profile_id_fkey news
+5531; 2606 19071 FK CONSTRAINT public entity_redirects entity_redirects_new_entity_id_fkey news
+5532; 2606 19066 FK CONSTRAINT public entity_redirects entity_redirects_old_entity_id_fkey news
+5487; 2606 17149 FK CONSTRAINT public entity_relationships entity_relationships_child_entity_id_fkey news
+5488; 2606 17144 FK CONSTRAINT public entity_relationships entity_relationships_parent_entity_id_fkey news
+5489; 2606 17167 FK CONSTRAINT public entity_resolution_runs entity_resolution_runs_matched_entity_id_fkey news
+5536; 2606 19148 FK CONSTRAINT public event_analogies event_analogies_event_id_fkey news
+5537; 2606 19153 FK CONSTRAINT public event_analogies event_analogies_historical_episode_id_fkey news
+5538; 2606 19158 FK CONSTRAINT public event_analogies event_analogies_llm_run_id_fkey news
+5465; 2606 16789 FK CONSTRAINT public event_articles event_articles_article_id_fkey news
+5466; 2606 16784 FK CONSTRAINT public event_articles event_articles_event_id_fkey news
+5510; 2606 18607 FK CONSTRAINT public event_companies event_companies_company_id_fkey news
+5511; 2606 18602 FK CONSTRAINT public event_companies event_companies_event_id_fkey news
+5507; 2606 18563 FK CONSTRAINT public event_embeddings event_embeddings_event_id_fkey news
+5508; 2606 18584 FK CONSTRAINT public event_entities event_entities_entity_profile_id_fkey news
+5509; 2606 18579 FK CONSTRAINT public event_entities event_entities_event_id_fkey news
+5512; 2606 18625 FK CONSTRAINT public event_industries event_industries_event_id_fkey news
+5514; 2606 18656 FK CONSTRAINT public event_locations event_locations_event_id_fkey news
+5467; 2606 16843 FK CONSTRAINT public event_risk_features event_risk_features_event_id_fkey news
+5513; 2606 18640 FK CONSTRAINT public event_timeline_items event_timeline_items_event_id_fkey news
+5492; 2606 18735 FK CONSTRAINT public country_indicator_observations fk_country_indicator_observations_raw_asset news
+5490; 2606 18728 FK CONSTRAINT public country_indicator_series fk_country_indicator_series_raw_asset news
+5498; 2606 18763 FK CONSTRAINT public energy_disruption_events fk_energy_disruption_events_raw_asset news
+5497; 2606 18756 FK CONSTRAINT public energy_market_snapshots fk_energy_market_snapshots_raw_asset news
+5495; 2606 18749 FK CONSTRAINT public geo_incidents fk_geo_incidents_raw_asset news
+5493; 2606 18742 FK CONSTRAINT public humanitarian_reports fk_humanitarian_reports_raw_asset news
+5472; 2606 18686 FK CONSTRAINT public macro_observations fk_macro_observations_raw_asset news
+5471; 2606 18679 FK CONSTRAINT public macro_series fk_macro_series_raw_asset news
+5547; 2606 19428 FK CONSTRAINT public personal_runs fk_personal_runs_snapshot_id news
+5544; 2606 19290 FK CONSTRAINT public personal_workspaces fk_personal_workspaces_active_profile_revision news
+5481; 2606 18721 FK CONSTRAINT public sanctions_entities fk_sanctions_entities_raw_asset news
+5480; 2606 18714 FK CONSTRAINT public sanctions_lists fk_sanctions_lists_raw_asset news
+5475; 2606 18693 FK CONSTRAINT public sec_companies fk_sec_companies_raw_asset news
+5478; 2606 18707 FK CONSTRAINT public sec_company_facts fk_sec_company_facts_raw_asset news
+5476; 2606 18700 FK CONSTRAINT public sec_filings fk_sec_filings_raw_asset news
+5534; 2606 19124 FK CONSTRAINT public forecast_scenarios forecast_scenarios_event_id_fkey news
+5535; 2606 19129 FK CONSTRAINT public forecast_scenarios forecast_scenarios_llm_run_id_fkey news
+5496; 2606 17275 FK CONSTRAINT public geo_incident_impacts geo_incident_impacts_geo_incident_id_fkey news
+5542; 2606 19227 FK CONSTRAINT public historical_episode_embeddings historical_episode_embeddings_historical_episode_id_fkey news
+5533; 2606 19097 FK CONSTRAINT public historical_episodes historical_episodes_parent_episode_id_fkey news
+5494; 2606 17240 FK CONSTRAINT public humanitarian_report_entities humanitarian_report_entities_report_id_fkey news
+5473; 2606 16947 FK CONSTRAINT public macro_observations macro_observations_series_uuid_fkey news
+5474; 2606 16964 FK CONSTRAINT public macro_signal_snapshots macro_signal_snapshots_provider_run_id_fkey news
+5566; 2606 19473 FK CONSTRAINT public personal_article_revisions personal_article_revisions_article_id_fkey news
+5567; 2606 19483 FK CONSTRAINT public personal_article_revisions personal_article_revisions_run_id_fkey news
+5568; 2606 19478 FK CONSTRAINT public personal_article_revisions personal_article_revisions_source_id_fkey news
+5559; 2606 19413 FK CONSTRAINT public personal_brief_snapshots personal_brief_snapshots_profile_revision_id_fkey news
+5560; 2606 19418 FK CONSTRAINT public personal_brief_snapshots personal_brief_snapshots_run_id_fkey news
+5561; 2606 19423 FK CONSTRAINT public personal_brief_snapshots personal_brief_snapshots_workspace_id_fkey news
+5552; 2606 19359 FK CONSTRAINT public personal_captures personal_captures_admitted_run_id_fkey news
+5553; 2606 19354 FK CONSTRAINT public personal_captures personal_captures_article_id_fkey news
+5554; 2606 19364 FK CONSTRAINT public personal_captures personal_captures_run_id_fkey news
+5555; 2606 19369 FK CONSTRAINT public personal_captures personal_captures_source_id_fkey news
+5556; 2606 19374 FK CONSTRAINT public personal_captures personal_captures_workspace_id_fkey news
+5569; 2606 19501 FK CONSTRAINT public personal_claim_preparations personal_claim_preparations_article_id_fkey news
+5570; 2606 19506 FK CONSTRAINT public personal_claim_preparations personal_claim_preparations_article_revision_id_fkey news
+5571; 2606 19511 FK CONSTRAINT public personal_claim_preparations personal_claim_preparations_claim_id_fkey news
+5572; 2606 19516 FK CONSTRAINT public personal_claim_preparations personal_claim_preparations_evidence_item_id_fkey news
+5573; 2606 19521 FK CONSTRAINT public personal_claim_preparations personal_claim_preparations_run_id_fkey news
+5546; 2606 19284 FK CONSTRAINT public personal_profile_revisions personal_profile_revisions_workspace_id_fkey news
+5562; 2606 19442 FK CONSTRAINT public personal_report_links personal_report_links_report_id_fkey news
+5563; 2606 19447 FK CONSTRAINT public personal_report_links personal_report_links_run_id_fkey news
+5564; 2606 19452 FK CONSTRAINT public personal_report_links personal_report_links_snapshot_id_fkey news
+5565; 2606 19457 FK CONSTRAINT public personal_report_links personal_report_links_workspace_id_fkey news
+5557; 2606 19392 FK CONSTRAINT public personal_run_event_observations personal_run_event_observations_event_id_fkey news
+5558; 2606 19397 FK CONSTRAINT public personal_run_event_observations personal_run_event_observations_run_id_fkey news
+5548; 2606 19319 FK CONSTRAINT public personal_runs personal_runs_job_id_fkey news
+5549; 2606 19324 FK CONSTRAINT public personal_runs personal_runs_profile_revision_id_fkey news
+5550; 2606 19329 FK CONSTRAINT public personal_runs personal_runs_report_id_fkey news
+5551; 2606 19334 FK CONSTRAINT public personal_runs personal_runs_workspace_id_fkey news
+5545; 2606 19265 FK CONSTRAINT public personal_workspaces personal_workspaces_owner_id_fkey news
+5543; 2606 19248 FK CONSTRAINT public pipeline_run_details pipeline_run_details_job_id_fkey news
+5470; 2606 16914 FK CONSTRAINT public raw_ingestion_items raw_ingestion_items_provider_run_id_fkey news
+5528; 2606 19013 FK CONSTRAINT public report_sections report_sections_report_id_fkey news
+5525; 2606 18982 FK CONSTRAINT public reports reports_event_id_fkey news
+5526; 2606 18987 FK CONSTRAINT public reports reports_generated_by_run_id_fkey news
+5527; 2606 18977 FK CONSTRAINT public reports reports_user_id_fkey news
+5539; 2606 19178 FK CONSTRAINT public risk_warnings risk_warnings_alert_id_fkey news
+5540; 2606 19183 FK CONSTRAINT public risk_warnings risk_warnings_event_id_fkey news
+5541; 2606 19188 FK CONSTRAINT public risk_warnings risk_warnings_llm_run_id_fkey news
+5483; 2606 17058 FK CONSTRAINT public sanctions_aliases sanctions_aliases_sanctions_entity_id_fkey news
+5482; 2606 17038 FK CONSTRAINT public sanctions_entities sanctions_entities_sanctions_list_id_fkey news
+5484; 2606 17074 FK CONSTRAINT public sanctions_identifiers sanctions_identifiers_sanctions_entity_id_fkey news
+5485; 2606 17092 FK CONSTRAINT public sanctions_matches sanctions_matches_sanctions_entity_id_fkey news
+5529; 2606 19029 FK CONSTRAINT public saved_searches saved_searches_user_id_fkey news
+5479; 2606 17009 FK CONSTRAINT public sec_company_facts sec_company_facts_company_id_fkey news
+5477; 2606 16991 FK CONSTRAINT public sec_filings sec_filings_company_id_fkey news
+5502; 2606 18465 FK CONSTRAINT public securities securities_company_id_fkey news
+5469; 2606 16898 FK CONSTRAINT public source_cursors source_cursors_last_provider_run_id_fkey news
+5503; 2606 18482 FK CONSTRAINT public source_health_snapshots source_health_snapshots_source_id_fkey news
+5518; 2606 18873 FK CONSTRAINT public watchlist_items watchlist_items_user_id_fkey news

@@ -1,0 +1,142 @@
+CAPTURE settings-source-limit-rejected- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Settings & limits" [level=1]
+  - paragraph: Explicit sources, separate collection and enrichment bounds, and recorded application spending.
+  - button "Refresh settings"
+  - alert:
+    - generic: "The last confirmed data remains on screen. Value error, selected sources exceed max_enabled_feeds Request ID: 0c6accb9-fe7d-497f-adc3-f44138197a63."
+  - heading "Feature readiness" [level=3]
+  - generic: Raw Reader
+  - generic: Ready
+  - generic: Saved And Briefs
+  - generic: Ready
+  - generic: Raw Collection
+  - generic: Ready
+  - generic: Embeddings
+  - generic: Ready
+  - generic: Brief Generation
+  - generic: Ready
+  - generic: Entity Linking
+  - generic: Disabled · Disabled by profile
+  - generic: Event Embeddings
+  - generic: Disabled · Disabled by profile
+  - generic: Analogies
+  - generic: Disabled · Disabled by profile
+  - generic: Forecasting
+  - generic: Disabled · Disabled by profile
+  - heading "Saved preferences · not applied" [level=3]
+  - paragraph: Saved choices are not active settings. The completed Phase 2 verification allowance is not a recurring allowance.
+  - list:
+    - listitem: BBC Business
+    - listitem: Ars Technica Technology Lab
+    - listitem: MIT News — Artificial Intelligence
+    - listitem: Federal Reserve — Monetary Policy
+  - paragraph: "Preferred generation: gemini-3.5-flash-lite. Preferred embeddings: text-embedding-3-small. No ongoing allowance has been supplied."
+  - heading "Add an RSS source" [level=3]
+  - generic: Source name
+  - textbox "Source name"
+  - generic: RSS URL
+  - textbox "RSS URL"
+  - button "Add draft source"
+  - paragraph: Adding retains the address without fetching or enabling it. Select its checkbox and save settings to enable collection.
+  - heading "Sources & interests" [level=3]
+  - paragraph: Select up to 1 enabled feeds. Removing a selection preserves its pending records and admitted articles.
+  - checkbox "Synthetic Phase 2 acceptance feed https://offline.personal.test/feed.xml" [checked]
+  - text: Synthetic Phase 2 acceptance feed
+  - generic: https://offline.personal.test/feed.xml
+  - checkbox "Synthetic item6 UI draft · draft, not enabled https://offline.personal.test/item6-ui.xml" [checked]
+  - text: Synthetic item6 UI draft · draft, not enabled
+  - generic: https://offline.personal.test/item6-ui.xml
+  - generic: Include phrases · one per line
+  - textbox "Include phrases · one per line": agency AI
+  - generic: Exclude phrases · one per line
+  - textbox "Exclude phrases · one per line": rumor
+  - paragraph: Empty inclusion means every selected-feed article matches. Exclusions win. Interest filters change Today and brief selection; capture and admission retain all eligible selected-feed items.
+  - heading "Collection & processing limits" [level=3]
+  - generic: Workspace timezone
+  - textbox "Workspace timezone": America/New_York
+  - generic: New articles per local day
+  - spinbutton "New articles per local day": "31"
+  - generic: New articles per run
+  - spinbutton "New articles per run": "100"
+  - generic: Articles selected for enrichment per run
+  - spinbutton "Articles selected for enrichment per run": "100"
+  - generic: Maximum selected feeds
+  - spinbutton "Maximum selected feeds": "1"
+  - generic: Processing profile
+  - combobox "Processing profile":
+    - option "RSS reading only"
+    - option "RSS with optional AI grouping and briefs" [selected]
+  - paragraph: Timezone is locked after the first run. Existing runs retain their selected inputs and original ceilings; raising limits does not enlarge them.
+  - heading "Optional paid processing" [level=3]
+  - checkbox "Explicitly enable paid AI processing within my configured allowance (requires the assisted profile)"
+  - generic: Explicitly enable paid AI processing within my configured allowance (requires the assisted profile)
+  - generic: Permitted monthly USD allowance
+  - textbox "Permitted monthly USD allowance":
+    - /placeholder: No allowance supplied
+  - generic: Optional lower per-run USD ceiling
+  - textbox "Optional lower per-run USD ceiling":
+    - /placeholder: Defaults to monthly allowance
+  - paragraph: Disabled AI has a zero spending ceiling. Missing provider configuration or allowance blocks paid calls while RSS remains readable.
+  - paragraph: A labeled offline fixture is configured. It uses deterministic inputs with no provider spending. Its route remains unchanged when saving these settings.
+  - button "Save settings"
+  - generic: Current profile revision 3
+  - heading "Recorded application spending" [level=3]
+  - generic: Ai disabled
+  - generic: 2026-10 · UTC accounting period
+  - generic: Permitted this month
+  - generic: $0
+  - generic: Finalized cost
+  - generic: $0
+  - generic: Reserved this month
+  - generic: $0
+  - generic: Unresolved, all periods
+  - generic: $0
+  - generic: Remaining this month
+  - generic: $0
+  - generic: Next UTC reset, local time
+  - generic: Oct 31, 2026, 08:00:00 PM EDT
+  - paragraph: This ledger covers requests through this application. Uncertain dispatches keep their reservation until receipt evidence resolves them.
+  - heading "Recorded collection" [level=3]
+  - generic: Observed candidates
+  - generic: "0"
+  - generic: Pending candidates
+  - generic: "0"
+  - generic: Admitted articles
+  - generic: "0"
+  - generic: Grouped articles
+  - generic: "0"
+  - paragraph: These are retained records, not estimated feed totals or completed-brief counts.
+  - paragraph: No feed capture receipts are available yet.
+  - heading "Retained pending candidates" [level=3]
+  - paragraph: 0 retained pending · 0 eligible · 0 from disabled sources. Pending content is retained before admission; these records have not completed enrichment.
+  - generic "Local access · key set for this tab"
+  - generic: API access key
+  - textbox "API access key":
+    - /placeholder: A key is already set for this tab
+    - text: <redacted>
+  - button "Clear key"
+  - paragraph: The value stays only in this browser tab and is sent only with protected actions. Provider credentials never belong here.

@@ -1,0 +1,251 @@
+{
+  "database": {
+    "articles": 1,
+    "child_history": {
+      "f022d081-679a-4ab2-b142-95537544f1d3": {
+        "delivery_token": "26bedbf3-879b-42b3-a174-b53676446833",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-04T09:38:00.897013+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-04T09:39:59.460284+00:00",
+        "hard_deadline_at": "2026-10-04T10:08:00.107750+00:00",
+        "identity": "f022d081-679a-4ab2-b142-95537544f1d3",
+        "launcher_id": "076b1b2b-27c4-4509-9dad-6e2ff8ab1447",
+        "launcher_pid": 17846,
+        "launcher_started_at": "Sun Oct  4 02:37:24 2026",
+        "pid": 18349,
+        "run_id": "629f9c5e-a0ab-4e7e-bef0-869500a8eb8c",
+        "running_lease_expires_at": "2026-10-04T10:13:00.107750+00:00",
+        "started_at": "Sun Oct  4 02:37:59 2026"
+      }
+    },
+    "events": 1,
+    "paid_requests": 0,
+    "runs": 1
+  },
+  "external_provider_calls": 0,
+  "one_actual_child": true,
+  "responses": [
+    {
+      "body": {
+        "already_processed": false,
+        "run": {
+          "attempt": 1,
+          "available_event_ids": [],
+          "capture_ended_at": null,
+          "capture_started_at": null,
+          "counts": {
+            "admitted": 0,
+            "grouped": 0,
+            "selected_for_enrichment": 0
+          },
+          "coverage": {},
+          "created_at": "2026-10-04T09:37:59.450190Z",
+          "error": null,
+          "id": "629f9c5e-a0ab-4e7e-bef0-869500a8eb8c",
+          "lease_expires_at": "2026-10-04T09:39:59.460284Z",
+          "local_date": "2026-10-04",
+          "max_attempts": 3,
+          "profile_revision": 2,
+          "profile_revision_id": "ad4a56f9-ff28-4305-808a-3125d9e618a6",
+          "profile_schema_revision": "personal-profile.v1",
+          "report_id": null,
+          "result": null,
+          "retry_eligible": false,
+          "retry_reason": "run in state queued is not retryable",
+          "runtime": {
+            "fencing_generation": 2,
+            "graceful_deadline_at": null,
+            "hard_deadline_at": null,
+            "lease_expires_at": "2026-10-04T09:39:59.460284Z",
+            "running_started_at": null,
+            "transport": "subprocess"
+          },
+          "scopes_frozen_at": null,
+          "snapshot_id": null,
+          "stage_results": {},
+          "state": "queued",
+          "updated_at": "2026-10-04T09:37:59.450190Z"
+        }
+      },
+      "request_id": "c349cc62-f620-4abb-999c-e7b1e524f7fd",
+      "status": 202
+    },
+    {
+      "body": {
+        "already_processed": false,
+        "run": {
+          "attempt": 1,
+          "available_event_ids": [],
+          "capture_ended_at": null,
+          "capture_started_at": null,
+          "counts": {
+            "admitted": 0,
+            "grouped": 0,
+            "selected_for_enrichment": 0
+          },
+          "coverage": {},
+          "created_at": "2026-10-04T09:37:59.450190Z",
+          "error": null,
+          "id": "629f9c5e-a0ab-4e7e-bef0-869500a8eb8c",
+          "lease_expires_at": "2026-10-04T09:39:59.460284Z",
+          "local_date": "2026-10-04",
+          "max_attempts": 3,
+          "profile_revision": 2,
+          "profile_revision_id": "ad4a56f9-ff28-4305-808a-3125d9e618a6",
+          "profile_schema_revision": "personal-profile.v1",
+          "report_id": null,
+          "result": null,
+          "retry_eligible": false,
+          "retry_reason": "run in state queued is not retryable",
+          "runtime": {
+            "fencing_generation": 2,
+            "graceful_deadline_at": null,
+            "hard_deadline_at": null,
+            "lease_expires_at": "2026-10-04T09:39:59.460284Z",
+            "running_started_at": null,
+            "transport": "subprocess"
+          },
+          "scopes_frozen_at": null,
+          "snapshot_id": null,
+          "stage_results": {},
+          "state": "queued",
+          "updated_at": "2026-10-04T09:37:59.450190Z"
+        }
+      },
+      "request_id": "876075fd-fd94-4b68-a35f-d2bf6cf678b5",
+      "status": 202
+    }
+  ],
+  "terminal": {
+    "attempt": 1,
+    "available_event_ids": [
+      "96166892-165c-4f9c-b4b2-b58ce086edd7"
+    ],
+    "capture_ended_at": "2026-10-04T09:38:00.252166Z",
+    "capture_started_at": "2026-10-04T09:38:00.183658Z",
+    "counts": {
+      "admitted": 1,
+      "grouped": 1,
+      "selected_for_enrichment": 1
+    },
+    "coverage": {
+      "articles_admitted": 1,
+      "articles_captured": 1,
+      "feed_failures": [],
+      "feed_pauses": [],
+      "feeds_attempted": 1,
+      "feeds_configured": 1,
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feeds_succeeded": 1,
+      "items_fetched": 1,
+      "pending_capacity": 2000,
+      "pending_total": 0,
+      "schema": "personal-capture-coverage.v1"
+    },
+    "created_at": "2026-10-04T09:37:59.450190Z",
+    "error": null,
+    "id": "629f9c5e-a0ab-4e7e-bef0-869500a8eb8c",
+    "lease_expires_at": null,
+    "local_date": "2026-10-04",
+    "max_attempts": 3,
+    "profile_revision": 2,
+    "profile_revision_id": "ad4a56f9-ff28-4305-808a-3125d9e618a6",
+    "profile_schema_revision": "personal-profile.v1",
+    "report_id": "9fa16ca4-6d49-4efc-86f6-328d3052c494",
+    "result": {
+      "attempt": 1,
+      "capture_partial": false,
+      "gate_outcome": "pass",
+      "processing_degraded": false,
+      "published": true,
+      "report_id": "9fa16ca4-6d49-4efc-86f6-328d3052c494",
+      "section_count": 5,
+      "snapshot_id": "252287c6-cc11-432c-aa13-27edf78d9ebe"
+    },
+    "retry_eligible": false,
+    "retry_reason": "run in state succeeded is not retryable",
+    "runtime": {
+      "fencing_generation": 2,
+      "graceful_deadline_at": "2026-10-04T10:03:00.107750Z",
+      "hard_deadline_at": "2026-10-04T10:08:00.107750Z",
+      "lease_expires_at": null,
+      "running_started_at": "2026-10-04T09:38:00.107750Z",
+      "transport": "subprocess"
+    },
+    "scopes_frozen_at": "2026-10-04T09:38:00.286073Z",
+    "snapshot_id": "252287c6-cc11-432c-aa13-27edf78d9ebe",
+    "stage_results": {
+      "admission": {
+        "articles_admitted": 1,
+        "local_day_limit": 100,
+        "run_limit": 100,
+        "status": "succeeded"
+      },
+      "capture": {
+        "articles_captured": 1,
+        "feed_failures": [],
+        "feed_pauses": [],
+        "feeds_attempted": 1,
+        "feeds_configured": 1,
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feeds_succeeded": 1,
+        "items_fetched": 1,
+        "pending_capacity": 2000,
+        "pending_total": 1,
+        "schema": "personal-capture-coverage.v1",
+        "status": "succeeded"
+      },
+      "claim_preparation": {
+        "abstained": 0,
+        "status": "succeeded",
+        "supported": 2
+      },
+      "embedding": {
+        "articles_embedded": 1,
+        "status": "succeeded"
+      },
+      "entity_linking": {
+        "reason": "disabled_by_profile",
+        "status": "disabled"
+      },
+      "event_embeddings": {
+        "reason": "disabled_by_profile",
+        "status": "disabled"
+      },
+      "forecasting": {
+        "reason": "disabled_by_profile",
+        "status": "disabled"
+      },
+      "grouping": {
+        "articles_clustered": 1,
+        "events_created": 1,
+        "status": "succeeded"
+      },
+      "historical_analogies": {
+        "reason": "disabled_by_profile",
+        "status": "disabled"
+      },
+      "observations": {
+        "events_observed": 1,
+        "status": "succeeded"
+      },
+      "scope": {
+        "articles_admitted": 1,
+        "articles_selected_for_enrichment": 1,
+        "status": "succeeded"
+      },
+      "snapshot": {
+        "snapshot_id": "252287c6-cc11-432c-aa13-27edf78d9ebe",
+        "status": "succeeded"
+      }
+    },
+    "state": "succeeded",
+    "updated_at": "2026-10-04T09:38:00.716493Z"
+  },
+  "worker_scheduler_stopped": true
+}

@@ -1,0 +1,8 @@
+{
+  "dump_sha256": "e16f3d6ca07d56ee915a678caf290235347c55539ae6cead46d203bddd7270fe",
+  "dump_bytes": 309609,
+  "state_dir": "/tmp/nip-phase2-live-20260920_retry_98db64a8",
+  "container_id": "4334ef455d6bfb2626fe16da40569be4311d1944acde9aa57281c6e1f031a708",
+  "ledger_hash": "a3c40e94b51b51edaf93cf150760730fa8ad217f074c478d147dc07912e87262",
+  "config_hash": "f1d76dd2ec8ebd862a2aa895ae5804ed7f7db1ad7ccca71d9dffc8150900f9aa"
+}

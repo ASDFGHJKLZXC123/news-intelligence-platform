@@ -1,0 +1,15 @@
+{
+  "authenticated": true,
+  "personal_mode_legacy_report_status": 409,
+  "report_broker_sentinel_calls": 0,
+  "personal_mode_legacy_pipeline_status": 409,
+  "pipeline_broker_sentinel_calls": 0,
+  "source_hashes": {
+    "apps/api/intelligence.py": "f0f2c539c045355c31355a9ad565503b0da2900a6332ede6f8409798438d9d1d",
+    "apps/api/pipeline.py": "dc0b2f987139844102bddf83dc135d4f132befd44c95caac39bb3a46a8ca3351",
+    "services/writer_mode.py": "baf8ee9bb621b937bb6b4c9a84db5e08519016d0ee65250b3d77976de5e11b11",
+    "services/pipeline/sqlalchemy_store.py": "d7d961d365196fb2fef1d209a85e689f8cf5b19034f592a0a188fba7daf9a333"
+  },
+  "source_stable": true,
+  "real_broker_dispatches": 0
+}

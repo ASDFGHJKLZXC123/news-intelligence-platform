@@ -1,0 +1,99 @@
+# Shared behavior contracts
+
+Version: personal-conversion.v1, September 6, 2026.
+
+These are selected engineering defaults for the conversion, not claims about current behavior or preferences supplied by the user. This file takes precedence if a phase document describes a shared behavior less precisely. Phase 1 is complete; the [package index](README.md) records the current status of later phases.
+
+## 1. Product and configuration
+
+One personal workspace per application database; one bound local owner; three main views: Today, Saved, Briefs. Feed/profile settings are a utility panel. Reuse the existing FastAPI, PostgreSQL, service code and frontend technology. No framework/database rewrite, public accounts, global dashboards, general chat, forecasting, external notifications or automatic schedule is included.
+
+Real mode is the default. Demo is an explicit read-only mode with a persistent label. Failure in real mode never loads fixtures. Personal direct links to deferred screens display an unavailable state. Preserve experimental code and existing prediction restrictions.
+
+Required live setup inputs: chosen feed URLs, optional interest phrases, explicit compatible provider/model routes for enabled features, and an actual spending allowance. Inspect existing configuration before requesting values again. Do not infer a live budget from example values. Until paid processing is explicitly enabled and configured, its allowance is zero; offline tests use labeled fixtures. A configured feed can still support RSS-only reading in Phase 3.
+
+Technical starting limits, editable where indicated: at most 10 active feeds, 100 new admissions per run, 100 new admissions per local calendar day, 100 article enrichments per run. The earlier 5–10 feed range and $10 monthly allowance are suggestions only. API credentials are never returned to the browser, stored in plan files, or embedded in exports.
+
+## 2. Dates, collection, and run identity — D2
+
+Persist `America/Los_Angeles` as the initial personal workspace timezone because it is supplied by the current environment. Allow setup to select a different IANA timezone before the first run; changing it afterward requires an explicit future migration and is outside v1. Display the workspace timezone and actual timestamps. Keep existing legacy New York calendar semantics unchanged.
+
+The server chooses the personal run date at the first start request, including weekends. Personal start accepts no arbitrary historical/future date. Use a new identity namespace `personal-daily:{workspace_uuid}:{YYYY-MM-DD}` and unique `(workspace_id, process_date)` personal lifecycle details, separate from legacy `daily-pipeline` date records. Reuse existing Job primitives through an injected identity/store boundary; do not relabel old rows.
+
+Repeating an active or succeeded date returns the existing run. Retry requires a failed/partially failed eligible run or expired ownership, retains its original date/ID, and never resets the three-attempt maximum. A retry crossing midnight still belongs to that original run. An original run label is not a claim that its inputs were published that day.
+
+Collection means the bounded current feed captures plus durable pending candidates. It is not historical replay and does not guarantee a 24-hour publication window. First use and use after missed days follow the same rule. Record capture start/end, original publication timestamps where available, and unknown publication timestamps without inventing them. Show these facts in Today and Briefs.
+
+Today displays the latest run with readable stored results, with its coverage and last-success timestamp; show a newer failed/running run separately without relabeling old data as current. Readable results include incomplete groups with explicit status and a healthy quiet snapshot with zero qualifying events. A newer healthy quiet result replaces the older story list; a complete capture failure cannot count as quiet. Before any usable result it is empty. Reload only rereads storage. There is no second successful same-date collection or standalone personal regenerate action in v1.
+
+Daily admission limits use server-recorded admission timestamps in the workspace calendar. Monthly spending uses server-recorded request dispatch timestamps in UTC calendar months, retaining the existing accounting basis. Show each reset as a timestamp in the workspace timezone. A caller-supplied date never determines the charged allowance period.
+
+## 3. Relevance and event selection — D1
+
+The v1 interest profile is explicit include/exclude keyword phrases; no new semantic classifier or mandatory entity linking. Store up to 20 include and 20 exclude phrases, each at most 80 characters. Normalize using Unicode NFKC and case folding; tokens are maximal Unicode letter/digit runs, with punctuation and underscores as separators. Match a phrase as a contiguous sequence of complete tokens within either retained article title or RSS summary. Reject configured phrases that normalize to zero tokens. Do not match fragments inside words or join the end of a title to the beginning of its summary.
+
+Any exclude match rejects an article for personal selection. Otherwise, any include match accepts it; an empty include list accepts all articles from the selected feeds. Thus phrase `AI` does not match `said`. Selected feeds control capture/admission; interest phrases filter Today and Briefs, not capture or admission. Profile settings are copied into each run; later edits apply to the next new run, not an existing run or retry.
+
+An event qualifies when at least one article in the run's frozen enrichment scope matches and belongs to it. This can include previously admitted raw articles, not only new admissions. Today and personal brief eligibility use the same predicate. Brief context contains only qualifying, in-scope member articles. Event-source detail may show additional current members, clearly distinguished from the report's cited snapshot. The collected-article view can show all admitted items with an explicit interest-filter toggle; it does not claim that unfiltered items matched the interest profile.
+
+Rank qualifying events lexicographically: (1) number of distinct configured `Source.id` values among qualifying members, descending; (2) recorded hotness, descending, with null last; (3) newest known publication time among qualifying members, descending, with unknown last; (4) event UUID ascending. Count feed sources, not purportedly independent publishers. Take at most five events. Apply no legacy hotness floor of 40 and no predictive-risk weight. Fewer than five is valid; zero produces a quiet-period result.
+
+## 4. Personal data, saved items, and legacy coexistence — D3
+
+Use additive migrations and a persisted personal workspace/run/snapshot model. Personal reports use `report_type=personal_daily_brief` with explicit personal workspace/run/input-snapshot links and uniqueness by personal workspace, run date and version. The legacy report type/date/version rules continue to apply to legacy reports. Adjust partial indexes/selectors as necessary so neither type shadows the other's latest/history/export result. Do not rewrite old dates, content policies or published text.
+
+Expose the personal APIs under `/api/v1/personal`. Legacy report selectors must not start serving personal generating/failed rows merely because their existing generic branches accept other report types. A clearly labeled legacy-history read path remains available; no automatic conversion of legacy reports is required.
+
+Reuse a persisted workspace-owner binding when it exists. At first setup: an explicit configured existing owner wins after validation; with no users, create a clearly designated internal local owner using a reserved `.invalid` identity; with exactly one existing user, bind that user and report the mapping in the upgrade summary. With multiple users and no binding, preserve all data and require a setup owner selection before personal save writes. Reading and independent development continue. No reassignments or deletion of old saves; legacy owner-grouped saved lists remain available during setup.
+
+`GET /api/v1/personal/workspace` returns safe owner identifiers/labels for ambiguous setup. `PUT /api/v1/personal/workspace/owner` accepts the selected existing `owner_id` and creates the binding atomically. Repeating the same binding returns 200; attempting a different owner after binding returns 409 with an explanation that reassignment requires a future explicit migration. This setup operation does not create a public login/account product.
+
+Save targets an existing event UUID and is idempotent under workspace owner/type/target uniqueness. Unsave affects only that owner's entry. A save is a pointer to the event's current data, not a frozen article archive. Keep its saved label and unavailable status when a target cannot be loaded. Never silently transfer a save to a different event after regrouping. Event detail stays accessible from Saved even outside Today's current results.
+
+## 5. Input snapshots, retries, and disabled features — D4
+
+Persist three distinct scopes: captured candidates, newly admitted articles, and selected enrichment articles. Phase 2's small assisted proof may use the same admitted/enrichment IDs; Phase 3 must represent them separately. Freeze admission and enrichment membership before the first paid/enrichment stage. Failed intake can append bounded captures only while intake remains incomplete and no downstream scope has frozen. A later retry after freezing does not refetch into that run's paid scope.
+
+Accumulate event IDs durably across attempts and retain per-run membership/source observations for every qualifying Today candidate, including candidates outside the brief's top five. Capture these at successful grouping boundaries so a later composition failure does not erase evaluation evidence. Before first report composition, freeze the candidate/selected event IDs, qualifying article membership, bounded actual source text, source IDs/URLs/publication times, capture coverage, selected profile, ranking inputs, model route identity and input hash. Use retained permitted source content or a resolvable immutable revision plus its hash; a hash alone is insufficient. Preserve the immutable snapshot for source inspection even if current event data changes.
+
+After a report snapshot exists, retries reuse it. New evidence/profile settings await a later new run; v1 has no personal UI action to replace a completed run's snapshot. A failed report attempt can create another report version referencing the same snapshot. Published versions are immutable; UI/export always name the selected report/version. Model-generated prose is not promised to be byte-identical on retry.
+
+The personal assisted profile enables RSS intake, article embeddings, clustering and descriptive brief generation. Entity linking, event embeddings and analogies are disabled by default, not represented as failures. The raw profile enables intake and reading only. Add explicit disabled/deferred stage outcomes rather than abusing the current seven-runner/dependency-skip rules. Existing publication grounding and predictive-output exclusions remain enforced.
+
+Expected disabled, allowance-deferred, or enrichment-capacity-deferred work is a completed run with explicit limitations and transferable raw items. Newly admitted articles outside the enrichment cap receive `deferred_enrichment_capacity`, not an unowned waiting state. Unexpected errors remain failed/partially failed with real eligibility/reasons. Do not report success for a publication that failed its evidence checks. A failed run's retry-owned scope is not silently claimed by another date; after retry exhaustion, raw data remains readable with the final error and no implicit new paid retry.
+
+## 6. Intake, deferred candidates, and accounting — D5/D6
+
+Reuse canonical URL normalization/deduplication. Retain pending candidates durably with bounded source fields. Default capture ceilings: 2 MiB response body and 500 parsed entries per feed; at most 2,000 pending candidates overall; title at most 512 characters and RSS summary at most 2,000 characters or the smaller existing source-policy limit. Record truncation. Pending metadata is not evidence of article admission or AI processing. No automatic deletion is introduced.
+
+Drain pending work before capturing more into freed capacity. At pending capacity, pause further capture and report this explicitly; never invent how many unseen feed entries were deferred. Within each feed, admit oldest first-seen capture batch first, then newest known publication within that batch, then canonical URL/ID. Choose one candidate per active feed per round, ordering feed IDs stably. Disabled feed candidates remain retained but ineligible until re-enabled. Atomic admission creates/reuses the article, records its run and admission timestamp, and consumes a unique new-admission unit once.
+
+Admit up to the smaller remaining run/day allowance. Separate enrichment from admission: choose at most 100 transferable admitted ungrouped articles per run from the run's selected active feeds, oldest previous admission first then UUID, followed by newly admitted articles in recorded admission order. Disabled-feed raw data stays readable but is not selected for new paid enrichment. Existing raw backlog must not stop new permitted RSS admissions. Old article enrichment consumes no second admission unit but every paid dispatch consumes spending. Only intentionally disabled, budget-deferred, or capacity-deferred work transfers automatically; do not steal active/eligible failed-run retry work. All downstream queries use these explicit scopes, not a global all-missing query. A newly grouped article replaces its ungrouped display entry rather than duplicating it.
+
+Paid routes must be explicitly resolved from configured compatible providers/models and frozen with a versioned price table. No automatic vendor fallback in the personal default; enabled fallbacks require explicit route configuration and the same limits. For the general profile, use the existing per-workload token ceilings, record their resolved finite values in the run, and refuse a route with missing prices or an unbounded request. Do not silently pick another model when a route is unavailable.
+
+Before each paid HTTP dispatch, atomically reserve the maximum estimated cost using bounded input/output and the recorded prices. Include embeddings, snapshot probes, schema corrections, grounding/composition retries, and configured fallbacks. Reconcile actual token usage afterward; retain uncertain reservations until usage evidence resolves them. Never free an uncertain reservation solely because the job failed. Record late usage against its original dispatch period, and do not reset outstanding obligations on a calendar rollover. Limits cover this application's accounted requests, not other programs on the same account or a guaranteed provider invoice ceiling.
+
+The general per-run spending ceiling defaults to the explicitly configured monthly allowance unless a lower run ceiling is configured; remaining monthly allowance still constrains every request. Disabled paid processing has zero allowance. Lowering live spending/daily-admission limits applies immediately to new dispatches/admissions without erasing usage; a run's frozen scope and original run ceilings cannot be enlarged by a settings edit. The Phase 2 smoke ceiling below is a separate, tighter verification boundary.
+
+Phase 2 live verification uses a disposable database, at most three explicitly listed real feed-capture articles, no scheduler/unrelated backlog, and a harness allowing at most 20 paid dispatches. Each dispatch is bounded to 8,192 input tokens; reasoning output is at most 4,096 tokens; embedding batches contain at most three test articles. Every probe/retry/fallback counts. The estimated reservation ceiling is the smaller of $0.25 and the actual configured live-test allowance. Without that allowance/routes, run offline verification and leave live evidence pending. Never increase these limits automatically to obtain a pass.
+
+## 7. Runtime behavior — D7
+
+Phase 2 may use existing Celery delivery for the new personal coordinator. Only one processing mode may write the shared dataset at a time. Make active mode explicit and reject incompatible writer starts; legacy read/history remains available. Mode switches require no queued/running writer and preserve data.
+
+In Phase 4A, API and command-line entry points use the same supervisor and runner, each launching a managed temporary Python child with a fixed argument vector, not a shell command containing user input. There is no supported unsupervised personal processing path. Persist queued state before launch; observe child exit and persist a conditional failure if launch/execution fails. The CLI waits and reports the outcome; the API returns the run identity for status polling. A child watchdog enforces the deadline if its launching parent disappears.
+
+Use a stable database-wide processing lock across dates/entry points and a per-run ownership token. Retain the existing timing values: 2-minute queue handoff lease, 25-minute graceful deadline, 30-minute hard deadline, 35-minute running lease. No automatic lease renewal in v1. The supervisor enforces deadlines; recovery cannot take ownership before lease expiry merely because a UI request timed out.
+
+Every personal business-write transaction, including intake, event membership and report publication, checks/locks the current ownership token in the same transaction as the write. Losing the lock/database connection stops new work. A superseded process must fail its next write, not merely be refused when it saves final job status. Test a delayed old writer after a replacement owns the run.
+
+Phase 4B replaces Redis-dependent cache/throughput limiting with local implementations inside the single permitted processor; monetary reservations, intake counters and ownership stay durable in PostgreSQL. A cache loss on restart may cause new calls only through the same spending reservation checks. Serve static frontend and API from one application service. Final personal operation requires application plus PostgreSQL persistently, with a temporary processing child. Health checks reflect the selected mode; absent optional Celery/Redis does not make personal mode unhealthy.
+
+## 8. Verification and decisions still belonging to the user — D8
+
+Each phase file specifies implementation steps and acceptance demonstrations. No endpoint/function name alone proves completion. Record actual results and limitations; keep fixtures, live-provider tests, real-feed operation and personal judgments distinct.
+
+The trial uses seven real daily sessions and at least 30 distinct event groups and 10 brief event summaries, sampled deterministically across days before judging quality. Extend observation when volume is insufficient. The engineer reviews coherence and all factual claims in selected summaries; the user supplies interest/relevance and usefulness judgments. An automated annotation is never labeled an independent human review. Numerical targets are stated acceptance defaults on a small personal sample, not forecasting validity.
+
+Only the following setup facts remain user-dependent: actual topic/phrases, chosen feeds, live provider/model configuration and allowed spend, and—if existing data is ambiguous—the workspace owner. Personal usefulness also requires the user's actual trial judgments. These are explicit inputs, not missing engineering algorithms. They do not block offline implementation or earlier phases. Exact migration numbers, internal helper names and harmless layout refinements remain ordinary implementation choices.

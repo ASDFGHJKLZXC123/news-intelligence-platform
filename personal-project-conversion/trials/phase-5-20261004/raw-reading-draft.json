@@ -1,0 +1,50 @@
+{
+  "current_feed_availability_verified": false,
+  "exclude_phrases": [],
+  "execution_profile": "raw",
+  "include_phrases": [],
+  "paid_runtime_enabled": false,
+  "requests_dispatched": 0,
+  "runtime_profile_revision": null,
+  "schema": "personal-raw-reading-draft.v1",
+  "settings": {
+    "ai_enabled": false,
+    "daily_article_limit": 100,
+    "enrichment_article_limit": 100,
+    "max_enabled_feeds": 10,
+    "model_route": {},
+    "monthly_allowance_usd": null,
+    "run_allowance_usd": null,
+    "run_article_limit": 100
+  },
+  "source_ids": null,
+  "sources": [
+    {
+      "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "key": "bbc-business",
+      "name": "BBC Business",
+      "source_type": "rss"
+    },
+    {
+      "feed_url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "key": "ars-technology",
+      "name": "Ars Technica Technology Lab",
+      "source_type": "rss"
+    },
+    {
+      "feed_url": "https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml",
+      "key": "mit-ai",
+      "name": "MIT News \u2014 Artificial Intelligence",
+      "source_type": "rss"
+    },
+    {
+      "feed_url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "key": "fed-monetary-policy",
+      "name": "Federal Reserve \u2014 Monetary Policy",
+      "source_type": "rss"
+    }
+  ],
+  "status": "inactive_not_applied",
+  "trial_id": "fe79058e-52c3-4d1d-b9f0-3f7cf8af2efb",
+  "user_choice": "raw_reading_first_models_off"
+}

@@ -1,0 +1,27 @@
+{"timestamp": "2026-09-09T05:06:37.089174+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T05:06:38.925172+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T05:06:38.997978+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"case": "exact tokenless phrase rejected before setup; all writes rolled back", "result": "PASS", "status": 422}
+{"timestamp": "2026-09-09T05:06:39.030239+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T05:06:39.038867+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"timestamp": "2026-09-09T05:06:39.049483+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"case": "tokenless include and exclude edits preserve configured immutable profiles", "result": "PASS"}
+{"timestamp": "2026-09-09T05:06:40.626945+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T05:06:40.702861+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T05:06:40.711404+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "ambiguous owner readiness agrees between setup and GET", "result": "PASS", "setup_ready": false, "get_ready": false}
+{"timestamp": "2026-09-09T05:06:40.724154+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: PUT http://testserver/api/v1/personal/workspace/owner \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T05:06:40.735063+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T05:06:40.741533+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "bound owner with valid raw profile ready on both responses", "result": "PASS"}
+{"case": "detail and source membership remain snapshot-pinned after actual retry observation revision2", "result": "PASS", "detail_qualifying": ["04267286-f106-4ffb-a856-635bbd2e11f7"], "source_total": 2, "new_member_qualifies": false, "all_members_in_frozen_enrichment": true}
+{
+  "stable_source_hashes": {
+    "services/personal/workspace.py": "f1706eb778d6a5290fe76fd0e4936941c83ad1b02c7e3c2abbe71fe96607d2ae",
+    "services/personal/repository.py": "d0e0154a8829f87f8f5ad9448deab73c44947026030dae21346e9ffbb13766fb",
+    "apps/api/personal.py": "305f214969cb5b5597d7b348c2571e023a179044525113d34c6cad3e4677f139",
+    "services/personal/snapshots.py": "b2db224bae70054f6e98db719e9ce19a027d0877814e947920a1ae68eb3be491",
+    "db/migrations/versions/0020_personal_news_desk.py": "280384c035920c6707459a2b035d841ad4a049fd66cbba78ff42bb881fe2d2e7"
+  },
+  "sessions": "Session(autoflush=False); production functions and real API middleware; fresh migrated disposable DBs"
+}

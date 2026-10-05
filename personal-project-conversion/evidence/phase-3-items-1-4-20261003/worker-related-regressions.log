@@ -1,0 +1,3 @@
+COMMAND: .venv/bin/python -m pytest -q -p no:cacheprovider tests/integration/test_personal_paid_worker.py tests/integration/test_personal_worker.py tests/integration/test_personal_spending.py tests/integration/test_personal_settings.py tests/integration/test_personal_coordinator.py tests/integration/test_personal_run_claim_snapshot.py tests/integration/test_personal_brief_api.py
+..................................................                       [100%]
+50 passed in 97.02s (0:01:37)

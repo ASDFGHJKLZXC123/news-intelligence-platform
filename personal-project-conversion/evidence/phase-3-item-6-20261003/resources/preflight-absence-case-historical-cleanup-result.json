@@ -1,0 +1,1061 @@
+{
+  "actions": [
+    {
+      "absence_verified": true,
+      "action": "drop_database",
+      "name": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986
+    },
+    {
+      "absence_verified": true,
+      "action": "drop_database",
+      "name": "nip_phase3_final_444731f8f123",
+      "oid": 649104
+    }
+  ],
+  "authorization": "Human item-6 assignment and root explicit exact-resource cleanup coordination.",
+  "cleanup_complete": false,
+  "completed_at_utc": "2026-10-04T01:13:34.366550+00:00",
+  "container_before": {
+    "created": "2026-09-20T22:50:40.739020472Z",
+    "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+    "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "labels": {
+      "com.docker.compose.project": "news-intelligence-platform",
+      "com.docker.compose.service": "postgres",
+      "com.docker.compose.version": "5.1.1",
+      "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+    },
+    "mounts": [
+      {
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "",
+        "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+        "Propagation": "",
+        "RW": true,
+        "Source": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+        "Type": "volume"
+      }
+    ],
+    "name": "/nip-phase3-tests-02ea38048d",
+    "port_bindings": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    },
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "58553"
+        }
+      ]
+    },
+    "state": {
+      "ExitCode": 0,
+      "FinishedAt": "0001-01-01T00:00:00Z",
+      "Pid": 30429,
+      "Running": true,
+      "StartedAt": "2026-09-20T22:50:40.915016514Z",
+      "Status": "running"
+    }
+  },
+  "container_identity_before_remove": {
+    "created": "2026-09-20T22:50:40.739020472Z",
+    "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+    "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "labels": {
+      "com.docker.compose.project": "news-intelligence-platform",
+      "com.docker.compose.service": "postgres",
+      "com.docker.compose.version": "5.1.1",
+      "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+    },
+    "mounts": [
+      {
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "",
+        "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+        "Propagation": "",
+        "RW": true,
+        "Source": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+        "Type": "volume"
+      }
+    ],
+    "name": "/nip-phase3-tests-02ea38048d",
+    "port_bindings": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    },
+    "ports": {},
+    "state": {
+      "ExitCode": 0,
+      "FinishedAt": "2026-10-04T01:13:33.896900597Z",
+      "Pid": 0,
+      "Running": false,
+      "StartedAt": "2026-09-20T22:50:40.915016514Z",
+      "Status": "exited"
+    }
+  },
+  "container_identity_before_stop": {
+    "created": "2026-09-20T22:50:40.739020472Z",
+    "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+    "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "labels": {
+      "com.docker.compose.project": "news-intelligence-platform",
+      "com.docker.compose.service": "postgres",
+      "com.docker.compose.version": "5.1.1",
+      "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+    },
+    "mounts": [
+      {
+        "Destination": "/var/lib/postgresql/data",
+        "Driver": "local",
+        "Mode": "",
+        "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+        "Propagation": "",
+        "RW": true,
+        "Source": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+        "Type": "volume"
+      }
+    ],
+    "name": "/nip-phase3-tests-02ea38048d",
+    "port_bindings": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": ""
+        }
+      ]
+    },
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "58553"
+        }
+      ]
+    },
+    "state": {
+      "ExitCode": 0,
+      "FinishedAt": "0001-01-01T00:00:00Z",
+      "Pid": 30429,
+      "Running": true,
+      "StartedAt": "2026-09-20T22:50:40.915016514Z",
+      "Status": "running"
+    }
+  },
+  "containers_before": {
+    "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a": {
+      "created": "2026-09-09T06:16:04.665051842Z",
+      "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "labels": {
+        "com.docker.compose.config-hash": "67a35dfaa24f72a93054b41c32ffd72780380293d93031fca553966806e7c55a",
+        "com.docker.compose.container-number": "1",
+        "com.docker.compose.depends_on": "",
+        "com.docker.compose.image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+        "com.docker.compose.oneoff": "False",
+        "com.docker.compose.project": "news-intelligence-platform",
+        "com.docker.compose.project.config_files": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/docker-compose.yml",
+        "com.docker.compose.project.working_dir": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform",
+        "com.docker.compose.replace": "postgres-1",
+        "com.docker.compose.service": "postgres",
+        "com.docker.compose.version": "5.1.1"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "news-intelligence-platform_pgdata",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/news-intelligence-platform_pgdata/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/news-intelligence-platform-postgres-1",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "55432"
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "55432"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 673,
+        "Running": true,
+        "StartedAt": "2026-09-09T06:16:04.728352259Z",
+        "Status": "running"
+      }
+    },
+    "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6": {
+      "created": "2026-09-20T22:50:40.739020472Z",
+      "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "labels": {
+        "com.docker.compose.project": "news-intelligence-platform",
+        "com.docker.compose.service": "postgres",
+        "com.docker.compose.version": "5.1.1",
+        "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-phase3-tests-02ea38048d",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "58553"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 30429,
+        "Running": true,
+        "StartedAt": "2026-09-20T22:50:40.915016514Z",
+        "Status": "running"
+      }
+    },
+    "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771": {
+      "created": "2026-10-04T00:55:50.499785966Z",
+      "id": "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "labels": {
+        "com.docker.compose.project": "news-intelligence-platform",
+        "com.docker.compose.service": "postgres",
+        "com.docker.compose.version": "5.1.1"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-pg-p3_item6_20261003_b",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "56414"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 42735,
+        "Running": true,
+        "StartedAt": "2026-10-04T00:55:50.956605133Z",
+        "Status": "running"
+      }
+    },
+    "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c": {
+      "created": "2026-08-09T17:49:59.795639928Z",
+      "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "image": "sha256:c354ac6ed923d82e5afbc4d118a4018509f08f79acaf12f27b1c33266c02b65f",
+      "labels": {
+        "com.docker.compose.config-hash": "1c19a67f9af1211458210e8265918699773038edbe3a7a97977a77c5cd568133",
+        "com.docker.compose.container-number": "1",
+        "com.docker.compose.depends_on": "",
+        "com.docker.compose.image": "sha256:c354ac6ed923d82e5afbc4d118a4018509f08f79acaf12f27b1c33266c02b65f",
+        "com.docker.compose.oneoff": "False",
+        "com.docker.compose.project": "promptgate",
+        "com.docker.compose.project.config_files": "/Users/f8fq/coding projects/Unfinished/PromptGate/docker-compose.yml",
+        "com.docker.compose.project.working_dir": "/Users/f8fq/coding projects/Unfinished/PromptGate",
+        "com.docker.compose.replace": "gateway-1",
+        "com.docker.compose.service": "gateway",
+        "com.docker.compose.version": "5.1.1"
+      },
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Mode": "rw",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/Users/f8fq/coding projects/Unfinished/PromptGate/data",
+          "Type": "bind"
+        }
+      ],
+      "name": "/promptgate-gateway-1",
+      "port_bindings": {
+        "8787/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8787"
+          }
+        ]
+      },
+      "ports": {},
+      "state": {
+        "ExitCode": 255,
+        "FinishedAt": "2026-08-09T21:34:09.546222751Z",
+        "Pid": 0,
+        "Running": false,
+        "StartedAt": "2026-08-09T17:50:09.124909126Z",
+        "Status": "exited"
+      }
+    },
+    "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f": {
+      "created": "2026-10-03T23:28:30.644383596Z",
+      "id": "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "io.infrastructure-monitor.local-demo": "infra-monitor-demo-progress-v2-test-restart",
+        "io.infrastructure-monitor.local-demo.configuration": "7913a5314e8434a6947b6107276673eb536d9af391ac4a727d6af3c524a36132",
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "infra-monitor-demo-progress-v2-test-restart-data",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/infra-monitor-demo-progress-v2-test-restart-data/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/infra-monitor-demo-progress-v2-test-restart-db",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "2026-10-03T23:47:24.716253093Z",
+        "Pid": 0,
+        "Running": false,
+        "StartedAt": "2026-10-03T23:41:47.70312059Z",
+        "Status": "exited"
+      }
+    },
+    "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99": {
+      "created": "2026-09-20T09:35:34.547572213Z",
+      "id": "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "image": "sha256:41d779d24d587060af9aa6faaa2ee9a14c96d6f3fe0a4065ff4a715686730edf",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/var/run/docker.sock",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/var/run/docker.sock",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost",
+          "Type": "bind"
+        }
+      ],
+      "name": "/fencepost-m3-native-smoke-20260920",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 75215,
+        "Running": true,
+        "StartedAt": "2026-09-20T09:35:36.559674172Z",
+        "Status": "running"
+      }
+    },
+    "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4": {
+      "created": "2026-10-03T21:45:42.825446464Z",
+      "id": "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [],
+      "name": "/infra-monitor-demo-20261003-db",
+      "port_bindings": {},
+      "ports": {
+        "5432/tcp": null
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 88426,
+        "Running": true,
+        "StartedAt": "2026-10-03T21:45:42.977145339Z",
+        "Status": "running"
+      }
+    },
+    "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a": {
+      "created": "2026-09-20T11:44:08.373334463Z",
+      "id": "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "image": "sha256:c0df9b0a8f56fc8d268a79c64663413dfbb9913135499455b67e5114fb505447",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost/.artifacts/a4-m3-cache-correction-4e48ad1/repo",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost/.artifacts/a4-m3-cache-correction-4e48ad1/repo",
+          "Type": "bind"
+        }
+      ],
+      "name": "/fencepost-m3-cache-a4-4e48ad1",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 66194,
+        "Running": true,
+        "StartedAt": "2026-09-20T11:44:08.493246172Z",
+        "Status": "running"
+      }
+    },
+    "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75": {
+      "created": "2026-10-03T23:37:08.302517377Z",
+      "id": "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "io.infrastructure-monitor.local-demo": "infra-monitor-demo-progress-v2",
+        "io.infrastructure-monitor.local-demo.configuration": "1423f08173c2f974e11be5fd8307f625f04377e1d4afdc8e920a7b001e38f7d7",
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [],
+      "name": "/infra-monitor-demo-progress-v2-relay",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "15443"
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "15443"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 21092,
+        "Running": true,
+        "StartedAt": "2026-10-03T23:37:08.427396794Z",
+        "Status": "running"
+      }
+    },
+    "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd": {
+      "created": "2026-10-03T23:37:02.955668375Z",
+      "id": "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "io.infrastructure-monitor.local-demo": "infra-monitor-demo-progress-v2",
+        "io.infrastructure-monitor.local-demo.configuration": "1423f08173c2f974e11be5fd8307f625f04377e1d4afdc8e920a7b001e38f7d7",
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "infra-monitor-demo-progress-v2-data",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/infra-monitor-demo-progress-v2-data/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/infra-monitor-demo-progress-v2-db",
+      "port_bindings": {},
+      "ports": {
+        "5432/tcp": null
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 20784,
+        "Running": true,
+        "StartedAt": "2026-10-03T23:37:03.078976583Z",
+        "Status": "running"
+      }
+    },
+    "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3": {
+      "created": "2026-09-20T11:01:58.054552875Z",
+      "id": "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "image": "sha256:c0df9b0a8f56fc8d268a79c64663413dfbb9913135499455b67e5114fb505447",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/private/tmp/fencepost-m3-product-a4.Nn1JJh",
+          "Mode": "rw",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/private/tmp/fencepost-m3-product-a4.Nn1JJh",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/var/run/docker.sock",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/var/run/docker.sock",
+          "Type": "bind"
+        }
+      ],
+      "name": "/fencepost-m3-product-a4-20260920t105847z",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 52020,
+        "Running": true,
+        "StartedAt": "2026-09-20T11:01:58.162424251Z",
+        "Status": "running"
+      }
+    },
+    "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7": {
+      "created": "2026-09-20T09:22:35.342241755Z",
+      "id": "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "image": "sha256:dbbe4ceb97851e2e5fa83798b239811f871cb743b259ba3563737349f6bcfaa0",
+      "labels": {},
+      "mounts": [],
+      "name": "/fencepost-m3-native-tools-20260920",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 32605,
+        "Running": true,
+        "StartedAt": "2026-09-20T09:22:35.418908255Z",
+        "Status": "running"
+      }
+    },
+    "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098": {
+      "created": "2026-09-19T05:21:12.026951214Z",
+      "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "image": "sha256:80f5d259a5969c86f6c92145d572de4a68c68e0edd28d4367dec0fb411b42af3",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost",
+          "Type": "bind"
+        }
+      ],
+      "name": "/fencepost-m3-linux-inode-35423434648",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 43657,
+        "Running": true,
+        "StartedAt": "2026-09-19T05:21:12.099369381Z",
+        "Status": "running"
+      }
+    },
+    "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5": {
+      "created": "2026-08-09T09:24:02.986568339Z",
+      "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+      "image": "sha256:2cffd68eda34762d010cba5de2e4462fcdab15ac2a53722b7cb17e8c76255cb3",
+      "labels": {},
+      "mounts": [],
+      "name": "/fp-w4-prep-order-numpy-22825",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 1,
+        "FinishedAt": "2026-08-09T09:24:53.515026918Z",
+        "Pid": 0,
+        "Running": false,
+        "StartedAt": "2026-08-09T09:24:08.91130355Z",
+        "Status": "exited"
+      }
+    },
+    "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5": {
+      "created": "2026-09-20T23:02:15.896693252Z",
+      "id": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "labels": {
+        "com.docker.compose.project": "news-intelligence-platform",
+        "com.docker.compose.service": "postgres",
+        "com.docker.compose.version": "5.1.1"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-pg-p3_browser_20260920_a",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "59734"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 33720,
+        "Running": true,
+        "StartedAt": "2026-09-20T23:02:16.042279418Z",
+        "Status": "running"
+      }
+    },
+    "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8": {
+      "created": "2026-10-03T21:45:43.144892256Z",
+      "id": "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [],
+      "name": "/infra-monitor-demo-20261003-relay",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "15442"
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "15442"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 88490,
+        "Running": true,
+        "StartedAt": "2026-10-03T21:45:43.220920214Z",
+        "Status": "running"
+      }
+    },
+    "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a": {
+      "created": "2026-10-03T23:28:32.796324875Z",
+      "id": "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "image": "sha256:fe9821935d163abca5611e3e0a6a7c73c8c547f3412ed2036ec0ed8f789390da",
+      "labels": {
+        "io.infrastructure-monitor.local-demo": "infra-monitor-demo-progress-v2-test-restart",
+        "io.infrastructure-monitor.local-demo.configuration": "7913a5314e8434a6947b6107276673eb536d9af391ac4a727d6af3c524a36132",
+        "maintainer": "PostGIS Project - https://postgis.net",
+        "org.opencontainers.image.description": "PostGIS 3.5.7 spatial database extension with PostgreSQL 17 Alpine",
+        "org.opencontainers.image.source": "https://github.com/postgis/docker-postgis"
+      },
+      "mounts": [],
+      "name": "/infra-monitor-demo-progress-v2-test-restart-relay",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "15444"
+          }
+        ]
+      },
+      "ports": {},
+      "state": {
+        "ExitCode": 130,
+        "FinishedAt": "2026-10-03T23:47:24.303236135Z",
+        "Pid": 0,
+        "Running": false,
+        "StartedAt": "2026-10-03T23:41:48.658224174Z",
+        "Status": "exited"
+      }
+    },
+    "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb": {
+      "created": "2026-09-20T09:25:14.445850967Z",
+      "id": "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "image": "sha256:93318084b94c0ae499f4c20c5f31166a71b897520e0f8ed9703cf86f8e980ff3",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/Users/f8fq/coding projects/Unfinished/new AI ideas/repos/fencepost",
+          "Type": "bind"
+        }
+      ],
+      "name": "/fencepost-m3-native-preflight-20260920",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 39110,
+        "Running": true,
+        "StartedAt": "2026-09-20T09:25:17.124204385Z",
+        "Status": "running"
+      }
+    },
+    "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73": {
+      "created": "2026-09-20T23:02:21.319704421Z",
+      "id": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "image": "sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-redis-p3_browser_20260920_a",
+      "port_bindings": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "59749"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 33911,
+        "Running": true,
+        "StartedAt": "2026-09-20T23:02:21.422923463Z",
+        "Status": "running"
+      }
+    },
+    "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02": {
+      "created": "2026-08-09T09:24:09.44827055Z",
+      "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "image": "sha256:2cffd68eda34762d010cba5de2e4462fcdab15ac2a53722b7cb17e8c76255cb3",
+      "labels": {},
+      "mounts": [],
+      "name": "/fp-w4-prep-order-pytest-sysmodules",
+      "port_bindings": {},
+      "ports": {},
+      "state": {
+        "ExitCode": 1,
+        "FinishedAt": "2026-08-09T09:24:56.344242086Z",
+        "Pid": 0,
+        "Running": false,
+        "StartedAt": "2026-08-09T09:24:09.540916925Z",
+        "Status": "exited"
+      }
+    },
+    "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8": {
+      "created": "2026-09-19T05:23:01.579926084Z",
+      "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "labels": {
+        "com.docker.compose.project": "news-intelligence-platform",
+        "com.docker.compose.service": "postgres",
+        "com.docker.compose.version": "5.1.1"
+      },
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "7a50253b3b76be4d78be846ab093fda1bbc8b3164fa51feafc6212bfdc24b474",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/7a50253b3b76be4d78be846ab093fda1bbc8b3164fa51feafc6212bfdc24b474/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+      "port_bindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "5432/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "59773"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 45279,
+        "Running": true,
+        "StartedAt": "2026-09-19T05:23:01.740485043Z",
+        "Status": "running"
+      }
+    },
+    "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825": {
+      "created": "2026-10-04T00:55:59.179249053Z",
+      "id": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "image": "sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-redis-p3_item6_20261003_b",
+      "port_bindings": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "56427"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 42957,
+        "Running": true,
+        "StartedAt": "2026-10-04T00:55:59.40352722Z",
+        "Status": "running"
+      }
+    },
+    "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb": {
+      "created": "2026-09-19T05:23:14.806281091Z",
+      "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "image": "sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+      "labels": {},
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "",
+          "Name": "830c533d174d0de1b3a6f7a605846c22dceedcf1acb735e705300720335552b6",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/830c533d174d0de1b3a6f7a605846c22dceedcf1acb735e705300720335552b6/_data",
+          "Type": "volume"
+        }
+      ],
+      "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+      "port_bindings": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": ""
+          }
+        ]
+      },
+      "ports": {
+        "6379/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "59821"
+          }
+        ]
+      },
+      "state": {
+        "ExitCode": 0,
+        "FinishedAt": "0001-01-01T00:00:00Z",
+        "Pid": 45555,
+        "Running": true,
+        "StartedAt": "2026-09-19T05:23:14.995419716Z",
+        "Status": "running"
+      }
+    }
+  },
+  "database_backups": {
+    "nip_phase3_final_444731f8f123": {
+      "bytes": 243377,
+      "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-item-6-20261003/resources/nip_phase3_final_444731f8f123.sql",
+      "sha256": "2f6257a2fef918444f384a4b135dbefe8c6283fd5c237d362765f484ac99e26d",
+      "synthetic_disposable_only": true
+    },
+    "nip_phase3_full_a5ca8c211b71": {
+      "bytes": 243377,
+      "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-item-6-20261003/resources/nip_phase3_full_a5ca8c211b71.sql",
+      "sha256": "314831f2cc207506047e45b027ad4938a4d80adcc571262d54eb7eaf7865e298",
+      "synthetic_disposable_only": true
+    }
+  },
+  "databases_after": [
+    {
+      "datname": "postgres",
+      "oid": 5,
+      "owner": "news"
+    },
+    {
+      "datname": "template0",
+      "oid": 4,
+      "owner": "news"
+    },
+    {
+      "datname": "template1",
+      "oid": 1,
+      "owner": "news"
+    }
+  ],
+  "databases_before": [
+    {
+      "datname": "nip_phase3_final_444731f8f123",
+      "oid": 649104,
+      "owner": "news"
+    },
+    {
+      "datname": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986,
+      "owner": "news"
+    },
+    {
+      "datname": "postgres",
+      "oid": 5,
+      "owner": "news"
+    },
+    {
+      "datname": "template0",
+      "oid": 4,
+      "owner": "news"
+    },
+    {
+      "datname": "template1",
+      "oid": 1,
+      "owner": "news"
+    }
+  ],
+  "error": "",
+  "new_item6_harness_excluded": "p3_item6_20261003_b",
+  "preserved_browser_stack_missing_manifest": true,
+  "started_at_utc": "2026-10-04T01:13:28.222546+00:00",
+  "volume_before": {
+    "identity": {
+      "CreatedAt": "2026-09-20T22:50:40Z",
+      "Driver": "local",
+      "Labels": {
+        "com.docker.volume.anonymous": ""
+      },
+      "Mountpoint": "/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data",
+      "Name": "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+      "Options": null,
+      "Scope": "local"
+    },
+    "references": [
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "verified_at": "2026-09-20T05:48:31.735158+00:00",
+  "report_id": "0539fc3a-a716-4f88-8647-d780de20ca82",
+  "snapshot_id": "55301cb1-e7d6-4198-9337-e03ff5af6a52",
+  "run_id": "da3288e6-efbd-4497-8f18-2adfb512c888",
+  "workspace_id": "231e39bf-97aa-455c-b44e-14802134e2d8",
+  "local_date": "2026-09-19",
+  "report_version": 1,
+  "files": {
+    "md": {
+      "name": "personal-news-brief-2026-09-19-v1-0539fc3a-a716-4f88-8647-d780de20ca82.md",
+      "size": 3666,
+      "sha256": "10eeaabf353298c2270d794c9d20090a88407ce9b5550af97d0608684c47e404",
+      "matches_exact_stored_report_rendering": true,
+      "browser_download_where_froms": [
+        "http://127.0.0.1:58685/api/v1/personal/briefs/0539fc3a-a716-4f88-8647-d780de20ca82/export.md"
+      ]
+    },
+    "pdf": {
+      "name": "personal-news-brief-2026-09-19-v1-0539fc3a-a716-4f88-8647-d780de20ca82.pdf",
+      "size": 19386,
+      "sha256": "1ca3349113e3465f7e0c38db59dd1183dfb42424af3b7953cc2b68af7f0af1a5",
+      "matches_exact_stored_report_rendering": true,
+      "browser_download_where_froms": [
+        "http://127.0.0.1:58685/api/v1/personal/briefs/0539fc3a-a716-4f88-8647-d780de20ca82/export.pdf"
+      ]
+    }
+  },
+  "pdf_pages": 2,
+  "all_section_bodies_titles_and_citation_ids_present": true,
+  "all_pages_visually_inspected": true,
+  "visual_defects_found": 0,
+  "counts": {
+    "articles": 1,
+    "events": 1,
+    "claims": 2,
+    "claim_evidence": 2,
+    "reports": 1,
+    "personal_runs": 1,
+    "personal_brief_snapshots": 1,
+    "llm_runs": 4
+  },
+  "scripted_model_records": [
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "cost_usd": "0.0"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "cost_usd": "0.0"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "cost_usd": "0.0"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "cost_usd": "0.0"
+    }
+  ],
+  "method": "Actual Chrome UI link clicks; Chrome marked both Done; original downloaded files moved via Finder into evidence. Repository rendering is only a byte-identity comparison, not download proof.",
+  "live_execution_authorized": false,
+  "live_calls_made": false
+}

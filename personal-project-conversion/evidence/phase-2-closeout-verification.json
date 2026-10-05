@@ -1,0 +1,18 @@
+{
+  "verified_at": "2026-09-09T19:38:50.332849+00:00",
+  "final_state": "Verification pending",
+  "non_documentation_source_files_unchanged_from_tested_copy": 543,
+  "source_drift": [],
+  "protocol_sha256": "494f97fb5357ecda8d35a296567fde0d9c503be58257ea003df2bd4625fda3af",
+  "local_document_links_checked": 224,
+  "missing_links": [],
+  "git_diff_check": "passed",
+  "remaining_containers": [
+    "news-intelligence-platform-postgres-1 127.0.0.1:55432->5432/tcp"
+  ],
+  "review_and_orchestrator_resources": "removed; shared preexisting development PostgreSQL preserved",
+  "remaining_gates": [
+    "browser export download and final wording check after Mac unlock",
+    "explicitly authorized fixed live RSS/model smoke with current selected routes/prices and allowance"
+  ]
+}

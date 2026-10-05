@@ -1,0 +1,289 @@
+{
+  "settings": {
+    "workspace_id": "6f2d8461-d874-41ee-a770-2e7167641b52",
+    "timezone": "America/Los_Angeles",
+    "timezone_editable": false,
+    "profile": {
+      "id": "d3a5ee86-dbc3-4233-bafc-519a02970673",
+      "revision": 11,
+      "schema_revision": "personal-profile.v2",
+      "selected_source_ids": [
+        "033b452a-657f-4a4c-9e4d-4b02cd1415e0",
+        "add28e65-6280-4fcb-8142-117cf67cd13a"
+      ],
+      "include_phrases": [],
+      "exclude_phrases": [],
+      "execution_profile": "assisted",
+      "model_route": {
+        "mode": "live",
+        "generation": {
+          "model": "synthetic-item6-generation",
+          "provider": "openai",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live",
+          "deadline_seconds": 10,
+          "max_input_tokens": 1000,
+          "price_source_url": "https://openai.com/api/pricing/",
+          "max_output_tokens": 1000,
+          "input_usd_per_million_tokens": "1000",
+          "output_usd_per_million_tokens": "1000"
+        },
+        "embedding": {
+          "model": "synthetic-item6-embedding",
+          "provider": "openai",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live",
+          "deadline_seconds": 10,
+          "max_input_tokens": 1000,
+          "price_source_url": "https://openai.com/api/pricing/",
+          "max_output_tokens": 0,
+          "input_usd_per_million_tokens": "1000",
+          "output_usd_per_million_tokens": "0"
+        }
+      },
+      "live_spending_authorized": true,
+      "settings": {
+        "daily_article_limit": 100,
+        "run_article_limit": 26,
+        "enrichment_article_limit": 26,
+        "max_enabled_feeds": 10,
+        "ai_enabled": true,
+        "monthly_allowance_usd": "0.35",
+        "run_allowance_usd": null,
+        "model_route": {
+          "mode": "live",
+          "generation": {
+            "model": "synthetic-item6-generation",
+            "provider": "openai",
+            "model_version": "fixture-v1",
+            "price_revision": "synthetic-item6-prices-not-live",
+            "deadline_seconds": 10,
+            "max_input_tokens": 1000,
+            "price_source_url": "https://openai.com/api/pricing/",
+            "max_output_tokens": 1000,
+            "input_usd_per_million_tokens": "1000",
+            "output_usd_per_million_tokens": "1000"
+          },
+          "embedding": {
+            "model": "synthetic-item6-embedding",
+            "provider": "openai",
+            "model_version": "fixture-v1",
+            "price_revision": "synthetic-item6-prices-not-live",
+            "deadline_seconds": 10,
+            "max_input_tokens": 1000,
+            "price_source_url": "https://openai.com/api/pricing/",
+            "max_output_tokens": 0,
+            "input_usd_per_million_tokens": "1000",
+            "output_usd_per_million_tokens": "0"
+          }
+        }
+      }
+    },
+    "settings": {
+      "daily_article_limit": 100,
+      "run_article_limit": 26,
+      "enrichment_article_limit": 26,
+      "max_enabled_feeds": 10,
+      "ai_enabled": true,
+      "monthly_allowance_usd": "0.35",
+      "run_allowance_usd": null,
+      "model_route": {
+        "mode": "live",
+        "generation": {
+          "model": "synthetic-item6-generation",
+          "provider": "openai",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live",
+          "deadline_seconds": 10,
+          "max_input_tokens": 1000,
+          "price_source_url": "https://openai.com/api/pricing/",
+          "max_output_tokens": 1000,
+          "input_usd_per_million_tokens": "1000",
+          "output_usd_per_million_tokens": "1000"
+        },
+        "embedding": {
+          "model": "synthetic-item6-embedding",
+          "provider": "openai",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live",
+          "deadline_seconds": 10,
+          "max_input_tokens": 1000,
+          "price_source_url": "https://openai.com/api/pricing/",
+          "max_output_tokens": 0,
+          "input_usd_per_million_tokens": "1000",
+          "output_usd_per_million_tokens": "0"
+        }
+      }
+    },
+    "features": {
+      "raw_reader": {
+        "state": "ready",
+        "reason": null
+      },
+      "saved_and_briefs": {
+        "state": "ready",
+        "reason": null
+      },
+      "raw_collection": {
+        "state": "ready",
+        "reason": null
+      },
+      "embeddings": {
+        "state": "disabled",
+        "reason": "paid_runtime_disabled"
+      },
+      "brief_generation": {
+        "state": "disabled",
+        "reason": "paid_runtime_disabled"
+      },
+      "entity_linking": {
+        "state": "disabled",
+        "reason": "disabled_by_profile"
+      },
+      "event_embeddings": {
+        "state": "disabled",
+        "reason": "disabled_by_profile"
+      },
+      "analogies": {
+        "state": "disabled",
+        "reason": "disabled_by_profile"
+      },
+      "forecasting": {
+        "state": "disabled",
+        "reason": "disabled_by_profile"
+      }
+    },
+    "effective_run_allowance_usd": "0.35",
+    "available_sources": [
+      {
+        "id": "033b452a-657f-4a4c-9e4d-4b02cd1415e0",
+        "name": "Synthetic item 6 policy feed",
+        "feed_url": "https://offline.personal.test/item6/policy.xml",
+        "active": true,
+        "draft": false,
+        "source_type": "rss"
+      },
+      {
+        "id": "add28e65-6280-4fcb-8142-117cf67cd13a",
+        "name": "Synthetic item 6 technology feed",
+        "feed_url": "https://offline.personal.test/item6/technology.xml",
+        "active": true,
+        "draft": false,
+        "source_type": "rss"
+      },
+      {
+        "id": "76fa81f5-0fca-4d9d-a02d-6db1712c5e88",
+        "name": "Synthetic item6 UI draft",
+        "feed_url": "https://offline.personal.test/item6-ui.xml",
+        "active": true,
+        "draft": false,
+        "source_type": "rss"
+      }
+    ],
+    "saved_suggestion": {
+      "status": "saved_preferences_not_applied",
+      "sources": [
+        {
+          "name": "BBC Business",
+          "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml"
+        },
+        {
+          "name": "Ars Technica Technology Lab",
+          "feed_url": "https://feeds.arstechnica.com/arstechnica/technology-lab"
+        },
+        {
+          "name": "MIT News \u2014 Artificial Intelligence",
+          "feed_url": "https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml"
+        },
+        {
+          "name": "Federal Reserve \u2014 Monetary Policy",
+          "feed_url": "https://www.federalreserve.gov/feeds/press_monetary.xml"
+        }
+      ],
+      "interest": {
+        "include_phrases": [],
+        "exclude_phrases": []
+      },
+      "model_route": {
+        "generation": {
+          "provider": "gemini",
+          "model": "gemini-3.5-flash-lite"
+        },
+        "embedding": {
+          "provider": "openai",
+          "model": "text-embedding-3-small"
+        },
+        "fallbacks": []
+      },
+      "monthly_allowance_authorized": false,
+      "note": "Saved choices are not active settings. The completed Phase 2 verification allowance is not a recurring allowance."
+    },
+    "application": {
+      "feed_interest_route_and_run_limits": "next_run",
+      "lower_daily_and_spending_limits": "immediately_for_new_admissions_and_requests",
+      "existing_run_limits": "never_expanded"
+    }
+  },
+  "spending": {
+    "status": "allowance_reached",
+    "accounting_period": "2026-10",
+    "accounting_timezone": "UTC",
+    "monthly_allowance_usd": "0.35",
+    "finalized_usd": "0.200000000000",
+    "reserved_usd": "0.150000000000",
+    "unresolved_usd": "0.300000000000",
+    "unreconciled_legacy_count": 0,
+    "remaining_usd": "0",
+    "next_reset_at": "2026-10-31T17:00:00-07:00",
+    "current_configuration": {
+      "profile_revision_id": "d3a5ee86-dbc3-4233-bafc-519a02970673",
+      "profile_revision": 11,
+      "route_mode": "live",
+      "routes": [
+        {
+          "role": "generation",
+          "provider": "openai",
+          "model": "synthetic-item6-generation",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live"
+        },
+        {
+          "role": "embedding",
+          "provider": "openai",
+          "model": "synthetic-item6-embedding",
+          "model_version": "fixture-v1",
+          "price_revision": "synthetic-item6-prices-not-live"
+        }
+      ]
+    },
+    "accounted_routes": [
+      {
+        "source": "paid_request",
+        "accounting_period": "2026-09",
+        "role": "generation",
+        "provider": "openai",
+        "model": "synthetic-item6-generation",
+        "model_version": "fixture-v1",
+        "price_revision": "synthetic-item6-prices-not-live"
+      },
+      {
+        "source": "legacy_usage",
+        "accounting_period": "2026-10",
+        "role": null,
+        "provider": "offline-personal-fixture",
+        "model": "offline-personal-fixture:phase-3-item-6-browser-v1",
+        "model_version": null,
+        "price_revision": null
+      },
+      {
+        "source": "paid_request",
+        "accounting_period": "2026-10",
+        "role": "generation",
+        "provider": "openai",
+        "model": "synthetic-item6-generation",
+        "model_version": "fixture-v1",
+        "price_revision": "synthetic-item6-prices-not-live"
+      }
+    ]
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "evidence_kind": "historical_actual_browser_observations",
+  "observed_date": "2026-09-20",
+  "consolidation_date": "2026-10-03",
+  "fresh_browser_rerun": false,
+  "values": [
+    {
+      "case": "settings_read",
+      "expected": "Read seeded revision 3 raw profile",
+      "actual": {
+        "revision": 3,
+        "daily_article_limit": 2,
+        "run_article_limit": 2,
+        "enrichment_article_limit": 2,
+        "max_selected_feeds": 10,
+        "timezone": "America/Los_Angeles",
+        "timezone_input_disabled": true,
+        "selected_feeds": 1
+      },
+      "artifact": "04-settings-initial.txt"
+    },
+    {
+      "case": "settings_update_reload",
+      "expected": "Persist daily limit 1 and deselected source",
+      "actual": {
+        "revision": 4,
+        "daily_article_limit": 1,
+        "run_article_limit": 2,
+        "enrichment_article_limit": 2,
+        "selected_feeds": 0,
+        "pending_total": 2,
+        "pending_eligible": 0,
+        "pending_disabled_sources": 2
+      },
+      "artifact": "05-settings-reload-disabled-feed.txt"
+    },
+    {
+      "case": "settings_source_reenabled",
+      "expected": "Preserve pending and restore eligibility",
+      "actual": {
+        "revision": 5,
+        "pending_total": 2,
+        "pending_eligible": 2,
+        "pending_disabled_sources": 0
+      },
+      "artifact": "06-settings-reenabled-feed.txt"
+    },
+    {
+      "case": "frozen_run_after_settings_edit",
+      "expected": "Original run uses original profile",
+      "actual": {
+        "run_id": "1f658636-2151-45f0-be64-bf579a0703b3",
+        "profile_revision": 3
+      },
+      "artifact": "07-today-frozen-run.txt"
+    },
+    {
+      "case": "collection_counts",
+      "expected": "Four observed two admitted two pending with AI disabled",
+      "actual": {
+        "observed_candidates": 4,
+        "admitted_articles": 2,
+        "pending_candidates": 2,
+        "grouped_articles": 0,
+        "selected_for_enrichment": 0
+      },
+      "artifacts": [
+        "04-settings-initial.txt",
+        "08-today-final-wording.txt"
+      ],
+      "limitation": "No completed-enrichment field was exposed in the retained DOM; zero selected/grouped plus disabled stages do not assert a new completed counter."
+    },
+    {
+      "case": "retained_article_fields",
+      "expected": "Exact labeled synthetic retained fields with authentic fixture times",
+      "actual": {
+        "title": "Synthetic: Agency publishes a policy update",
+        "source": "Synthetic Phase 2 acceptance feed",
+        "url": "https://offline.personal.test/phase3/1",
+        "snippet": "A retained RSS summary with an authentic fixture URL; AI is disabled.",
+        "publication_local": "Sep 20, 2026, 03:06:03 PM PDT",
+        "capture_local": "Sep 20, 2026, 04:06:03 PM PDT",
+        "admission_local": "Sep 20, 2026, 04:06:03 PM PDT",
+        "processing_state": "Disabled by profile"
+      },
+      "artifact": "03-raw-detail-loaded.txt"
+    },
+    {
+      "case": "unknown_publication",
+      "expected": "Missing synthetic RSS publisher date stays unknown",
+      "actual": {
+        "pending_title": "Synthetic: AI lab releases a research note",
+        "publication": "Publication time unknown"
+      },
+      "artifact": "04-settings-initial.txt",
+      "limitation": "Observed on pending content, not an admitted raw detail page."
+    },
+    {
+      "case": "spending_zero_reset",
+      "expected": "Zero disabled allowance/obligations with UTC month and correct local reset",
+      "actual": {
+        "status": "Ai disabled",
+        "accounting_period": "2026-09",
+        "accounting_basis": "UTC accounting period",
+        "permitted_usd": "0",
+        "finalized_usd": "0",
+        "reserved_current_month_usd": "0",
+        "unresolved_all_periods_usd": "0",
+        "remaining_current_month_usd": "0",
+        "next_reset_local": "Sep 30, 2026, 05:00:00 PM PDT"
+      },
+      "artifact": "04-settings-initial.txt",
+      "limitation": "No nonzero or rollover browser proof."
+    },
+    {
+      "case": "disabled_grouping_wording",
+      "expected": "Differentiate disabled grouping from successful quiet stories",
+      "actual": {
+        "before": "No stories matched this update",
+        "after": "Grouping is disabled",
+        "explanation": "AI grouping was disabled for this update. Any retained RSS articles remain readable above."
+      },
+      "artifacts": [
+        "07-today-frozen-run.txt",
+        "08-today-final-wording.txt"
+      ]
+    },
+    {
+      "case": "console_logs",
+      "expected": "Retain actual warn/error read",
+      "actual": {
+        "detail_error_records": 0,
+        "today_error_records": 0,
+        "final_warning_records": 3,
+        "final_warning_kind": "In-browser Babel transformer CDN prerequisite",
+        "observed_network_errors": null
+      },
+      "artifacts": [
+        "03-raw-detail-loaded-console.txt",
+        "07-today-frozen-run-console.txt",
+        "08-today-final-wording-console.txt"
+      ],
+      "limitation": "No general network-log inventory was taken; no network-error claim is inferred."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+ 
+ -------------- root-00cb17bf3399@f8fqgfm.local v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- macOS-26.4.1-arm64-arm-64bit-Mach-O 2026-09-08 23:59:00
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         news_intelligence:0x10b122120
+- ** ---------- .> transport:   redis://127.0.0.1:57787/1
+- ** ---------- .> results:     redis://127.0.0.1:57787/2
+- *** --- * --- .> concurrency: 1 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> pipeline         exchange=default(direct) key=default
+                
+
+[tasks]
+  . generate_daily_brief
+  . workers.alert_tasks.run_alert_evaluation
+  . workers.alert_tasks.run_pending_alert_notification_sweep
+  . workers.analogy_tasks.run_event_analogy_rerank
+  . workers.clustering_tasks.run_article_clustering
+  . workers.embedding_tasks.run_article_embedding
+  . workers.embedding_tasks.run_episode_embedding_refresh
+  . workers.embedding_tasks.run_event_embedding
+  . workers.entity_linking_tasks.run_event_entity_linking
+  . workers.ingestion_tasks.ingest_source_feed
+  . workers.personal_tasks.run_personal_daily
+  . workers.pipeline_tasks.run_daily_pipeline
+  . workers.provider_data_tasks.run_country_indicator_ingestion
+  . workers.provider_data_tasks.run_energy_series_ingestion
+  . workers.provider_data_tasks.run_entity_identity_ingestion
+  . workers.provider_data_tasks.run_fred_macro_ingestion
+  . workers.provider_data_tasks.run_gdelt_raw_ingestion
+  . workers.provider_data_tasks.run_geo_incident_ingestion
+  . workers.provider_data_tasks.run_humanitarian_report_ingestion
+  . workers.provider_data_tasks.run_sanctions_ingestion
+  . workers.provider_data_tasks.run_sec_company_ingestion
+  . workers.provider_data_tasks.run_sec_identity_refresh
+  . workers.provider_data_tasks.run_wikidata_identity_ingestion
+  . workers.tasks.noop
+  . workers.tasks.scheduled_heartbeat
+
+[2026-09-08 23:59:00,996: INFO/MainProcess] Connected to redis://127.0.0.1:57787/1
+[2026-09-08 23:59:01,006: INFO/MainProcess] root-00cb17bf3399@f8fqgfm.local ready.
+[2026-09-09 00:01:55,894: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[ec7291a8-f1c8-4155-bf31-307a4a0e2240] received
+[2026-09-09 00:01:56,172: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[ec7291a8-f1c8-4155-bf31-307a4a0e2240] succeeded in 0.2762633750680834s: {'status': 'succeeded', 'run_id': 'fda6c6b9-d734-4a61-aea3-c972981943eb', 'report_id': '50cf2f44-9282-4bde-a145-60f2de5aede0', 'published': True, 'feeds_attempted': 1, 'feeds_succeeded': 1, 'feeds_failed': 0, 'articles_captured': 1, 'articles_admitted': 1, 'events_observed': 1, 'claims_supported': 2, 'fixture_label': 'OFFLINE VERIFICATION: synthetic feed and scripted model replies; no live feed or paid model calls'}

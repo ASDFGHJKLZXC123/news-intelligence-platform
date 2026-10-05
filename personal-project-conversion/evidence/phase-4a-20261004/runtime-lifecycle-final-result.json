@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "inventory_unchanged": true,
+  "protected_unchanged": true,
+  "source_drift": [
+    "tests/integration/test_personal_spending.py",
+    "tests/integration/test_personal_spending_metadata.py"
+  ]
+}

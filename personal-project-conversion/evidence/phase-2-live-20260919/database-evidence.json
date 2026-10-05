@@ -1,0 +1,122 @@
+{
+  "run": {
+    "id": "b762e211-ee4a-4359-b660-4ec2feb8db7b",
+    "error": {
+      "code": "all_feeds_failed",
+      "message": "Personal update failed; an explicit retry may be available."
+    },
+    "state": "failed",
+    "job_id": "62db4d55-b16c-4c94-8456-a81739be3579",
+    "result": null,
+    "attempt": 1,
+    "coverage": {
+      "schema": "personal-capture-coverage.v1",
+      "feed_pauses": [],
+      "feeds_failed": 1,
+      "feeds_paused": 0,
+      "feed_failures": [
+        {
+          "code": "feed_capture_failed",
+          "source_id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e"
+        }
+      ],
+      "items_fetched": 0,
+      "pending_total": 0,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 0,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_captured": 0
+    },
+    "event_ids": [],
+    "report_id": null,
+    "created_at": "2026-09-20T06:55:26.690673+00:00",
+    "local_date": "2026-09-19",
+    "updated_at": "2026-09-20T06:55:27.081975+00:00",
+    "snapshot_id": null,
+    "max_attempts": 3,
+    "workspace_id": "9c853140-eb1d-4f74-9c8c-b8bf617be36a",
+    "stage_results": {
+      "capture": {
+        "schema": "personal-capture-coverage.v1",
+        "status": "failed",
+        "feed_pauses": [],
+        "feeds_failed": 1,
+        "feeds_paused": 0,
+        "feed_failures": [
+          {
+            "code": "feed_capture_failed",
+            "source_id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e"
+          }
+        ],
+        "items_fetched": 0,
+        "pending_total": 0,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 0,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_captured": 0
+      },
+      "admission": {
+        "status": "succeeded",
+        "run_limit": 100,
+        "local_day_limit": 100,
+        "articles_admitted": 0
+      },
+      "live_smoke": {
+        "status": "configured",
+        "config_hash": "c80d68585f9d29f3c2fd749fbbda55755151d5620f050b4f0bc98110922388d2",
+        "verification_id": "8cf55cfa-8162-436b-bb14-2430636fdd34"
+      }
+    },
+    "celery_task_id": null,
+    "execution_mode": "personal",
+    "ownership_token": "b873692b-cbed-4d79-b295-e61d5abc71dc",
+    "capture_ended_at": "2026-09-20T06:55:27.07916+00:00",
+    "lease_expires_at": null,
+    "scopes_frozen_at": null,
+    "terminal_manifest": {
+      "schema": "personal-review-manifest.v1",
+      "observations": []
+    },
+    "capture_started_at": "2026-09-20T06:55:26.967734+00:00",
+    "profile_revision_id": "7d50b72f-9244-4dd2-a493-610ecaf395a4",
+    "admitted_article_ids": [],
+    "enrichment_article_ids": []
+  },
+  "profile": {
+    "id": "3567c684-86d7-408c-a74a-226f3f1ed5e2",
+    "revision": 1,
+    "settings": {
+      "source": "selection_required",
+      "observed_active_source_count": 1
+    },
+    "created_at": "2026-09-20T06:55:26.690673+00:00",
+    "workspace_id": "9c853140-eb1d-4f74-9c8c-b8bf617be36a",
+    "exclude_phrases": [],
+    "include_phrases": [],
+    "schema_revision": "personal-profile.v1",
+    "execution_profile": "assisted",
+    "selected_source_ids": []
+  },
+  "sources": [
+    {
+      "id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+      "name": "BBC Business bounded Phase 2 test",
+      "active": true,
+      "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "created_at": "2026-09-20T06:54:48.433196+00:00",
+      "updated_at": "2026-09-20T06:54:48.433196+00:00",
+      "source_type": "rss",
+      "homepage_url": null,
+      "authority_score": null
+    }
+  ],
+  "counts": {
+    "articles": 0,
+    "captures": 0,
+    "snapshots": 0,
+    "reports": 0,
+    "llm_runs": 0
+  }
+}

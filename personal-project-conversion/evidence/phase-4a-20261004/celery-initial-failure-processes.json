@@ -1,0 +1,45 @@
+{
+  "beat": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "beat",
+      "--loglevel=INFO",
+      "--schedule",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule",
+    "created": "Sun Oct  4 01:29:11 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 61399,
+    "pid": 61399,
+    "started_utc": "2026-10-04T08:29:11.688304+00:00",
+    "stopped_utc": "2026-10-04T08:32:54.700323+00:00"
+  },
+  "worker": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "worker",
+      "--loglevel=INFO",
+      "--pool=solo",
+      "--queues=pipeline",
+      "--hostname=phase4a-a1952a864e82@localhost",
+      "--without-gossip",
+      "--without-mingle"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-a1952a864e82@localhost --without-gossip --without-mingle",
+    "created": "Sun Oct  4 01:29:11 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 61395,
+    "pid": 61395,
+    "started_utc": "2026-10-04T08:29:11.656275+00:00",
+    "stopped_utc": "2026-10-04T08:32:55.166278+00:00"
+  }
+}

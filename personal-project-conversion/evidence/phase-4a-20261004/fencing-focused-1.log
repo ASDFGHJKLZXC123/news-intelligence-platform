@@ -1,0 +1,67 @@
+.......F............                                                     [100%]
+=================================== FAILURES ===================================
+_ test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send _
+
+    def test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send():
+        with migrated_disposable_engine() as engine:
+            october = dt.datetime(2026, 10, 1, tzinfo=dt.UTC)
+            factory, (ledger, other) = seed(engine, now=october - dt.timedelta(seconds=1))
+            old = reserve(ledger)
+            ledger.clock = other.clock = lambda: october
+>           dispatched = reserve(other)
+                         ^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_personal_spending.py:135: in reserve
+    return ledger.reserve(
+services/personal/spending.py:453: in reserve
+    self._allow(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <services.personal.spending.SpendingLedger object at 0x112981e50>
+session = <sqlalchemy.orm.session.Session object at 0x112ad2e90>
+month = datetime.date(2026, 10, 1), amount = Decimal('0.020000000000')
+month_limit = Decimal('0.03'), run_limit = Decimal('0.03'), excluding = None
+
+    def _allow(
+        self,
+        session: Session,
+        *,
+        month: dt.date,
+        amount: Decimal,
+        month_limit: Decimal,
+        run_limit: Decimal,
+        excluding: uuid.UUID | None = None,
+    ) -> None:
+        rows = session.scalars(
+            select(PersonalPaidRequest).where(
+                PersonalPaidRequest.workspace_id == self.workspace_id,
+            )
+        ).all()
+        month_used = sum(
+            (
+                _obligation(row)
+                for row in rows
+                if row.accounting_month == month and row.id != excluding
+            ),
+            Decimal(0),
+        )
+        run_used = sum(
+            (_obligation(row) for row in rows if row.run_id == self.run_id and row.id != excluding),
+            Decimal(0),
+        )
+        legacy = session.scalars(
+            select(PersonalLegacyUsage).where(PersonalLegacyUsage.accounting_month == month)
+        ).all()
+        if any(row.actual_usd is None for row in legacy):
+            raise PaidWorkBlocked("legacy_usage_unreconciled")
+        month_used += sum((row.actual_usd for row in legacy), Decimal(0))
+        if month_used + amount > month_limit or run_used + amount > run_limit:
+>           raise PaidWorkBlocked("allowance_reached")
+E           services.personal.spending.PaidWorkBlocked: allowance reached
+
+services/personal/spending.py:427: PaidWorkBlocked
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_spending.py::test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send
+1 failed, 19 passed in 38.40s

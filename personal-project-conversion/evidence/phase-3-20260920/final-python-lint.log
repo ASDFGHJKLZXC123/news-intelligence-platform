@@ -1,0 +1,38 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/api/main.py:7:1
+   |
+ 5 |   """
+ 6 |
+ 7 | / from __future__ import annotations
+ 8 | |
+ 9 | | from fastapi import FastAPI
+10 | | from fastapi.exceptions import RequestValidationError
+11 | | from fastapi.middleware.cors import CORSMiddleware
+12 | | from starlette.exceptions import HTTPException as StarletteHTTPException
+13 | |
+14 | | from apps.api.analogies import router as analogies_router
+15 | | from apps.api.entities import router as entities_router
+16 | | from apps.api.health import router as health_router
+17 | | from apps.api.intelligence import router as intelligence_router
+18 | | from apps.api.middleware import (
+19 | |     APIKeyMiddleware,
+20 | |     RequestIDMiddleware,
+21 | |     http_exception_handler,
+22 | |     unhandled_exception_handler,
+23 | |     validation_exception_handler,
+24 | | )
+25 | | from apps.api.personal import router as personal_router
+26 | | from apps.api.personal_reading import router as personal_reading_router
+27 | | from apps.api.personal_briefs import router as personal_briefs_router
+28 | | from apps.api.pipeline import router as pipeline_router
+29 | | from apps.api.provider_data import company_research_router
+30 | | from apps.api.provider_data import router as provider_data_router
+31 | | from apps.api.risk_intelligence import router as risk_intelligence_router
+32 | | from packages.config.logging import configure_logging, get_logger
+33 | | from packages.config.settings import get_settings
+   | |_________________________________________________^
+   |
+help: Organize imports
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

@@ -1,0 +1,33 @@
+{
+  "created": "2026-10-04T09:05:20.124776335Z",
+  "creation_command": [
+    "docker",
+    "run",
+    "-d",
+    "--pull",
+    "never",
+    "--name",
+    "nip-phase4a-outage-a1952a864e82",
+    "--label",
+    "nip.phase4a.owner=a1952a864e824e0bbc99a4c2c131862e",
+    "--label",
+    "nip.phase4a.purpose=literal-postgres-outage",
+    "-p",
+    "127.0.0.1::5432",
+    "--tmpfs",
+    "/var/lib/postgresql/data:rw",
+    "-e",
+    "POSTGRES_USER=news",
+    "-e",
+    "POSTGRES_PASSWORD=news",
+    "-e",
+    "POSTGRES_DB=nip_phase4a_outage_a1952a864e82",
+    "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c"
+  ],
+  "id": "5d0de8cf2bcdcab155415f998a2e741b819e1f05f4f6cf17e969731ea19d5614",
+  "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+  "mounts": [],
+  "name": "nip-phase4a-outage-a1952a864e82",
+  "owner": "a1952a864e824e0bbc99a4c2c131862e",
+  "port": 62537
+}

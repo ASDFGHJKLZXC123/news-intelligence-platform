@@ -1,0 +1,28 @@
+{
+  "body": {
+    "app": "news-intelligence-api",
+    "components": {
+      "config": {
+        "detail": "ok",
+        "ok": true
+      },
+      "database": {
+        "detail": "reachable",
+        "ok": true
+      },
+      "launcher": {
+        "detail": "ready; Celery/Beat not required",
+        "ok": true
+      },
+      "redis": {
+        "detail": "reachable",
+        "ok": true
+      }
+    },
+    "env": "test",
+    "status": "ok"
+  },
+  "owned_worker_and_scheduler_stopped": true,
+  "redis_retained": "997ef659955daece01db805627010d740caca9ed601f9aabe294a9f1971ddf77",
+  "status_code": 200
+}

@@ -86,7 +86,30 @@ from db.models.core import (
     WatchlistItem,
 )
 from db.models.enums import Horizon, RiskLevel, RiskType, SourceType, risk_level_for_score
+from db.models.personal import (
+    PERSONAL_JOB_TYPE,
+    PERSONAL_REPORT_TYPE,
+    PERSONAL_TIMEZONE,
+    PersonalArticleRevision,
+    PersonalBriefSnapshot,
+    PersonalCapture,
+    PersonalClaimPreparation,
+    PersonalEnrichmentTransfer,
+    PersonalFeedReceipt,
+    PersonalProfileRevision,
+    PersonalReportLink,
+    PersonalRun,
+    PersonalRunEventObservation,
+    PersonalWorkspace,
+    PersonalWriterMode,
+)
+from db.models.personal_spending import (
+    PersonalLegacyUsage,
+    PersonalPaidRequest,
+    PersonalSpendingState,
+)
 from db.models.pipeline import PipelineRunDetail
+from db.models.processing import ProcessingControl
 from db.models.risk import (
     CountryDailyRiskSignal,
     CrisisPrediction,
@@ -198,7 +221,28 @@ APPLICATION_TABLES = (
     SavedSearch,
 )
 
+PERSONAL_TABLES = (
+    PersonalLegacyUsage,
+    PersonalPaidRequest,
+    PersonalSpendingState,
+    PersonalWorkspace,
+    PersonalProfileRevision,
+    PersonalRun,
+    PersonalCapture,
+    PersonalEnrichmentTransfer,
+    PersonalFeedReceipt,
+    PersonalRunEventObservation,
+    PersonalBriefSnapshot,
+    PersonalReportLink,
+    PersonalArticleRevision,
+    PersonalClaimPreparation,
+    PersonalWriterMode,
+)
+
 __all__ = [
+    "PersonalLegacyUsage",
+    "PersonalPaidRequest",
+    "PersonalSpendingState",
     "ACTIVE_ALERT_STATES",
     "ALERT_STATES",
     "APPLICATION_TABLES",
@@ -217,6 +261,23 @@ __all__ = [
     "PROVIDER_DATA_TABLES",
     "PROVIDER_EXPANSION_TABLES",
     "PipelineRunDetail",
+    "PERSONAL_JOB_TYPE",
+    "PERSONAL_REPORT_TYPE",
+    "PERSONAL_TABLES",
+    "PERSONAL_TIMEZONE",
+    "PersonalArticleRevision",
+    "PersonalBriefSnapshot",
+    "PersonalCapture",
+    "PersonalEnrichmentTransfer",
+    "PersonalFeedReceipt",
+    "PersonalClaimPreparation",
+    "PersonalProfileRevision",
+    "PersonalReportLink",
+    "PersonalRun",
+    "PersonalRunEventObservation",
+    "PersonalWorkspace",
+    "PersonalWriterMode",
+    "ProcessingControl",
     "REPORT_CONTENT_POLICY_DESCRIPTIVE_ONLY",
     "REPORT_CONTENT_POLICY_PREDICTION_BACKED",
     "RISK_OUTPUT_TABLES",

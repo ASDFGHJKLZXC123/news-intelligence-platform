@@ -1,0 +1,363 @@
+{
+  "observed_at": "2026-10-04T01:26:15.803481+00:00",
+  "baseline_file_count": 1237,
+  "unchanged_file_count": 1233,
+  "changed_baseline_files": [
+    {
+      "path": "frontend/SIGNAL - Intelligence Platform.html",
+      "before": "89e855d25f1c12a30ce4ebafacf8028bd32a083f77577c851267b8f0360c55fd",
+      "after": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4"
+    },
+    {
+      "path": "frontend/app/page-personal.jsx",
+      "before": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d",
+      "after": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b"
+    },
+    {
+      "path": "frontend/app/personal-foundation.test.js",
+      "before": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca",
+      "after": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0"
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3.md",
+      "before": "005164a2605a8f01314b773da799a56f5164b1089c02c1aea69d7be617888589",
+      "after": "531a55e9d876ec63cf262bb670122ef8449e5e3b15eb73cdbb68419fe097eee9"
+    }
+  ],
+  "unexpected_changes": [],
+  "missing_baseline_files": [],
+  "staged_diff_byte_identical": true,
+  "staged_before_sha256": "9a9894a26505448b788e6dfd9ade51cce70fd21f545bcd70ba792264f6ba83fc",
+  "staged_after_sha256": "9a9894a26505448b788e6dfd9ade51cce70fd21f545bcd70ba792264f6ba83fc",
+  "phase3_original_prefix_unchanged": false,
+  "whitespace": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "links": [
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/capture-index.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-provenance.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-initial.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-browser-pages-before-failures.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "api-snapshot-spending-rev10.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-pre-run-reload.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "timezone-post-run-rejection.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-source-limit-rejected.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-allowlist-saved.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-raw-counts.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-initial.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/capture-entry-boundary.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/disabled-source-retained.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-disabled-reload.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser-raw-pagination-comparison.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/raw-page-1.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/raw-page-2.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/raw-page-3.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/raw-detail-known-final.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/raw-detail-unknown-truncated.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-provider-failure.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/grouped-article-direct-link.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/saved-event-source.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-capture-failure.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/capture-failure-corrected.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/call_88hAlLGtkDHFpqXZlZ2bTEWn-image-1.jpg",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-provider-failure.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/provider-failure-corrected.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/call_3aCxzKLdz2Ixh07Y7coRkU5m-image-1.jpg",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/saved-ai-disabled.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/saved-after-correction.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/brief-after-correction.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/brief-ai-blocked.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-spending.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/spending-nonzero-gate-off.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "api-snapshot-spending-rev10.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/settings-model-price-metadata.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/allowance-reached-visible.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/missing-configuration-visible.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "api-ai-disabled-rev13.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "fixture-gate-off.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "ui-failure-state-correction.diff",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "ui-failure-state-correction-check.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "ui-failure-cache-correction.diff",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "ui-failure-cache-correction-check.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "capture-secret-guard-check.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "independent-review.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "independent-checks.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "historical/README.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "resources/README.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "resources/historical-cleanup-adjudication.json",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "new-harness-resources/README.md",
+      "exists": false
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/browser-console-prerequisites.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "browser/console-after-correction.dom.txt",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3.md",
+      "target": "phase-3-items-2-3-20261003/README.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3.md",
+      "target": "phase-3-items-1-4-20261003/README.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3.md",
+      "target": "phase-3-item-5-20261003/README.md",
+      "exists": true
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3.md",
+      "target": "phase-3-item-6-20261003/README.md",
+      "exists": true
+    }
+  ],
+  "broken_links": [
+    {
+      "from": "personal-project-conversion/evidence/phase-3-item-6-20261003/README.md",
+      "target": "new-harness-resources/README.md",
+      "exists": false
+    }
+  ],
+  "private_key_exclusion": {
+    "files_scanned": 198,
+    "matching_files": [],
+    "scope": "Exact private key byte match; not OCR or all-secret detection"
+  },
+  "native_capture_hash_failures": [],
+  "retained_evidence_file_count": 198,
+  "status": "FAIL"
+}

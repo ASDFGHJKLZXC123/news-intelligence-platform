@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
-<link rel="stylesheet" href="app/styles.css?v=company-research-1" />
+<link rel="stylesheet" href="app/styles.css?v=personal-workflow-7" />
 <style>
   #boot { position: fixed; inset: 0; display: grid; place-items: center; background: #0a0d13; z-index: 999; transition: opacity .4s; }
   #boot .b { display: flex; align-items: center; gap: 12px; color: #e8edf6; font-family: "IBM Plex Mono", monospace; }
@@ -27,7 +27,21 @@
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Cesium.js"></script>
 
 <!-- api adapter (the ONLY wire layer) — must load before the data loader -->
-<script src="app/api-adapter.js?v=stage7-6b-1"></script>
+<script>
+  // A disposable local harness may use a random port. Accept an explicit loopback-only
+  // ?api=http://127.0.0.1:PORT override before the adapter and personal client initialize.
+  try {
+    const configuredApi = new URLSearchParams(window.location.search).get("api");
+    if (configuredApi && !window.SIGNAL_PERSONAL_APP) {
+      const candidate = new URL(configuredApi);
+      const loopback = ["127.0.0.1", "localhost", "[::1]"].includes(candidate.hostname);
+      if (candidate.protocol === "http:" && loopback && !candidate.username && !candidate.password) {
+        window.SIGNAL_API_BASE = candidate.origin;
+      }
+    }
+  } catch (_ignoredLocalApiOverride) {}
+</script>
+<script src="app/api-adapter.js?v=personal-workflow-7"></script>
 <script>
   // Preserve any caller-supplied base; otherwise adopt the adapter default.
   // (Trailing-slash normalization is delegated to the adapter, not done here.)
@@ -46,7 +60,7 @@
 <!-- tweaks shell + primitives -->
 <script type="text/babel" src="app/tweaks-panel.jsx?v=frontend-polish-2"></script>
 <script type="text/babel" src="app/components.jsx?v=frontend-polish-3"></script>
-<script type="text/babel" src="app/shell.jsx?v=topbar-actions-1"></script>
+<script type="text/babel" src="app/shell.jsx?v=personal-workflow-7"></script>
 <script type="text/babel" src="app/widgets.jsx?v=company-row-actions-1"></script>
 
 <!-- pages -->
@@ -58,9 +72,10 @@
 <script type="text/babel" src="app/page-entities.jsx?v=company-research-1"></script>
 <script type="text/babel" src="app/page-alerts-admin.jsx"></script>
 <script type="text/babel" src="app/page-misc.jsx?v=company-logos-1"></script>
+<script type="text/babel" src="app/page-personal.jsx?v=personal-item6-failure-1"></script>
 
 <!-- mount (must be last) -->
-<script type="text/babel" src="app/main.jsx"></script>
+<script type="text/babel" src="app/main.jsx?v=personal-workflow-7"></script>
 
 <script type="text/babel" data-presets="env,react">
   // hide boot splash once React mounts AND fonts are ready (avoids font-swap reflow)

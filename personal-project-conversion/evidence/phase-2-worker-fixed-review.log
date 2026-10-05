@@ -1,0 +1,49 @@
+{"initial_hashes": {"workers/personal_tasks.py": "b6c025a605711282e86fb5c325b86e47990b1016e564443d2aee0274e47c30f1", "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4", "apps/api/personal.py": "9e6bc013ca0f573a543d29ef58375100ec92d863af9141efcfe0b2dcd31c8c6b", "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a", "services/nlp/embeddings.py": "f9371cf9865d402742bf570acf92c5cf54d3fbe30f3338ec5a7a4fc73528eb4a", "services/personal/runs.py": "39d5a0944e794b3a0978d6f9eb5e3d0ab724a10a20794df28657c2ef80fa825e"}, "boundary": "Direct actual registered task, production Session(autoflush=False), owned disposable PostgreSQL, checked-in synthetic fixture and RSS I/O fake only; no Redis/browser/live calls"}
+{"case": "raw_empty_settings", "status": "PASS", "result": {"retained_assisted_route": false, "raw_no_ai_or_embedding_requirements": true}, "changed_files": {}}
+{"case": "raw_api_default_empty_route", "status": "PASS", "result": {"retained_assisted_route": "empty", "raw_no_ai_or_embedding_requirements": true}, "changed_files": {}}
+{"case": "raw_retained_assisted_route", "status": "PASS", "result": {"retained_assisted_route": true, "raw_no_ai_or_embedding_requirements": true}, "changed_files": {}}
+personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 229, in execute_personal_task
+    fixture, embedding_provider, _ = _offline_runtime(settings, spec)
+                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 158, in _offline_runtime
+    fixture = load_offline_personal_fixture(settings.personal_offline_fixture_path)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+ValueError: PRIVATE-runtime-credential-path
+personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 217, in execute_personal_task
+    spec = _runtime_spec(run_id, token)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 64, in _runtime_spec
+    raise ValueError("personal worker delivery is stale")
+ValueError: personal worker delivery is stale
+personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 229, in execute_personal_task
+    fixture, embedding_provider, _ = _offline_runtime(settings, spec)
+                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py", line 1234, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/tmp/nip-p2-worker-review-74cd.py", line 57, in race
+    raise ValueError('PRIVATE-post-spec-race')
+ValueError: PRIVATE-post-spec-race
+{"case": "durable_setup_and_stale_races", "status": "PASS", "result": {"durable_run_and_job_failure_sanitized": true, "old_token_cannot_fail_retry": true, "post_spec_running_race_preserved": true}, "changed_files": {}}
+{"case": "frozen_route_and_embedding_provenance", "status": "PASS", "result": {"active_profile_change_ignored": true, "mutable_global_embedding_settings_ignored": true, "frozen_embedding_identity_exact": true}, "changed_files": {}}
+{"case": "task_partial_and_retry", "status": "PASS", "result": {"task_partial_status_matches_run_with_job_failed_mapping": true, "partial_retry_same_report_and_zero_new_dispatches": true}, "changed_files": {}}
+{"case": "live_route_settings_only", "status": "PASS", "result": {"frozen_live_generation_embedding_identity": true, "fallback_removed_and_budget_capped": true, "external_calls": 0}, "changed_files": {}}
+{"final_hashes": {"workers/personal_tasks.py": "b6c025a605711282e86fb5c325b86e47990b1016e564443d2aee0274e47c30f1", "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4", "apps/api/personal.py": "9e6bc013ca0f573a543d29ef58375100ec92d863af9141efcfe0b2dcd31c8c6b", "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a", "services/nlp/embeddings.py": "f9371cf9865d402742bf570acf92c5cf54d3fbe30f3338ec5a7a4fc73528eb4a", "services/personal/runs.py": "39d5a0944e794b3a0978d6f9eb5e3d0ab724a10a20794df28657c2ef80fa825e"}, "leaked_databases": []}
+{"case": "offline_embedding_result_identity", "status": "PASS", "actual": {"provider": "offline-personal-fixture", "model": "offline-fixture-embedding:phase-2-offline-workflow-v1", "model_version": "fixture-v1"}}

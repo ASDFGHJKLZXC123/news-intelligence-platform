@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "recorded_at_utc": "2026-10-04T03:08:25.124177+00:00",
+  "user_date": "2026-10-03",
+  "acceptance": {
+    "pass": 14,
+    "pending": 0,
+    "fail": 0
+  },
+  "current_personal_integration": 100,
+  "independent_repeated_new_cases": 5,
+  "original_failed_gate_retained": "final-targeted.xml",
+  "baseline_files": 1280,
+  "changed_existing_files": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/README.md",
+    "personal-project-conversion/evidence/phase-3.md",
+    "services/personal/coordinator.py"
+  ],
+  "added_source_files": [
+    "tests/integration/test_personal_phase3_closeout.py"
+  ],
+  "earlier_evidence_unchanged": true,
+  "operational_preferences_env_index_staged_diff_unchanged": true,
+  "historical_record_byte_identical": true,
+  "all_fresh_gate_source_hashes_match_except_authorized_status_updates": true,
+  "local_links_and_anchors_checked": 357,
+  "broken_links": [],
+  "owned_container_absence_rechecked": true,
+  "preexisting_containers_preserved": 20,
+  "proof_sha256": {
+    "acceptance-matrix.json": "bb37533d00d77b79374ec436c2be1f2138125a1f7f53f8b569827a57f242b97c",
+    "personal-final.xml": "076e10bcc4f4ece5507f29484379c5e8a99fc00bd69473a39f3777a8907ef8d3",
+    "personal-final-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "personal-final-source-after.json": "25c842d2b2a4a43d387da4ea15fc29df975d78df34b4fa4e54ec7eb7b2e87faa",
+    "independent-closeout-proof.xml": "6543283d5b596210fcfbd60d7b05b06140fec2f8e934a86170bcb9bf5172b215",
+    "independent-closeout-proof-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "resource-cleanup.json": "2b3d5cd8e565b57457e8c6126705d3a4d3e3660abd69d61ba0c991cc35d605cb",
+    "independent-final-check.json": "8996f344ecca76625ddb44a8fb469d3c1fdd86fd803aa46db8a29b92b899639f",
+    "historical-phase-3-record.txt": "531a55e9d876ec63cf262bb670122ef8449e5e3b15eb73cdbb68419fe097eee9"
+  }
+}

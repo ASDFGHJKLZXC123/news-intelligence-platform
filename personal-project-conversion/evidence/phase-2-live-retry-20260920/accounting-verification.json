@@ -1,0 +1,12 @@
+{
+  "ledger_hash_verified": true,
+  "dispatch_count": 5,
+  "all_reconciled": true,
+  "known_actual_usd": "0.00362026",
+  "cumulative_reserved_usd": "0.0460505",
+  "held_uncertain_usd": "0",
+  "prior_attempt_known_actual_usd": "0",
+  "cumulative_known_actual_usd": "0.00362026",
+  "live_outcome": "failed",
+  "no_grounding_model_call": true
+}

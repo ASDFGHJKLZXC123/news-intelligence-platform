@@ -1,0 +1,189 @@
+[
+  {
+    "id": "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+    "name": "/infra-monitor-demo-20261003-relay",
+    "created": "2026-10-03T21:45:43.144892256Z",
+    "started": "2026-10-03T21:45:43.220920214Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "15442"
+        }
+      ]
+    }
+  },
+  {
+    "id": "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+    "name": "/infra-monitor-demo-20261003-db",
+    "created": "2026-10-03T21:45:42.825446464Z",
+    "started": "2026-10-03T21:45:42.977145339Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": null
+    }
+  },
+  {
+    "id": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+    "name": "/nip-personal-phase2-offline-redis-p3_browser_20260920_a",
+    "created": "2026-09-20T23:02:21.319704421Z",
+    "started": "2026-09-20T23:02:21.422923463Z",
+    "running": true,
+    "ports": {
+      "6379/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "59749"
+        }
+      ]
+    }
+  },
+  {
+    "id": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+    "name": "/nip-personal-phase2-offline-pg-p3_browser_20260920_a",
+    "created": "2026-09-20T23:02:15.896693252Z",
+    "started": "2026-09-20T23:02:16.042279418Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "59734"
+        }
+      ]
+    }
+  },
+  {
+    "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+    "name": "/nip-phase3-tests-02ea38048d",
+    "created": "2026-09-20T22:50:40.739020472Z",
+    "started": "2026-09-20T22:50:40.915016514Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "58553"
+        }
+      ]
+    }
+  },
+  {
+    "id": "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+    "name": "/fencepost-m3-cache-a4-4e48ad1",
+    "created": "2026-09-20T11:44:08.373334463Z",
+    "started": "2026-09-20T11:44:08.493246172Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+    "name": "/fencepost-m3-product-a4-20260920t105847z",
+    "created": "2026-09-20T11:01:58.054552875Z",
+    "started": "2026-09-20T11:01:58.162424251Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+    "name": "/fencepost-m3-native-smoke-20260920",
+    "created": "2026-09-20T09:35:34.547572213Z",
+    "started": "2026-09-20T09:35:36.559674172Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+    "name": "/fencepost-m3-native-preflight-20260920",
+    "created": "2026-09-20T09:25:14.445850967Z",
+    "started": "2026-09-20T09:25:17.124204385Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+    "name": "/fencepost-m3-native-tools-20260920",
+    "created": "2026-09-20T09:22:35.342241755Z",
+    "started": "2026-09-20T09:22:35.418908255Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+    "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+    "created": "2026-09-19T05:23:14.806281091Z",
+    "started": "2026-09-19T05:23:14.995419716Z",
+    "running": true,
+    "ports": {
+      "6379/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "59821"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+    "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+    "created": "2026-09-19T05:23:01.579926084Z",
+    "started": "2026-09-19T05:23:01.740485043Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "59773"
+        }
+      ]
+    }
+  },
+  {
+    "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+    "name": "/fencepost-m3-linux-inode-35423434648",
+    "created": "2026-09-19T05:21:12.026951214Z",
+    "started": "2026-09-19T05:21:12.099369381Z",
+    "running": true,
+    "ports": {}
+  },
+  {
+    "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+    "name": "/news-intelligence-platform-postgres-1",
+    "created": "2026-09-09T06:16:04.665051842Z",
+    "started": "2026-09-09T06:16:04.728352259Z",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "55432"
+        }
+      ]
+    }
+  },
+  {
+    "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+    "name": "/promptgate-gateway-1",
+    "created": "2026-08-09T17:49:59.795639928Z",
+    "started": "2026-08-09T17:50:09.124909126Z",
+    "running": false,
+    "ports": {}
+  },
+  {
+    "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+    "name": "/fp-w4-prep-order-pytest-sysmodules",
+    "created": "2026-08-09T09:24:09.44827055Z",
+    "started": "2026-08-09T09:24:09.540916925Z",
+    "running": false,
+    "ports": {}
+  },
+  {
+    "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+    "name": "/fp-w4-prep-order-numpy-22825",
+    "created": "2026-08-09T09:24:02.986568339Z",
+    "started": "2026-08-09T09:24:08.91130355Z",
+    "running": false,
+    "ports": {}
+  }
+]

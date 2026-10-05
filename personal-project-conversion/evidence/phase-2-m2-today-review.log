@@ -1,0 +1,12 @@
+{"case": "snapshot-pinned Today observation", "result": "PASS", "before": {"id": "e4d1ef4e-6be8-4b11-8ffb-b9efdeb0cc61", "title": "Event 0", "summary": null, "saved": false, "status": "incomplete", "source_count": 1, "article_count": 1, "hotness_score": 99.0, "newest_publication_at": "2026-09-07T06:59:00Z", "observation_revision": 1}, "after": {"id": "e4d1ef4e-6be8-4b11-8ffb-b9efdeb0cc61", "title": "Event 0", "summary": null, "saved": false, "status": "incomplete", "source_count": 1, "article_count": 1, "hotness_score": 99.0, "newest_publication_at": "2026-09-07T06:59:00Z", "observation_revision": 1}, "snapshot_unchanged": true}
+{
+  "stable_source_hashes": {
+    "services/personal/repository.py": "1701a1810edca32eedd5fe6e7fbdd72843fc92241f8fd4400b236d6c1d016fa4",
+    "services/personal/workspace.py": "51047072699e021295651eb96628ab1550c6f7be0480f9ef1ebddd50a80d6616",
+    "db/models/personal.py": "b7c9cff7973269f7a206754524b584b99b03e455875a8c9973203047bdf74b33",
+    "services/personal/runs.py": "e7f097c109b2f53ed93d4c6200f0613e1d06baa29054311b7365f3af36192b21",
+    "services/personal/claims.py": "35cc494ca05d87f0abee3dd38dda6641725acda9ac5ed0eed8e6d95fb25beaf7",
+    "services/personal/snapshots.py": "b2db224bae70054f6e98db719e9ce19a027d0877814e947920a1ae68eb3be491",
+    "db/migrations/versions/0020_personal_news_desk.py": "280384c035920c6707459a2b035d841ad4a049fd66cbba78ff42bb881fe2d2e7"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "source": "personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py",
+  "source_sha256": "b673fffe697918ae2139ca435e545f18b02e9dd9a5569229b336fd361c77da5e",
+  "changes": [
+    "Rename only artifact ownership/labels/container/base DB prefixes to closeout",
+    "Normalize preexisting mount-array ordering while preserving exact mount objects",
+    "Add exact Docker Created identity guard"
+  ],
+  "unchanged_guards": [
+    "Test-only allowlisted environment with all paid credentials blank and gatefalse",
+    "Owned literal IPv4 loopback port only socket guard",
+    "DB CREATE/OID capture and exact-OID DROP/absence checks",
+    "Protected dotenv/preferences/index hashes and source drift checks",
+    "Tmpfs data directory, no mounted or persistent owned volume"
+  ],
+  "write_target": "personal-project-conversion/evidence/phase-3-closeout-20261003/verify.py"
+}

@@ -34,6 +34,7 @@ from services.analogies.compatibility import normalize_tags
 from services.analogies.contracts import DEFAULT_MIN_SIMILARITY, DEFAULT_TOP_K
 from services.analogies.service import EventAnalogyResult, generate_event_analogies
 from services.llm.runtime import build_production_orchestrator
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.analogy_tasks")
@@ -155,6 +156,7 @@ def run_event_analogy_rerank(
     redis_client: Any = None
     orchestrator: Any = None
     try:
+        require_legacy_writer_mode(session, lock=True)
         redis_client = build_redis_client()
         orchestrator = build_orchestrator(session, redis_client)
         result = generate_event_analogies(

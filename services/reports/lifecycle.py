@@ -53,6 +53,7 @@ from db.models.core import (
     Report,
     ReportSection,
 )
+from db.models.personal import PERSONAL_REPORT_TYPE
 from services.reports.context import ARTICLE_EVIDENCE_SOURCE_TYPE
 from services.reports.grounding import (
     GateOutcome,
@@ -777,7 +778,11 @@ class ReportLifecycleRepository:
         )
         event_stmt = (
             select(Report.id)
-            .where(Report.event_id == event_id, Report.status == PUBLISHED_STATUS)
+            .where(
+                Report.event_id == event_id,
+                Report.status == PUBLISHED_STATUS,
+                Report.report_type != PERSONAL_REPORT_TYPE,
+            )
             .order_by(Report.id)
             .limit(STALE_SCAN_LIMIT)
         )

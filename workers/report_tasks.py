@@ -11,14 +11,13 @@ this module opens no Redis socket and no database connection. ``from_url`` build
 pool, and ``db.base.SessionLocal``'s engine only connects when the coordinator actually opens a
 session.
 
-## Session ownership: the coordinator owns every session, this task owns none
+## Session ownership: coordinator transactions plus an independent writer fence
 
-The coordinator (:func:`services.reports.generation.generate_daily_brief`) is the sole owner of
-the SQL sessions and transactions -- its whole purpose is the two-transaction durability contract
-(a committed ``generating`` start, then one main commit at the end). So this task passes
-``SessionLocal`` as the ``session_factory`` and never opens, commits, or rolls back a session
-itself; doing so would open a second connection outside the coordinator's transaction boundary.
-The orchestrator is likewise built *for the coordinator's session*, via the accepted
+The coordinator (:func:`services.reports.generation.generate_daily_brief`) owns its report SQL
+sessions and two-transaction durability contract. This task also holds one independent
+writer-mode transaction through the complete call. For a manually queued delivery, that same
+fence transaction advances the durable Job row; scheduled calls have no manual row. The
+orchestrator is built *for the coordinator's session*, via the accepted
 :func:`~services.reports.generation.build_generation_orchestrator_factory` hook
 (``commit_on_write=False``), so its LLM audit rows share the report's transaction -- the task
 makes no direct LLM provider calls.
@@ -49,12 +48,14 @@ down rather than a cleanup fault, so it propagates (the job context is still cle
 from __future__ import annotations
 
 import datetime
+import uuid
 from typing import Any
 
 from celery import shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 
 from db.base import SessionLocal
+from db.models import Job
 from packages.config import metrics
 from packages.config.logging import get_logger, set_job_id
 from packages.config.settings import get_settings
@@ -66,6 +67,7 @@ from services.reports import (
     generate_daily_brief,
 )
 from services.reports.window import BRIEF_TIMEZONE, window_for
+from services.writer_mode import LEGACY_DAILY_BRIEF_JOB_TYPE, require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.report_tasks")
@@ -218,8 +220,88 @@ def _failure_extra(brief_date: datetime.date, cause: BaseException) -> dict[str,
     return extra
 
 
+def _begin_manual_job(
+    session: Any, raw_job_id: str | None, brief_date: datetime.date
+) -> Job | dict[str, Any] | None:
+    """Lock a broker-backed manual queue claim or identify a duplicate terminal delivery."""
+
+    if raw_job_id is None:
+        return None
+    try:
+        job_id = uuid.UUID(raw_job_id)
+    except ValueError as exc:
+        raise ValueError("legacy_job_id must be a UUID") from exc
+    job = session.get(Job, job_id, with_for_update=True, populate_existing=True)
+    if job is None or job.job_type != LEGACY_DAILY_BRIEF_JOB_TYPE:
+        raise RuntimeError("manual daily brief job is unavailable")
+    expected_key = f"legacy-daily-brief:{brief_date.isoformat()}:{job.id}"
+    if (
+        (job.related_ids or {}).get("brief_date") != brief_date.isoformat()
+        or job.job_key != expected_key
+    ):
+        raise RuntimeError("manual daily brief delivery does not match its queued date")
+    if job.state == "succeeded":
+        return {
+            "status": "duplicate_terminal_delivery",
+            "job_id": str(job.id),
+            "state": job.state,
+            "brief_date": (job.related_ids or {}).get("brief_date"),
+        }
+    if job.state == "failed":
+        retryable = isinstance(job.error, dict) and job.error.get("retryable") is True
+        if not retryable or not job.safe_to_rerun or job.attempt >= job.max_attempts:
+            return {
+                "status": "duplicate_terminal_delivery",
+                "job_id": str(job.id),
+                "state": job.state,
+                "brief_date": (job.related_ids or {}).get("brief_date"),
+            }
+        job.attempt += 1
+        job.error = None
+        job.state = "running"
+    if job.state not in {"queued", "running"}:
+        raise RuntimeError(f"manual daily brief job has invalid state {job.state!r}")
+    job.state = "running"
+    session.flush()
+    return job
+
+
+def _finish_manual_job(session: Any, job: Job | None, result: DailyBriefGenerationResult) -> None:
+    if job is None:
+        return
+    job.state = "succeeded" if result.published else "failed"
+    job.error = None
+    if not result.published:
+        job.safe_to_rerun = False
+        job.error = {
+            "code": "grounding_gate_blocked",
+            "message": "daily brief generation completed without publishing",
+            "retryable": False,
+        }
+    job.related_ids = {
+        **(job.related_ids or {}),
+        "report_id": str(result.report.id),
+        "published": result.published,
+    }
+    session.commit()
+
+
+def _fail_manual_job(session: Any, job: Job | None) -> None:
+    if job is None:
+        return
+    job.state = "failed"
+    job.error = {
+        "code": "daily_brief_generation_failed",
+        "message": "daily brief generation failed",
+        "retryable": True,
+    }
+    session.commit()
+
+
 @shared_task(name=TASK_NAME, base=Stage1Task, queue=QUEUE_PIPELINE)
-def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
+def run_daily_brief_generation(
+    brief_date: str | None = None, legacy_job_id: str | None = None
+) -> dict[str, Any]:
     """Generate, ground, and publish-or-fail the daily brief for one ``brief_date`` (ADR 0009).
 
     ``brief_date`` is normally ``None`` -- the Beat entry fires with no args and the ET-cutoff date
@@ -237,7 +319,17 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
     metrics.increment(metrics.JOB_STARTS)
 
     redis_client: Any = None
+    fence_session: Any = None
+    durable_job: Job | None = None
     try:
+        fence_session = SessionLocal()
+        # Keep this independent read transaction open through every coordinator transaction, so
+        # personal setup cannot switch writer modes between report stages or provider calls.
+        require_legacy_writer_mode(fence_session, lock=True)
+        job_or_terminal = _begin_manual_job(fence_session, legacy_job_id, resolved)
+        if isinstance(job_or_terminal, dict):
+            return job_or_terminal
+        durable_job = job_or_terminal
         redis_client = build_redis_client()
         settings = get_settings()
         orchestrator_factory = build_generation_orchestrator_factory(
@@ -252,12 +344,22 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
             orchestrator_factory=orchestrator_factory,
             prediction_backed_outputs_enabled=settings.crisis_prediction_reads_enabled,
         )
+        _finish_manual_job(fence_session, durable_job, result)
         return _finish(job, result)
     except Exception as cause:  # noqa: BLE001 -- failure metric + structured log, then re-raise
         # DailyBriefGenerationError or anything else: the coordinator already durably marked the
         # version `failed`, so a Stage1Task retry safely allocates version + 1.
         metrics.increment(metrics.JOB_FAILURES)
         logger.exception("daily brief generation failed", extra=_failure_extra(resolved, cause))
+        if fence_session is not None:
+            try:
+                _fail_manual_job(fence_session, durable_job)
+            except Exception:  # noqa: BLE001 -- retain original task failure
+                fence_session.rollback()
+                logger.exception(
+                    "failed to persist manual daily brief job failure",
+                    extra={"brief_date": resolved.isoformat()},
+                )
         raise
     finally:
         # Closing the Redis pool is best-effort cleanup, never part of the report/job disposition.
@@ -283,5 +385,11 @@ def run_daily_brief_generation(brief_date: str | None = None) -> dict[str, Any]:
                         extra={"brief_date": resolved.isoformat()},
                     )
         finally:
-            # Still unconditional: the re-raise above must not leak this thread's job context.
-            set_job_id(None)
+            try:
+                if fence_session is not None:
+                    fence_session.rollback()
+            finally:
+                if fence_session is not None:
+                    fence_session.close()
+                # Still unconditional: the re-raise above must not leak this thread's job context.
+                set_job_id(None)

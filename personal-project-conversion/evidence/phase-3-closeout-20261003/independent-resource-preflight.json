@@ -1,0 +1,15 @@
+{
+  "status": "CORRECTED_INSPECTION_COMPARISON_SCOPE",
+  "first_assertion": "cleanup-after must equal filtered twenty-record baseline",
+  "failure_cause": "cleanup-after includes one additional unrelated Fencepost record",
+  "corrected_assertion": "all twenty preexisting records exact, owned id/name/owner absent, every retained cleanup-after record matches live",
+  "corrected_result": "PASS",
+  "additional_records": [
+    {
+      "id": "fe14bf3298025f75b67cb9deab45ceb419a2806083a1ede02a64cad690c834ca",
+      "name": "/fencepost-m3-product-a4-final-20261004t024119z",
+      "running": true
+    }
+  ],
+  "resource_mutation_by_reviewer": false
+}

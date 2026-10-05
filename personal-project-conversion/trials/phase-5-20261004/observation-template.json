@@ -1,0 +1,23 @@
+{
+  "actual_reading_session": false,
+  "application_revision": null,
+  "attempt_observations": [],
+  "brief_reading": null,
+  "closed_at": null,
+  "developer_intervention": null,
+  "export": null,
+  "failures": [],
+  "maintenance_minutes": null,
+  "notes": null,
+  "ordinary_retry_count": 0,
+  "reading_minutes": null,
+  "recorded_by": "user",
+  "recovery_actions": [],
+  "runtime_revision_basis": null,
+  "saving_reopening": null,
+  "source_inspection": null,
+  "sources_opened": [],
+  "started_at": null,
+  "useful_stories": [],
+  "workflow_completed": null
+}

@@ -1,0 +1,22 @@
+- complementary:
+  - navigation:
+    - generic "Today":
+    - generic "Saved":
+    - generic "Briefs":
+    - generic "Settings":
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Settings & limits" [level=1]
+  - paragraph: Explicit sources, separate collection and enrichment bounds, and recorded application spending.
+  - button "Refresh settings"
+  - generic: Reading settings
+  - generic "Local access"

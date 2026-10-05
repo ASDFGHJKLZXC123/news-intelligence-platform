@@ -1,0 +1,39 @@
+{
+  "actual_session_count": 0,
+  "excluded_sessions": [],
+  "extension": {
+    "completed_with_developer_intervention": 0,
+    "completed_without_developer_intervention": 0,
+    "completed_without_developer_intervention_ids": [],
+    "completion_without_intervention_rate": null,
+    "developer_intervention_count": 0,
+    "identity_evidence_complete": true,
+    "identity_unverifiable_session_ids": [],
+    "not_completed": 0,
+    "required_successes": null,
+    "session_count": 0,
+    "session_ids": [],
+    "status": "insufficient_evidence",
+    "unproven_count": 0,
+    "unproven_session_ids": []
+  },
+  "original_seven": {
+    "completed_with_developer_intervention": 0,
+    "completed_without_developer_intervention": 0,
+    "completed_without_developer_intervention_ids": [],
+    "completion_without_intervention_rate": null,
+    "developer_intervention_count": 0,
+    "identity_evidence_complete": true,
+    "identity_unverifiable_session_ids": [],
+    "not_completed": 0,
+    "required_successes": 6,
+    "session_count": 0,
+    "session_ids": [],
+    "status": "insufficient_evidence",
+    "unproven_count": 0,
+    "unproven_session_ids": []
+  },
+  "schema": "personal-trial-reliability.v1",
+  "status": "insufficient_evidence",
+  "timezone": "America/Los_Angeles"
+}

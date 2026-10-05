@@ -1,0 +1,30 @@
+{
+  "args": [
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/accepted-units.xml",
+    "tests/unit/test_personal_claims.py",
+    "tests/unit/test_personal_composition_policy.py",
+    "tests/unit/test_personal_contracts.py",
+    "tests/unit/test_personal_exports.py",
+    "tests/unit/test_personal_live_smoke.py",
+    "tests/unit/test_personal_offline_harness.py",
+    "tests/unit/test_personal_phase4a_api.py",
+    "tests/unit/test_personal_phase4a_lifecycle.py",
+    "tests/unit/test_personal_phase4a_maintenance.py",
+    "tests/unit/test_personal_processing_identity.py",
+    "tests/unit/test_personal_runtime_process.py",
+    "tests/unit/test_personal_runtime_readiness.py",
+    "tests/unit/test_personal_settings.py",
+    "tests/unit/test_personal_spending.py",
+    "tests/unit/test_http_rss_provider.py",
+    "tests/unit/test_episode_seed.py",
+    "tests/unit/test_intelligence_api.py",
+    "tests/unit/test_report_api.py",
+    "tests/unit/test_report_worker.py"
+  ],
+  "credentials_blank": true,
+  "network": "loopback synthetic HTTP servers only; external sockets blocked",
+  "paid_gate": false
+}

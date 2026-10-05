@@ -1,0 +1,89 @@
+Browser tab: 1, Title: "SIGNAL � AI News Intelligence", URL: "http://127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731".
+0 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731
+	2 container root
+		3 container
+			4 image
+			5 text SIGNAL
+			6 text PERSONAL DESK
+			7 container Today
+				8 image
+				9 text Today 1
+			10 container
+				11 image
+				12 text Saved
+			13 container
+				14 image
+				15 text Briefs
+			16 container
+				17 image
+				18 text Settings
+		19 container
+			20 button Toggle sidebar
+				21 image
+			22 button Search stories
+				23 image
+				24 text Search stories�
+				25 text &#8984;K
+			26 container Display data mode
+				27 checkbox Real, Value: 1
+				28 checkbox Demo, Value: 0
+			29 button Description: Toggle theme, Help: Switch to light mode
+				30 image
+		31 container
+			32 text PERSONAL NEWS RESEARCH DESK
+			33 heading Today, Value: 1
+				34 text Today
+			35 text Readable results for 2026-10-04 � America/Los_Angeles
+			36 button Refresh display
+				37 image
+				38 text Refresh display
+			39 button Request today�s update
+				40 image
+				41 text Request today�s update
+			42 container Retained RSS articles
+				61 text READABLE WITHOUT AI
+				43 heading Retained RSS articles � 0, Value: 2
+					62 text Retained RSS articles  � 0
+				63 button Refresh articles
+				64 text Admitted articles awaiting grouping stay readable here. Grouped articles appear in their story and remain accessible by their original article link.
+				65 container
+					66 image
+					67 text No ungrouped articles match this view Collection and admission are separate from completed AI processing.
+			69 image
+			70 text 2026-10-04
+			71 heading Displayed update, Value: 3
+				72 text Displayed update
+			73 text SUCCEEDED Attempt  1  of  3 Last successful update Oct 4, 2026, 01:38:28 AM PDT Run ID aea5b316-e9eb-4c61-9e40-12b4014fa25c Settings revision 2 Article selection frozen Oct 4, 2026, 01:38:28 AM PDT
+			74 image
+			75 heading Capture coverage, Value: 3
+				76 text Capture coverage
+			77 text Update execution On-demand child Stops starting work by Oct 4, 2026, 02:03:28 AM PDT Hard stop by Oct 4, 2026, 02:08:28 AM PDT Capture started Oct 4, 2026, 01:38:28 AM PDT Capture ended Oct 4, 2026, 01:38:28 AM PDT Feeds configured 1 Feeds succeeded 1 Feeds failed 0 Feeds paused 0 Articles admitted 1 Pending items 0 of 2000 capacity Selected for enrichment 1 Grouped articles 1 Scope Succeeded Capture Succeeded Grouping Succeeded Snapshot Succeeded Admission Succeeded Embedding Succeeded Forecasting Disabled � Disabled by profile Observations Succeeded Entity Linking Disabled � Disabled by profile Event Embeddings Disabled � Disabled by profile Claim Preparation Succeeded Historical Analogies Disabled � Disabled by profile
+			44 container
+				45 text Search stored stories
+				46 text field (settable) Search stored stories
+			47 container
+				48 text Update
+				49 pop up button (collapsed, settable) Update, Value: Latest readable result, Secondary Actions: Expand
+					50 menu
+						51 (selected) Latest readable result
+						68 2026-10-04 � Succeeded � attempt 1
+			52 container
+				53 checkbox (settable, integer) Description: Saved only, Value: 0
+				54 text Saved only
+			55 button Apply
+			56 button Reset
+			78 text STORED RESULTS
+			79 heading 1 grouped story, Value: 2
+				80 text 1  grouped  story
+			81 text GROUPED STORY
+			82 heading Agency approves coastal resilience project, Value: 2
+				83 text Agency approves coastal resilience project
+			84 text The agency confirmed the coastal resilience project was approved.
+			85 text 1  feed sources 1  articles Latest known publication Sep 8, 2026, 09:00:00 AM PDT
+			86 checkbox Saved, Value: 1
+				87 image
+				88 text Saved
+			59 button (collapsed) Local access, Secondary Actions: Expand
+				60 text Local access
+
+The focused UI element is 0 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731

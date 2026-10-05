@@ -1,0 +1,23 @@
+{"timestamp": "2026-10-04T09:15:54.790231+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [99860]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:63395 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63642 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:63641 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:63646 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63647 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63648 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63649 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63651 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63656 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63663 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63670 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63675 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63685 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+{"articles_admitted": 1, "articles_captured": 1, "claims_supported": 2, "events_observed": 1, "feeds_attempted": 1, "feeds_failed": 0, "feeds_succeeded": 1, "fixture_label": "Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls", "published": true, "report_id": "7a86fbc5-5dcd-41fb-ae30-e969a9c3c14a", "run_id": "858ea7b7-c662-4100-94fb-b61f0b81ba97", "status": "succeeded"}
+INFO:     127.0.0.1:63692 - "GET /api/v1/personal/runs/858ea7b7-c662-4100-94fb-b61f0b81ba97 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [99860]

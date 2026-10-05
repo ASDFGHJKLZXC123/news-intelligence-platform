@@ -1,0 +1,44 @@
+{
+  "schema": "phase5-preparation-verification.v1",
+  "timestamp_utc": "2026-10-05T04:30:12.822112+00:00",
+  "tests": {
+    "passed": 99,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit": "preparation-final.xml",
+    "scope": "three Phase5 unit suites; synthetic rows/bookkeeping/sampling; no real DB proof"
+  },
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/test_personal_phase5_records.py",
+    "tests/unit/test_personal_phase5_sampling.py",
+    "tests/unit/test_personal_phase5_capture.py",
+    "--junitxml=personal-project-conversion/evidence/phase-5-20261004/preparation-final.xml"
+  ],
+  "application_source_matches_initialized_trial": true,
+  "observations": {
+    "actual_sessions": 0,
+    "baseline_sessions": 0,
+    "user_judgments": 0
+  },
+  "runtime_operations_performed": false,
+  "database_operations_performed": false,
+  "live_feed_or_provider_requests_performed": false,
+  "paid_runtime_enabled": false,
+  "release_decision": "insufficient_evidence",
+  "independent_review": "independent-review.md",
+  "independent_test_rerun": {
+    "passed": 99,
+    "seconds": 1.77,
+    "overlaps_primary_scope": true
+  },
+  "lint": "passed, 7 Phase5 files",
+  "format": "passed, 7 Phase5 files",
+  "git_whitespace": "passed",
+  "final_check": "final-check.json",
+  "preservation": "preservation.json"
+}

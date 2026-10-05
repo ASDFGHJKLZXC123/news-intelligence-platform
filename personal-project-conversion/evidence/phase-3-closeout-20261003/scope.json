@@ -1,0 +1,22 @@
+{
+  "started_at_utc": "2026-10-04T02:33:45.065067+00:00",
+  "user_date": "2026-10-03",
+  "timezone": "America/Los_Angeles",
+  "scope": "Reconcile Phase3 P3-01 through P3-14, fill concrete evidence/correction gaps, independent review, preserve historical matrix, update authoritative acceptance and plan statuses together. No Phase4/5 implementation or real paid activation.",
+  "baseline_files": 1280,
+  "allowed_status_documents": [
+    "personal-project-conversion/evidence/phase-3.md",
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/README.md",
+    "README.md",
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md"
+  ],
+  "paid_runtime": "off",
+  "provider_calls": "no real calls authorized",
+  "allowed_implementation_changes": [
+    "services/personal/coordinator.py: flush workflow failure stage before terminal ownership refresh; reproduced by retained final-targeted failure"
+  ],
+  "allowed_new_tests": [
+    "tests/integration/test_personal_phase3_closeout.py"
+  ]
+}

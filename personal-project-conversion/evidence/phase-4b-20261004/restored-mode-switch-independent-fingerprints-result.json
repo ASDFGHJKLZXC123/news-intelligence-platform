@@ -1,0 +1,7 @@
+{
+  "all_91_public_table_counts_retained": true,
+  "non_control_fingerprints_equal": true,
+  "only_changed_table": [
+    "personal_writer_mode"
+  ]
+}

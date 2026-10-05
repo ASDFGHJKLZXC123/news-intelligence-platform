@@ -1,0 +1,1443 @@
+{
+  "schema": "phase3-closeout-acceptance-map-01-07.v2",
+  "observed_at": "2026-10-04T02:59:29.039013+00:00",
+  "user_date": "2026-10-03 America/Los_Angeles",
+  "scope": "Read-only evidence reconciliation of P3-01\u201307; the root owns test execution and phase-level disposition",
+  "status": "PASS",
+  "basis": "Exact assertion inspection, individual JUnit outcomes, current source hashes and retained native browser provenance; suite totals alone are never an acceptance oracle.",
+  "current_gate": {
+    "prefix": "personal-final",
+    "valid": true,
+    "timestamp": "2026-10-03T19:52:49.341622-07:00",
+    "result": {
+      "exit_code": 0,
+      "inventory_unchanged": true,
+      "protected_unchanged": true,
+      "source_drift": []
+    },
+    "exact_testcases": 100
+  },
+  "item5_gate_timestamp": "2026-10-03T16:33:46.755713-07:00",
+  "source_checks": [
+    {
+      "path": "services/personal/coordinator.py",
+      "current_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+      "verified_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450",
+      "matches_item5": false
+    },
+    {
+      "path": "services/personal/runs.py",
+      "current_sha256": "5dfd4123d312361fcac46c9f76420418d3bddfef0909ff2f71988236eff2e166",
+      "verified_sha256": "5dfd4123d312361fcac46c9f76420418d3bddfef0909ff2f71988236eff2e166",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "5dfd4123d312361fcac46c9f76420418d3bddfef0909ff2f71988236eff2e166",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/settings.py",
+      "current_sha256": "f2e1bdf3007fb00f08a5d5bc4d3c1b075ff5f1862fb530291a22aa712de878f8",
+      "verified_sha256": "f2e1bdf3007fb00f08a5d5bc4d3c1b075ff5f1862fb530291a22aa712de878f8",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "f2e1bdf3007fb00f08a5d5bc4d3c1b075ff5f1862fb530291a22aa712de878f8",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/reader.py",
+      "current_sha256": "007070de1e032bce8937b03051865cd19489b56bcf6373be39d0ff305132fba5",
+      "verified_sha256": "007070de1e032bce8937b03051865cd19489b56bcf6373be39d0ff305132fba5",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "007070de1e032bce8937b03051865cd19489b56bcf6373be39d0ff305132fba5",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/workspace.py",
+      "current_sha256": "4f8f3cfbe7c7b682152d77ca8aa7cc6513a359289d8fe67aeada253f03a4b005",
+      "verified_sha256": "4f8f3cfbe7c7b682152d77ca8aa7cc6513a359289d8fe67aeada253f03a4b005",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "4f8f3cfbe7c7b682152d77ca8aa7cc6513a359289d8fe67aeada253f03a4b005",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/snapshots.py",
+      "current_sha256": "213aba7fabd60164f141b49b6894dd350bae9601eda143935beb6cafefb4d485",
+      "verified_sha256": "213aba7fabd60164f141b49b6894dd350bae9601eda143935beb6cafefb4d485",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "213aba7fabd60164f141b49b6894dd350bae9601eda143935beb6cafefb4d485",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/contracts.py",
+      "current_sha256": "8999239a78479b7421275f2c84ef2348defa67abb04073e5462082cea83b33d7",
+      "verified_sha256": "8999239a78479b7421275f2c84ef2348defa67abb04073e5462082cea83b33d7",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "8999239a78479b7421275f2c84ef2348defa67abb04073e5462082cea83b33d7",
+      "matches_item5": true
+    },
+    {
+      "path": "services/personal/spending.py",
+      "current_sha256": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+      "verified_sha256": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+      "matches_item5": true
+    },
+    {
+      "path": "services/ingestion/capture_bounds.py",
+      "current_sha256": "956424188424530d6bb595ef6216c99a070fb3fcda68185bc81009e413e96d33",
+      "verified_sha256": "956424188424530d6bb595ef6216c99a070fb3fcda68185bc81009e413e96d33",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "956424188424530d6bb595ef6216c99a070fb3fcda68185bc81009e413e96d33",
+      "matches_item5": true
+    },
+    {
+      "path": "services/ingestion/http_provider.py",
+      "current_sha256": "1fdf480d78a559e5a940894c51b70884dd7d73da98f546ea07097edab6577f00",
+      "verified_sha256": "1fdf480d78a559e5a940894c51b70884dd7d73da98f546ea07097edab6577f00",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "1fdf480d78a559e5a940894c51b70884dd7d73da98f546ea07097edab6577f00",
+      "matches_item5": true
+    },
+    {
+      "path": "services/ingestion/normalize.py",
+      "current_sha256": "cfdc0a850b3204a0275a7851f41a8af5ac45b37c68a7dbc8a7e34f7f5ee01c61",
+      "verified_sha256": "cfdc0a850b3204a0275a7851f41a8af5ac45b37c68a7dbc8a7e34f7f5ee01c61",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "cfdc0a850b3204a0275a7851f41a8af5ac45b37c68a7dbc8a7e34f7f5ee01c61",
+      "matches_item5": true
+    },
+    {
+      "path": "db/models/personal.py",
+      "current_sha256": "12303627911e9ba133a95e9ad1e9d2c7073083b9766f42658bff30dccdc0c148",
+      "verified_sha256": "12303627911e9ba133a95e9ad1e9d2c7073083b9766f42658bff30dccdc0c148",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "12303627911e9ba133a95e9ad1e9d2c7073083b9766f42658bff30dccdc0c148",
+      "matches_item5": true
+    },
+    {
+      "path": "apps/api/personal.py",
+      "current_sha256": "b230a4b9f1f69d87a09391f7865ed2af522ae8a8f94cf621a7ff10b78abbf3f8",
+      "verified_sha256": "b230a4b9f1f69d87a09391f7865ed2af522ae8a8f94cf621a7ff10b78abbf3f8",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "b230a4b9f1f69d87a09391f7865ed2af522ae8a8f94cf621a7ff10b78abbf3f8",
+      "matches_item5": true
+    },
+    {
+      "path": "apps/api/personal_reading.py",
+      "current_sha256": "99373046fe04c907bb243c9084bfc34266603e804b67e22f59b6ecc17488d0c3",
+      "verified_sha256": "99373046fe04c907bb243c9084bfc34266603e804b67e22f59b6ecc17488d0c3",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "99373046fe04c907bb243c9084bfc34266603e804b67e22f59b6ecc17488d0c3",
+      "matches_item5": true
+    },
+    {
+      "path": "workers/personal_tasks.py",
+      "current_sha256": "cb05a71700692c5bec906e8e9d715a75832b46e72df03a082e0194a98ff7f1ad",
+      "verified_sha256": "cb05a71700692c5bec906e8e9d715a75832b46e72df03a082e0194a98ff7f1ad",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "cb05a71700692c5bec906e8e9d715a75832b46e72df03a082e0194a98ff7f1ad",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_daily_bounds.py",
+      "current_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+      "verified_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_reading_bounds.py",
+      "current_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+      "verified_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_paid_worker.py",
+      "current_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+      "verified_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_item5_composed.py",
+      "current_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3",
+      "verified_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_worker.py",
+      "current_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818",
+      "verified_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818",
+      "matches_item5": true
+    },
+    {
+      "path": "tests/integration/test_personal_run_claim_snapshot.py",
+      "current_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+      "verified_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+      "matches_item5": true
+    },
+    {
+      "path": "frontend/app/page-personal.jsx",
+      "current_sha256": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b",
+      "verified_sha256": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b",
+      "matches_verified": true,
+      "verification_record": "phase-3-item-6-20261003/final-check.json",
+      "verified_at": "2026-10-04T01:34:42.364602+00:00",
+      "gate_valid": true,
+      "item5_sha256": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d",
+      "matches_item5": false
+    },
+    {
+      "path": "frontend/app/api-adapter.js",
+      "current_sha256": "3f73bddac8fd6a5e9e76dd2d0bb421092ffed4cedc8a8f3a9fd63ec34088d694",
+      "verified_sha256": "3f73bddac8fd6a5e9e76dd2d0bb421092ffed4cedc8a8f3a9fd63ec34088d694",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "3f73bddac8fd6a5e9e76dd2d0bb421092ffed4cedc8a8f3a9fd63ec34088d694",
+      "matches_item5": true
+    },
+    {
+      "path": "frontend/app/personal-foundation.test.js",
+      "current_sha256": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0",
+      "verified_sha256": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0",
+      "matches_verified": true,
+      "verification_record": "phase-3-item-6-20261003/final-check.json",
+      "verified_at": "2026-10-04T01:34:42.364602+00:00",
+      "gate_valid": true,
+      "item5_sha256": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca",
+      "matches_item5": false
+    },
+    {
+      "path": "frontend/SIGNAL - Intelligence Platform.html",
+      "current_sha256": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4",
+      "verified_sha256": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4",
+      "matches_verified": true,
+      "verification_record": "phase-3-item-6-20261003/final-check.json",
+      "verified_at": "2026-10-04T01:34:42.364602+00:00",
+      "gate_valid": true,
+      "item5_sha256": "89e855d25f1c12a30ce4ebafacf8028bd32a083f77577c851267b8f0360c55fd",
+      "matches_item5": false
+    },
+    {
+      "path": "tests/integration/test_personal_phase3_closeout.py",
+      "current_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+      "verified_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": null,
+      "matches_item5": false
+    },
+    {
+      "path": "services/personal/briefs.py",
+      "current_sha256": "059b21b21eb863ba418230e462ad0403880893a39484870b2ec1142c37db968e",
+      "verified_sha256": "059b21b21eb863ba418230e462ad0403880893a39484870b2ec1142c37db968e",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "059b21b21eb863ba418230e462ad0403880893a39484870b2ec1142c37db968e",
+      "matches_item5": true
+    },
+    {
+      "path": "apps/api/personal_briefs.py",
+      "current_sha256": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+      "verified_sha256": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+      "matches_verified": true,
+      "verification_record": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "verified_at": "2026-10-04T02:55:45.892892+00:00",
+      "gate_valid": true,
+      "item5_sha256": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+      "matches_item5": true
+    }
+  ],
+  "all_relevant_verified_sources_match": true,
+  "artifact_hashes": [
+    {
+      "path": "phase-3-item-5-20261003/full-integration.xml",
+      "sha256": "bcf225fe9c15c111a346bd5e927a89564cc8dec987e5b26acc1ed8eb396afbae"
+    },
+    {
+      "path": "phase-3-item-5-20261003/full-integration.log",
+      "sha256": "26cd68d9b6ca4cda6039ec8fb564eb079663da2ed16752f4465cf33c75da67ce"
+    },
+    {
+      "path": "phase-3-item-5-20261003/full-integration-command.json",
+      "sha256": "edd4fbcda4193ce827236f174a52d5b58ac58f5feae4f234992cb5b6fadf2ab1"
+    },
+    {
+      "path": "phase-3-item-5-20261003/full-integration-source-before.json",
+      "sha256": "b4a78fae5c5bea464f97b788bf870106d8bbbf2060964334db280f540336f31e"
+    },
+    {
+      "path": "phase-3-item-5-20261003/full-integration-source-after.json",
+      "sha256": "f6f92d6751ea5dabafb36c1827733e4e8394fc5fa5950d036d4242245dbe38b1"
+    },
+    {
+      "path": "phase-3-item-6-20261003/browser/capture-index.json",
+      "sha256": "d48a483924bb3a645c9bf7998bf6fe158f25d453ba62d284a05111df494f2f10"
+    },
+    {
+      "path": "phase-3-item-6-20261003/independent-native-fidelity-check.json",
+      "sha256": "ea6a343e5558fbdc16b16be6d468f3dde2c885b0ab76f73deb955f50e95c87c7"
+    },
+    {
+      "path": "phase-3-item-6-20261003/final-check.json",
+      "sha256": "9bf36e1f7aa3575d87ea70bb4efc6f016539ebd6cc7d5be4f5f9167d521aa4b3"
+    },
+    {
+      "path": "phase-3-item-6-20261003/independent-final-check.json",
+      "sha256": "a0806984a91683c9ce3afca015282d68ff6d085a3001da3abf9b08e360792034"
+    },
+    {
+      "path": "phase-3-item-6-20261003/fixture-initial.json",
+      "sha256": "b1c398aecd74397dec1d02a1fc14958f203723f9fa05abc5fee6dcb7ef89b527"
+    },
+    {
+      "path": "phase-3-item-6-20261003/fixture-capture-failure.json",
+      "sha256": "60213dc1de592cb235b48275310a1744f88d2672e506f8b324bee01a3caf857d"
+    },
+    {
+      "path": "phase-3-item-6-20261003/fixture-provider-failure.json",
+      "sha256": "dbfc4914161e4923c2648f7b319cd22be069caf265cc16214c4c1065ee7f5432"
+    },
+    {
+      "path": "phase-3-item-6-20261003/fixture-spending.json",
+      "sha256": "936cc8c5928f0e3c00c75cce5557e1e2bfb9704e51a3eea3c0ae15d3ec081345"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final.xml",
+      "sha256": "076e10bcc4f4ece5507f29484379c5e8a99fc00bd69473a39f3777a8907ef8d3"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final.log",
+      "sha256": "5171d9442ec49e283a37a0b2410dcdee40163a011cc6be3d2722cb0e5cd09d7a"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final-command.json",
+      "sha256": "3ceb5e46558e17055777bed32e17be1ede28141127a2e5e359c35e716b5f5e5c"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final-source-before.json",
+      "sha256": "d4174028b287c4ddfba16ad202ad8c1e6642f1b80fe2197a036311ea2153d63d"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final-source-after.json",
+      "sha256": "25c842d2b2a4a43d387da4ea15fc29df975d78df34b4fa4e54ec7eb7b2e87faa"
+    },
+    {
+      "path": "phase-3-closeout-20261003/personal-final-result.json",
+      "sha256": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693"
+    },
+    {
+      "path": "phase-3-closeout-20261003/literal-proof-purpose.json",
+      "sha256": "2e3ac2cb42a47d54ee6114e9ca9225a46b62745c8dcbc04786f690eb118d28f0"
+    },
+    {
+      "path": "phase-3-closeout-20261003/coordinator-before-failure-stage-fix.json",
+      "sha256": "5641607ce50d0d4a4ad981759538a417b057b7c3c6bc72dc94f1267d341f3dff"
+    },
+    {
+      "path": "phase-3-closeout-20261003/coordinator-before-failure-stage-fix.py",
+      "sha256": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450"
+    },
+    {
+      "path": "phase-3-closeout-20261003/coordinator-failure-stage-fix.diff",
+      "sha256": "1424d3eda678749a65b634e0f17a72ddeb1066a027b85c70d4c5274f9a2a690c"
+    },
+    {
+      "path": "phase-3-closeout-20261003/final-targeted.xml",
+      "sha256": "64250c369192aaa3ca685a61ba7f075e2c8cd56c84471aebb18981c74ce4bc07"
+    },
+    {
+      "path": "phase-3-closeout-20261003/final-targeted.log",
+      "sha256": "22beef54bd2073d8c72eb1cc8f053f9c9b136823aa4d3e5e16e2b0f09cc99521"
+    },
+    {
+      "path": "phase-3-closeout-20261003/final-targeted-result.json",
+      "sha256": "919e709ee7a6f2fa56428b8baa70c8a71177f591d4fd55bf4a6dadf03aecca13"
+    },
+    {
+      "path": "phase-3-closeout-20261003/final-targeted-source-before.json",
+      "sha256": "35ad7dd3f51f5627845d9334a3fc91c1bc5cf6a4690829aa41da02fcb8eef3c1"
+    },
+    {
+      "path": "phase-3-closeout-20261003/final-targeted-source-after.json",
+      "sha256": "c98f26c274aa1e617a101c2f30a6f4a279355763f857d33704e62ff0b07dbb06"
+    },
+    {
+      "path": "phase-3-closeout-20261003/closeout-test-before-publication-oracle.py",
+      "sha256": "ffd89728de2b0c081ba3453c4ddab5dc400e99ebc8feba32f0bb9ec74379046d"
+    },
+    {
+      "path": "phase-3-closeout-20261003/closeout-publication-oracle-correction.diff",
+      "sha256": "8559aca6c24f8741ef650e6839b7c814a0aaa85ddaf153556b776f4cd4831025"
+    }
+  ],
+  "rows": [
+    {
+      "id": "P3-01",
+      "plan_setup": "Admission and enrichment ceilings of 20; capture 30 distinct articles",
+      "status": "PASS",
+      "claim_assessment": [
+        "The exact 20 admitted/10 pending boundary is proved by individual PostgreSQL assertions. The current browser fixture uses 27 admitted/10 pending and independently demonstrates the distinction between retained counts and completed processing."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_01_twenty_admitted_ten_pending_and_twenty_frozen",
+          "source_lines": [
+            203,
+            244
+          ],
+          "assertion_claims": [
+            "30 captured; 20 Article rows, 20 charged admissions and 20 frozen enrichment members; 10 pending; profile and scopes equal returned IDs",
+            "Scope selects 20 and no embedding stage exists yet; intake is distinct from completed enrichment",
+            "A 600-character title and 3,000-character snippet retain 512/2,000 with both truncation indicators and revision evidence"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "2.516",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        }
+      ],
+      "native_browser": [
+        {
+          "label": "settings-raw-counts",
+          "claim": "Settings displays 37 observed, 10 pending, 27 admitted and one grouped, and identifies these as retained records rather than completed-brief counts",
+          "artifact": "phase-3-item-6-20261003/browser/settings-raw-counts.dom.txt",
+          "sha256": "8d54ab767c0ad8c67c5892ed3b6a73190ba2aa5b898676e532837df00b083059",
+          "call_id": "call_XOmoQ4mjRTcp4JVjLhpFFWDS",
+          "session_line": 317,
+          "observed_at": "2026-10-04T01:01:31.172Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "raw-page-1",
+          "claim": "Admitted standalone raw cards remain explicitly Disabled by profile and separate from the grouped story",
+          "artifact": "phase-3-item-6-20261003/browser/raw-page-1.dom.txt",
+          "sha256": "7d4441a1aa6ff8a184919f1886328d7fa3d6709bde1248e3f31f0b947de34536",
+          "call_id": "call_6hMYAEsy1LO5cCPUSA49lhvi",
+          "session_line": 352,
+          "observed_at": "2026-10-04T01:02:54.728Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        }
+      ],
+      "remaining_gap": null,
+      "qualification": "Initial fixture-initial.json establishes expected service/database records; it is not a browser result. Count and raw-reader components were unchanged by the narrow item-6 failure classifier correction.",
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-02",
+      "plan_setup": "Replay tracking variants and duplicates; retry the same failed run concurrently; rolled-back admission spends no charge",
+      "status": "PASS",
+      "claim_assessment": [
+        "Capture/admission replay, canonical uniqueness and rollback are proved separately from the new literal concurrent HTTP retry. The latter demonstrates one new attempt/token/delivery, unchanged frozen membership and no repeated admission charge."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_02_concurrent_duplicate_capture_and_rolled_back_admission",
+          "source_lines": [
+            247,
+            315
+          ],
+          "assertion_claims": [
+            "Two concurrent captures retain two canonical records despite tracking variants and duplicates; first titles survive",
+            "Fault during the second Article insert rolls back all articles and admission state; later concurrent admissions return the same two IDs",
+            "Exactly two captures/articles, two distinct article IDs, two charges and admission ordinals [0, 1]"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.638",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_run_claim_snapshot.py::test_same_date_start_is_idempotent_under_concurrency",
+          "source_lines": [
+            98,
+            122
+          ],
+          "assertion_claims": [
+            "Four competing starts create one run ID and one row; repeated same-date start is not created or enqueued"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.516",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_phase3_closeout.py::test_two_concurrent_http_retries_rotate_one_attempt_and_preserve_frozen_admissions",
+          "source_lines": [
+            97,
+            174
+          ],
+          "assertion_claims": [
+            "Two simultaneous actual HTTP retries yield 202 and 409 with exactly one production enqueue and scripted delivery",
+            "Only attempt 2 with a rotated token; frozen date/profile/scopes/capture/admission records stay unchanged and old ownership fails",
+            "Actual frozen coordinator retry does not recapture, embed or generate a report; two charges, one pending record and no paid rows remain"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.839",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "NOT_PRESENT",
+          "prior_item5_record": null
+        }
+      ],
+      "native_browser": [],
+      "remaining_gap": null,
+      "qualification": null,
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-03",
+      "plan_setup": "Source A has 20 pending and source B has two; admit four in stable round-robin order across reconnection",
+      "status": "PASS",
+      "claim_assessment": [
+        "The exact A1/B1/A2/B2 order survives engine disposal and new sessions. This is durable reconnection proof; no operating-system process restart is inferred."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_03_round_robin_order_survives_new_sessions",
+          "source_lines": [
+            318,
+            340
+          ],
+          "assertion_claims": [
+            "Source configuration reverses IDs but admission URL order is A0000, B0000, A0001, B0001",
+            "After engine disposal and new sessions, repeated admission returns identical IDs and stored ordinals"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.748",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_03_older_capture_batch_precedes_newer_and_unknown_dates_follow_known",
+          "source_lines": [
+            343,
+            361
+          ],
+          "assertion_claims": [
+            "Within the oldest batch, known publication precedes unknown; both precede the newer batch: old known, old unknown, new known"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.739",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        }
+      ],
+      "native_browser": [],
+      "remaining_gap": null,
+      "qualification": null,
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-04",
+      "plan_setup": "Retained candidate rotates out; disabling and re-enabling its source preserves eligibility and original content",
+      "status": "PASS",
+      "claim_assessment": [
+        "Current-source integration proves retained rotation and source re-enable. Fresh browser observations prove disabling preserves stored records and saved settings persist."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_04_retained_candidate_survives_rotation_and_disabled_source",
+          "source_lines": [
+            364,
+            394
+          ],
+          "assertion_claims": [
+            "First capture with zero admission remains pending; disabling A while B is empty admits nothing",
+            "Re-enabled A drains the retained candidate before an empty rotated feed; original run/capture timestamp, title, snippet and unknown publication remain"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.616",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        }
+      ],
+      "native_browser": [
+        {
+          "label": "disabled-source-retained",
+          "claim": "Removing technology selection leaves 10 pending: five eligible and five from a disabled source, with original content retained",
+          "artifact": "phase-3-item-6-20261003/browser/disabled-source-retained.dom.txt",
+          "sha256": "a7b00dca369f86b2f1be71340aaf31a255947ecd9a046593476fa9193ef03c4a",
+          "call_id": "call_rYiVO7neQJNMwDaMOxSztZRC",
+          "session_line": 324,
+          "observed_at": "2026-10-04T01:01:53.447Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "settings-disabled-reload",
+          "claim": "Saved source selections, limits and interests persist on reload",
+          "artifact": "phase-3-item-6-20261003/browser/settings-disabled-reload.dom.txt",
+          "sha256": "2d44700d5485fc923bb4c377726065a2d02e05545b18fb10ad683fe1628b2dbd",
+          "call_id": "call_d04FoYkn9bQZ44Fzl0xbeyxB",
+          "session_line": 331,
+          "observed_at": "2026-10-04T01:02:20.110Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        }
+      ],
+      "remaining_gap": null,
+      "qualification": "September 20 browser re-enable is historical corroboration only. Item 6 does not claim fresh browser re-enable, and no requirement is closed using that historical observation alone.",
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-05",
+      "plan_setup": "Oversized response, 501 entries and a full 2,000-item pending queue",
+      "status": "PASS",
+      "claim_assessment": [
+        "Each capture bound has exact executed assertions. The browser's 501 authored items contain 18 unique URLs plus duplicates, so 18 retained records is correct; that fixture is distinct from the 500 unique-entry integration dataset."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_05_full_two_thousand_queue_pauses_without_requesting_unknown_input",
+          "source_lines": [
+            397,
+            429
+          ],
+          "assertion_claims": [
+            "Exactly 2,000 pending/capture rows; another capture invokes no provider and records zero attempted/items with four paused feeds",
+            "Four collection_paused_pending_capacity receipts retain observed count None and pending_capacity bound"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "5.032",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[False]",
+          "source_lines": [
+            433,
+            463
+          ],
+          "assertion_claims": [
+            "Actual HttpRSSProvider parses scripted 501-entry XML; entry_limit_reached, unknown remote total, 501 observed, 500 processed/pending and no Article rows"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "2.762",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[True]",
+          "source_lines": [
+            433,
+            463
+          ],
+          "assertion_claims": [
+            "Actual HttpRSSProvider receives scripted bytes above 2 MiB; response_byte_limit, unknown remote total, observed None, zero processed/pending and no Article rows"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "2.050",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        }
+      ],
+      "native_browser": [
+        {
+          "label": "capture-entry-boundary",
+          "claim": "Feed receipts show technology 501 observed/18 retained/entry limit and unknown remote total, with 18 policy records retained",
+          "artifact": "phase-3-item-6-20261003/browser/capture-entry-boundary.dom.txt",
+          "sha256": "851116a6e98a2b7f7e4bc5166b36699e55652fa0a8b9a37b676fa76d8ce6b22e",
+          "call_id": "call_rYiVO7neQJNMwDaMOxSztZRC",
+          "session_line": 324,
+          "observed_at": "2026-10-04T01:01:53.447Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        }
+      ],
+      "remaining_gap": null,
+      "qualification": "Oversized transport and a full 2,000-item queue have fresh PostgreSQL proof. The fresh representative browser boundary is the rendered entry-limit receipt with an unknown remote total.",
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-06",
+      "plan_setup": "Retry spans Los Angeles midnight; an old caller date cannot reset the admission allowance",
+      "status": "PASS",
+      "claim_assessment": [
+        "Midnight accounting uses the actual local admission day while preserving the original run identity and frozen ceilings. The new actual HTTP request supplies four old caller-date fields; the independently derived server date and unchanged one-run/two-charge result prove that request cannot reopen credit."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_06_midnight_retry_keeps_run_identity_and_charges_actual_admission_day",
+          "source_lines": [
+            466,
+            496
+          ],
+          "assertion_claims": [
+            "At 06:59 UTC two are admitted; at 07:01 UTC retry preserves run ID/prefix and admits one more up to its original ceiling of three",
+            "After freeze another admission returns unchanged; a genuine new local-day run receives only one remaining admission",
+            "Original September 19 run remains attempt 2; two charges occurred before midnight, four total articles are admitted and one remains pending"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.955",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_daily_bounds.py::test_p3_06_lower_daily_ceiling_applies_now_and_frozen_run_ceiling_cannot_grow",
+          "source_lines": [
+            499,
+            522
+          ],
+          "assertion_claims": [
+            "Lowered live daily ceiling of one refuses more after two; raised live ceiling of 50 permits only frozen run three/enrichment two with original profile"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.981",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_run_claim_snapshot.py::test_la_logical_date_retry_preserves_scope_and_stops_after_three_attempts",
+          "source_lines": [
+            125,
+            164
+          ],
+          "assertion_claims": [
+            "Retries on later days preserve the Los Angeles logical date and scope; maximum attempt three is enforced"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.510",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_phase3_closeout.py::test_http_old_caller_dates_cannot_backdate_run_or_reopen_same_day_admission",
+          "source_lines": [
+            177,
+            243
+          ],
+          "assertion_claims": [
+            "First actual HTTP start plus raw coordinator captures three, admits two and retains one pending at a fixed server instant",
+            "Expected date is independently derived from START in America/Los_Angeles; second POST supplies old report/local/process/brief dates but returns the same ID/server date/attempt one with one delivery",
+            "Frozen profile/token/scopes/records stay unchanged; one Job, one Run, two Articles, two charges, one pending and no paid rows"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.692",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "NOT_PRESENT",
+          "prior_item5_record": null
+        }
+      ],
+      "native_browser": [],
+      "remaining_gap": null,
+      "qualification": null,
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    },
+    {
+      "id": "P3-07",
+      "plan_setup": "AI disabled, exhausted allowance, missing model configuration and one failed feed preserve raw and prior Saved/Brief reading without paid probes",
+      "status": "PASS",
+      "claim_assessment": [
+        "Ordinary worker cases explicitly assert zero physical provider calls and paid ledger rows for disabled, configuration and allowance paths. Actual browser observations separately show the distinct causes and raw/prior Saved/Brief readability. Partial feed failure uses the actual offline worker; complete feed and provider failures use actual coordinator records displayed in Chrome."
+      ],
+      "tests": [
+        {
+          "nodeid": "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]",
+          "source_lines": [
+            101,
+            132
+          ],
+          "assertion_claims": [
+            "Actual raw GET exposes two records with unknown publication and admission time, distinct pages, one interest match and two query matches",
+            "Limit 101 is rejected with 422; unknown run is 404; collection has three observed, two admitted, one pending, zero grouped, zero remaining ceiling and explicit succeeded reason"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.708",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-False-ai_disabled]",
+          "source_lines": [
+            101,
+            132
+          ],
+          "assertion_claims": [
+            "Actual raw GET exposes two records with unknown publication and admission time, distinct pages, one interest match and two query matches",
+            "Limit 101 is rejected with 422; unknown run is 404; collection has three observed, two admitted, one pending, zero grouped, zero remaining ceiling and explicit succeeded reason"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.581",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-True-configuration_missing]",
+          "source_lines": [
+            101,
+            132
+          ],
+          "assertion_claims": [
+            "Actual raw GET exposes two records with unknown publication and admission time, distinct pages, one interest match and two query matches",
+            "Limit 101 is rejected with 422; unknown run is 404; collection has three observed, two admitted, one pending, zero grouped, zero remaining ceiling and explicit succeeded reason"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.723",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_reading_bounds.py::test_budget_block_retains_readable_transferable_articles_without_repeated_admission",
+          "source_lines": [
+            178,
+            206
+          ],
+          "assertion_claims": [
+            "Injected allowance refusal records embedding blocked/allowance_reached, two deferred_budget records and actual GET of two raw articles"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.642",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_reading_bounds.py::test_required_provider_failure_stays_failed_with_retained_raw_content",
+          "source_lines": [
+            209,
+            235
+          ],
+          "assertion_claims": [
+            "Required provider raises; run stays failed with two provider_failed raw records and an error; optional entity linking remains disabled"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.441",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_paid_worker.py::test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[False-True-True-1-ai_disabled]",
+          "source_lines": [
+            201,
+            221
+          ],
+          "assertion_claims": [
+            "Registered ordinary worker captures and admits one, publishes nothing and records the expected distinct reason; physical calls list, Report rows and PersonalPaidRequest rows are empty"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.555",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_paid_worker.py::test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-False-True-1-paid_runtime_disabled]",
+          "source_lines": [
+            201,
+            221
+          ],
+          "assertion_claims": [
+            "Registered ordinary worker captures and admits one, publishes nothing and records the expected distinct reason; physical calls list, Report rows and PersonalPaidRequest rows are empty"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.951",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_paid_worker.py::test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-False-1-configuration_missing]",
+          "source_lines": [
+            201,
+            221
+          ],
+          "assertion_claims": [
+            "Registered ordinary worker captures and admits one, publishes nothing and records the expected distinct reason; physical calls list, Report rows and PersonalPaidRequest rows are empty"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.766",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_paid_worker.py::test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0-allowance_reached]",
+          "source_lines": [
+            201,
+            221
+          ],
+          "assertion_claims": [
+            "Registered ordinary worker captures and admits one, publishes nothing and records the expected distinct reason; physical calls list, Report rows and PersonalPaidRequest rows are empty"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.717",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_paid_worker.py::test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0.0000001-allowance_reached]",
+          "source_lines": [
+            201,
+            221
+          ],
+          "assertion_claims": [
+            "Registered ordinary worker captures and admits one, publishes nothing and records the expected distinct reason; physical calls list, Report rows and PersonalPaidRequest rows are empty"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.653",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_item5_composed.py::test_missing_route_api_run_keeps_raw_reader_available_without_paid_dispatch",
+          "source_lines": [
+            178,
+            204
+          ],
+          "assertion_claims": [
+            "Actual API 202 reaches production enqueue and registered task; missing configuration constructs no transport/delegate, creates no paid request/report and actual raw GET retains title/URL/snippet"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.659",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        },
+        {
+          "nodeid": "tests/integration/test_personal_worker.py::test_worker_returns_partial_state_for_partial_offline_capture",
+          "source_lines": [
+            381,
+            396
+          ],
+          "assertion_claims": [
+            "Actual worker/coordinator with one absent fixture feed records one success and one failure, partially_failed, published true and partial_capture error"
+          ],
+          "assertion_outcome": "PASS",
+          "junit_seconds": "1.715",
+          "retained_result": "phase-3-closeout-20261003/personal-final.xml",
+          "gate_log": "phase-3-closeout-20261003/personal-final.log",
+          "verified_at": "2026-10-03T19:52:49.341622-07:00",
+          "source_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818",
+          "source_matches_gate": true,
+          "prior_item5_outcome": "PASS",
+          "prior_item5_record": "phase-3-item-5-20261003/full-integration.xml"
+        }
+      ],
+      "native_browser": [
+        {
+          "label": "allowance-reached-visible",
+          "claim": "Allowance reached is shown at $0.35, equal to current finalized plus reserved obligations; remaining is zero and raw reading is ready",
+          "artifact": "phase-3-item-6-20261003/browser/allowance-reached-visible.dom.txt",
+          "sha256": "bc8fd1701ba3608941d38f99af544b62975eb4e62c88d1e4d66f830e617de7f6",
+          "call_id": "call_Pi008fiPQRmDqFMYpXexy3gG",
+          "session_line": 605,
+          "observed_at": "2026-10-04T01:09:00.006Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "missing-configuration-visible",
+          "claim": "Configuration missing is visible while raw reading remains ready",
+          "artifact": "phase-3-item-6-20261003/browser/missing-configuration-visible.dom.txt",
+          "sha256": "3d66a5183ba4f5e6e339d8917c0050b5dc77da498289748cc6eaa151d837395f",
+          "call_id": "call_lisoDyeGnQUDy5jmArSKvsko",
+          "session_line": 617,
+          "observed_at": "2026-10-04T01:09:27.371Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "ai-disabled-explicit",
+          "claim": "AI disabled is visible while raw reading remains ready",
+          "artifact": "phase-3-item-6-20261003/browser/ai-disabled-explicit.dom.txt",
+          "sha256": "3ec6cdfd8866bd0e518b444dbb0eac3062de5e68cea76380d76fcb4fb3fbd607",
+          "call_id": "call_SSyRR4oKXkMIlM8CX87vqb5T",
+          "session_line": 624,
+          "observed_at": "2026-10-04T01:09:38.470Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "spending-nonzero-gate-off",
+          "claim": "A valid configured route with the server paid gate off displays Paid runtime disabled",
+          "artifact": "phase-3-item-6-20261003/browser/spending-nonzero-gate-off.dom.txt",
+          "sha256": "fc59ade9ae95f0fa6453fa7beaa3ae7b965fe1ad6d54ec24722c011387952994",
+          "call_id": "call_LHbcLJGcfLwMj6uEmasDmOJH",
+          "session_line": 565,
+          "observed_at": "2026-10-04T01:07:25.749Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "capture-failure-corrected",
+          "claim": "Selected failed capture displays the corrected warning/unavailable state and retained raw content remains readable",
+          "artifact": "phase-3-item-6-20261003/browser/capture-failure-corrected.dom.txt",
+          "sha256": "84fa0c60b8455266a1586283546825dbd32843123fb0582d013e3cedaa0b111f",
+          "call_id": "call_88hAlLGtkDHFpqXZlZ2bTEWn",
+          "session_line": 918,
+          "observed_at": "2026-10-04T01:20:17.729Z",
+          "source_epoch": "after-correction-and-cache-key",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "provider-failure-corrected",
+          "claim": "Selected provider failure displays the corrected warning/unavailable state and nine Provider failed raw records",
+          "artifact": "phase-3-item-6-20261003/browser/provider-failure-corrected.dom.txt",
+          "sha256": "6c88862484e3446cb0017f7737bc363f3bd79c383f1bf971ddf6a19d2ee660c8",
+          "call_id": "call_3aCxzKLdz2Ixh07Y7coRkU5m",
+          "session_line": 925,
+          "observed_at": "2026-10-04T01:20:30.193Z",
+          "source_epoch": "after-correction-and-cache-key",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "saved-after-correction",
+          "claim": "The loaded Saved story remains readable after the correction",
+          "artifact": "phase-3-item-6-20261003/browser/saved-after-correction.dom.txt",
+          "sha256": "9ebc15be190f6cabc7b42d50cb6246eddfe840100e11440305e1ec9a3ce661e4",
+          "call_id": "call_s9LmWtNchSW6vySfsQ6ALHCl",
+          "session_line": 948,
+          "observed_at": "2026-10-04T01:20:50.265Z",
+          "source_epoch": "after-correction-and-cache-key",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "brief-after-correction",
+          "claim": "The loaded prior published version, snapshot, prose and citation remain readable after the correction",
+          "artifact": "phase-3-item-6-20261003/browser/brief-after-correction.dom.txt",
+          "sha256": "57f117dc03683c21ad9a3ebafae7c7256ae0375c6de58cbe9a9484b5aebcfe2c",
+          "call_id": "call_9CY17PJCIRjP8kYvLHatO46q",
+          "session_line": 970,
+          "observed_at": "2026-10-04T01:21:15.380Z",
+          "source_epoch": "after-correction-and-cache-key",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        },
+        {
+          "label": "brief-ai-blocked",
+          "claim": "The prior published brief remains readable while AI readiness is blocked",
+          "artifact": "phase-3-item-6-20261003/browser/brief-ai-blocked.dom.txt",
+          "sha256": "8aac5478bed0441d705b87109d58ea1b08eef9c0c663e448cdb875b621b2d358",
+          "call_id": "call_p6i4L2s0fk9Jsm3byktbz6sP",
+          "session_line": 673,
+          "observed_at": "2026-10-04T01:11:05.632Z",
+          "source_epoch": "pre-correction",
+          "limitation": "Native DOM observation; images remain call-scoped, and fixture/API records are separately identified."
+        }
+      ],
+      "remaining_gap": null,
+      "qualification": "Browser inputs and monetary obligations are labeled synthetic. No live provider behavior or personal usefulness judgment is claimed. The item-6 UI correction retained two focused baseline failures, 50 affected frontend passes, an independent rerun and corrected native captures. Earlier loading or pre-fix failure captures do not establish the final wording. These browser observations predate the later coordinator failure-stage persistence fix; the failed-run/raw/read UI inputs are unchanged, and no browser rerun after that backend fix is claimed.",
+      "source_hash_refs": [
+        "services/personal/coordinator.py",
+        "services/personal/runs.py",
+        "services/personal/settings.py",
+        "services/personal/reader.py",
+        "services/personal/workspace.py",
+        "services/personal/snapshots.py",
+        "services/personal/contracts.py",
+        "services/personal/spending.py",
+        "services/ingestion/capture_bounds.py",
+        "services/ingestion/http_provider.py",
+        "services/ingestion/normalize.py",
+        "db/models/personal.py",
+        "apps/api/personal.py",
+        "apps/api/personal_reading.py",
+        "workers/personal_tasks.py",
+        "tests/integration/test_personal_daily_bounds.py",
+        "tests/integration/test_personal_reading_bounds.py",
+        "tests/integration/test_personal_paid_worker.py",
+        "tests/integration/test_personal_item5_composed.py",
+        "tests/integration/test_personal_worker.py",
+        "tests/integration/test_personal_run_claim_snapshot.py",
+        "frontend/app/page-personal.jsx",
+        "frontend/app/api-adapter.js",
+        "frontend/app/personal-foundation.test.js",
+        "frontend/SIGNAL - Intelligence Platform.html",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "services/personal/briefs.py",
+        "apps/api/personal_briefs.py"
+      ]
+    }
+  ],
+  "correction_provenance": {
+    "changed_application_file": "services/personal/coordinator.py",
+    "change": "Flush the newly assigned workflow failure stage before finish_run refreshes ownership",
+    "before_sha256": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450",
+    "after_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+    "failing_gate": "final-targeted: two failed, six passed",
+    "oracle_adjudication": "Default successful report status is asserted from run.result/published Report/snapshot rather than an unwritten stage success key; failure stage assertion was preserved"
+  },
+  "historical_policy": "September 20 observations remain historical corroboration. Completed Phase 2 and earlier evidence are unchanged.",
+  "source_epoch_policy": "All mapped personal integration outcomes come from the current-source root-owned gate after the one-line coordinator correction. Item 5 remains earlier execution proof; unchanged unit/front-end sources retain their own earlier verification. Item 6 pins corrected frontend and native failure/Saved/Brief captures. Earlier settings/backlog captures predate that narrow UI correction and their components are unchanged.",
+  "execution_qualification": "Production API/coordinator/database and registered task composition use scripted broker and RSS/model responses with cleared credentials, paid runtime false and database-only socket access. No real provider or running broker service proof is inferred.",
+  "not_rerun_by_mapper": [
+    "Integration tests",
+    "Databases",
+    "Services",
+    "Browser",
+    "Phase 2 live provider proof"
+  ]
+}

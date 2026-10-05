@@ -13,6 +13,7 @@ every text after the gap with the wrong vector.
 
 from __future__ import annotations
 
+import uuid
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -166,6 +167,7 @@ def embed_unembedded_articles(
     embedding_model_version: str | None = None,
     batch_size: int = MAX_EMBEDDING_BATCH_SIZE,
     limit: int | None = None,
+    article_ids: Sequence[uuid.UUID] | None = None,
 ) -> int:
     """Embed articles missing a vector in the selected model space (ADR 0004)."""
     model, model_version = resolve_embedding_identity(
@@ -184,6 +186,8 @@ def embed_unembedded_articles(
         .where(ArticleEmbedding.article_id.is_(None))
         .order_by(Article.fetched_at)
     )
+    if article_ids is not None:
+        stmt = stmt.where(Article.id.in_(tuple(article_ids)))
     if limit is not None:
         stmt = stmt.limit(limit)
     articles = list(session.scalars(stmt).all())

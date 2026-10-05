@@ -1,0 +1,45 @@
+{
+  "completed_utc": "2026-10-04T08:28:46.951212+00:00",
+  "databases": {
+    "celery": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_celery_a1952a864e82",
+      "oid": 78656
+    },
+    "child": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_child_a1952a864e82",
+      "oid": 78657
+    },
+    "manual": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_manual_a1952a864e82",
+      "oid": 81935
+    },
+    "template": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_template_a1952a864e82",
+      "oid": 75368
+    },
+    "ui": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_ui_a1952a864e82",
+      "oid": 78658
+    }
+  },
+  "processes": {},
+  "redis": {
+    "created": "2026-10-04T08:27:32.739380341Z",
+    "id": "1e78ddb45d69d94437ecbc94b17df072143c86fcf1ea55c17a84d028e2823b53",
+    "image": "sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+    "mounts": [],
+    "name": "/nip-phase4a-redis-a1952a864e82",
+    "port": 59648,
+    "removed": true
+  }
+}

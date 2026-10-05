@@ -1,0 +1,30 @@
+{
+  "kind": "final focused unit acceptance",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/unit/test_personal*.py",
+    "tests/unit/test_health.py",
+    "tests/unit/test_api_key_middleware.py",
+    "tests/unit/test_llm_orchestrator.py",
+    "tests/unit/test_embedding_provider.py",
+    "--junitxml=personal-project-conversion/evidence/phase-4b-20261004/units-final.xml"
+  ],
+  "environment": {
+    "APP_ENV": "test",
+    "DATABASE_URL": "postgresql+psycopg2://test:test@127.0.0.1:9/test",
+    "REDIS_URL": "redis://127.0.0.1:9/0",
+    "CELERY_BROKER_URL": "redis://127.0.0.1:9/1",
+    "CELERY_RESULT_BACKEND": "redis://127.0.0.1:9/2",
+    "PERSONAL_PAID_RUNTIME_ENABLED": "false",
+    "provider_and_API_keys": "explicitly blank",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "result": "451 passed in 12.27s",
+  "network": "unit transports/probes mocked; nonempty legacy broker strings point at unusedloopback9; personal disabled-dependency tests explicitly blank theirURLs",
+  "earlier_invalid_invocation": "units-final-blank-legacy-config.xml/log retain446passed5failed due blank legacybroker/backend testsettings; corrected launch only, no production/test weakening"
+}

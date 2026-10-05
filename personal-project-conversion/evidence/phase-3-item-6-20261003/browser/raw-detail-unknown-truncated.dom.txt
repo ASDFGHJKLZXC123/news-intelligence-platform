@@ -1,0 +1,43 @@
+CAPTURE raw-detail-unknown-truncated- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - article:
+    - generic: Retained RSS article
+    - generic: Provider failed
+    - 'heading "Synthetic item 6 technology: retained raw article 00" [level=2]'
+    - generic: Synthetic item 6 technology feed
+    - generic: Publication time unknown
+    - paragraph: "Unknown publication time fixture. Retained summary: boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text bo"
+    - text: The retained RSS text was shortened to its storage limit.
+    - generic: Captured
+    - generic: Oct 1, 2026, 06:01:12 PM PDT
+    - generic: Admitted
+    - generic: Oct 3, 2026, 06:06:30 PM PDT
+    - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+    - link "Open original source":
+      - /url: https://offline.personal.test/item6/technology/0?utm_source=item6{ paragraphLengths: [ 2000, 71 ] }{
+  url: 'http://127.0.0.1:60316/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:56430#/article/3fb7b0c6-0676-42cd-ae5a-83a66d6e2642'
+}

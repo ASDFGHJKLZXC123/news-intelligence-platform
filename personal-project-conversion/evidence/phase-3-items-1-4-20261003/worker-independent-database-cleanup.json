@@ -1,0 +1,67 @@
+{
+  "server_identity_verified": {
+    "container_id": "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+    "verification_id": "7ca9fcb920f7417e99aed95bae46e54b",
+    "port": 64707,
+    "binding": "127.0.0.1"
+  },
+  "tests": [
+    "tests/integration/test_personal_paid_worker.py::test_gate_off_raw_articles_transfer_to_a_later_assisted_run",
+    "tests/integration/test_personal_paid_worker.py::test_api_queued_other_run_obligation_competes_with_ordinary_worker",
+    "tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty"
+  ],
+  "pytest_exit": 0,
+  "before": [
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "databases": [
+    {
+      "name": "nip_stage7_61a5f3c06c424c5db798081de65ce916",
+      "oid": 165617,
+      "revision": "0022_personal_spending",
+      "removed": true
+    },
+    {
+      "name": "nip_stage7_173c9b33890047f0b47342eef5a4d083",
+      "oid": 168885,
+      "revision": "0022_personal_spending",
+      "removed": true
+    },
+    {
+      "name": "nip_stage7_17c2f18a5d884ec7a8c074b3a5887b9d",
+      "oid": 172149,
+      "revision": "0022_personal_spending",
+      "removed": true
+    }
+  ],
+  "after": [
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "inventory_preserved": true,
+  "all_owned_databases_removed": true,
+  "no_server_shutdown_performed": true,
+  "transport": "httpx.MockTransport; fake RSS only",
+  "activation_env": false
+}

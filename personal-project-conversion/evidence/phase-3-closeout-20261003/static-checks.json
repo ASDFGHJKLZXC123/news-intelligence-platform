@@ -1,0 +1,58 @@
+{
+  "initial_read_only_cache_attempt": "Ruff could not create a cache temp file; no source/check failure inferred. Retried using --no-cache.",
+  "checks": [
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "services/personal/coordinator.py",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/verify.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/assemble-record.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/check-record.py"
+      ],
+      "exit_code": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "services/personal/coordinator.py",
+        "tests/integration/test_personal_phase3_closeout.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/verify.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/assemble-record.py",
+        "personal-project-conversion/evidence/phase-3-closeout-20261003/check-record.py"
+      ],
+      "exit_code": 0,
+      "stdout": "5 files already formatted\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "status": "PASS"
+}

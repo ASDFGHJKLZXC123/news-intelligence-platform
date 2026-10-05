@@ -1,0 +1,386 @@
+{
+  "all_durable_children_exited_and_no_matching_process": true,
+  "children": [
+    {
+      "current_birth": null,
+      "database_key": "browser",
+      "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+      "matching_process_present": false,
+      "recorded": {
+        "delivery_token": "8990b5c3-8346-45d6-a32f-2952f396517a",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-05T00:16:37.092243+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-05T00:18:35.423274+00:00",
+        "hard_deadline_at": "2026-10-05T00:46:36.264996+00:00",
+        "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+        "launcher_id": "b9e705fc-8637-4a03-acca-2477f143541c",
+        "launcher_pid": 43368,
+        "launcher_started_at": "Sun Oct  4 17:15:31 2026",
+        "pid": 44107,
+        "run_id": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5",
+        "running_lease_expires_at": "2026-10-05T00:51:36.264996+00:00",
+        "started_at": "Sun Oct  4 17:16:35 2026"
+      }
+    },
+    {
+      "current_birth": null,
+      "database_key": "browser_initial",
+      "identity": "79021327-88d0-44c1-bfce-14d596f65008",
+      "matching_process_present": false,
+      "recorded": {
+        "delivery_token": "3a3e66c7-ff1e-44f8-a289-bb2b84fedf71",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-05T00:02:06.927299+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-05T00:04:04.900654+00:00",
+        "hard_deadline_at": "2026-10-05T00:32:05.763240+00:00",
+        "identity": "79021327-88d0-44c1-bfce-14d596f65008",
+        "launcher_id": "b2096c11-e0b7-4d31-9ad5-2d00b0ed2798",
+        "launcher_pid": 32409,
+        "launcher_started_at": "Sun Oct  4 17:01:30 2026",
+        "pid": 33135,
+        "run_id": "f1e7acd6-8819-469c-a21c-3f7e050c92b9",
+        "running_lease_expires_at": "2026-10-05T00:37:05.763240+00:00",
+        "started_at": "Sun Oct  4 17:02:04 2026"
+      }
+    },
+    {
+      "current_birth": null,
+      "database_key": "manual",
+      "identity": "80b4980e-35d3-4264-826c-5dfc3ff1fd41",
+      "matching_process_present": false,
+      "recorded": {
+        "delivery_token": "66cd2e3e-8844-462e-a2b0-35267c5e34cf",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-05T00:16:10.300794+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-05T00:18:08.872257+00:00",
+        "hard_deadline_at": "2026-10-05T00:46:09.526938+00:00",
+        "identity": "80b4980e-35d3-4264-826c-5dfc3ff1fd41",
+        "launcher_id": "80265c49-8c73-4392-abd4-032759988893",
+        "launcher_pid": 43850,
+        "launcher_started_at": "Sun Oct  4 17:16:08 2026",
+        "pid": 43852,
+        "run_id": "b2ba4b71-c991-4f6d-a671-f5d457cae35b",
+        "running_lease_expires_at": "2026-10-05T00:51:09.526938+00:00",
+        "started_at": "Sun Oct  4 17:16:08 2026"
+      }
+    },
+    {
+      "current_birth": null,
+      "database_key": "manual_initial",
+      "identity": "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3",
+      "matching_process_present": false,
+      "recorded": {
+        "delivery_token": "25feb30c-9c82-498b-8325-e2d987a0ccf2",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-05T00:02:04.021292+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-05T00:04:02.272728+00:00",
+        "hard_deadline_at": "2026-10-05T00:32:02.985201+00:00",
+        "identity": "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3",
+        "launcher_id": "465c1166-d862-41a1-a945-11dacf020106",
+        "launcher_pid": 33110,
+        "launcher_started_at": "Sun Oct  4 17:02:01 2026",
+        "pid": 33119,
+        "run_id": "2c26f407-f585-4c83-9820-347b0dc72095",
+        "running_lease_expires_at": "2026-10-05T00:37:02.985201+00:00",
+        "started_at": "Sun Oct  4 17:02:02 2026"
+      }
+    },
+    {
+      "current_birth": null,
+      "database_key": "restored",
+      "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+      "matching_process_present": false,
+      "recorded": {
+        "delivery_token": "8990b5c3-8346-45d6-a32f-2952f396517a",
+        "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "exit_confirmed_at": "2026-10-05T00:16:37.092243+00:00",
+        "exit_evidence": "owned_launcher_wait",
+        "exited": true,
+        "generation": 2,
+        "handoff_expires_at": "2026-10-05T00:18:35.423274+00:00",
+        "hard_deadline_at": "2026-10-05T00:46:36.264996+00:00",
+        "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+        "launcher_id": "b9e705fc-8637-4a03-acca-2477f143541c",
+        "launcher_pid": 43368,
+        "launcher_started_at": "Sun Oct  4 17:15:31 2026",
+        "pid": 44107,
+        "run_id": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5",
+        "running_lease_expires_at": "2026-10-05T00:51:36.264996+00:00",
+        "started_at": "Sun Oct  4 17:16:35 2026"
+      }
+    }
+  ],
+  "controls": {
+    "browser": {
+      "active_job_count": 0,
+      "active_run_count": 0,
+      "database": {
+        "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+        "evidence_epoch": "accepted_final_production_code",
+        "name": "nip_phase4b_browser_accepted_ac0f466f5808",
+        "oid": 308449
+      },
+      "processing_control": [
+        {
+          "active_attempt": null,
+          "active_run_id": null,
+          "child_history": {
+            "cbba2e37-0d72-494d-9557-9ff38f2a1735": {
+              "delivery_token": "8990b5c3-8346-45d6-a32f-2952f396517a",
+              "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+              "exit_confirmed_at": "2026-10-05T00:16:37.092243+00:00",
+              "exit_evidence": "owned_launcher_wait",
+              "exited": true,
+              "generation": 2,
+              "handoff_expires_at": "2026-10-05T00:18:35.423274+00:00",
+              "hard_deadline_at": "2026-10-05T00:46:36.264996+00:00",
+              "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+              "launcher_id": "b9e705fc-8637-4a03-acca-2477f143541c",
+              "launcher_pid": 43368,
+              "launcher_started_at": "Sun Oct  4 17:15:31 2026",
+              "pid": 44107,
+              "run_id": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5",
+              "running_lease_expires_at": "2026-10-05T00:51:36.264996+00:00",
+              "started_at": "Sun Oct  4 17:16:35 2026"
+            }
+          },
+          "child_identity": null,
+          "child_pid": null,
+          "delivery_token": "506706f7-288a-4d5d-a082-657c5db25799",
+          "generation": 3,
+          "graceful_deadline_at": "2026-10-06T00:47:43.829797+00:00",
+          "hard_deadline_at": "2026-10-06T00:52:43.829797+00:00",
+          "launcher_id": null,
+          "lease_expires_at": null,
+          "mode": "personal",
+          "ownership_token": "506706f7-288a-4d5d-a082-657c5db25799",
+          "queued_at": "2026-10-06T00:22:43.829797+00:00",
+          "singleton": true,
+          "started_at": "2026-10-06T00:22:43.829797+00:00",
+          "unconfirmed_child": false,
+          "updated_at": "2026-10-05T00:22:43.928271+00:00",
+          "workspace_id": "7cbc2d6b-89a2-4ba4-b2ad-180c471d3f0e"
+        }
+      ]
+    },
+    "browser_initial": {
+      "active_job_count": 0,
+      "active_run_count": 0,
+      "database": {
+        "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+        "name": "nip_phase4b_browser_ac0f466f5808",
+        "oid": 19677
+      },
+      "processing_control": [
+        {
+          "active_attempt": null,
+          "active_run_id": null,
+          "child_history": {
+            "79021327-88d0-44c1-bfce-14d596f65008": {
+              "delivery_token": "3a3e66c7-ff1e-44f8-a289-bb2b84fedf71",
+              "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+              "exit_confirmed_at": "2026-10-05T00:02:06.927299+00:00",
+              "exit_evidence": "owned_launcher_wait",
+              "exited": true,
+              "generation": 2,
+              "handoff_expires_at": "2026-10-05T00:04:04.900654+00:00",
+              "hard_deadline_at": "2026-10-05T00:32:05.763240+00:00",
+              "identity": "79021327-88d0-44c1-bfce-14d596f65008",
+              "launcher_id": "b2096c11-e0b7-4d31-9ad5-2d00b0ed2798",
+              "launcher_pid": 32409,
+              "launcher_started_at": "Sun Oct  4 17:01:30 2026",
+              "pid": 33135,
+              "run_id": "f1e7acd6-8819-469c-a21c-3f7e050c92b9",
+              "running_lease_expires_at": "2026-10-05T00:37:05.763240+00:00",
+              "started_at": "Sun Oct  4 17:02:04 2026"
+            }
+          },
+          "child_identity": "79021327-88d0-44c1-bfce-14d596f65008",
+          "child_pid": 33135,
+          "delivery_token": "3a3e66c7-ff1e-44f8-a289-bb2b84fedf71",
+          "generation": 2,
+          "graceful_deadline_at": "2026-10-05T00:27:05.76324+00:00",
+          "hard_deadline_at": "2026-10-05T00:32:05.76324+00:00",
+          "launcher_id": "b2096c11-e0b7-4d31-9ad5-2d00b0ed2798",
+          "lease_expires_at": null,
+          "mode": "personal",
+          "ownership_token": "8d720bb6-6b59-47db-ab74-81a3fb83fadf",
+          "queued_at": "2026-10-05T00:02:04.900654+00:00",
+          "singleton": true,
+          "started_at": "2026-10-05T00:02:05.76324+00:00",
+          "unconfirmed_child": false,
+          "updated_at": "2026-10-05T00:02:06.83894+00:00",
+          "workspace_id": "76bb1bec-2927-4227-ba0a-b1d6eb2b6a69"
+        }
+      ]
+    },
+    "manual": {
+      "active_job_count": 0,
+      "active_run_count": 0,
+      "database": {
+        "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+        "evidence_epoch": "accepted_final_production_code",
+        "name": "nip_phase4b_manual_accepted_ac0f466f5808",
+        "oid": 308450
+      },
+      "processing_control": [
+        {
+          "active_attempt": null,
+          "active_run_id": null,
+          "child_history": {
+            "80b4980e-35d3-4264-826c-5dfc3ff1fd41": {
+              "delivery_token": "66cd2e3e-8844-462e-a2b0-35267c5e34cf",
+              "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+              "exit_confirmed_at": "2026-10-05T00:16:10.300794+00:00",
+              "exit_evidence": "owned_launcher_wait",
+              "exited": true,
+              "generation": 2,
+              "handoff_expires_at": "2026-10-05T00:18:08.872257+00:00",
+              "hard_deadline_at": "2026-10-05T00:46:09.526938+00:00",
+              "identity": "80b4980e-35d3-4264-826c-5dfc3ff1fd41",
+              "launcher_id": "80265c49-8c73-4392-abd4-032759988893",
+              "launcher_pid": 43850,
+              "launcher_started_at": "Sun Oct  4 17:16:08 2026",
+              "pid": 43852,
+              "run_id": "b2ba4b71-c991-4f6d-a671-f5d457cae35b",
+              "running_lease_expires_at": "2026-10-05T00:51:09.526938+00:00",
+              "started_at": "Sun Oct  4 17:16:08 2026"
+            }
+          },
+          "child_identity": "80b4980e-35d3-4264-826c-5dfc3ff1fd41",
+          "child_pid": 43852,
+          "delivery_token": "66cd2e3e-8844-462e-a2b0-35267c5e34cf",
+          "generation": 2,
+          "graceful_deadline_at": "2026-10-05T00:41:09.526938+00:00",
+          "hard_deadline_at": "2026-10-05T00:46:09.526938+00:00",
+          "launcher_id": "80265c49-8c73-4392-abd4-032759988893",
+          "lease_expires_at": null,
+          "mode": "personal",
+          "ownership_token": "c0f48f0c-1503-4b88-8ab5-281ceaab2d2b",
+          "queued_at": "2026-10-05T00:16:08.872257+00:00",
+          "singleton": true,
+          "started_at": "2026-10-05T00:16:09.526938+00:00",
+          "unconfirmed_child": false,
+          "updated_at": "2026-10-05T00:16:10.299272+00:00",
+          "workspace_id": "ad39b831-f19c-47e7-a538-dd4d68436dc7"
+        }
+      ]
+    },
+    "manual_initial": {
+      "active_job_count": 0,
+      "active_run_count": 0,
+      "database": {
+        "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+        "name": "nip_phase4b_manual_ac0f466f5808",
+        "oid": 19678
+      },
+      "processing_control": [
+        {
+          "active_attempt": null,
+          "active_run_id": null,
+          "child_history": {
+            "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3": {
+              "delivery_token": "25feb30c-9c82-498b-8325-e2d987a0ccf2",
+              "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+              "exit_confirmed_at": "2026-10-05T00:02:04.021292+00:00",
+              "exit_evidence": "owned_launcher_wait",
+              "exited": true,
+              "generation": 2,
+              "handoff_expires_at": "2026-10-05T00:04:02.272728+00:00",
+              "hard_deadline_at": "2026-10-05T00:32:02.985201+00:00",
+              "identity": "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3",
+              "launcher_id": "465c1166-d862-41a1-a945-11dacf020106",
+              "launcher_pid": 33110,
+              "launcher_started_at": "Sun Oct  4 17:02:01 2026",
+              "pid": 33119,
+              "run_id": "2c26f407-f585-4c83-9820-347b0dc72095",
+              "running_lease_expires_at": "2026-10-05T00:37:02.985201+00:00",
+              "started_at": "Sun Oct  4 17:02:02 2026"
+            }
+          },
+          "child_identity": "2e0fa174-2e43-4aaf-8ef4-60f4a66d1eb3",
+          "child_pid": 33119,
+          "delivery_token": "25feb30c-9c82-498b-8325-e2d987a0ccf2",
+          "generation": 2,
+          "graceful_deadline_at": "2026-10-05T00:27:02.985201+00:00",
+          "hard_deadline_at": "2026-10-05T00:32:02.985201+00:00",
+          "launcher_id": "465c1166-d862-41a1-a945-11dacf020106",
+          "lease_expires_at": null,
+          "mode": "personal",
+          "ownership_token": "2f691f9f-0101-4e3e-9ba8-5cc8d66a0f66",
+          "queued_at": "2026-10-05T00:02:02.272728+00:00",
+          "singleton": true,
+          "started_at": "2026-10-05T00:02:02.985201+00:00",
+          "unconfirmed_child": false,
+          "updated_at": "2026-10-05T00:02:04.019717+00:00",
+          "workspace_id": "3473e24c-facb-44bb-b295-a7f94fd42e58"
+        }
+      ]
+    },
+    "restored": {
+      "active_job_count": 0,
+      "active_run_count": 0,
+      "database": {
+        "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+        "name": "nip_phase4b_restored_ac0f466f5808",
+        "oid": 466073
+      },
+      "processing_control": [
+        {
+          "active_attempt": null,
+          "active_run_id": null,
+          "child_history": {
+            "cbba2e37-0d72-494d-9557-9ff38f2a1735": {
+              "delivery_token": "8990b5c3-8346-45d6-a32f-2952f396517a",
+              "executable": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+              "exit_confirmed_at": "2026-10-05T00:16:37.092243+00:00",
+              "exit_evidence": "owned_launcher_wait",
+              "exited": true,
+              "generation": 2,
+              "handoff_expires_at": "2026-10-05T00:18:35.423274+00:00",
+              "hard_deadline_at": "2026-10-05T00:46:36.264996+00:00",
+              "identity": "cbba2e37-0d72-494d-9557-9ff38f2a1735",
+              "launcher_id": "b9e705fc-8637-4a03-acca-2477f143541c",
+              "launcher_pid": 43368,
+              "launcher_started_at": "Sun Oct  4 17:15:31 2026",
+              "pid": 44107,
+              "run_id": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5",
+              "running_lease_expires_at": "2026-10-05T00:51:36.264996+00:00",
+              "started_at": "Sun Oct  4 17:16:35 2026"
+            }
+          },
+          "child_identity": null,
+          "child_pid": null,
+          "delivery_token": null,
+          "generation": 4,
+          "graceful_deadline_at": "2026-10-06T00:47:43.829797+00:00",
+          "hard_deadline_at": "2026-10-06T00:52:43.829797+00:00",
+          "launcher_id": null,
+          "lease_expires_at": null,
+          "mode": "legacy",
+          "ownership_token": null,
+          "queued_at": "2026-10-06T00:22:43.829797+00:00",
+          "singleton": true,
+          "started_at": "2026-10-06T00:22:43.829797+00:00",
+          "unconfirmed_child": false,
+          "updated_at": "2026-10-05T00:24:14.610907+00:00",
+          "workspace_id": "7cbc2d6b-89a2-4ba4-b2ad-180c471d3f0e"
+        }
+      ]
+    }
+  },
+  "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+  "utc": "2026-10-05T00:32:48.617157+00:00"
+}

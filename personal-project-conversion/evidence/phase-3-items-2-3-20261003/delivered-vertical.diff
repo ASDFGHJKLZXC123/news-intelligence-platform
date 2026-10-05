@@ -1,0 +1,40 @@
+diff --git a/tests/integration/test_daily_pipeline_vertical_slice.py b/tests/integration/test_daily_pipeline_vertical_slice.py
+index 9049b72..af36922 100644
+--- a/tests/integration/test_daily_pipeline_vertical_slice.py
++++ b/tests/integration/test_daily_pipeline_vertical_slice.py
+@@ -15,6 +15,7 @@ from typing import Any
+ import pytest
+ from alembic import command
+ from alembic.config import Config
++from alembic.script import ScriptDirectory
+ from sqlalchemy import create_engine, func, select, text
+ from sqlalchemy.engine import make_url
+ from sqlalchemy.orm import Session, sessionmaker
+@@ -95,6 +96,10 @@ def _vector() -> list[float]:
+ def migrated_pipeline_db(require_postgres: None, monkeypatch: pytest.MonkeyPatch):
+     """Apply migration head to a throwaway database and return its own session factory."""
+ 
++    migration_config = Config("alembic.ini")
++    expected_head = ScriptDirectory.from_config(migration_config).get_current_head()
++    assert expected_head is not None, "repository migration head is missing"
++
+     configured = make_url(get_settings().database_url)
+     database_name = f"{_DISPOSABLE_PREFIX}{uuid.uuid4().hex[:12]}"
+     assert database_name != configured.database
+@@ -115,11 +120,14 @@ def migrated_pipeline_db(require_postgres: None, monkeypatch: pytest.MonkeyPatch
+             database_url.render_as_string(hide_password=False),
+         )
+         get_settings.cache_clear()
+-        command.upgrade(Config("alembic.ini"), "head")
++        command.upgrade(migration_config, "head")
+ 
+         engine = create_engine(database_url, future=True)
+         with engine.connect() as connection:
+-            assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0019"
++            assert (
++                connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
++                == expected_head
++            )
+         yield sessionmaker(
+             bind=engine,
+             autoflush=False,

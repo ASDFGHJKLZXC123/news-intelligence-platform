@@ -1,0 +1,26 @@
+{
+  "schema": "item6-independent-native-fidelity.v1",
+  "observed_at": "2026-10-04T01:27:19.827391+00:00",
+  "source_session_id": "01a10467-132b-7ff2-a698-47b6023248c8",
+  "source_scope": "Native function_call_output text/image content only; no call arguments retained",
+  "index": "browser/capture-index.json",
+  "index_sha256": "d48a483924bb3a645c9bf7998bf6fe158f25d453ba62d284a05111df494f2f10",
+  "checks": {
+    "all_dom_segments_exact_against_indexed_native_output": true,
+    "all_native_image_payloads_exact": true,
+    "all_recorded_artifact_hashes_equal": true
+  },
+  "counts": {
+    "labeled_dom_segments": 39,
+    "native_calls": 30,
+    "native_images": 12
+  },
+  "visual_review": {
+    "native_images_inspected": 12,
+    "no_visible_credential_observed": true,
+    "corrected_capture_failure_warning": "browser/call_88hAlLGtkDHFpqXZlZ2bTEWn-image-1.jpg",
+    "corrected_provider_failure_warning": "browser/call_3aCxzKLdz2Ixh07Y7coRkU5m-image-1.jpg"
+  },
+  "qualification": "The session hash in the extraction index is the extraction-time snapshot; the active session may subsequently grow. Images remain call-scoped and loaded/loading states were inspected separately.",
+  "status": "PASS"
+}

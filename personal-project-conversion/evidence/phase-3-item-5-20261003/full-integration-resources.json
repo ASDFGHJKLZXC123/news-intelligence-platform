@@ -1,0 +1,1822 @@
+{
+  "after": {
+    "databases": [
+      {
+        "name": "nip_item5_base_62685f0adc26",
+        "oid": 16384
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "all_owned_databases_removed": true,
+  "before": {
+    "databases": [
+      {
+        "name": "nip_item5_base_62685f0adc26",
+        "oid": 16384
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "container_id": "fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab",
+  "databases": [
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0019"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_alembic_smoke_b07d500c9e3848e1bcec29ef8c671aa4",
+      "oid": 39237
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0021_personal_daily_bounds"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_alembic_smoke_e2de9d35c0a04e43815c5e7814ba3a81",
+      "oid": 45003
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_alembic_smoke_dfd03b20886b4b61a56eac4cb8ebf7e9",
+      "oid": 48217
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_8b488bf9b62d",
+      "oid": 52949
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_836180690cdb",
+      "oid": 53424
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_40746adebf8c",
+      "oid": 53899
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_897253d350e9",
+      "oid": 54374
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_65b8d9f4868e",
+      "oid": 54849
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_3395dc7936b9",
+      "oid": 55324
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_d4d8f7b0174a",
+      "oid": 55799
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_p_1b62df89c66f",
+      "oid": 56274
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_11562692fd5a",
+      "oid": 56749
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_b9fecdc19fd7",
+      "oid": 57168
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_8616a9891d9b",
+      "oid": 57587
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_f0289c7ef717",
+      "oid": 58006
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_68daf9376edb",
+      "oid": 58425
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_71e68f4ad908",
+      "oid": 58844
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_46fb37730f74",
+      "oid": 59263
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_analogy_it_cebc875d33a9",
+      "oid": 59682
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_pipeline_slice_ae9375bbbf7c",
+      "oid": 60107
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_roles_ec25b1abec26",
+      "oid": 63373
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0017"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_embedding_migration_7565ce5692fb4091ae551088d23ba815",
+      "oid": 66664
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0016"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_embedding_migration_769a9474f99f4a3f8d45c8c0a97b9022",
+      "oid": 69523
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0017"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_embedding_migration_2644d330d605474babeb393088e529e1",
+      "oid": 72377
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_6a67f6761ace",
+      "oid": 75229
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_5670c6578998",
+      "oid": 75385
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_b01ac5c9f04b",
+      "oid": 75541
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_e2c9e3364034",
+      "oid": 75697
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_569773cc15de",
+      "oid": 75853
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_6b9af64b12f2",
+      "oid": 76009
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_9ef3c58fcb4b",
+      "oid": 76165
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_identity_it_fd9d2b6d7ebd",
+      "oid": 76321
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_f3e6e599b5a8",
+      "oid": 76477
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_1858744c34c7",
+      "oid": 76693
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_5711aba569e1",
+      "oid": 76909
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_b6eda5d66f52",
+      "oid": 77125
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_890e840fa862",
+      "oid": 77341
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_e1d06668c115",
+      "oid": 77557
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_90c55760352e",
+      "oid": 77773
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_bbd2a25155b9",
+      "oid": 77989
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_linking_it_c7990dcf9f1c",
+      "oid": 78205
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_49bcdf9596ea4dac9093d8ae07813d10",
+      "oid": 78707
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c19f0dfcdc5941e4b6d16f3210a2e3fb",
+      "oid": 81969
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_df3e9c722cbb469eaa719927b7b37533",
+      "oid": 85235
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_57b77e3a4ea3444586b2362f135f1b9a",
+      "oid": 88501
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4241d7907bea40b38ba2b2fd694b9351",
+      "oid": 91763
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_90cc4d5fe13f4e15a917deef4d4de18b",
+      "oid": 95029
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4769fef55b394ad390c8fa64d2e0949b",
+      "oid": 98292
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1a0ec95179c247ec83e1bead97b63616",
+      "oid": 101555
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_201418ede7c04c009b2e9ce70149edf8",
+      "oid": 104818
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_00f3ca759475457c93574027a3a17da8",
+      "oid": 108084
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4abfdbe8fa0f479a8ea30d50ede14bae",
+      "oid": 111350
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_88067011297b45ffadfc6f056c9090d8",
+      "oid": 114613
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_791b6288ef73418aa570cd2a4518fcaf",
+      "oid": 117880
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_fa1effd4fd7249ca870ec0c9c01eed2c",
+      "oid": 121147
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1df6e8a8340d467fbd66c9b3be29eff9",
+      "oid": 124409
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_fe6f5450c2b64c87b68d946130562b7a",
+      "oid": 127692
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5475f9e7e1684f99abc5498401a0ed22",
+      "oid": 130954
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_03b6fb2b535145db9521cd40a5287d4a",
+      "oid": 134216
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a2381b8b1b444375909d66853e88e4b6",
+      "oid": 137478
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_8df28869a4ec46e78a2c8b3f6e507477",
+      "oid": 140740
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_db5fb43a8f3b478aa1037cc7ca382531",
+      "oid": 144002
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_f82651d1c064417299bb73aaecd9682b",
+      "oid": 147264
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ab6dca3a21674bb6ac39caefa6a4dc6d",
+      "oid": 150526
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_3b7b853931754cb1ad57e6beb85ac425",
+      "oid": 153788
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c34676477ded4fa9992104cab1d0fe45",
+      "oid": 157050
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_aa158419c83643a89b6cdc7d8faea57a",
+      "oid": 160312
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_01099e7f7f674bedab7f7c7b858faf97",
+      "oid": 163574
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_eb2a2d09645e4c18b954c812a01c155d",
+      "oid": 166840
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_cd5832f1dca4478497683482dd52017d",
+      "oid": 170102
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_98bb4f61612f4ce28be663a9c277339a",
+      "oid": 173364
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_42783279fa05439bb270ac4c83f32513",
+      "oid": 176632
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_3abddfe8247d4625ba3fdb3104326a6c",
+      "oid": 179894
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_40657704432a413587ea9757c465028c",
+      "oid": 183156
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_399bb9cc4f214d7d9bb856fb8fed93ee",
+      "oid": 186418
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0b5dc08761714489a699daba96e76501",
+      "oid": 189680
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_260f2fa158f8459284d3f8bbd91618e6",
+      "oid": 192948
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1da7ece120d348a8b6389f10c9892b68",
+      "oid": 196216
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4a27b9c80e854d14aaa30dcdef44f916",
+      "oid": 199484
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_93c3be13103c44f990019c256a4778f6",
+      "oid": 202746
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_d01db6b627954db48cd34c280d5600a1",
+      "oid": 206008
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_8400c79af1fa42f3aa28aaab49cf848d",
+      "oid": 209277
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_88997c7b49d64b84963fd77595f4b75f",
+      "oid": 212539
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_48c8dbdb20f84fe284c4abdd8d34101e",
+      "oid": 215801
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a12a2f19073a43ce9727cd8350a6aaf0",
+      "oid": 219065
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_6555fd5f52d8492681ea95118faf7765",
+      "oid": 222333
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ebd0d0ac3706455ebb3ce6bc54c545d0",
+      "oid": 225597
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0cf7e42a633d4334917568b9adbcf1a4",
+      "oid": 228865
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_02ecfcb2a6814a3a801bd9eccb6ae8d4",
+      "oid": 232127
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5518bdfc7cc74fef8ecf45f42a35aab9",
+      "oid": 235389
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_13164bf308ce40c1a18461cff6138a5c",
+      "oid": 238651
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4847d56485b744e5afff866a46e8e7c4",
+      "oid": 241913
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_840432876ebd48fd86fc2e5e43eb439b",
+      "oid": 245175
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a91471c969fc4d698075a7a734702d13",
+      "oid": 248437
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_8fa3d2e6bf47497db4776273f67c149b",
+      "oid": 251699
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_7ac724e2869a45d580d72dd92d79adb4",
+      "oid": 254961
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_05e0d20a3e00404f939cef36a15ed988",
+      "oid": 258223
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_13001aac03f54f88ba98a4f29faf2e51",
+      "oid": 261485
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_81268100bee3467d86e3b48e99cd5934",
+      "oid": 264754
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_722db859f78e4af385790edc6bc87afc",
+      "oid": 268016
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_9acfacc5b1f14d36b0353f2a2a99c6f2",
+      "oid": 271278
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_18f5cacd04344785852cdb82a2401e6f",
+      "oid": 274540
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5148f974ec8242c3ac7568648c06863b",
+      "oid": 277802
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_eb17f3c5785a45fcbb50109c481d7324",
+      "oid": 281064
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_e869c2bcd4d34ff5a5fb9406fb4d1197",
+      "oid": 284326
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_6e29e50ad6394c72afcf1ce844c49ba2",
+      "oid": 287588
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_099f3ca99a4b40979ac254fbf8ffbe38",
+      "oid": 290850
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a4c38d39166447beb5304f609cfd39a9",
+      "oid": 294112
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_694d67bcdf59490d99e8564b5a5ecdb6",
+      "oid": 297374
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_88b87d94dc9a48978e5a93276ac3faaa",
+      "oid": 300636
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_54fd08eca39b40cca78e28bd709b6284",
+      "oid": 303898
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_860de1c46bf64b0fb6fed56e4d6a062c",
+      "oid": 307160
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_82c9b8b345484a73ba91c7c11b095b88",
+      "oid": 310422
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_9cedbd49bb864aad8a877d01a4ce0778",
+      "oid": 313684
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1405fee9dc3b48439216bfbf05e98967",
+      "oid": 316946
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_51553de6b37340e9a465b961a7b2f219",
+      "oid": 320208
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c178dd5655da4dc3ba49bab1ab99ff2e",
+      "oid": 323470
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1f3113a240b94baca7968aa3169ff3f2",
+      "oid": 326732
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_8ca9fd0ca6ef4a529d20aca2ad5738ee",
+      "oid": 329994
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_46e1fa8d2567435294f5fd98ca8663d1",
+      "oid": 333256
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_af46883c930c4e8b9305242d24f07ed4",
+      "oid": 336518
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_22807d68d52648a8bfeca728cc498430",
+      "oid": 339780
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0eabc46a51524a7991fab7fdaea57dcf",
+      "oid": 343042
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_83cce0116e0c4aceb14b01c3b78b598d",
+      "oid": 346309
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1d4767fad77f4918845b95059dac7e2c",
+      "oid": 349571
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5ab50e69d0d84db1a027cf317e93b409",
+      "oid": 352839
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_59766cf8ec2d41eea9a1735ac7748e44",
+      "oid": 356101
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0cfe994f3f094479a30ee23280ebd600",
+      "oid": 359363
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_phase2_live_f9821eb7c48645d8a8bf00c6228408b2",
+      "oid": 362625
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_phase2_live_0a2bbc44cd924935aa077e8d25de9c9f",
+      "oid": 365895
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_phase2_live_1891cf2c8a8f42c38156749cd920c549",
+      "oid": 369165
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a8d5950578d54640b9bcf2af5371a200",
+      "oid": 372427
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_23a7701ec09244fda3f161bba2be45af",
+      "oid": 375689
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c0edc6ff4dc04ccda0a48b30ffcd179f",
+      "oid": 378951
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0014"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_score_precision_70bd66e064954233afa677522396f18b",
+      "oid": 382227
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0014"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_score_precision_4c3156778a834beab9828d2f25a160d4",
+      "oid": 385116
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0013"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_score_precision_91f95e37fc9148a6b2c96d86e8093a35",
+      "oid": 388005
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0013"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage1_migration_7cdfce999857434a8d128b840484c32e",
+      "oid": 390911
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0012"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage1_migration_9274f339f8214c7c9646cd3545d757a2",
+      "oid": 393964
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0016"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_hotness_92537788e7f54b42b85dcc2437655607",
+      "oid": 397032
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_sel_ffa7fe397e0b4585868acde9f4bb531a",
+      "oid": 399864
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0016"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_hotness_944c0b139ffb42b2b5355542b288ec41",
+      "oid": 403126
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_sel_f606a5be6d1448308a700f4b00e2180f",
+      "oid": 405966
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_sel_0346fad30eca4daba5b6af6bacf9126d",
+      "oid": 409228
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_sel_be6fd919139a4fd28248c4393140d67c",
+      "oid": 412490
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_sel_f86271a1a82c4cee8623c7b4ce68e670",
+      "oid": 415752
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_45fb053995be4dde9b32659712afbc64",
+      "oid": 419014
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_33789d0b35f64c948f1ab1b0e53a6d31",
+      "oid": 419560
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_06b9ee97b1d043649445a6066c60c9fa",
+      "oid": 420106
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_fdcef4ed8fce4c91b9c80430ae69aa43",
+      "oid": 420652
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_fb54ce9adf5240cdb135cd6acd7b9fc9",
+      "oid": 421198
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_ctx_3a7730f652b94374a41932d392ca2499",
+      "oid": 421746
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_7c1d88b892e94d49bb6943413cc6ea93",
+      "oid": 422292
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_8deda5d716e84c5282ef7b780ab9d7dd",
+      "oid": 422473
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_f24b6beb0d3b488d8c0b62b6ff5edd8a",
+      "oid": 422654
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_69fd280969ac428e8420942e8c1d0ac3",
+      "oid": 422835
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_c8382844840c4a3ab09b6b47c8290175",
+      "oid": 423016
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_b457c04795cf46e69d3454009bf42f26",
+      "oid": 423197
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_export_b7c33c7073e140ad9a31e865dd180c27",
+      "oid": 423378
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_generation_0bde8f8c6f374866b08fffb6eb7aecec",
+      "oid": 423559
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_generation_8cd25a05d10140628cd16065f05c5950",
+      "oid": 426821
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_generation_cc269dcc6f7c40c4ad305f5e7995af72",
+      "oid": 430083
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_generation_7be6ef3d480d47d19103be9b7d131ff3",
+      "oid": 433345
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_0b5b5053734e424db6c3593d9a4a17fe",
+      "oid": 436607
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_3864d6504ce44beeb50116fd81d1ed0a",
+      "oid": 436806
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_d74db9e5ac064f82ba7c44aff8288c11",
+      "oid": 437005
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_99e202d03ceb4e3bae09f89b9fbdd68f",
+      "oid": 437204
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_c994317e0a5a4de8809a2d0746c102cc",
+      "oid": 437403
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_665ef08a72de4b04ac7e7b05c2777988",
+      "oid": 437602
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_8ae5bb419d354d79a9070cb14531b7af",
+      "oid": 437801
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_ca2a43c4e22a412ab05ee3b3227df65a",
+      "oid": 438000
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_lifecycle_21c47831a2064bed965b865cbe611f44",
+      "oid": 438199
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_bf74df69564e4030872977a869592a40",
+      "oid": 438398
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_4f6806ac285849d0bc98b68070e72ae3",
+      "oid": 438794
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_17056f848996457e945ed357f95f3780",
+      "oid": 439190
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_301638859a144306897722d2705475e2",
+      "oid": 439586
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_a2e9fce7620d4755bd66bc1f02f07110",
+      "oid": 439982
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_befffa8253e940ae845c47e946140583",
+      "oid": 440378
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_f5982f1a843d40458023caaa813be2ac",
+      "oid": 440774
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_58da4b4bf47e4c758abafb564f5953c9",
+      "oid": 441170
+    },
+    {
+      "absent_after_drop": true,
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage6_api_a25e78c36e964623ae37d1939a2a2806",
+      "oid": 441566
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0022_personal_spending"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1618f4e8ae8c497cbdc9237fdaf8d261",
+      "oid": 441962
+    }
+  ],
+  "inventory_unchanged": true,
+  "roles": [
+    {
+      "absent_after_drop": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_delegate_ec25b1abec26",
+      "oid": 63374,
+      "owned_database": "nip_roles_ec25b1abec26"
+    },
+    {
+      "absent_after_drop": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_runtime_ec25b1abec26",
+      "oid": 64785,
+      "owned_database": "nip_roles_ec25b1abec26"
+    },
+    {
+      "absent_after_drop": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_migrator_ec25b1abec26",
+      "oid": 64784,
+      "owned_database": "nip_roles_ec25b1abec26"
+    }
+  ]
+}

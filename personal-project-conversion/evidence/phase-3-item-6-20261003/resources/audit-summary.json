@@ -1,0 +1,11 @@
+{
+  "captured_at_utc": "2026-10-04T01:02:45.019455+00:00",
+  "database_oids_match_item23": true,
+  "dedicated_container_identity_match": true,
+  "evidence_only_writes": true,
+  "historical_browser_disposition": "Preserve: original private ownership manifest missing; no cleanup inferred from names.",
+  "new_item6_harness_excluded_from_cleanup": "p3_item6_20261003_b",
+  "resource_mutations": [],
+  "shared_development_postgres": "Preserve exact ID 07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a and named volume news-intelligence-platform_pgdata; no database connection made to it.",
+  "unrelated_infrastructure_disposition": "Preserve all, including stopped restart-test containers; historical item-5 broad comparison remains failed."
+}

@@ -9,7 +9,8 @@ requires-python = ">=3.11"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["frontend"]
+# Evidence includes frozen historical source and intentionally failing harnesses.
+extend-exclude = ["frontend", "personal-project-conversion/evidence"]
 
 [tool.ruff.lint]
 # Sensible default rule set: pyflakes, pycodestyle, isort, bugbear, pyupgrade.

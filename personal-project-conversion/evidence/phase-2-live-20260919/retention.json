@@ -1,0 +1,10 @@
+{
+  "retained_at": "2026-09-20T06:58:08.183846+00:00",
+  "dump_sha256": "584a2271c2a2d72a22cdda9fa45306efa9e55a890f576542712f4f8558f65903",
+  "dump_bytes": 292880,
+  "dump_path": "/tmp/nip-phase2-live-20260919_8cf55cfa/failed-database.dump",
+  "container_id": "78365ec05b42690e4d723a92ff0d953eab3afeefd3a2c01c0689879662d4244d",
+  "database": "nip_phase2_live_20260919_8cf55cfa",
+  "ledger_hash": "aee7f9c2b5828e446e81961996a65b20e94744f41df5d5c83a5464da7e0bbae5",
+  "config_hash": "c80d68585f9d29f3c2fd749fbbda55755151d5620f050b4f0bc98110922388d2"
+}

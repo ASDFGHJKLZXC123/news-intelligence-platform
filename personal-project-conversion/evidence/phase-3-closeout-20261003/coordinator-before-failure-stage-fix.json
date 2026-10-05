@@ -1,0 +1,6 @@
+{
+  "path": "services/personal/coordinator.py",
+  "observed_at": "2026-10-04T02:52:24.405914+00:00",
+  "sha256": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450",
+  "baseline": "Current dirty source before authorized one-line persistence correction; retained 2-failure/6-pass final-targeted gate is the failing proof."
+}

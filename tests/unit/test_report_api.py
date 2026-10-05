@@ -344,7 +344,10 @@ class FakeEvidenceRepo:
         self.claim_reads = 0
         self.link_reads = 0
 
-    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
+    def claim_is_referenced_by_descriptive_report(
+        self, claim_id: uuid.UUID, *, descriptive_only: bool = True
+    ) -> bool:
+        del descriptive_only
         return self._descriptive_reference
 
     def get_claim(self, claim_id: uuid.UUID) -> Any:
@@ -415,7 +418,7 @@ def test_evidence_drawer_shape_carries_real_support_types_and_a_safe_snippet(
         snippet_truncated=False,
     )
     app.dependency_overrides[get_intelligence_repository] = lambda: FakeEvidenceRepo(
-        claim, (supports, contradicts)
+        claim, (supports, contradicts), descriptive_reference=True
     )
 
     payload = client.get(f"/api/v1/evidence/{claim_id}").json()
@@ -447,6 +450,23 @@ def test_evidence_drawer_shape_carries_real_support_types_and_a_safe_snippet(
 def test_evidence_drawer_missing_claim_is_404(client: TestClient) -> None:
     app.dependency_overrides[get_intelligence_repository] = lambda: FakeEvidenceRepo(None, ())
     assert client.get(f"/api/v1/evidence/{uuid.uuid4()}").status_code == 404
+
+
+def test_open_gate_does_not_expose_a_claim_with_only_personal_scoped_support(
+    client: TestClient,
+) -> None:
+    claim_id = uuid.uuid4()
+    claim = SimpleNamespace(
+        id=claim_id,
+        claim_text="Personal source-reported assertion.",
+        claim_type="source_reported_assertion",
+        confidence_score=None,
+    )
+    app.dependency_overrides[get_intelligence_repository] = lambda: FakeEvidenceRepo(claim, ())
+
+    response = client.get(f"/api/v1/evidence/{claim_id}")
+
+    assert response.status_code == 404
 
 
 def test_closed_gate_evidence_requires_a_published_descriptive_report_reference(
@@ -489,15 +509,38 @@ def test_evidence_drawer_malformed_uuid_is_422_at_routing(client: TestClient) ->
 class RecordingEnqueuer:
     def __init__(self) -> None:
         self.dates: list[datetime.date] = []
+        self.task_ids: list[uuid.UUID] = []
 
-    def __call__(self, brief_date: datetime.date) -> QueuedBrief:
+    def __call__(
+        self, brief_date: datetime.date, *, task_id: uuid.UUID, legacy_job_id: uuid.UUID
+    ) -> QueuedBrief:
         self.dates.append(brief_date)
-        return QueuedBrief(task_id="task-123", task_name="generate_daily_brief", queue="pipeline")
+        assert legacy_job_id == task_id
+        self.task_ids.append(task_id)
+        return QueuedBrief(
+            task_id=str(task_id), task_name="generate_daily_brief", queue="pipeline"
+        )
 
 
 def test_generate_daily_brief_enqueues_and_returns_202(client: TestClient) -> None:
     enqueuer = RecordingEnqueuer()
     app.dependency_overrides[get_brief_enqueuer] = lambda: enqueuer
+
+    class QueueSession:
+        def __init__(self) -> None:
+            self.rows: list[Any] = []
+
+        def add(self, row: Any) -> None:
+            self.rows.append(row)
+
+        def flush(self) -> None:
+            return None
+
+        def commit(self) -> None:
+            return None
+
+    session = QueueSession()
+    app.dependency_overrides[get_session] = lambda: session
 
     resp = client.post(
         "/api/v1/internal/jobs/generate-daily-brief", json={"brief_date": "2026-07-14"}
@@ -505,7 +548,8 @@ def test_generate_daily_brief_enqueues_and_returns_202(client: TestClient) -> No
 
     assert resp.status_code == 202
     body = resp.json()
-    assert body["task_id"] == "task-123"
+    assert body["task_id"] == str(enqueuer.task_ids[0])
+    assert body["job_id"] == str(enqueuer.task_ids[0])
     assert body["task_name"] == "generate_daily_brief"
     assert body["queue"] == "pipeline"
     assert body["brief_date"] == "2026-07-14"
@@ -539,17 +583,27 @@ def test_enqueue_helper_sends_the_exact_task_args_and_queue_without_a_broker(
     calls: list[dict[str, Any]] = []
 
     class FakeCelery:
-        def send_task(self, name: str, *, args: Any, queue: str) -> Any:
-            calls.append({"name": name, "args": args, "queue": queue})
-            return SimpleNamespace(id="async-1")
+        def send_task(self, name: str, *, args: Any, queue: str, task_id: str) -> Any:
+            calls.append({"name": name, "args": args, "queue": queue, "task_id": task_id})
+            return SimpleNamespace(id=task_id)
 
     # Patch the module attribute the lazily-imported enqueuer resolves -- no broker is contacted.
     monkeypatch.setattr("workers.celery_app.celery_app", FakeCelery())
 
-    queued = enqueue_generate_daily_brief(datetime.date(2026, 7, 14))
+    task_id = uuid.uuid4()
+    queued = enqueue_generate_daily_brief(
+        datetime.date(2026, 7, 14), task_id=task_id, legacy_job_id=task_id
+    )
 
-    assert queued == QueuedBrief(task_id="async-1", task_name=TASK_NAME, queue=QUEUE_PIPELINE)
-    assert calls == [{"name": TASK_NAME, "args": ["2026-07-14"], "queue": QUEUE_PIPELINE}]
+    assert queued == QueuedBrief(task_id=str(task_id), task_name=TASK_NAME, queue=QUEUE_PIPELINE)
+    assert calls == [
+        {
+            "name": TASK_NAME,
+            "args": ["2026-07-14", str(task_id)],
+            "queue": QUEUE_PIPELINE,
+            "task_id": str(task_id),
+        }
+    ]
 
 
 # --------------------------------------------------------------------------------------

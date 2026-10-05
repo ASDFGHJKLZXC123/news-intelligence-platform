@@ -1,0 +1,69 @@
+{
+  "all_historical_evidence_unchanged": true,
+  "baseline_file_count": 1865,
+  "baseline_files_changed": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "frontend/SIGNAL - Intelligence Platform.html",
+    "personal-project-conversion/04-local-runtime.md",
+    "personal-project-conversion/README.md",
+    "services/personal/runner.py",
+    "services/personal/offline_fixture.py",
+    "services/personal/paid_runtime.py",
+    "services/personal/app.py",
+    "services/llm/cache.py",
+    "services/llm/limiter.py",
+    "apps/api/deps.py",
+    "apps/api/health.py",
+    "apps/api/main.py",
+    "apps/api/middleware.py"
+  ],
+  "baseline_sha256": "d72b3e2cd6796053ad6f3acdc2aeb3115493f4451aabd086b66be0d716b49b4e",
+  "baseline_timestamp_utc": "2026-10-04T23:52:45.738477+00:00",
+  "closure_artifact_sha256": {
+    "independent-review.md": "8e9415106be33cdf24bb294dc9ddad05c4211c61157171de0aaa600debfaf38e",
+    "resource-cleanup.json": "cf1e0158de540b01273b7f891ba93ce9abfd463ef8fc63f25b102abab5ae7699",
+    "stack-cleanup.json": "4feb5812cf02f5abafdf23e012722338932ff5b711a26e6c4422df56bd7074fd"
+  },
+  "control_checks": {
+    "branch_unchanged": true,
+    "git_index_unchanged": true,
+    "head_unchanged": true,
+    "staged_diff_unchanged": true
+  },
+  "current_branch": "codex/stage10-hardening",
+  "current_git_index_sha256": "8021fcd5864c808429c0379ea28e1e82d3b9a121303025adebf98111a3991bcf",
+  "current_head": "7c7fcebbeba9c7b9671d6eb38631c2625cc8b454",
+  "current_implementation_drift": [],
+  "current_implementation_manifest": "actual-final-formatted-source-before.json",
+  "current_implementation_paths_checked": [
+    "services/personal/local_runtime.py",
+    "services/personal/paid_runtime.py",
+    "services/personal/runner.py",
+    "services/llm/cache.py",
+    "services/llm/limiter.py",
+    "apps/api/main.py",
+    "apps/api/deps.py",
+    "apps/api/health.py",
+    "apps/api/middleware.py",
+    "apps/api/personal_frontend.py",
+    "frontend/app/api-adapter.js",
+    "frontend/app/shell.jsx"
+  ],
+  "current_staged_diff_sha256": "9a9894a26505448b788e6dfd9ade51cce70fd21f545bcd70ba792264f6ba83fc",
+  "env_unchanged": true,
+  "historical_evidence_file_count": 1039,
+  "kind": "independent final read-only protected baseline comparison",
+  "passed": true,
+  "protected_file_count": 1041,
+  "protected_mismatches": [],
+  "selected_preferences_unchanged": true,
+  "status_document_sha256": {
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md": "af41b7fe9ec4d20c1a3c7b4303e40a661d5aa5a9e31a394c420e972a618c3a8e",
+    "README.md": "009b5ec39bab6f96bb65ad030b8b35a3156f8d0a57bdf02e459fd518bd4fedc0",
+    "personal-project-conversion/04-local-runtime.md": "b725ca91894117cd1a63849a152a4f4c46b86b3c66f09363f45dea7146e7de70",
+    "personal-project-conversion/README.md": "edb023b7ef9819c441a23f68fccfe78fb16cd2b592b272b164a353a343270356",
+    "personal-project-conversion/evidence/phase-4b.md": "d7cc00e40caff8a5bc59e535266fc122b395e0a13d00e4341eea55b72a4f9267"
+  },
+  "timestamp_utc": "2026-10-05T00:38:12.476133+00:00"
+}

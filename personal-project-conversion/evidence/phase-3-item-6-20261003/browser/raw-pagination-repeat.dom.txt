@@ -1,0 +1,41 @@
+CAPTURE raw-pagination-repeat{
+  firstPageStable: true,
+  pageTitles: [
+    [
+      'Retained RSS articles · 26',
+      'Synthetic item 6 technology: retained raw article 08',
+      'Synthetic item 6 policy: retained raw article 06',
+      'Synthetic item 6 technology: retained raw article 11',
+      'Synthetic item 6 policy: retained raw article 11',
+      'Synthetic item 6 policy: retained raw article 10',
+      'Synthetic item 6 technology: retained raw article 12',
+      'Synthetic item 6 policy: retained raw article 02',
+      'Synthetic item 6 policy: retained raw article 07',
+      'Synthetic item 6 technology: retained raw article 10',
+      'Synthetic item 6 policy: retained raw article 12',
+      'Synthetic item 6 technology: retained raw article 04',
+      'Synthetic item 6 technology: retained raw article 05'
+    ],
+    [
+      'Retained RSS articles · 26',
+      'Synthetic item 6 policy: retained raw article 01',
+      'Synthetic item 6 policy: retained raw article 13',
+      'Synthetic item 6 technology: retained raw article 01',
+      'Synthetic item 6 technology: retained raw article 13',
+      'Synthetic item 6 technology: retained raw article 03',
+      'Synthetic item 6 technology: retained raw article 09',
+      'Synthetic item 6 policy: retained raw article 08',
+      'Synthetic item 6 technology: retained raw article 02',
+      'Synthetic item 6 policy: retained raw article 09',
+      'Synthetic item 6 policy: retained raw article 03',
+      'Synthetic item 6 technology: retained raw article 06',
+      'Synthetic item 6 technology: retained raw article 07'
+    ],
+    [
+      'Retained RSS articles · 26',
+      'Synthetic item 6 policy: retained raw article 05',
+      'Synthetic item 6 policy: retained raw article 04'
+    ]
+  ],
+  uniqueRawTitles: 26
+}

@@ -1,0 +1,122 @@
+--- before/workers/personal_tasks.py
++++ after/workers/personal_tasks.py
+@@ -65,12 +65,18 @@
+     OfflinePersonalFixture,
+     load_offline_personal_fixture,
+ )
++from services.personal.paid_runtime import (
++    build_paid_embedding_provider,
++    build_paid_orchestrator,
++    runtime_readiness,
++)
+ from services.personal.runs import (
+     create_daily_run,
+     lock_owned_run,
+     require_personal_writer_mode,
+ )
+ from services.personal.settings import processing_block_reason
++from services.personal.spending import PaidRoute, SpendingLedger
+ from services.personal.workspace import configure_profile, ensure_workspace
+ from workers.celery_app import (
+     PIPELINE_TASK_SOFT_TIME_LIMIT,
+@@ -102,6 +108,7 @@
+     route: dict[str, Any]
+     authorized_spend_usd: float
+     ai_block_reason: str | None = None
++    workspace_id: uuid.UUID | None = None
+ 
+ 
+ @dataclass(frozen=True)
+@@ -111,7 +118,7 @@
+     frozen_route: dict[str, Any]
+ 
+ 
+-def _runtime_spec(run_id: uuid.UUID, token: uuid.UUID) -> _RuntimeSpec:
++def _runtime_spec(run_id: uuid.UUID, token: uuid.UUID, *, runtime: Settings) -> _RuntimeSpec:
+     with SessionLocal() as session:
+         row = session.execute(
+             select(PersonalRun, PersonalProfileRevision)
+@@ -145,15 +152,14 @@
+             if profile.schema_revision == "personal-profile.v2"
+             else None
+         )
+-        # Ordinary live activation has not been authorized. Durable paid adapters are
+-        # verified separately using synthetic transport; config/keys alone cannot
+-        # activate them through this worker. Continue bounded raw intake instead.
++        # Implemented capability is separate from activation: the server gate defaults
++        # off, and frozen profile configuration/credentials alone cannot enable dispatch.
+         if (
+             profile.schema_revision == "personal-profile.v2"
+             and isinstance(route, dict)
+             and route.get("mode") == "live"
+         ):
+-            reason = reason or "execution_route_unavailable"
++            reason = reason or runtime_readiness(runtime, route)
+         return _RuntimeSpec(
+             route=(
+                 {"mode": "raw"}
+@@ -164,6 +170,9 @@
+             ),
+             authorized_spend_usd=authorized_spend,
+             ai_block_reason=reason,
++            workspace_id=run.workspace_id
++            if profile.schema_revision == "personal-profile.v2"
++            else None,
+         )
+ 
+ 
+@@ -850,9 +859,10 @@
+     redis_client: object | None = None
+     embedding_provider: object | None = None
+     fixture: OfflinePersonalFixture | None = None
++    ledger: SpendingLedger | None = None
+     try:
+         settings = get_settings()
+-        spec = _runtime_spec(run_id, token)
++        spec = _runtime_spec(run_id, token, runtime=settings)
+         if spec.route.get("mode") == "raw":
+             embedding_provider = _DisabledEmbeddingProvider()
+ 
+@@ -868,6 +878,34 @@
+             rss_factory = fixture.rss_provider
+             orchestrator_factory = fixture.orchestrator
+             fixture_label = fixture.label
++        elif spec.route.get("mode") == "live" and spec.workspace_id is not None:
++            ledger = SpendingLedger(
++                session_factory=SessionLocal,
++                workspace_id=spec.workspace_id,
++                run_id=run_id,
++                ownership_token=token,
++            )
++            generation_route = PaidRoute.from_mapping(spec.route["generation"], role="generation")
++            embedding_provider = build_paid_embedding_provider(
++                settings=settings,
++                route=PaidRoute.from_mapping(spec.route["embedding"], role="embedding"),
++                ledger=ledger,
++            )
++
++            def rss_factory(_source):  # noqa: ANN001, ANN202
++                return HttpRSSProvider()
++
++            def orchestrator_factory(session, frozen_route):  # noqa: ANN001, ANN202
++                if frozen_route != spec.route:
++                    raise ValueError("personal snapshot route differs from its frozen worker route")
++                return build_paid_orchestrator(
++                    session=session,
++                    settings=settings,
++                    route=generation_route,
++                    ledger=ledger,
++                )
++
++            fixture_label = None
+         else:
+             raise ValueError(
+                 "live assisted processing requires the dedicated bounded smoke harness"
+@@ -882,6 +920,7 @@
+             orchestrator_factory=orchestrator_factory,
+             now=now or datetime.datetime.now(datetime.UTC),
+             ai_block_reason=spec.ai_block_reason,
++            paid_block_reason=(lambda: ledger.blocked_code) if ledger is not None else None,
+         )
+         with SessionLocal() as session:
+             terminal_state = session.scalar(

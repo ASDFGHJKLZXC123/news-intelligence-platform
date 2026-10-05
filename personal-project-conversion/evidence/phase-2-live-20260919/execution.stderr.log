@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/run-personal-phase2-live-smoke.py", line 91, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/run-personal-phase2-live-smoke.py", line 82, in main
+    result = _execute(config, ledger)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/run-personal-phase2-live-smoke.py", line 54, in _execute
+    result = execute_personal_live_smoke(config=config, ledger=ledger)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 713, in execute_personal_live_smoke
+    result = run_personal_daily(
+        prepared.run_id,
+    ...<5 lines>...
+        now=now,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 651, in run_personal_daily
+    raise PersonalCoordinatorError("all configured personal feeds failed")
+services.personal.coordinator.PersonalCoordinatorError: all configured personal feeds failed

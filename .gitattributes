@@ -1,0 +1,4 @@
+# Preserve byte-identical historical command output and source snapshots.
+personal-project-conversion/evidence/** -whitespace
+# Trial CSV records use the standard CSV writer's CRLF line endings.
+personal-project-conversion/trials/**/*.csv whitespace=cr-at-eol

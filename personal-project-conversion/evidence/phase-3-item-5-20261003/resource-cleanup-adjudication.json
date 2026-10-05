@@ -1,0 +1,82 @@
+{
+  "complete_preexisting_records_unchanged": 17,
+  "event_initiator_available": false,
+  "events": "resource-events.jsonl",
+  "events_command": [
+    "docker",
+    "events",
+    "--since",
+    "2026-10-03T23:28:35Z",
+    "--until",
+    "2026-10-03T23:39:00Z",
+    "--filter",
+    "type=container",
+    "--filter",
+    "container=452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+    "--filter",
+    "container=ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+    "--filter",
+    "container=fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab",
+    "--filter",
+    "event=kill",
+    "--filter",
+    "event=stop",
+    "--filter",
+    "event=die",
+    "--filter",
+    "event=destroy",
+    "--format",
+    "{{json .}}"
+  ],
+  "item5_mutation_targets": [
+    "fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab"
+  ],
+  "observed_drift": [
+    {
+      "fields": {
+        "ports": {
+          "after": {},
+          "before": {
+            "5432/tcp": null
+          }
+        },
+        "running": {
+          "after": false,
+          "before": true
+        }
+      },
+      "id": "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "name": "/infra-monitor-demo-progress-v2-test-restart-db"
+    },
+    {
+      "fields": {
+        "ports": {
+          "after": {},
+          "before": {
+            "5432/tcp": [
+              {
+                "HostIp": "127.0.0.1",
+                "HostPort": "15444"
+              }
+            ]
+          }
+        },
+        "running": {
+          "after": false,
+          "before": true
+        }
+      },
+      "id": "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "name": "/infra-monitor-demo-progress-v2-test-restart-relay"
+    }
+  ],
+  "original_broad_comparison_failed": true,
+  "original_record_preserved": "resource-cleanup.json",
+  "owned_cleanup_complete": true,
+  "preexisting_count": 19,
+  "preexisting_identity_image_labels_mounts_unchanged": true,
+  "reason": "Two other-project containers stopped before owned cleanup. Item 5 resource actions targeted only the manifested owned container. Broad unchanged-state claim remains false; no unrelated restoration is authorized.",
+  "unrelated_resources_modified_by_item5": false,
+  "unrelated_states_restored_or_cleaned": false,
+  "unrelated_stops_preceded_owned_cleanup": true
+}

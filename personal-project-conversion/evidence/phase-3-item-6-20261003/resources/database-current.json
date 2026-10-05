@@ -1,0 +1,24 @@
+{
+  "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6": {
+    "clients": "datname|pid|usename|application_name|client_addr|backend_start|state\npostgres|57379|news|psql||2026-10-04 01:02:43.939397+00|active\n(1 row)\n",
+    "inventory": "oid|datname|owner\n649104|nip_phase3_final_444731f8f123|news\n296986|nip_phase3_full_a5ca8c211b71|news\n5|postgres|news\n4|template0|news\n1|template1|news\n(5 rows)\n"
+  },
+  "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5": {
+    "clients": "datname|pid|usename|application_name|client_addr|backend_start|state\nnip_personal_phase2_offline_p3_browser_20260920_a|105|news||172.17.0.1|2026-09-20 23:06:35.766507+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|106|news||172.17.0.1|2026-09-20 23:06:35.767761+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|107|news||172.17.0.1|2026-09-20 23:06:35.799013+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|108|news||172.17.0.1|2026-09-20 23:06:35.802555+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|115|news||172.17.0.1|2026-09-20 23:08:39.508039+00|idle\npostgres|41482|news|psql||2026-10-04 01:02:44.09753+00|active\n(6 rows)\n",
+    "inventory": "oid|datname|owner\n16384|nip_personal_phase2_offline_p3_browser_20260920_a|news\n5|postgres|news\n4|template0|news\n1|template1|news\n(4 rows)\n"
+  },
+  "nip_phase3_final_444731f8f123": {
+    "counts": "table_name|rows\npersonal_workspaces|0\npersonal_runs|0\npersonal_captures|0\npersonal_paid_requests|0\npersonal_legacy_usage|0\nreports|0\narticles|4\nsources|2\n(8 rows)\n",
+    "expected_oid": 649104,
+    "fixture_articles": "id|source_id|title|url|published_at|fetched_at\n08c2b635-fcfe-42f0-870d-8196fa5496a0|ff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration smoke headline one|https://integration.example.test/news/ingestion-smoke-1|2026-06-20 12:00:00+00|2026-09-20 23:19:58.316759+00\na13fbd7f-7a3e-40bd-9e08-bd3246105677|204029d6-225d-409a-9e1e-b0cc12cf96db|Sample headline one|https://example.com/news/1|2026-01-01 12:00:00+00|2026-09-20 23:19:43.485294+00\nb5d3bf08-c869-45ba-a13c-6e10f4ba05c5|204029d6-225d-409a-9e1e-b0cc12cf96db|Sample headline two|https://example.com/news/2|2026-01-01 12:00:00+00|2026-09-20 23:19:43.485294+00\nbfb92c54-d7ba-48dd-9df4-969ffd2fc230|ff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration smoke headline two|https://integration.example.test/news/ingestion-smoke-2|2026-06-20 12:00:00+00|2026-09-20 23:19:58.316759+00\n(4 rows)\n",
+    "fixture_sources": "id|name|feed_url|active\n204029d6-225d-409a-9e1e-b0cc12cf96db|Fake Feed|https://fake.example/feed.xml|t\nff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration Smoke Feed|https://integration.example.test/feed.xml|t\n(2 rows)\n",
+    "head": "current_database|version_num\nnip_phase3_final_444731f8f123|0022_personal_spending\n(1 row)\n"
+  },
+  "nip_phase3_full_a5ca8c211b71": {
+    "counts": "table_name|rows\npersonal_workspaces|0\npersonal_runs|0\npersonal_captures|0\npersonal_paid_requests|0\npersonal_legacy_usage|0\nreports|0\narticles|4\nsources|2\n(8 rows)\n",
+    "expected_oid": 296986,
+    "fixture_articles": "id|source_id|title|url|published_at|fetched_at\n2eaa4489-ee23-4fbd-8ee5-e8d05700803e|59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration smoke headline one|https://integration.example.test/news/ingestion-smoke-1|2026-06-20 12:00:00+00|2026-09-20 23:10:05.061258+00\ndd135ef0-86c3-4cb5-b206-c8fc7b356aa3|83cba482-05fc-43d0-8cd6-c15bd6a52a87|Sample headline two|https://example.com/news/2|2026-01-01 12:00:00+00|2026-09-20 23:10:00.084526+00\nf5f14b3d-afac-4658-a501-ccd352bfe3ba|59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration smoke headline two|https://integration.example.test/news/ingestion-smoke-2|2026-06-20 12:00:00+00|2026-09-20 23:10:05.061258+00\nff6d129c-5de9-4f73-8152-5e2b0ce4d532|83cba482-05fc-43d0-8cd6-c15bd6a52a87|Sample headline one|https://example.com/news/1|2026-01-01 12:00:00+00|2026-09-20 23:10:00.084526+00\n(4 rows)\n",
+    "fixture_sources": "id|name|feed_url|active\n59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration Smoke Feed|https://integration.example.test/feed.xml|t\n83cba482-05fc-43d0-8cd6-c15bd6a52a87|Fake Feed|https://fake.example/feed.xml|t\n(2 rows)\n",
+    "head": "current_database|version_num\nnip_phase3_full_a5ca8c211b71|0022_personal_spending\n(1 row)\n"
+  }
+}

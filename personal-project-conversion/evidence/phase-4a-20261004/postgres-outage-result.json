@@ -1,0 +1,30 @@
+{
+  "database_paused_and_unpaused": true,
+  "external_provider_calls": 0,
+  "frozen_inputs": {
+    "admitted": [
+      "e00b5539-56b6-40dd-b66e-ced09a4d0c93"
+    ],
+    "enrichment": [
+      "e00b5539-56b6-40dd-b66e-ced09a4d0c93"
+    ],
+    "scopes_frozen_at": "2026-10-04T09:05:23.678962+00:00"
+  },
+  "inflight_request_id": "668d70fb-8b4f-4f99-86cb-ec99e198c2d7",
+  "late_reconciled_actual_usd": "0.005000000000",
+  "network_handoffs": [
+    "scripted physical handoff"
+  ],
+  "new_attempt": 2,
+  "new_generation": 3,
+  "ordinary_paid_activation": false,
+  "ownership_expiry": "explicit test acceleration; production retry/acquire used",
+  "passed": true,
+  "reservation_id": "a1792d3b-74ae-46de-b51f-2589464d084c",
+  "retained_reservation_usd": "0.020000000000",
+  "run_id": "7794e4c8-7417-4d82-b73c-0aba25e7d36a",
+  "timings": {
+    "inflight_response_accounting_connection_failure_seconds": 1.1020119171589613,
+    "new_dispatch_connection_failure_seconds": 1.0008482499979436
+  }
+}

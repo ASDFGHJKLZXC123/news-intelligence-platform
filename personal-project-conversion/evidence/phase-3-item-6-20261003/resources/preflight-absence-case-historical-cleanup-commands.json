@@ -1,0 +1,847 @@
+[
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-aq",
+      "--no-trunc"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.222667+00:00",
+    "stderr": "",
+    "stdout": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75\n6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd\nce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a\n452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f\nbdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8\n5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4\nd578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73\nbc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5\n1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a\n73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3\n463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99\nd50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb\n788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7\nfcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb\ne14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8\n83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098\n07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a\n44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c\ndf6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02\n9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.325174+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.385922+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.406151+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-09-20T22:50:40Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data\",\n        \"Name\": \"6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.427414+00:00",
+    "stderr": "",
+    "stdout": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.458906+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"649104\",\"datname\":\"nip_phase3_final_444731f8f123\",\"owner\":\"news\"}, \n {\"oid\":\"296986\",\"datname\":\"nip_phase3_full_a5ca8c211b71\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.557798+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.650095+00:00",
+    "stderr": "",
+    "stdout": "0022_personal_spending\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_workspaces"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.734199+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_runs"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.840287+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_captures"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:28.935376+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_paid_requests"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:29.037454+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_legacy_usage"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:29.138811+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM reports"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:29.222275+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "pg_dump",
+      "-U",
+      "news",
+      "--no-owner",
+      "--no-acl",
+      "nip_phase3_full_a5ca8c211b71"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:29.310007+00:00",
+    "stderr": "",
+    "stdout_bytes": 243377,
+    "stdout_sha256": "314831f2cc207506047e45b027ad4938a4d80adcc571262d54eb7eaf7865e298"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:30.687266+00:00",
+    "stderr": "",
+    "stdout": "0022_personal_spending\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_workspaces"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:30.799726+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_runs"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:30.899869+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_captures"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.027413+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_paid_requests"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.120216+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM personal_legacy_usage"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.209565+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT count(*) FROM reports"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.287132+00:00",
+    "stderr": "",
+    "stdout": "0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "pg_dump",
+      "-U",
+      "news",
+      "--no-owner",
+      "--no-acl",
+      "nip_phase3_final_444731f8f123"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.363195+00:00",
+    "stderr": "",
+    "stdout_bytes": 243377,
+    "stdout_sha256": "2f6257a2fef918444f384a4b135dbefe8c6283fd5c237d362765f484ac99e26d"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.910665+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:31.933205+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"649104\",\"datname\":\"nip_phase3_final_444731f8f123\",\"owner\":\"news\"}, \n {\"oid\":\"296986\",\"datname\":\"nip_phase3_full_a5ca8c211b71\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.017519+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "DROP DATABASE \"nip_phase3_full_a5ca8c211b71\""
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.107679+00:00",
+    "stderr": "",
+    "stdout": "DROP DATABASE\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.509378+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"649104\",\"datname\":\"nip_phase3_final_444731f8f123\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.643130+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.734531+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.763907+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"649104\",\"datname\":\"nip_phase3_final_444731f8f123\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.860527+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "DROP DATABASE \"nip_phase3_final_444731f8f123\""
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:32.948877+00:00",
+    "stderr": "",
+    "stdout": "DROP DATABASE\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.286959+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.390671+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d ORDER BY datname),'[]'::json) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.542622+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT COALESCE(json_agg(d),'[]'::json) FROM (SELECT datname,pid,usename,application_name,client_addr,state FROM pg_stat_activity WHERE backend_type='client backend' AND pid<>pg_backend_pid()) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.663560+00:00",
+    "stderr": "",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.775012+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "stop",
+      "--time",
+      "10",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:33.798267+00:00",
+    "stderr": "",
+    "stdout": "Flag --time has been deprecated, use --timeout instead\n1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:34.186870+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe identity projection retained separately; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "rm",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:13:34.239504+00:00",
+    "stderr": "",
+    "stdout": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:13:34.315890+00:00",
+    "stderr": "error: no such object: 1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n",
+    "stdout": "\n"
+  }
+]

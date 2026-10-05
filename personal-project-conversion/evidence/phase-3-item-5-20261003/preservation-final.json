@@ -1,0 +1,51 @@
+{
+  "artifact_script_hashes": {
+    "checks.py": "480cc9739248208042b68dc8c5a6e11913140763ad72cd0e868f74c8e5c14765",
+    "verify.py": "b673fffe697918ae2139ca435e545f18b02e9dd9a5569229b336fd361c77da5e"
+  },
+  "branch": "codex/stage10-hardening",
+  "broad_preexisting_state_comparison_passed": false,
+  "changed_regular_files": [
+    "tests/integration/test_personal_bounds_upgrade.py",
+    "tests/integration/test_personal_item5_composed.py"
+  ],
+  "checks": {
+    "full-integration": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 238
+    },
+    "new-proof": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 6
+    },
+    "unit": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 175
+    }
+  },
+  "cleanup_explanation": "resource-cleanup-adjudication.json",
+  "cleanup_outer_exit_code": 1,
+  "exact_outer_commands": [
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py init",
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py new-proof tests/integration/test_personal_item5_composed.py tests/integration/test_personal_bounds_upgrade.py",
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py full-integration -m integration",
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/checks.py unit",
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/checks.py tooling",
+    ".venv/bin/python personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py cleanup"
+  ],
+  "gate_source_stable": true,
+  "head": "7c7fcebbeba9c7b9671d6eb38631c2625cc8b454",
+  "historical_evidence_files_unchanged": 307,
+  "operational_dotenv_and_selected_preferences_preserved": true,
+  "original_bounds_upgrade_hash_verified": true,
+  "owned_cleanup_complete": true,
+  "production_files_unchanged": true,
+  "pytest_ra_source": "pyproject.toml tool.pytest.ini_options.addopts=-ra; pytest prepends it to the unit argv list during configuration",
+  "staged_diff_and_index_preserved": true
+}

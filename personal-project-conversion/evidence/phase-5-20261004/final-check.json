@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "local_link_targets_checked": 73,
+  "missing_targets": [],
+  "trial_runtime_source_drift": [],
+  "trial_id": "fe79058e-52c3-4d1d-b9f0-3f7cf8af2efb",
+  "original_acceptance_contract_unchanged_except_status": true,
+  "all_actual_evidence_counts_zero": true
+}

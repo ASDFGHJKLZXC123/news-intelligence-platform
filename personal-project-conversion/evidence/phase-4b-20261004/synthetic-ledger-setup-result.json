@@ -1,0 +1,14 @@
+{
+  "authored_clock": "next_day_synthetic_accounting_only",
+  "external_calls": 0,
+  "known_request_id": "6e381970-b3b4-416d-97b8-6d3b764c33a2",
+  "ordinary_paid_activation": false,
+  "original_offline_profile_restored": true,
+  "paid_table": {
+    "count": 2,
+    "sha256": "4783018568c65e9e3762803a31e06a1fe53a0acdc896a6e8b6e51214c5c40dc2"
+  },
+  "run_id": "8fcc6e4f-e2fc-4964-b7d4-8b713dbfd38a",
+  "runtime_credentials_blank": true,
+  "uncertain_request_id": "689a795d-649e-4632-a1f1-ba53fae764d8"
+}

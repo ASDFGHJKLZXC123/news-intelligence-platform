@@ -1,0 +1,134 @@
+.........FF                                                              [100%]
+=================================== FAILURES ===================================
+______ test_api_queued_other_run_obligation_competes_with_ordinary_worker ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10f6d0210>
+
+    def test_api_queued_other_run_obligation_competes_with_ordinary_worker(monkeypatch):
+        with migrated_disposable_engine() as engine:
+            run_id, token, workspace_id, _ = _queued(engine, monthly="0.03")
+            monkeypatch.setattr(personal_api, "_utc_now", lambda: dt.datetime.now(dt.UTC) + dt.timedelta(days=1))
+            deliveries = []
+            with Session(engine) as session:
+                response = personal_api.start_personal_run(session, lambda *args: deliveries.append(args))
+                assert response.status_code == 202 and len(deliveries) == 1
+                competitor_id, competitor_token, _ = deliveries[0]
+                competitor = session.get(PersonalRun, competitor_id)
+                competitor.scopes_frozen_at = dt.datetime.now(dt.UTC)
+                session.commit()
+            factory = sessionmaker(engine, expire_on_commit=False)
+            competitor_ledger = SpendingLedger(
+                session_factory=factory,
+                workspace_id=workspace_id,
+                run_id=competitor_id,
+                ownership_token=competitor_token,
+            )
+            obligation = competitor_ledger.reserve(
+                PaidRoute.from_mapping(model_route()["generation"], role="generation"),
+                input_token_bound=1000,
+                output_token_bound=1000,
+            )
+            competitor_ledger.dispatch(obligation)
+            competitor_ledger.mark_uncertain(obligation, "synthetic other-run crash")
+            factory, calls, _ = _runtime(monkeypatch, engine)
+            result = worker.run_personal_daily_task.run(str(run_id), str(token))
+            assert result["status"] == "succeeded" and not result["published"]
+            assert [role for role, _ in calls] == ["embedding"]
+            with factory() as session:
+                summary = get_spending(session)
+>               assert Decimal(summary["uncertain_usd"]) == Decimal("0.02")
+                               ^^^^^^^^^^^^^^^^^^^^^^^^
+E               KeyError: 'uncertain_usd'
+
+tests/integration/test_personal_paid_worker.py:263: KeyError
+__ test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty ___
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10feda6d0>
+
+    def test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty(monkeypatch):
+        with migrated_disposable_engine() as engine:
+            run_id, token, workspace_id, source_id = _queued(engine)
+            factory, calls, delegates = _runtime(monkeypatch, engine, failure="generation_timeout")
+            result = worker.run_personal_daily_task.run(str(run_id), str(token))
+            assert result["status"] in {"failed", "partially_failed"} and not result["published"]
+            assert all(client.closed for client in delegates)
+            with factory() as session:
+                run = session.get(PersonalRun, run_id)
+                snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                original = snapshot.id, snapshot.input_hash, run.profile_revision_id, tuple(run.enrichment_article_ids)
+                requests = session.scalars(select(PersonalPaidRequest)).all()
+                uncertain = {row.id: row.reserved_usd for row in requests if row.status == "uncertain"}
+                assert uncertain and len(requests) == len(calls)
+                assert session.get(Report, run.report_id).status == "failed"
+                workspace = session.get(PersonalWorkspace, workspace_id)
+                changed_route = model_route()
+                changed_route["generation"]["price_revision"] = "next-run-only"
+                update_settings(
+                    session,
+                    workspace,
+                    PersonalSettingsUpdate(
+                        execution_profile="assisted",
+                        selected_source_ids=[source_id],
+                        include_phrases=["unmatched next run setting"],
+                        ai_enabled=True,
+                        monthly_allowance_usd="1",
+                        model_route=changed_route,
+                    ),
+                )
+                decision = retry_run(session, workspace, run_id, now=dt.datetime.now(dt.UTC))
+                retry_token = decision.run.ownership_token
+                session.commit()
+            factory, retry_calls, retry_delegates = _runtime(monkeypatch, engine)
+    
+            def no_recapture():
+                raise AssertionError("frozen retry must not refetch feeds")
+    
+            monkeypatch.setattr(worker, "HttpRSSProvider", no_recapture)
+>           result = worker.run_personal_daily_task.run(str(run_id), str(retry_token))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_paid_worker.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+workers/personal_tasks.py:978: in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workers/personal_tasks.py:889: in execute_personal_task
+    embedding_provider = build_paid_embedding_provider(
+services/personal/paid_runtime.py:256: in build_paid_embedding_provider
+    client = _client(route, ledger)
+             ^^^^^^^^^^^^^^^^^^^^^^
+services/personal/paid_runtime.py:249: in _client
+    delegate=DeadlineHTTPClient(base_url=_BASE_URLS[route.provider]),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tests.integration.test_personal_paid_worker._runtime.<locals>.SyntheticDeadlineClient object at 0x10ae77a10>
+base_url = 'https://api.openai.com'
+
+    def __init__(self, *, base_url):
+>       super().__init__(base_url=base_url, transport=httpx.MockTransport(respond))
+E       TypeError: _runtime.<locals>.SyntheticDeadlineClient.__init__() got an unexpected keyword argument 'transport'
+
+tests/integration/test_personal_paid_worker.py:143: TypeError
+------------------------------ Captured log call -------------------------------
+ERROR    workers.personal_tasks:personal_tasks.py:950 personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 889, in execute_personal_task
+    embedding_provider = build_paid_embedding_provider(
+        settings=settings,
+        route=PaidRoute.from_mapping(spec.route["embedding"], role="embedding"),
+        ledger=ledger,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py", line 256, in build_paid_embedding_provider
+    client = _client(route, ledger)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py", line 249, in _client
+    delegate=DeadlineHTTPClient(base_url=_BASE_URLS[route.provider]),
+             ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_paid_worker.py", line 143, in __init__
+    super().__init__(base_url=base_url, transport=httpx.MockTransport(respond))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _runtime.<locals>.SyntheticDeadlineClient.__init__() got an unexpected keyword argument 'transport'
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_paid_worker.py::test_api_queued_other_run_obligation_competes_with_ordinary_worker
+FAILED tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty
+2 failed, 9 passed in 28.75s

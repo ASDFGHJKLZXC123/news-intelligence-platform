@@ -81,6 +81,7 @@ from typing import Any
 
 from celery import shared_task
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from db.base import SessionLocal
 from db.models import ACTIVE_ALERT_STATES, Alert
@@ -105,6 +106,7 @@ from services.alerts.notifications import (
     PendingAlertAction,
     deliver_actions,
 )
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.alert_tasks")
@@ -120,6 +122,21 @@ def build_notifier() -> AlertNotifier:
     like :func:`workers.entity_linking_tasks.build_mention_adjudicator`.
     """
     return LoggingAlertNotifier()
+
+
+def _legacy_alert_sessions() -> tuple[Session | None, Any]:
+    """Return a continuous mode fence plus the alert work transaction."""
+
+    candidate = SessionLocal()
+    if not isinstance(candidate, Session):
+        return None, candidate
+    try:
+        require_legacy_writer_mode(candidate, lock=True)
+        return candidate, SessionLocal()
+    except BaseException:
+        candidate.rollback()
+        candidate.close()
+        raise
 
 
 def _parse_now(now: str | datetime.datetime | None) -> datetime.datetime:
@@ -294,10 +311,10 @@ def run_alert_evaluation(
     job = Stage1Job.create(
         RUN_ALERT_EVALUATION, {"observation_count": len(observations)}
     ).mark_running()
+    fence_session, session = _legacy_alert_sessions()
     set_job_id(job.job_id)
     metrics.increment(metrics.JOB_STARTS)
 
-    session = SessionLocal()
     try:
         repository = SQLAlchemyAlertRepository(session)
         service = AlertLifecycleService(repository)
@@ -355,8 +372,15 @@ def run_alert_evaluation(
         logger.exception("alert evaluation pipeline failed")
         raise
     finally:
-        session.close()
-        set_job_id(None)
+        try:
+            session.close()
+        finally:
+            if fence_session is not None:
+                try:
+                    fence_session.rollback()
+                finally:
+                    fence_session.close()
+            set_job_id(None)
 
 
 @shared_task(name=RUN_ALERT_NOTIFICATION_SWEEP, base=Stage1Task, queue=QUEUE_PIPELINE)
@@ -394,10 +418,10 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
 
     run_at = _parse_now(now)
     job = Stage1Job.create(RUN_ALERT_NOTIFICATION_SWEEP, {}).mark_running()
+    fence_session, session = _legacy_alert_sessions()
     set_job_id(job.job_id)
     metrics.increment(metrics.JOB_STARTS)
 
-    session = SessionLocal()
     try:
         repository = SQLAlchemyAlertRepository(session)
         service = AlertLifecycleService(repository)
@@ -485,5 +509,12 @@ def run_pending_alert_notification_sweep(now: str | None = None) -> dict[str, An
         logger.exception("alert notification sweep failed")
         raise
     finally:
-        session.close()
-        set_job_id(None)
+        try:
+            session.close()
+        finally:
+            if fence_session is not None:
+                try:
+                    fence_session.rollback()
+                finally:
+                    fence_session.close()
+            set_job_id(None)

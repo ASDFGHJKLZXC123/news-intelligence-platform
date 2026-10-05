@@ -1,0 +1,24 @@
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting tests/unit/test_health.py __________________
+tests/unit/test_health.py:22: in <module>
+    from apps.api.main import app
+apps/api/main.py:17: in <module>
+    from apps.api.analogies import router as analogies_router
+apps/api/analogies.py:30: in <module>
+    from db.base import get_session
+db/base.py:20: in <module>
+    _settings = get_settings()
+                ^^^^^^^^^^^^^^
+packages/config/settings.py:415: in get_settings
+    return Settings()
+           ^^^^^^^^^^
+.venv/lib/python3.13/site-packages/pydantic_settings/main.py:247: in __init__
+    super().__init__(**__pydantic_self__.__class__._settings_build_values(sources, init_kwargs))
+E   pydantic.errors.PydanticUserError: `Settings` is not fully defined; you should define `Literal`, then call `Settings.model_rebuild()`.
+E   
+E   For further information visit https://errors.pydantic.dev/2.13/u/class-not-fully-defined
+=========================== short test summary info ============================
+ERROR tests/unit/test_health.py - pydantic.errors.PydanticUserError: `Setting...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.38s

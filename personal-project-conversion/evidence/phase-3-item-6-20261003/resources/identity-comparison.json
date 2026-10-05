@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "name": true,
+    "created": true,
+    "image": true,
+    "label": true,
+    "ports": true,
+    "running": true,
+    "current_oids": true,
+    "no_non_audit_database_clients": true
+  },
+  "all_passed": true,
+  "resource_mutations": []
+}

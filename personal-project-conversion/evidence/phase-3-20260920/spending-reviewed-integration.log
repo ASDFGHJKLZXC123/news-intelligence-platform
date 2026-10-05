@@ -1,0 +1,1311 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+________ test_competing_run_dates_share_one_month_reservation_allowance ________
+
+    def test_competing_run_dates_share_one_month_reservation_allowance():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_2d6e8709f93f48cc835603d31dbc8a89'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent _
+
+    def test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_b51ffc42640d4850b8ae0ef6c89a1fcc'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month _
+
+    def test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:183: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_59be90daa53c44fd80e053561d718caf'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send _
+
+    def test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_291f7d7fd392422b989f174cb4cde0a9'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run _
+
+    def test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_b77c2d61107c4ad68ad416c064d1238c'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_independent_commit_survives_business_rollback_without_row_lock_deadlock _
+
+    def test_independent_commit_survives_business_rollback_without_row_lock_deadlock():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_5952afd90f084ac9b0f25e569355a55d'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_______ test_dispatch_handoff_fences_concurrent_ownership_changes[retry] _______
+
+mutation = 'retry'
+
+    @pytest.mark.parametrize("mutation", ["retry", "finish"])
+    def test_dispatch_handoff_fences_concurrent_ownership_changes(mutation):
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:260: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_802a232161de49b285a362468c2bddec'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+______ test_dispatch_handoff_fences_concurrent_ownership_changes[finish] _______
+
+mutation = 'finish'
+
+    @pytest.mark.parametrize("mutation", ["retry", "finish"])
+    def test_dispatch_handoff_fences_concurrent_ownership_changes(mutation):
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:260: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_44977070c6db4e3a8f22189f36bbaf9f'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_______ test_legacy_costs_import_once_and_unknown_blocks_paid_enablement _______
+
+    def test_legacy_costs_import_once_and_unknown_blocks_paid_enablement():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:317: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_01e7306407384509aa9d874cb5193aaf'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count _
+
+    def test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:363: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_e593c76114c5405a9598e0dc0d1d94b2'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_______ test_provider_embedding_retry_has_separate_durable_reservations ________
+
+    def test_provider_embedding_retry_has_separate_durable_reservations():
+        from packages.providers.openai_embeddings import (
+            OPENAI_EMBEDDING_DIMENSIONS,
+            OpenAIEmbeddingProvider,
+        )
+    
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:402: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_354e2c6b520142d1b6e7fd2024a322a1'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit _
+
+    def test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit():
+>       with migrated_disposable_engine() as engine:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:449: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+tests/integration/_stage7_db.py:201: in migrated_disposable_engine
+    _run_alembic_upgrade_head(url_for(name))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+disposable_url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_d986be71a8184bd38902f1cef0aa02d1'
+
+    def _run_alembic_upgrade_head(disposable_url: str) -> None:
+        """``alembic upgrade head`` against the disposable database, in an isolated subprocess.
+    
+        The subprocess's ``DATABASE_URL`` is the disposable URL, so ``db/migrations/env.py`` (which
+        reads it through Settings) migrates the disposable and nothing else. Running out-of-process
+        means the parent's Settings ``lru_cache`` and ``db.base`` engine -- both bound to ``news`` --
+        are never mutated and can never be the migration target. The URL is asserted to be a
+        ``nip_stage7_`` database before the process is spawned.
+        """
+        assert f"/{STAGE7_DB_PREFIX}" in disposable_url, disposable_url
+        assert not disposable_url.endswith(f"/{FORBIDDEN_DB}"), disposable_url
+        env = dict(os.environ)
+        env["DATABASE_URL"] = disposable_url
+        env["POSTGRES_HOST_PORT"] = str(PORT)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        proc = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            env=env,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        if proc.returncode != 0:
+>           raise RuntimeError(
+                "alembic upgrade head failed on the disposable database\n"
+                f"stdout:\n{proc.stdout[-2000:]}\nstderr:\n{proc.stderr[-2000:]}"
+            )
+E           RuntimeError: alembic upgrade head failed on the disposable database
+E           stdout:
+E           
+E           stderr:
+E           /coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E               context = constructor(
+E                   dialect, self, conn, execution_options, *args, **kw
+E               )
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E               compiled.construct_params(
+E               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                   m,
+E                   ^^
+E               ...<2 lines>...
+E                   extracted_parameters=extracted_parameters,
+E                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               )
+E               ^
+E             File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E               raise exc.InvalidRequestError(
+E               ...<3 lines>...
+E               )
+E           sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E           [SQL: 
+E                   INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E                   SELECT id,
+E                          date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                                AT TIME ZONE 'UTC')::date,
+E                          CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                               WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                                 OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                                     AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                                 OR (provider = 'offline-personal-fixture'
+E                                     AND model LIKE 'offline-personal-fixture:%%')
+E                               THEN 0 ELSE NULL END,
+E                          jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E                   FROM llm_runs
+E               ]
+E           [parameters: [immutabledict({})]]
+E           (Background on this error at: https://sqlalche.me/e/20/cd3x)
+
+tests/integration/_stage7_db.py:134: RuntimeError
+_ test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once _
+
+    from services.personal.workspace import configure_profile, ensure_workspace
+    from tests.integration._stage7_db import _disposable_database, require_disposable_postgres, url_for
+    
+    pytestmark = pytest.mark.integration
+    
+    
+    def _migrate(url: str, revision: str) -> None:
+        result = subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", revision],
+            env={**os.environ, "DATABASE_URL": url},
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+    
+    
+    def test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once():
+        require_disposable_postgres()
+        with _disposable_database() as database:
+            url = url_for(database)
+            _migrate(url, "0020")
+            engine = create_engine(url)
+            now = dt.datetime.now(dt.UTC)
+            try:
+                with Session(engine) as session:
+                    source = Source(
+                        name="Retained existing source", feed_url="https://offline.example/retained.xml"
+                    )
+                    event = Event(title="Retained saved event")
+                    session.add_all([source, event])
+                    session.flush()
+                    workspace, _ = ensure_workspace(session)
+                    configure_profile(
+                        session, workspace, selected_source_ids=[source.id], execution_profile="raw"
+                    )
+                    decision = create_daily_run(session, workspace, now=now)
+                    run = decision.run
+                    article = Article(
+                        source_id=source.id,
+                        url="https://offline.example/retained",
+                        url_hash=url_hash("https://offline.example/retained"),
+                        title="Retained raw title",
+>                       summary="Retained RSS source text",
+                ^^^^^^^^^^^^^^^^^^^^^
+                        published_at=None,
+                    )
+
+tests/integration/test_personal_bounds_upgrade.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'postgresql+psycopg2://news:news@localhost:58553/nip_stage7_b70cf66e593d412f9152d719c1832a19'
+revision = 'head'
+
+    from services.ingestion.normalize import url_hash
+    from services.personal.runs import create_daily_run
+    from services.personal.spending import (
+        PaidWorkBlocked,
+        assert_legacy_usage_reconciled,
+>       import_legacy_usage,
+        spending_summary,
+    )
+E   AssertionError: INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+E     INFO  [alembic.runtime.migration] Will assume transactional DDL.
+E     INFO  [alembic.runtime.migration] Running upgrade 0020 -> 0021_personal_daily_bounds, Add retained capture receipts and explicit personal enrichment transfers.
+E     INFO  [alembic.runtime.migration] Running upgrade 0021_personal_daily_bounds -> 0022_personal_spending, Retain paid dispatch reservations and legacy application usage.
+E     Traceback (most recent call last):
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E         context = constructor(
+E             dialect, self, conn, execution_options, *args, **kw
+E         )
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E         compiled.construct_params(
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E             m,
+E             ^^
+E         ...<2 lines>...
+E             extracted_parameters=extracted_parameters,
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E         raise exc.InvalidRequestError(
+E         ...<3 lines>...
+E         )
+E     sqlalchemy.exc.InvalidRequestError: A value is required for bind parameter 'true' (Background on this error at: https://sqlalche.me/e/20/cd3x)
+E     
+E     The above exception was the direct cause of the following exception:
+E     
+E     Traceback (most recent call last):
+E       File "<frozen runpy>", line 198, in _run_module_as_main
+E       File "<frozen runpy>", line 88, in _run_code
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/__main__.py", line 4, in <module>
+E         main(prog="alembic")
+E         ~~~~^^^^^^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/config.py", line 1047, in main
+E         CommandLine(prog=prog).main(argv=argv)
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/config.py", line 1037, in main
+E         self.run_cmd(cfg, options)
+E         ~~~~~~~~~~~~^^^^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/config.py", line 971, in run_cmd
+E         fn(
+E         ~~^
+E             config,
+E             ^^^^^^^
+E             *[getattr(options, k, None) for k in positional],
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E             **{k: getattr(options, k, None) for k in kwarg},
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/command.py", line 483, in upgrade
+E         script.run_env()
+E         ~~~~~~~~~~~~~~^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/script/base.py", line 545, in run_env
+E         util.load_python_file(self.dir, "env.py")
+E         ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/util/pyfiles.py", line 116, in load_python_file
+E         module = load_module_py(module_id, path)
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/util/pyfiles.py", line 136, in load_module_py
+E         spec.loader.exec_module(module)  # type: ignore
+E         ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+E       File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+E       File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/migrations/env.py", line 58, in <module>
+E         run_migrations_online()
+E         ~~~~~~~~~~~~~~~~~~~~~^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/migrations/env.py", line 52, in run_migrations_online
+E         context.run_migrations()
+E         ~~~~~~~~~~~~~~~~~~~~~~^^
+E       File "<string>", line 8, in run_migrations
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/runtime/environment.py", line 969, in run_migrations
+E         self.get_context().run_migrations(**kw)
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/runtime/migration.py", line 626, in run_migrations
+E         step.migration_fn(**kw)
+E         ~~~~~~~~~~~~~~~~~^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/db/migrations/versions/0022_personal_spending.py", line 88, in upgrade
+E         op.execute("""
+E         ~~~~~~~~~~^^^^
+E             INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         ...<11 lines>...
+E             FROM llm_runs
+E             ^^^^^^^^^^^^^
+E         """)
+E         ^^^^
+E       File "<string>", line 8, in execute
+E       File "<string>", line 3, in execute
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/operations/ops.py", line 2667, in execute
+E         return operations.invoke(op)
+E                ~~~~~~~~~~~~~~~~~^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/operations/base.py", line 452, in invoke
+E         return fn(self, operation)
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/operations/toimpl.py", line 259, in execute_sql
+E         operations.migration_context.impl.execute(
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+E             operation.sqltext, execution_options=operation.execution_options
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/ddl/impl.py", line 263, in execute
+E         self._exec(sql, execution_options)
+E         ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/alembic/ddl/impl.py", line 256, in _exec
+E         return conn.execute(construct, params)
+E                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1421, in execute
+E         return meth(
+E             self,
+E             distilled_parameters,
+E             execution_options or NO_OPTIONS,
+E         )
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+E         return connection._execute_clauseelement(
+E                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+E             self, distilled_params, execution_options
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1643, in _execute_clauseelement
+E         ret = self._execute_context(
+E             dialect,
+E         ...<8 lines>...
+E             cache_hit=cache_hit,
+E         )
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1823, in _execute_context
+E         self._handle_dbapi_exception(
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+E             e, str(statement), parameters, None, None
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2365, in _handle_dbapi_exception
+E         raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+E         context = constructor(
+E             dialect, self, conn, execution_options, *args, **kw
+E         )
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1417, in _init_compiled
+E         compiled.construct_params(
+E         ~~~~~~~~~~~~~~~~~~~~~~~~~^
+E             m,
+E             ^^
+E         ...<2 lines>...
+E             extracted_parameters=extracted_parameters,
+E             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         )
+E         ^
+E       File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/sql/compiler.py", line 1963, in construct_params
+E         raise exc.InvalidRequestError(
+E         ...<3 lines>...
+E         )
+E     sqlalchemy.exc.StatementError: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter 'true'
+E     [SQL: 
+E             INSERT INTO personal_legacy_usage (llm_run_id, accounting_month, actual_usd, evidence)
+E             SELECT id,
+E                    date_trunc('month', COALESCE(started_at, completed_at, created_at)
+E                                          AT TIME ZONE 'UTC')::date,
+E                    CASE WHEN cost_usd > 0 THEN ceil(cost_usd * 1000000000000) / 1000000000000
+E                         WHEN input_refs @> '{"cache_hit"%(true)s}'::jsonb
+E                           OR (status = 'failed' AND error_message = 'token bucket limit reached'
+E                               AND input_tokens = 0 AND output_tokens = 0 AND latency_ms = 0)
+E                           OR (provider = 'offline-personal-fixture'
+E                               AND model LIKE 'offline-personal-fixture:%%')
+E                         THEN 0 ELSE NULL END,
+E                    jsonb_build_object('kind', 'legacy_llm_run', 'classification', 'positive_cost_or_proven_no_dispatch')
+E             FROM llm_runs
+E         ]
+E     [parameters: [immutabledict({})]]
+E     (Background on this error at: https://sqlalche.me/e/20/cd3x)
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python3.13', '-m',...OM llm_runs\n    ]\n[parameters: [immutabledict({})]]\n(Background on this error at: https://sqlalche.me/e/20/cd3x)\n').returncode
+
+tests/integration/test_personal_bounds_upgrade.py:34: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_spending.py::test_competing_run_dates_share_one_month_reservation_allowance
+FAILED tests/integration/test_personal_spending.py::test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent
+FAILED tests/integration/test_personal_spending.py::test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month
+FAILED tests/integration/test_personal_spending.py::test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send
+FAILED tests/integration/test_personal_spending.py::test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run
+FAILED tests/integration/test_personal_spending.py::test_independent_commit_survives_business_rollback_without_row_lock_deadlock
+FAILED tests/integration/test_personal_spending.py::test_dispatch_handoff_fences_concurrent_ownership_changes[retry]
+FAILED tests/integration/test_personal_spending.py::test_dispatch_handoff_fences_concurrent_ownership_changes[finish]
+FAILED tests/integration/test_personal_spending.py::test_legacy_costs_import_once_and_unknown_blocks_paid_enablement
+FAILED tests/integration/test_personal_spending.py::test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count
+FAILED tests/integration/test_personal_spending.py::test_provider_embedding_retry_has_separate_durable_reservations
+FAILED tests/integration/test_personal_spending.py::test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit
+FAILED tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once
+13 failed in 24.38s

@@ -43,6 +43,11 @@ def health(
 ) -> JSONResponse:
     components = [config, database, redis_status, worker]
     settings = get_settings()
+    if settings.personal_processing_transport == "subprocess":
+        components.extend(
+            ComponentStatus(name, True, "not_required_in_personal_mode")
+            for name in ("celery", "beat")
+        )
 
     if not all(c.ok for c in components):
         # Degraded readiness is a non-2xx response and must use the shared error

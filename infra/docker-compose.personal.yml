@@ -1,0 +1,27 @@
+# Phase 4B: PostgreSQL is the only container. The foreground app runs natively
+# through scripts/personal-local.py, so its socket itself binds to loopback.
+# Keep this project separate from the legacy stack and preserve its named volume.
+name: nip-personal-local
+
+services:
+  postgres:
+    build:
+      context: ..
+      dockerfile: infra/docker/postgres.Dockerfile
+    environment:
+      POSTGRES_USER: ${PERSONAL_POSTGRES_USER:-news}
+      POSTGRES_PASSWORD: ${PERSONAL_POSTGRES_PASSWORD:-personal_local_only}
+      POSTGRES_DB: ${PERSONAL_POSTGRES_DB:-news_personal}
+    ports:
+      - "127.0.0.1:${PERSONAL_POSTGRES_PORT:-55443}:5432"
+    volumes:
+      - personal_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    stop_grace_period: 30s
+
+volumes:
+  personal_pgdata:

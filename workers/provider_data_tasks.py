@@ -11,7 +11,7 @@ import datetime
 import hashlib
 import json
 import uuid
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -48,6 +48,7 @@ from services.provider_data import (
     ingest_sec_company_tickers,
     ingest_wikidata_identities,
 )
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import Stage1Task
 
 logger = get_logger("workers.provider_data_tasks")
@@ -131,7 +132,7 @@ def _record_provider_run(
     provider: str,
     run_type: str,
     parameters: Mapping[str, Any] | None,
-    provider_binding: ProviderBinding,
+    provider_binding_factory: Callable[[], ProviderBinding],
     ingest: Any | None,
 ) -> dict[str, Any]:
     normalized_parameters = _canonical_parameters(parameters)
@@ -146,11 +147,17 @@ def _record_provider_run(
 
     session = SessionLocal()
     try:
+        require_legacy_writer_mode(session, lock=True)
         run = session.get(ProviderRun, run_id)
         if run is not None and run.status == "succeeded":
             metrics.increment(metrics.JOB_SUCCESSES)
             completed = job.mark_succeeded()
             return _task_result(run, completed, idempotent=True)
+
+        # Provider/client construction may inspect credentials or initialize a network-capable
+        # SDK. Resolve it only after the writer-mode row is locked and only for work which is not
+        # already terminally idempotent.
+        provider_binding = provider_binding_factory()
 
         started_at = _utc_now()
         if run is None:
@@ -245,6 +252,7 @@ def _mark_run_failed(
     """
 
     try:
+        require_legacy_writer_mode(session, lock=True)
         run = session.get(ProviderRun, run_id)
         if run is None:
             run = ProviderRun(
@@ -302,7 +310,7 @@ def run_fred_macro_ingestion(
             "observation_start": observation_start,
             "series_ids": series,
         },
-        provider_binding=_fred_provider_binding(),
+        provider_binding_factory=_fred_provider_binding,
         ingest=ingest,
     )
 
@@ -324,7 +332,7 @@ def run_sec_company_ingestion(ciks: Sequence[str] | None = None) -> dict[str, An
         provider="sec-edgar",
         run_type="company_filings",
         parameters={"ciks": normalized_ciks},
-        provider_binding=_sec_provider_binding(),
+        provider_binding_factory=_sec_provider_binding,
         ingest=ingest,
     )
 
@@ -350,7 +358,7 @@ def run_sec_identity_refresh(period: str | None = None) -> dict[str, Any]:
         # a constant parameter set would make the second week a no-op forever. Keyed by week,
         # a retry inside the week resumes that week's run and the next week opens its own.
         parameters={"period": refresh_period},
-        provider_binding=_sec_identity_provider_binding(),
+        provider_binding_factory=_sec_identity_provider_binding,
         ingest=ingest,
     )
 
@@ -388,7 +396,7 @@ def run_gdelt_raw_ingestion(
             "window_end": end_at.isoformat(timespec="seconds"),
             "window_start": start_at.isoformat(timespec="seconds"),
         },
-        provider_binding=_gdelt_provider_binding(),
+        provider_binding_factory=_gdelt_provider_binding,
         ingest=ingest,
     )
 
@@ -413,7 +421,7 @@ def run_sanctions_ingestion(
         provider="ofac",
         run_type="sanctions_entities",
         parameters={"limit": limit, "program": program},
-        provider_binding=_ofac_provider_binding(),
+        provider_binding_factory=_ofac_provider_binding,
         ingest=ingest,
     )
 
@@ -460,7 +468,7 @@ def run_entity_identity_ingestion(
             "limit": search_limit,
             "period": refresh_period,
         },
-        provider_binding=_gleif_provider_binding(),
+        provider_binding_factory=_gleif_provider_binding,
         ingest=ingest,
     )
 
@@ -502,7 +510,7 @@ def run_wikidata_identity_ingestion(
             "curated_qids": qids,
             "period": refresh_period,
         },
-        provider_binding=_wikidata_provider_binding(),
+        provider_binding_factory=_wikidata_provider_binding,
         ingest=ingest,
     )
 
@@ -541,7 +549,7 @@ def run_country_indicator_ingestion(
             "limit": limit,
             "start_year": start_year,
         },
-        provider_binding=_world_bank_provider_binding(),
+        provider_binding_factory=_world_bank_provider_binding,
         ingest=ingest,
     )
 
@@ -576,7 +584,7 @@ def run_humanitarian_report_ingestion(
             "limit": limit,
             "query": normalized_query,
         },
-        provider_binding=_reliefweb_provider_binding(),
+        provider_binding_factory=_reliefweb_provider_binding,
         ingest=ingest,
     )
 
@@ -616,7 +624,7 @@ def run_geo_incident_ingestion(
             "window_end": end_at.isoformat(timespec="seconds"),
             "window_start": start_at.isoformat(timespec="seconds"),
         },
-        provider_binding=_geo_provider_binding(normalized_source),
+        provider_binding_factory=lambda: _geo_provider_binding(normalized_source),
         ingest=ingest,
     )
 
@@ -653,7 +661,7 @@ def run_energy_series_ingestion(
             "series_ids": series,
             "start_at": start_at,
         },
-        provider_binding=_eia_provider_binding(),
+        provider_binding_factory=_eia_provider_binding,
         ingest=ingest,
     )
 

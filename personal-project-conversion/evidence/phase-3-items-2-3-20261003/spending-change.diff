@@ -1,0 +1,113 @@
+--- baseline/services/personal/spending.py
++++ delivered/services/personal/spending.py
+@@ -29,6 +29,7 @@
+     PersonalPaidRequest,
+     PersonalSpendingState,
+ )
++from services.personal.settings import safe_model_route
+ 
+ USD_QUANTUM = Decimal("0.000000000001")
+ _DECIMAL = re.compile(r"^(?:0|[1-9][0-9]{0,9})(?:\.[0-9]{1,12})?$")
+@@ -584,6 +585,54 @@
+             row.reconciled_at = _utc(self.clock())
+ 
+ 
++def _public_route_identity(role: str | None, route: Mapping[str, Any]) -> dict[str, Any]:
++    """Project retained public identifiers only; never serialize transport or receipt data."""
++    return {
++        "role": role,
++        **{
++            key: route[key] if isinstance(route.get(key), str) else None
++            for key in ("provider", "model", "model_version", "price_revision")
++        },
++    }
++
++
++def _accounted_routes(
++    rows: list[PersonalPaidRequest], legacy_audits: list[LLMRun], month: dt.date
++) -> list[dict[str, Any]]:
++    """Identify routes contributing to current charges or retained unresolved obligations."""
++    identities = [
++        {
++            "source": "paid_request",
++            "accounting_period": row.accounting_month.strftime("%Y-%m"),
++            **_public_route_identity(row.role, row.route),
++        }
++        for row in rows
++        if row.status in _UNRESOLVED
++        or (row.accounting_month == month and row.status == "reconciled")
++    ]
++    # Legacy audits have provider/model, but no authoritative role, snapshot or price
++    # revision. Do not infer those from today's settings or arbitrary model_params.
++    identities.extend(
++        {
++            "source": "legacy_usage",
++            "accounting_period": month.strftime("%Y-%m"),
++            **_public_route_identity(None, {"provider": row.provider, "model": row.model}),
++        }
++        for row in legacy_audits
++    )
++    keys = (
++        "accounting_period",
++        "source",
++        "role",
++        "provider",
++        "model",
++        "model_version",
++        "price_revision",
++    )
++    unique = {tuple(item[key] or "" for key in keys): item for item in identities}
++    return [unique[key] for key in sorted(unique)]
++
++
+ def spending_summary(
+     session: Session, workspace_id: uuid.UUID, *, now: dt.datetime | None = None
+ ) -> dict[str, Any]:
+@@ -591,8 +640,13 @@
+     workspace = session.get(PersonalWorkspace, workspace_id)
+     if workspace is None:
+         raise ValueError("workspace is unavailable")
+-    profile = session.get(PersonalProfileRevision, workspace.active_profile_revision_id)
++    profile = (
++        session.get(PersonalProfileRevision, workspace.active_profile_revision_id)
++        if workspace.active_profile_revision_id is not None
++        else None
++    )
+     settings = profile.settings if profile else {}
++    current_route = safe_model_route((settings or {}).get("model_route"))
+     try:
+         allowance, _ = _ceiling(settings or {})
+         status = "ready"
+@@ -602,9 +656,12 @@
+     rows = session.scalars(
+         select(PersonalPaidRequest).where(PersonalPaidRequest.workspace_id == workspace_id)
+     ).all()
+-    legacy = session.scalars(
+-        select(PersonalLegacyUsage).where(PersonalLegacyUsage.accounting_month == month)
++    legacy_records = session.execute(
++        select(PersonalLegacyUsage, LLMRun)
++        .join(LLMRun, LLMRun.id == PersonalLegacyUsage.llm_run_id)
++        .where(PersonalLegacyUsage.accounting_month == month)
+     ).all()
++    legacy = [usage for usage, _ in legacy_records]
+     # Read endpoints disclose costs awaiting the next explicit import without writing
+     # cutover metadata or relying on a GET transaction to commit side effects.
+     occurred = func.coalesce(LLMRun.started_at, LLMRun.completed_at, LLMRun.created_at)
+@@ -656,4 +713,17 @@
+         "unreconciled_legacy_count": unknown_legacy,
+         "remaining_usd": format(max(Decimal(0), allowance - finalized - reserved), "f"),
+         "next_reset_at": _next_month(month).astimezone(ZoneInfo(workspace.timezone)).isoformat(),
++        "current_configuration": {
++            "profile_revision_id": str(profile.id) if profile else None,
++            "profile_revision": profile.revision if profile else None,
++            "route_mode": current_route.get("mode"),
++            "routes": [
++                _public_route_identity(role, current_route[role])
++                for role in ("generation", "embedding")
++                if role in current_route
++            ],
++        },
++        "accounted_routes": _accounted_routes(
++            rows, [audit for _, audit in legacy_records] + pending_legacy, month
++        ),
+     }

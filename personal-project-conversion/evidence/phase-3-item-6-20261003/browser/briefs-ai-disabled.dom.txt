@@ -1,0 +1,64 @@
+CAPTURE briefs-ai-disabled- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Briefs" [level=1]
+  - generic: Stored personal reports by date and immutable version.
+  - button "Refresh display":
+    - text: Refresh display
+  - text: "Published brief on this page:"
+  - button "Personal News Brief — 2026-09-30"
+  - text: . Failed versions remain visible without replacing published content.
+  - article:
+    - generic: 2026-09-30 · version 1
+    - generic: Published
+    - heading "Personal News Brief — 2026-09-30" [level=2]
+    - paragraph: Report 5c80b023-8f29-423c-b014-19d02afa2988
+    - button "Open this version"- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+      - generic: "1"
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Reading exact brief version

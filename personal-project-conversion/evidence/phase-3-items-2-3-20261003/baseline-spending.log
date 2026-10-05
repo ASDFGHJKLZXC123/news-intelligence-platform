@@ -1,0 +1,148 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10e918770>
+
+    def test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration(monkeypatch):
+        with migrated_disposable_engine() as engine:
+            factory, (ledger, _) = seed(engine, monthly="1")
+            prior = NOW.replace(month=8)
+            ledger.clock = lambda: prior
+            old_finalized = reserve(ledger)
+            ledger.dispatch(old_finalized)
+            ledger.reconcile(old_finalized, input_tokens=100, output_tokens=100)
+            old_uncertain = reserve(ledger)
+            ledger.dispatch(old_uncertain)
+            ledger.mark_uncertain(old_uncertain, reason="synthetic timeout")
+            ledger.clock = lambda: NOW
+            finalized = reserve(ledger)
+            ledger.dispatch(finalized)
+            ledger.reconcile(finalized, input_tokens=100, output_tokens=100)
+            reserved = reserve(ledger)
+            cancelled = reserve(ledger)
+            ledger.cancel_before_dispatch(cancelled)
+            non_billable = reserve(ledger)
+            ledger.dispatch(non_billable)
+            ledger.confirm_non_billable(non_billable, receipt="synthetic-nonbillable-receipt")
+            revise(factory, ledger, monthly="1", enabled=False)
+            with factory() as session, session.begin():
+                workspace = session.get(PersonalWorkspace, ledger.workspace_id)
+                profile = session.get(PersonalProfileRevision, workspace.active_profile_revision_id)
+                routes = profile.settings["model_route"]
+                profile.settings = {
+                    **profile.settings,
+                    "api_key": SECRET,
+                    "model_route": {
+                        **routes,
+                        "authorization": SECRET,
+                        "generation": {
+                            **routes["generation"],
+                            "provider": "anthropic",
+                            "model": "next-synthetic-model",
+                            "model_version": "fixture-v2",
+                            "price_revision": "next-synthetic-prices",
+                            "api_key": SECRET,
+                        },
+                    },
+                }
+                current_id, current_revision = str(profile.id), profile.revision
+                for request_id in (old_uncertain, finalized, reserved):
+                    row = session.get(PersonalPaidRequest, request_id)
+                    row.route = {**row.route, "api_key": SECRET, "credentials": {"token": SECRET}}
+                    row.evidence = {"authorization": SECRET}
+                    row.provider_request_id = SECRET
+                for request_id, excluded_model in (
+                    (old_finalized, "previous-finalized-excluded"),
+                    (cancelled, "cancelled-excluded"),
+                    (non_billable, "nonbillable-excluded"),
+                ):
+                    row = session.get(PersonalPaidRequest, request_id)
+                    row.route = {**row.route, "model": excluded_model}
+            summary_function = spending_summary
+            monkeypatch.setattr(
+                spending, "spending_summary",
+                lambda session, workspace_id: summary_function(session, workspace_id, now=NOW),
+            )
+            with _client(engine) as client:
+                response = client.get("/api/v1/personal/spending")
+                assert response.status_code == 200
+                summary = response.json()
+                assert client.get("/api/v1/personal/spending").json() == summary
+>           assert summary["current_configuration"] == {
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "profile_revision_id": current_id,
+                "profile_revision": current_revision,
+                "route_mode": "live",
+                "routes": [
+                    _identity("generation", "anthropic", "next-synthetic-model", "fixture-v2", "next-synthetic-prices"),
+                    _identity("embedding"),
+                ],
+            }
+E           KeyError: 'current_configuration'
+
+tests/integration/test_personal_spending_metadata.py:100: KeyError
+----------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-03T22:42:52.982261+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/spending \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-10-03T22:42:52.987610+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/spending \"HTTP/1.1 200 OK\""}
+------------------------------ Captured log call -------------------------------
+INFO     httpx2:_client.py:984 HTTP Request: GET http://testserver/api/v1/personal/spending "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:984 HTTP Request: GET http://testserver/api/v1/personal/spending "HTTP/1.1 200 OK"
+_ test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import _
+
+    def test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import():
+        with migrated_disposable_engine() as engine:
+            factory, (ledger, _) = seed(engine, monthly="1")
+            with factory() as session, session.begin():
+                for cost, params in (
+                    (Decimal("0.005"), {"price_revision": "unverified-extra", "api_key": SECRET}),
+                    (None, None),
+                    (Decimal("0.9"), {"personal_paid_ledger_accounted": True}),
+                ):
+                    session.add(LLMRun(
+                        prompt_name="synthetic", prompt_version="v1", provider="legacy-provider",
+                        model="legacy-model" if cost != Decimal("0.9") else "guarded-copy-excluded",
+                        model_params=params, cost_usd=cost,
+                        created_at=NOW - dt.timedelta(hours=1),
+                    ))
+            with factory() as session:
+                before = session.scalar(select(func.count()).select_from(PersonalLegacyUsage))
+                summary = spending_summary(session, ledger.workspace_id, now=NOW)
+>               assert summary["accounted_routes"] == [{
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "source": "legacy_usage", "accounting_period": "2026-09",
+                    **_identity(None, "legacy-provider", "legacy-model", None, None),
+                }]
+E               KeyError: 'accounted_routes'
+
+tests/integration/test_personal_spending_metadata.py:146: KeyError
+__ test_spending_metadata_without_active_profile_or_paid_records_is_explicit ___
+
+    def test_spending_metadata_without_active_profile_or_paid_records_is_explicit():
+        with migrated_disposable_engine() as engine:
+            from sqlalchemy.orm import Session
+    
+            with Session(engine) as session:
+                workspace, _ = ensure_workspace(session)
+                workspace.active_profile_revision_id = None
+                session.commit()
+                summary = spending_summary(session, workspace.id, now=NOW)
+>               assert summary["current_configuration"] == {
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "profile_revision_id": None, "profile_revision": None,
+                    "route_mode": None, "routes": [],
+                }
+E               KeyError: 'current_configuration'
+
+tests/integration/test_personal_spending_metadata.py:170: KeyError
+=============================== warnings summary ===============================
+tests/integration/test_personal_spending_metadata.py::test_spending_metadata_without_active_profile_or_paid_records_is_explicit
+  /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/spending.py:594: SAWarning: fully NULL primary key identity cannot load any object.  This condition may raise an error in a future release.
+    profile = session.get(PersonalProfileRevision, workspace.active_profile_revision_id)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_spending_metadata.py::test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration
+FAILED tests/integration/test_personal_spending_metadata.py::test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import
+FAILED tests/integration/test_personal_spending_metadata.py::test_spending_metadata_without_active_profile_or_paid_records_is_explicit
+3 failed, 1 warning in 7.75s

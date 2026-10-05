@@ -1,0 +1,11 @@
+{
+  "all_listeners_absent": true,
+  "archive_private_values_absent_at_capture": true,
+  "docker_environment_projection_only": true,
+  "other_container_identities_preserved": true,
+  "other_state_drift_absent": true,
+  "owned_cleanup_complete": true,
+  "private_database_url_absent": true,
+  "private_marker_absent": true,
+  "private_startup_log_not_copied": true
+}

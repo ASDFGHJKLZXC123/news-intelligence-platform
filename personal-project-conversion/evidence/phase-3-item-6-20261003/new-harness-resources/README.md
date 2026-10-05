@@ -1,0 +1,34 @@
+# Item 6 fresh browser harness — ownership, archive and completed cleanup
+
+**PASS for owned resource cleanup.** Root explicitly released this harness after completing browser work and closing owned Chrome tab `952904347`; no more fixture writes were expected. Final cleanup completed at `2026-10-04T01:26:10.534406+00:00` (October 3 America/Los_Angeles). [Exact result](result.json) and [all commands](commands.json) retain identity checks, archive/log hashes, mutation targets, process and listener absence, and semantic preservation comparison. No automatic approval review rejected an action.
+
+## Exact owned resources
+
+| Resource | Verified identity | Outcome |
+| --- | --- | --- |
+| PostgreSQL | ID `2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771`, Created `2026-10-04T00:55:50.499785966Z`, image `sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c`, manifest-owned name `nip-personal-phase2-offline-pg-p3_item6_20261003_b`, `127.0.0.1:56414` | Exact ID and name absent after existing stop helper. |
+| Redis | ID `f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825`, Created `2026-10-04T00:55:59.179249053Z`, image `sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf`, manifest-owned name `nip-personal-phase2-offline-redis-p3_item6_20261003_b`, `127.0.0.1:56427` | Exact ID and name absent after existing stop helper. |
+| Disposable DB | `nip_personal_phase2_offline_p3_item6_20261003_b`, OID `16384`, owner `news`, head `0022_personal_spending`, exact private marker match | Existing helper successfully verifies marker and drops only this DB before removing its server. Private manifest subsequently records `database.owned=false`. Container absence proves disposable dataset removal; this record does not claim a separate live post-DROP OID query after the helper removed the server. |
+| API | PID `73698`, start `Sat Oct 3 17:56:00 2026`, marker `--port 56430` | Exact PID absent; listener `56430` absent. |
+| Worker | PID `73812`, start `Sat Oct 3 17:56:02 2026`, marker `--hostname=personal-offline-p3_item6_20261003_b@localhost` | Exact PID absent. |
+| Frontend | PID `74254`, start `Sat Oct 3 17:56:41 2026`, marker `http.server 60316 --bind 127.0.0.1 --directory frontend` | Exact identity checked, TERM only, PID/listener `60316` absent. |
+| PG anonymous volume | `892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef`, Created `2026-10-04T00:55:50Z` | Exact creation/anonymous label/mount verified, zero references after container removal, exact volume removed and absence verified. |
+| Redis anonymous volume | `e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965`, Created `2026-10-04T00:55:59Z` | Same exact identity/reference/remove/absence procedure. |
+
+[Safe private-manifest projection](manifest-safe.json) preserves its hash, resource ownership fields and a SHA-256 of the private marker; it omits access credentials and redacts the DB URL. Current container images, labels, immutable mounts, loopback bindings, PIDs/starts/commands, DB OID/name/owner/head and marker hash were retained before mutation. Actual API/worker environments were projected to `APP_ENV=test`, `PERSONAL_PAID_RUNTIME_ENABLED=false` and all four paid-provider-key present/blank booleans; other environment values were discarded. No news/model provider was contacted by this resource workflow.
+
+## Archive and logs
+
+The [secret-safe synthetic SQL archive](nip_personal_phase2_offline_p3_item6_20261003_b-secret-safe.sql) retains the complete schema and other final synthetic fixture data from `pg_dump --no-owner --no-acl`. The private access key, harness marker token and DB URL are replaced wherever present; this is deliberately a redacted evidence archive and does not recreate the original private cleanup marker. Raw-source and retained SHA-256/byte counts are in [result.json](result.json). Its retained size is `353225` bytes, mode `0600`. The retained raw-source hash documents the original capture without retaining its private values.
+
+[Before API](before-api.log), [before worker](before-worker.log), [before frontend](before-frontend.log), [after API](after-api.log), [after worker](after-worker.log) and [after frontend](after-frontend.log) retain redacted logs and original/redacted hashes. The private startup log was not copied. The access key was read privately from the exact owned API environment only to scrub artifacts, since the harness manifest intentionally never stores that key.
+
+## Cleanup and preservation
+
+[The guarded capture/cleanup script](capture-cleanup.py) verifies the exact resources and archives them before calling the existing `stop-personal-phase2-offline.sh` with its valid private ownership manifest. That helper stops only manifest-matched API/worker processes, verifies the DB marker before dropping the owned DB, then removes only exact matching owned containers. Independent checks establish container ID/name and API/worker process absence. The separately manifested frontend is stopped by its own exact identity, then only the exact anonymous volumes are removed after zero-reference verification. All four loopback ports are absent afterward.
+
+All **20 other containers** matched the immediate cleanup baseline for ID/name/creation/image/labels, exact mount objects, port bindings and states. Any mount list ordering differences are preserved separately and do not change exact object identity. The older manifest-missing browser stack, shared development PostgreSQL, Phase 2 resources and unrelated stopped infrastructure containers remain untouched. Existing item-5 and historical-cleanup comparison failure records remain preserved outside this directory. No operational `.env`, saved preference, real allowance or paid-runtime activation was changed by this cleanup.
+
+Two preparation failures occurred before resource capture/mutation and remain retained: [parse preflight](preflight-parse.json) with [original script](preflight-parse-capture-cleanup.py), and [manifest-key preflight](preflight-manifest-key.json) with [original script](preflight-manifest-key-capture-cleanup.py). A missing dictionary brace was repaired before execution; the deliberately absent API key was then sourced privately from the actual owned API only for redaction. Neither failure was an approval rejection, UI defect or resource identity mismatch. Final cleanup completed without another failure.
+
+[Safety/preservation checks](safety-preservation-check.json) and [launcher/helper source hashes](harness-source-hashes.json) are retained. The scripts are reproducible descriptions of the executed single-owned cleanup; rerunning `capture-cleanup.py --execute` now intentionally fails the owned-live-process/resource preconditions because resources are already absent. The private state directory and its manifest/logs remain for local recovery; all actual owned runtime resources are removed.

@@ -1,0 +1,49 @@
+ 
+ -------------- phase4a-final-a1952a864e82@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- macOS-26.4.1-arm64-arm-64bit-Mach-O 2026-10-04 02:15:48
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         news_intelligence:0x1097f2120
+- ** ---------- .> transport:   redis://127.0.0.1:59735/1
+- ** ---------- .> results:     redis://127.0.0.1:59735/2
+- *** --- * --- .> concurrency: 8 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> pipeline         exchange=default(direct) key=default
+                
+
+[tasks]
+  . generate_daily_brief
+  . workers.alert_tasks.run_alert_evaluation
+  . workers.alert_tasks.run_pending_alert_notification_sweep
+  . workers.analogy_tasks.run_event_analogy_rerank
+  . workers.clustering_tasks.run_article_clustering
+  . workers.embedding_tasks.run_article_embedding
+  . workers.embedding_tasks.run_episode_embedding_refresh
+  . workers.embedding_tasks.run_event_embedding
+  . workers.entity_linking_tasks.run_event_entity_linking
+  . workers.ingestion_tasks.ingest_source_feed
+  . workers.personal_tasks.run_personal_daily
+  . workers.pipeline_tasks.run_daily_pipeline
+  . workers.provider_data_tasks.run_country_indicator_ingestion
+  . workers.provider_data_tasks.run_energy_series_ingestion
+  . workers.provider_data_tasks.run_entity_identity_ingestion
+  . workers.provider_data_tasks.run_fred_macro_ingestion
+  . workers.provider_data_tasks.run_gdelt_raw_ingestion
+  . workers.provider_data_tasks.run_geo_incident_ingestion
+  . workers.provider_data_tasks.run_humanitarian_report_ingestion
+  . workers.provider_data_tasks.run_sanctions_ingestion
+  . workers.provider_data_tasks.run_sec_company_ingestion
+  . workers.provider_data_tasks.run_sec_identity_refresh
+  . workers.provider_data_tasks.run_wikidata_identity_ingestion
+  . workers.tasks.noop
+  . workers.tasks.scheduled_heartbeat
+
+[2026-10-04 02:15:48,815: INFO/MainProcess] Connected to redis://127.0.0.1:59735/1
+[2026-10-04 02:15:48,828: INFO/MainProcess] phase4a-final-a1952a864e82@localhost ready.
+[2026-10-04 02:15:48,829: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[234e979f-b706-4946-9e7d-6f19c9462588] received
+[2026-10-04 02:15:49,030: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[234e979f-b706-4946-9e7d-6f19c9462588] succeeded in 0.20091570913791656s: {'status': 'succeeded', 'run_id': '7ef07384-9f27-4fdf-82ba-eae2f633f9d1', 'report_id': 'e5641c4f-fa00-4375-b60d-c391a4839ae6', 'published': True, 'feeds_attempted': 1, 'feeds_succeeded': 1, 'feeds_failed': 0, 'articles_captured': 1, 'articles_admitted': 1, 'events_observed': 1, 'claims_supported': 2, 'fixture_label': 'Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls'}
+
+worker: Warm shutdown (MainProcess)

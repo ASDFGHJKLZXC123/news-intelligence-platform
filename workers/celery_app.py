@@ -230,6 +230,9 @@ celery_app = Celery(
         # Manual non-crisis daily coordinator. Registered on the pipeline queue but deliberately
         # absent from BEAT_SCHEDULE: an authenticated operator/API request is its only trigger.
         "workers.pipeline_tasks",
+        # Personal updates are API-delivered only. They are deliberately absent from Beat and
+        # own retries in PostgreSQL rather than Celery autoretry.
+        "workers.personal_tasks",
     ],
 )
 

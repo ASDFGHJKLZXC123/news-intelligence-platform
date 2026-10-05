@@ -1,0 +1,90 @@
+{
+  "mode": "baseline-spending",
+  "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+  "container_name": "nip-phase3-tests-02ea38048d",
+  "container_label": {
+    "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+  },
+  "loopback_port": 58553,
+  "maintenance_database": "postgres",
+  "environment": "test; four provider keys cleared",
+  "before": [
+    {
+      "name": "nip_phase3_final_444731f8f123",
+      "oid": 649104
+    },
+    {
+      "name": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986
+    },
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "databases": [
+    {
+      "name": "nip_stage7_457f8cf393ea40e9a4fce2c526f3d007",
+      "oid": 993957,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_1f2e3298204741fdb72ddf0306f38817",
+      "oid": 997219,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_e20042e8dc5b420192d5da908e3474b0",
+      "oid": 1000481,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    }
+  ],
+  "pytest_exit_code": 1,
+  "after": [
+    {
+      "name": "nip_phase3_final_444731f8f123",
+      "oid": 649104
+    },
+    {
+      "name": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986
+    },
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "inventory_unchanged": true,
+  "all_owned_databases_removed": true
+}

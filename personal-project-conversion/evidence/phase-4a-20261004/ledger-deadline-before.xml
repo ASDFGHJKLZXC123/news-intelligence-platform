@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="3.642" timestamp="2026-10-04T01:34:14.099062-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_phase4a_ledger" name="test_paid_reservation_rejects_a_run_without_global_personal_ownership" time="1.622" /><testcase classname="tests.integration.test_personal_phase4a_ledger" name="test_durable_dispatch_permission_needs_full_call_budget" time="1.585"><failure message="Failed: DID NOT RAISE PaidWorkBlocked">def test_durable_dispatch_permission_needs_full_call_budget():
+        import datetime as dt
+        from decimal import Decimal
+        from sqlalchemy import select, func
+        from db.models import PersonalRun
+        from db.models.personal_spending import PersonalPaidRequest
+        from tests.integration.test_personal_phase4a_faults import _paid_owner
+    
+        with migrated_disposable_engine() as engine:
+            factory, ledger = _paid_owner(engine)
+            with factory() as session:
+                run = session.get(PersonalRun, ledger.run_id)
+                too_late = run.graceful_deadline_at - dt.timedelta(seconds=29)
+            ledger.clock = lambda: too_late
+&gt;           with pytest.raises(PaidWorkBlocked, match="deadline"):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE PaidWorkBlocked
+
+tests/integration/test_personal_phase4a_ledger.py:35: Failed</failure></testcase></testsuite></testsuites>

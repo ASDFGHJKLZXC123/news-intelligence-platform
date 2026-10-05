@@ -1,0 +1,344 @@
+{
+  "recorded_at": "2026-09-20T07:18:23.737452+00:00",
+  "run": {
+    "id": "321902cf-f088-4e07-b6f1-6ef734444228",
+    "error": {
+      "code": "model_processing_degraded",
+      "message": "Brief generation stopped because model-generated sections failed."
+    },
+    "state": "partially_failed",
+    "job_id": "feb2846a-ebaa-4494-a9b0-71079f24f571",
+    "result": {
+      "attempt": 1,
+      "published": false,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "snapshot_id": "78fefdbe-f92f-4b68-954e-5dfa6ede40df",
+      "gate_outcome": "pass",
+      "section_count": 5,
+      "capture_partial": false,
+      "processing_degraded": true
+    },
+    "attempt": 1,
+    "coverage": {
+      "schema": "personal-capture-coverage.v1",
+      "feed_pauses": [],
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feed_failures": [],
+      "items_fetched": 1,
+      "pending_total": 0,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 1,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_admitted": 1,
+      "articles_captured": 1
+    },
+    "event_ids": [
+      "fc6e1c7c-c580-4646-b17a-87a669d3f823"
+    ],
+    "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+    "created_at": "2026-09-20T07:15:28.588716+00:00",
+    "local_date": "2026-09-20",
+    "updated_at": "2026-09-20T07:15:40.560439+00:00",
+    "snapshot_id": "78fefdbe-f92f-4b68-954e-5dfa6ede40df",
+    "max_attempts": 3,
+    "workspace_id": "123e50b7-f528-4d79-b5e8-219e9b25ff6b",
+    "stage_results": {
+      "scope": {
+        "status": "succeeded",
+        "articles_admitted": 1,
+        "articles_selected_for_enrichment": 1
+      },
+      "capture": {
+        "schema": "personal-capture-coverage.v1",
+        "status": "succeeded",
+        "feed_pauses": [],
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feed_failures": [],
+        "items_fetched": 1,
+        "pending_total": 1,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 1,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_captured": 1
+      },
+      "grouping": {
+        "status": "succeeded",
+        "events_created": 1,
+        "articles_clustered": 1
+      },
+      "snapshot": {
+        "status": "succeeded",
+        "snapshot_id": "78fefdbe-f92f-4b68-954e-5dfa6ede40df"
+      },
+      "admission": {
+        "status": "succeeded",
+        "run_limit": 100,
+        "local_day_limit": 100,
+        "articles_admitted": 1
+      },
+      "embedding": {
+        "status": "succeeded",
+        "articles_embedded": 1
+      },
+      "live_smoke": {
+        "code": "workflow_incomplete",
+        "status": "workflow_failed",
+        "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+        "capture_ids": [
+          "bbc-japan-rates-1"
+        ],
+        "config_hash": "f1d76dd2ec8ebd862a2aa895ae5804ed7f7db1ad7ccca71d9dffc8150900f9aa",
+        "snapshot_id": "78fefdbe-f92f-4b68-954e-5dfa6ede40df",
+        "verification_id": "98db64a8-cc44-4984-a1f4-181ba5803fe1",
+        "report_published": false
+      },
+      "observations": {
+        "status": "succeeded",
+        "events_observed": 1
+      },
+      "claim_preparation": {
+        "status": "succeeded",
+        "abstained": 0,
+        "supported": 1
+      }
+    },
+    "celery_task_id": null,
+    "execution_mode": "personal",
+    "ownership_token": "13132b43-3562-4b5c-a152-c47a35682bb9",
+    "capture_ended_at": "2026-09-20T07:15:30.229862+00:00",
+    "lease_expires_at": null,
+    "scopes_frozen_at": "2026-09-20T07:15:30.293341+00:00",
+    "terminal_manifest": {
+      "schema": "personal-review-manifest.v1",
+      "observations": [
+        {
+          "event_id": "fc6e1c7c-c580-4646-b17a-87a669d3f823",
+          "revision": 1,
+          "observation_id": "ca3daa76-c333-442e-98c7-611990448bc6"
+        }
+      ]
+    },
+    "capture_started_at": "2026-09-20T07:15:29.803598+00:00",
+    "profile_revision_id": "75e8e588-85d8-4d88-958e-b115663b766f",
+    "admitted_article_ids": [
+      "4f6a7b5e-a8eb-44e2-855b-2b166e9968fe"
+    ],
+    "enrichment_article_ids": [
+      "4f6a7b5e-a8eb-44e2-855b-2b166e9968fe"
+    ]
+  },
+  "reports": [
+    {
+      "id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "stale": false,
+      "title": "Personal News Brief \u2014 2026-09-20",
+      "status": "failed",
+      "user_id": "6c1e6d11-baf6-4d72-ae10-0fae0ae509fd",
+      "version": 1,
+      "event_id": null,
+      "brief_date": "2026-09-20",
+      "created_at": "2026-09-20T07:15:33.667278+00:00",
+      "updated_at": "2026-09-20T07:15:33.745883+00:00",
+      "report_type": "personal_daily_brief",
+      "change_reason": null,
+      "content_policy": "descriptive_only.v1",
+      "confidence_score": null,
+      "generated_by_run_id": "45e82838-43a0-41c7-8d51-6fede1768905"
+    }
+  ],
+  "sections": [
+    {
+      "id": "efb105e8-23e8-43de-90e5-72745c09d5b5",
+      "body": "[budget_unmet] section prose was 126 words after one budget-feedback retry, outside the 96-120 word range; generated prose omitted.",
+      "title": "Executive Summary",
+      "blocks": null,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "evidence_refs": null,
+      "section_order": 1,
+      "grounding_status": "data_quality_note"
+    },
+    {
+      "id": "d25d1353-71c8-4c64-8d8b-63957b6da186",
+      "body": "[budget_unmet] section prose was 69 words after one budget-feedback retry, outside the 120-180 word range; generated prose omitted.",
+      "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "blocks": null,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "evidence_refs": null,
+      "section_order": 2,
+      "grounding_status": "data_quality_note"
+    },
+    {
+      "id": "1ebe0bbd-b6dd-4af9-a3ce-4bee31466141",
+      "body": "No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported.\nNo risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "title": "What Changed Since Yesterday",
+      "blocks": null,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "evidence_refs": null,
+      "section_order": 3,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "5a888e32-5db8-452f-8c64-1cf0495ef890",
+      "body": "[capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained, 0 feeds failed, and 0 feeds were paused at pending capacity.\n[no_risk_observations] Personal Phase 2 does not compute or narrate risk scores.\n[no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2 workflow.\n[no_prior_brief] No prior personal brief is injected into this immutable snapshot.\n[no_prior_comparison] No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "title": "Data Quality",
+      "blocks": null,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "evidence_refs": null,
+      "section_order": 4,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "299f0bde-c1bc-4259-abbb-36b049d38049",
+      "body": "This system provides probabilistic analysis based on public information, data signals, and model-assisted reasoning. It is for informational purposes only and does not constitute investment, legal, or financial advice.",
+      "title": "Disclaimer",
+      "blocks": null,
+      "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+      "evidence_refs": null,
+      "section_order": 5,
+      "grounding_status": "passed"
+    }
+  ],
+  "llm_runs": [
+    {
+      "prompt_name": "daily_brief_executive_summary",
+      "status": "succeeded",
+      "error_message": null,
+      "output": {
+        "blocks": [
+          {
+            "text": "Market participants preparing for the US open should note that monetary authorities in Japan have lifted interest rates to levels not seen in thirty-one years, a policy move explicitly designed to combat escalating consumer prices.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      }
+    },
+    {
+      "prompt_name": "daily_brief_executive_summary",
+      "status": "succeeded",
+      "error_message": null,
+      "output": {
+        "blocks": [
+          {
+            "text": "Market monitoring systems show that critical alert states remain stable with no fresh risk shifts reported in this cycle. Investors should note there are currently no new high-priority alert modifications or emergency state adjustments active across the primary tracking grids prior to the opening bell.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          },
+          {
+            "text": "In major global developments, monetary policy shifting in Asia drew significant focus as authorities moved borrowing costs upward to a level not seen in thirty-one years. This aggressive adjustment aims to counter persistent inflationary pressures and stabilize domestic purchasing power as economic conditions evolve.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          },
+          {
+            "text": "Meanwhile, broader systemic risk indicators reflect quiet conditions with no notable volatility spikes or major cross-asset risk movements recorded during the latest monitoring window, leaving traders to focus on domestic rate impacts and upcoming macroeconomic data releases.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      }
+    },
+    {
+      "prompt_name": "daily_brief_top_event",
+      "status": "succeeded",
+      "error_message": null,
+      "output": {
+        "blocks": [
+          {
+            "text": "Authorities in Japan have increased the national interest rate to a level not seen in thirty-one years. This monetary policy adjustment was implemented as a direct measure to address and control escalating costs and rising prices within the economy.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          },
+          {
+            "text": "This significant shift in monetary policy carries broad implications for domestic financial markets and consumer purchasing power. By pushing borrowing costs to a decades-long peak, policymakers aim to cool inflationary pressures, though such tightening can also influence currency valuation and economic growth trajectory.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      }
+    },
+    {
+      "prompt_name": "daily_brief_top_event",
+      "status": "succeeded",
+      "error_message": null,
+      "output": {
+        "blocks": [
+          {
+            "text": "Japanese monetary authorities have implemented a significant adjustment to their monetary policy by lifting the benchmark interest rate to its highest level in thirty-one years.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          },
+          {
+            "text": "This decisive policy action was deployed primarily as a direct economic countermeasure aimed at curbing persistent upward pressures on consumer prices within the domestic market.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          },
+          {
+            "text": "Reaching a three-decade peak marks an important milestone for the nation's financial landscape as policymakers navigate ongoing inflationary challenges.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      }
+    }
+  ],
+  "counts": {
+    "personal_runs": 1,
+    "personal_profile_revisions": 2,
+    "sources": 1,
+    "personal_captures": 1,
+    "personal_article_revisions": 1,
+    "claims": 1,
+    "claim_evidence": 1,
+    "evidence_items": 1,
+    "personal_brief_snapshots": 1,
+    "reports": 1,
+    "report_sections": 5,
+    "llm_runs": 4
+  },
+  "ledger_totals": {
+    "dispatches": 5,
+    "held_uncertain_usd": "0",
+    "known_actual_usd": "0.00362026",
+    "reserved_usd": "0.0460505"
+  },
+  "ledger_outcome": {
+    "capture_ids": [
+      "bbc-japan-rates-1"
+    ],
+    "personal_run_id": "321902cf-f088-4e07-b6f1-6ef734444228",
+    "reason": "workflow_incomplete",
+    "recorded_at": "2026-09-20T07:15:40.669941Z",
+    "report_id": "8d0533bd-e7f4-4fdd-b466-2fc8e5dbd119",
+    "snapshot_id": "78fefdbe-f92f-4b68-954e-5dfa6ede40df",
+    "status": "failed"
+  }
+}

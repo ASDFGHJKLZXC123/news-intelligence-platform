@@ -1,0 +1,100 @@
+{
+  "final-suite-database.json": {
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-20260920/final-suite-database.json",
+    "safe_record": {
+      "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "container_name": "nip-phase3-tests-02ea38048d",
+      "created": "2026-09-20T22:50:40.739020472Z",
+      "database_name": "nip_phase3_final_444731f8f123",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "port": 58553
+    },
+    "sha256": "211085143c308751125702e2cc8baab29fb2a83719c357e3c11c098ca34827ed"
+  },
+  "frontend-ownership.json": {
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-20260920/frontend-ownership.json",
+    "safe_record": {
+      "command_marker": "http.server 61410",
+      "pid": 47982,
+      "port": 61410,
+      "started": "Sun Sep 20 16:06:03 2026"
+    },
+    "sha256": "aa413532132e23bb16404ae350da999c166e4821afc10e911afef52fb0d9744e"
+  },
+  "full-suite-database.json": {
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-20260920/full-suite-database.json",
+    "safe_record": {
+      "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "container_name": "nip-phase3-tests-02ea38048d",
+      "created": "2026-09-20T22:50:40.739020472Z",
+      "database_name": "nip_phase3_full_a5ca8c211b71",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "port": 58553
+    },
+    "sha256": "05000ec13d16707ec33fd2fa3baf3a0e3bb3a9faa8f751969dc000dc1b9a3fcb"
+  },
+  "item23-final-resources": {
+    "after": [
+      {
+        "name": "nip_phase3_final_444731f8f123",
+        "oid": 649104
+      },
+      {
+        "name": "nip_phase3_full_a5ca8c211b71",
+        "oid": 296986
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "before": [
+      {
+        "name": "nip_phase3_final_444731f8f123",
+        "oid": 649104
+      },
+      {
+        "name": "nip_phase3_full_a5ca8c211b71",
+        "oid": 296986
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+    "container_label": {
+      "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+    },
+    "inventory_unchanged": true,
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-items-2-3-20261003/final-integration-resources.json",
+    "sha256": "f2f5bc4e31b45f2456fae21a2d435ccad7f7a4a36acb717353fe970ce8436df8"
+  },
+  "postgres-ownership.json": {
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-20260920/postgres-ownership.json",
+    "safe_record": {
+      "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "container_name": "nip-phase3-tests-02ea38048d",
+      "created": "2026-09-20T22:50:40.739020472Z",
+      "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+      "port": 58553
+    },
+    "sha256": "fdf2a8d2989ad5f12c99ca980ed22e266df2882ce90477dc978ec6face105c63"
+  }
+}

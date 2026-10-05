@@ -1,7 +1,7 @@
 # Developer command runner.
 # Most targets assume dependencies from requirements-dev.txt are installed (see `make install`).
 
-.PHONY: help install up down logs migrate revision seed benchmark-pipeline benchmark-stage-kernels degraded-path-drills production-config-check test test-unit test-integration test-integration-fresh lint fmt audit compose-config db-backup db-restore db-restore-drill db-retention-preview check
+.PHONY: help install up down logs frontend migrate revision seed benchmark-pipeline benchmark-stage-kernels degraded-path-drills production-config-check test test-unit test-frontend test-integration test-integration-fresh lint fmt audit compose-config db-backup db-restore db-restore-drill db-retention-preview check
 
 # Prefer the repository virtual environment when it exists while still allowing every
 # command to be overridden by callers and CI.
@@ -11,6 +11,10 @@ PYTEST ?= $(PYTHON) -m pytest
 RUFF ?= $(PYTHON) -m ruff
 ALEMBIC ?= $(PYTHON) -m alembic
 PIP_AUDIT ?= $(PYTHON) -m pip_audit
+NODE ?= node
+FRONTEND_HOST ?= 127.0.0.1
+FRONTEND_PORT ?= 3000
+FRONTEND_TESTS ?= frontend/app/*.test.js
 BENCHMARK_ITERATIONS ?= 1000
 BENCHMARK_WARMUP ?= 100
 STAGE_BENCHMARK_ITERATIONS ?= 10
@@ -45,6 +49,9 @@ down: ## Stop and remove the Docker Compose stack
 logs: ## Tail Docker Compose logs
 	docker compose logs -f
 
+frontend: ## Serve the no-build browser frontend on localhost
+	$(PYTHON) -m http.server $(FRONTEND_PORT) --bind $(FRONTEND_HOST) --directory frontend
+
 migrate: ## Apply database migrations to the latest revision
 	$(ALEMBIC) upgrade head
 
@@ -70,11 +77,15 @@ production-config-check: ## Fail closed on unsafe production configuration witho
 degraded-path-drills: ## Exercise bounded dependency-loss, lease-recovery, and shutdown paths
 	@$(PYTHON) scripts/run-degraded-path-drills.py --pretty
 
-test: ## Run the full test suite (integration auto-skips unless REQUIRE_POSTGRES=1)
+test: ## Run Python tests plus the no-build frontend tests
 	$(PYTEST)
+	$(MAKE) test-frontend
 
-test-unit: ## Run unit tests only (no Postgres/Redis required)
+test-unit: ## Run Python unit tests only (no Postgres/Redis required)
 	$(PYTEST) -m 'not integration'
+
+test-frontend: ## Run frontend tests with Node's built-in test runner
+	$(NODE) --test $(FRONTEND_TESTS)
 
 test-integration: ## Run integration smoke tests; fails (not skips) if Postgres is unreachable
 	REQUIRE_POSTGRES=1 $(PYTEST) -m integration
@@ -118,10 +129,11 @@ db-restore-drill: ## Backup and restore sentinel data between two disposable, ve
 db-retention-preview: ## Preview rows eligible for retention cleanup
 	psql "$$DATABASE_URL" -f infra/sql/retention-preview.sql
 
-check: ## Self-contained CI gate: compose, lint, unit, fresh-database integration, and audit
+check: ## Full gate: config, lint, Python/frontend tests, integration, and audit
 	$(MAKE) compose-config
 	$(MAKE) lint
 	$(MAKE) test-unit
+	$(MAKE) test-frontend
 	$(MAKE) benchmark-stage-kernels
 	$(MAKE) test-integration-fresh
 	$(MAKE) audit

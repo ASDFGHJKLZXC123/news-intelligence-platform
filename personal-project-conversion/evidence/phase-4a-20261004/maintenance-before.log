@@ -1,0 +1,33 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________ test_episode_maintenance_checks_mode_before_provider _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ab5de00>
+
+    def test_episode_maintenance_checks_mode_before_provider(monkeypatch):
+        session = Mock()
+        monkeypatch.setattr(seed, "SessionLocal", lambda: session)
+        monkeypatch.setattr(seed, "build_provider", lambda: pytest.fail("forbidden mode opened provider"))
+        def reject(_session, **_kwargs):
+            raise writer_mode.LegacyWriterModeConflict("personal writer active")
+        monkeypatch.setattr(writer_mode, "require_legacy_writer_mode", reject)
+        with pytest.raises(writer_mode.LegacyWriterModeConflict):
+>           seed.seed_episodes(allow_unreviewed=True)
+
+tests/unit/test_personal_phase4a_maintenance.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+db/seed/seed.py:116: in seed_episodes
+    provider = build_provider()
+               ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   monkeypatch.setattr(seed, "build_provider", lambda: pytest.fail("forbidden mode opened provider"))
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: forbidden mode opened provider
+
+tests/unit/test_personal_phase4a_maintenance.py:13: Failed
+------------------------------ Captured log call -------------------------------
+WARNING  db.seed:seed.py:107 seeding episodes that no human has reviewed: these are drafts, not verified corpus
+=========================== short test summary info ============================
+FAILED tests/unit/test_personal_phase4a_maintenance.py::test_episode_maintenance_checks_mode_before_provider
+1 failed in 0.54s

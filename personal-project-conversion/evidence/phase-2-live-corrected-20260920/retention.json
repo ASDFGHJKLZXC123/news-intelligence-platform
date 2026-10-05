@@ -1,0 +1,10 @@
+{
+  "retained_at": "2026-09-20T07:52:17.521286+00:00",
+  "database_dump": "corrected-database.dump",
+  "database_dump_sha256": "18ae260975de05b61a204b9082ed72c9f54c6305d90da8eb631beb14073a3347",
+  "database_dump_bytes": 308940,
+  "archive_list_readable": true,
+  "live_database_removed": true,
+  "state_dir": "/tmp/nip-phase2-live-20260920_corrected_dec8277e",
+  "ledger_sha256": "dfb7473caca1fdaeff5e6f83de99063747cf4079326044e7367a4e5cba251ca8"
+}

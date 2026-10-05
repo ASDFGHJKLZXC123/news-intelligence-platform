@@ -1,0 +1,220 @@
+{
+  "mode": "final-integration",
+  "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+  "container_name": "nip-phase3-tests-02ea38048d",
+  "container_label": {
+    "nip.phase3.owned": "nip-phase3-tests-02ea38048d"
+  },
+  "loopback_port": 58553,
+  "maintenance_database": "postgres",
+  "environment": "test; four provider keys cleared",
+  "before": [
+    {
+      "name": "nip_phase3_final_444731f8f123",
+      "oid": 649104
+    },
+    {
+      "name": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986
+    },
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "databases": [
+    {
+      "name": "nip_stage7_153ba790b5634737b425c71c64a9ce74",
+      "oid": 1003743,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_e3390342082542368427658a27e210a0",
+      "oid": 1007005,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_82949ed6ef7e4ff8ae219ae93a7d393e",
+      "oid": 1010267,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_fa285703ed224a0a800b55e910691067",
+      "oid": 1013538,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_0c7e48b529124bc587b75b02d5437cf6",
+      "oid": 1016800,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_ce32fcbe36c94bc8be0d2a0076dff807",
+      "oid": 1020062,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_9993d3cec3044fb8bb03a5800a6e0321",
+      "oid": 1023324,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_35c4518d9adc4dca801e2f4623c91ddb",
+      "oid": 1026586,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_066ab02b30cc40ab96ec1c757391f30d",
+      "oid": 1029848,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_5ad9b4fb2d02450b8adf933d2dee83b7",
+      "oid": 1033110,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_4fdf3c1474074dc5b01148d665a94570",
+      "oid": 1036372,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_2c6239f3525b4a738f7ba9b55efe65ab",
+      "oid": 1039634,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_7982dc94afcd4409b12f67ebcdaed1ef",
+      "oid": 1042896,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_16f934191f014134a0191cae5a06b677",
+      "oid": 1046158,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_stage7_ad483247d37a4ab098c04a4e490ce82f",
+      "oid": 1049420,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    },
+    {
+      "name": "nip_pipeline_slice_1758c1ec889e",
+      "oid": 1052682,
+      "created_by_this_runner": true,
+      "applied_heads": [
+        "0022_personal_spending"
+      ],
+      "identity_verified_before_drop": true,
+      "absent_after_drop": true
+    }
+  ],
+  "pytest_exit_code": 0,
+  "after": [
+    {
+      "name": "nip_phase3_final_444731f8f123",
+      "oid": 649104
+    },
+    {
+      "name": "nip_phase3_full_a5ca8c211b71",
+      "oid": 296986
+    },
+    {
+      "name": "postgres",
+      "oid": 5
+    },
+    {
+      "name": "template0",
+      "oid": 4
+    },
+    {
+      "name": "template1",
+      "oid": 1
+    }
+  ],
+  "inventory_unchanged": true,
+  "all_owned_databases_removed": true
+}

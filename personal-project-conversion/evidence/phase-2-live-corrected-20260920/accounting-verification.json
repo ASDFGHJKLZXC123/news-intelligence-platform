@@ -1,0 +1,42 @@
+{
+  "canonical_ledger_hash_verified": true,
+  "ledger_hash": "ac6d9b35521e838a53bc1912077c83a14b9e2bc5d7a3dae3531b2e1a4aecd29a",
+  "dispatches": [
+    {
+      "sequence": 1,
+      "actual_usd": "6.6E-7",
+      "reserved_usd": "0.0000154",
+      "status": "reconciled"
+    },
+    {
+      "sequence": 2,
+      "actual_usd": "0.000557",
+      "reserved_usd": "0.0115714",
+      "status": "reconciled"
+    },
+    {
+      "sequence": 3,
+      "actual_usd": "0.0005839",
+      "reserved_usd": "0.0115675",
+      "status": "reconciled"
+    },
+    {
+      "sequence": 4,
+      "actual_usd": "0.0005785",
+      "reserved_usd": "0.0116368",
+      "status": "reconciled"
+    },
+    {
+      "sequence": 5,
+      "actual_usd": "0.0005218",
+      "reserved_usd": "0.0116545",
+      "status": "reconciled"
+    }
+  ],
+  "known_actual_usd": "0.00224186",
+  "reserved_usd": "0.0464456",
+  "held_uncertain_usd": "0",
+  "all_token_route_dispatch_and_allowance_limits_pass": true,
+  "cost_basis": "Returned provider token usage multiplied by freshly verified Standard list prices; not an invoice reconciliation.",
+  "cumulative_known_cost_all_three_attempts_usd": "0.00586212"
+}

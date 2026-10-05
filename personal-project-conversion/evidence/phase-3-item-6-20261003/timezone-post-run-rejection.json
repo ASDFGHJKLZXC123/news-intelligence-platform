@@ -1,0 +1,18 @@
+{
+  "status": 422,
+  "response": {
+    "error": {
+      "code": "unprocessable_content",
+      "message": "timezone cannot change after the first run; an explicit future migration is required",
+      "request_id": "0581dea9-365c-47e2-97f2-95137912e01d"
+    }
+  },
+  "checks": {
+    "status_422": true,
+    "specific_reason": true,
+    "timezone_unchanged": true,
+    "profile_unchanged": true
+  },
+  "before_revision": 14,
+  "after_revision": 14
+}

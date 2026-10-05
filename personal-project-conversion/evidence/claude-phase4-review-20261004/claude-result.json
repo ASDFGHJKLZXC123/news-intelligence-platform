@@ -1,0 +1,23 @@
+{
+  "completed_utc": "2026-10-05T01:13:54.492037+00:00",
+  "exit_code": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "claude_model": [
+    "claude-opus-5-5"
+  ],
+  "report_retained": true,
+  "original_changed_paths": [],
+  "snapshot_changed_paths": [],
+  "controls": {
+    "head_unchanged": true,
+    "branch_unchanged": true,
+    "index_unchanged": true,
+    "staged_diff_unchanged": true
+  },
+  "snapshot": "/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-claude-phase4-81cbe328fe-r6vlxeo0/repo",
+  "source_file_count": 1219,
+  "original_preservation_passed": true,
+  "tests_freshly_rerun_by_claude": false,
+  "exact_temporary_snapshot_removed": true
+}

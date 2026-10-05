@@ -1,0 +1,367 @@
+..F.F...                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default] _
+
+mode = 'default'
+
+    @pytest.mark.parametrize("mode", ["default", "raw", "stage_failure"])
+    def test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes(mode):
+        # Identical authored RSS fields/hash in every mode; DB identities differ.
+        fixture = _triad_fixture()
+        with migrated_disposable_engine() as engine:
+    
+            def factory():
+                return Session(engine, autoflush=False)
+    
+            with factory() as session:
+                source = Source(name="Synthetic P3-12 shared fixture feed", feed_url=_TRIAD_FEED_URL)
+                session.add(source)
+                session.flush()
+                workspace, _ = ensure_workspace(session)
+                profile = update_settings(
+                    session,
+                    workspace,
+                    PersonalSettingsUpdate(
+                        selected_source_ids=[source.id],
+                        include_phrases=["agency"],
+                        execution_profile="raw" if mode == "raw" else "assisted",
+                        daily_article_limit=2,
+                        run_article_limit=2,
+                        enrichment_article_limit=2,
+                        ai_enabled=False,
+                        model_route=fixture.route,
+                    ),
+                )
+                decision = create_daily_run(session, workspace, now=START)
+                assert decision.created
+                run_id, token = decision.run.id, decision.run.ownership_token
+                profile_id, workspace_id, source_id = profile.id, workspace.id, source.id
+                session.commit()
+            embedding_calls, report_calls = [], []
+            delegate_embedding = fixture.embedding_provider()
+    
+            class ScopedEmbedding:
+                model_name = delegate_embedding.model_name
+                model_version = delegate_embedding.model_version
+    
+                def embed(self, texts):
+                    embedding_calls.append(tuple(texts))
+                    with factory() as probe:
+                        frozen = probe.get(PersonalRun, run_id)
+                        assert frozen.scopes_frozen_at is not None
+                        assert frozen.profile_revision_id == profile_id
+                        assert (
+                            len(frozen.admitted_article_ids) == len(frozen.enrichment_article_ids) == 2
+                        )
+                        assert (
+                            probe.scalar(select(func.count()).select_from(PersonalArticleRevision)) == 2
+                        )
+                    if mode == "stage_failure":
+                        raise RuntimeError("synthetic required embedding failure after scope freeze")
+                    # After freeze, edit only the active profile. The run must use its old agency
+                    # selection and old enrichment ceiling, not the new league preference/zero cap.
+                    with factory() as edit:
+                        live_workspace = edit.get(PersonalWorkspace, workspace_id)
+                        revised = update_settings(
+                            edit,
+                            live_workspace,
+                            PersonalSettingsUpdate(
+                                selected_source_ids=[source_id],
+                                include_phrases=["league"],
+                                execution_profile="assisted",
+                                daily_article_limit=2,
+                                run_article_limit=2,
+                                enrichment_article_limit=0,
+                                ai_enabled=False,
+                                model_route=fixture.route,
+                            ),
+                        )
+                        assert revised.id != profile_id
+                        edit.commit()
+                    return delegate_embedding.embed(texts)
+    
+            def offline_report(session, route):
+                report_calls.append(route)
+                assert route == fixture.route
+                return fixture.orchestrator(session, route)
+    
+            arguments = dict(
+                session_factory=factory,
+                rss_provider_factory=fixture.rss_provider,
+                embedding_provider=_NoPaidProvider() if mode == "raw" else ScopedEmbedding(),
+                orchestrator_factory=_no_report if mode == "raw" else offline_report,
+                now=START,
+                clock=StepClock(START + dt.timedelta(seconds=10)),
+            )
+            if mode == "stage_failure":
+                with pytest.raises(PersonalCoordinatorError, match="workflow failed"):
+                    run_personal_daily(run_id, token, **arguments)
+            else:
+                result = run_personal_daily(run_id, token, **arguments)
+                assert result.articles_captured == result.articles_admitted == 2
+                assert bool(result.report and result.report.published) is (mode == "default")
+            with factory() as session:
+                run = session.get(PersonalRun, run_id)
+                profile = session.get(PersonalProfileRevision, profile_id)
+                assert profile.schema_revision == "personal-profile.v2"
+                assert (
+                    profile.include_phrases == ["agency"]
+                    and profile.settings["model_route"] == fixture.route
+                )
+                assert run.profile_revision_id == profile_id and run.ownership_token == token
+                assert run.scopes_frozen_at is not None and len(run.admitted_article_ids) == 2
+                assert run.capture_ended_at <= run.scopes_frozen_at
+                assert run.coverage["articles_captured"] == run.coverage["articles_admitted"] == 2
+                assert run.stage_results["scope"]["articles_admitted"] == 2
+                captures = list(session.scalars(select(PersonalCapture)))
+                assert len(captures) == 2 and all(row.admission_charged for row in captures)
+                assert {row.article_id for row in captures} == set(run.admitted_article_ids)
+                authored_by_url = {row["url"]: row for row in _TRIAD_AUTHORED_RSS}
+                for capture in captures:
+                    authored = authored_by_url[capture.original_url]
+                    assert (
+                        capture.title == authored["title"]
+                        and capture.rss_summary == authored["summary"]
+                    )
+                    assert capture.published_at == (
+                        dt.datetime.fromisoformat(authored["published_at"])
+                        if authored["published_at"]
+                        else None
+                    )
+                for stage in (
+                    "entity_linking",
+                    "event_embeddings",
+                    "historical_analogies",
+                    "forecasting",
+                ):
+                    assert run.stage_results[stage] == {
+                        "status": "disabled",
+                        "reason": "disabled_by_profile",
+                    }
+                assert session.scalar(select(func.count()).select_from(PersonalPaidRequest)) == 0
+                if mode == "raw":
+                    assert run.state == "succeeded" and run.result["reason"] == "disabled_by_profile"
+                    assert run.enrichment_article_ids == [] and embedding_calls == report_calls == []
+                    for stage in ("embedding", "grouping", "claim_preparation", "snapshot", "report"):
+                        assert run.stage_results[stage] == {
+                            "status": "disabled",
+                            "reason": "disabled_by_profile",
+                        }
+                    assert all(row.enrichment_state == "disabled_by_profile" for row in captures)
+                    assert run.snapshot_id is None and run.report_id is None
+                elif mode == "stage_failure":
+                    assert run.state == "failed" and run.error["code"] == "personal_workflow_failed"
+                    assert run.stage_results["workflow"] == {
+                        "status": "failed",
+                        "code": "personal_workflow_failed",
+                    }
+                    assert run.enrichment_article_ids == run.admitted_article_ids
+                    assert len(embedding_calls) == 1 and report_calls == []
+                    assert all(row.enrichment_state == "provider_failed" for row in captures)
+                    assert run.snapshot_id is None and run.report_id is None
+                    assert (
+                        session.scalar(select(func.count()).select_from(PersonalArticleRevision)) == 2
+                    )
+                else:
+                    assert (
+                        run.state == "succeeded"
+                        and run.enrichment_article_ids == run.admitted_article_ids
+                    )
+                    assert len(embedding_calls) == 1 and len(report_calls) == 1
+                    assert (
+                        session.get(PersonalWorkspace, workspace_id).active_profile_revision_id
+                        != profile_id
+                    )
+>                   assert all(
+                        run.stage_results[stage]["status"] == "succeeded"
+                        for stage in (
+                            "embedding",
+                            "grouping",
+                            "claim_preparation",
+                            "snapshot",
+                            "report",
+                        )
+                    )
+
+tests/integration/test_personal_phase3_closeout.py:486: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <tuple_iterator object at 0x112a8eef0>
+
+    assert all(
+>       run.stage_results[stage]["status"] == "succeeded"
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+        for stage in (
+            "embedding",
+            "grouping",
+            "claim_preparation",
+            "snapshot",
+            "report",
+        )
+    )
+E   KeyError: 'report'
+
+tests/integration/test_personal_phase3_closeout.py:487: KeyError
+_ test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure] _
+
+mode = 'stage_failure'
+
+    @pytest.mark.parametrize("mode", ["default", "raw", "stage_failure"])
+    def test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes(mode):
+        # Identical authored RSS fields/hash in every mode; DB identities differ.
+        fixture = _triad_fixture()
+        with migrated_disposable_engine() as engine:
+    
+            def factory():
+                return Session(engine, autoflush=False)
+    
+            with factory() as session:
+                source = Source(name="Synthetic P3-12 shared fixture feed", feed_url=_TRIAD_FEED_URL)
+                session.add(source)
+                session.flush()
+                workspace, _ = ensure_workspace(session)
+                profile = update_settings(
+                    session,
+                    workspace,
+                    PersonalSettingsUpdate(
+                        selected_source_ids=[source.id],
+                        include_phrases=["agency"],
+                        execution_profile="raw" if mode == "raw" else "assisted",
+                        daily_article_limit=2,
+                        run_article_limit=2,
+                        enrichment_article_limit=2,
+                        ai_enabled=False,
+                        model_route=fixture.route,
+                    ),
+                )
+                decision = create_daily_run(session, workspace, now=START)
+                assert decision.created
+                run_id, token = decision.run.id, decision.run.ownership_token
+                profile_id, workspace_id, source_id = profile.id, workspace.id, source.id
+                session.commit()
+            embedding_calls, report_calls = [], []
+            delegate_embedding = fixture.embedding_provider()
+    
+            class ScopedEmbedding:
+                model_name = delegate_embedding.model_name
+                model_version = delegate_embedding.model_version
+    
+                def embed(self, texts):
+                    embedding_calls.append(tuple(texts))
+                    with factory() as probe:
+                        frozen = probe.get(PersonalRun, run_id)
+                        assert frozen.scopes_frozen_at is not None
+                        assert frozen.profile_revision_id == profile_id
+                        assert (
+                            len(frozen.admitted_article_ids) == len(frozen.enrichment_article_ids) == 2
+                        )
+                        assert (
+                            probe.scalar(select(func.count()).select_from(PersonalArticleRevision)) == 2
+                        )
+                    if mode == "stage_failure":
+                        raise RuntimeError("synthetic required embedding failure after scope freeze")
+                    # After freeze, edit only the active profile. The run must use its old agency
+                    # selection and old enrichment ceiling, not the new league preference/zero cap.
+                    with factory() as edit:
+                        live_workspace = edit.get(PersonalWorkspace, workspace_id)
+                        revised = update_settings(
+                            edit,
+                            live_workspace,
+                            PersonalSettingsUpdate(
+                                selected_source_ids=[source_id],
+                                include_phrases=["league"],
+                                execution_profile="assisted",
+                                daily_article_limit=2,
+                                run_article_limit=2,
+                                enrichment_article_limit=0,
+                                ai_enabled=False,
+                                model_route=fixture.route,
+                            ),
+                        )
+                        assert revised.id != profile_id
+                        edit.commit()
+                    return delegate_embedding.embed(texts)
+    
+            def offline_report(session, route):
+                report_calls.append(route)
+                assert route == fixture.route
+                return fixture.orchestrator(session, route)
+    
+            arguments = dict(
+                session_factory=factory,
+                rss_provider_factory=fixture.rss_provider,
+                embedding_provider=_NoPaidProvider() if mode == "raw" else ScopedEmbedding(),
+                orchestrator_factory=_no_report if mode == "raw" else offline_report,
+                now=START,
+                clock=StepClock(START + dt.timedelta(seconds=10)),
+            )
+            if mode == "stage_failure":
+                with pytest.raises(PersonalCoordinatorError, match="workflow failed"):
+                    run_personal_daily(run_id, token, **arguments)
+            else:
+                result = run_personal_daily(run_id, token, **arguments)
+                assert result.articles_captured == result.articles_admitted == 2
+                assert bool(result.report and result.report.published) is (mode == "default")
+            with factory() as session:
+                run = session.get(PersonalRun, run_id)
+                profile = session.get(PersonalProfileRevision, profile_id)
+                assert profile.schema_revision == "personal-profile.v2"
+                assert (
+                    profile.include_phrases == ["agency"]
+                    and profile.settings["model_route"] == fixture.route
+                )
+                assert run.profile_revision_id == profile_id and run.ownership_token == token
+                assert run.scopes_frozen_at is not None and len(run.admitted_article_ids) == 2
+                assert run.capture_ended_at <= run.scopes_frozen_at
+                assert run.coverage["articles_captured"] == run.coverage["articles_admitted"] == 2
+                assert run.stage_results["scope"]["articles_admitted"] == 2
+                captures = list(session.scalars(select(PersonalCapture)))
+                assert len(captures) == 2 and all(row.admission_charged for row in captures)
+                assert {row.article_id for row in captures} == set(run.admitted_article_ids)
+                authored_by_url = {row["url"]: row for row in _TRIAD_AUTHORED_RSS}
+                for capture in captures:
+                    authored = authored_by_url[capture.original_url]
+                    assert (
+                        capture.title == authored["title"]
+                        and capture.rss_summary == authored["summary"]
+                    )
+                    assert capture.published_at == (
+                        dt.datetime.fromisoformat(authored["published_at"])
+                        if authored["published_at"]
+                        else None
+                    )
+                for stage in (
+                    "entity_linking",
+                    "event_embeddings",
+                    "historical_analogies",
+                    "forecasting",
+                ):
+                    assert run.stage_results[stage] == {
+                        "status": "disabled",
+                        "reason": "disabled_by_profile",
+                    }
+                assert session.scalar(select(func.count()).select_from(PersonalPaidRequest)) == 0
+                if mode == "raw":
+                    assert run.state == "succeeded" and run.result["reason"] == "disabled_by_profile"
+                    assert run.enrichment_article_ids == [] and embedding_calls == report_calls == []
+                    for stage in ("embedding", "grouping", "claim_preparation", "snapshot", "report"):
+                        assert run.stage_results[stage] == {
+                            "status": "disabled",
+                            "reason": "disabled_by_profile",
+                        }
+                    assert all(row.enrichment_state == "disabled_by_profile" for row in captures)
+                    assert run.snapshot_id is None and run.report_id is None
+                elif mode == "stage_failure":
+                    assert run.state == "failed" and run.error["code"] == "personal_workflow_failed"
+>                   assert run.stage_results["workflow"] == {
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        "status": "failed",
+                        "code": "personal_workflow_failed",
+                    }
+E                   KeyError: 'workflow'
+
+tests/integration/test_personal_phase3_closeout.py:465: KeyError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]
+FAILED tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]
+2 failed, 6 passed in 14.62s

@@ -1,0 +1,77 @@
+..........F                                                              [100%]
+=================================== FAILURES ===================================
+_ test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once _
+
+    def test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once():
+        require_disposable_postgres()
+        with _disposable_database() as database:
+            url = url_for(database)
+            _migrate(url, "0020")
+            engine = create_engine(url)
+            now = dt.datetime.now(dt.UTC)
+            try:
+                with Session(engine) as session:
+                    source = Source(name="Retained existing source", feed_url="https://offline.example/retained.xml")
+                    event = Event(title="Retained saved event")
+                    session.add_all([source, event])
+                    session.flush()
+                    workspace, _ = ensure_workspace(session)
+                    configure_profile(session, workspace, selected_source_ids=[source.id], execution_profile="raw")
+                    decision = create_daily_run(session, workspace, now=now)
+                    run = decision.run
+                    article = Article(source_id=source.id, url="https://offline.example/retained", url_hash=url_hash("https://offline.example/retained"), title="Retained raw title", summary="Retained RSS source text", published_at=None)
+                    report = Report(user_id=workspace.owner_id, report_type="daily_brief", title="Immutable legacy report", status="published", version=1, brief_date=now.date(), content_policy="descriptive_only.v1")
+                    saved = WatchlistItem(user_id=workspace.owner_id, item_type="event", item_id=str(event.id), label="Retained saved label")
+                    known = LLMRun(prompt_name="legacy", prompt_version="v1", provider="scripted", model="existing", cost_usd=Decimal("0.005"), started_at=now)
+                    unknown = LLMRun(prompt_name="legacy", prompt_version="v1", provider="scripted", model="existing", cost_usd=None, started_at=now)
+                    session.add_all([article, report, saved, known, unknown])
+                    session.flush()
+                    run.state = "succeeded"
+                    run.admitted_article_ids = [article.id]
+                    run.scopes_frozen_at = now
+                    session.get(Job, run.job_id).state = "succeeded"
+                    session.flush()
+                    # Reflect only the pre-upgrade table so no new ORM default is inserted.
+                    old_capture = Table("personal_captures", MetaData(), autoload_with=session.connection())
+                    capture_id = uuid.uuid4()
+                    session.execute(old_capture.insert().values(
+                        id=capture_id, workspace_id=workspace.id, run_id=run.id,
+                        source_id=source.id, canonical_url=article.url, url_hash=article.url_hash,
+                        title=article.title, rss_summary=article.summary, published_at=None,
+                        captured_at=now, article_id=article.id, admitted_run_id=run.id,
+                        admitted_at=now, truncated=False, receipt={"admission_ordinal": 0},
+                    ))
+                    identities = {"workspace": workspace.id, "run": run.id, "source": source.id, "article": article.id, "report": report.id, "saved": saved.id, "known": known.id, "unknown": unknown.id}
+                    session.commit()
+                engine.dispose()
+                _migrate(url, "head")
+                with Session(engine) as session:
+                    article = session.get(Article, identities["article"])
+                    assert (article.title, article.summary, article.published_at) == ("Retained raw title", "Retained RSS source text", None)
+                    assert session.get(Report, identities["report"]).title == "Immutable legacy report"
+                    assert session.get(Report, identities["report"]).status == "published"
+                    assert session.get(WatchlistItem, identities["saved"]).label == "Retained saved label"
+                    capture = session.get(PersonalCapture, capture_id)
+                    assert capture.admitted_at == now and capture.enrichment_state == "disabled_by_profile"
+                    assert capture.article_id == identities["article"] and capture.processing_run_id == identities["run"]
+                    run = session.get(PersonalRun, identities["run"])
+                    assert run.enrichment_article_ids == [] and run.admitted_article_ids == [identities["article"]]
+                    assert session.get(PersonalLegacyUsage, identities["known"]).actual_usd == Decimal("0.005")
+                    assert session.get(PersonalLegacyUsage, identities["unknown"]).actual_usd is None
+                    import_legacy_usage(session, identities["workspace"], now=now)
+                    import_legacy_usage(session, identities["workspace"], now=now)
+                    assert session.scalar(select(func.count()).select_from(PersonalLegacyUsage)) == 2
+                    assert session.scalar(select(func.count()).select_from(PersonalPaidRequest)) == 0
+                    summary = spending_summary(session, identities["workspace"], now=now)
+                    assert Decimal(summary["finalized_usd"]) == Decimal("0.005")
+                    assert summary["unreconciled_legacy_count"] == 1
+>                   with pytest.raises(PaidWorkBlocked, match="legacy"):
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   AssertionError: Regex pattern did not match.
+E                     Expected regex: 'legacy'
+E                     Actual message: 'Prior current-month application usage needs receipt reconciliation before enabling paid work.'
+
+tests/integration/test_personal_bounds_upgrade.py:100: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once
+1 failed, 10 passed in 21.57s

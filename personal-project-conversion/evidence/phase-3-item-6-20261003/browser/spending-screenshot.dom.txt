@@ -1,0 +1,1 @@
+CAPTURE spending-screenshotRecorded application spending

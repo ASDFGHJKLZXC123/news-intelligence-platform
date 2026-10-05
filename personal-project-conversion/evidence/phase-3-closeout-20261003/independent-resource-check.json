@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "recorded_at_utc": "2026-10-04T03:05:20.062689+00:00",
+  "checks": {
+    "owned_id_absent": true,
+    "owned_name_label_absent": true,
+    "all_twenty_preexisting_records_exact": true,
+    "cleanup_identity_and_inventory_consistent": true,
+    "every_cleanup_record_matches_live": true
+  },
+  "owned_container_id": "1c96158e480703c30fc60e9ba947705fcfeb6795b912c242dcbdd536fb30f13e",
+  "baseline_container_records": 20,
+  "cleanup_after_container_records": 21,
+  "live_container_records": 21,
+  "additional_unrelated_records": [
+    {
+      "id": "fe14bf3298025f75b67cb9deab45ceb419a2806083a1ede02a64cad690c834ca",
+      "name": "/fencepost-m3-product-a4-final-20261004t024119z",
+      "running": true
+    }
+  ],
+  "qualification": "Preservation applies to all twenty exact preexisting container records. An additional unrelated Fencepost container is visible; identical whole-inventory or ownership attribution is not claimed.",
+  "source_artifact_sha256": {
+    "containers-before.json": "2d379a5e18294234ee0ca975ab24a3b22c6b47ef06710e23c819aae9acb13305",
+    "owned-resource.json": "7f159c49842c864b96e3344e0f2294dd4a7f41d32bc66646a9365fa3acef8ae2",
+    "resource-cleanup.json": "2b3d5cd8e565b57457e8c6126705d3a4d3e3660abd69d61ba0c991cc35d605cb"
+  },
+  "reviewer_operations": "Docker ps/inspect reads only; owned-container cleanup was performed by root, not reviewer"
+}

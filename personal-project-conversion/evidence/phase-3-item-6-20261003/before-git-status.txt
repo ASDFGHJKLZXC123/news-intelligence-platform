@@ -1,0 +1,103 @@
+M  .gitignore
+ M Makefile
+ M README.md
+ M apps/api/intelligence.py
+ M apps/api/main.py
+ M apps/api/middleware.py
+ M apps/api/pipeline.py
+ M db/models/__init__.py
+ M db/models/core.py
+A  docs/evaluation/stage9-validation-protocol.md
+ M "frontend/SIGNAL - Intelligence Platform.html"
+ M frontend/app/api-adapter.js
+ M frontend/app/api-adapter.test.js
+ M frontend/app/components.jsx
+ M frontend/app/data-loader.test.js
+ M frontend/app/data.js
+ M frontend/app/main.jsx
+ M frontend/app/shell.jsx
+ M frontend/app/styles.css
+ M frontend/app/types.ts
+ M frontend/app/widgets.jsx
+ M packages/config/settings.py
+ M packages/providers/base.py
+ M requirements-dev.txt
+ M scripts/test-postgres-restore.sh
+ M services/ingestion/http_provider.py
+ M services/llm/repository.py
+ M services/nlp/cluster_service.py
+ M services/nlp/embeddings.py
+ M services/pipeline/sqlalchemy_store.py
+ M services/reports/composition.py
+ M services/reports/context.py
+ M services/reports/contracts.py
+ M services/reports/lifecycle.py
+ M services/reports/prompts.py
+ M tests/integration/test_alembic_smoke.py
+ M tests/integration/test_daily_pipeline_vertical_slice.py
+ M tests/integration/test_embedding_snapshot_expand_migration.py
+ M tests/integration/test_entity_identity_pipeline.py
+ M tests/integration/test_score_precision_migration.py
+ M tests/integration/test_stage1_migration.py
+ M tests/integration/test_stage6_brief_selection.py
+ M tests/integration/test_stage6_report_api.py
+ M tests/unit/test_api_key_middleware.py
+ M tests/unit/test_intelligence_api.py
+ M tests/unit/test_report_api.py
+ M tests/unit/test_report_worker.py
+ M workers/alert_tasks.py
+ M workers/analogy_tasks.py
+ M workers/celery_app.py
+ M workers/clustering_tasks.py
+ M workers/embedding_tasks.py
+ M workers/entity_linking_tasks.py
+ M workers/ingestion_tasks.py
+ M workers/provider_data_tasks.py
+ M workers/report_tasks.py
+?? PERSONAL_PROJECT_CONVERSION_PLAN.md
+?? PERSONAL_PROJECT_REVIEW.md
+?? apps/api/personal.py
+?? apps/api/personal_briefs.py
+?? apps/api/personal_reading.py
+?? db/migrations/versions/0020_personal_news_desk.py
+?? db/migrations/versions/0021_personal_daily_bounds.py
+?? db/migrations/versions/0022_personal_spending.py
+?? db/models/personal.py
+?? db/models/personal_spending.py
+?? frontend/app/page-personal.jsx
+?? frontend/app/personal-foundation.test.js
+?? personal-project-conversion/
+?? scripts/personal_phase2_offline_db.py
+?? scripts/run-personal-phase2-live-smoke.py
+?? scripts/seed-personal-phase3-browser.py
+?? scripts/start-personal-phase2-offline.sh
+?? scripts/stop-personal-phase2-offline.sh
+?? services/ingestion/capture_bounds.py
+?? services/personal/
+?? services/writer_mode.py
+?? tests/integration/test_personal_bounds_upgrade.py
+?? tests/integration/test_personal_brief_api.py
+?? tests/integration/test_personal_brief_generation.py
+?? tests/integration/test_personal_coordinator.py
+?? tests/integration/test_personal_daily_bounds.py
+?? tests/integration/test_personal_item5_composed.py
+?? tests/integration/test_personal_paid_worker.py
+?? tests/integration/test_personal_phase2.py
+?? tests/integration/test_personal_reading_bounds.py
+?? tests/integration/test_personal_run_claim_snapshot.py
+?? tests/integration/test_personal_settings.py
+?? tests/integration/test_personal_spending.py
+?? tests/integration/test_personal_spending_metadata.py
+?? tests/integration/test_personal_worker.py
+?? tests/integration/test_personal_writer_mode.py
+?? tests/unit/test_http_rss_provider.py
+?? tests/unit/test_personal_claims.py
+?? tests/unit/test_personal_composition_policy.py
+?? tests/unit/test_personal_contracts.py
+?? tests/unit/test_personal_exports.py
+?? tests/unit/test_personal_live_smoke.py
+?? tests/unit/test_personal_offline_harness.py
+?? tests/unit/test_personal_runtime_readiness.py
+?? tests/unit/test_personal_settings.py
+?? tests/unit/test_personal_spending.py
+?? workers/personal_tasks.py

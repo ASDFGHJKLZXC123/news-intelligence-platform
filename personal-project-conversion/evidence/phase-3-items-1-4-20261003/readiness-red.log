@@ -1,0 +1,484 @@
+FFFFFFFFFFFFFFFFFFFFFF.F........F.                                       [100%]
+=================================== FAILURES ===================================
+____ test_server_activation_defaults_off_even_with_credentials_and_profile _____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x108a8fe10>
+
+    def test_server_activation_defaults_off_even_with_credentials_and_profile(monkeypatch):
+        monkeypatch.delenv("PERSONAL_PAID_RUNTIME_ENABLED", raising=False)
+        configured = Settings(
+            _env_file=None, app_env="test", openai_api_key="synthetic-test-key"
+        )
+>       assert configured.personal_paid_runtime_enabled is False
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_personal_runtime_readiness.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5)
+item = 'personal_paid_runtime_enabled'
+
+    def __getattr__(self, item: str) -> Any:
+        private_attributes = object.__getattribute__(self, '__private_attributes__')
+        if item in private_attributes:
+            attribute = private_attributes[item]
+            if hasattr(attribute, '__get__'):
+                return attribute.__get__(self, type(self))  # type: ignore
+    
+            try:
+                # Note: self.__pydantic_private__ cannot be None if self.__private_attributes__ has items
+                return self.__pydantic_private__[item]  # type: ignore
+            except KeyError as exc:
+                raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}') from exc
+        else:
+            # `__pydantic_extra__` can fail to be set if the model is not yet fully initialized.
+            # See `BaseModel.__repr_args__` for more details
+            try:
+                pydantic_extra = object.__getattribute__(self, '__pydantic_extra__')
+            except AttributeError:
+                pydantic_extra = None
+    
+            if pydantic_extra and item in pydantic_extra:
+                return pydantic_extra[item]
+            else:
+                if hasattr(self.__class__, item):
+                    return super().__getattribute__(item)  # Raises AttributeError if appropriate
+                else:
+                    # this is the current error
+>                   raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E                   AttributeError: 'Settings' object has no attribute 'personal_paid_runtime_enabled'
+
+.venv/lib/python3.13/site-packages/pydantic/main.py:1042: AttributeError
+_______________ test_only_the_boolean_true_opens_the_gate[None] ________________
+
+gate = None
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_______________ test_only_the_boolean_true_opens_the_gate[False] _______________
+
+gate = False
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_________________ test_only_the_boolean_true_opens_the_gate[0] _________________
+
+gate = 0
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_________________ test_only_the_boolean_true_opens_the_gate[1] _________________
+
+gate = 1
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_______________ test_only_the_boolean_true_opens_the_gate[true] ________________
+
+gate = 'true'
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_______________ test_only_the_boolean_true_opens_the_gate[false] _______________
+
+gate = 'false'
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_______________ test_only_the_boolean_true_opens_the_gate[gate6] _______________
+
+gate = []
+
+    @pytest.mark.parametrize("gate", [None, False, 0, 1, "true", "false", []])
+    def test_only_the_boolean_true_opens_the_gate(gate):
+        configured = SimpleNamespace(personal_paid_runtime_enabled=gate)
+        # The gate is checked before invalid route metadata or missing credentials.
+>       assert paid_runtime.runtime_readiness(configured, {}) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:108: AssertionError
+_________________ test_absent_runtime_or_gate_is_closed[None] __________________
+
+configured = None
+
+    @pytest.mark.parametrize("configured", [None, SimpleNamespace()])
+    def test_absent_runtime_or_gate_is_closed(configured):
+>       assert paid_runtime.runtime_readiness(configured, synthetic_route()) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:113: AssertionError
+______________ test_absent_runtime_or_gate_is_closed[configured1] ______________
+
+configured = namespace()
+
+    @pytest.mark.parametrize("configured", [None, SimpleNamespace()])
+    def test_absent_runtime_or_gate_is_closed(configured):
+>       assert paid_runtime.runtime_readiness(configured, synthetic_route()) == "paid_runtime_disabled"
+E       AssertionError: assert 'configuration_missing' == 'paid_runtime_disabled'
+E         
+E         - paid_runtime_disabled
+E         + configuration_missing
+
+tests/unit/test_personal_runtime_readiness.py:113: AssertionError
+_ test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[openai] _
+
+provider = 'openai'
+
+    @pytest.mark.parametrize("provider", ["openai", "anthropic", "gemini", "deepseek"])
+    def test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated(provider):
+        route = synthetic_route(provider)
+        original = copy.deepcopy(route)
+        configured = runtime()
+        assert paid_runtime.runtime_readiness(configured, route) is None
+        assert route == original
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )
+>       assert features["embeddings"] == {"state": "ready", "reason": None}
+E       AssertionError: assert {'state': 'bl..._unavailable'} == {'state': 're...reason': None}
+E         
+E         Differing items:
+E         {'reason': 'execution_route_unavailable'} != {'reason': None}
+E         {'state': 'blocked'} != {'state': 'ready'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:129: AssertionError
+_ test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[anthropic] _
+
+provider = 'anthropic'
+
+    @pytest.mark.parametrize("provider", ["openai", "anthropic", "gemini", "deepseek"])
+    def test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated(provider):
+        route = synthetic_route(provider)
+        original = copy.deepcopy(route)
+        configured = runtime()
+        assert paid_runtime.runtime_readiness(configured, route) is None
+        assert route == original
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )
+>       assert features["embeddings"] == {"state": "ready", "reason": None}
+E       AssertionError: assert {'state': 'bl..._unavailable'} == {'state': 're...reason': None}
+E         
+E         Differing items:
+E         {'reason': 'execution_route_unavailable'} != {'reason': None}
+E         {'state': 'blocked'} != {'state': 'ready'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:129: AssertionError
+_ test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[gemini] _
+
+provider = 'gemini'
+
+    @pytest.mark.parametrize("provider", ["openai", "anthropic", "gemini", "deepseek"])
+    def test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated(provider):
+        route = synthetic_route(provider)
+        original = copy.deepcopy(route)
+        configured = runtime()
+        assert paid_runtime.runtime_readiness(configured, route) is None
+        assert route == original
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )
+>       assert features["embeddings"] == {"state": "ready", "reason": None}
+E       AssertionError: assert {'state': 'bl..._unavailable'} == {'state': 're...reason': None}
+E         
+E         Differing items:
+E         {'reason': 'execution_route_unavailable'} != {'reason': None}
+E         {'state': 'blocked'} != {'state': 'ready'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:129: AssertionError
+_ test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[deepseek] _
+
+provider = 'deepseek'
+
+    @pytest.mark.parametrize("provider", ["openai", "anthropic", "gemini", "deepseek"])
+    def test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated(provider):
+        route = synthetic_route(provider)
+        original = copy.deepcopy(route)
+        configured = runtime()
+        assert paid_runtime.runtime_readiness(configured, route) is None
+        assert route == original
+        features = feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )
+>       assert features["embeddings"] == {"state": "ready", "reason": None}
+E       AssertionError: assert {'state': 'bl..._unavailable'} == {'state': 're...reason': None}
+E         
+E         Differing items:
+E         {'reason': 'execution_route_unavailable'} != {'reason': None}
+E         {'state': 'blocked'} != {'state': 'ready'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:129: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-openai_api_key] _
+
+key = 'openai_api_key', value = ''
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+        assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+>       assert feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 'bl...ials_missing'} == {'state': 'bl...tion_missing'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'reason': 'provider_credentials_missing'} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:140: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-anthropic_api_key] _
+
+key = 'anthropic_api_key', value = ''
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+        assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+>       assert feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 'bl...ials_missing'} == {'state': 'bl...tion_missing'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'reason': 'provider_credentials_missing'} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:140: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-gemini_api_key] _
+
+key = 'gemini_api_key', value = ''
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+        assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+>       assert feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 'bl...ials_missing'} == {'state': 'bl...tion_missing'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'reason': 'provider_credentials_missing'} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:140: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-deepseek_api_key] _
+
+key = 'deepseek_api_key', value = ''
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+        assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+>       assert feature_readiness(
+            assisted_profile(route), owner_ready=True, writer_ready=True, runtime=configured
+        )["embeddings"] == {"state": "blocked", "reason": "configuration_missing"}
+E       AssertionError: assert {'state': 'bl...ials_missing'} == {'state': 'bl...tion_missing'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'reason': 'provider_credentials_missing'} != {'reason': 'configuration_missing'}
+E         Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:140: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -openai_api_key] _
+
+key = 'openai_api_key', value = '   '
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+>       assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+E       AssertionError: assert None == 'configuration_missing'
+E        +  where None = <function runtime_readiness at 0x10c618c20>(Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5), {'mode': 'live', 'generation': {'provider': 'openai', 'model': 'synthetic-generation', 'model_version': 'synthetic-v1'..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}})
+E        +    where <function runtime_readiness at 0x10c618c20> = paid_runtime.runtime_readiness
+
+tests/unit/test_personal_runtime_readiness.py:139: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -anthropic_api_key] _
+
+key = 'anthropic_api_key', value = '   '
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+>       assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+E       AssertionError: assert None == 'configuration_missing'
+E        +  where None = <function runtime_readiness at 0x10c618c20>(Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5), {'mode': 'live', 'generation': {'provider': 'anthropic', 'model': 'synthetic-generation', 'model_version': 'synthetic-..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}})
+E        +    where <function runtime_readiness at 0x10c618c20> = paid_runtime.runtime_readiness
+
+tests/unit/test_personal_runtime_readiness.py:139: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -gemini_api_key] _
+
+key = 'gemini_api_key', value = '   '
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+>       assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+E       AssertionError: assert None == 'configuration_missing'
+E        +  where None = <function runtime_readiness at 0x10c618c20>(Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5), {'mode': 'live', 'generation': {'provider': 'gemini', 'model': 'synthetic-generation', 'model_version': 'synthetic-v1'..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}})
+E        +    where <function runtime_readiness at 0x10c618c20> = paid_runtime.runtime_readiness
+
+tests/unit/test_personal_runtime_readiness.py:139: AssertionError
+_ test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -deepseek_api_key] _
+
+key = 'deepseek_api_key', value = '   '
+
+    @pytest.mark.parametrize("key", ["openai_api_key", "anthropic_api_key", "gemini_api_key", "deepseek_api_key"])
+    @pytest.mark.parametrize("value", ["", "   "])
+    def test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing(key, value):
+        provider = key.removesuffix("_api_key")
+        configured = runtime(**{key: value})
+        route = synthetic_route(provider)
+>       assert paid_runtime.runtime_readiness(configured, route) == "configuration_missing"
+E       AssertionError: assert None == 'configuration_missing'
+E        +  where None = <function runtime_readiness at 0x10c618c20>(Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5), {'mode': 'live', 'generation': {'provider': 'deepseek', 'model': 'synthetic-generation', 'model_version': 'synthetic-v..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}})
+E        +    where <function runtime_readiness at 0x10c618c20> = paid_runtime.runtime_readiness
+
+tests/unit/test_personal_runtime_readiness.py:139: AssertionError
+____ test_enabled_gemini_requires_explicit_supported_thinking_configuration ____
+
+    def test_enabled_gemini_requires_explicit_supported_thinking_configuration():
+        configured = runtime(gemini_model_thinking_levels={})
+        assert paid_runtime.runtime_readiness(configured, synthetic_route("gemini")) == "configuration_missing"
+        configured = configured.model_copy(update={"gemini_model_thinking_levels": {"synthetic-generation": "unsupported"}})
+>       assert paid_runtime.runtime_readiness(configured, synthetic_route("gemini")) == "configuration_missing"
+E       AssertionError: assert None == 'configuration_missing'
+E        +  where None = <function runtime_readiness at 0x10c618c20>(Settings(app_name='news-intelligence-api', app_env='test', debug=False, log_level='INFO', crisis_prediction_reads_enab...0, 'T2': 64000, 'T3': 96000}, llm_tier_max_output_tokens={'T0': 0, 'T1': 2000, 'T2': 4000, 'T3': 6000}, llm_t2_top_n=5), {'mode': 'live', 'generation': {'provider': 'gemini', 'model': 'synthetic-generation', 'model_version': 'synthetic-v1'..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}})
+E        +    where <function runtime_readiness at 0x10c618c20> = paid_runtime.runtime_readiness
+E        +    and   {'mode': 'live', 'generation': {'provider': 'gemini', 'model': 'synthetic-generation', 'model_version': 'synthetic-v1'..., 'model': 'synthetic-embedding', 'model_version': 'synthetic-v1', 'price_revision': 'synthetic-prices-not-live', ...}} = synthetic_route('gemini')
+
+tests/unit/test_personal_runtime_readiness.py:155: AssertionError
+___________ test_unready_collection_still_blocks_otherwise_ready_ai ____________
+
+    def test_unready_collection_still_blocks_otherwise_ready_ai():
+        for owner, writer, expected in [
+            (False, True, "owner_selection_required"),
+            (True, False, "personal_writer_unavailable"),
+        ]:
+            features = feature_readiness(
+                assisted_profile(), owner_ready=owner, writer_ready=writer, runtime=runtime()
+            )
+>           assert features["embeddings"] == {"state": "blocked", "reason": expected}
+E           AssertionError: assert {'state': 'bl..._unavailable'} == {'state': 'bl...ion_required'}
+E             
+E             Omitting 1 identical items, use -vv to show
+E             Differing items:
+E             {'reason': 'execution_route_unavailable'} != {'reason': 'owner_selection_required'}
+E             Use -v to get more diff
+
+tests/unit/test_personal_runtime_readiness.py:197: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_personal_runtime_readiness.py::test_server_activation_defaults_off_even_with_credentials_and_profile
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[None]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[False]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[0]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[1]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[true]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[false]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_only_the_boolean_true_opens_the_gate[gate6]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_absent_runtime_or_gate_is_closed[None]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_absent_runtime_or_gate_is_closed[configured1]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[openai]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[anthropic]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[gemini]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[deepseek]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-openai_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-anthropic_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-gemini_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-deepseek_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -openai_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -anthropic_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -gemini_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -deepseek_api_key]
+FAILED tests/unit/test_personal_runtime_readiness.py::test_enabled_gemini_requires_explicit_supported_thinking_configuration
+FAILED tests/unit/test_personal_runtime_readiness.py::test_unready_collection_still_blocks_otherwise_ready_ai
+24 failed, 10 passed in 0.75s

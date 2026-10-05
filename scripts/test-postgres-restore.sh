@@ -13,7 +13,7 @@ requested_port="${RESTORE_DRILL_PORT:-0}"
 ready_attempts="${RESTORE_DRILL_READY_ATTEMPTS:-60}"
 postgres_image="${RESTORE_DRILL_POSTGRES_IMAGE:-}"
 python_bin="${PYTHON:-}"
-expected_alembic_head="0019"
+expected_alembic_head="0023_personal_processing_control"
 
 readonly db_user="news"
 readonly db_password="news"

@@ -1,0 +1,9 @@
+{
+  "container_id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+  "container_name": "nip-phase3-tests-02ea38048d",
+  "port": 58553,
+  "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+  "created": "2026-09-20T22:50:40.739020472Z",
+  "database_name": "nip_phase3_full_a5ca8c211b71",
+  "database_url": "postgresql+psycopg2://news:news@127.0.0.1:58553/nip_phase3_full_a5ca8c211b71"
+}

@@ -1,0 +1,12 @@
+......                                                                   [100%]
+=============================== warnings summary ===============================
+tests/integration/test_embedding_snapshot_expand_migration.py::test_upgrade_copies_the_legacy_vector_without_relabelling_it
+  /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_embedding_snapshot_expand_migration.py:98: SAWarning: Did not recognize type 'vector' of column 'embedding'
+    for column in inspect(connection).get_columns("article_embeddings")
+
+tests/integration/test_embedding_snapshot_expand_migration.py::test_upgrade_copies_the_legacy_vector_without_relabelling_it
+  /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_embedding_snapshot_expand_migration.py:101: SAWarning: Did not recognize type 'vector' of column 'embedding'
+    column["name"]: column for column in inspect(connection).get_columns("event_embeddings")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 2 warnings in 16.57s

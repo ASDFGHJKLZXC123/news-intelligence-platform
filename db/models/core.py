@@ -2483,7 +2483,9 @@ class Report(Base):
             "brief_date",
             "version",
             unique=True,
-            postgresql_where=text("brief_date IS NOT NULL"),
+            postgresql_where=text(
+                "brief_date IS NOT NULL AND report_type <> 'personal_daily_brief'"
+            ),
         ),
         Index(
             "uq_reports_type_event_version",

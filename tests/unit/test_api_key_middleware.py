@@ -82,3 +82,44 @@ def test_bad_key_denied(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_good_key_allowed(monkeypatch: pytest.MonkeyPatch) -> None:
     client = _client(Settings(app_env="prod", api_key="secret"), monkeypatch)
     assert client.post("/jobs/ingest", headers={"X-API-Key": "secret"}).status_code == 200
+
+
+def test_browser_origin_must_be_allowlisted_before_mutation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = 0
+    settings = Settings(app_env="local", api_key="")
+    monkeypatch.setattr(mw, "get_settings", lambda: settings)
+    app = FastAPI()
+    app.add_middleware(APIKeyMiddleware)
+
+    @app.post("/api/v1/personal/runs")
+    def mutate():
+        nonlocal calls
+        calls += 1
+        return {"ok": True}
+
+    client = TestClient(app, client=_LOOPBACK)
+    rejected = client.post(
+        "/api/v1/personal/runs", headers={"Origin": "https://untrusted.example"}
+    )
+    assert rejected.status_code == 403
+    assert calls == 0
+    allowed = client.post(
+        "/api/v1/personal/runs", headers={"Origin": "http://localhost:3000"}
+    )
+    assert allowed.status_code == 200
+    assert calls == 1
+
+
+def test_valid_api_key_does_not_override_browser_origin_policy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    client = _client(Settings(app_env="local", api_key="secret"), monkeypatch)
+    assert (
+        client.post(
+            "/jobs/ingest",
+            headers={"Origin": "https://untrusted.example", "X-API-Key": "secret"},
+        ).status_code
+        == 403
+    )

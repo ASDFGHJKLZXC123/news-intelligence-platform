@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.026" timestamp="2026-10-04T18:15:12.488548-07:00" hostname="Mac"><testcase classname="tests.unit.test_pipeline_runtime" name="test_api_delivery_helper_uses_exact_pipeline_queue" time="0.001"><failure message="AttributeError: &lt;module 'apps.api.pipeline' from '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/apps/api/pipeline.py'&gt; has no attribute 'run_daily_pipeline_task'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x10ae6bbb0&gt;
+
+    def test_api_delivery_helper_uses_exact_pipeline_queue(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -&gt; None:
+        deliveries: list[dict[str, Any]] = []
+    
+        class FakeTask:
+            @staticmethod
+            def apply_async(*, args: list[str], queue: str, task_id: str) -&gt; _AsyncResult:
+                deliveries.append({"args": args, "queue": queue, "task_id": task_id})
+                return _AsyncResult()
+    
+&gt;       monkeypatch.setattr(pipeline_api, "run_daily_pipeline_task", FakeTask())
+E       AttributeError: &lt;module 'apps.api.pipeline' from '/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/apps/api/pipeline.py'&gt; has no attribute 'run_daily_pipeline_task'
+
+tests/unit/test_pipeline_runtime.py:656: AttributeError</failure></testcase></testsuite></testsuites>

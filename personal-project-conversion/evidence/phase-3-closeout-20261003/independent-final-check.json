@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "recorded_at_utc": "2026-10-04T03:07:28.602391+00:00",
+  "user_date": "2026-10-03",
+  "timezone": "America/Los_Angeles",
+  "scope": "P3-01 through P3-14 local/synthetic engineering acceptance and scoped preservation/resource review",
+  "acceptance": {
+    "pass": 14,
+    "pending": 0,
+    "open_recorded_failures": 0
+  },
+  "checks": {
+    "authoritative_plan_requirements_unweakened": true,
+    "all_fourteen_rows_exact_passed_nodes_current_test_hashes": true,
+    "fresh_affected_personal_gate100_no_fail_error_skip": true,
+    "independent_new_case_repeat5_no_fail_error_skip": true,
+    "C1_C2_C3_literal_gaps_closed": true,
+    "D1_failed_stage_assertion_preserved_and_passed": true,
+    "O1_real_publication_oracle_strength_retained": true,
+    "ownership_fence_retained_in_one_line_fix": true,
+    "all1280_baseline_files_preserved_except_six_authorized": true,
+    "only_one_added_application_test_source": true,
+    "old_phase3_bytes_archived_and_embedded_exact": true,
+    "operational_preferences_dotenv_index_and_staged_diff_unchanged": true,
+    "all_gate_source_hashes_current_except_four_authorized_status_documents": true,
+    "stable_mapped_assertion_anchors_present": true,
+    "owned_resource_absence_and_twenty_preexisting_records_independently_verified": true,
+    "current_status_documents_consistent_and_runtime_off": true,
+    "historical_browser_and_gate_qualifications_retained": true
+  },
+  "fresh_affected_personal_cases": 100,
+  "independent_repeated_new_cases": 5,
+  "totals_policy": "Independent5 overlaps personal100; personal100 is95prior+5new. Old238/175/50 and scoped repeats are not added.",
+  "baseline_files": 1280,
+  "unchanged_baseline_files": 1274,
+  "changed_existing_files": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/README.md",
+    "personal-project-conversion/evidence/phase-3.md",
+    "services/personal/coordinator.py"
+  ],
+  "added_source_files": [
+    "tests/integration/test_personal_phase3_closeout.py"
+  ],
+  "post_gate_drift_only_authorized_status_documents": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/README.md"
+  ],
+  "current_status_document_sha256": {
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md": "03685d7715995ffd368ffd19de7d8b68b1bcc07f51395cb01444c703a74ae5d2",
+    "README.md": "7a6fe461f08fb67652508e0a0cf33b1149a27e14a7521e06212764802c2346cd",
+    "personal-project-conversion/03-bounded-daily-use.md": "6605132ff5cac4a15f4a733670df9c620bcb55032613fa723486befb2b49c318",
+    "personal-project-conversion/README.md": "faac339edfdb621479e0f2e3988b0589ff1f81a1e59a2d0ea983bf67c8d43906",
+    "personal-project-conversion/evidence/phase-3.md": "f468848e17ae75e68eb5f69904912164355b642275e33e21e89e113b6c0cbe1c"
+  },
+  "source_sha256": {
+    "services/personal/coordinator.py": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+    "tests/integration/test_personal_phase3_closeout.py": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+  },
+  "proof_artifact_sha256": {
+    "acceptance-matrix.json": "bb37533d00d77b79374ec436c2be1f2138125a1f7f53f8b569827a57f242b97c",
+    "acceptance-matrix.md": "063958298d265eb37ae36e42f96c7376ff123007cca3d3d5bb71d92ec26c285c",
+    "personal-final.xml": "076e10bcc4f4ece5507f29484379c5e8a99fc00bd69473a39f3777a8907ef8d3",
+    "personal-final-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "personal-final-source-after.json": "25c842d2b2a4a43d387da4ea15fc29df975d78df34b4fa4e54ec7eb7b2e87faa",
+    "independent-closeout-proof.xml": "6543283d5b596210fcfbd60d7b05b06140fec2f8e934a86170bcb9bf5172b215",
+    "independent-closeout-proof-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "independent-execution-check.json": "b8a514b7668a09a483fc17c2a65ef79b75e9629a9d094828d916ceb9fac50b7b",
+    "independent-resource-check.json": "8a597e66523451e6fa8e101621576c3f7f9e6b4bc9a006f1d457f2bfc41b0c3d",
+    "resource-cleanup.json": "2b3d5cd8e565b57457e8c6126705d3a4d3e3660abd69d61ba0c991cc35d605cb",
+    "status-update.json": "2cdccdfe83f9d72718e93a3140f11080969a5f4b3b5f1565639a43abb051d473",
+    "final-targeted.xml": "64250c369192aaa3ca685a61ba7f075e2c8cd56c84471aebb18981c74ce4bc07",
+    "final-targeted-result.json": "919e709ee7a6f2fa56428b8baa70c8a71177f591d4fd55bf4a6dadf03aecca13",
+    "coordinator-failure-stage-fix.diff": "1424d3eda678749a65b634e0f17a72ddeb1066a027b85c70d4c5274f9a2a690c",
+    "closeout-publication-oracle-correction.diff": "8559aca6c24f8741ef650e6839b7c814a0aaa85ddaf153556b776f4cd4831025",
+    "historical-phase-3-record.txt": "531a55e9d876ec63cf262bb670122ef8449e5e3b15eb73cdbb68419fe097eee9"
+  },
+  "resolved_findings": [
+    "C1 concurrent retry proof",
+    "C2 caller-old-date proof",
+    "C3 matched-authored-fixture triad",
+    "D1 real workflow failure-stage persistence defect",
+    "O1 default publication oracle mismatch",
+    "mapped-assertion anchor targets corrected"
+  ],
+  "retained_preflights": [
+    "independent-execution-preflight.json",
+    "independent-resource-preflight.json",
+    "final-targeted.xml"
+  ],
+  "resource_qualification": "Preservation applies to all twenty exact preexisting container records. An additional unrelated Fencepost container is visible; identical whole-inventory or ownership attribution is not claimed.",
+  "runtime_limits": [
+    "paid runtime stays off; saved operational preferences remain unapplied",
+    "provider/feed inputs and broker delivery scripted; no live paid contacts",
+    "durable ledger/session reconstruction; no OS/service-restart claim",
+    "native item6 browser proof predates coordinator flush and loaded CDN prerequisites; no new post-flush browser capture or isolated network claim",
+    "Phase4/5 and personal-usefulness judgment remain unstarted",
+    "shared dirty checkout is not a clean tracked release"
+  ],
+  "root_final_validation": "Root check-record.py link/preservation/hash output is still to be generated after this review; its planned self-output is handled provisionally. Final artifact readback will follow."
+}

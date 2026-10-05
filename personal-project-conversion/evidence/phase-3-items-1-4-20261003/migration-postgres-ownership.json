@@ -1,0 +1,10 @@
+{
+  "verification_id": "7ca9fcb920f7417e99aed95bae46e54b",
+  "container_id": "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+  "container_name": "nip-p3-items14-7ca9fcb920f7",
+  "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+  "created": "2026-10-03T23:00:36.843252585Z",
+  "port": 64707,
+  "binding": "127.0.0.1",
+  "scope": "phase3-items1-4-20261003"
+}

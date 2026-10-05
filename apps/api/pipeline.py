@@ -22,8 +22,7 @@ from services.pipeline.sqlalchemy_store import (
     PipelineStaleDeliveryError,
     SQLAlchemyPipelineLifecycleStore,
 )
-from workers.celery_app import QUEUE_PIPELINE
-from workers.pipeline_tasks import run_daily_pipeline_task
+from services.writer_mode import LegacyWriterModeConflict
 
 router = APIRouter(prefix="/api/v1/internal/jobs", tags=["jobs"])
 
@@ -87,6 +86,9 @@ def enqueue_pipeline_task(
     celery_task_id: str,
 ):
     """Deliver one explicit date to the exact pipeline queue."""
+
+    from workers.celery_app import QUEUE_PIPELINE
+    from workers.pipeline_tasks import run_daily_pipeline_task
 
     return run_daily_pipeline_task.apply_async(
         args=[process_date.isoformat(), str(delivery_token)],
@@ -157,7 +159,10 @@ def process_daily_pipeline(
     """Persist queued state before broker delivery and deduplicate active/succeeded dates."""
 
     identity = _validated_identity(request.process_date)
-    return _deliver(store.queue(identity), store)
+    try:
+        return _deliver(store.queue(identity), store)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
 
 @router.get(
@@ -194,6 +199,8 @@ def retry_daily_pipeline(
     identity = _validated_identity(process_date)
     try:
         decision = store.retry(identity)
+    except LegacyWriterModeConflict as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     except PipelineRetryConflictError as exc:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

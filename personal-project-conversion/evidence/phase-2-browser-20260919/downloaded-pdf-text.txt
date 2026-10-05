@@ -1,0 +1,62 @@
+Personal News Brief — 2026-09-19
+Brief date: 2026-09-19 · Version: 1 · Status: published
+Report and capture details
+Report UUID: 0539fc3a-a716-4f88-8647-d780de20ca82
+Snapshot UUID: 55301cb1-e7d6-4198-9337-e03ff5af6a52
+Run UUID: da3288e6-efbd-4497-8f18-2adfb512c888
+Profile revision UUID: dfb990f7-e881-4db6-b13c-3d25101f0991
+Capture started: 2026-09-20T05:40:58.730059+00:00
+Capture ended: 2026-09-20T05:40:58.741297+00:00
+Feeds configured: 1
+Feeds attempted: 1
+Feeds succeeded: 1
+Feeds failed: 0
+Feeds paused: 0
+Articles captured: 1
+Items fetched: 1
+Pending items: 0
+Pending capacity: 2000
+Executive Summary
+The configured feed reports that the agency approved the coastal resilience project. This
+brief records the approval as a source-reported assertion from the captured article. The
+retained excerpt attributes the statement to the agency and does not add a reason, budget,
+schedule, or predicted outcome. Coverage in this snapshot comes from one configured source,
+so  the  report  does  not  treat  repetition  as  corroboration.  The  item  appears  because  it
+matched the personal source and phrase settings. No independent verification, risk estimate,
+historical comparison, or forecast is supplied. The available evidence supports only the
+reported approval and its attribution within this captured source record.
+Agency approves coastal resilience project
+The leading item in this personal snapshot is the reported approval of a coastal resilience
+project.  The  configured  feed  says  the  agency  confirmed  that  approval,  and  the  brief
+preserves  that  attribution.  The  source  record  does  not  state  a  budget,  schedule,
+implementation milestone, motive, or expected effect, so this section adds none of those
+details. It also does not turn the source statement into an independently verified fact.
+Coverage is limited to the retained article from one selected feed. No second source in this
+run  corroborates  the  assertion.  The  supported  reading  is  therefore  narrow:  the  captured
+publisher reports an agency confirmation that the project was approved, with no further
+conclusion  about  delivery  or  impact.  The  record  offers  no  basis  for  additional
+interpretation.
+What Changed Since Yesterday
+No  published  brief  exists  for  the  previous  day,  so  today's  figures  cannot  be  compared
+against what we previously reported.
+No risk carried an observation on both sides of the window, so no day-over-day movement
+could be measured.
+Data Quality
+[capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained,
+0 feeds failed, and 0 feeds were paused at pending capacity.
+[no_risk_observations] Personal Phase 2 does not compute or narrate risk scores.
+[no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2
+workflow.
+[no_prior_brief] No prior personal brief is injected into this immutable snapshot.
+[no_prior_comparison] No published brief exists for the previous day, so today's figures
+cannot be compared against what we previously reported. No risk carried an observation on
+both sides of the window, so no day-over-day movement could be measured.
+Sources
+-  Synthetic  Phase  2  acceptance  feed  ·  published  2026-09-08T16:00:00+00:00  ·  claim
+bb6a002e-a71d-53de-8d14-ddbdb5936d93  —  Agency  approves  coastal  resilience  project  —
+"Agency approves coastal resilience project"
+https://offline.personal.test/articles/coastal-resilience
+Disclaimer
+This system provides probabilistic analysis based on public information, data signals, and
+model-assisted  reasoning.  It  is  for  informational  purposes  only  and  does  not  constitute
+investment, legal, or financial advice.

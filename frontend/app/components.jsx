@@ -364,15 +364,15 @@ function PageStatus({ blocks, quality, label, style }) {
   );
 }
 
-/* Persistent, calm demo-data banner — the whole snapshot is bundled fixture data
-   because the backend was wholly unreachable. */
+/* Persistent label for the deliberately selected read-only demonstration. */
 function DemoBanner() {
+  const rt = (window.DATA && window.DATA.runtime) || {};
   return (
     <div className="global-notice demo-banner" role="status" aria-live="polite">
       <Icon.warn className="notice-ico" aria-hidden="true" />
       <div className="notice-text">
-        <strong>Demo data</strong>
-        <span>The intelligence backend is unreachable, so SIGNAL is showing bundled fixture data. Values are illustrative, not live.</span>
+        <strong>Demo — sample data</strong>
+        <span>{rt.requestFailed ? "The sample data could not be loaded." : rt.loading ? "Loading the read-only sample." : "Read-only sample content. Authored dates and times are preserved."}</span>
       </div>
     </div>
   );
@@ -386,14 +386,20 @@ function DegradedNotice() {
   const D = window.DATA;
   const details = DQ.errorSummaries(D);
   const ids = DQ.requestIds(D);
+  const rt = D.runtime || {};
+  const stale = !!rt.stale;
+  const retry = () => window.SignalDataController && window.SignalDataController.refresh();
   return (
     <div className="global-notice degraded-notice" role="status" aria-live="polite">
       <div className="notice-row">
         <Icon.activity className="notice-ico" aria-hidden="true" />
         <div className="notice-text">
-          <strong>Some live data is unavailable</strong>
-          <span>Showing the data that loaded successfully — other sections will fill in once the backend recovers.</span>
+          <strong>{stale ? "Unable to refresh" : "Stored data is unavailable"}</strong>
+          <span>{stale
+            ? "Showing the last successful fetch" + (rt.lastSuccessfulFetchAt ? " from " + fmtTime(rt.lastSuccessfulFetchAt) : "") + "."
+            : "The application could not read all requested data from the API."}</span>
         </div>
+        <button className="btn btn-sm notice-retry" type="button" onClick={retry}>Retry</button>
         {details.length > 0 && (
           <button className="btn btn-sm btn-ghost notice-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
             {open ? "Hide details" : "Details"}
@@ -419,8 +425,7 @@ function DegradedNotice() {
   );
 }
 
-/* One global surface: the demo banner (whole-snapshot demo) OR the degraded
-   notice (reachable but partial) — never both, and quiet when all-live. */
+/* One global surface: explicit demo label or a real-data failure notice. */
 function GlobalDataNotices() {
   const D = window.DATA;
   if (!D) return null;

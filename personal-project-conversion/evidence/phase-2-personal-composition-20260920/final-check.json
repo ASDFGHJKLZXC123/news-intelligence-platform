@@ -1,0 +1,34 @@
+{
+  "git_diff_check": "passed",
+  "preexisting_files_changed": [
+    "personal-project-conversion/02-personal-workflow.md",
+    "personal-project-conversion/README.md",
+    "personal-project-conversion/SELECTED_PREFERENCES.md",
+    "personal-project-conversion/config/selected-preferences.json",
+    "personal-project-conversion/evidence/phase-2-acceptance.md",
+    "personal-project-conversion/evidence/phase-2.md",
+    "personal-project-conversion/phase-2-live-smoke.md",
+    "services/personal/briefs.py",
+    "services/personal/snapshots.py",
+    "services/reports/composition.py",
+    "services/reports/contracts.py",
+    "services/reports/prompts.py",
+    "tests/integration/test_personal_brief_generation.py"
+  ],
+  "scoped_implementation_files": [
+    "personal-project-conversion/02-personal-workflow.md",
+    "services/personal/briefs.py",
+    "services/personal/snapshots.py",
+    "services/reports/composition.py",
+    "services/reports/contracts.py",
+    "services/reports/prompts.py",
+    "tests/integration/test_personal_brief_generation.py",
+    "tests/unit/test_personal_composition_policy.py"
+  ],
+  "pending_evidence_links": [],
+  "credential_scan": "passed",
+  "outside_scope_source_changes": false,
+  "prior_failed_live_evidence_unchanged": true,
+  "independent_review": "passed",
+  "tested_implementation_hashes_unchanged": true
+}

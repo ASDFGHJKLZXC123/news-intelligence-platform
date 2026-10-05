@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="20" time="38.399" timestamp="2026-10-04T02:05:13.854470-07:00" hostname="Mac"><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[legacy-None]" time="3.249" /><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[personal-queued]" time="3.396" /><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[personal-running]" time="3.248" /><testcase classname="tests.integration.test_personal_bounds_upgrade" name="test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once" time="2.374" /><testcase classname="tests.integration.test_personal_spending" name="test_competing_reservations_and_explicit_next_date_share_one_month_allowance" time="1.461" /><testcase classname="tests.integration.test_personal_spending" name="test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent" time="1.360" /><testcase classname="tests.integration.test_personal_spending" name="test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month" time="1.449" /><testcase classname="tests.integration.test_personal_spending" name="test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send" time="1.448"><failure message="services.personal.spending.PaidWorkBlocked: allowance reached">def test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send():
+        with migrated_disposable_engine() as engine:
+            october = dt.datetime(2026, 10, 1, tzinfo=dt.UTC)
+            factory, (ledger, other) = seed(engine, now=october - dt.timedelta(seconds=1))
+            old = reserve(ledger)
+            ledger.clock = other.clock = lambda: october
+&gt;           dispatched = reserve(other)
+                         ^^^^^^^^^^^^^^
+
+tests/integration/test_personal_spending.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_personal_spending.py:135: in reserve
+    return ledger.reserve(
+services/personal/spending.py:453: in reserve
+    self._allow(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;services.personal.spending.SpendingLedger object at 0x112981e50&gt;
+session = &lt;sqlalchemy.orm.session.Session object at 0x112ad2e90&gt;
+month = datetime.date(2026, 10, 1), amount = Decimal('0.020000000000')
+month_limit = Decimal('0.03'), run_limit = Decimal('0.03'), excluding = None
+
+    def _allow(
+        self,
+        session: Session,
+        *,
+        month: dt.date,
+        amount: Decimal,
+        month_limit: Decimal,
+        run_limit: Decimal,
+        excluding: uuid.UUID | None = None,
+    ) -&gt; None:
+        rows = session.scalars(
+            select(PersonalPaidRequest).where(
+                PersonalPaidRequest.workspace_id == self.workspace_id,
+            )
+        ).all()
+        month_used = sum(
+            (
+                _obligation(row)
+                for row in rows
+                if row.accounting_month == month and row.id != excluding
+            ),
+            Decimal(0),
+        )
+        run_used = sum(
+            (_obligation(row) for row in rows if row.run_id == self.run_id and row.id != excluding),
+            Decimal(0),
+        )
+        legacy = session.scalars(
+            select(PersonalLegacyUsage).where(PersonalLegacyUsage.accounting_month == month)
+        ).all()
+        if any(row.actual_usd is None for row in legacy):
+            raise PaidWorkBlocked("legacy_usage_unreconciled")
+        month_used += sum((row.actual_usd for row in legacy), Decimal(0))
+        if month_used + amount &gt; month_limit or run_used + amount &gt; run_limit:
+&gt;           raise PaidWorkBlocked("allowance_reached")
+E           services.personal.spending.PaidWorkBlocked: allowance reached
+
+services/personal/spending.py:427: PaidWorkBlocked</failure></testcase><testcase classname="tests.integration.test_personal_spending" name="test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run" time="1.392" /><testcase classname="tests.integration.test_personal_spending" name="test_independent_commit_survives_business_rollback_without_row_lock_deadlock" time="1.516" /><testcase classname="tests.integration.test_personal_spending" name="test_dispatch_handoff_fences_concurrent_ownership_changes[retry]" time="1.669" /><testcase classname="tests.integration.test_personal_spending" name="test_dispatch_handoff_fences_concurrent_ownership_changes[finish]" time="1.931" /><testcase classname="tests.integration.test_personal_spending" name="test_legacy_costs_import_once_and_unknown_blocks_paid_enablement" time="1.559" /><testcase classname="tests.integration.test_personal_spending" name="test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count" time="1.482" /><testcase classname="tests.integration.test_personal_spending" name="test_provider_embedding_retry_has_separate_durable_reservations" time="1.531" /><testcase classname="tests.integration.test_personal_spending" name="test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit" time="1.648" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration" time="1.799" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import" time="1.594" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_spending_metadata_without_active_profile_or_paid_records_is_explicit" time="1.603" /><testcase classname="tests.integration.test_personal_spending_metadata" name="test_same_period_charges_retain_both_price_revisions_for_the_same_provider_and_model" time="1.481" /></testsuite></testsuites>

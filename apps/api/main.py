@@ -6,6 +6,9 @@ health/metrics router. No business endpoints exist in Stage 1.
 
 from __future__ import annotations
 
+import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,6 +25,9 @@ from apps.api.middleware import (
     unhandled_exception_handler,
     validation_exception_handler,
 )
+from apps.api.personal import router as personal_router
+from apps.api.personal_briefs import router as personal_briefs_router
+from apps.api.personal_reading import router as personal_reading_router
 from apps.api.pipeline import router as pipeline_router
 from apps.api.provider_data import company_research_router
 from apps.api.provider_data import router as provider_data_router
@@ -35,7 +41,24 @@ def create_app() -> FastAPI:
     configure_logging(settings.log_level)
     logger = get_logger("apps.api")
 
-    app = FastAPI(title=settings.app_name, version="0.1.0")
+    @asynccontextmanager
+    async def lifespan(_app):
+        supervisor = None
+        if settings.personal_processing_transport == "subprocess":
+            from apps.api.deps import check_config
+            from services.personal.supervisor import get_supervisor
+
+            configuration = check_config()
+            if not configuration.ok:
+                raise RuntimeError(configuration.detail)
+            supervisor = get_supervisor()
+        try:
+            yield
+        finally:
+            if supervisor is not None:
+                await asyncio.to_thread(supervisor.shutdown)
+
+    app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 
     # Conservative CORS: only the explicitly allow-listed origins, no wildcard. Credentials
     # are off for the MVP (no cookies), so the browser never receives an allow-credentials
@@ -68,6 +91,14 @@ def create_app() -> FastAPI:
     app.include_router(intelligence_router)
     app.include_router(analogies_router)
     app.include_router(pipeline_router)
+    app.include_router(personal_router)
+    app.include_router(personal_reading_router)
+    app.include_router(personal_briefs_router)
+
+    if settings.personal_processing_transport == "subprocess":
+        from apps.api.personal_frontend import mount_personal_frontend
+
+        mount_personal_frontend(app)
 
     logger.info("api initialized", extra={"env": settings.app_env})
     return app

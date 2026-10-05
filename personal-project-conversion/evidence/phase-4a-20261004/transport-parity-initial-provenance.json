@@ -1,0 +1,6 @@
+{
+  "sha256": "fce7b7930c3e2b9542f152dc4acc87c6861a56f0859e7770ff8d489bb5ad35fb",
+  "original_path": "transport-parity.json",
+  "retained_path": "transport-parity-initial.json",
+  "reason": "retain pre-bootstrap parity before final actual-source repetition"
+}

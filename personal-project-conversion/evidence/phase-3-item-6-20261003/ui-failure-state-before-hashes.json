@@ -1,0 +1,15 @@
+{
+  "observed_at": "2026-10-04T01:12:39.288533+00:00",
+  "files": [
+    {
+      "path": "frontend/app/page-personal.jsx",
+      "sha256": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d",
+      "dirty_initial_snapshot": "ui-failure-state-before.jsx"
+    },
+    {
+      "path": "frontend/app/personal-foundation.test.js",
+      "sha256": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca",
+      "dirty_initial_snapshot": "ui-failure-state-tests-before.js"
+    }
+  ]
+}

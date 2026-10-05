@@ -1,0 +1,15 @@
+{
+  "address": "http://127.0.0.1:58118",
+  "all_public_tables_equal_across_final_app_restart": true,
+  "credentials_blank": true,
+  "paid_activation": false,
+  "source": {
+    "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+    "evidence_epoch": "accepted_final_production_code",
+    "name": "nip_phase4b_browser_accepted_ac0f466f5808",
+    "oid": 308449
+  },
+  "source_identity": "actual-final-source-before.json",
+  "startup_uses_explicit_owned_database_url": true,
+  "zero_runs_and_paid_requests": true
+}

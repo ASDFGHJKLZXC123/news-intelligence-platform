@@ -1,0 +1,14 @@
+{
+  "verified_at": "2026-09-09T19:26:15.516617+00:00",
+  "harness_id": "00cb17bf3399",
+  "database": "nip_phase2_browser_00cb17bf3399",
+  "database_absent": true,
+  "redis_container_absent": true,
+  "processes_absent": {
+    "source": true,
+    "api": true,
+    "worker": true
+  },
+  "static_server_session_91504": "terminated with exit 0",
+  "remaining_browser_gate": "Mac locked; exports and wording recheck need a new disposable run after unlock"
+}

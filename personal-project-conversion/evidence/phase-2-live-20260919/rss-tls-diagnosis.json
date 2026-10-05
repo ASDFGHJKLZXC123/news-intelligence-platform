@@ -1,0 +1,24 @@
+{
+  "existing_default_trust": {
+    "status": "failed",
+    "exception": "URLError",
+    "message": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)>"
+  },
+  "explicit_certifi_trust": {
+    "status": "passed",
+    "article_count": 1,
+    "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+    "url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_medium=RSS&at_campaign=rss"
+  },
+  "scope": "Public RSS-only diagnostic; no database or models; not a new application attempt",
+  "default_verify_paths": {
+    "cafile": "None",
+    "capath": "/opt/homebrew/etc/openssl@3/certs",
+    "openssl_cafile_env": "SSL_CERT_FILE",
+    "openssl_cafile": "/opt/homebrew/etc/openssl@3/cert.pem",
+    "openssl_capath_env": "SSL_CERT_DIR",
+    "openssl_capath": "/opt/homebrew/etc/openssl@3/certs"
+  },
+  "certifi_bundle": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/certifi/cacert.pem",
+  "certificate_verification_disabled": false
+}

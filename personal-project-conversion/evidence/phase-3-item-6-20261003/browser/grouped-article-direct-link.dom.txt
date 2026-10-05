@@ -1,0 +1,69 @@
+CAPTURE grouped-article-direct-link- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - article:
+    - generic: Retained RSS article
+    - generic: Grouped
+    - 'heading "Synthetic: Agency approves browser verification project" [level=2]'
+    - generic: Synthetic item 6 technology feed
+    - generic: Published Sep 30, 2026, 05:00:57 PM PDT
+    - paragraph: The agency confirmed the browser verification project was approved.
+    - generic: Captured
+    - generic: Sep 30, 2026, 06:01:10 PM PDT
+    - generic: Admitted
+    - generic: Sep 30, 2026, 06:01:12 PM PDT
+    - button "Open grouped story"
+    - link "Open original source":
+      - /url: https://offline.personal.test/item6/grouped-project?utm_source=item6- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - button "Saved":
+    - text: Saved
+  - button "Refresh detail":
+    - text: Refresh detail
+  - generic: Reading story detail
+  - generic "Local access"

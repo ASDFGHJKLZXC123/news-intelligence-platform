@@ -1,0 +1,7 @@
+verify.py cleanup completed owned resource removal, then exited 1 at the final preexisting-state comparison:
+Traceback (most recent call last):
+  File "verify.py", line 453, in <module>
+    cleanup()
+  File "verify.py", line 443, in cleanup
+    assert preserved
+AssertionError

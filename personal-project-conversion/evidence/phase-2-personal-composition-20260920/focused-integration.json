@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-09-20T07:33:56.874167+00:00",
+  "finished_at": "2026-09-20T07:36:37.721788+00:00",
+  "exit_code": 0,
+  "test_files": [
+    "tests/integration/test_personal_brief_generation.py",
+    "tests/integration/test_personal_run_claim_snapshot.py",
+    "tests/integration/test_personal_brief_api.py"
+  ],
+  "postgres_port": 55152,
+  "provider_keys_disabled": true,
+  "providers": "scripted offline only"
+}

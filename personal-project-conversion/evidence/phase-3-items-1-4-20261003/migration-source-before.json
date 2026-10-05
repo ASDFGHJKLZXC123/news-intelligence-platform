@@ -1,0 +1,5 @@
+{
+  "tests/integration/test_stage6_brief_selection.py": "252626aeb6faed28b4d6a67da07cd2e1fb8d3235ab7e0fcfad49a2fe8cfcfb57",
+  "db/migrations/versions/0016_event_hotness_score.py": "a77956bc4ac070c481541e3f0fa8411c414fe0f2dfec89277bf01bbeffb7e62c",
+  "db/migrations/versions/0022_personal_spending.py": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491"
+}

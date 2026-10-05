@@ -1,0 +1,60 @@
+{
+  "recorded_at_utc": "2026-10-04T02:59:47.446044+00:00",
+  "status": "PASS_EXECUTION_FINAL_DOCUMENT_REVIEW_PENDING",
+  "fresh_affected_personal_cases": 100,
+  "independent_repeated_new_cases": 5,
+  "totals_policy": "independent5 overlaps personal100; personal100 includes95previouspersonal+5new; do not add old238/175/50",
+  "checks": {
+    "new_cases_all_pass_no_skip_error": true,
+    "affected_personal_cases_all_pass_no_skip_error": true,
+    "independent_inventory_restored": true,
+    "independent_owned_databases_exact_and_absent": true,
+    "source_and_protected_unchanged": true,
+    "staged_diff_unchanged": true,
+    "corrected_source_hashes": true
+  },
+  "resolved_literal_gaps": [
+    "C1:P3-02 concurrent HTTP retry",
+    "C2:P3-06 caller old date HTTP",
+    "C3:P3-12 same-authored fixture triad"
+  ],
+  "reproduced_defect": {
+    "id": "D1",
+    "fixed": true,
+    "unchanged_regression_oracle": "workflow failed stage persisted",
+    "ownership_review": "flush after fresh owned-run token/state validation and transaction lock; finish_run revalidation and terminal lock preserved"
+  },
+  "oracle_correction": {
+    "id": "O1",
+    "acceptance_strength_retained": true,
+    "published_result_report_snapshot_and_immutable_api_checked": true
+  },
+  "source_sha256": {
+    "services/personal/coordinator.py": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+    "tests/integration/test_personal_phase3_closeout.py": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+  },
+  "authored_rss_fixture_sha256": "f1fddce95550b567f275aa2986bd3a06440fe015089b82093db8a2edd3a78f07",
+  "container_id": "1c96158e480703c30fc60e9ba947705fcfeb6795b912c242dcbdd536fb30f13e",
+  "applied_head": "0022_personal_spending",
+  "database_oids": [
+    381873,
+    385135,
+    388397,
+    391662,
+    394924
+  ],
+  "artifact_sha256": {
+    "personal-final.xml": "076e10bcc4f4ece5507f29484379c5e8a99fc00bd69473a39f3777a8907ef8d3",
+    "personal-final-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "independent-closeout-proof.xml": "6543283d5b596210fcfbd60d7b05b06140fec2f8e934a86170bcb9bf5172b215",
+    "independent-closeout-proof-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "independent-closeout-proof-resources.json": "2422b0ea77cf71b9403ca1b4ca0cdec14c40a005d5dde420b1795a6141e99d81",
+    "independent-closeout-proof-source-before.json": "6a6d280a83fda8fb77ffb6d1dbf206ffc000a96d2e81b4a51ef15bde835435b7",
+    "independent-closeout-proof-source-after.json": "347e4d6435b85a77c423efd996b1756ad74cc7e273a2973b0ee3e201a3a12d1f",
+    "coordinator-failure-stage-fix.diff": "1424d3eda678749a65b634e0f17a72ddeb1066a027b85c70d4c5274f9a2a690c",
+    "closeout-publication-oracle-correction.diff": "8559aca6c24f8741ef650e6839b7c814a0aaa85ddaf153556b776f4cd4831025",
+    "final-targeted.xml": "64250c369192aaa3ca685a61ba7f075e2c8cd56c84471aebb18981c74ce4bc07",
+    "final-targeted-result.json": "919e709ee7a6f2fa56428b8baa70c8a71177f591d4fd55bf4a6dadf03aecca13"
+  },
+  "limitation": "Synthetic adapters and TestClient/in-process coordinator; no real provider/broker service/process restart/personal usefulness inferred"
+}

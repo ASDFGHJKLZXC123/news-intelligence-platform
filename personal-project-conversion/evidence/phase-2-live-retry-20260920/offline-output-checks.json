@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-09-20T07:21:07.841157+00:00",
+  "checks": [
+    {
+      "prompt_name": "daily_brief_executive_summary",
+      "word_count": 35,
+      "minimum": 96,
+      "maximum": 120,
+      "within_budget": false
+    },
+    {
+      "prompt_name": "daily_brief_executive_summary",
+      "word_count": 126,
+      "minimum": 96,
+      "maximum": 120,
+      "within_budget": false
+    },
+    {
+      "prompt_name": "daily_brief_top_event",
+      "word_count": 82,
+      "minimum": 120,
+      "maximum": 180,
+      "within_budget": false
+    },
+    {
+      "prompt_name": "daily_brief_top_event",
+      "word_count": 69,
+      "minimum": 120,
+      "maximum": 180,
+      "within_budget": false
+    }
+  ],
+  "test_suite_rerun": false,
+  "scope": "Replayed deterministic word counts on retained model outputs; no model calls or DB writes"
+}

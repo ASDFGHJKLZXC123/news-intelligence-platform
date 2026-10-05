@@ -1,0 +1,151 @@
+{
+  "api_port": 58118,
+  "created_redis_celery_beat": false,
+  "databases": {
+    "browser": {
+      "absent_after_drop": true,
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "evidence_epoch": "accepted_final_production_code",
+      "identity_verified_before_drop": true,
+      "name": "nip_phase4b_browser_accepted_ac0f466f5808",
+      "oid": 308449
+    },
+    "browser_initial": {
+      "absent_after_drop": true,
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "identity_verified_before_drop": true,
+      "name": "nip_phase4b_browser_ac0f466f5808",
+      "oid": 19677
+    },
+    "manual": {
+      "absent_after_drop": true,
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "evidence_epoch": "accepted_final_production_code",
+      "identity_verified_before_drop": true,
+      "name": "nip_phase4b_manual_accepted_ac0f466f5808",
+      "oid": 308450
+    },
+    "manual_initial": {
+      "absent_after_drop": true,
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "identity_verified_before_drop": true,
+      "name": "nip_phase4b_manual_ac0f466f5808",
+      "oid": 19678
+    },
+    "restored": {
+      "absent_after_drop": true,
+      "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "identity_verified_before_drop": true,
+      "name": "nip_phase4b_restored_ac0f466f5808",
+      "oid": 466073
+    }
+  },
+  "network_guard": {
+    "identity_verified_removed": true,
+    "inherited_by_app_cli_children_and_test_subprocesses": true,
+    "path": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4b-20261004/owned-network-guard/sitecustomize.py",
+    "sha256": "7d89d5cbc403b6a1cc7a898366ceb2f2a7444b3bc0e9d39608c1a431aba18c24"
+  },
+  "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+  "persistent_services": [
+    "application",
+    "owned PostgreSQL"
+  ],
+  "processes": {
+    "app": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+        "app",
+        "--port",
+        "58118"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 58118",
+      "created": "Sun Oct  4 17:28:06 2026",
+      "exec_transition_wrapper_cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py app --port 58118",
+      "expected_exec_module_verified": true,
+      "identity_verified_before_signal": true,
+      "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "pgid": 52617,
+      "pid": 52617,
+      "started_utc": "2026-10-05T00:28:06.109203+00:00",
+      "stopped_utc": "2026-10-05T00:33:20.886942+00:00"
+    },
+    "app_before_final_default_fix": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+        "app",
+        "--port",
+        "58118"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 58118",
+      "created": "Sun Oct  4 17:13:57 2026",
+      "exec_transition_wrapper_cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py app --port 58118",
+      "expected_exec_module_verified": true,
+      "identity_verified_before_signal": true,
+      "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "pgid": 42262,
+      "pid": 42262,
+      "started_utc": "2026-10-05T00:13:57.201280+00:00",
+      "stopped_utc": "2026-10-05T00:14:46.113167+00:00"
+    },
+    "app_before_first_verified_restart": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+        "app",
+        "--port",
+        "58118"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 58118",
+      "created": "Sun Oct  4 17:15:31 2026",
+      "exec_transition_wrapper_cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py app --port 58118",
+      "expected_exec_module_verified": true,
+      "identity_verified_before_signal": true,
+      "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "pgid": 43368,
+      "pid": 43368,
+      "started_utc": "2026-10-05T00:15:31.962953+00:00",
+      "stopped_utc": "2026-10-05T00:22:58.156636+00:00"
+    },
+    "app_before_restart": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+        "app",
+        "--port",
+        "58118"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 58118",
+      "created": "Sun Oct  4 17:22:58 2026",
+      "exec_transition_wrapper_cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py app --port 58118",
+      "expected_exec_module_verified": true,
+      "identity_verified_before_signal": true,
+      "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "pgid": 48928,
+      "pid": 48928,
+      "started_utc": "2026-10-05T00:22:58.267544+00:00",
+      "stopped_utc": "2026-10-05T00:28:06.001062+00:00"
+    },
+    "app_initial": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+        "app",
+        "--port",
+        "58118"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 58118",
+      "created": "Sun Oct  4 17:01:30 2026",
+      "exec_transition_wrapper_cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py app --port 58118",
+      "expected_exec_module_verified": true,
+      "identity_verified_before_signal": true,
+      "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+      "pgid": 32409,
+      "pid": 32409,
+      "started_utc": "2026-10-05T00:01:30.923703+00:00",
+      "stopped_utc": "2026-10-05T00:13:55.685922+00:00"
+    }
+  }
+}

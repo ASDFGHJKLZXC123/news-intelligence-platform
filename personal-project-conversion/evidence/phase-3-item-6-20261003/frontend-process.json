@@ -1,0 +1,9 @@
+{
+  "kind": "frontend",
+  "pid": 74254,
+  "started": "Sat Oct  3 17:56:41 2026",
+  "command": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m http.server 60316 --bind 127.0.0.1 --directory frontend",
+  "marker": "http.server 60316 --bind 127.0.0.1 --directory frontend",
+  "owner": "p3_item6_20261003_b",
+  "created_at": "2026-10-04T00:56:42.303601+00:00"
+}

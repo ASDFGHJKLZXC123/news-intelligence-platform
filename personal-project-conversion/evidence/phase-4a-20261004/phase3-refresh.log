@@ -1,0 +1,636 @@
+.........F...................F..................F....................... [ 71%]
+................F............                                            [100%]
+=================================== FAILURES ===================================
+____ test_published_bookkeeping_recovery_reuses_report_without_model_calls _____
+
+    def test_published_bookkeeping_recovery_reuses_report_without_model_calls() -> None:
+        with migrated_disposable_engine() as engine:
+            now = datetime.datetime(2026, 9, 10, 18, tzinfo=UTC)
+            run_id, token, _, _ = _prepared_snapshot(
+                engine,
+                now=now,
+                coverage={
+                    "feeds_attempted": 1,
+                    "feeds_succeeded": 1,
+                    "feeds_failed": 0,
+                    "feed_failures": [],
+                    "articles_captured": 1,
+                },
+            )
+            first = generate_personal_brief(
+                run_id,
+                token,
+                session_factory=lambda: Session(engine),
+                orchestrator_factory=_orchestrator,
+            )
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                job = session.get(Job, run.job_id)
+                run.state = "running"
+                run.result = None
+                run.error = None
+                job.state = "running"
+                session.commit()
+>           recovered = generate_personal_brief(
+                run_id,
+                token,
+                session_factory=lambda: Session(engine),
+                orchestrator_factory=lambda *_: pytest.fail("recovery recomposed a published report"),
+            )
+
+tests/integration/test_personal_brief_generation.py:756: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/personal/briefs.py:631: in generate_personal_brief
+    run = lock_owned_run(start_session, run_id, ownership_token)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/personal/runs.py:331: in lock_owned_run
+    verify_control(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+control = <db.models.processing.PersonalWriterMode object at 0x113357550>
+run = <db.models.personal.PersonalRun object at 0x114cce850>
+token = UUID('10446abb-a4b1-4c21-9722-a70586adca05')
+now = datetime.datetime(2026, 9, 10, 18, 0, tzinfo=datetime.timezone.utc)
+allow_queued = False, generation = None
+
+    def verify_control(
+        control: PersonalWriterMode,
+        run: PersonalRun,
+        token: uuid.UUID,
+        *,
+        now: dt.datetime,
+        allow_queued: bool = False,
+        generation: int | None = None,
+    ) -> None:
+        require_mode(control, "personal")
+        expected_token = control.delivery_token if run.state == "queued" else control.ownership_token
+        if (
+            control.active_run_id != run.id
+            or control.active_attempt != run.attempt
+            or control.generation != run.fencing_generation
+            or (generation is not None and control.generation != generation)
+            or run.ownership_token != token
+            or expected_token != token
+            or run.state not in ({"queued", "running"} if allow_queued else {"running"})
+        ):
+>           raise PersonalOwnershipLost("personal write refused because attempt ownership changed")
+E           services.personal.processing.PersonalOwnershipLost: personal write refused because attempt ownership changed
+
+services/personal/processing.py:162: PersonalOwnershipLost
+_ test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost _
+
+role = 'embedding'
+factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_7b124d91921e429f9592b27ca6612a1e), autoflush=False, expire_on_commit=False)
+
+    def observe_send(role, factory):
+        payload = calls[-1][1]
+        with factory() as session:
+            row = session.scalar(
+                select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+            )
+            run = session.get(PersonalRun, row.run_id)
+            route = PaidRoute.from_mapping(model_route()[role], role=role)
+            assert row.workspace_id == run.workspace_id == workspace_id
+            assert str(row.run_id) == delivery["args"][0]
+>           assert str(run.ownership_token) == delivery["args"][1]
+E           AssertionError: assert 'fcc6af1b-a96...-1c9258240b73' == '448da4dc-b91...-bc335e7c368f'
+E             
+E             - 448da4dc-b919-4181-9ed1-bc335e7c368f
+E             + fcc6af1b-a96e-42e6-9fa0-1c9258240b73
+
+tests/integration/test_personal_item5_composed.py:105: AssertionError
+
+The above exception was the direct cause of the following exception:
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1158c4c20>
+
+    def test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost(
+        monkeypatch,
+    ):
+        with migrated_disposable_engine() as engine:
+            workspace_id, profile_id, _ = _configured_workspace(engine, route=model_route())
+            observed_requests = []
+            delivery = {}
+    
+            def observe_send(role, factory):
+                payload = calls[-1][1]
+                with factory() as session:
+                    row = session.scalar(
+                        select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+                    )
+                    run = session.get(PersonalRun, row.run_id)
+                    route = PaidRoute.from_mapping(model_route()[role], role=role)
+                    assert row.workspace_id == run.workspace_id == workspace_id
+                    assert str(row.run_id) == delivery["args"][0]
+                    assert str(run.ownership_token) == delivery["args"][1]
+                    assert row.attempt == run.attempt == 1
+                    assert run.profile_revision_id == profile_id and run.scopes_frozen_at is not None
+                    assert row.role == role and row.route == route.to_mapping()
+                    assert row.input_token_bound == conservative_payload_token_bound(payload)
+                    assert row.output_token_bound == (0 if role == "embedding" else 1000)
+                    assert row.reserved_usd == route.cost(row.input_token_bound, row.output_token_bound)
+                    assert row.actual_usd is None and row.dispatch_attempt_at is not None
+                    if role == "generation":
+                        snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                        assert snapshot.run_id == run.id and snapshot.profile_revision_id == profile_id
+                        assert snapshot.model_route == model_route()
+                    observed_requests.append(row.id)
+    
+            factory, calls, delegates = _runtime(monkeypatch, engine, on_send=observe_send)
+            deliveries = _capture_production_delivery(monkeypatch, factory)
+            with _client(engine) as client:
+                response = client.post("/api/v1/personal/runs")
+                assert response.status_code == 202, response.text
+                assert len(deliveries) == 1
+                delivery["args"] = deliveries[0][1]
+                assert response.json()["run"]["id"] == delivery["args"][0]
+                assert response.json()["run"]["profile_revision_id"] == str(profile_id)
+                assert response.json()["run"]["state"] == "queued"
+    
+            task = celery_app.tasks[deliveries[0][0]]
+            assert task.name == worker.TASK_NAME and task.run == worker.run_personal_daily_task.run
+>           result = task.run(*delivery["args"])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_item5_composed.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+workers/personal_tasks.py:853: in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workers/personal_tasks.py:830: in execute_personal_task
+    return execute(
+services/personal/runner.py:303: in execute_personal_task
+    result = run_personal_daily(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run_id = UUID('6aa14605-31d0-4e76-ae32-5aae603b1724')
+ownership_token = UUID('fcc6af1b-a96e-42e6-9fa0-1c9258240b73')
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg2://news:***@127.0.0.1:58797/nip_stage7_7b124d91921e429f9592b27ca6612a1e), autoflush=False, expire_on_commit=False)
+rss_provider_factory = <function execute_personal_task.<locals>.rss_factory at 0x114ead6c0>
+embedding_provider = <packages.providers.openai_embeddings.OpenAIEmbeddingProvider object at 0x113424830>
+orchestrator_factory = <function execute_personal_task.<locals>.orchestrator_factory at 0x114eadbc0>
+now = datetime.datetime(2026, 10, 4, 9, 23, 25, 69757, tzinfo=datetime.timezone.utc)
+clock = <function run_personal_daily.<locals>.<lambda> at 0x114ead080>
+ai_block_reason = None
+paid_block_reason = <function execute_personal_task.<locals>.<lambda> at 0x114eaf4c0>
+generation = None
+on_acquired = <function execute_personal_task.<locals>.acquired at 0x114eae8e0>
+rotate_token = True
+
+    def run_personal_daily(
+        run_id: uuid.UUID,
+        ownership_token: uuid.UUID,
+        *,
+        session_factory: SessionFactory,
+        rss_provider_factory: RSSProviderFactory,
+        embedding_provider: EmbeddingProvider,
+        orchestrator_factory: OrchestratorFactory,
+        now: datetime.datetime,
+        clock: Clock | None = None,
+        ai_block_reason: str | None = None,
+        paid_block_reason: Callable[[], str | None] | None = None,
+        generation: int | None = None,
+        on_acquired: Callable[[PersonalRun], None] | None = None,
+        rotate_token: bool = False,
+    ) -> PersonalCoordinatorResult:
+        """Run all personal stages, fencing every write transaction by owner token and mode."""
+    
+        now = _utc(now)
+        clock = clock or (lambda: datetime.datetime.now(datetime.UTC))
+        try:
+            check_budget()
+            with session_factory() as session:
+                run = acquire_run(
+                    session,
+                    run_id,
+                    ownership_token,
+                    now=now,
+                    generation=generation,
+                    rotate_token=rotate_token,
+                )
+                ownership_token = run.ownership_token
+                recover_published = _published_recovery_available(session, run)
+                existing_coverage = dict(run.coverage or {})
+                existing_article_count = len(run.enrichment_article_ids)
+                ai_reason = ai_block_reason or _ai_reason(_profile(session, run))
+                for disabled_stage in (
+                    "entity_linking",
+                    "event_embeddings",
+                    "historical_analogies",
+                    "forecasting",
+                ):
+                    _stage(run, disabled_stage, "disabled", reason="disabled_by_profile")
+                scopes_frozen = run.scopes_frozen_at is not None
+                session.commit()
+                session.refresh(run)
+                session.expunge(run)
+    
+            if on_acquired is not None:
+                on_acquired(run)
+            check_budget()
+    
+            if recover_published:
+                report = generate_personal_brief(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    orchestrator_factory=orchestrator_factory,
+                )
+                return PersonalCoordinatorResult(
+                    run_id=run_id,
+                    report=report,
+                    feeds_attempted=int(existing_coverage.get("feeds_attempted") or 0),
+                    feeds_succeeded=int(existing_coverage.get("feeds_succeeded") or 0),
+                    feeds_failed=int(existing_coverage.get("feeds_failed") or 0),
+                    articles_captured=int(existing_coverage.get("articles_captured") or 0),
+                    articles_admitted=existing_article_count,
+                    events_observed=len(report.selected_event_ids),
+                    claims_supported=0,
+                )
+    
+            if scopes_frozen:
+                check_budget()
+                with session_factory() as session:
+                    run = lock_owned_run(session, run_id, ownership_token)
+                    coverage = dict(run.coverage or {})
+                    article_ids = tuple(run.enrichment_article_ids)
+                    admitted_ids = tuple(run.admitted_article_ids)
+                    session.rollback()
+            else:
+                # Existing pending work gets the first admission slots. Capture then fills freed
+                # pending capacity, and a second pass uses any admission allowance still available.
+                _admit_pending(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    admitted_at=_utc(clock()),
+                )
+                coverage = _capture_selected_feeds(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    provider_factory=rss_provider_factory,
+                    clock=clock,
+                )
+                if coverage["feeds_attempted"] > 0 and coverage["feeds_succeeded"] == 0:
+                    _mark_stage_failure(
+                        run_id,
+                        ownership_token,
+                        session_factory=session_factory,
+                        code="all_feeds_failed",
+                    )
+                    raise PersonalCoordinatorError("all configured personal feeds failed")
+                admitted_ids = _admit_pending(
+                    run_id,
+                    ownership_token,
+                    session_factory=session_factory,
+                    admitted_at=_utc(clock()),
+                )
+                article_ids = _freeze_enrichment_scope(
+                    run_id,
+                    ownership_token,
+                    admitted_ids,
+                    session_factory=session_factory,
+                    now=_utc(clock()),
+                    ai_block_reason=ai_reason,
+                )
+    
+            if ai_reason is not None:
+                _finish_raw(run_id, ownership_token, session_factory=session_factory, reason=ai_reason)
+                return PersonalCoordinatorResult(
+                    run_id=run_id,
+                    report=None,
+                    feeds_attempted=int(coverage.get("feeds_attempted") or 0),
+                    feeds_succeeded=int(coverage.get("feeds_succeeded") or 0),
+                    feeds_failed=int(coverage.get("feeds_failed") or 0),
+                    articles_captured=int(coverage.get("articles_captured") or 0),
+                    articles_admitted=len(admitted_ids),
+                    events_observed=0,
+                    claims_supported=0,
+                )
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                embedded = embed_unembedded_articles(
+                    session,
+                    _UnlockedEmbeddingProvider(embedding_provider, session, run_id, ownership_token),
+                    embedding_model=embedding_provider.model_name,
+                    embedding_model_version=embedding_provider.model_version,
+                    article_ids=article_ids,
+                )
+                _stage(run, "embedding", "succeeded", articles_embedded=embedded)
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                clustered = cluster_unclustered_articles(
+                    session,
+                    embedding_model=embedding_provider.model_name,
+                    embedding_model_version=embedding_provider.model_version,
+                    article_ids=article_ids,
+                )
+                for capture in session.scalars(
+                    select(PersonalCapture).where(
+                        PersonalCapture.processing_run_id == run.id,
+                        PersonalCapture.article_id.in_(article_ids),
+                    )
+                ):
+                    if (
+                        session.scalar(
+                            select(EventArticle.event_id)
+                            .where(EventArticle.article_id == capture.article_id)
+                            .limit(1)
+                        )
+                        is not None
+                    ):
+                        capture.enrichment_state = "grouped"
+                _stage(
+                    run,
+                    "grouping",
+                    "succeeded",
+                    events_created=clustered.events_created,
+                    articles_clustered=clustered.articles_clustered,
+                )
+                # record_event_observations refreshes the locked identity-map row. Flush the JSON
+                # stage update first so that refresh cannot replace it with the prior database value.
+                session.flush()
+                observations = record_event_observations(session, run.id, ownership_token)
+                _stage(run, "observations", "succeeded", events_observed=len(observations))
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                preparations = prepare_article_claims(session, run.id, ownership_token)
+                supported = sum(item.status == "supported" for item in preparations)
+                _stage(
+                    run,
+                    "claim_preparation",
+                    "succeeded",
+                    supported=supported,
+                    abstained=sum(item.status == "abstained" for item in preparations),
+                )
+                session.commit()
+    
+            check_budget()
+            with session_factory() as session:
+                run = lock_owned_run(session, run_id, ownership_token)
+                route = (_profile(session, run).settings or {}).get("model_route")
+                if not isinstance(route, dict) or not route:
+                    raise RuntimeError("personal profile has no explicit model route")
+                snapshot = freeze_brief_snapshot(
+                    session,
+                    run.id,
+                    ownership_token,
+                    model_route=route,
+                    prepared_at=_utc(clock()),
+                )
+                _stage(run, "snapshot", "succeeded", snapshot_id=str(snapshot.id))
+                session.commit()
+    
+            report = generate_personal_brief(
+                run_id,
+                ownership_token,
+                session_factory=session_factory,
+                orchestrator_factory=orchestrator_factory,
+                paid_block_reason=paid_block_reason,
+            )
+            return PersonalCoordinatorResult(
+                run_id=run_id,
+                report=report,
+                feeds_attempted=int(coverage.get("feeds_attempted") or 0),
+                feeds_succeeded=int(coverage.get("feeds_succeeded") or 0),
+                feeds_failed=int(coverage.get("feeds_failed") or 0),
+                articles_captured=int(coverage.get("articles_captured") or 0),
+                articles_admitted=len(admitted_ids),
+                events_observed=len(observations),
+                claims_supported=supported,
+            )
+        except RuntimeCancelled:
+            with bind_budget(None):
+                _mark_stage_failure(
+                    run_id, ownership_token, session_factory=session_factory, code="runtime_cancelled"
+                )
+            raise
+        except PersonalCoordinatorError:
+            raise
+        except Exception as exc:
+            try:
+                propagate_fatal(exc)
+            except RuntimeCancelled:
+                with bind_budget(None):
+                    _mark_stage_failure(
+                        run_id,
+                        ownership_token,
+                        session_factory=session_factory,
+                        code="runtime_cancelled",
+                    )
+                raise
+            from services.personal.spending import PaidWorkBlocked
+    
+            if isinstance(exc, PaidWorkBlocked) and exc.code in {
+                "allowance_reached",
+                "ai_disabled",
+                "configuration_missing",
+            }:
+                _finish_raw(run_id, ownership_token, session_factory=session_factory, reason=exc.code)
+                check_budget()
+                with session_factory() as session:
+                    deferred = session.get(PersonalRun, run_id)
+                    retained = deferred.coverage or {}
+                    return PersonalCoordinatorResult(
+                        run_id=run_id,
+                        report=None,
+                        feeds_attempted=int(retained.get("feeds_attempted") or 0),
+                        feeds_succeeded=int(retained.get("feeds_succeeded") or 0),
+                        feeds_failed=int(retained.get("feeds_failed") or 0),
+                        articles_captured=int(retained.get("articles_captured") or 0),
+                        articles_admitted=len(deferred.admitted_article_ids),
+                        events_observed=len(deferred.event_ids),
+                        claims_supported=0,
+                    )
+            _mark_stage_failure(
+                run_id,
+                ownership_token,
+                session_factory=session_factory,
+                code="personal_workflow_failed",
+            )
+>           raise PersonalCoordinatorError("personal daily workflow failed") from exc
+E           services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed
+
+services/personal/coordinator.py:1065: PersonalCoordinatorError
+----------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-04T09:23:25.059283+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/runs \"HTTP/1.1 202 Accepted\""}
+{"timestamp": "2026-10-04T09:23:25.165150+00:00", "level": "ERROR", "logger": "services.personal.runner", "message": "personal daily task failed", "job_id": "6aa14605-31d0-4e76-ae32-5aae603b1724", "exc_info": "Traceback (most recent call last):\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py\", line 920, in run_personal_daily\n    embedded = embed_unembedded_articles(\n        session,\n    ...<3 lines>...\n        article_ids=article_ids,\n    )\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/nlp/embeddings.py\", line 203, in embed_unembedded_articles\n    results = embed_texts(\n        provider, texts, model=model, model_version=model_version, batch_size=batch_size\n    )\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/nlp/embeddings.py\", line 151, in embed_texts\n    chunk_results = list(provider.embed(chunk))\n                         ~~~~~~~~~~~~~~^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py\", line 779, in embed\n    results = self.delegate.embed(texts)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py\", line 116, in embed\n    results.extend(self._embed_chunk(chunk))\n                   ~~~~~~~~~~~~~~~~~^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py\", line 133, in _embed_chunk\n    body = self._post(\n        {\n    ...<4 lines>...\n        }\n    )\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py\", line 147, in _post\n    response = self._client.post(\n        EMBEDDINGS_PATH, json=dict(payload), headers=self._headers()\n    )\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py\", line 191, in post\n    response = self.delegate.post(path, **kwargs, timeout=self.route.deadline_seconds)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py\", line 108, in post\n    return asyncio.run(request())\n           ~~~~~~~~~~~^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py\", line 195, in run\n    return runner.run(main)\n           ~~~~~~~~~~^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py\", line 118, in run\n    return self._loop.run_until_complete(task)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py\", line 719, in run_until_complete\n    return future.result()\n           ~~~~~~~~~~~~~^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py\", line 104, in request\n    return await client.post(path, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1859, in post\n    return await self.request(\n           ^^^^^^^^^^^^^^^^^^^\n    ...<13 lines>...\n    )\n    ^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1540, in request\n    return await self.send(request, auth=auth, follow_redirects=follow_redirects)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1629, in send\n    response = await self._send_handling_auth(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<4 lines>...\n    )\n    ^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1657, in _send_handling_auth\n    response = await self._send_handling_redirects(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n    )\n    ^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1694, in _send_handling_redirects\n    response = await self._send_single_request(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py\", line 1730, in _send_single_request\n    response = await transport.handle_async_request(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_transports/mock.py\", line 34, in handle_async_request\n    response = self.handler(request)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_paid_worker.py\", line 130, in respond\n    on_send(role, factory)\n    ~~~~~~~^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_item5_composed.py\", line 105, in observe_send\n    assert str(run.ownership_token) == delivery[\"args\"][1]\nAssertionError: assert 'fcc6af1b-a96...-1c9258240b73' == '448da4dc-b91...-bc335e7c368f'\n  \n  - 448da4dc-b919-4181-9ed1-bc335e7c368f\n  + fcc6af1b-a96e-42e6-9fa0-1c9258240b73\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py\", line 303, in execute_personal_task\n    result = run_personal_daily(\n        run_id,\n    ...<10 lines>...\n        paid_block_reason=(lambda: ledger.blocked_code) if ledger is not None else None,\n    )\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py\", line 1065, in run_personal_daily\n    raise PersonalCoordinatorError(\"personal daily workflow failed\") from exc\nservices.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed", "personal_run_id": "6aa14605-31d0-4e76-ae32-5aae603b1724"}
+------------------------------ Captured log call -------------------------------
+INFO     httpx2:_client.py:984 HTTP Request: POST http://testserver/api/v1/personal/runs "HTTP/1.1 202 Accepted"
+ERROR    services.personal.runner:runner.py:343 personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 920, in run_personal_daily
+    embedded = embed_unembedded_articles(
+        session,
+    ...<3 lines>...
+        article_ids=article_ids,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/nlp/embeddings.py", line 203, in embed_unembedded_articles
+    results = embed_texts(
+        provider, texts, model=model, model_version=model_version, batch_size=batch_size
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/nlp/embeddings.py", line 151, in embed_texts
+    chunk_results = list(provider.embed(chunk))
+                         ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 779, in embed
+    results = self.delegate.embed(texts)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py", line 116, in embed
+    results.extend(self._embed_chunk(chunk))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py", line 133, in _embed_chunk
+    body = self._post(
+        {
+    ...<4 lines>...
+        }
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/packages/providers/openai_embeddings.py", line 147, in _post
+    response = self._client.post(
+        EMBEDDINGS_PATH, json=dict(payload), headers=self._headers()
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py", line 191, in post
+    response = self.delegate.post(path, **kwargs, timeout=self.route.deadline_seconds)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py", line 108, in post
+    return asyncio.run(request())
+           ~~~~~~~~~~~^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/paid_runtime.py", line 104, in request
+    return await client.post(path, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1859, in post
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+    ...<13 lines>...
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/httpx/_transports/mock.py", line 34, in handle_async_request
+    response = self.handler(request)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_paid_worker.py", line 130, in respond
+    on_send(role, factory)
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/tests/integration/test_personal_item5_composed.py", line 105, in observe_send
+    assert str(run.ownership_token) == delivery["args"][1]
+AssertionError: assert 'fcc6af1b-a96...-1c9258240b73' == '448da4dc-b91...-bc335e7c368f'
+  
+  - 448da4dc-b919-4181-9ed1-bc335e7c368f
+  + fcc6af1b-a96e-42e6-9fa0-1c9258240b73
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 303, in execute_personal_task
+    result = run_personal_daily(
+        run_id,
+    ...<10 lines>...
+        paid_block_reason=(lambda: ledger.blocked_code) if ledger is not None else None,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 1065, in run_personal_daily
+    raise PersonalCoordinatorError("personal daily workflow failed") from exc
+services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed
+______________ test_nonempty_personal_downgrade_refuses_data_loss ______________
+
+    def test_nonempty_personal_downgrade_refuses_data_loss() -> None:
+        with migrated_disposable_engine() as engine:
+            with Session(engine) as session:
+                ensure_workspace(session)
+                session.commit()
+            env = dict(os.environ)
+            env["DATABASE_URL"] = engine.url.render_as_string(hide_password=False)
+            result = subprocess.run(
+                [sys.executable, "-m", "alembic", "downgrade", "0019"],
+                cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+            assert result.returncode != 0
+>           assert "Paid usage and unresolved reservations must be retained" in result.stderr
+E           AssertionError: assert 'Paid usage and unresolved reservations must be retained' in 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n'
+E            +  where 'INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.\nINFO  [alembic.runtime.migration] Will assume transac...RuntimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n' = CompletedProcess(args=['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-m', 'al...untimeError: Processing ownership and history must be retained; select the previous supported runtime mode instead.\n').stderr
+
+tests/integration/test_personal_phase2.py:314: AssertionError
+_ test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10e2af070>
+
+    def test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        with migrated_disposable_engine() as engine:
+            run_id, token, workspace_id = _queued_run(engine)
+            _patch_runtime(monkeypatch, engine, fixture_path="")
+    
+            with pytest.raises(ValueError, match="PERSONAL_OFFLINE_FIXTURE_PATH"):
+                personal_tasks.run_personal_daily_task.run(str(run_id), str(token))
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                assert run.state == "failed"
+>               assert run.error == {
+                    "code": "worker_setup_failed",
+                    "message": "Personal update could not start; an explicit retry may be available.",
+                }
+E               AssertionError: assert {'code': 'wor...ryable': True} == {'code': 'wor...e available.'}
+E                 
+E                 Omitting 2 identical items, use -vv to show
+E                 Left contains 1 more item:
+E                 {'retryable': True}
+E                 Use -v to get more diff
+
+tests/integration/test_personal_worker.py:354: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-04T09:24:59.940462+00:00", "level": "ERROR", "logger": "services.personal.runner", "message": "personal daily task failed", "job_id": "0ad9f00b-fa7e-4956-b2d0-d2c4a776df54", "exc_info": "Traceback (most recent call last):\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py\", line 244, in execute_personal_task\n    fixture, embedding_provider, _ = _offline_runtime(settings, spec)\n                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py\", line 147, in _offline_runtime\n    fixture = load_offline_personal_fixture(settings.personal_offline_fixture_path)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/offline_fixture.py\", line 145, in load_offline_personal_fixture\n    raise ValueError(\"PERSONAL_OFFLINE_FIXTURE_PATH is required for offline fixture mode\")\nValueError: PERSONAL_OFFLINE_FIXTURE_PATH is required for offline fixture mode", "personal_run_id": "0ad9f00b-fa7e-4956-b2d0-d2c4a776df54"}
+------------------------------ Captured log call -------------------------------
+ERROR    services.personal.runner:runner.py:343 personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 244, in execute_personal_task
+    fixture, embedding_provider, _ = _offline_runtime(settings, spec)
+                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 147, in _offline_runtime
+    fixture = load_offline_personal_fixture(settings.personal_offline_fixture_path)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/offline_fixture.py", line 145, in load_offline_personal_fixture
+    raise ValueError("PERSONAL_OFFLINE_FIXTURE_PATH is required for offline fixture mode")
+ValueError: PERSONAL_OFFLINE_FIXTURE_PATH is required for offline fixture mode
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_brief_generation.py::test_published_bookkeeping_recovery_reuses_report_without_model_calls
+FAILED tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost
+FAILED tests/integration/test_personal_phase2.py::test_nonempty_personal_downgrade_refuses_data_loss
+FAILED tests/integration/test_personal_worker.py::test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry
+4 failed, 97 passed in 172.68s (0:02:52)

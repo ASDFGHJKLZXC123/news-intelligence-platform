@@ -25,6 +25,7 @@ from packages.jobs import Stage1Job
 from services.nlp.cluster_service import ClusterResult, cluster_unclustered_articles
 from services.nlp.clustering import DEFAULT_CLUSTERING_THRESHOLD
 from services.nlp.embeddings import resolve_embedding_identity
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.clustering_tasks")
@@ -57,6 +58,7 @@ def run_article_clustering(
 
     session = SessionLocal()
     try:
+        require_legacy_writer_mode(session, lock=True)
         result: ClusterResult = cluster_unclustered_articles(
             session,
             threshold=threshold,

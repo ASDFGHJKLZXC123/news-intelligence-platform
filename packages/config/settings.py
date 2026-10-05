@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import re
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
@@ -68,6 +69,20 @@ class Settings(BaseSettings):
     # Gate G remains closed until prediction-backed public reads receive explicit approval.
     # Model generation and persistence are intentionally independent of this read switch.
     crisis_prediction_reads_enabled: bool = False
+    # Optional existing user chosen only by the protected personal-workspace setup action.
+    # Once persisted, the binding wins and later configuration cannot reassign it.
+    personal_owner_id: str = ""
+    # Explicit file-backed synthetic data/runtime used only by the disposable local acceptance
+    # harness. Empty disables offline-fixture worker execution; there is no implicit sample data.
+    personal_offline_fixture_path: str = ""
+    # Separate server activation from credentials and persisted profile preferences.
+    # A route and an allowance still need explicit configuration before any paid dispatch.
+    personal_paid_runtime_enabled: bool = False
+    # Transport is separate from the durable processing mode. Upgrades keep legacy defaults.
+    personal_processing_transport: Literal["celery", "subprocess"] = "celery"
+    personal_processing_mode: Literal["legacy", "personal"] = "legacy"
+    personal_bind_host: str = "127.0.0.1"
+    personal_app_workers: int = 1
 
     # --- Datastores ------------------------------------------------------------
     database_url: str = "postgresql+psycopg2://news:news@localhost:5432/news"

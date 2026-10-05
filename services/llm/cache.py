@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 import json
 import time
-from collections.abc import Mapping
+from collections import OrderedDict
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
+from threading import RLock
 from typing import Any, Protocol, runtime_checkable
 
 from services.llm.adapters import LLMInvocationMode, LLMInvocationRequest
@@ -91,6 +93,85 @@ class InMemoryLLMPromptCache:
         ttl = self.default_ttl_seconds if ttl_seconds is None else ttl_seconds
         expires_at = None if ttl is None else time.time() + ttl
         self._store[key] = (expires_at, value)
+
+
+@dataclass
+class BoundedLRULLMPromptCache:
+    """Runner-local JSON cache with encoded-byte accounting and a fixed TTL ceiling."""
+
+    max_entries: int = 256
+    max_bytes: int = 16 * 1024 * 1024
+    default_ttl_seconds: int = 3600
+    time_func: Callable[[], float] = time.monotonic
+    _store: OrderedDict[str, tuple[float, bytes, int]] = field(
+        default_factory=OrderedDict, init=False
+    )
+    _encoded_bytes: int = field(default=0, init=False)
+    _lock: RLock = field(default_factory=RLock, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        if self.max_entries <= 0 or self.max_bytes <= 0 or self.default_ttl_seconds <= 0:
+            raise ValueError("cache entry, byte and TTL limits must be positive")
+
+    @property
+    def encoded_bytes(self) -> int:
+        with self._lock:
+            self._expire(self.time_func())
+            return self._encoded_bytes
+
+    @property
+    def entry_count(self) -> int:
+        with self._lock:
+            self._expire(self.time_func())
+            return len(self._store)
+
+    def _remove(self, key: str) -> None:
+        entry = self._store.pop(key, None)
+        if entry is not None:
+            self._encoded_bytes -= entry[2]
+
+    def _expire(self, now: float) -> None:
+        for key, (expires_at, _, _) in tuple(self._store.items()):
+            if expires_at <= now:
+                self._remove(key)
+
+    def get(self, key: str) -> Mapping[str, Any] | None:
+        with self._lock:
+            self._expire(self.time_func())
+            entry = self._store.get(key)
+            if entry is None:
+                return None
+            self._store.move_to_end(key)
+            # Decode a new object: caller mutation cannot change byte accounting.
+            return json.loads(entry[1])
+
+    def set(
+        self,
+        key: str,
+        value: Mapping[str, Any],
+        *,
+        ttl_seconds: int | None = None,
+    ) -> None:
+        encoded = json.dumps(
+            dict(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+        size = len(key.encode("utf-8")) + len(encoded)
+        ttl = min(
+            self.default_ttl_seconds,
+            self.default_ttl_seconds if ttl_seconds is None else ttl_seconds,
+        )
+        with self._lock:
+            now = self.time_func()
+            self._expire(now)
+            self._remove(key)
+            if size > self.max_bytes or ttl <= 0:
+                return
+            while (
+                len(self._store) >= self.max_entries or self._encoded_bytes + size > self.max_bytes
+            ):
+                self._remove(next(iter(self._store)))
+            self._store[key] = (now + ttl, encoded, size)
+            self._encoded_bytes += size
 
 
 @dataclass

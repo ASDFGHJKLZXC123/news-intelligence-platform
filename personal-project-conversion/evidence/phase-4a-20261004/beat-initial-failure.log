@@ -1,0 +1,14 @@
+[2026-10-04 01:29:12,488: INFO/MainProcess] beat: Starting...
+[2026-10-04 01:30:12,537: INFO/MainProcess] Scheduler: Sending due task noop-heartbeat (workers.tasks.scheduled_heartbeat)
+[2026-10-04 01:31:12,518: INFO/MainProcess] Scheduler: Sending due task noop-heartbeat (workers.tasks.scheduled_heartbeat)
+[2026-10-04 01:32:12,523: INFO/MainProcess] Scheduler: Sending due task noop-heartbeat (workers.tasks.scheduled_heartbeat)
+celery beat v5.6.3 (recovery) is starting.
+__    -    ... __   -        _
+LocalTime -> 2026-10-04 01:29:12
+Configuration ->
+    . broker -> redis://127.0.0.1:59735/1
+    . loader -> celery.loaders.app.AppLoader
+    . scheduler -> celery.beat.PersistentScheduler
+    . db -> /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule
+    . logfile -> [stderr]@%INFO
+    . maxinterval -> 5.00 minutes (300s)

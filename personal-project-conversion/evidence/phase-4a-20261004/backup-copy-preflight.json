@@ -1,0 +1,14 @@
+{
+  "clone": {
+    "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "name": "nip_phase4a_backup_source_a1952a864e82",
+    "oid": 170581
+  },
+  "initial_copy_refused": "PostgreSQL ObjectInUse:5 sessions; no created target; no connection termination",
+  "resolution": "Stopped exact-owned API using PID/birth/command/group checks; clone created; same API restarted",
+  "source": {
+    "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "name": "nip_phase4a_ui_a1952a864e82",
+    "oid": 88514
+  }
+}

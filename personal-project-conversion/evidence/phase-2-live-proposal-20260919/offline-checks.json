@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-09-20T06:42:42.382108+00:00",
+  "validation_exit_code": 0,
+  "inactive_execution_rejected": true,
+  "replacement_claim_candidates": 1,
+  "maximum_allocated_reservations_usd": "0.11444224",
+  "provider_calls": 0,
+  "application_runs": 0,
+  "database_connections": 0,
+  "suite_tests_rerun": false,
+  "new_runtime_resources": []
+}

@@ -1,0 +1,15 @@
+{
+  "git_diff_check": "passed",
+  "broken_evidence_links": [],
+  "preexisting_files_changed": [
+    "personal-project-conversion/README.md",
+    "personal-project-conversion/SELECTED_PREFERENCES.md",
+    "personal-project-conversion/config/selected-preferences.json",
+    "personal-project-conversion/evidence/phase-2-acceptance.md",
+    "personal-project-conversion/evidence/phase-2.md",
+    "personal-project-conversion/phase-2-live-smoke.md"
+  ],
+  "application_source_changes": false,
+  "evidence_credential_scan": "passed",
+  "test_suites_rerun": false
+}

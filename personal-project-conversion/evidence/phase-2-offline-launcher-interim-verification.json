@@ -1,0 +1,164 @@
+{
+  "id": "rootproof_d61765bf7e",
+  "dataset": "synthetic",
+  "source_hashes_before": {
+    "scripts/start-personal-phase2-offline.sh": "a3bd66c964710e44f6e642a06b04169f6771459752a5bc28fbb12cea6c9f31d0",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "81d7392a96ae9c2d6cc45abdb6936b848d807c9cc919177757ff7c89218c93f6",
+    "workers/personal_tasks.py": "f01d7a506d2a8a3db319135fcfd70ada34557daca5756ef4602496730e24d374",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "c8e1c67713d2c9d776938202b86c6dfe28b8af80f8ac4052368fb23c36a97464",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "checks": [
+    "same-day duplicate returns same run without extra business/LLM rows"
+  ],
+  "api": "http://127.0.0.1:63244",
+  "state_dir": "/tmp/nip-personal-phase2-offline-rootproof_d61765bf7e",
+  "before_counts": {
+    "articles": 0,
+    "events": 0,
+    "claims": 0,
+    "claim_evidence": 0,
+    "reports": 0,
+    "personal_runs": 0,
+    "personal_captures": 0,
+    "personal_run_event_observations": 0,
+    "personal_brief_snapshots": 0,
+    "llm_runs": 0
+  },
+  "run": {
+    "id": "e78392ed-0b0e-4fe0-8a0d-1879d53c0f01",
+    "local_date": "2026-09-09",
+    "state": "succeeded",
+    "attempt": 1,
+    "max_attempts": 3,
+    "created_at": "2026-09-09T18:28:41.411650Z",
+    "updated_at": "2026-09-09T18:28:41.687194Z",
+    "lease_expires_at": null,
+    "capture_started_at": "2026-09-09T18:28:41.576433Z",
+    "capture_ended_at": "2026-09-09T18:28:41.587745Z",
+    "coverage": {
+      "schema": "personal-capture-coverage.v1",
+      "feed_pauses": [],
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feed_failures": [],
+      "items_fetched": 1,
+      "pending_total": 0,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 1,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_admitted": 1,
+      "articles_captured": 1
+    },
+    "available_event_ids": [
+      "bf800c33-4e05-4263-8dc8-90d370e7072c"
+    ],
+    "snapshot_id": "92e5fe7c-6ac9-4fe9-b562-4cc69852d968",
+    "report_id": "fbaf3700-af0c-48d2-9937-7df294724cb3",
+    "stage_results": {
+      "scope": {
+        "status": "succeeded",
+        "articles_admitted": 1,
+        "articles_selected_for_enrichment": 1
+      },
+      "capture": {
+        "schema": "personal-capture-coverage.v1",
+        "status": "succeeded",
+        "feed_pauses": [],
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feed_failures": [],
+        "items_fetched": 1,
+        "pending_total": 1,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 1,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_captured": 1
+      },
+      "grouping": {
+        "status": "succeeded",
+        "events_created": 1,
+        "articles_clustered": 1
+      },
+      "snapshot": {
+        "status": "succeeded",
+        "snapshot_id": "92e5fe7c-6ac9-4fe9-b562-4cc69852d968"
+      },
+      "admission": {
+        "status": "succeeded",
+        "run_limit": 100,
+        "local_day_limit": 100,
+        "articles_admitted": 1
+      },
+      "embedding": {
+        "status": "succeeded",
+        "articles_embedded": 1
+      },
+      "observations": {
+        "status": "succeeded",
+        "events_observed": 1
+      },
+      "claim_preparation": {
+        "status": "succeeded",
+        "abstained": 0,
+        "supported": 2
+      }
+    },
+    "result": {
+      "attempt": 1,
+      "published": true,
+      "report_id": "fbaf3700-af0c-48d2-9937-7df294724cb3",
+      "snapshot_id": "92e5fe7c-6ac9-4fe9-b562-4cc69852d968",
+      "gate_outcome": "pass",
+      "section_count": 5,
+      "capture_partial": false,
+      "processing_degraded": false
+    },
+    "error": null,
+    "retry_eligible": false,
+    "retry_reason": "run in state succeeded is not retryable"
+  },
+  "after_counts": {
+    "articles": 1,
+    "events": 1,
+    "claims": 2,
+    "claim_evidence": 2,
+    "reports": 1,
+    "personal_runs": 1,
+    "personal_captures": 1,
+    "personal_run_event_observations": 1,
+    "personal_brief_snapshots": 1,
+    "llm_runs": 4
+  },
+  "md_sha256": "60646888f7523a629eca940713ce486beaaacf2c81637ac248f101299085acd3",
+  "pdf_sha256": "fe8b5b5a363fb25013afdd6d665cf387bb11e9deb9066935410db7761fd584ee",
+  "passed": false,
+  "error": "Traceback (most recent call last):\n  File \"<string>\", line 68, in <module>\n    profile=c.execute(text('SELECT settings FROM personal_profile_revisions')).scalar_one()\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py\", line 1518, in scalar_one\n    return self._only_one_row(\n           ~~~~~~~~~~~~~~~~~~^\n        raise_for_second_row=True, raise_for_none=True, scalar=True\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/engine/result.py\", line 852, in _only_one_row\n    raise exc.MultipleResultsFound(\n    ...<4 lines>...\n    )\nsqlalchemy.exc.MultipleResultsFound: Multiple rows were found when exactly one was required\n",
+  "cleanup_codes": [
+    0,
+    0
+  ],
+  "database_owned_after": false,
+  "bystanders_preserved": true,
+  "owned_containers_absent": true,
+  "source_hashes_after": {
+    "scripts/start-personal-phase2-offline.sh": "a3bd66c964710e44f6e642a06b04169f6771459752a5bc28fbb12cea6c9f31d0",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "81d7392a96ae9c2d6cc45abdb6936b848d807c9cc919177757ff7c89218c93f6",
+    "workers/personal_tasks.py": "f01d7a506d2a8a3db319135fcfd70ada34557daca5756ef4602496730e24d374",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "c8e1c67713d2c9d776938202b86c6dfe28b8af80f8ac4052368fb23c36a97464",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "source_drift": []
+}

@@ -1,0 +1,92 @@
+{
+  "beat": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "beat",
+      "--loglevel=INFO",
+      "--schedule",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch-schedule",
+      "--pidfile",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch.pid"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch-schedule --pidfile /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch.pid",
+    "created": "Sun Oct  4 02:37:18 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 17668,
+    "pid": 17668,
+    "started_utc": "2026-10-04T09:37:18.651613+00:00",
+    "stopped_utc": "2026-10-04T09:37:20.267220+00:00"
+  },
+  "prior_beat": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "beat",
+      "--loglevel=INFO",
+      "--schedule",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule-final",
+      "--pidfile",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final.pid"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule-final --pidfile /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final.pid",
+    "created": "Sun Oct  4 01:35:56 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 67486,
+    "pid": 67486,
+    "started_utc": "2026-10-04T08:35:56.053644+00:00",
+    "stopped_utc": "2026-10-04T08:35:57.801982+00:00"
+  },
+  "prior_worker": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "worker",
+      "--loglevel=INFO",
+      "--pool=solo",
+      "--queues=pipeline",
+      "--hostname=phase4a-a1952a864e82@localhost",
+      "--without-gossip",
+      "--without-mingle"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-a1952a864e82@localhost --without-gossip --without-mingle",
+    "created": "Sun Oct  4 01:35:56 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 67482,
+    "pid": 67482,
+    "started_utc": "2026-10-04T08:35:56.023520+00:00",
+    "stopped_utc": "2026-10-04T08:35:58.500043+00:00"
+  },
+  "worker": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "celery",
+      "-A",
+      "workers.celery_app.celery_app",
+      "worker",
+      "--loglevel=INFO",
+      "--pool=solo",
+      "--queues=pipeline",
+      "--hostname=phase4a-accepted-a1952a864e82@localhost",
+      "--without-gossip",
+      "--without-mingle"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-accepted-a1952a864e82@localhost --without-gossip --without-mingle",
+    "created": "Sun Oct  4 02:37:18 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 17658,
+    "pid": 17658,
+    "started_utc": "2026-10-04T09:37:18.625012+00:00",
+    "stopped_utc": "2026-10-04T09:37:21.067155+00:00"
+  }
+}

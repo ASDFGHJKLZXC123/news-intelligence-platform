@@ -1,0 +1,380 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make compose-config
+/Applications/Xcode.app/Contents/Developer/usr/bin/make lint
+.venv/bin/python -m ruff check .
+All checks passed!
+/Applications/Xcode.app/Contents/Developer/usr/bin/make test-unit
+.venv/bin/python -m pytest -m 'not integration'
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-9.1.0, pluggy-1.6.0
+rootdir: /private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-phase2-orchestration-hh6k_p8m/final-delivery-54248437
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.13.0
+collected 4261 items / 176 deselected / 4085 selected
+
+tests/unit/test_alert_api.py ..........                                  [  0%]
+tests/unit/test_alert_budget.py .............                            [  0%]
+tests/unit/test_alert_episode_gold_dataset.py .......................... [  1%]
+                                                                         [  1%]
+tests/unit/test_alert_episode_gold_schema.py ........................... [  1%]
+.................................................                        [  3%]
+tests/unit/test_alert_experimental_gate.py ..........................    [  3%]
+tests/unit/test_alert_notifications.py ....................              [  4%]
+tests/unit/test_alert_persistence.py ................................... [  5%]
+................................                                         [  5%]
+tests/unit/test_alert_policy.py ........................................ [  6%]
+................................................................         [  8%]
+tests/unit/test_alert_supersession.py ................                   [  8%]
+tests/unit/test_alert_worker.py ..................                       [  9%]
+tests/unit/test_analogy_api.py ................                          [  9%]
+tests/unit/test_analogy_compatibility.py ............................... [ 10%]
+                                                                         [ 10%]
+tests/unit/test_analogy_evaluation.py .........                          [ 10%]
+tests/unit/test_analogy_gold_set.py ...............                      [ 10%]
+tests/unit/test_analogy_outcomes.py ........                             [ 11%]
+tests/unit/test_analogy_persistence.py ...............                   [ 11%]
+tests/unit/test_analogy_rerank.py ...............................        [ 12%]
+tests/unit/test_analogy_retrieval.py ................................... [ 13%]
+................................                                         [ 13%]
+tests/unit/test_analogy_service.py ..............                        [ 14%]
+tests/unit/test_analogy_worker.py .....................                  [ 14%]
+tests/unit/test_api_key_middleware.py .........                          [ 14%]
+tests/unit/test_celery_config.py .........                               [ 15%]
+tests/unit/test_clustering_task.py .......                               [ 15%]
+tests/unit/test_company_research_contract.py ........                    [ 15%]
+tests/unit/test_company_research_filing_text.py ..                       [ 15%]
+tests/unit/test_company_research_identity.py ....                        [ 15%]
+tests/unit/test_company_research_industry_context.py ..                  [ 15%]
+tests/unit/test_company_research_peers.py .....                          [ 15%]
+tests/unit/test_company_research_refresh_policy.py ...                   [ 15%]
+tests/unit/test_company_research_token_strategy.py ....                  [ 16%]
+tests/unit/test_config.py ..................................             [ 16%]
+tests/unit/test_country_context.py ..                                    [ 16%]
+tests/unit/test_crisis_model_baseline.py .....                           [ 17%]
+tests/unit/test_crisis_model_calibration.py ....                         [ 17%]
+tests/unit/test_crisis_model_contract.py ..........                      [ 17%]
+tests/unit/test_crisis_model_critic_report.py ....                       [ 17%]
+tests/unit/test_crisis_model_ensemble.py ...                             [ 17%]
+tests/unit/test_crisis_model_evaluation.py ...                           [ 17%]
+tests/unit/test_crisis_model_event_shock.py .....                        [ 17%]
+tests/unit/test_crisis_model_historical.py ....                          [ 17%]
+tests/unit/test_crisis_model_signals.py .....                            [ 17%]
+tests/unit/test_data_providers.py ......                                 [ 18%]
+tests/unit/test_database_operations_artifacts.py .......                 [ 18%]
+tests/unit/test_database_role_provisioning_artifacts.py .......          [ 18%]
+tests/unit/test_degraded_path_drills.py ..                               [ 18%]
+tests/unit/test_descriptive_exposure.py .....                            [ 18%]
+tests/unit/test_embedding_provider.py .................................. [ 19%]
+............                                                             [ 19%]
+tests/unit/test_embedding_service.py ................................... [ 20%]
+                                                                         [ 20%]
+tests/unit/test_embedding_snapshot_registry.py ......................... [ 21%]
+.                                                                        [ 21%]
+tests/unit/test_embedding_text.py ...............                        [ 21%]
+tests/unit/test_energy_signals.py ..                                     [ 21%]
+tests/unit/test_entities_api.py ..                                       [ 21%]
+tests/unit/test_entity_identity_gleif.py ...........                     [ 22%]
+tests/unit/test_entity_link_adjudication.py ...................          [ 22%]
+tests/unit/test_entity_linking_gold_dataset.py .................         [ 22%]
+tests/unit/test_entity_linking_gold_schema.py .......................... [ 23%]
+.............                                                            [ 23%]
+tests/unit/test_entity_redirects.py .....................                [ 24%]
+tests/unit/test_entity_resolution.py ....                                [ 24%]
+tests/unit/test_episode_corpus.py ...................................... [ 25%]
+......                                                                   [ 25%]
+tests/unit/test_episode_seed.py ..........................               [ 26%]
+tests/unit/test_event_entity_linking_pipeline.py ....................... [ 26%]
+......                                                                   [ 26%]
+tests/unit/test_event_entity_links.py ................                   [ 27%]
+tests/unit/test_evidence_graph.py ..                                     [ 27%]
+tests/unit/test_expansion_providers.py ............                      [ 27%]
+tests/unit/test_health.py ................                               [ 28%]
+tests/unit/test_http_rss_provider.py ......                              [ 28%]
+tests/unit/test_http_wire.py ....................                        [ 28%]
+tests/unit/test_identity_refresh_tasks.py .....................          [ 29%]
+tests/unit/test_ingestion.py .....                                       [ 29%]
+tests/unit/test_intelligence_api.py .................................... [ 30%]
+...........................                                              [ 30%]
+tests/unit/test_jobs.py .........                                        [ 31%]
+tests/unit/test_llm_contracts.py ....................................... [ 31%]
+........................................................................ [ 33%]
+........................................................................ [ 35%]
+........................................................................ [ 37%]
+........................................................................ [ 39%]
+..........                                                               [ 39%]
+tests/unit/test_llm_orchestrator.py .................................... [ 40%]
+........................................................................ [ 41%]
+..............                                                           [ 42%]
+tests/unit/test_llm_quality_canary.py .................                  [ 42%]
+tests/unit/test_llm_repository.py ....                                   [ 42%]
+tests/unit/test_llm_shadow_cost.py ...................                   [ 43%]
+tests/unit/test_llm_shadow_evaluation.py ...............                 [ 43%]
+tests/unit/test_logging_metrics.py ...                                   [ 43%]
+tests/unit/test_models.py ..................................             [ 44%]
+tests/unit/test_news_entity_linking.py ................................. [ 45%]
+........................................................................ [ 47%]
+......................                                                   [ 47%]
+tests/unit/test_news_review_queue.py ................................    [ 48%]
+tests/unit/test_nlp.py .....................                             [ 48%]
+tests/unit/test_nlp_assertions.py ............................           [ 49%]
+tests/unit/test_nlp_mentions.py ...................                      [ 50%]
+tests/unit/test_pagination_queries.py ......................             [ 50%]
+tests/unit/test_parent_exposure.py .....................                 [ 51%]
+tests/unit/test_personal_claims.py ...............                       [ 51%]
+tests/unit/test_personal_contracts.py .........                          [ 51%]
+tests/unit/test_personal_exports.py .                                    [ 51%]
+tests/unit/test_personal_live_smoke.py ....................              [ 52%]
+tests/unit/test_personal_offline_harness.py ........                     [ 52%]
+tests/unit/test_pipeline_coordinator.py .............                    [ 52%]
+tests/unit/test_pipeline_runtime.py .......................              [ 53%]
+tests/unit/test_pipeline_stages.py ...............                       [ 53%]
+tests/unit/test_production_config.py ..............                      [ 54%]
+tests/unit/test_provider_data_api.py ....................                [ 54%]
+tests/unit/test_provider_data_expansion_services.py ...                  [ 54%]
+tests/unit/test_provider_data_services.py ...                            [ 54%]
+tests/unit/test_provider_data_tasks.py ..........                        [ 54%]
+tests/unit/test_providers.py .........                                   [ 55%]
+tests/unit/test_report_api.py ......................                     [ 55%]
+tests/unit/test_report_budget.py .............                           [ 55%]
+tests/unit/test_report_composition.py ................                   [ 56%]
+tests/unit/test_report_consistency.py ........                           [ 56%]
+tests/unit/test_report_content_policy_migration.py ..                    [ 56%]
+tests/unit/test_report_context.py .........                              [ 56%]
+tests/unit/test_report_copyright.py ............                         [ 57%]
+tests/unit/test_report_evidence.py .......................               [ 57%]
+tests/unit/test_report_export.py .......................                 [ 58%]
+tests/unit/test_report_export_api.py ...........                         [ 58%]
+tests/unit/test_report_generation.py ................................    [ 59%]
+tests/unit/test_report_grounding.py ....................                 [ 59%]
+tests/unit/test_report_hotness.py ...................................... [ 60%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 69%]
+........................................................................ [ 71%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 83%]
+                                                                         [ 83%]
+tests/unit/test_report_lifecycle.py .................................... [ 84%]
+.......................                                                  [ 85%]
+tests/unit/test_report_material.py ....................                  [ 85%]
+tests/unit/test_report_parallels.py ....................                 [ 86%]
+tests/unit/test_report_prompts.py ..........                             [ 86%]
+tests/unit/test_report_schedule.py ..............                        [ 86%]
+tests/unit/test_report_selection.py .................................... [ 87%]
+.....                                                                    [ 87%]
+tests/unit/test_report_window.py .......................                 [ 88%]
+tests/unit/test_report_worker.py .......................                 [ 88%]
+tests/unit/test_risk_intelligence_api.py ...                             [ 88%]
+tests/unit/test_sec_company_identity.py ................................ [ 89%]
+........                                                                 [ 89%]
+tests/unit/test_signal_fusion.py ....                                    [ 89%]
+tests/unit/test_stage1_schema.py ..................................      [ 90%]
+tests/unit/test_stage6_schema.py ......                                  [ 90%]
+tests/unit/test_stage8_gold_datasets.py .................                [ 91%]
+tests/unit/test_stage9_alert_validation.py ..........................    [ 91%]
+tests/unit/test_stage9_analogy_validation.py ................            [ 92%]
+tests/unit/test_stage9_calibration.py .................................. [ 93%]
+...........                                                              [ 93%]
+tests/unit/test_stage9_clustering_calibration.py ....................... [ 94%]
+......................................                                   [ 94%]
+tests/unit/test_stage9_entity_linking_calibration.py ................... [ 95%]
+.........................                                                [ 96%]
+tests/unit/test_stage9_entity_linking_final.py ......................... [ 96%]
+........                                                                 [ 96%]
+tests/unit/test_stage9_freeze.py ....................................... [ 97%]
+...........                                                              [ 98%]
+tests/unit/test_stage9_v2.py ................                            [ 98%]
+tests/unit/test_stage9_v2_review_packets.py .............                [ 98%]
+tests/unit/test_stage_kernel_benchmark.py ..                             [ 98%]
+tests/unit/test_wikidata_identity_ingestion.py ..................        [ 99%]
+tests/unit/test_wikidata_provider.py ..............................      [100%]
+
+==================== 4085 passed, 176 deselected in 24.37s =====================
+/Applications/Xcode.app/Contents/Developer/usr/bin/make test-frontend
+node --test frontend/app/*.test.js
+✔ CommonJS + browser export, no data side effects at eval (0.899375ms)
+✔ toNyDisplayIso converts UTC-Z to America/New_York with correct DST offset (22.186083ms)
+✔ alert lifecycle states map to the UI triad (0.091292ms)
+✔ mappers align with types.ts and apply safe defaults (3.022ms)
+✔ evidence mapping preserves only the retained snippet and validates source protocols (0.19425ms)
+✔ risk detail stays descriptive when prediction-backed fields are gated off (0.076458ms)
+✔ safe defaults for an unscored live event (0.225375ms)
+✔ industries and list-companies expose honest unknown/null defaults, never fixtures (0.116833ms)
+✔ radar deltas are computed only from real history, else null (0.080042ms)
+✔ reachable snapshot: every field present, blocks merged, metadata attached (2.874583ms)
+✔ one failed endpoint does not erase successful blocks; request_id captured (1.204833ms)
+✔ request_id falls back to the X-Request-ID header when body has no envelope (1.037416ms)
+✔ paginates across pages using the real total (8.692292ms)
+✔ over-cap pagination marks the block partial and records a truncation, never silent (16.896875ms)
+✔ evidence comes from real drawer links; a 404 brief is an honest empty source (0.814583ms)
+✔ latest-brief and nested claim failures degrade evidence instead of disappearing (1.485333ms)
+✔ reachable API with failed history yields empty series, never a fake curve (0.898208ms)
+✔ total API-unreachable stays real and contains no fixture content (0.315375ms)
+✔ all HTTP failures are a first-load error while healthy empty responses are successful (0.30275ms)
+✔ demo snapshot requires an explicit demo request (0.182083ms)
+✔ buildFixtureSnapshot is pure and self-contained (0.063834ms)
+✔ company-research batching requests every identifier exactly once (mismatched lengths) (2.986125ms)
+✔ company-research alias fallback on 404 and match-by-ticker (0.141958ms)
+✔ company-research enrichment failure is partial, never erases companies (0.905625ms)
+✔ personal client scopes queries and maps wire keys before pages see them (0.3095ms)
+✔ personal protected writes use only an explicit tab key and start accepts no date/body (0.111833ms)
+✔ personal mutation failure rejects with visible safe details and cannot look successful (0.209625ms)
+✔ personal reports, evidence, and exports remain pinned to the selected report UUID (0.072541ms)
+✔ personal run poller allows one status request at a time and stops at terminal (6.433833ms)
+✔ adapter source carries the required literal // SYNTHETIC: tags (0.301708ms)
+✔ HTML keeps the classic adapter before the real-first data controller (1.275416ms)
+✔ default boot is real and never requests fixture files (28.3855ms)
+✔ unreachable API publishes a real error and no sample content (1.226666ms)
+✔ a degraded refresh preserves prior data and its successful fetch time (0.705667ms)
+✔ pending real response cannot populate an explicitly selected demo (1.171417ms)
+✔ pending demo response cannot populate real after a mode switch (0.851083ms)
+✔ mode changes clear displayed collections before the next mode resolves (0.690833ms)
+✔ the loader owns no backend routes or wire-shape keys (0.166333ms)
+✔ qualityMeta: live/unknown -> null (no badge noise); non-live -> labelled (0.564375ms)
+✔ isNonLive only flags partial/synthetic/empty (0.07825ms)
+✔ blockQuality reads the registry, then the block's dataQuality tag, else '' (0.082334ms)
+✔ aggregateQuality picks the most-concerning non-live block (empty > partial > synthetic) (0.119417ms)
+✔ isDemo / isDegraded gate the two global surfaces (never both) (0.098625ms)
+✔ requestIds returns only distinct, non-null ids (never fabricated) (0.518334ms)
+✔ errorSummaries dedupes, caps, keeps request ids, and never exposes endpoints (0.136833ms)
+✔ value formatters: null/absent -> dash, never a fabricated zero (21.41025ms)
+✔ horizonLabel maps canonical tokens, passes friendly labels through, dashes null (0.576333ms)
+✔ module exports both a browser global and CommonJS (adapter pattern) (0.129333ms)
+✔ HTML loads data-quality.js as a classic script before the JSX that consumes it (0.13625ms)
+✔ the global demo/degraded surface is mounted once and gated by mode (0.198167ms)
+✔ badge renders nothing for a live block (live stays quiet, no badge noise) (0.092375ms)
+✔ degraded notice surfaces request IDs under a human label, not a wire key (0.067458ms)
+✔ the new surfaces carry accessible semantics (0.104ms)
+✔ every route that renders a top-level block has a visible badge path (2.724417ms)
+✔ dashboard Risk Level card never fabricates a model rating (Stage 7 regression) (0.247917ms)
+✔ narrow layout: page-head actions row is scoped to a sibling div, so a sole .titles stays stacked (Stage 7 browser regression) (0.183417ms)
+✔ data-quality.js carries no backend endpoints or wire keys (that boundary is the adapter's) (0.173959ms)
+✔ Today keeps partial workspace and history read failures visible (1.36525ms)
+✔ capture coverage shows useful recorded counts without schema or diagnostic arrays (1.605875ms)
+✔ hash routes preserve personal aliases, event ids, and deferred destinations (1.24775ms)
+✔ personal navigation and command palette advertise only Today, Saved, Briefs, and stories (0.117292ms)
+✔ evidence drawer renders the retained excerpt as escaped React text and activates only HTTP(S) (0.150209ms)
+✔ demo is persistently labelled and all personal mutations are gated out of demo (0.163541ms)
+✔ freshness labels keep publication, display fetch, and processing success distinct (0.159667ms)
+✔ Today implements server filters, previous-run selection, quiet results, and explicit retry (0.16875ms)
+✔ persistent saves use confirmed responses and preserve unavailable pointers (0.110958ms)
+✔ detail and briefs keep frozen scope, report identity, citations, and exports explicit (0.309208ms)
+✔ late personal responses are isolated by current filter, route, and mode identity (0.107875ms)
+✔ access key is tab-memory only and setup does not silently configure owner or feeds (0.159208ms)
+✔ personal page loads before the router and legacy prototype files remain included (0.065917ms)
+✔ URL API override accepts explicit credential-free loopback only (2.789167ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 141.572459
+/Applications/Xcode.app/Contents/Developer/usr/bin/make benchmark-stage-kernels
+{"decision":"pass","external_io":{"broker":false,"database":false,"files_written":false,"network":false,"redis":false},"interpretation":"Structural work amplification is gated; compare p50/p95 only on equivalent hosts. Production database/network latency requires an environment-specific SLO run.","iterations":10,"schema":"production-stage-kernel-benchmark.v1","structural_checks":[{"passed":true,"workload":"ingestion"},{"passed":true,"workload":"embedding"},{"passed":true,"workload":"clustering"},{"passed":true,"workload":"pipeline_adapters"}],"timing_gate_enforced":false,"warmup_iterations":2,"workload_version":"stage10-fixed-small.v1","workloads":{"clustering":{"structure":{"cluster_count":4,"cluster_sizes":[6,6,6,6],"input_items":24,"pair_comparisons":276},"timing":{"max_ns":34932375,"mean_ns":34471212.5,"min_ns":34334167,"p50_ns":34405396,"p95_ns":34545625,"samples":10,"units_per_second":696.2331249589785}},"embedding":{"structure":{"batch_sizes":[16,16,16,16],"dimension":1536,"input_texts":64,"provider_calls":4,"vectors":64},"timing":{"max_ns":17176542,"mean_ns":17089971.0,"min_ns":17045500,"p50_ns":17080417,"p95_ns":17130084,"samples":10,"units_per_second":3744.8864015041336}},"ingestion":{"structure":{"duplicate_items":10,"input_items":200,"mapped_rows":190,"new_items":190},"timing":{"max_ns":2676625,"mean_ns":2569670.8,"min_ns":2538750,"p50_ns":2553500,"p95_ns":2601666,"samples":10,"units_per_second":77830.9813070219}},"pipeline_adapters":{"structure":{"pipeline_state":"succeeded","stage_count":7,"task_calls":{"analogies":4,"article_embeddings":1,"clustering":1,"daily_brief":1,"entity_linking":4,"event_embeddings":1,"ingestion":3},"total_task_calls":15},"timing":{"max_ns":129959,"mean_ns":119387.7,"min_ns":112500,"p50_ns":118687,"p95_ns":124375,"samples":10,"units_per_second":125641.08362921808}}}}
+/Applications/Xcode.app/Contents/Developer/usr/bin/make test-integration-fresh
+>> starting disposable Postgres (project=nip-ephemeral-20260909193425-85769-19148, automatic host port)
+ Network nip-ephemeral-20260909193425-85769-19148_default Creating 
+ Network nip-ephemeral-20260909193425-85769-19148_default Created 
+ Volume nip-ephemeral-20260909193425-85769-19148_pgdata Creating 
+ Volume nip-ephemeral-20260909193425-85769-19148_pgdata Created 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Creating 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Created 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Starting 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Started 
+>> waiting for readiness
+>> disposable Postgres is ready on host port 55030
+>> migrating blank database to head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, create pgvector extension
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, core schema: pipeline + canonical crisis-model tables
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, provider data integration storage
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, provider expansion storage tables
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, enable postgis extension
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, company master tables
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, ingestion observability tables
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, evidence and claim tables
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, event intelligence tables
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, provider provenance columns
+INFO  [alembic.runtime.migration] Running upgrade 0010 -> 0011, risk output tables
+INFO  [alembic.runtime.migration] Running upgrade 0011 -> 0012, application tables
+INFO  [alembic.runtime.migration] Running upgrade 0012 -> 0013, intelligence contract schema
+INFO  [alembic.runtime.migration] Running upgrade 0013 -> 0014, llm raw_output, contract score precision, and analogy scale reconciliation
+INFO  [alembic.runtime.migration] Running upgrade 0014 -> 0015, alert condition state and alert peak severity
+INFO  [alembic.runtime.migration] Running upgrade 0015 -> 0016, events.hotness_score
+INFO  [alembic.runtime.migration] Running upgrade 0016 -> 0017, Expand embedding persistence for immutable model snapshots.
+INFO  [alembic.runtime.migration] Running upgrade 0017 -> 0018, Add durable lifecycle details for the manual daily pipeline.
+INFO  [alembic.runtime.migration] Running upgrade 0018 -> 0019, Add a durable Gate-G content policy marker to reports.
+INFO  [alembic.runtime.migration] Running upgrade 0019 -> 0020, Add the personal news desk schema without rewriting legacy data.
+>> running integration suite
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-9.1.0, pluggy-1.6.0
+rootdir: /private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-phase2-orchestration-hh6k_p8m/final-delivery-54248437
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.13.0
+collected 4261 items / 4085 deselected / 176 selected
+
+tests/integration/test_alembic_smoke.py .                                [  0%]
+tests/integration/test_alert_delivery_durability.py .....                [  3%]
+tests/integration/test_analogy_persistence_pgvector.py ........          [  7%]
+tests/integration/test_analogy_retrieval_pgvector.py ........            [ 12%]
+tests/integration/test_application_schema_smoke.py .                     [ 13%]
+tests/integration/test_clustering_smoke.py ..                            [ 14%]
+tests/integration/test_company_master_schema_smoke.py .                  [ 14%]
+tests/integration/test_core_schema_smoke.py .                            [ 15%]
+tests/integration/test_daily_pipeline_vertical_slice.py .                [ 15%]
+tests/integration/test_database_role_hardening.py .                      [ 16%]
+tests/integration/test_embedding_snapshot_expand_migration.py ...        [ 18%]
+tests/integration/test_entity_identity_pipeline.py ........              [ 22%]
+tests/integration/test_event_entity_linking_pipeline.py .........        [ 27%]
+tests/integration/test_event_intelligence_schema_smoke.py .              [ 28%]
+tests/integration/test_evidence_schema_smoke.py .                        [ 28%]
+tests/integration/test_ingestion_observability_schema_smoke.py .         [ 29%]
+tests/integration/test_ingestion_smoke.py .                              [ 30%]
+tests/integration/test_llm_runtime_repository.py ..                      [ 31%]
+tests/integration/test_personal_brief_api.py .                           [ 31%]
+tests/integration/test_personal_brief_generation.py ......               [ 35%]
+tests/integration/test_personal_coordinator.py .....                     [ 38%]
+tests/integration/test_personal_phase2.py ...                            [ 39%]
+tests/integration/test_personal_run_claim_snapshot.py ......             [ 43%]
+tests/integration/test_personal_worker.py ...........                    [ 49%]
+tests/integration/test_personal_writer_mode.py ...                       [ 51%]
+tests/integration/test_pgvector_smoke.py .                               [ 51%]
+tests/integration/test_postgis_smoke.py .                                [ 52%]
+tests/integration/test_provider_provenance_schema_smoke.py .             [ 52%]
+tests/integration/test_risk_output_schema_smoke.py .                     [ 53%]
+tests/integration/test_score_precision_migration.py ...                  [ 55%]
+tests/integration/test_stage1_migration.py ..                            [ 56%]
+tests/integration/test_stage6_brief_selection.py .......                 [ 60%]
+tests/integration/test_stage6_context_joins.py ......                    [ 63%]
+tests/integration/test_stage6_export.py .......                          [ 67%]
+tests/integration/test_stage6_generation.py ....                         [ 69%]
+tests/integration/test_stage6_lifecycle.py .........                     [ 75%]
+tests/integration/test_stage6_report_api.py .........                    [ 80%]
+tests/integration/test_stage7_api_contract.py .......................... [ 94%]
+.........                                                                [100%]
+
+=============== 176 passed, 4085 deselected in 93.85s (0:01:33) ================
+>> tearing down disposable Postgres (including its volume)
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Stopping 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Stopped 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Removing 
+ Container nip-ephemeral-20260909193425-85769-19148-postgres-1 Removed 
+ Network nip-ephemeral-20260909193425-85769-19148_default Removing 
+ Volume nip-ephemeral-20260909193425-85769-19148_pgdata Removing 
+ Volume nip-ephemeral-20260909193425-85769-19148_pgdata Removed 
+ Network nip-ephemeral-20260909193425-85769-19148_default Removed 
+>> cleanup verified: no project containers, volumes, networks, or images remain
+/Applications/Xcode.app/Contents/Developer/usr/bin/make audit
+.venv/bin/python -m pip_audit -r requirements-dev.txt
+No known vulnerabilities found

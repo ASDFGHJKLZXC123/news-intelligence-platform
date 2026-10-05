@@ -1,0 +1,46 @@
+{
+  "APP_ENV": "test",
+  "credential_fields_cleared": [
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "FRED_API_KEY",
+    "EIA_API_KEY",
+    "NASA_FIRMS_MAP_KEY",
+    "API_KEY"
+  ],
+  "checks": {
+    "unit": {
+      "command": [
+        ".venv/bin/pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/unit/test_personal_spending.py",
+        "tests/unit/test_personal_settings.py"
+      ],
+      "exit_code": 0,
+      "output": ".......................................................                  [100%]\n55 passed in 0.71s\n"
+    },
+    "lint": {
+      "command": [
+        ".venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "."
+      ],
+      "exit_code": 0,
+      "output": "All checks passed!\n"
+    },
+    "diff-check": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": ""
+    }
+  }
+}

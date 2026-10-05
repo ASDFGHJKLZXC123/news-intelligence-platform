@@ -1,0 +1,424 @@
+{
+  "after": {
+    "databases": [
+      {
+        "name": "nip_phase4a_backup_source_a1952a864e82",
+        "oid": 170581
+      },
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "nip_phase4a_celery2_a1952a864e82",
+        "oid": 137744
+      },
+      {
+        "name": "nip_phase4a_celery_a1952a864e82",
+        "oid": 88512
+      },
+      {
+        "name": "nip_phase4a_celery_final_a1952a864e82",
+        "oid": 334668
+      },
+      {
+        "name": "nip_phase4a_child_a1952a864e82",
+        "oid": 88513
+      },
+      {
+        "name": "nip_phase4a_child_final_a1952a864e82",
+        "oid": 334669
+      },
+      {
+        "name": "nip_phase4a_concurrent_a1952a864e82",
+        "oid": 337951
+      },
+      {
+        "name": "nip_phase4a_manual_a1952a864e82",
+        "oid": 91794
+      },
+      {
+        "name": "nip_phase4a_manual_final_a1952a864e82",
+        "oid": 334671
+      },
+      {
+        "name": "nip_phase4a_restored_a1952a864e82",
+        "oid": 170582
+      },
+      {
+        "name": "nip_phase4a_template_a1952a864e82",
+        "oid": 85230
+      },
+      {
+        "name": "nip_phase4a_ui_a1952a864e82",
+        "oid": 88514
+      },
+      {
+        "name": "nip_phase4a_ui_final_a1952a864e82",
+        "oid": 334670
+      },
+      {
+        "name": "nip_phase4a_ui_retry_a1952a864e82",
+        "oid": 144321
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "all_owned_databases_removed": true,
+  "before": {
+    "databases": [
+      {
+        "name": "nip_phase4a_backup_source_a1952a864e82",
+        "oid": 170581
+      },
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "nip_phase4a_celery2_a1952a864e82",
+        "oid": 137744
+      },
+      {
+        "name": "nip_phase4a_celery_a1952a864e82",
+        "oid": 88512
+      },
+      {
+        "name": "nip_phase4a_celery_final_a1952a864e82",
+        "oid": 334668
+      },
+      {
+        "name": "nip_phase4a_child_a1952a864e82",
+        "oid": 88513
+      },
+      {
+        "name": "nip_phase4a_child_final_a1952a864e82",
+        "oid": 334669
+      },
+      {
+        "name": "nip_phase4a_concurrent_a1952a864e82",
+        "oid": 337951
+      },
+      {
+        "name": "nip_phase4a_manual_a1952a864e82",
+        "oid": 91794
+      },
+      {
+        "name": "nip_phase4a_manual_final_a1952a864e82",
+        "oid": 334671
+      },
+      {
+        "name": "nip_phase4a_restored_a1952a864e82",
+        "oid": 170582
+      },
+      {
+        "name": "nip_phase4a_template_a1952a864e82",
+        "oid": 85230
+      },
+      {
+        "name": "nip_phase4a_ui_a1952a864e82",
+        "oid": 88514
+      },
+      {
+        "name": "nip_phase4a_ui_final_a1952a864e82",
+        "oid": 334670
+      },
+      {
+        "name": "nip_phase4a_ui_retry_a1952a864e82",
+        "oid": 144321
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "container_id": "6d09505d6a0465db867b00eced1cb33a50bfbbfd6f3462f6725a3e1f81f092ab",
+  "databases": [
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_d1b414ff1af84a2e99482a315affd3ab",
+      "oid": 361002
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_be1239b4af544c31ac5c2345a467ee23",
+      "oid": 364282
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_52f3cec111134f37a5908dc028d4edac",
+      "oid": 367562
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_efdcb83da7ee43d697c48b74d9b83410",
+      "oid": 370843
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_e5df21c4e7d84e55a35ad425bf4ec7ce",
+      "oid": 374127
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_bb03bb66ab8c4b2c82c5f1e46601e057",
+      "oid": 377411
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0a67aa2c484b461b8fe043dbf8dbcede",
+      "oid": 380691
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_64b961210b584b1eb1f821fb50eb708f",
+      "oid": 383971
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0e80a63a54cc42cb92e7542fe528233a",
+      "oid": 387251
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_53b8856e956e47c08242f2ddb9bd4186",
+      "oid": 390531
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ebd9c8ce47444aa1af9a6d48f8c1d34c",
+      "oid": 393811
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_429d71da06ea4dddbbbc438a5bd5e6e9",
+      "oid": 397091
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_79b0909fd3414e28b1ea3cc27b18c547",
+      "oid": 400371
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_2723854c069d45cd81205515e95a9249",
+      "oid": 403651
+    }
+  ],
+  "inventory_unchanged": true,
+  "roles": []
+}

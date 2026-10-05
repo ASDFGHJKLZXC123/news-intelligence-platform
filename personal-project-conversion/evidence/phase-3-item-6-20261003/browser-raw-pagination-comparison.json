@@ -1,0 +1,406 @@
+{
+  "schema": "item6-native-browser-raw-pagination-comparison.v1",
+  "snapshot": "fixture-browser-pages-before-failures.json",
+  "snapshot_sha256": "bd81ac270b05dcb4abbaa7d1ec3471c66270e21ec324d001e66c9d6eda473776",
+  "pages": [
+    {
+      "page": 1,
+      "offset": 0,
+      "limit": 12,
+      "total": 26,
+      "native_capture": "browser/raw-page-1.dom.txt",
+      "native_sha256": "7d4441a1aa6ff8a184919f1886328d7fa3d6709bde1248e3f31f0b947de34536",
+      "expected_titles": [
+        "Synthetic item 6 technology: retained raw article 08",
+        "Synthetic item 6 policy: retained raw article 06",
+        "Synthetic item 6 technology: retained raw article 11",
+        "Synthetic item 6 policy: retained raw article 11",
+        "Synthetic item 6 policy: retained raw article 10",
+        "Synthetic item 6 technology: retained raw article 12",
+        "Synthetic item 6 policy: retained raw article 02",
+        "Synthetic item 6 policy: retained raw article 07",
+        "Synthetic item 6 technology: retained raw article 10",
+        "Synthetic item 6 policy: retained raw article 12",
+        "Synthetic item 6 technology: retained raw article 04",
+        "Synthetic item 6 technology: retained raw article 05"
+      ],
+      "actual_titles": [
+        "Synthetic item 6 technology: retained raw article 08",
+        "Synthetic item 6 policy: retained raw article 06",
+        "Synthetic item 6 technology: retained raw article 11",
+        "Synthetic item 6 policy: retained raw article 11",
+        "Synthetic item 6 policy: retained raw article 10",
+        "Synthetic item 6 technology: retained raw article 12",
+        "Synthetic item 6 policy: retained raw article 02",
+        "Synthetic item 6 policy: retained raw article 07",
+        "Synthetic item 6 technology: retained raw article 10",
+        "Synthetic item 6 policy: retained raw article 12",
+        "Synthetic item 6 technology: retained raw article 04",
+        "Synthetic item 6 technology: retained raw article 05"
+      ],
+      "title_order_equal": true,
+      "expected_records": [
+        {
+          "id": "0dd35e01-b1e8-4797-98c4-57e0f6c7c077",
+          "title": "Synthetic item 6 technology: retained raw article 08",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/8?utm_source=item6",
+          "published_at": "2026-10-01 17:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "0fdb188b-f62b-4c2c-a98b-08d9ea468fe9",
+          "title": "Synthetic item 6 policy: retained raw article 06",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/6?utm_source=item6",
+          "published_at": "2026-10-01 19:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "15ef1fbf-fafa-46cb-a280-caf7b54e9f59",
+          "title": "Synthetic item 6 technology: retained raw article 11",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/11?utm_source=item6",
+          "published_at": "2026-10-01 14:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "1dd90a10-3d84-4b5c-840c-f0ead154192a",
+          "title": "Synthetic item 6 policy: retained raw article 11",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/11?utm_source=item6",
+          "published_at": "2026-10-01 14:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "430cb293-e1c2-4d14-bf13-b894e358002e",
+          "title": "Synthetic item 6 policy: retained raw article 10",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/10?utm_source=item6",
+          "published_at": "2026-10-01 15:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "4b9f575d-810d-4b8c-ae93-123b42b49842",
+          "title": "Synthetic item 6 technology: retained raw article 12",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/12?utm_source=item6",
+          "published_at": "2026-10-01 13:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "4c0254c7-1f3c-4dbc-9a25-f3ceb2c3a5fe",
+          "title": "Synthetic item 6 policy: retained raw article 02",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/2?utm_source=item6",
+          "published_at": "2026-10-01 23:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "631d69a2-8d18-44c9-bab0-5509aaf3a6c7",
+          "title": "Synthetic item 6 policy: retained raw article 07",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/7?utm_source=item6",
+          "published_at": "2026-10-01 18:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "702dd1bd-6d0c-4111-ab2a-7250a4f17eb8",
+          "title": "Synthetic item 6 technology: retained raw article 10",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/10?utm_source=item6",
+          "published_at": "2026-10-01 15:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "7fbaee71-957d-4878-97eb-80da25f9bdc9",
+          "title": "Synthetic item 6 policy: retained raw article 12",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/12?utm_source=item6",
+          "published_at": "2026-10-01 13:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "8075f6f8-d3a6-45e7-b740-057ed24dc8bc",
+          "title": "Synthetic item 6 technology: retained raw article 04",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/4?utm_source=item6",
+          "published_at": "2026-10-01 21:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "8bec495e-9c34-4073-8e5b-a54982bb90a2",
+          "title": "Synthetic item 6 technology: retained raw article 05",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/5?utm_source=item6",
+          "published_at": "2026-10-01 20:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        }
+      ],
+      "field_scope": "Exact title order is observed in native DOM; expected per-record fields identify retained API/service records and are not claims of unobserved DOM values."
+    },
+    {
+      "page": 2,
+      "offset": 12,
+      "limit": 12,
+      "total": 26,
+      "native_capture": "browser/raw-page-2.dom.txt",
+      "native_sha256": "049ff6db6f00d510fe921e1dff8cb55eab28ac9048807a9b1706140c84c063e4",
+      "expected_titles": [
+        "Synthetic item 6 policy: retained raw article 01",
+        "Synthetic item 6 policy: retained raw article 13",
+        "Synthetic item 6 technology: retained raw article 01",
+        "Synthetic item 6 technology: retained raw article 13",
+        "Synthetic item 6 technology: retained raw article 03",
+        "Synthetic item 6 technology: retained raw article 09",
+        "Synthetic item 6 policy: retained raw article 08",
+        "Synthetic item 6 technology: retained raw article 02",
+        "Synthetic item 6 policy: retained raw article 09",
+        "Synthetic item 6 policy: retained raw article 03",
+        "Synthetic item 6 technology: retained raw article 06",
+        "Synthetic item 6 technology: retained raw article 07"
+      ],
+      "actual_titles": [
+        "Synthetic item 6 policy: retained raw article 01",
+        "Synthetic item 6 policy: retained raw article 13",
+        "Synthetic item 6 technology: retained raw article 01",
+        "Synthetic item 6 technology: retained raw article 13",
+        "Synthetic item 6 technology: retained raw article 03",
+        "Synthetic item 6 technology: retained raw article 09",
+        "Synthetic item 6 policy: retained raw article 08",
+        "Synthetic item 6 technology: retained raw article 02",
+        "Synthetic item 6 policy: retained raw article 09",
+        "Synthetic item 6 policy: retained raw article 03",
+        "Synthetic item 6 technology: retained raw article 06",
+        "Synthetic item 6 technology: retained raw article 07"
+      ],
+      "title_order_equal": true,
+      "expected_records": [
+        {
+          "id": "9081aec8-2a9d-4cbb-9510-ad6e5b430d88",
+          "title": "Synthetic item 6 policy: retained raw article 01",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/1?utm_source=item6",
+          "published_at": "2026-10-02 00:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "967aea98-ee4e-4a57-b9ca-a5c766e7eb77",
+          "title": "Synthetic item 6 policy: retained raw article 13",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/13?utm_source=item6",
+          "published_at": "2026-10-01 12:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "97abab6e-6dcc-4f0e-a06e-f9c2c30ca31a",
+          "title": "Synthetic item 6 technology: retained raw article 01",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/1?utm_source=item6",
+          "published_at": "2026-10-02 00:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "9ec053b9-5f02-4a7b-933b-c888e018fa5b",
+          "title": "Synthetic item 6 technology: retained raw article 13",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/13?utm_source=item6",
+          "published_at": "2026-10-01 12:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "a365fa9a-de88-4c59-9138-6e14eb66bb4e",
+          "title": "Synthetic item 6 technology: retained raw article 03",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/3?utm_source=item6",
+          "published_at": "2026-10-01 22:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "a530c87b-fb77-447c-a809-ec17143c6005",
+          "title": "Synthetic item 6 technology: retained raw article 09",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/9?utm_source=item6",
+          "published_at": "2026-10-01 16:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "a85dcd0c-f5f1-4790-875c-20a070463b9d",
+          "title": "Synthetic item 6 policy: retained raw article 08",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/8?utm_source=item6",
+          "published_at": "2026-10-01 17:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "b37ed61f-9c58-4b19-91bb-eddf23c1cdf9",
+          "title": "Synthetic item 6 technology: retained raw article 02",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/2?utm_source=item6",
+          "published_at": "2026-10-01 23:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "c95af927-2c62-4db3-8d95-7552e5923091",
+          "title": "Synthetic item 6 policy: retained raw article 09",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/9?utm_source=item6",
+          "published_at": "2026-10-01 16:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "d3341e1a-d9d3-4a11-8212-20c84a1ce0b3",
+          "title": "Synthetic item 6 policy: retained raw article 03",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/3?utm_source=item6",
+          "published_at": "2026-10-01 22:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "dbc95fca-b5aa-4489-8952-787727129ecb",
+          "title": "Synthetic item 6 technology: retained raw article 06",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/6?utm_source=item6",
+          "published_at": "2026-10-01 19:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "e4dcb2bb-f36c-48c9-9aff-de8ca044d523",
+          "title": "Synthetic item 6 technology: retained raw article 07",
+          "source_name": "Synthetic item 6 technology feed",
+          "url": "https://offline.personal.test/item6/technology/7?utm_source=item6",
+          "published_at": "2026-10-01 18:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:12+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        }
+      ],
+      "field_scope": "Exact title order is observed in native DOM; expected per-record fields identify retained API/service records and are not claims of unobserved DOM values."
+    },
+    {
+      "page": 3,
+      "offset": 24,
+      "limit": 12,
+      "total": 26,
+      "native_capture": "browser/raw-page-3.dom.txt",
+      "native_sha256": "123c65b451fdfac74fadbfb59c0975b58a686983807d785aa7a82820b2f7276e",
+      "expected_titles": [
+        "Synthetic item 6 policy: retained raw article 05",
+        "Synthetic item 6 policy: retained raw article 04"
+      ],
+      "actual_titles": [
+        "Synthetic item 6 policy: retained raw article 05",
+        "Synthetic item 6 policy: retained raw article 04"
+      ],
+      "title_order_equal": true,
+      "expected_records": [
+        {
+          "id": "e8062a70-a9af-4f00-8bc5-87b286ef6734",
+          "title": "Synthetic item 6 policy: retained raw article 05",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/5?utm_source=item6",
+          "published_at": "2026-10-01 20:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        },
+        {
+          "id": "f6a85f44-6f73-4fdb-b1a3-65f37bac512d",
+          "title": "Synthetic item 6 policy: retained raw article 04",
+          "source_name": "Synthetic item 6 policy feed",
+          "url": "https://offline.personal.test/item6/policy/4?utm_source=item6",
+          "published_at": "2026-10-01 21:00:57+00:00",
+          "captured_at": "2026-10-02 01:01:10+00:00",
+          "admitted_at": "2026-10-02 01:01:14+00:00",
+          "enrichment_state": "disabled_by_profile",
+          "event_id": null
+        }
+      ],
+      "field_scope": "Exact title order is observed in native DOM; expected per-record fields identify retained API/service records and are not claims of unobserved DOM values."
+    }
+  ],
+  "observed_lengths": [
+    12,
+    12,
+    2
+  ],
+  "unique_observed_titles": 26,
+  "repeat_capture": "browser/raw-pagination-repeat.dom.txt",
+  "repeat_sha256": "c6e7e96783c4463df2ec640ecf0026efd3cc6892491b2e189dab608a444ec3c9",
+  "repeat_exact_order_equal": true,
+  "first_page_stable_observed": true,
+  "grouped_article_id": "a164a192-dd2b-4ae3-a793-7facf7ceeae3",
+  "grouped_article_excluded_from_expected_raw_pages": true,
+  "status": "PASS"
+}

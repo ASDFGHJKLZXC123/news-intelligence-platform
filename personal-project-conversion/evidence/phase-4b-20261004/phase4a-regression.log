@@ -1,0 +1,121 @@
+.........................................F..                             [100%]
+=================================== FAILURES ===================================
+_ test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x11343f150>
+
+    def test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost(
+        monkeypatch,
+    ):
+        with migrated_disposable_engine() as engine:
+            workspace_id, profile_id, _ = _configured_workspace(engine, route=model_route())
+            observed_requests = []
+            delivery = {}
+    
+            def observe_send(role, factory):
+                payload = calls[-1][1]
+                with factory() as session:
+                    row = session.scalar(
+                        select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+                    )
+                    run = session.get(PersonalRun, row.run_id)
+                    route = PaidRoute.from_mapping(model_route()[role], role=role)
+                    assert row.workspace_id == run.workspace_id == workspace_id
+                    assert str(row.run_id) == delivery["args"][0]
+                    control = session.get(PersonalWriterMode, True)
+                    assert str(run.ownership_token) != delivery["args"][1]
+                    assert control.active_run_id == run.id
+                    assert control.active_attempt == run.attempt
+                    assert control.ownership_token == run.ownership_token
+                    assert control.delivery_token == uuid.UUID(delivery["args"][1])
+                    assert control.generation == run.fencing_generation
+                    assert row.attempt == run.attempt == 1
+                    assert run.profile_revision_id == profile_id and run.scopes_frozen_at is not None
+                    assert row.role == role and row.route == route.to_mapping()
+                    assert row.input_token_bound == conservative_payload_token_bound(payload)
+                    assert row.output_token_bound == (0 if role == "embedding" else 1000)
+                    assert row.reserved_usd == route.cost(row.input_token_bound, row.output_token_bound)
+                    assert row.actual_usd is None and row.dispatch_attempt_at is not None
+                    if role == "generation":
+                        snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                        assert snapshot.run_id == run.id and snapshot.profile_revision_id == profile_id
+                        assert snapshot.model_route == model_route()
+                    observed_requests.append(row.id)
+    
+            factory, calls, delegates = _runtime(monkeypatch, engine, on_send=observe_send)
+            deliveries = _capture_production_delivery(monkeypatch, factory)
+            with _client(engine) as client:
+                response = client.post("/api/v1/personal/runs")
+                assert response.status_code == 202, response.text
+                assert len(deliveries) == 1
+                delivery["args"] = deliveries[0][1]
+                assert response.json()["run"]["id"] == delivery["args"][0]
+                assert response.json()["run"]["profile_revision_id"] == str(profile_id)
+                assert response.json()["run"]["state"] == "queued"
+    
+            task = celery_app.tasks[deliveries[0][0]]
+            assert task.name == worker.TASK_NAME and task.run == worker.run_personal_daily_task.run
+>           result = task.run(*delivery["args"])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_item5_composed.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+workers/personal_tasks.py:853: in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workers/personal_tasks.py:830: in execute_personal_task
+    return execute(
+services/personal/runner.py:265: in execute_personal_task
+    redis.Redis.from_url(
+.venv/lib/python3.13/site-packages/redis/client.py:170: in from_url
+    connection_pool = ConnectionPool.from_url(url, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/redis/connection.py:1371: in from_url
+    url_options = parse_url(url)
+                  ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = ''
+
+    def parse_url(url):
+        if not (
+            url.startswith("redis://")
+            or url.startswith("rediss://")
+            or url.startswith("unix://")
+        ):
+>           raise ValueError(
+                "Redis URL must specify one of the following "
+                "schemes (redis://, rediss://, unix://)"
+            )
+E           ValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)
+
+.venv/lib/python3.13/site-packages/redis/connection.py:1261: ValueError
+----------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-05T00:07:42.973629+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/runs \"HTTP/1.1 202 Accepted\""}
+{"timestamp": "2026-10-05T00:07:43.024562+00:00", "level": "ERROR", "logger": "services.personal.runner", "message": "personal daily task failed", "job_id": "957cfbbf-aa67-4735-bf73-f4fcf20481ea", "exc_info": "Traceback (most recent call last):\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py\", line 265, in execute_personal_task\n    redis.Redis.from_url(\n    ~~~~~~~~~~~~~~~~~~~~^\n        settings.redis_url,\n        ^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n        retry_on_timeout=False,\n        ^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/client.py\", line 170, in from_url\n    connection_pool = ConnectionPool.from_url(url, **kwargs)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/connection.py\", line 1371, in from_url\n    url_options = parse_url(url)\n  File \"/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/connection.py\", line 1261, in parse_url\n    raise ValueError(\n    ...<2 lines>...\n    )\nValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)", "personal_run_id": "957cfbbf-aa67-4735-bf73-f4fcf20481ea"}
+------------------------------ Captured log call -------------------------------
+INFO     httpx2:_client.py:984 HTTP Request: POST http://testserver/api/v1/personal/runs "HTTP/1.1 202 Accepted"
+ERROR    services.personal.runner:runner.py:355 personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 265, in execute_personal_task
+    redis.Redis.from_url(
+    ~~~~~~~~~~~~~~~~~~~~^
+        settings.redis_url,
+        ^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        retry_on_timeout=False,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/client.py", line 170, in from_url
+    connection_pool = ConnectionPool.from_url(url, **kwargs)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/connection.py", line 1371, in from_url
+    url_options = parse_url(url)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/redis/connection.py", line 1261, in parse_url
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost
+1 failed, 43 passed in 103.57s (0:01:43)

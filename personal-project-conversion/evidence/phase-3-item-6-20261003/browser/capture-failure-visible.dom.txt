@@ -1,0 +1,29 @@
+CAPTURE capture-failure-visibleA newer update did not finish cleanly
+FAILED
+
+Run date 2026-10-02. Personal update failed; an explicit retry may be available.
+
+Last status read Oct 3, 2026, 06:05:21 PM PDT
+Retry this run[
+  'Today',
+  'Retained RSS articles · 27',
+  'Synthetic item 6 policy: retained raw article 14',
+  'Synthetic item 6 technology: retained raw article 08',
+  'Synthetic item 6 policy: retained raw article 06',
+  'Synthetic item 6 technology: retained raw article 11',
+  'Synthetic item 6 policy: retained raw article 11',
+  'Synthetic item 6 policy: retained raw article 10',
+  'Synthetic item 6 technology: retained raw article 12',
+  'Synthetic item 6 policy: retained raw article 02',
+  'Synthetic item 6 policy: retained raw article 07',
+  'Synthetic item 6 technology: retained raw article 10',
+  'Synthetic item 6 policy: retained raw article 12',
+  'Synthetic item 6 technology: retained raw article 04',
+  'Displayed update',
+  'Capture coverage',
+  '1 grouped story',
+  'Synthetic: Agency approves browser verification project'
+]Latest readable result
+2026-10-02 · Failed · attempt 1
+2026-10-01 · Partially failed · attempt 1
+2026-09-30 · Succeeded · attempt 1

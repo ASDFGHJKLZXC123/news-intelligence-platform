@@ -1,0 +1,224 @@
+ 
+ -------------- phase4a-a1952a864e82@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- macOS-26.4.1-arm64-arm-64bit-Mach-O 2026-10-04 01:29:12
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         news_intelligence:0x107506120
+- ** ---------- .> transport:   redis://127.0.0.1:59735/1
+- ** ---------- .> results:     redis://127.0.0.1:59735/2
+- *** --- * --- .> concurrency: 8 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> pipeline         exchange=default(direct) key=default
+                
+
+[tasks]
+  . generate_daily_brief
+  . workers.alert_tasks.run_alert_evaluation
+  . workers.alert_tasks.run_pending_alert_notification_sweep
+  . workers.analogy_tasks.run_event_analogy_rerank
+  . workers.clustering_tasks.run_article_clustering
+  . workers.embedding_tasks.run_article_embedding
+  . workers.embedding_tasks.run_episode_embedding_refresh
+  . workers.embedding_tasks.run_event_embedding
+  . workers.entity_linking_tasks.run_event_entity_linking
+  . workers.ingestion_tasks.ingest_source_feed
+  . workers.personal_tasks.run_personal_daily
+  . workers.pipeline_tasks.run_daily_pipeline
+  . workers.provider_data_tasks.run_country_indicator_ingestion
+  . workers.provider_data_tasks.run_energy_series_ingestion
+  . workers.provider_data_tasks.run_entity_identity_ingestion
+  . workers.provider_data_tasks.run_fred_macro_ingestion
+  . workers.provider_data_tasks.run_gdelt_raw_ingestion
+  . workers.provider_data_tasks.run_geo_incident_ingestion
+  . workers.provider_data_tasks.run_humanitarian_report_ingestion
+  . workers.provider_data_tasks.run_sanctions_ingestion
+  . workers.provider_data_tasks.run_sec_company_ingestion
+  . workers.provider_data_tasks.run_sec_identity_refresh
+  . workers.provider_data_tasks.run_wikidata_identity_ingestion
+  . workers.tasks.noop
+  . workers.tasks.scheduled_heartbeat
+
+[2026-10-04 01:29:12,551: INFO/MainProcess] Connected to redis://127.0.0.1:59735/1
+[2026-10-04 01:29:12,572: INFO/MainProcess] phase4a-a1952a864e82@localhost ready.
+[2026-10-04 01:30:52,238: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[e8c055c1-c57c-4dbb-956c-78befc7f5a3c] received
+[2026-10-04 01:30:52,476: ERROR/MainProcess] personal daily task failed
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/briefs.py", line 713, in generate_personal_brief
+    draft = compose_brief(
+        orchestrator,
+    ...<3 lines>...
+        prediction_backed_outputs_enabled=False,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 958, in compose_brief
+    sections = tuple(
+        _compose_section(orchestrator, inputs=inputs, context=context, material=material_section)
+        for material_section in visible_material
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 959, in <genexpr>
+    _compose_section(orchestrator, inputs=inputs, context=context, material=material_section)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 766, in _compose_section
+    return _compose_generated(
+        orchestrator,
+    ...<28 lines>...
+        ),
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 573, in _compose_generated
+    blocks, telemetry = _run_attempt(
+                        ~~~~~~~~~~~~^
+        orchestrator,
+        ^^^^^^^^^^^^^
+    ...<9 lines>...
+        policy=policy,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 472, in _run_attempt
+    telemetry = _telemetry(
+        outcome, attempt=attempt, word_count=word_count, within_budget=budget.contains(word_count)
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 383, in _telemetry
+    prompt_name=run.prompt_name,
+                ^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 1126, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 828, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 1607, in load_scalar_attributes
+    raise orm_exc.DetachedInstanceError(
+    ...<2 lines>...
+    )
+sqlalchemy.orm.exc.DetachedInstanceError: Instance <LLMRun at 0x10b178050> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 997, in run_personal_daily
+    report = generate_personal_brief(
+        run_id,
+    ...<3 lines>...
+        paid_block_reason=paid_block_reason,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/briefs.py", line 820, in generate_personal_brief
+    raise PersonalBriefGenerationError(
+        report_id, cause, durable_failure_marked=marked
+    ) from cause
+services.personal.briefs.PersonalBriefGenerationError: personal brief 21a65726-38f1-4e52-a195-d4f893f95b6b failed: DetachedInstanceError: Instance <LLMRun at 0x10b178050> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3); durable failure marked: True
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 235, in execute_personal_task
+    result = run_personal_daily(
+        run_id,
+    ...<10 lines>...
+        paid_block_reason=(lambda: ledger.blocked_code) if ledger is not None else None,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 1053, in run_personal_daily
+    raise PersonalCoordinatorError("personal daily workflow failed") from exc
+services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed
+[2026-10-04 01:30:52,491: ERROR/MainProcess] Task workers.personal_tasks.run_personal_daily[e8c055c1-c57c-4dbb-956c-78befc7f5a3c] raised unexpected: PersonalCoordinatorError('personal daily workflow failed')
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/briefs.py", line 713, in generate_personal_brief
+    draft = compose_brief(
+        orchestrator,
+    ...<3 lines>...
+        prediction_backed_outputs_enabled=False,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 958, in compose_brief
+    sections = tuple(
+        _compose_section(orchestrator, inputs=inputs, context=context, material=material_section)
+        for material_section in visible_material
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 959, in <genexpr>
+    _compose_section(orchestrator, inputs=inputs, context=context, material=material_section)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 766, in _compose_section
+    return _compose_generated(
+        orchestrator,
+    ...<28 lines>...
+        ),
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 573, in _compose_generated
+    blocks, telemetry = _run_attempt(
+                        ~~~~~~~~~~~~^
+        orchestrator,
+        ^^^^^^^^^^^^^
+    ...<9 lines>...
+        policy=policy,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 472, in _run_attempt
+    telemetry = _telemetry(
+        outcome, attempt=attempt, word_count=word_count, within_budget=budget.contains(word_count)
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/reports/composition.py", line 383, in _telemetry
+    prompt_name=run.prompt_name,
+                ^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 569, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 1096, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/attributes.py", line 1126, in _fire_loader_callables
+    return state._load_expired(state, passive)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state.py", line 828, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/sqlalchemy/orm/loading.py", line 1607, in load_scalar_attributes
+    raise orm_exc.DetachedInstanceError(
+    ...<2 lines>...
+    )
+sqlalchemy.orm.exc.DetachedInstanceError: Instance <LLMRun at 0x10b178050> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 997, in run_personal_daily
+    report = generate_personal_brief(
+        run_id,
+    ...<3 lines>...
+        paid_block_reason=paid_block_reason,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/briefs.py", line 820, in generate_personal_brief
+    raise PersonalBriefGenerationError(
+        report_id, cause, durable_failure_marked=marked
+    ) from cause
+services.personal.briefs.PersonalBriefGenerationError: personal brief 21a65726-38f1-4e52-a195-d4f893f95b6b failed: DetachedInstanceError: Instance <LLMRun at 0x10b178050> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3); durable failure marked: True
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/celery/app/trace.py", line 585, in trace_task
+    R = retval = fun(*args, **kwargs)
+                 ~~~^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/lib/python3.13/site-packages/celery/app/trace.py", line 858, in __protected_call__
+    return self.run(*args, **kwargs)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 866, in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/workers/personal_tasks.py", line 852, in execute_personal_task
+    return execute(run_id, token, now=now, session_factory=SessionLocal, settings_factory=get_settings, rss_provider_factory=HttpRSSProvider)
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/runner.py", line 235, in execute_personal_task
+    result = run_personal_daily(
+        run_id,
+    ...<10 lines>...
+        paid_block_reason=(lambda: ledger.blocked_code) if ledger is not None else None,
+    )
+  File "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/services/personal/coordinator.py", line 1053, in run_personal_daily
+    raise PersonalCoordinatorError("personal daily workflow failed") from exc
+services.personal.coordinator.PersonalCoordinatorError: personal daily workflow failed
+
+worker: Warm shutdown (MainProcess)

@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_registered_ordinary_worker_publishes_through_durable_guard[None] _____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10a58b230>
+failure = None
+
+    @pytest.mark.parametrize("failure", [None, "embedding_retry", "schema_retry"])
+    def test_registered_ordinary_worker_publishes_through_durable_guard(monkeypatch, failure):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _, _ = _queued(engine)
+            factory, calls, delegates = _runtime(monkeypatch, engine, failure=failure)
+            result = worker.run_personal_daily_task.run(str(run_id), str(token))
+>           assert result["status"] == "succeeded" and result["published"]
+E           AssertionError: assert ('succeeded' == 'succeeded'
+E             
+E               succeeded and False)
+
+tests/integration/test_personal_paid_worker.py:155: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_paid_worker.py::test_registered_ordinary_worker_publishes_through_durable_guard[None]
+1 failed in 2.49s

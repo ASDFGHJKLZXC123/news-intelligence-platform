@@ -1,0 +1,32 @@
+{
+  "counts": {
+    "actual_sessions": 0,
+    "groups": 0,
+    "summaries": 0
+  },
+  "evidence_findings": [],
+  "exclusions": [],
+  "extension_session_ids": [],
+  "group_population": [],
+  "group_sample": [],
+  "history_sequence": 1,
+  "minimums_met": false,
+  "observed_actual_session_ids": [],
+  "original_session_ids": [],
+  "previous_manifest_sha256": null,
+  "sampling_method": "sha256-round-robin-v1",
+  "schema": "personal-samples.v1",
+  "selection_batches": [],
+  "selection_order": {
+    "groups": [],
+    "summaries": []
+  },
+  "state": "provisional",
+  "summary_candidates": [],
+  "summary_population": [],
+  "summary_population_complete": true,
+  "summary_sample": [],
+  "summary_selection_blocked": false,
+  "timezone": "America/Los_Angeles",
+  "trial_id": "fe79058e-52c3-4d1d-b9f0-3f7cf8af2efb"
+}

@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "inventory_unchanged": true,
+  "protected_unchanged": true,
+  "source_drift": [
+    "tests/integration/test_personal_phase4a_faults.py",
+    "tests/unit/test_personal_phase4a_lifecycle.py"
+  ]
+}

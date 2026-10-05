@@ -1,0 +1,466 @@
+{
+  "articles": [
+    {
+      "author": null,
+      "body": null,
+      "content_hash": "7b4bf5616182317b9b95b008d784f491d3ee96f26ae3faeeac1ceaa78afa8ba0",
+      "created_at": "2026-10-04T08:38:28.364323+00:00",
+      "fetched_at": "2026-10-04T08:38:28.364323+00:00",
+      "id": "7cee2e84-4d89-44bb-91f3-d377befa3469",
+      "language": null,
+      "published_at": "2026-09-08T16:00:00+00:00",
+      "raw_payload": {
+        "personal_capture_id": "ed0d31fd-1b29-4d50-abd8-192f37cac366",
+        "personal_field_truncations": [],
+        "personal_truncated": false,
+        "provider_name": "offline-personal-fixture",
+        "schema_version": "rss-item.v1"
+      },
+      "source_id": "b01cbb3f-6e8f-4ef4-837d-0e950130cbd7",
+      "summary": "The agency confirmed the coastal resilience project was approved.",
+      "title": "Agency approves coastal resilience project",
+      "url": "https://offline.personal.test/articles/coastal-resilience",
+      "url_hash": "f5b79b7959c3bf83a082e1dbd0c82eb5b1932fbf820dab322175a06554165942"
+    }
+  ],
+  "events": [
+    {
+      "article_count": 1,
+      "country": null,
+      "created_at": "2026-10-04T08:38:28.457083+00:00",
+      "event_type": null,
+      "first_seen_at": "2026-09-08T16:00:00+00:00",
+      "hotness_score": 29.17,
+      "id": "bf89871b-c470-46c4-9b98-b28f69617194",
+      "last_seen_at": "2026-09-08T16:00:00+00:00",
+      "region": null,
+      "severity_score": 24.7,
+      "source_count": 1,
+      "summary": "The agency confirmed the coastal resilience project was approved.",
+      "title": "Agency approves coastal resilience project",
+      "updated_at": "2026-10-04T08:38:28.457083+00:00"
+    }
+  ],
+  "personal_brief_snapshots": [
+    {
+      "candidate_event_ids": [
+        "bf89871b-c470-46c4-9b98-b28f69617194"
+      ],
+      "id": "3371ca5a-dfc1-411a-8958-9ad34557f917",
+      "input_contract": "personal-brief-input.v1",
+      "input_hash": "0943e68aec7bc516d75090b5cceed8cbe00109c7dba2080038f17c4c63888da5",
+      "input_payload": {
+        "admitted_article_ids": [
+          "7cee2e84-4d89-44bb-91f3-d377befa3469"
+        ],
+        "candidates": [
+          {
+            "event_id": "bf89871b-c470-46c4-9b98-b28f69617194",
+            "observation_id": "3fcb99c1-9ecd-41bf-b990-2cea0fd914c4",
+            "ranking": {
+              "candidate_rank": 1,
+              "hotness": 29.17,
+              "newest_publication_at": "2026-09-08T16:00:00Z",
+              "sort_key": [
+                -1,
+                0,
+                -29.17,
+                0,
+                -1788883200.0,
+                "bf89871b-c470-46c4-9b98-b28f69617194"
+              ],
+              "source_count": 1
+            },
+            "revision": 1,
+            "source_inputs": {
+              "articles": [
+                {
+                  "article_id": "7cee2e84-4d89-44bb-91f3-d377befa3469",
+                  "content_hash": "dd7ed7f6d92c52eace02e45f85ec6ba4576ae6a8963760cf13eae29eac7fcd5d",
+                  "published_at": "2026-09-08T16:00:00Z",
+                  "publisher": "Synthetic Phase 4A owned feed",
+                  "revision_id": "d0a45072-b2bb-4e75-8503-395e1c9e6d29",
+                  "rss_summary": "The agency confirmed the coastal resilience project was approved.",
+                  "source_id": "b01cbb3f-6e8f-4ef4-837d-0e950130cbd7",
+                  "title": "Agency approves coastal resilience project",
+                  "truncated": false,
+                  "url": "https://offline.personal.test/articles/coastal-resilience"
+                }
+              ],
+              "event_summary": "The agency confirmed the coastal resilience project was approved.",
+              "event_title": "Agency approves coastal resilience project",
+              "schema": "personal-event-observation.v1"
+            }
+          }
+        ],
+        "captured": {
+          "end": "2026-10-04T08:38:28.354785Z",
+          "start": "2026-10-04T08:38:28.277974Z"
+        },
+        "claims": [
+          {
+            "article_id": "7cee2e84-4d89-44bb-91f3-d377befa3469",
+            "article_revision_hash": "dd7ed7f6d92c52eace02e45f85ec6ba4576ae6a8963760cf13eae29eac7fcd5d",
+            "article_revision_id": "d0a45072-b2bb-4e75-8503-395e1c9e6d29",
+            "citable": true,
+            "claim_id": "bb6a002e-a71d-53de-8d14-ddbdb5936d93",
+            "evidence_item_id": "8ca1580b-8fe6-57c3-a976-ab203bd6d521",
+            "exact_excerpt": "Agency approves coastal resilience project",
+            "preparation_id": "4361b983-1b99-4bd2-9a8f-794fcc5e7b80",
+            "source_field": "title",
+            "span": [
+              0,
+              42
+            ],
+            "status": "supported",
+            "validation": {
+              "assertion_kind": "source_reported",
+              "evidence_created_by_personal": true,
+              "qualifiers_preserved": true,
+              "schema": "source-reported-assertion.v1",
+              "support_created_by_personal": true,
+              "truth_verified": false
+            }
+          },
+          {
+            "article_id": "7cee2e84-4d89-44bb-91f3-d377befa3469",
+            "article_revision_hash": "dd7ed7f6d92c52eace02e45f85ec6ba4576ae6a8963760cf13eae29eac7fcd5d",
+            "article_revision_id": "d0a45072-b2bb-4e75-8503-395e1c9e6d29",
+            "citable": true,
+            "claim_id": "45583cd5-8c3f-5be0-a3b3-4c56bdcfa436",
+            "evidence_item_id": "8ca1580b-8fe6-57c3-a976-ab203bd6d521",
+            "exact_excerpt": "The agency confirmed the coastal resilience project was approved.",
+            "preparation_id": "e9456e9b-7715-4ae0-a0aa-cb4a8af78695",
+            "source_field": "summary",
+            "span": [
+              0,
+              65
+            ],
+            "status": "supported",
+            "validation": {
+              "assertion_kind": "source_reported",
+              "evidence_created_by_personal": false,
+              "qualifiers_preserved": true,
+              "schema": "source-reported-assertion.v1",
+              "support_created_by_personal": true,
+              "truth_verified": false
+            }
+          }
+        ],
+        "composition_policy": "personal_descriptive.v1",
+        "coverage": {
+          "articles_admitted": 1,
+          "articles_captured": 1,
+          "feed_failures": [],
+          "feed_pauses": [],
+          "feeds_attempted": 1,
+          "feeds_configured": 1,
+          "feeds_failed": 0,
+          "feeds_paused": 0,
+          "feeds_succeeded": 1,
+          "items_fetched": 1,
+          "pending_capacity": 2000,
+          "pending_total": 0,
+          "schema": "personal-capture-coverage.v1"
+        },
+        "enrichment_article_ids": [
+          "7cee2e84-4d89-44bb-91f3-d377befa3469"
+        ],
+        "local_date": "2026-10-04",
+        "model_route": {
+          "embedding": {
+            "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+            "model_version": "fixture-v1",
+            "provider": "offline-personal-fixture"
+          },
+          "fixture_id": "phase-2-offline-workflow-v1",
+          "generation": {
+            "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+            "provider": "offline-personal-fixture"
+          },
+          "mode": "offline_fixture"
+        },
+        "prepared_at": "2026-10-04T08:38:28.529191Z",
+        "profile_revision_id": "c44f38f4-ea3f-4a13-821f-2e1667b0e8e7",
+        "run_id": "aea5b316-e9eb-4c61-9e40-12b4014fa25c",
+        "schema": "personal-brief-input.v1",
+        "workspace_id": "1d92bbb4-a893-47ad-a712-942a94ee2865"
+      },
+      "model_route": {
+        "embedding": {
+          "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+          "model_version": "fixture-v1",
+          "provider": "offline-personal-fixture"
+        },
+        "fixture_id": "phase-2-offline-workflow-v1",
+        "generation": {
+          "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+          "provider": "offline-personal-fixture"
+        },
+        "mode": "offline_fixture"
+      },
+      "prepared_at": "2026-10-04T08:38:28.529191+00:00",
+      "profile_revision_id": "c44f38f4-ea3f-4a13-821f-2e1667b0e8e7",
+      "run_id": "aea5b316-e9eb-4c61-9e40-12b4014fa25c",
+      "selected_event_ids": [
+        "bf89871b-c470-46c4-9b98-b28f69617194"
+      ],
+      "workspace_id": "1d92bbb4-a893-47ad-a712-942a94ee2865"
+    }
+  ],
+  "personal_paid_requests": [],
+  "personal_report_links": [
+    {
+      "brief_date": "2026-10-04",
+      "created_at": "2026-10-04T08:38:28.554795+00:00",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "run_id": "aea5b316-e9eb-4c61-9e40-12b4014fa25c",
+      "snapshot_id": "3371ca5a-dfc1-411a-8958-9ad34557f917",
+      "version": 1,
+      "workspace_id": "1d92bbb4-a893-47ad-a712-942a94ee2865"
+    }
+  ],
+  "personal_runs": [
+    {
+      "admitted_article_ids": [
+        "7cee2e84-4d89-44bb-91f3-d377befa3469"
+      ],
+      "attempt": 1,
+      "capture_ended_at": "2026-10-04T08:38:28.354785+00:00",
+      "capture_started_at": "2026-10-04T08:38:28.277974+00:00",
+      "celery_task_id": null,
+      "coverage": {
+        "articles_admitted": 1,
+        "articles_captured": 1,
+        "feed_failures": [],
+        "feed_pauses": [],
+        "feeds_attempted": 1,
+        "feeds_configured": 1,
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feeds_succeeded": 1,
+        "items_fetched": 1,
+        "pending_capacity": 2000,
+        "pending_total": 0,
+        "schema": "personal-capture-coverage.v1"
+      },
+      "created_at": "2026-10-04T08:38:27.37271+00:00",
+      "delivery_transport": "subprocess",
+      "enrichment_article_ids": [
+        "7cee2e84-4d89-44bb-91f3-d377befa3469"
+      ],
+      "error": null,
+      "event_ids": [
+        "bf89871b-c470-46c4-9b98-b28f69617194"
+      ],
+      "execution_mode": "personal",
+      "fencing_generation": 2,
+      "graceful_deadline_at": "2026-10-04T09:03:28.203894+00:00",
+      "hard_deadline_at": "2026-10-04T09:08:28.203894+00:00",
+      "id": "aea5b316-e9eb-4c61-9e40-12b4014fa25c",
+      "job_id": "cc738123-b2cc-4308-99e1-2b3ef4ad1322",
+      "lease_expires_at": null,
+      "local_date": "2026-10-04",
+      "max_attempts": 3,
+      "ownership_token": "f1429e2c-adb8-44c4-a76f-b2405ad446e3",
+      "profile_revision_id": "c44f38f4-ea3f-4a13-821f-2e1667b0e8e7",
+      "queued_at": "2026-10-04T08:38:27.393298+00:00",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "result": {
+        "attempt": 1,
+        "capture_partial": false,
+        "gate_outcome": "pass",
+        "processing_degraded": false,
+        "published": true,
+        "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+        "section_count": 5,
+        "snapshot_id": "3371ca5a-dfc1-411a-8958-9ad34557f917"
+      },
+      "scopes_frozen_at": "2026-10-04T08:38:28.385229+00:00",
+      "snapshot_id": "3371ca5a-dfc1-411a-8958-9ad34557f917",
+      "stage_results": {
+        "admission": {
+          "articles_admitted": 1,
+          "local_day_limit": 100,
+          "run_limit": 100,
+          "status": "succeeded"
+        },
+        "capture": {
+          "articles_captured": 1,
+          "feed_failures": [],
+          "feed_pauses": [],
+          "feeds_attempted": 1,
+          "feeds_configured": 1,
+          "feeds_failed": 0,
+          "feeds_paused": 0,
+          "feeds_succeeded": 1,
+          "items_fetched": 1,
+          "pending_capacity": 2000,
+          "pending_total": 1,
+          "schema": "personal-capture-coverage.v1",
+          "status": "succeeded"
+        },
+        "claim_preparation": {
+          "abstained": 0,
+          "status": "succeeded",
+          "supported": 2
+        },
+        "embedding": {
+          "articles_embedded": 1,
+          "status": "succeeded"
+        },
+        "entity_linking": {
+          "reason": "disabled_by_profile",
+          "status": "disabled"
+        },
+        "event_embeddings": {
+          "reason": "disabled_by_profile",
+          "status": "disabled"
+        },
+        "forecasting": {
+          "reason": "disabled_by_profile",
+          "status": "disabled"
+        },
+        "grouping": {
+          "articles_clustered": 1,
+          "events_created": 1,
+          "status": "succeeded"
+        },
+        "historical_analogies": {
+          "reason": "disabled_by_profile",
+          "status": "disabled"
+        },
+        "observations": {
+          "events_observed": 1,
+          "status": "succeeded"
+        },
+        "scope": {
+          "articles_admitted": 1,
+          "articles_selected_for_enrichment": 1,
+          "status": "succeeded"
+        },
+        "snapshot": {
+          "snapshot_id": "3371ca5a-dfc1-411a-8958-9ad34557f917",
+          "status": "succeeded"
+        }
+      },
+      "started_at": "2026-10-04T08:38:28.203894+00:00",
+      "state": "succeeded",
+      "terminal_manifest": {
+        "observations": [
+          {
+            "event_id": "bf89871b-c470-46c4-9b98-b28f69617194",
+            "observation_id": "3fcb99c1-9ecd-41bf-b990-2cea0fd914c4",
+            "revision": 1
+          }
+        ],
+        "schema": "personal-review-manifest.v1"
+      },
+      "updated_at": "2026-10-04T08:38:28.741205+00:00",
+      "workspace_id": "1d92bbb4-a893-47ad-a712-942a94ee2865"
+    }
+  ],
+  "report_sections": [
+    {
+      "blocks": null,
+      "body": "This system provides probabilistic analysis based on public information, data signals, and model-assisted reasoning. It is for informational purposes only and does not constitute investment, legal, or financial advice.",
+      "evidence_refs": null,
+      "grounding_status": "passed",
+      "id": "22738e07-5d3c-4f24-bf7c-cbf0ee1627aa",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "section_order": 5,
+      "title": "Disclaimer"
+    },
+    {
+      "blocks": [
+        {
+          "claim_ids": [
+            "bb6a002e-a71d-53de-8d14-ddbdb5936d93"
+          ],
+          "text": "The leading item in this personal snapshot is the reported approval of a coastal resilience project. The configured feed says the agency confirmed that approval, and the brief preserves that attribution. The source record does not state a budget, schedule, implementation milestone, motive, or expected effect, so this section adds none of those details. It also does not turn the source statement into an independently verified fact. Coverage is limited to the retained article from one selected feed. No second source in this run corroborates the assertion. The supported reading is therefore narrow: the captured publisher reports an agency confirmation that the project was approved, with no further conclusion about delivery or impact. The record offers no basis for additional interpretation."
+        }
+      ],
+      "body": "The leading item in this personal snapshot is the reported approval of a coastal resilience project. The configured feed says the agency confirmed that approval, and the brief preserves that attribution. The source record does not state a budget, schedule, implementation milestone, motive, or expected effect, so this section adds none of those details. It also does not turn the source statement into an independently verified fact. Coverage is limited to the retained article from one selected feed. No second source in this run corroborates the assertion. The supported reading is therefore narrow: the captured publisher reports an agency confirmation that the project was approved, with no further conclusion about delivery or impact. The record offers no basis for additional interpretation.",
+      "evidence_refs": [
+        "bb6a002e-a71d-53de-8d14-ddbdb5936d93"
+      ],
+      "grounding_status": "passed",
+      "id": "365d39f8-554f-48b3-89cf-9a310070ed07",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "section_order": 2,
+      "title": "Agency approves coastal resilience project"
+    },
+    {
+      "blocks": null,
+      "body": "[capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained, 0 feeds failed, and 0 feeds were paused at pending capacity.\n[no_risk_observations] Personal Phase 2 does not compute or narrate risk scores.\n[no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2 workflow.\n[no_prior_brief] No prior personal brief is injected into this immutable snapshot.\n[no_prior_comparison] No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "evidence_refs": null,
+      "grounding_status": "passed",
+      "id": "a85d02e5-e6fb-462a-bd7e-ccccb2e9e132",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "section_order": 4,
+      "title": "Data Quality"
+    },
+    {
+      "blocks": null,
+      "body": "No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported.\nNo risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "evidence_refs": null,
+      "grounding_status": "passed",
+      "id": "d4bbe0c9-aa0d-4f2b-bb61-17c6ad6c340d",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "section_order": 3,
+      "title": "What Changed Since Yesterday"
+    },
+    {
+      "blocks": [
+        {
+          "claim_ids": [
+            "bb6a002e-a71d-53de-8d14-ddbdb5936d93"
+          ],
+          "text": "The configured feed reports that the agency approved the coastal resilience project. This brief records the approval as a source-reported assertion from the captured article. The retained excerpt attributes the statement to the agency and does not add a reason, budget, schedule, or predicted outcome. Coverage in this snapshot comes from one configured source, so the report does not treat repetition as corroboration. The item appears because it matched the personal source and phrase settings. No independent verification, risk estimate, historical comparison, or forecast is supplied. The available evidence supports only the reported approval and its attribution within this captured source record."
+        }
+      ],
+      "body": "The configured feed reports that the agency approved the coastal resilience project. This brief records the approval as a source-reported assertion from the captured article. The retained excerpt attributes the statement to the agency and does not add a reason, budget, schedule, or predicted outcome. Coverage in this snapshot comes from one configured source, so the report does not treat repetition as corroboration. The item appears because it matched the personal source and phrase settings. No independent verification, risk estimate, historical comparison, or forecast is supplied. The available evidence supports only the reported approval and its attribution within this captured source record.",
+      "evidence_refs": [
+        "bb6a002e-a71d-53de-8d14-ddbdb5936d93"
+      ],
+      "grounding_status": "passed",
+      "id": "e51b7bc4-aa95-47db-9f45-0b59703caecd",
+      "report_id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "section_order": 1,
+      "title": "Executive Summary"
+    }
+  ],
+  "reports": [
+    {
+      "brief_date": "2026-10-04",
+      "change_reason": null,
+      "confidence_score": null,
+      "content_policy": "descriptive_only.v1",
+      "created_at": "2026-10-04T08:38:28.554795+00:00",
+      "event_id": null,
+      "generated_by_run_id": "fe1ba25b-36bc-4543-9b69-ffc50375c705",
+      "id": "6d7d39ee-9d84-4b12-88d0-f30c35104d49",
+      "report_type": "personal_daily_brief",
+      "stale": false,
+      "status": "published",
+      "title": "Personal News Brief \u2014 2026-10-04",
+      "updated_at": "2026-10-04T08:38:28.741205+00:00",
+      "user_id": "82eebcbf-d69e-4a11-9c31-3456cb857374",
+      "version": 1
+    }
+  ],
+  "watchlist_items": [
+    {
+      "alert_enabled": false,
+      "created_at": "2026-10-04T08:38:38.356418+00:00",
+      "id": "a4a1b0bd-0efa-4bae-acaf-f3e375dd4fe1",
+      "item_id": "bf89871b-c470-46c4-9b98-b28f69617194",
+      "item_type": "event",
+      "label": "Agency approves coastal resilience project",
+      "metadata": {
+        "personal_workspace_id": "1d92bbb4-a893-47ad-a712-942a94ee2865"
+      },
+      "user_id": "82eebcbf-d69e-4a11-9c31-3456cb857374"
+    }
+  ]
+}

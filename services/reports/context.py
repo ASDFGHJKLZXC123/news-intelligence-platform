@@ -178,6 +178,8 @@ class ExcerptOrigin(StrEnum):
 
     SUMMARY = "summary"
     BODY = "body"
+    #: Publisher wording retained from an RSS/Atom feed for a personal snapshot.
+    PUBLISHER_RSS = "publisher_rss"
     #: The article carries neither a summary nor a body. An honest empty, not an empty string.
     NONE = "none"
 

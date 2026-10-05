@@ -1,0 +1,12 @@
+{
+  "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424": {
+    "absent": false,
+    "exit_code": 1,
+    "stderr": "error: no such object: 33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424\n"
+  },
+  "fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab": {
+    "absent": false,
+    "exit_code": 1,
+    "stderr": "error: no such object: fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab\n"
+  }
+}

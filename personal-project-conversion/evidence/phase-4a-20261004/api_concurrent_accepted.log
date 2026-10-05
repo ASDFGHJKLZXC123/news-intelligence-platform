@@ -1,0 +1,24 @@
+{"timestamp": "2026-10-04T09:37:25.383733+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [17846]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:65495 (Press CTRL+C to quit)
+INFO:     127.0.0.1:65534 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:65533 - "POST /api/v1/personal/runs HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:49157 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49158 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49159 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49162 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49163 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49167 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49175 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49180 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49184 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49191 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49201 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+{"articles_admitted": 1, "articles_captured": 1, "claims_supported": 2, "events_observed": 1, "feeds_attempted": 1, "feeds_failed": 0, "feeds_succeeded": 1, "fixture_label": "Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls", "published": true, "report_id": "9fa16ca4-6d49-4efc-86f6-328d3052c494", "run_id": "629f9c5e-a0ab-4e7e-bef0-869500a8eb8c", "status": "succeeded"}
+INFO:     127.0.0.1:49205 - "GET /api/v1/personal/runs/629f9c5e-a0ab-4e7e-bef0-869500a8eb8c HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17846]

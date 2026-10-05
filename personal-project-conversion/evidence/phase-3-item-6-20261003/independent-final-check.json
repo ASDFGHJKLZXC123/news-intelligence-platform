@@ -1,0 +1,54 @@
+{
+  "schema": "item6-independent-final-check.v1",
+  "observed_at": "2026-10-04T01:33:22.166498+00:00",
+  "status": "PASS",
+  "scope": "Authorized local/synthetic item6 only; no item7/global acceptance or live runtime claim",
+  "resolved_findings": [
+    "R1 failed grouped-empty presentation; source/test-first/fresh actual Chrome verified",
+    "R2 multiline explicit-text secret guard; meaningful sentinel baseline and 4/4 independent rerun"
+  ],
+  "frontend_tests": {
+    "passed": 50,
+    "failed": 0,
+    "skipped": 0,
+    "repeated_after_cache_change": true,
+    "distinct_coverage_is_not_additive": true
+  },
+  "native_fidelity": "independent-native-fidelity-check.json",
+  "preservation": {
+    "baseline_files": 1237,
+    "unchanged_baseline_files": 1233,
+    "changed_paths": [
+      "frontend/SIGNAL - Intelligence Platform.html",
+      "frontend/app/page-personal.jsx",
+      "frontend/app/personal-foundation.test.js",
+      "personal-project-conversion/evidence/phase-3.md"
+    ],
+    "original_phase3_prefix_exact": true,
+    "staged_diff_exact": true,
+    "reviewed_links_resolve": true,
+    "private_throwaway_key_scan_before_report_write": {
+      "files": 207,
+      "matches": 0,
+      "scope": "Exact bytes, no all-secret/OCR claim"
+    }
+  },
+  "fresh_cleanup_read_only_recheck": {
+    "owned_container_ids_and_names_absent": 2,
+    "owned_anonymous_volumes_absent": 2,
+    "owned_processes_absent": 3,
+    "owned_listeners_absent": 4,
+    "other_complete_container_records_match": 20,
+    "resource_mutations": 0
+  },
+  "fresh_archive": {
+    "sha256": "fd3df4aab51a45ad46a7059136ef295f45bb696663ca206edd5bc4761bc9a582",
+    "bytes": 353225,
+    "mode": "0600",
+    "hash_and_size_independently_match": true,
+    "private_marker_redaction_limit_explicit": true
+  },
+  "historical_qualification": "Separately extracted actual September20 outputs; unknown-publication pending-only and loading/pre-wording/source-revision limits retained. Historical zero-money proof is not fresh nonzero-money proof.",
+  "resource_qualification": "Historical identity-matched cleanup and fresh cleanup verified separately; original older browser stack lacks private ownership manifest and is preserved. Initial failed comparisons/preflights and independent adjudication retained.",
+  "evidence_refresh_required": "Root regenerates final evidence hashes after this reviewer report write."
+}

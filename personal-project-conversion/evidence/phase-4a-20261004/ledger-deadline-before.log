@@ -1,0 +1,26 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+___________ test_durable_dispatch_permission_needs_full_call_budget ____________
+
+    def test_durable_dispatch_permission_needs_full_call_budget():
+        import datetime as dt
+        from decimal import Decimal
+        from sqlalchemy import select, func
+        from db.models import PersonalRun
+        from db.models.personal_spending import PersonalPaidRequest
+        from tests.integration.test_personal_phase4a_faults import _paid_owner
+    
+        with migrated_disposable_engine() as engine:
+            factory, ledger = _paid_owner(engine)
+            with factory() as session:
+                run = session.get(PersonalRun, ledger.run_id)
+                too_late = run.graceful_deadline_at - dt.timedelta(seconds=29)
+            ledger.clock = lambda: too_late
+>           with pytest.raises(PaidWorkBlocked, match="deadline"):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE PaidWorkBlocked
+
+tests/integration/test_personal_phase4a_ledger.py:35: Failed
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_phase4a_ledger.py::test_durable_dispatch_permission_needs_full_call_budget
+1 failed, 1 passed in 3.64s

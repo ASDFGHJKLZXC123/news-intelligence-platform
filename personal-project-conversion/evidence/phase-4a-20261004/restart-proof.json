@@ -1,0 +1,47 @@
+{
+  "api_new": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "services.personal.app",
+      "--port",
+      "59731"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 59731",
+    "created": "Sun Oct  4 01:50:01 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 78930,
+    "pid": 78930,
+    "started_utc": "2026-10-04T08:50:01.533165+00:00"
+  },
+  "api_old": {
+    "args": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "services.personal.app",
+      "--port",
+      "59731"
+    ],
+    "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 59731",
+    "created": "Sun Oct  4 01:37:49 2026",
+    "owner": "a1952a864e824e0bbc99a4c2c131862e",
+    "pgid": 69119,
+    "pid": 69119,
+    "started_utc": "2026-10-04T08:37:49.628938+00:00",
+    "stopped_utc": "2026-10-04T08:50:01.494513+00:00"
+  },
+  "data_identical": true,
+  "no_automatic_new_run": true,
+  "tables": [
+    "articles",
+    "events",
+    "personal_brief_snapshots",
+    "personal_paid_requests",
+    "personal_report_links",
+    "personal_runs",
+    "report_sections",
+    "reports",
+    "watchlist_items"
+  ],
+  "worker_scheduler_stopped": true
+}

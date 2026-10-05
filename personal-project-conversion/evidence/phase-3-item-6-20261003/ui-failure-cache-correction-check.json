@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-10-04T01:19:48.131173+00:00",
+  "path": "frontend/SIGNAL - Intelligence Platform.html",
+  "before_sha256": "89e855d25f1c12a30ce4ebafacf8028bd32a083f77577c851267b8f0360c55fd",
+  "after_sha256": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4",
+  "only_replacement": "app/page-personal.jsx?v=personal-item6-failure-1",
+  "reason": "Actual Chrome kept previously compiled Babel external script after reload despite corrected HTTP bytes; a new script version delivers the current file",
+  "affected_test_command": "node --test frontend/app/personal-foundation.test.js frontend/app/api-adapter.test.js",
+  "affected_test_log": "ui-failure-cache-regression-after.log",
+  "browser_reverification": "PASS: capture-failure-corrected/provider-failure-corrected plus saved-after-correction/brief-after-correction native outputs after revised script loaded",
+  "independent_scoped_review": "See independent-review.md and independent-checks.json"
+}

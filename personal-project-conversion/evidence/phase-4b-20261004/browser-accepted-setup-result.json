@@ -1,0 +1,18 @@
+{
+  "fresh_zero_runs_and_paid_requests": true,
+  "ordinary_paid_activation": false,
+  "original": {
+    "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+    "name": "nip_phase4b_browser_ac0f466f5808",
+    "oid": 19677
+  },
+  "original_all_public_tables_unchanged": true,
+  "source": {
+    "created_by_owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+    "evidence_epoch": "accepted_final_production_code",
+    "name": "nip_phase4b_browser_accepted_ac0f466f5808",
+    "oid": 308449
+  },
+  "source_identity": "browser-accepted-source-before.json",
+  "supported_seed": "phase-2-offline-workflow-v1"
+}

@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-09-20T05:52:50.702957+00:00",
+  "owned_processes_absent": {
+    "86485": true,
+    "86599": true,
+    "86623": true
+  },
+  "owned_containers_absent": {
+    "nip-personal-phase2-offline-pg-browser_20260919_5fa7": true,
+    "nip-personal-phase2-offline-redis-browser_20260919_5fa7": true
+  },
+  "owned_database_dropped_and_manifest_relinquished": true,
+  "owned_frontend_api_ports_rebindable": {
+    "3019": true,
+    "58685": true
+  },
+  "baseline_containers_preserved": [
+    {
+      "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+      "started_at": "2026-09-19T05:23:14.995419716Z",
+      "same_id_started_at_and_running": true
+    },
+    {
+      "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+      "started_at": "2026-09-19T05:23:01.740485043Z",
+      "same_id_started_at_and_running": true
+    },
+    {
+      "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "name": "/fencepost-m3-linux-inode-35423434648",
+      "started_at": "2026-09-19T05:21:12.099369381Z",
+      "same_id_started_at_and_running": true
+    },
+    {
+      "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "name": "/news-intelligence-platform-postgres-1",
+      "started_at": "2026-09-09T06:16:04.728352259Z",
+      "same_id_started_at_and_running": true
+    }
+  ],
+  "changed_preexisting_files": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "personal-project-conversion/README.md",
+    "personal-project-conversion/SELECTED_PREFERENCES.md",
+    "personal-project-conversion/evidence/phase-2-acceptance.md",
+    "personal-project-conversion/evidence/phase-2-orchestration.md",
+    "personal-project-conversion/evidence/phase-2.md",
+    "README.md"
+  ],
+  "executable_sources_and_preference_json_unchanged": true,
+  "git_head_unchanged": true,
+  "git_branch_unchanged": true,
+  "resources_retained": "Evidence files and owned private state-directory logs/manifest retained intentionally.",
+  "shared_development_database": "No connection or mutation performed; container identity, start time and running state preserved.",
+  "cleanup_idempotent_second_run_passed": true,
+  "browser_cleanup": {
+    "devtools_owned_page_closed": true,
+    "chrome_application_tab_closed": true,
+    "temporary_download_history_tab_may_remain": "952903099",
+    "finder_evidence_window_may_remain": true,
+    "reason": "Mac relocked after completed acceptance observations; final native-window cleanup unavailable"
+  }
+}

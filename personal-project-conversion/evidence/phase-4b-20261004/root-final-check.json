@@ -1,0 +1,40 @@
+{
+  "baseline_files_checked": 1865,
+  "authorized_changed_baseline_paths": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "frontend/SIGNAL - Intelligence Platform.html",
+    "personal-project-conversion/04-local-runtime.md",
+    "personal-project-conversion/README.md",
+    "services/personal/runner.py",
+    "services/personal/offline_fixture.py",
+    "services/personal/paid_runtime.py",
+    "services/personal/app.py",
+    "services/llm/cache.py",
+    "services/llm/limiter.py",
+    "apps/api/deps.py",
+    "apps/api/health.py",
+    "apps/api/main.py",
+    "apps/api/middleware.py"
+  ],
+  "unexpected_changed_or_missing_paths": [],
+  "junit_scope": {
+    "units-final.xml": {
+      "passed": 451,
+      "failed": 0,
+      "skipped": 0
+    },
+    "phase4a-accepted.xml": {
+      "passed": 44,
+      "failed": 0,
+      "skipped": 0
+    },
+    "personal-paid-accepted.xml": {
+      "passed": 48,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "backup_and_final_restart_passed": true,
+  "owned_process_absence_passed": true
+}

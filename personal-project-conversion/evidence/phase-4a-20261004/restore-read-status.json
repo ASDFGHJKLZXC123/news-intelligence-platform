@@ -1,0 +1,6 @@
+{
+  "/api/v1/personal/articles": 200,
+  "/api/v1/personal/briefs": 200,
+  "/api/v1/personal/saved": 200,
+  "/api/v1/personal/spending": 200
+}

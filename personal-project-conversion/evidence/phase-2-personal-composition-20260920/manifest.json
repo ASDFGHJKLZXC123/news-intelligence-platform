@@ -1,0 +1,53 @@
+{
+  "container_name": "nip-phase2-policy-check-20260920_98db64a8",
+  "container_id": "be51373646163e194fe106e60ab4beb0a05841066d10d43e5788e0bd08212f89",
+  "state_dir": "/tmp/nip-phase2-policy-check-20260920_98db64a8",
+  "evidence_dir": "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-2-personal-composition-20260920",
+  "created_at": "2026-09-20T07:28:30.542492+00:00",
+  "purpose": "offline integration checks only; no providers",
+  "existing_containers": [
+    {
+      "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+      "running": true,
+      "started_at": "2026-09-19T05:23:14.995419716Z"
+    },
+    {
+      "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+      "running": true,
+      "started_at": "2026-09-19T05:23:01.740485043Z"
+    },
+    {
+      "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "name": "/fencepost-m3-linux-inode-35423434648",
+      "running": true,
+      "started_at": "2026-09-19T05:21:12.099369381Z"
+    },
+    {
+      "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "name": "/news-intelligence-platform-postgres-1",
+      "running": true,
+      "started_at": "2026-09-09T06:16:04.728352259Z"
+    },
+    {
+      "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "name": "/promptgate-gateway-1",
+      "running": false,
+      "started_at": "2026-08-09T17:50:09.124909126Z"
+    },
+    {
+      "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "name": "/fp-w4-prep-order-pytest-sysmodules",
+      "running": false,
+      "started_at": "2026-08-09T09:24:09.540916925Z"
+    },
+    {
+      "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+      "name": "/fp-w4-prep-order-numpy-22825",
+      "running": false,
+      "started_at": "2026-08-09T09:24:08.91130355Z"
+    }
+  ],
+  "port": 55152
+}

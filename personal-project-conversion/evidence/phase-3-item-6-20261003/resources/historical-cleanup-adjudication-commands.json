@@ -1,0 +1,110 @@
+[
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-aq",
+      "--no-trunc"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:16:00.845662+00:00",
+    "stderr": "",
+    "stdout": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75\n6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd\nce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a\n452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f\nbdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8\n5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4\nd578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73\nbc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5\n59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a\n73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3\n463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99\nd50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb\n788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7\nfcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb\ne14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8\n83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098\n07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a\n44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c\ndf6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02\n9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:16:00.907783+00:00",
+    "stderr": "",
+    "stdout": "[secret-safe projection in final current resource records; Docker environment omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:16:00.946048+00:00",
+    "stderr": "error: no such object: 1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "nip-phase3-tests-02ea38048d",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:16:00.981737+00:00",
+    "stderr": "error: no such object: nip-phase3-tests-02ea38048d\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:16:01.005737+00:00",
+    "stderr": "Error response from daemon: get 6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e: no such volume\n",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "47982",
+      "-o",
+      "lstart=,command="
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:16:01.010026+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:61410",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:16:01.074104+00:00",
+    "stderr": "",
+    "stdout": ""
+  }
+]

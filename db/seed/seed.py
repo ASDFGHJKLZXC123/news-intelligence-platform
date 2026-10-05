@@ -109,15 +109,16 @@ def seed_episodes(
             extra={"unreviewed": len(unreviewed_episodes(corpus)), "episodes": corpus.quotas.total},
         )
 
-    # A stack rather than a bare try/finally, because the provider is opened first and the session
-    # second: an unreachable database has to close the HTTP client that was already built for it,
-    # and a `finally` guarding both only runs if the second one was constructed at all.
+    # Verify the durable processing mode before constructing or probing a provider.
     with contextlib.ExitStack() as stack:
-        provider = build_provider()
-        stack.callback(provider.close)
         session = SessionLocal()
         stack.callback(session.close)
         try:
+            from services.writer_mode import require_legacy_maintenance_mode
+
+            require_legacy_maintenance_mode(session)
+            provider = build_provider()
+            stack.callback(provider.close)
             _verify_live_snapshot(provider)
             summary = seed_episode_corpus(
                 session, corpus, provider, batch_size=batch_size, allow_unreviewed=allow_unreviewed

@@ -1,0 +1,541 @@
+{
+  "checked": 107,
+  "missing": [],
+  "targets": [
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/evidence/phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/evidence/phase-3.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/evidence/phase-2.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "personal-project-conversion/PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/operations/stage10-runbook.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/README.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/reference/previous-roadmap.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/evidence/phase-1.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/evidence/phase-2.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/evidence/phase-3.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/evidence/phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+      "target": "personal-project-conversion/PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-1.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-2.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-2-live-corrected-20260920/README.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "potential-expansions/README.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "CORE_FOLLOW_UPS.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "00-shared-contracts.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "SELECTED_PREFERENCES.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "01-foundation.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "02-personal-workflow.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "03-bounded-daily-use.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "04-local-runtime.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "05-validation-and-release.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "potential-expansions/README.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "CORE_FOLLOW_UPS.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "MODEL_AND_EFFORT_PLAN.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "reference/project-assessment.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "reference/previous-roadmap.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-1.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-2.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-3.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "00-shared-contracts.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "SELECTED_PREFERENCES.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-2-live-20260919/README.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-1.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-2.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-3.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/README.md",
+      "target": "evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "evidence/phase-4b.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "evidence/phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "PHASE4A_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "00-shared-contracts.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/04-local-runtime.md",
+      "target": "03-bounded-daily-use.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "../04-local-runtime.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "../00-shared-contracts.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4a.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "../PHASE4B_SETUP.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/browser-observations.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/browser-export-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/app-readiness.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/manual-cli-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/stack-resource.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/independent-review.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/restart-final-format-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/synthetic-ledger-setup-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/browser-observations.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/same-origin-api-error.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/script-execution.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-accepted-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-accepted.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/backup-restore-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/backup-restore-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/backup-source-tables.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/backup-restore.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final-command.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-accepted-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-accepted-command.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-accepted.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/personal-paid-accepted-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/personal-paid-accepted-command.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/personal-paid-accepted.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/integration-test-scope.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/frontend.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/final-lint.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/final-format.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/compose-services.log",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/independent-review.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/static-review.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/baseline.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/format-only-equivalence.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/actual-final-formatted-source-before.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/browser-brief.md",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/browser-brief.pdf",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/brief-page-1.png",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/brief-page-2.png",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-regression-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/phase4a-regression.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/units-final-blank-legacy-config.xml",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/stack-cleanup.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/resource-cleanup.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/no-residual-owned-processes.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/preservation-result.json",
+      "exists": true
+    },
+    {
+      "source": "personal-project-conversion/evidence/phase-4b.md",
+      "target": "phase-4b-20261004/cleanup-final-source-result.json",
+      "exists": true
+    }
+  ]
+}

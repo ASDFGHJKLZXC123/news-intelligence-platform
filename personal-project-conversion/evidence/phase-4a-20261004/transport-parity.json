@@ -1,0 +1,28 @@
+{
+  "baseline_registered_task": "workers.personal_tasks.run_personal_daily",
+  "credentials_blank": true,
+  "data": {
+    "celery_final": {
+      "different_fields": [],
+      "equal": true,
+      "sha256": "450869426f388e265ccc7f0b5613674d80d01096b0f615ca3def9fe5a5f6a719"
+    },
+    "child_final": {
+      "different_fields": [],
+      "equal": true,
+      "sha256": "450869426f388e265ccc7f0b5613674d80d01096b0f615ca3def9fe5a5f6a719"
+    },
+    "ui_final": {
+      "different_fields": [],
+      "equal": true,
+      "sha256": "450869426f388e265ccc7f0b5613674d80d01096b0f615ca3def9fe5a5f6a719"
+    }
+  },
+  "excluded_differences": [
+    "generated report and telemetry UUIDs",
+    "claim/publication wall-clock timestamps",
+    "transport label/generation"
+  ],
+  "fixture": "phase-2-offline-workflow-v1",
+  "ordinary_paid_activation": false
+}

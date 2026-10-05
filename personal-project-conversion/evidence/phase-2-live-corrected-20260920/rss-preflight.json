@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-09-20T07:50:46.372169+00:00",
+  "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+  "url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_medium=RSS&at_campaign=rss",
+  "summary": "Central banks around the world have hiked rates as high energy prices are pushing up inflation.",
+  "summary_sha256": "74be9430684e43be4b38eac8d71f96366a49a5d077b87e8387c133c82b466d0c",
+  "supported_candidate_count": 1,
+  "tls_verification": true,
+  "provider": "production HttpRSSProvider + FixedCaptureRSSProvider",
+  "paid_calls": 0
+}

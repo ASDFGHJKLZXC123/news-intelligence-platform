@@ -1,0 +1,8 @@
+................................................                         [100%]
+=============================== warnings summary ===============================
+tests/unit/test_personal_phase4b_api.py::test_personal_health_never_imports_disabled_components
+  /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/apps/api/personal_frontend.py:34: SyntaxWarning: invalid escape sequence '\/'
+    setup += 'const route=window.location.pathname.replace(/^\/+|\/+$/g, "");'
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+48 passed, 1 warning in 6.72s

@@ -1,0 +1,11 @@
+--- frontend/SIGNAL - Intelligence Platform.html (dirty before item6 cache correction)
++++ frontend/SIGNAL - Intelligence Platform.html (after item6 cache correction)
+@@ -72,7 +72,7 @@
+ <script type="text/babel" src="app/page-entities.jsx?v=company-research-1"></script>
+ <script type="text/babel" src="app/page-alerts-admin.jsx"></script>
+ <script type="text/babel" src="app/page-misc.jsx?v=company-logos-1"></script>
+-<script type="text/babel" src="app/page-personal.jsx?v=personal-workflow-7"></script>
++<script type="text/babel" src="app/page-personal.jsx?v=personal-item6-failure-1"></script>
+ 
+ <!-- mount (must be last) -->
+ <script type="text/babel" src="app/main.jsx?v=personal-workflow-7"></script>

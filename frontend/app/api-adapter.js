@@ -4,7 +4,7 @@
    The ONLY frontend runtime file that knows backend endpoints, snake_case wire
    keys, pagination/error envelopes, the alert lifecycle map, and the canonical
    risk-token vocabulary. It maps the FastAPI `/api/v1` wire shapes to the
-   `types.ts` fixture schema and assembles the flattened `window.DATA` contract
+   `types.ts` display schema and assembles the flattened `window.DATA` contract
    the pages already consume. Pages never see wire formats.
 
    Contract sources: docs/adr/0007-frontend-architecture-for-mvp.md and
@@ -12,8 +12,8 @@
 
    This module has NO side effects at evaluation time: it does not fetch, does
    not assign window.DATA, and does not dispatch events. Item 6B wires the loader
-   (readiness Promise + `signal:data-ready`) around `loadSnapshot` / the fixture
-   fallback; item 7 renders the data-quality badges/banner from the metadata this
+   (readiness Promise + `signal:data-ready`) around `loadSnapshot`; item 7 renders
+   the data-quality badges/banner from the metadata this
    adapter attaches (blockQuality / runtime / apiErrors).
 
    Exports a browser global (`window.SignalApiAdapter`) and a CommonJS export for
@@ -151,6 +151,18 @@
   function normalizeId(value) { return value == null ? "" : String(value).trim(); }
   function normalizeName(value) {
     return value == null ? "" : String(value).trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  // A source control is usable only for an absolute HTTP(S) URL. Returning null
+  // keeps validation in the data boundary while leaving navigation to the UI.
+  function safeHttpUrl(value) {
+    if (value == null || String(value).trim() === "") return null;
+    try {
+      var parsed = new URL(String(value));
+      return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : null;
+    } catch (e) {
+      return null;
+    }
   }
 
   // Attach a NON-enumerable `dataQuality` marker so arrays keep array behavior and
@@ -402,8 +414,10 @@
       primaryLocation: locations.length ? locations[0].location_name : undefined,
       sourceCount: _num(w.source_count, 0),
       articleCount: _num(w.article_count, 0),
+      earliestPublishedAt: toNyDisplayIso(w.first_seen_at),
+      latestPublishedAt: toNyDisplayIso(w.last_seen_at),
       firstSeenAt: toNyDisplayIso(w.first_seen_at),
-      lastUpdatedAt: toNyDisplayIso(w.last_seen_at || w.updated_at),
+      lastUpdatedAt: toNyDisplayIso(w.updated_at),
       whyItMatters: "",                        // no live source; not fabricated
     };
   }
@@ -508,6 +522,7 @@
       url: link.url || undefined,
       publishedAt: toNyDisplayIso(link.published_at),
       credibilityScore: link.credibility != null ? link.credibility : undefined,
+      excerpt: link.snippet == null ? undefined : String(link.snippet),
       relatedClaims: claimId != null ? [String(claimId)] : [],
     };
   }
@@ -615,7 +630,7 @@
   }
 
   /* ======================================================================== */
-  /*  Fixture fallback: full demo snapshot (API totally unreachable)          */
+  /*  Explicit read-only fixture demonstration                               */
   /* ======================================================================== */
   function buildFixtureSnapshot(core, events, meta) {
     core = core || {};
@@ -668,7 +683,38 @@
         apiBase: _normBase(meta.apiBase),
         now: now,
         degraded: true,
-        reason: meta.reason || "api unreachable — full fixture fallback",
+        reason: meta.reason || "explicit read-only demonstration",
+        sampleAsOf: now,
+        lastSuccessfulFetchAt: null,
+        truncated: [],
+      },
+    });
+  }
+
+  // Neutral real-mode shape used before the first response and when the API is
+  // wholly unavailable. It never reads fixture content or invents a series.
+  function buildEmptySnapshot(meta) {
+    meta = meta || {};
+    var registry = {};
+    for (var i = 0; i < ROOT_BLOCK_FIELDS.length; i++) {
+      registry[ROOT_BLOCK_FIELDS[i]] = { quality: DATA_QUALITY.EMPTY };
+    }
+    var now = meta.now ? toNyDisplayIso(meta.now) : toNyDisplayIso(new Date().toISOString());
+    var error = meta.error || null;
+    return assembleRoot({}, {
+      now: now,
+      registry: registry,
+      apiErrors: error ? [error] : [],
+      runtime: {
+        mode: meta.mode || "real",
+        apiBase: _normBase(meta.apiBase),
+        now: now,
+        degraded: !!error,
+        loading: !!meta.loading,
+        requestFailed: !!meta.requestFailed,
+        reason: meta.reason,
+        fetchAttemptedAt: meta.fetchAttemptedAt || null,
+        lastSuccessfulFetchAt: null,
         truncated: [],
       },
     });
@@ -769,14 +815,17 @@
   // EvidenceSource items (relatedClaims unioned). Real drawer links only.
   async function loadRealEvidence(fetchImpl, base, report) {
     var claimIds = collectClaimRefs(report);
-    var byId = {}, order = [];
+    var byId = {}, order = [], errors = [];
     var results = await Promise.all(claimIds.map(function (cid) {
       return requestJson(fetchImpl, base + API_PREFIX + "/evidence/" + encodeURIComponent(cid))
         .then(function (r) { return { cid: cid, r: r }; });
     }));
     for (var i = 0; i < results.length; i++) {
       var cid = results[i].cid, r = results[i].r;
-      if (!r.reached || !r.ok || !r.body) continue;
+      if (!r.reached || !r.ok || !r.body) {
+        errors.push(apiError(API_PREFIX + "/evidence/" + encodeURIComponent(cid), r));
+        continue;
+      }
       var links = Array.isArray(r.body.evidence) ? r.body.evidence : [];
       for (var l = 0; l < links.length; l++) {
         var mapped = mapEvidenceLink(links[l], cid);
@@ -787,7 +836,7 @@
         } else { byId[mapped.id] = mapped; order.push(mapped.id); }
       }
     }
-    return order.map(function (id) { return byId[id]; });
+    return { items: order.map(function (id) { return byId[id]; }), errors: errors };
   }
 
   /* ======================================================================== */
@@ -795,18 +844,29 @@
   /* ======================================================================== */
   async function loadSnapshot(options) {
     options = options || {};
-    var fixtures = options.fixtures || {};
-    var core = fixtures.core || {};
-    var events = fixtures.events || [];
     var base = _normBase(options.apiBase);
     var fetchImpl = options.fetch || (typeof fetch !== "undefined" ? fetch : null);
 
-    if (!fetchImpl) {
-      return buildFixtureSnapshot(core, events, { apiBase: base, now: options.now, reason: "no fetch implementation" });
+    if (options.mode === "demo") {
+      var fixtures = options.fixtures || {};
+      return buildFixtureSnapshot(fixtures.core || {}, fixtures.events || [], {
+        apiBase: base, now: options.now, reason: "explicit read-only demonstration",
+      });
     }
 
-    var nowIso = resolveNow(options.now, core, true);
-    var nowMs = new Date(options.now || (core.meta && core.meta.now) || Date.now()).getTime();
+    if (!fetchImpl) {
+      return buildEmptySnapshot({
+        apiBase: base,
+        now: options.now,
+        requestFailed: true,
+        fetchAttemptedAt: options.now || new Date().toISOString(),
+        reason: "API request could not be started",
+        error: apiError(API_PREFIX, { reached: false, ok: false }),
+      });
+    }
+
+    var nowIso = resolveNow(options.now, null, true);
+    var nowMs = new Date(options.now || Date.now()).getTime();
     if (isNaN(nowMs)) nowMs = Date.now();
 
     var apiErrors = [];
@@ -858,13 +918,23 @@
     var modelsRes = await pModels;
     var briefRes = await pBrief;
 
-    // Total-unreachable detection: no request produced ANY HTTP response -> demo.
+    // A wholly unreachable real API is an explicit real-mode error. Fixture
+    // loading is reserved for the deliberate demo path above.
     var reachedAny = dashboardRes.reached || eventsRes.reached || radarRes.reached ||
       industriesRes.reached || companiesRes.reached || alertsRes.reached ||
       watchlistRes.reached || jobsRes.reached || sourcesRes.reached ||
       modelsRes.reached || briefRes.reached;
-    if (!reachedAny) {
-      return buildFixtureSnapshot(core, events, { apiBase: base, now: options.now, reason: "api unreachable" });
+    var succeededAny = dashboardRes.ok || eventsRes.ok || radarRes.ok || industriesRes.ok ||
+      companiesRes.ok || alertsRes.ok || watchlistRes.ok || jobsRes.ok || sourcesRes.ok || modelsRes.ok;
+    if (!reachedAny || !succeededAny) {
+      return buildEmptySnapshot({
+        apiBase: base,
+        now: nowIso,
+        requestFailed: true,
+        fetchAttemptedAt: nowIso,
+        reason: reachedAny ? "The API returned no readable data" : "The API is unavailable",
+        error: apiError(API_PREFIX, dashboardRes),
+      });
     }
 
     /* ---- Dashboard block (summary/metrics/triggers/map/company_ranking) ---- */
@@ -993,26 +1063,20 @@
       registry.companyProfiles = { quality: DATA_QUALITY.EMPTY };
     }
 
-    /* ---- Evidence: real drawer links + retained fixture evidence ---------- */
+    /* ---- Evidence: retained real drawer links only ------------------------ */
     var realEvidence = [];
     if (briefRes.reached && briefRes.ok && briefRes.body && briefRes.body.report) {
-      realEvidence = await loadRealEvidence(fetchImpl, base, briefRes.body.report);
-    } else if (briefRes.reached && briefRes.status !== 404) {
+      var evidenceResult = await loadRealEvidence(fetchImpl, base, briefRes.body.report);
+      realEvidence = evidenceResult.items;
+      for (var ee = 0; ee < evidenceResult.errors.length; ee++) apiErrors.push(evidenceResult.errors[ee]);
+    } else if (!briefRes.reached || briefRes.status !== 404) {
       apiErrors.push(apiError(API_PREFIX + "/reports/daily-brief/latest", briefRes));
     } // a 404 latest brief is an honest empty evidence source, not an error/demo fallback.
 
-    // Retain fixture evidence — it backs the synthetic fixture events' drawers. Because
-    // fixture (synthetic) evidence is present, the block is `partial`, never `live`.
-    var fixtureEvidence = Array.isArray(core.evidence) ? core.evidence : [];
-    var mergedEvidence = [], evSeen = {};
-    for (var re = 0; re < realEvidence.length; re++) { mergedEvidence.push(realEvidence[re]); evSeen[realEvidence[re].id] = 1; }
-    for (var fe = 0; fe < fixtureEvidence.length; fe++) {
-      if (!evSeen[fixtureEvidence[fe].id]) { mergedEvidence.push(fixtureEvidence[fe]); evSeen[fixtureEvidence[fe].id] = 1; }
-    }
-    blocks.evidence = mergedEvidence;
-    registry.evidence = { quality: mergedEvidence.length ? DATA_QUALITY.PARTIAL : DATA_QUALITY.EMPTY };
+    blocks.evidence = realEvidence;
+    registry.evidence = { quality: evidenceResult && evidenceResult.errors.length ? DATA_QUALITY.PARTIAL : (realEvidence.length ? DATA_QUALITY.LIVE : DATA_QUALITY.EMPTY) };
 
-    /* ---- Events: live cores + retained synthetic fixture events ----------- */
+    /* ---- Events: live cores only ------------------------------------------ */
     var liveEvents = (eventsRes.ok ? eventsRes.items : []).map(mapEventListItem);
     if (!eventsRes.reached || !eventsRes.ok) {
       apiErrors.push(apiError(API_PREFIX + "/events", eventsRes));
@@ -1020,19 +1084,13 @@
       truncations.push({ endpoint: API_PREFIX + "/events", total: eventsRes.total, shown: eventsRes.items.length });
       apiErrors.push({ endpoint: API_PREFIX + "/events", code: "truncated", message: "showing " + eventsRes.items.length + " of " + eventsRes.total, requestId: null });
     }
-    var mergedEvents = [], evtSeen = {};
-    for (var le = 0; le < liveEvents.length; le++) { mergedEvents.push(liveEvents[le]); evtSeen[liveEvents[le].id] = 1; }
-    for (var se = 0; se < events.length; se++) {
-      if (!evtSeen[events[se].id]) mergedEvents.push(syntheticFixtureEvent(events[se]));
-    }
-    blocks.events = mergedEvents;
-    // Merged synthetic fixture events keep this block `partial`, never mislabeled live.
-    registry.events = { quality: mergedEvents.length ? DATA_QUALITY.PARTIAL : DATA_QUALITY.EMPTY };
+    blocks.events = liveEvents;
+    registry.events = { quality: liveEvents.length ? DATA_QUALITY.LIVE : DATA_QUALITY.EMPTY };
 
-    /* ---- Ask suggestions: fixture-backed, no endpoint -------------------- */
-    // SYNTHETIC: ask/query suggestions + canned answers are fixture-backed (no ask endpoint).
-    blocks.askSuggestions = (core.ask && core.ask.suggestions) || [];
-    registry.askSuggestions = { quality: DATA_QUALITY.SYNTHETIC };
+    // General Ask AI is outside the personal product. Keep its prototype code,
+    // but do not populate it while the browser is in real mode.
+    blocks.askSuggestions = [];
+    registry.askSuggestions = { quality: DATA_QUALITY.EMPTY };
 
     var degraded = apiErrors.length > 0;
     return assembleRoot(blocks, {
@@ -1040,13 +1098,226 @@
       registry: registry,
       apiErrors: apiErrors,
       runtime: {
-        mode: "api",
+        mode: "real",
         apiBase: base,
         now: nowIso,
         degraded: degraded,
+        requestFailed: false,
+        fetchAttemptedAt: nowIso,
+        lastSuccessfulFetchAt: nowIso,
         truncated: truncations,
       },
     });
+  }
+
+  /* ======================================================================== */
+  /*  Personal desk API: scoped reads, protected writes, and run polling       */
+  /* ======================================================================== */
+
+  function _camelKey(key) {
+    return String(key).replace(/_([a-z])/g, function (_, letter) { return letter.toUpperCase(); });
+  }
+
+  function camelWire(value) {
+    if (Array.isArray(value)) return value.map(camelWire);
+    if (!value || typeof value !== "object") return value;
+    var out = {};
+    Object.keys(value).forEach(function (key) { out[_camelKey(key)] = camelWire(value[key]); });
+    return out;
+  }
+
+  function personalQuery(params) {
+    var parts = [];
+    Object.keys(params || {}).forEach(function (key) {
+      var value = params[key];
+      if (value === undefined || value === null || value === "") return;
+      parts.push(encodeURIComponent(key) + "=" + encodeURIComponent(String(value)));
+    });
+    return parts.length ? "?" + parts.join("&") : "";
+  }
+
+  function personalRequestError(path, response, body, fallback) {
+    var wire = body && body.error ? body.error : {};
+    var err = new Error(wire.message || fallback || "Request failed");
+    err.name = "PersonalApiError";
+    err.status = response ? response.status : 0;
+    err.code = wire.code || (response ? "http_" + response.status : "network_error");
+    err.requestId = wire.request_id || null;
+    err.endpoint = path;
+    return err;
+  }
+
+  function createPersonalApi(options) {
+    options = options || {};
+    var base = _normBase(options.apiBase);
+    var fetchImpl = options.fetch || (globalRoot && globalRoot.fetch ? globalRoot.fetch.bind(globalRoot) : null);
+    var accessKey = String(options.apiKey || "");
+
+    function setApiKey(value) { accessKey = String(value || "").trim(); }
+    function hasApiKey() { return accessKey.length > 0; }
+
+    async function call(path, init) {
+      init = init || {};
+      if (!fetchImpl) throw personalRequestError(path, null, null, "The browser cannot start API requests");
+      var method = String(init.method || "GET").toUpperCase();
+      var headers = Object.assign({ Accept: "application/json" }, init.headers || {});
+      if (init.json !== undefined) headers["Content-Type"] = "application/json";
+      if (method !== "GET" && method !== "HEAD" && accessKey) headers["X-API-Key"] = accessKey;
+      var requestInit = { method: method, headers: headers, signal: init.signal };
+      if (init.json !== undefined) requestInit.body = JSON.stringify(init.json);
+      var response;
+      try {
+        response = await fetchImpl(base + API_PREFIX + path, requestInit);
+      } catch (cause) {
+        throw personalRequestError(path, null, null, String((cause && cause.message) || cause || "Network error"));
+      }
+      if (response.status === 204) {
+        if (!response.ok) throw personalRequestError(path, response, null);
+        return null;
+      }
+      var body = null;
+      try { body = await response.json(); } catch (ignore) { body = null; }
+      if (!response.ok) throw personalRequestError(path, response, body);
+      return camelWire(body || {});
+    }
+
+    function listEvents(params, signal) {
+      params = params || {};
+      return call("/personal/events" + personalQuery({
+        run_id: params.runId,
+        q: params.query,
+        saved: params.savedOnly ? "true" : undefined,
+        limit: params.limit,
+        offset: params.offset,
+      }), { signal: signal });
+    }
+
+    function eventDetail(eventId, runId, signal) {
+      return call("/personal/events/" + encodeURIComponent(eventId) + personalQuery({ run_id: runId }), { signal: signal });
+    }
+
+    function eventSources(eventId, params, signal) {
+      params = params || {};
+      return call("/personal/events/" + encodeURIComponent(eventId) + "/sources" + personalQuery({
+        run_id: params.runId, limit: params.limit, offset: params.offset,
+      }), { signal: signal });
+    }
+
+    function listRuns(params, signal) {
+      params = params || {};
+      return call("/personal/runs" + personalQuery({ limit: params.limit, offset: params.offset }), { signal: signal });
+    }
+
+    function listSaved(params, signal) {
+      params = params || {};
+      return call("/personal/saved" + personalQuery({ limit: params.limit, offset: params.offset }), { signal: signal });
+    }
+
+    function listLegacySaved(params, signal) {
+      params = params || {};
+      return call("/watchlist" + personalQuery({ limit: params.limit, offset: params.offset }), { signal: signal });
+    }
+
+    function listBriefs(params, signal) {
+      params = params || {};
+      return call("/personal/briefs" + personalQuery({ limit: params.limit, offset: params.offset }), { signal: signal });
+    }
+
+    function reportExportUrl(reportId, format) {
+      var suffix = format === "pdf" ? "pdf" : "md";
+      return safeHttpUrl(base + API_PREFIX + "/personal/briefs/" + encodeURIComponent(reportId) + "/export." + suffix);
+    }
+
+    return {
+      setApiKey: setApiKey,
+      hasApiKey: hasApiKey,
+      workspace: function (signal) { return call("/personal/workspace", { signal: signal }); },
+      settings: function (signal) { return call("/personal/settings", { signal: signal }); },
+      updateSettings: function (body, signal) { return call("/personal/settings", { method: "PUT", json: body, signal: signal }); },
+      addSource: function (body, signal) { return call("/personal/sources", { method: "POST", json: body, signal: signal }); },
+      readiness: function (signal) { return call("/personal/readiness", { signal: signal }); },
+      spending: function (signal) { return call("/personal/spending", { signal: signal }); },
+      collection: function (signal) { return call("/personal/collection", { signal: signal }); },
+      backlog: function (params, signal) { params = params || {}; return call("/personal/backlog" + personalQuery({ limit: params.limit, offset: params.offset }), { signal: signal }); },
+      listArticles: function (params, signal) { params = params || {}; return call("/personal/articles" + personalQuery({ limit: params.limit, offset: params.offset, ungrouped: params.ungrouped ? "true" : undefined, interest_only: params.interestOnly ? "true" : undefined, run_id: params.runId, q: params.query }), { signal: signal }); },
+      article: function (articleId, signal) { return call("/personal/articles/" + encodeURIComponent(articleId), { signal: signal }); },
+      setupWorkspace: function (signal) { return call("/personal/workspace/setup", { method: "POST", signal: signal }); },
+      bindOwner: function (ownerId, signal) { return call("/personal/workspace/owner", { method: "PUT", json: { owner_id: ownerId }, signal: signal }); },
+      listEvents: listEvents,
+      eventDetail: eventDetail,
+      eventSources: eventSources,
+      saveEvent: function (eventId, signal) { return call("/personal/saved/" + encodeURIComponent(eventId), { method: "PUT", signal: signal }); },
+      unsaveEvent: function (eventId, signal) { return call("/personal/saved/" + encodeURIComponent(eventId), { method: "DELETE", signal: signal }); },
+      unsaveEntry: function (entryId, signal) { return call("/personal/saved/entries/" + encodeURIComponent(entryId), { method: "DELETE", signal: signal }); },
+      listSaved: listSaved,
+      listLegacySaved: listLegacySaved,
+      startRun: function (signal) { return call("/personal/runs", { method: "POST", signal: signal }); },
+      listRuns: listRuns,
+      run: function (runId, signal) { return call("/personal/runs/" + encodeURIComponent(runId), { signal: signal }); },
+      retryRun: function (runId, signal) { return call("/personal/runs/" + encodeURIComponent(runId) + "/retry", { method: "POST", signal: signal }); },
+      listBriefs: listBriefs,
+      brief: function (reportId, signal) { return call("/personal/briefs/" + encodeURIComponent(reportId), { signal: signal }); },
+      claimEvidence: function (reportId, claimId, signal) {
+        return call("/personal/briefs/" + encodeURIComponent(reportId) + "/claims/" + encodeURIComponent(claimId) + "/evidence", { signal: signal });
+      },
+      reportExportUrl: reportExportUrl,
+    };
+  }
+
+  function createPersonalStatusPoller(options) {
+    options = options || {};
+    var interval = options.interval == null ? 2000 : options.interval;
+    var schedule = options.setTimeout || setTimeout;
+    var cancelSchedule = options.clearTimeout || clearTimeout;
+    var timer = null;
+    var stopped = true;
+    var inFlight = false;
+    var runId = null;
+    var terminal = { succeeded: 1, partially_failed: 1, failed: 1 };
+
+    function clearTimer() {
+      if (timer !== null) cancelSchedule(timer);
+      timer = null;
+    }
+
+    function plan() {
+      clearTimer();
+      if (!stopped) timer = schedule(tick, interval);
+    }
+
+    async function tick() {
+      timer = null;
+      if (stopped || inFlight || !runId) return;
+      inFlight = true;
+      try {
+        var result = await options.readRun(runId);
+        if (stopped) return;
+        var run = result && result.run ? result.run : result;
+        if (options.onUpdate) options.onUpdate(run);
+        if (run && terminal[run.state]) {
+          stopped = true;
+          if (options.onTerminal) options.onTerminal(run);
+        }
+      } catch (err) {
+        if (!stopped && options.onStale) options.onStale(err);
+      } finally {
+        inFlight = false;
+        if (!stopped) plan();
+      }
+    }
+
+    return {
+      start: function (nextRunId, immediate) {
+        clearTimer();
+        runId = nextRunId;
+        stopped = false;
+        if (immediate === false) plan(); else tick();
+      },
+      stop: function () { stopped = true; clearTimer(); },
+      refresh: function () { if (!stopped) return tick(); },
+      isInFlight: function () { return inFlight; },
+      isStopped: function () { return stopped; },
+    };
   }
 
   /* ---- Public surface ----------------------------------------------------- */
@@ -1056,6 +1327,7 @@
     // entry points
     loadSnapshot: loadSnapshot,
     buildFixtureSnapshot: buildFixtureSnapshot,
+    buildEmptySnapshot: buildEmptySnapshot,
     // pure helpers / mappers (exposed for item 6B + tests)
     conf: conf,
     toNyDisplayIso: toNyDisplayIso,
@@ -1079,6 +1351,10 @@
     mapSource: mapSource,
     mapModel: mapModel,
     mapEvidenceLink: mapEvidenceLink,
+    safeHttpUrl: safeHttpUrl,
+    camelWire: camelWire,
+    createPersonalApi: createPersonalApi,
+    createPersonalStatusPoller: createPersonalStatusPoller,
     // company-research batching
     enrichCompanyProfiles: enrichCompanyProfiles,
     profileMatchesCompany: profileMatchesCompany,

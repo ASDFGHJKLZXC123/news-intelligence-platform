@@ -1,0 +1,167 @@
+{
+  "counts": {
+    "Article": 1,
+    "Event": 1,
+    "Claim": 2,
+    "ClaimEvidence": 2,
+    "Report": 1,
+    "PersonalRun": 1,
+    "PersonalCapture": 1,
+    "PersonalRunEventObservation": 1,
+    "PersonalBriefSnapshot": 1,
+    "LLMRun": 4,
+    "WatchlistItem": 0
+  },
+  "run_id": "fda6c6b9-d734-4a61-aea3-c972981943eb",
+  "report_id": "50cf2f44-9282-4bde-a145-60f2de5aede0",
+  "brief_date": "2026-09-09",
+  "version": 1,
+  "snapshot_id": "a75f0934-75b7-466c-8bf9-980446121499",
+  "stage_results": {
+    "scope": {
+      "status": "succeeded",
+      "articles_admitted": 1,
+      "articles_selected_for_enrichment": 1
+    },
+    "capture": {
+      "schema": "personal-capture-coverage.v1",
+      "status": "succeeded",
+      "feed_pauses": [],
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feed_failures": [],
+      "items_fetched": 1,
+      "pending_total": 1,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 1,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_captured": 1
+    },
+    "grouping": {
+      "status": "succeeded",
+      "events_created": 1,
+      "articles_clustered": 1
+    },
+    "snapshot": {
+      "status": "succeeded",
+      "snapshot_id": "a75f0934-75b7-466c-8bf9-980446121499"
+    },
+    "admission": {
+      "status": "succeeded",
+      "run_limit": 100,
+      "local_day_limit": 100,
+      "articles_admitted": 1
+    },
+    "embedding": {
+      "status": "succeeded",
+      "articles_embedded": 1
+    },
+    "observations": {
+      "status": "succeeded",
+      "events_observed": 1
+    },
+    "claim_preparation": {
+      "status": "succeeded",
+      "abstained": 0,
+      "supported": 2
+    }
+  },
+  "coverage": {
+    "schema": "personal-capture-coverage.v1",
+    "feed_pauses": [],
+    "feeds_failed": 0,
+    "feeds_paused": 0,
+    "feed_failures": [],
+    "items_fetched": 1,
+    "pending_total": 0,
+    "feeds_attempted": 1,
+    "feeds_succeeded": 1,
+    "feeds_configured": 1,
+    "pending_capacity": 2000,
+    "articles_admitted": 1,
+    "articles_captured": 1
+  },
+  "chains": [
+    {
+      "claim_id": "bb6a002e-a71d-53de-8d14-ddbdb5936d93",
+      "claim": "Agency approves coastal resilience project",
+      "support_type": "supports",
+      "confidence": null,
+      "evidence_id": "bc2ed102-5e3f-5820-97e1-e100d691edad",
+      "article_id": "d065d430-e10d-4d94-b6d3-0cddd242ea85",
+      "article_url": "http://127.0.0.1:3011/article.html"
+    },
+    {
+      "claim_id": "45583cd5-8c3f-5be0-a3b3-4c56bdcfa436",
+      "claim": "The agency confirmed the coastal resilience project was approved.",
+      "support_type": "supports",
+      "confidence": null,
+      "evidence_id": "bc2ed102-5e3f-5820-97e1-e100d691edad",
+      "article_id": "d065d430-e10d-4d94-b6d3-0cddd242ea85",
+      "article_url": "http://127.0.0.1:3011/article.html"
+    }
+  ],
+  "llm_runs": [
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:root-browser-00cb17bf3399",
+      "status": "succeeded",
+      "prompt_name": "daily_brief_executive_summary"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:root-browser-00cb17bf3399",
+      "status": "succeeded",
+      "prompt_name": "daily_brief_top_event"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:root-browser-00cb17bf3399",
+      "status": "succeeded",
+      "prompt_name": "daily_brief_claim_grounding"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:root-browser-00cb17bf3399",
+      "status": "succeeded",
+      "prompt_name": "daily_brief_claim_grounding"
+    }
+  ],
+  "frozen_route": {
+    "mode": "offline_fixture",
+    "embedding": {
+      "model": "offline-fixture-embedding:root-browser-00cb17bf3399",
+      "provider": "offline-personal-fixture",
+      "model_version": "fixture-v1"
+    },
+    "fixture_id": "root-browser-00cb17bf3399",
+    "generation": {
+      "model": "offline-personal-fixture:root-browser-00cb17bf3399",
+      "provider": "offline-personal-fixture"
+    }
+  },
+  "duplicate_no_second_run_or_task": true,
+  "browser_unavailable_saved_removal_persisted": true,
+  "exports": {
+    "detail.json": {
+      "sha256": "261ac5abae8aa26592c4892254c91ea00d1479e346210e8fd163bcafba378810",
+      "bytes": 4684,
+      "content_type": "application/json",
+      "disposition": null
+    },
+    "personal-brief.md": {
+      "sha256": "089d9e28628053debeed7d6acdbfc5b20555dcfb92fc5d4926e36df8298fc694",
+      "bytes": 3647,
+      "content_type": "text/markdown; charset=utf-8",
+      "disposition": "attachment; filename=\"personal-news-brief-2026-09-09-v1-50cf2f44-9282-4bde-a145-60f2de5aede0.md\""
+    },
+    "personal-brief.pdf": {
+      "sha256": "928f10c13a561345b316b3f3d33e46f7cc3b2140121ffdc51a148dc7337ef8b4",
+      "bytes": 19371,
+      "content_type": "application/pdf",
+      "disposition": "attachment; filename=\"personal-news-brief-2026-09-09-v1-50cf2f44-9282-4bde-a145-60f2de5aede0.pdf\""
+    }
+  },
+  "citation_http_passed": 1
+}

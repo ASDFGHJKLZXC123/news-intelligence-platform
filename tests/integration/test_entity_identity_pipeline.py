@@ -20,7 +20,7 @@ import pytest
 from sqlalchemy import create_engine, select, text
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from db.base import Base
 from db.models import (
@@ -29,6 +29,8 @@ from db.models import (
     EntityProfile,
     EntityRedirect,
     EntityRelationship,
+    Job,
+    PersonalWriterMode,
     ProviderRun,
     RawIngestionItem,
 )
@@ -60,8 +62,11 @@ ALPHABET_CIK = "0001652044"
 APPLE_LEI = "HWUPKR0MPOU8FGXBT394"
 PARENT_LEI = "213800D1EI4B9WTWWD28"
 
-# Only the tables the identity pipeline writes; the set is closed under its foreign keys.
+# The tables the identity pipeline writes plus the two durable writer-fence dependencies every
+# legacy task reads before it constructs a provider. The set is closed under its foreign keys.
 IDENTITY_MODELS = (
+    Job,
+    PersonalWriterMode,
     ProviderRun,
     RawIngestionItem,
     EntityProfile,
@@ -97,6 +102,9 @@ def disposable_db(require_postgres: None):
         try:
             # Built from the same ORM metadata the migrations create their tables from.
             Base.metadata.create_all(engine, tables=[m.__table__ for m in IDENTITY_MODELS])
+            with Session(engine) as session:
+                session.add(PersonalWriterMode(singleton=True, mode="legacy"))
+                session.commit()
             yield sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
         finally:
             engine.dispose()

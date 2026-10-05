@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+    "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/personal-local.py",
+    "update"
+  ],
+  "exit_code": 0,
+  "paid_activation": false,
+  "redis_celery_beat_created": false,
+  "result": {
+    "paid_requests": 0,
+    "report_id": "ee67adf9-2b8e-4a4e-9b09-99d4c059899d",
+    "run_id": "b2ba4b71-c991-4f6d-a671-f5d457cae35b",
+    "state": "succeeded"
+  },
+  "synthetic": true
+}

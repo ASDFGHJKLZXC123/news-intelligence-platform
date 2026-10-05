@@ -1,0 +1,252 @@
+{
+  "after": {
+    "databases": [
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "all_owned_databases_removed": true,
+  "before": {
+    "databases": [
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "container_id": "6d09505d6a0465db867b00eced1cb33a50bfbbfd6f3462f6725a3e1f81f092ab",
+  "databases": [
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c8e6553217e04aa9b2cb69cf6ef0861e",
+      "oid": 45874
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ac3e322e91ec4d1fb24a784c5696f433",
+      "oid": 49151
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_58a3c4b0631f472c91aa91c8cb0f7934",
+      "oid": 52428
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_d20e5efc86684cac86eb8f676f9cd70a",
+      "oid": 55706
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_b85d1382cb93429aac2857a665e3b7dd",
+      "oid": 58983
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_503ad8a0051843259b1bff64574deef7",
+      "oid": 62260
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_4bb51187c90644d2b24944aab8b31316",
+      "oid": 65537
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_06b2c6e2464a48d3b400b2b40af1e2ad",
+      "oid": 68814
+    }
+  ],
+  "inventory_unchanged": true,
+  "roles": []
+}

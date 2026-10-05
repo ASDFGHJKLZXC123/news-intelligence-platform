@@ -1,0 +1,1596 @@
+{
+  "acceptance": [
+    {
+      "claims": [
+        {
+          "claim": "One workspace lock serializes simultaneous reservations across two logical dates.",
+          "implementation": [
+            "services/personal/spending.py:185",
+            "services/personal/spending.py:389",
+            "services/personal/spending.py:425",
+            "services/personal/spending.py:477"
+          ],
+          "observed_assertions": [
+            "Two ThreadPoolExecutor workers synchronize at a barrier; different PersonalRun.local_date values share one workspace.",
+            "Exactly [allowance_reached, dispatched]; exactly one PersonalPaidRequest with reserved_usd=0.02."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending.py::test_competing_run_dates_share_one_month_reservation_allowance"
+          ]
+        },
+        {
+          "claim": "API-created competing run reduces the registered ordinary worker\u2019s shared credit before generation dispatch.",
+          "implementation": [
+            "apps/api/personal.py:715",
+            "workers/personal_tasks.py:849",
+            "services/personal/paid_runtime.py:148"
+          ],
+          "observed_assertions": [
+            "API start returns 202 and enqueues a run on the following date; its generation request reserves/dispatches 0.02 and remains uncertain.",
+            "Registered worker sends embedding only, publishes no report, reports allowance_reached; finalized=0.00024, unresolved=0.02, remaining=0.00976."
+          ],
+          "qualification": "This is a composition test with a preexisting API-created obligation, not a second simultaneous API/worker barrier. The separate real concurrent ledger test supplies the race proof.",
+          "test_node_ids": [
+            "tests/integration/test_personal_paid_worker.py::test_api_queued_other_run_obligation_competes_with_ordinary_worker"
+          ]
+        },
+        {
+          "claim": "Actual API enqueuer and registered task enter the production durable dispatch boundary.",
+          "implementation": [
+            "apps/api/personal.py:387",
+            "workers/personal_tasks.py:975",
+            "services/personal/paid_runtime.py:178"
+          ],
+          "observed_assertions": [
+            "Real TestClient POST, production enqueuer, registered Celery task; broker delivery and provider transport are replaced only.",
+            "Independent DB observation at each physical send verifies committed dispatching, exact workspace/run/attempt/profile/token, frozen route and conservative serialized payload bounds.",
+            "Five distinct physical requests (one embedding and four generation); exact final synthetic charge 0.00744, reserved=unresolved=0."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost"
+          ]
+        }
+      ],
+      "id": "P3-08",
+      "limitations": [
+        "Production serializers/adapters/coordinator/ledger execute with synthetic MockTransport; no external provider, broker service or purchased work is proved."
+      ],
+      "requirement": "Remaining $0.03; two requests requiring $0.02 each: one reserve/dispatch only, across API/worker and different run dates.",
+      "status": "covered_synthetic"
+    },
+    {
+      "claims": [
+        {
+          "claim": "A committed dispatch survives a missing completion write and ledger reconstruction.",
+          "implementation": [
+            "services/personal/spending.py:425",
+            "services/personal/spending.py:477",
+            "services/personal/spending.py:533"
+          ],
+          "observed_assertions": [
+            "Rebuilt SpendingLedger sees the original dispatched 0.02 obligation and blocks another 0.02 reservation under 0.03 credit.",
+            "Two identical trustworthy receipts reconcile only once: finalized=0.002; new retry UUID has reserved=0.02; remaining=0.008; rewriting usage raises.",
+            "Business transaction rollback leaves independently committed paid request dispatching and rolls back business coverage."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending.py::test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent",
+            "tests/integration/test_personal_spending.py::test_independent_commit_survives_business_rollback_without_row_lock_deadlock"
+          ]
+        },
+        {
+          "claim": "Every physical provider retry has a distinct durable request; timeout uncertainty has no automatic expiry credit.",
+          "implementation": [
+            "services/personal/paid_runtime.py:148",
+            "services/personal/spending.py:514",
+            "services/personal/spending.py:523",
+            "services/personal/spending.py:344"
+          ],
+          "observed_assertions": [
+            "Scripted embedding 500 then 200 yields two physical sends and two distinct request identities, one uncertain and one reconciled.",
+            "Scripted HTTP ReadTimeout leaves actual_usd null and positive unresolved reservation; moving the clock to January 2027 does not release the original logical run\u2019s credit."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending.py::test_provider_embedding_retry_has_separate_durable_reservations",
+            "tests/integration/test_personal_spending.py::test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit"
+          ]
+        },
+        {
+          "claim": "Ordinary registered worker retry preserves frozen snapshot and route while old unknown requests remain charged conservatively.",
+          "implementation": [
+            "workers/personal_tasks.py:849",
+            "services/personal/runs.py:189",
+            "services/personal/briefs.py:617"
+          ],
+          "observed_assertions": [
+            "Generation timeout leaves run failed/partially_failed, report failed/unpublished and uncertain rows matching physical sends.",
+            "After active interest/price settings change, explicit retry performs four generation calls without recapture, keeps snapshot ID/hash/profile/enrichment IDs and old route, creates attempt-2 reconciled rows, and retains every attempt-1 uncertain reservation unchanged."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty"
+          ]
+        }
+      ],
+      "id": "P3-09",
+      "limitations": [
+        "Crash is simulated at the durable handoff and a fresh ledger object reconstructs state; no operating-system crash or external provider receipt recovery is claimed. Older-period unresolved obligations remain disclosed; current monthly charges and the logical run ceiling follow the contract\u2019s distinct accounting rules."
+      ],
+      "requirement": "Crash/timeout after paid dispatch; retry/restart retain first unresolved obligation, reserve additional credit, and reconcile known cost once without converting unknown cost to zero.",
+      "status": "covered_synthetic"
+    },
+    {
+      "browser_artifacts": [
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/fixture-spending.json",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/api-snapshot-spending-rev10.json",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/spending-nonzero-gate-off.dom.txt",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/settings-pre-run-reload.dom.txt"
+      ],
+      "browser_observation": "Item 6 synthetic browser shows October UTC accounting, Los Angeles October 31 5 PM PDT reset, finalized 0.20, current reserved 0.15, all-period unresolved 0.30 and remaining 0.65 of 1.00. These fields deliberately separate current-period credit from all-period unresolved disclosure. A pre-run saved New York setting showed October 31 8 PM EDT.",
+      "claims": [
+        {
+          "claim": "Dispatch moves an undispatched reservation atomically to the dispatch month; late receipt stays there.",
+          "implementation": [
+            "services/personal/spending.py:201",
+            "services/personal/spending.py:477",
+            "services/personal/spending.py:636"
+          ],
+          "observed_assertions": [
+            "Reserve 2026-09-30 23:59:59 UTC, dispatch 2026-10-01 00:00:01 UTC, reconcile 2026-11-01 UTC.",
+            "Stored accounting_month=2026-10-01, dispatch timestamp month=10, reconciled timestamp month=11; October finalized=0.002.",
+            "Los Angeles next_reset_at is exactly 2026-10-31T17:00:00-07:00."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending.py::test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month"
+          ]
+        },
+        {
+          "claim": "The next bucket is revalidated before send; only confirmed pre-dispatch cancellation releases credit.",
+          "implementation": [
+            "services/personal/spending.py:389",
+            "services/personal/spending.py:477",
+            "services/personal/spending.py:514"
+          ],
+          "observed_assertions": [
+            "A competing 0.02 October dispatch blocks the old September 0.02 reservation when it attempts to dispatch against 0.03 October credit.",
+            "Old confirmed pre-send reservation becomes cancelled; cancellation of the already-dispatching competing request raises and leaves it dispatching."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending.py::test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send"
+          ]
+        },
+        {
+          "claim": "Current summary exposes current-period values separately from old unresolved obligations and frozen route identities.",
+          "implementation": [
+            "services/personal/spending.py:599",
+            "services/personal/spending.py:636"
+          ],
+          "observed_assertions": [
+            "API metadata keeps charged/reserved frozen routes when today\u2019s profile changes or is disabled; older unresolved routes remain represented while irrelevant old finalized/cancelled/non-billable routes are excluded."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_spending_metadata.py::test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration"
+          ]
+        }
+      ],
+      "id": "P3-10",
+      "limitations": [
+        "Synthetic clocks/receipts and local synthetic browser state prove accounting/display; no live billed request crossed a month."
+      ],
+      "requirement": "Reservation before UTC month boundary, dispatch next month, completion later: dispatch-month charge, correct local reset and no credit gap.",
+      "status": "covered_synthetic"
+    },
+    {
+      "claims": [
+        {
+          "claim": "Actual 0020-to-current-head upgrade preserves populated identities and retained raw content.",
+          "implementation": [
+            "db/migrations/versions/0021_personal_daily_bounds.py",
+            "db/migrations/versions/0022_personal_spending.py"
+          ],
+          "observed_assertions": [
+            "Seeds source, article, event, saved watch entry, published report, workspace/profile/run and prior usage at 0020, then upgrades to current head.",
+            "Same article/title/summary/unknown publication time, published report/title, watch entry label/event, capture identity and original admission time/owner remain.",
+            "Migrated run is succeeded/frozen with original admitted article ID and zero enrichment IDs; retained raw capture is disabled_by_profile."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once"
+          ]
+        },
+        {
+          "claim": "Known historical cost imports once; missing/timeout cost remains unknown and blocks paid enablement.",
+          "implementation": [
+            "services/personal/spending.py:214",
+            "services/personal/spending.py:247",
+            "services/personal/spending.py:308"
+          ],
+          "observed_assertions": [
+            "Known cost=0.005, unknown=None, timeout with zero recorded cost/tokens remains None; repeated import leaves exactly three legacy rows and zero paid requests.",
+            "Summary finalized=0.005, unreconciled_legacy_count=2; guard code legacy_usage_unreconciled before paid work."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once",
+            "tests/integration/test_personal_spending.py::test_legacy_costs_import_once_and_unknown_blocks_paid_enablement",
+            "tests/integration/test_personal_spending.py::test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count"
+          ]
+        },
+        {
+          "claim": "Repeated spending GET discloses the migration result without changing retained data or starting catch-up.",
+          "implementation": [
+            "apps/api/personal_reading.py:74",
+            "services/personal/spending.py:636",
+            "services/personal/coordinator.py:522"
+          ],
+          "observed_assertions": [
+            "Two actual API reads return HTTP 200 and identical expected summary; original legacy provider/model retained and unknown role/version/price fields null.",
+            "SQL write observer records no writes; full value snapshots of fifteen retained tables are unchanged; PersonalPaidRequest is empty before/after."
+          ],
+          "qualification": "No worker/service starts in the migration test. The test proves migration and GET do not launch processing; later ordinary runs must explicitly freeze transfer scope.",
+          "test_node_ids": [
+            "tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once"
+          ]
+        }
+      ],
+      "id": "P3-11",
+      "limitations": [
+        "The upgrade dataset is synthetic and actual disposable PostgreSQL; no upgrade of the shared development/personal-use database occurred."
+      ],
+      "requirement": "Populated upgrade preserves prior usage, saves, reports and ungrouped article identities; known spend imported once, unknown disclosed before paid enablement; no unrestricted catch-up.",
+      "status": "covered_synthetic"
+    },
+    {
+      "claims": [
+        {
+          "claim": "The exact same authored fixture is processed through default, raw and required-stage failure on current source.",
+          "implementation": [
+            "services/personal/coordinator.py:522",
+            "services/personal/coordinator.py:646",
+            "services/personal/coordinator.py:746",
+            "services/personal/snapshots.py:344",
+            "services/personal/briefs.py:282",
+            "services/personal/briefs.py:617",
+            "tests/integration/test_personal_phase3_closeout.py:256"
+          ],
+          "observed_assertions": [
+            "Every mode reconstructs the same two authored RSS records and asserts the fixed canonical SHA256 f1fddce95550b567f275aa2986bd3a06440fe015089b82093db8a2edd3a78f07; generated DB identities differ.",
+            "Actual v2 coordinator captures/admit-charges exactly two, retains authored title/summary/URL/publication-or-unknown, persists frozen original profile and both admitted IDs. Each mode durably marks entity_linking/event_embeddings/historical_analogies/forecasting disabled_by_profile.",
+            "Raw: succeeds with zero enrichment IDs, no embedding/report calls, no snapshot/report, all five optional pipeline stages disabled_by_profile, two readable raw API records and zero briefs.",
+            "Required embedding failure occurs after the frozen two-ID scope and two pinned article revisions: workflow failure stage persists, run failed with personal_workflow_failed, both captures provider_failed, no snapshot/report, two raw API records with error and zero briefs.",
+            "Default: succeeds and publishes using original frozen agency interest/profile/route despite an active-profile edit after freeze; snapshot source candidates and citable claims contain only the eligible agency article, excluding the non-interest league item. Report/run result/snapshot IDs and snapshot canonical input hash agree.",
+            "After current Article title/summary/URL mutate, actual report-detail and claim-evidence HTTP response bytes remain identical to their pre-mutation reads; frozen source title/URL/citations stay agency-authored. All three modes have zero PersonalPaidRequest rows."
+          ],
+          "qualification": "The three modes share authored retained inputs and a fixed source-field hash, rather than generated UUID equality. Each mode freezes its own typed DB scope before optional work. Providers are deterministic offline adapters; no billable transport, live feed or provider request occurs.",
+          "test_node_ids": [
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]",
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+          ]
+        },
+        {
+          "claim": "Default coordinator can capture/group/prepare claims and publish; raw path records disabled stages.",
+          "implementation": [
+            "services/personal/coordinator.py:687",
+            "services/personal/coordinator.py:746"
+          ],
+          "observed_assertions": [
+            "Default publishes from initially empty article/event/claim/evidence/report tables, freezes identical admitted/enrichment ID, persists grouping, claims, evidence and exact report text.",
+            "Raw coordinator records embedding disabled_by_profile; raw registered worker succeeds with raw capture/admission, unpublished result and zero LLMRun rows.",
+            "Current source explicitly marks entity_linking, event_embeddings, historical_analogies and forecasting disabled_by_profile in every coordinator run."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_coordinator.py::test_actual_coordinator_captures_groups_claims_and_publishes_from_empty_tables",
+            "tests/integration/test_personal_coordinator.py::test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles",
+            "tests/integration/test_personal_worker.py::test_raw_worker_needs_no_model_route_credentials_or_fixture"
+          ]
+        },
+        {
+          "claim": "Enabled provider/grounding failure stays failed; partial capture stays partial and raw remains readable.",
+          "implementation": [
+            "services/personal/coordinator.py:646",
+            "services/personal/briefs.py:786",
+            "services/personal/reader.py:34"
+          ],
+          "observed_assertions": [
+            "Broken required embedding provider raises PersonalCoordinatorError; run is failed; two raw API records remain provider_failed with nonempty error.",
+            "Failed required regeneration publishes no report for both provider and budget causes; partial capture remains partial through explicit retry."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_reading_bounds.py::test_required_provider_failure_stays_failed_with_retained_raw_content",
+            "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[provider]",
+            "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[budget]",
+            "tests/integration/test_personal_brief_generation.py::test_partial_capture_remains_partial_across_explicit_retry"
+          ]
+        },
+        {
+          "claim": "Published default report references the persisted snapshot and source revisions; frozen-source corruption is rejected.",
+          "implementation": [
+            "services/personal/snapshots.py:344",
+            "services/personal/briefs.py:282",
+            "services/personal/briefs.py:617"
+          ],
+          "observed_assertions": [
+            "Report link holds the exact persisted snapshot ID; expected selected event and exact source-grounded report sections are retained.",
+            "Claim preparation persists supported/abstained identities once; modified pinned observation text and invalid exact claim span each reject snapshot freeze.",
+            "Ordinary retry reuses snapshot ID/hash and scope without recapture despite changed settings."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_brief_generation.py::test_fresh_captured_source_is_composed_grounded_and_published",
+            "tests/integration/test_personal_run_claim_snapshot.py::test_fresh_articles_produce_exact_claim_evidence_paths_and_snapshot_rejects_bad_span",
+            "tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty",
+            "tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost"
+          ]
+        }
+      ],
+      "id": "P3-12",
+      "limitations": [
+        "The matched triad uses deterministic offline adapters and separate real disposable PostgreSQL databases. It proves the specified source/profile/outcome boundaries, not live provider operation. The initial two-failure gate is retained and superseded by the corrected current-source gate, not erased."
+      ],
+      "requirement": "Process the same frozen fixture through default, raw and required-stage failure: explicit disabled stages, honest failed/partial outcome, default brief only from persisted eligible snapshot.",
+      "resolved_gaps": [
+        {
+          "authored_rss_sha256": "f1fddce95550b567f275aa2986bd3a06440fe015089b82093db8a2edd3a78f07",
+          "correction": "Preserve failure-stage JSON with one session.flush() before finish_run refreshes ownership. Correct successful default test oracle to run.result/Report/snapshot; do not invent a report stage.",
+          "current_closeout_test_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+          "current_coordinator_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+          "first_gate": {
+            "correction_diff": "personal-project-conversion/evidence/phase-3-closeout-20261003/coordinator-failure-stage-fix.diff",
+            "default_failure": "KeyError report: incorrect assertion of successful report stage; corrected to durable run.result, Report and snapshot.",
+            "exact_failed_node_ids": [
+              "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+              "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+            ],
+            "failures": 2,
+            "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted.xml",
+            "passed": 6,
+            "required_failure": "KeyError workflow: real dirty JSON stage lost on ownership refresh; one session.flush before finish_run preserves it.",
+            "result": "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted-result.json",
+            "tests": 8,
+            "timestamp": "2026-10-03T19:50:21.354715-07:00"
+          },
+          "id": "C3",
+          "initial_gap": "Existing retained tests use separate authored inputs for successful default publication versus raw/required failure. The shared reading helper covers raw and failure but manually groups its grouped case and intentionally rejects report generation. Literal matched-fixture triad is not yet executed in this map.",
+          "resolution": "One identical authored two-item RSS field/hash fixture is captured/admitted/frozen by the actual coordinator in three separate disposable databases. All three mode nodes passed in personal-final. Generated UUIDs are intentionally distinct; retained authored fields and hash are identical.",
+          "test_node_ids": [
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]",
+            "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+          ]
+        }
+      ],
+      "status": "covered_synthetic"
+    },
+    {
+      "browser_artifacts": [
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser-raw-pagination-comparison.json",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-1.dom.txt",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-2.dom.txt",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-3.dom.txt"
+      ],
+      "claims": [
+        {
+          "claim": "All three default ceilings are 100 and old enrichment does not consume new admission capacity.",
+          "implementation": [
+            "services/personal/settings.py:80",
+            "services/personal/coordinator.py:522"
+          ],
+          "observed_assertions": [
+            "Desk.configure uses daily/run/enrichment=100, matching PersonalSettingsUpdate defaults. First raw run admits 100 fresh-at-that-time records and freezes zero enrichment IDs.",
+            "Next assisted run admits 100 additional fresh records, selects exactly sorted original 100 IDs, with no overlap with the fresh set.",
+            "All fresh rows are deferred_enrichment_capacity; exact 100 explicit transfers and total 200 Article records."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_daily_bounds.py::test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers"
+          ]
+        },
+        {
+          "claim": "Old article admission identity/time stays fixed; capacity-deferred new raw can transfer later without another admission.",
+          "implementation": [
+            "services/personal/coordinator.py:522",
+            "services/personal/snapshots.py:72"
+          ],
+          "observed_assertions": [
+            "Old admitted_at remains START and admitted_run_id remains original raw run; only processing_run_id changes.",
+            "Third run admits zero, selects the previous fresh 100, records 100 transfers reason deferred_enrichment_capacity, and still has 200 articles."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_daily_bounds.py::test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers"
+          ]
+        },
+        {
+          "claim": "Capacity-deferred raw records remain available to the common reader, and disabled-source content stays retained without selection.",
+          "implementation": [
+            "services/personal/reader.py:34",
+            "services/personal/reader.py:78"
+          ],
+          "observed_assertions": [
+            "Disabled-source raw Article exists, keeps its original processing owner and disabled_by_profile; only enabled source transfers.",
+            "Actual raw API returns retained admitted content with unknown dates, pagination and reason; source projects stored enrichment_state unchanged for ungrouped captures."
+          ],
+          "qualification": "The 100-capacity case proves durable Article/capture retention and deferred state directly. Readability uses the same tested raw API and state projection; no separate 100-record browser assertion is claimed.",
+          "test_node_ids": [
+            "tests/integration/test_personal_daily_bounds.py::test_p3_13_existing_raw_from_disabled_feed_stays_readable_and_outside_new_scope",
+            "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]"
+          ]
+        }
+      ],
+      "id": "P3-13",
+      "limitations": [
+        "Transfer/count test executes capture/admission/scope primitives on real PostgreSQL, with synthetic feeds; it does not perform paid enrichment of those 100 records."
+      ],
+      "requirement": "Default 100 old transferable raw plus 100 fresh: 100 fresh admissions, old 100 enrichment first, new readable capacity deferral, no old readmission; raw admits and selects zero.",
+      "status": "covered_synthetic"
+    },
+    {
+      "browser_artifacts": [
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/fixture-provider-failure.json",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/provider-failure-corrected.dom.txt"
+      ],
+      "claims": [
+        {
+          "claim": "Failed ownership remains fenced both before and after exhausting explicit attempts.",
+          "implementation": [
+            "services/personal/coordinator.py:522",
+            "services/personal/runs.py:189",
+            "services/personal/snapshots.py:72"
+          ],
+          "observed_assertions": [
+            "After required failure, next run selects zero of the old scope. Two explicit retries keep the exact original IDs; fourth retry raises exhausted.",
+            "Later run selects only its own fresh article; zero PersonalEnrichmentTransfer rows, old processing owner unchanged, state provider_failed, original run attempt=3, old Article still exists.",
+            "Explicit scope collision rejects active/retryable and exhausted failed ownership rather than silently reassigning it."
+          ],
+          "qualification": null,
+          "test_node_ids": [
+            "tests/integration/test_personal_daily_bounds.py::test_p3_14_failed_retry_scope_and_exhausted_failure_are_never_implicitly_transferred",
+            "tests/integration/test_personal_run_claim_snapshot.py::test_article_scope_cannot_be_owned_by_two_active_or_retryable_runs"
+          ]
+        },
+        {
+          "claim": "Failure does not delete raw content or suppress its reason.",
+          "implementation": [
+            "services/personal/coordinator.py:646",
+            "services/personal/reader.py:34",
+            "services/personal/runs.py:342"
+          ],
+          "observed_assertions": [
+            "Actual raw GET returns both retained failed records with provider_failed and nonempty error; run failed; disabled optional entity_linking retains disabled_by_profile.",
+            "Current common reader derives error from failed/partially_failed processing run independently of retry availability, while retaining title/snippet/URL and original admission identity."
+          ],
+          "qualification": "The exact exhausted case proves persisted state/owner/content; failure visibility is composed with the same reader and an executed failed raw GET, not a separately executed exhausted-run browser scenario.",
+          "test_node_ids": [
+            "tests/integration/test_personal_reading_bounds.py::test_required_provider_failure_stays_failed_with_retained_raw_content"
+          ]
+        }
+      ],
+      "id": "P3-14",
+      "limitations": [
+        "Explicit retries and failures are deterministic synthetic cases. No external failure, spontaneous background retry, or paid operation is claimed."
+      ],
+      "requirement": "Retryable failed or exhausted hard-failure raw scope cannot be silently taken/retried by a later run; raw/error remain visible.",
+      "status": "covered_synthetic"
+    }
+  ],
+  "artifact_sha256": {
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/coordinator-before-failure-stage-fix.json": "5641607ce50d0d4a4ad981759538a417b057b7c3c6bc72dc94f1267d341f3dff",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/coordinator-before-failure-stage-fix.py": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/coordinator-failure-stage-fix.diff": "1424d3eda678749a65b634e0f17a72ddeb1066a027b85c70d4c5274f9a2a690c",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted-result.json": "919e709ee7a6f2fa56428b8baa70c8a71177f591d4fd55bf4a6dadf03aecca13",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted-source-after.json": "c98f26c274aa1e617a101c2f30a6f4a279355763f857d33704e62ff0b07dbb06",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted.log": "22beef54bd2073d8c72eb1cc8f053f9c9b136823aa4d3e5e16e2b0f09cc99521",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted.xml": "64250c369192aaa3ca685a61ba7f075e2c8cd56c84471aebb18981c74ce4bc07",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/literal-proof-purpose.json": "2e3ac2cb42a47d54ee6114e9ca9225a46b62745c8dcbc04786f690eb118d28f0",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/literal-proof-purpose.md": "f6f28ddadd7539480737132231856b436fe3cd11e3d6f0f80937410972993cca",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-command.json": "3ceb5e46558e17055777bed32e17be1ede28141127a2e5e359c35e716b5f5e5c",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-resources.json": "04558a475ce8f90026dd74af91c86a17c4c5918e32176accc1c62bc6936241da",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-after.json": "25c842d2b2a4a43d387da4ea15fc29df975d78df34b4fa4e54ec7eb7b2e87faa",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-before.json": "d4174028b287c4ddfba16ad202ad8c1e6642f1b80fe2197a036311ea2153d63d",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log": "5171d9442ec49e283a37a0b2410dcdee40163a011cc6be3d2722cb0e5cd09d7a",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml": "076e10bcc4f4ece5507f29484379c5e8a99fc00bd69473a39f3777a8907ef8d3",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration-command.json": "edd4fbcda4193ce827236f174a52d5b58ac58f5feae4f234992cb5b6fadf2ab1",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration-result.json": "49c7f30873a48085a76faddfe03d975b2ead39766373e87932468af8ee228693",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration-source-after.json": "f6f92d6751ea5dabafb36c1827733e4e8394fc5fa5950d036d4242245dbe38b1",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration-source-before.json": "b4a78fae5c5bea464f97b788bf870106d8bbbf2060964334db280f540336f31e",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log": "26cd68d9b6ca4cda6039ec8fb564eb079663da2ed16752f4465cf33c75da67ce",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml": "bcf225fe9c15c111a346bd5e927a89564cc8dec987e5b26acc1ed8eb396afbae",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/independent-review.md": "b2552ffdec8315cf5abfffc8bb2f4d8fab6f1f8fd44e94d89e354c207eda8a70",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/new-proof.log": "bed92f2993e6583cdfd0626f7e586e6a4b27d32e293ae5b25471f475d7579373",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/new-proof.xml": "4b3c6b70c4406db1c3f4e53ea9f1c6b617fd03b96e260270e3634a252b8a1687",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/resource-cleanup-adjudication.json": "df2c98abf70814d1cade2d61b7d52e946b3f2b93881e7d52c45d8de0fc30ec51",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/resource-cleanup.json": "d843c0a8862e2b69996f5ab66279dfc637704365e5fa6e0d0bb7027c91732ac8",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/resource-events.jsonl": "60102d2ec7fa7c957f77627c1b4009a79563490f9eca268244cbbba01df692fa",
+    "personal-project-conversion/evidence/phase-3-item-5-20261003/unit.xml": "759539efcbdc9f758262f5a1bb926479680b14998243254ad42559c2ea3900f3",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/api-snapshot-spending-rev10.json": "74b46a386704037a62a353ea349a5f4f4d4a34b544a9c75d9dca0f1937fed7fb",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser-raw-pagination-comparison.json": "8a5c029b88dfff178e1bea3a46d55b42979399670b0e9a70ca94036fa11f87eb",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/provider-failure-corrected.dom.txt": "6c88862484e3446cb0017f7737bc363f3bd79c383f1bf971ddf6a19d2ee660c8",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-1.dom.txt": "7d4441a1aa6ff8a184919f1886328d7fa3d6709bde1248e3f31f0b947de34536",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-2.dom.txt": "049ff6db6f00d510fe921e1dff8cb55eab28ac9048807a9b1706140c84c063e4",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/raw-page-3.dom.txt": "123c65b451fdfac74fadbfb59c0975b58a686983807d785aa7a82820b2f7276e",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/settings-pre-run-reload.dom.txt": "1c9baae785b84b95d43bc61fd37e219c0a36e82513fe9844727f2e01b66ef0a5",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/spending-nonzero-gate-off.dom.txt": "fc59ade9ae95f0fa6453fa7beaa3ae7b965fe1ad6d54ec24722c011387952994",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/fixture-provider-failure.json": "dbfc4914161e4923c2648f7b319cd22be069caf265cc16214c4c1065ee7f5432",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/fixture-spending.json": "936cc8c5928f0e3c00c75cce5557e1e2bfb9704e51a3eea3c0ae15d3ec081345",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/new-harness-resources/result.json": "f2f38b3d85b0aeeb5f14325f14f7f5c898bcfa03e1ec2f6209831b5558ec63c2",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/new-harness-resources/safety-preservation-check.json": "396f6ac0feff1ea7c18d6b2d62b0cdab42d868f97e0ac2123a53b21806441d8e",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/resources/historical-cleanup-adjudication.json": "c955bc044735c62c52402c8a4c86bde6e2fef160a3fc68b7d124b04f04f1fbfc",
+    "personal-project-conversion/evidence/phase-3-item-6-20261003/resources/historical-cleanup-result.json": "b791bc89e6adb70a57efaace70d963c42f4e622975ef2a6d3671e02a6e442c23"
+  },
+  "browser_epoch_qualification": "Retained native browser artifacts are item6 epoch, before the one-line coordinator failure-stage flush correction. Current backend/API cases were rerun in personal-final; no fresh native browser rendering after the correction is claimed. Current frontend hashes match item6 corrected source.",
+  "cleanup_preservation": {
+    "current_parent_inventory": {
+      "path": "personal-project-conversion/evidence/phase-3-closeout-20261003/containers-before.json",
+      "preserved_exact_ids_present": [
+        "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+        "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+        "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+        "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+        "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a"
+      ],
+      "removed_exact_ids_absent": [
+        "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+        "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+        "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+        "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+        "fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab"
+      ],
+      "sha256": "2d379a5e18294234ee0ca975ab24a3b22c6b47ef06710e23c819aae9acb13305"
+    },
+    "fresh_item6": {
+      "cleanup_complete": true,
+      "completed_at_utc": "2026-10-04T01:26:10.534406+00:00",
+      "qualification": "Exact owned API/worker/frontend, PG/Redis containers and two zero-reference anonymous volumes removed after archive and browser completion; all 20 other semantic records preserved. Helper marker-DROP success and server absence are retained; no separate post-DROP live OID query after server removal is claimed. Private state/log directory retained, actual runtime resources removed."
+    },
+    "historical_item6": {
+      "captured_at_utc": "2026-10-04T01:16:01.075239+00:00",
+      "original_broad_raw_mount_comparison_failed": true,
+      "owned_cleanup_complete": true,
+      "qualification": "Two exact-OID DBs 296986/649104 archived and non-force dropped; old dedicated PG, exact anonymous volume and frontend removed. Original failed positional mount-order comparison retained; separate exact-object comparison confirms all 22 unrelated identities/states preserved."
+    },
+    "item5": {
+      "complete_records_unchanged": 17,
+      "identity_image_labels_mounts_unchanged": true,
+      "original_broad_comparison_failed": true,
+      "owned_cleanup_complete": true,
+      "preexisting_count": 19,
+      "qualification": "Two unrelated infrastructure-monitor containers stopped before owned cleanup; initiator unavailable. Broad unchanged-state claim remains false; no unrelated restoration or cleanup was performed."
+    },
+    "preserved_boundaries": [
+      "Historical browser stack missing original /tmp ownership manifest/token: do not infer ownership or clean it.",
+      "Shared development PostgreSQL and named volume, older Phase 2 and other-project resources preserved.",
+      "Item5 original broad state failure and item6 original positional comparison failure remain retained, not rewritten as success.",
+      "Operational dotenv/preferences/staged work/paid gate unchanged; no activation or recurring allowance authorization inferred.",
+      "Parent owns fresh closeout verification resources and their eventual cleanup; they are outside this mapping task."
+    ],
+    "verification": "Read retained raw results/adjudications and parent closeout containers-before.json only; no new Docker/database/process commands in this mapping task."
+  },
+  "contract": {
+    "path": "personal-project-conversion/03-bounded-daily-use.md",
+    "sha256": "1b01bd2d55cae3e65bdff8aaa0102f2329ae5f2149afcb481f467f9350859ac2"
+  },
+  "coordinated_refresh": {
+    "current_closeout_test_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+    "current_coordinator_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+    "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+    "expected_junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+    "expected_source_after": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-after.json",
+    "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+    "matched_fixture_authored_rss_sha256": "f1fddce95550b567f275aa2986bd3a06440fe015089b82093db8a2edd3a78f07",
+    "result": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-result.json",
+    "retained_red_gate": {
+      "correction_diff": "personal-project-conversion/evidence/phase-3-closeout-20261003/coordinator-failure-stage-fix.diff",
+      "default_failure": "KeyError report: incorrect assertion of successful report stage; corrected to durable run.result, Report and snapshot.",
+      "exact_failed_node_ids": [
+        "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+        "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+      ],
+      "failures": 2,
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted.xml",
+      "passed": 6,
+      "required_failure": "KeyError workflow: real dirty JSON stage lost on ownership refresh; one session.flush before finish_run preserves it.",
+      "result": "personal-project-conversion/evidence/phase-3-closeout-20261003/final-targeted-result.json",
+      "tests": 8,
+      "timestamp": "2026-10-03T19:50:21.354715-07:00"
+    },
+    "source_after": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-after.json",
+    "status": "passed",
+    "triad_node_ids": [
+      "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+      "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]",
+      "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+    ]
+  },
+  "executed_run": {
+    "command": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-command.json",
+    "errors": 0,
+    "failures": 0,
+    "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+    "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+    "network_control": "Owned loopback PostgreSQL only; isolated Settings and deterministic fixtures/MockTransport; no live provider/feed requests.",
+    "result": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-result.json",
+    "skipped": 0,
+    "source_after": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-after.json",
+    "suite_tests": 100,
+    "timestamp": "2026-10-03T19:52:49.341622-07:00",
+    "totals_policy": "100 is current personal gate context: 95 earlier personal cases plus five new closeout cases. This map uses 31 distinct exact cases. The earlier 238 full suite, six composed proofs, worker/spending selections and independent reruns overlap and are not added."
+  },
+  "judgment": "All seven rows P3-08 through P3-14 covered by exact current-source software/synthetic assertions. No live/recurring paid use or whole-project/global phase status is inferred by this mapping alone.",
+  "prior_scoped_runs": [
+    {
+      "date": "2026-10-03",
+      "path": "personal-project-conversion/evidence/phase-3-items-1-4-20261003/worker-final.log",
+      "relevance": "ordinary durable worker, retries, gate-off transfer and API-created competing obligation",
+      "result": "12 worker cases passed; overlap full integration"
+    },
+    {
+      "date": "2026-10-03",
+      "path": "personal-project-conversion/evidence/phase-3-items-1-4-20261003/worker-independent-review.md",
+      "relevance": "independent transfer finding fixed and reverified",
+      "result": "Read-only review plus three overlapping recovery/competition DB reruns and 76 units"
+    },
+    {
+      "date": "2026-10-03",
+      "path": "personal-project-conversion/evidence/phase-3-items-2-3-20261003/final-integration.log",
+      "relevance": "current/frozen route metadata, safe read-only GET and repaired migration-head fixture",
+      "result": "17 selected spending/metadata/vertical tests passed; overlap full integration"
+    },
+    {
+      "date": "2026-10-03",
+      "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/independent-review.md",
+      "relevance": "combined evidence and populated migration assertions independently inspected",
+      "result": "Read-only source/log/JUnit/resource review; no independent DB rerun"
+    }
+  ],
+  "recorded_at_utc": "2026-10-04T02:59:02.490232+00:00",
+  "schema": "phase3-acceptance-map.08-14.v1",
+  "scope": "Read-only claim mapping plus these two evidence files; no test execution, application edits, network calls, activation, services or resource cleanup by this mapping task.",
+  "source_history": [
+    {
+      "executed_run": {
+        "errors": 0,
+        "failures": 0,
+        "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+        "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+        "network_control": "Owned loopback PostgreSQL only; test Settings and MockTransport; no live provider/feed requests.",
+        "skipped": 0,
+        "suite_tests": 238,
+        "timestamp": "2026-10-03T16:33:46.755713-07:00",
+        "totals_policy": "238 is suite context only, not acceptance proof. Per-case results/assertions below are the basis. New-proof six, worker item1/4 selections, item2/3 seventeen and independent reruns overlap and are never summed."
+      },
+      "manifest": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration-source-after.json",
+      "mapped_test_results": [
+        {
+          "duration_seconds": 2.307,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once",
+          "result": "passed",
+          "source_end_line": 312,
+          "source_file": "tests/integration/test_personal_bounds_upgrade.py",
+          "source_line": 61,
+          "source_sha256": "31dfc50347597bcd3ce3ad3ff406da3991c7a592aab36ff5d4664d1d7890d5da"
+        },
+        {
+          "duration_seconds": 1.551,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[budget]",
+          "result": "passed",
+          "source_end_line": 608,
+          "source_file": "tests/integration/test_personal_brief_generation.py",
+          "source_line": 566,
+          "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+        },
+        {
+          "duration_seconds": 1.914,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[provider]",
+          "result": "passed",
+          "source_end_line": 608,
+          "source_file": "tests/integration/test_personal_brief_generation.py",
+          "source_line": 566,
+          "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+        },
+        {
+          "duration_seconds": 1.58,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_brief_generation.py::test_fresh_captured_source_is_composed_grounded_and_published",
+          "result": "passed",
+          "source_end_line": 420,
+          "source_file": "tests/integration/test_personal_brief_generation.py",
+          "source_line": 275,
+          "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+        },
+        {
+          "duration_seconds": 1.527,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_brief_generation.py::test_partial_capture_remains_partial_across_explicit_retry",
+          "result": "passed",
+          "source_end_line": 698,
+          "source_file": "tests/integration/test_personal_brief_generation.py",
+          "source_line": 611,
+          "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+        },
+        {
+          "duration_seconds": 2.003,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_coordinator.py::test_actual_coordinator_captures_groups_claims_and_publishes_from_empty_tables",
+          "result": "passed",
+          "source_end_line": 180,
+          "source_file": "tests/integration/test_personal_coordinator.py",
+          "source_line": 98,
+          "source_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d"
+        },
+        {
+          "duration_seconds": 1.525,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_coordinator.py::test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles",
+          "result": "passed",
+          "source_end_line": 326,
+          "source_file": "tests/integration/test_personal_coordinator.py",
+          "source_line": 241,
+          "source_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d"
+        },
+        {
+          "duration_seconds": 1.543,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_13_existing_raw_from_disabled_feed_stays_readable_and_outside_new_scope",
+          "result": "passed",
+          "source_end_line": 640,
+          "source_file": "tests/integration/test_personal_daily_bounds.py",
+          "source_line": 620,
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+        },
+        {
+          "duration_seconds": 2.832,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers",
+          "result": "passed",
+          "source_end_line": 574,
+          "source_file": "tests/integration/test_personal_daily_bounds.py",
+          "source_line": 525,
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+        },
+        {
+          "duration_seconds": 1.758,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_14_failed_retry_scope_and_exhausted_failure_are_never_implicitly_transferred",
+          "result": "passed",
+          "source_end_line": 617,
+          "source_file": "tests/integration/test_personal_daily_bounds.py",
+          "source_line": 577,
+          "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+        },
+        {
+          "duration_seconds": 1.742,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost",
+          "result": "passed",
+          "source_end_line": 175,
+          "source_file": "tests/integration/test_personal_item5_composed.py",
+          "source_line": 87,
+          "source_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3"
+        },
+        {
+          "duration_seconds": 1.582,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_paid_worker.py::test_api_queued_other_run_obligation_competes_with_ordinary_worker",
+          "result": "passed",
+          "source_end_line": 313,
+          "source_file": "tests/integration/test_personal_paid_worker.py",
+          "source_line": 271,
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226"
+        },
+        {
+          "duration_seconds": 2.542,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty",
+          "result": "passed",
+          "source_end_line": 388,
+          "source_file": "tests/integration/test_personal_paid_worker.py",
+          "source_line": 316,
+          "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226"
+        },
+        {
+          "duration_seconds": 1.782,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]",
+          "result": "passed",
+          "source_end_line": 132,
+          "source_file": "tests/integration/test_personal_reading_bounds.py",
+          "source_line": 101,
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca"
+        },
+        {
+          "duration_seconds": 1.443,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_reading_bounds.py::test_required_provider_failure_stays_failed_with_retained_raw_content",
+          "result": "passed",
+          "source_end_line": 235,
+          "source_file": "tests/integration/test_personal_reading_bounds.py",
+          "source_line": 209,
+          "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca"
+        },
+        {
+          "duration_seconds": 1.408,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_run_claim_snapshot.py::test_article_scope_cannot_be_owned_by_two_active_or_retryable_runs",
+          "result": "passed",
+          "source_end_line": 316,
+          "source_file": "tests/integration/test_personal_run_claim_snapshot.py",
+          "source_line": 260,
+          "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009"
+        },
+        {
+          "duration_seconds": 1.39,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_run_claim_snapshot.py::test_fresh_articles_produce_exact_claim_evidence_paths_and_snapshot_rejects_bad_span",
+          "result": "passed",
+          "source_end_line": 413,
+          "source_file": "tests/integration/test_personal_run_claim_snapshot.py",
+          "source_line": 319,
+          "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009"
+        },
+        {
+          "duration_seconds": 1.339,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_competing_run_dates_share_one_month_reservation_allowance",
+          "result": "passed",
+          "source_end_line": 148,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 129,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.501,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent",
+          "result": "passed",
+          "source_end_line": 179,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 151,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.436,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_independent_commit_survives_business_rollback_without_row_lock_deadlock",
+          "result": "passed",
+          "source_end_line": 255,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 239,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.431,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_legacy_costs_import_once_and_unknown_blocks_paid_enablement",
+          "result": "passed",
+          "source_end_line": 359,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 316,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.349,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month",
+          "result": "passed",
+          "source_end_line": 200,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 182,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.445,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send",
+          "result": "passed",
+          "source_end_line": 218,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 203,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.422,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_provider_embedding_retry_has_separate_durable_reservations",
+          "result": "passed",
+          "source_end_line": 445,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 396,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.84,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count",
+          "result": "passed",
+          "source_end_line": 393,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 362,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.408,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending.py::test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit",
+          "result": "passed",
+          "source_end_line": 472,
+          "source_file": "tests/integration/test_personal_spending.py",
+          "source_line": 448,
+          "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+        },
+        {
+          "duration_seconds": 1.642,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_spending_metadata.py::test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration",
+          "result": "passed",
+          "source_end_line": 138,
+          "source_file": "tests/integration/test_personal_spending_metadata.py",
+          "source_line": 41,
+          "source_sha256": "e6f58434f2d84d59eda5abee5703556e9eb85fe6f7b2237022154bed44a880b4"
+        },
+        {
+          "duration_seconds": 1.391,
+          "executed_suite_timestamp": "2026-10-03T16:33:46.755713-07:00",
+          "junit": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+          "log": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.log",
+          "node_id": "tests/integration/test_personal_worker.py::test_raw_worker_needs_no_model_route_credentials_or_fixture",
+          "result": "passed",
+          "source_end_line": 465,
+          "source_file": "tests/integration/test_personal_worker.py",
+          "source_line": 399,
+          "source_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818"
+        }
+      ],
+      "qualification": "The full item5 gate remains intact historical combined evidence. Current coordinator differs only by the concrete failure-stage flush correction; all personal integration cases are freshly re-executed below. Three earlier frontend differences were scoped item6 work. New closeout tests were not present in item5. Do not add overlapping gate totals.",
+      "source_current_comparison": {
+        "drift": [
+          {
+            "current_sha256": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4",
+            "path": "frontend/SIGNAL - Intelligence Platform.html",
+            "tested_sha256": "89e855d25f1c12a30ce4ebafacf8028bd32a083f77577c851267b8f0360c55fd"
+          },
+          {
+            "current_sha256": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b",
+            "path": "frontend/app/page-personal.jsx",
+            "tested_sha256": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d"
+          },
+          {
+            "current_sha256": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0",
+            "path": "frontend/app/personal-foundation.test.js",
+            "tested_sha256": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca"
+          },
+          {
+            "current_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+            "path": "services/personal/coordinator.py",
+            "tested_sha256": "1b3ed9442bca8455ce444884fc7ef0658103301ca42cbfed1228845209e7c450"
+          }
+        ],
+        "regular_sources_compared": 592,
+        "regular_sources_match": 588
+      },
+      "tested_at_utc": "2026-10-03T23:37:39.934431+00:00"
+    }
+  ],
+  "source_verification": {
+    "baseline_manifest": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final-source-after.json",
+    "branch": "codex/stage10-hardening",
+    "drift": [],
+    "head": "7c7fcebbeba9c7b9671d6eb38631c2625cc8b454",
+    "qualification": "All 593 current regular-source hashes match the fresh personal-final after manifest, including all 28 relevant implementation/migration/test files. Earlier item5 coordinator and frontend hash differences remain explicit in source_history; current-source proof replaces their relevance to these personal integration assertions.",
+    "regular_sources_compared": 593,
+    "regular_sources_match": 593,
+    "relevant_sources": [
+      {
+        "current_sha256": "b230a4b9f1f69d87a09391f7865ed2af522ae8a8f94cf621a7ff10b78abbf3f8",
+        "matches": true,
+        "path": "apps/api/personal.py",
+        "tested_sha256": "b230a4b9f1f69d87a09391f7865ed2af522ae8a8f94cf621a7ff10b78abbf3f8"
+      },
+      {
+        "current_sha256": "99373046fe04c907bb243c9084bfc34266603e804b67e22f59b6ecc17488d0c3",
+        "matches": true,
+        "path": "apps/api/personal_reading.py",
+        "tested_sha256": "99373046fe04c907bb243c9084bfc34266603e804b67e22f59b6ecc17488d0c3"
+      },
+      {
+        "current_sha256": "887c2d44c105d2b52a61582e90debed522ceb416f276e9b962cf363d2870da86",
+        "matches": true,
+        "path": "db/migrations/versions/0021_personal_daily_bounds.py",
+        "tested_sha256": "887c2d44c105d2b52a61582e90debed522ceb416f276e9b962cf363d2870da86"
+      },
+      {
+        "current_sha256": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491",
+        "matches": true,
+        "path": "db/migrations/versions/0022_personal_spending.py",
+        "tested_sha256": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491"
+      },
+      {
+        "current_sha256": "12303627911e9ba133a95e9ad1e9d2c7073083b9766f42658bff30dccdc0c148",
+        "matches": true,
+        "path": "db/models/personal.py",
+        "tested_sha256": "12303627911e9ba133a95e9ad1e9d2c7073083b9766f42658bff30dccdc0c148"
+      },
+      {
+        "current_sha256": "421863fdbc496902f5c3e1b5ebb6e5efd20999149b6e7d70a3f05bdf256602fe",
+        "matches": true,
+        "path": "db/models/personal_spending.py",
+        "tested_sha256": "421863fdbc496902f5c3e1b5ebb6e5efd20999149b6e7d70a3f05bdf256602fe"
+      },
+      {
+        "current_sha256": "059b21b21eb863ba418230e462ad0403880893a39484870b2ec1142c37db968e",
+        "matches": true,
+        "path": "services/personal/briefs.py",
+        "tested_sha256": "059b21b21eb863ba418230e462ad0403880893a39484870b2ec1142c37db968e"
+      },
+      {
+        "current_sha256": "2fcc0a480ba82cecfac0c3b3963b105ac4e3b928351154633513e751241ead57",
+        "matches": true,
+        "path": "services/personal/claims.py",
+        "tested_sha256": "2fcc0a480ba82cecfac0c3b3963b105ac4e3b928351154633513e751241ead57"
+      },
+      {
+        "current_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+        "matches": true,
+        "path": "services/personal/coordinator.py",
+        "tested_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16"
+      },
+      {
+        "current_sha256": "138c4fe83cd30060fdea22d9f929373ea9aa48e21d0516f293bf024eccab4623",
+        "matches": true,
+        "path": "services/personal/paid_runtime.py",
+        "tested_sha256": "138c4fe83cd30060fdea22d9f929373ea9aa48e21d0516f293bf024eccab4623"
+      },
+      {
+        "current_sha256": "007070de1e032bce8937b03051865cd19489b56bcf6373be39d0ff305132fba5",
+        "matches": true,
+        "path": "services/personal/reader.py",
+        "tested_sha256": "007070de1e032bce8937b03051865cd19489b56bcf6373be39d0ff305132fba5"
+      },
+      {
+        "current_sha256": "5dfd4123d312361fcac46c9f76420418d3bddfef0909ff2f71988236eff2e166",
+        "matches": true,
+        "path": "services/personal/runs.py",
+        "tested_sha256": "5dfd4123d312361fcac46c9f76420418d3bddfef0909ff2f71988236eff2e166"
+      },
+      {
+        "current_sha256": "f2e1bdf3007fb00f08a5d5bc4d3c1b075ff5f1862fb530291a22aa712de878f8",
+        "matches": true,
+        "path": "services/personal/settings.py",
+        "tested_sha256": "f2e1bdf3007fb00f08a5d5bc4d3c1b075ff5f1862fb530291a22aa712de878f8"
+      },
+      {
+        "current_sha256": "213aba7fabd60164f141b49b6894dd350bae9601eda143935beb6cafefb4d485",
+        "matches": true,
+        "path": "services/personal/snapshots.py",
+        "tested_sha256": "213aba7fabd60164f141b49b6894dd350bae9601eda143935beb6cafefb4d485"
+      },
+      {
+        "current_sha256": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+        "matches": true,
+        "path": "services/personal/spending.py",
+        "tested_sha256": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42"
+      },
+      {
+        "current_sha256": "31dfc50347597bcd3ce3ad3ff406da3991c7a592aab36ff5d4664d1d7890d5da",
+        "matches": true,
+        "path": "tests/integration/test_personal_bounds_upgrade.py",
+        "tested_sha256": "31dfc50347597bcd3ce3ad3ff406da3991c7a592aab36ff5d4664d1d7890d5da"
+      },
+      {
+        "current_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147",
+        "matches": true,
+        "path": "tests/integration/test_personal_brief_generation.py",
+        "tested_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+      },
+      {
+        "current_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d",
+        "matches": true,
+        "path": "tests/integration/test_personal_coordinator.py",
+        "tested_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d"
+      },
+      {
+        "current_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76",
+        "matches": true,
+        "path": "tests/integration/test_personal_daily_bounds.py",
+        "tested_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+      },
+      {
+        "current_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3",
+        "matches": true,
+        "path": "tests/integration/test_personal_item5_composed.py",
+        "tested_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3"
+      },
+      {
+        "current_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226",
+        "matches": true,
+        "path": "tests/integration/test_personal_paid_worker.py",
+        "tested_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226"
+      },
+      {
+        "current_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+        "matches": true,
+        "path": "tests/integration/test_personal_phase3_closeout.py",
+        "tested_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+      },
+      {
+        "current_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca",
+        "matches": true,
+        "path": "tests/integration/test_personal_reading_bounds.py",
+        "tested_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca"
+      },
+      {
+        "current_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009",
+        "matches": true,
+        "path": "tests/integration/test_personal_run_claim_snapshot.py",
+        "tested_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009"
+      },
+      {
+        "current_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7",
+        "matches": true,
+        "path": "tests/integration/test_personal_spending.py",
+        "tested_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+      },
+      {
+        "current_sha256": "e6f58434f2d84d59eda5abee5703556e9eb85fe6f7b2237022154bed44a880b4",
+        "matches": true,
+        "path": "tests/integration/test_personal_spending_metadata.py",
+        "tested_sha256": "e6f58434f2d84d59eda5abee5703556e9eb85fe6f7b2237022154bed44a880b4"
+      },
+      {
+        "current_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818",
+        "matches": true,
+        "path": "tests/integration/test_personal_worker.py",
+        "tested_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818"
+      },
+      {
+        "current_sha256": "cb05a71700692c5bec906e8e9d715a75832b46e72df03a082e0194a98ff7f1ad",
+        "matches": true,
+        "path": "workers/personal_tasks.py",
+        "tested_sha256": "cb05a71700692c5bec906e8e9d715a75832b46e72df03a082e0194a98ff7f1ad"
+      }
+    ],
+    "tested_at_utc": "2026-10-04T02:55:45.892892+00:00"
+  },
+  "test_results": [
+    {
+      "duration_seconds": 2.587,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_bounds_upgrade.py::test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once",
+      "result": "passed",
+      "source_end_line": 312,
+      "source_file": "tests/integration/test_personal_bounds_upgrade.py",
+      "source_line": 61,
+      "source_sha256": "31dfc50347597bcd3ce3ad3ff406da3991c7a592aab36ff5d4664d1d7890d5da"
+    },
+    {
+      "duration_seconds": 3.001,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[budget]",
+      "result": "passed",
+      "source_end_line": 608,
+      "source_file": "tests/integration/test_personal_brief_generation.py",
+      "source_line": 566,
+      "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+    },
+    {
+      "duration_seconds": 1.928,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_brief_generation.py::test_failed_personal_grounding_regeneration_cannot_publish[provider]",
+      "result": "passed",
+      "source_end_line": 608,
+      "source_file": "tests/integration/test_personal_brief_generation.py",
+      "source_line": 566,
+      "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+    },
+    {
+      "duration_seconds": 2.845,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_brief_generation.py::test_fresh_captured_source_is_composed_grounded_and_published",
+      "result": "passed",
+      "source_end_line": 420,
+      "source_file": "tests/integration/test_personal_brief_generation.py",
+      "source_line": 275,
+      "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+    },
+    {
+      "duration_seconds": 1.555,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_brief_generation.py::test_partial_capture_remains_partial_across_explicit_retry",
+      "result": "passed",
+      "source_end_line": 698,
+      "source_file": "tests/integration/test_personal_brief_generation.py",
+      "source_line": 611,
+      "source_sha256": "fb98bceb3b971cb1c43a57805edb50fabe59d81b675190049718f2f91c9aa147"
+    },
+    {
+      "duration_seconds": 1.516,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_coordinator.py::test_actual_coordinator_captures_groups_claims_and_publishes_from_empty_tables",
+      "result": "passed",
+      "source_end_line": 180,
+      "source_file": "tests/integration/test_personal_coordinator.py",
+      "source_line": 98,
+      "source_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d"
+    },
+    {
+      "duration_seconds": 1.539,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_coordinator.py::test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles",
+      "result": "passed",
+      "source_end_line": 326,
+      "source_file": "tests/integration/test_personal_coordinator.py",
+      "source_line": 241,
+      "source_sha256": "daf1dc63a40dea4ec737389057ca185b1d8ad4c90a6df06c1fa54e654178261d"
+    },
+    {
+      "duration_seconds": 1.72,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_13_existing_raw_from_disabled_feed_stays_readable_and_outside_new_scope",
+      "result": "passed",
+      "source_end_line": 640,
+      "source_file": "tests/integration/test_personal_daily_bounds.py",
+      "source_line": 620,
+      "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+    },
+    {
+      "duration_seconds": 2.658,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers",
+      "result": "passed",
+      "source_end_line": 574,
+      "source_file": "tests/integration/test_personal_daily_bounds.py",
+      "source_line": 525,
+      "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+    },
+    {
+      "duration_seconds": 1.709,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_daily_bounds.py::test_p3_14_failed_retry_scope_and_exhausted_failure_are_never_implicitly_transferred",
+      "result": "passed",
+      "source_end_line": 617,
+      "source_file": "tests/integration/test_personal_daily_bounds.py",
+      "source_line": 577,
+      "source_sha256": "3404d15c2cf5aa441ca28813e8442e77933573238ac87621cadaeffac95b2f76"
+    },
+    {
+      "duration_seconds": 1.827,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_item5_composed.py::test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost",
+      "result": "passed",
+      "source_end_line": 175,
+      "source_file": "tests/integration/test_personal_item5_composed.py",
+      "source_line": 87,
+      "source_sha256": "efe2ffeb1a8a2d4d8ba1b2918a870fb964f11f79fdbdea39d09129bd2cda96d3"
+    },
+    {
+      "duration_seconds": 1.731,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_paid_worker.py::test_api_queued_other_run_obligation_competes_with_ordinary_worker",
+      "result": "passed",
+      "source_end_line": 313,
+      "source_file": "tests/integration/test_personal_paid_worker.py",
+      "source_line": 271,
+      "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226"
+    },
+    {
+      "duration_seconds": 2.089,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_paid_worker.py::test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty",
+      "result": "passed",
+      "source_end_line": 388,
+      "source_file": "tests/integration/test_personal_paid_worker.py",
+      "source_line": 316,
+      "source_sha256": "2e8da1aa73cc048b90b86d63492392f06a855d364248e13e64ec9274675f0226"
+    },
+    {
+      "duration_seconds": 1.871,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+      "result": "passed",
+      "source_end_line": 576,
+      "source_file": "tests/integration/test_personal_phase3_closeout.py",
+      "source_line": 319,
+      "source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+    },
+    {
+      "duration_seconds": 1.521,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]",
+      "result": "passed",
+      "source_end_line": 576,
+      "source_file": "tests/integration/test_personal_phase3_closeout.py",
+      "source_line": 319,
+      "source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+    },
+    {
+      "duration_seconds": 1.598,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]",
+      "result": "passed",
+      "source_end_line": 576,
+      "source_file": "tests/integration/test_personal_phase3_closeout.py",
+      "source_line": 319,
+      "source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649"
+    },
+    {
+      "duration_seconds": 1.708,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_reading_bounds.py::test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]",
+      "result": "passed",
+      "source_end_line": 132,
+      "source_file": "tests/integration/test_personal_reading_bounds.py",
+      "source_line": 101,
+      "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca"
+    },
+    {
+      "duration_seconds": 1.441,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_reading_bounds.py::test_required_provider_failure_stays_failed_with_retained_raw_content",
+      "result": "passed",
+      "source_end_line": 235,
+      "source_file": "tests/integration/test_personal_reading_bounds.py",
+      "source_line": 209,
+      "source_sha256": "9a3e6c236d2b3e4c76622571aa1edd397f53230b638ba7d062b613fcafc6e1ca"
+    },
+    {
+      "duration_seconds": 1.548,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_run_claim_snapshot.py::test_article_scope_cannot_be_owned_by_two_active_or_retryable_runs",
+      "result": "passed",
+      "source_end_line": 316,
+      "source_file": "tests/integration/test_personal_run_claim_snapshot.py",
+      "source_line": 260,
+      "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009"
+    },
+    {
+      "duration_seconds": 1.565,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_run_claim_snapshot.py::test_fresh_articles_produce_exact_claim_evidence_paths_and_snapshot_rejects_bad_span",
+      "result": "passed",
+      "source_end_line": 413,
+      "source_file": "tests/integration/test_personal_run_claim_snapshot.py",
+      "source_line": 319,
+      "source_sha256": "03fc4b53fbf58a4b73f8d571b4c488561f399d5410a08eccb4830161ae32a009"
+    },
+    {
+      "duration_seconds": 1.725,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_competing_run_dates_share_one_month_reservation_allowance",
+      "result": "passed",
+      "source_end_line": 148,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 129,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.621,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent",
+      "result": "passed",
+      "source_end_line": 179,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 151,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.432,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_independent_commit_survives_business_rollback_without_row_lock_deadlock",
+      "result": "passed",
+      "source_end_line": 255,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 239,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.376,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_legacy_costs_import_once_and_unknown_blocks_paid_enablement",
+      "result": "passed",
+      "source_end_line": 359,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 316,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.527,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month",
+      "result": "passed",
+      "source_end_line": 200,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 182,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.56,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send",
+      "result": "passed",
+      "source_end_line": 218,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 203,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.676,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_provider_embedding_retry_has_separate_durable_reservations",
+      "result": "passed",
+      "source_end_line": 445,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 396,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.36,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count",
+      "result": "passed",
+      "source_end_line": 393,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 362,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.472,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending.py::test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit",
+      "result": "passed",
+      "source_end_line": 472,
+      "source_file": "tests/integration/test_personal_spending.py",
+      "source_line": 448,
+      "source_sha256": "d2319360e67cdabe35231668adaa8c1c5340fa151ab25c5ca8f6fb99f057fdd7"
+    },
+    {
+      "duration_seconds": 1.449,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_spending_metadata.py::test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration",
+      "result": "passed",
+      "source_end_line": 138,
+      "source_file": "tests/integration/test_personal_spending_metadata.py",
+      "source_line": 41,
+      "source_sha256": "e6f58434f2d84d59eda5abee5703556e9eb85fe6f7b2237022154bed44a880b4"
+    },
+    {
+      "duration_seconds": 1.611,
+      "executed_suite_timestamp": "2026-10-03T19:52:49.341622-07:00",
+      "junit": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.xml",
+      "log": "personal-project-conversion/evidence/phase-3-closeout-20261003/personal-final.log",
+      "node_id": "tests/integration/test_personal_worker.py::test_raw_worker_needs_no_model_route_credentials_or_fixture",
+      "result": "passed",
+      "source_end_line": 465,
+      "source_file": "tests/integration/test_personal_worker.py",
+      "source_line": 399,
+      "source_sha256": "58773f58abe61e020d64a10c55b522564712acef697f324f2bdb2d1888f79818"
+    }
+  ],
+  "timezone": "America/Los_Angeles",
+  "user_date": "2026-10-03"
+}

@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "owner_count_before": 0,
+      "legacy_tables_compared": 75,
+      "legacy_rows_before": 8500,
+      "schema_only_upgrade_preserved_rows": true,
+      "explicit_setup_owner_rule_passed": true,
+      "saved_count": 0,
+      "database": "nip_phase2_migration_627e1cf644a1"
+    },
+    {
+      "owner_count_before": 1,
+      "legacy_tables_compared": 75,
+      "legacy_rows_before": 8501,
+      "schema_only_upgrade_preserved_rows": true,
+      "explicit_setup_owner_rule_passed": true,
+      "saved_count": 0,
+      "database": "nip_phase2_migration_c2fe64a3ae3b"
+    },
+    {
+      "owner_count_before": 2,
+      "legacy_tables_compared": 75,
+      "legacy_rows_before": 8509,
+      "schema_only_upgrade_preserved_rows": true,
+      "explicit_setup_owner_rule_passed": true,
+      "saved_count": 2,
+      "database": "nip_phase2_migration_ff62e672056c"
+    }
+  ],
+  "source_hashes": {
+    "db/migrations/versions/0020_personal_news_desk.py": "0f9d96e46aadc0db4d903dd7a0fa927bc7cc09f9869d2c2fffbb475b9f2f12eb",
+    "services/personal/workspace.py": "f1706eb778d6a5290fe76fd0e4936941c83ad1b02c7e3c2abbe71fe96607d2ae"
+  },
+  "source_stable": true,
+  "owned_databases_removed": true
+}

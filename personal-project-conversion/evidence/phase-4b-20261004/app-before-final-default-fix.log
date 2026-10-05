@@ -1,0 +1,44 @@
+{"timestamp": "2026-10-05T00:13:58.477420+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [42262]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:58118 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59775 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /app/styles.css?v=personal-workflow-7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59782 - "GET /app/api-adapter.js?v=personal-workflow-7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /app/data.js?v=stage7-6b-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /app/globe-runtime.js?v=map-optimized-2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /app/icons.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59785 - "GET /app/data-quality.js?v=stage7-7-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59782 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59785 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /app/tweaks-panel.jsx?v=frontend-polish-2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /app/components.jsx?v=frontend-polish-3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /app/shell.jsx?v=personal-workflow-7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59782 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59785 - "GET /app/widgets.jsx?v=company-row-actions-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59783 - "GET /app/page-geo-intel.jsx?v=company-logos-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /app/page-event-detail.jsx?v=company-logos-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59782 - "GET /app/page-dashboard.jsx?v=frontend-polish-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59781 - "GET /app/page-risk.jsx?v=frontend-polish-3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /app/page-events.jsx?v=search-dedupe-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59785 - "GET /app/page-entities.jsx?v=company-research-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /app/page-alerts-admin.jsx HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59782 - "GET /app/page-misc.jsx?v=company-logos-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /app/page-personal.jsx?v=personal-item6-failure-1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59784 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59781 - "GET /app/main.jsx?v=personal-workflow-7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59786 - "GET /api/v1/personal/briefs/7f15314c-4b68-45cd-80a9-a4d35add8870 HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42262]

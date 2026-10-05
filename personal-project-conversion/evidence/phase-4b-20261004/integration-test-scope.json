@@ -1,0 +1,18 @@
+{
+  "group_counts": [
+    44,
+    48
+  ],
+  "test_executions": 92,
+  "unique_tests": 90,
+  "repeated_tests": [
+    {
+      "classname": "tests.integration.test_personal_brief_generation",
+      "name": "test_published_bookkeeping_recovery_reuses_report_without_model_calls"
+    },
+    {
+      "classname": "tests.integration.test_personal_item5_composed",
+      "name": "test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost"
+    }
+  ]
+}

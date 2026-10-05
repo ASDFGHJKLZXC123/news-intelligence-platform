@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "frontend/app/api-adapter.test.js",
+    "frontend/app/data-loader.test.js",
+    "frontend/app/data-quality.test.js",
+    "frontend/app/personal-foundation.test.js"
+  ],
+  "exit_code": 0,
+  "protected_unchanged": true,
+  "source_drift": []
+}

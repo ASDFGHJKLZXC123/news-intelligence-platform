@@ -7,18 +7,38 @@ against a real Postgres is that 0014 *runs*, that it carries analogy rows off th
 
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
-from alembic import command
-from alembic.config import Config
-from sqlalchemy import inspect, text
+from sqlalchemy import Engine, create_engine, inspect, text
 
-from db.base import engine
+from tests.integration._stage6_db import disposable_database, require_disposable_postgres, url_for
 
 pytestmark = pytest.mark.integration
 
-_ALEMBIC = Config("alembic.ini")
+
+def _migrate(engine: Engine, action: str, revision: str) -> None:
+    """Migrate only this owned legacy schema in a fresh settings process."""
+    assert engine.url.database and engine.url.database.startswith("nip_score_precision_")
+    environment = {
+        **os.environ,
+        "APP_ENV": "test",
+        "DATABASE_URL": engine.url.render_as_string(hide_password=False),
+    }
+    result = subprocess.run(
+        [sys.executable, "-m", "alembic", action, revision],
+        env=environment,
+        cwd=Path(__file__).parents[2],
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    assert result.returncode == 0, result.stderr[-3000:]
+
 
 _SCORE_COLUMNS = [
     ("event_industries", "impact_score"),
@@ -69,29 +89,34 @@ def _analogy_check(conn) -> str:
 
 
 @pytest.fixture
-def at_revision_0013(require_postgres: None):
+def at_revision_0013():
     """A database holding an analogy row on 0013's 0-1 scale, parked one revision below 0014."""
-    command.upgrade(_ALEMBIC, "head")
-    command.downgrade(_ALEMBIC, "0013")
-    with engine.begin() as conn:
-        conn.execute(text("TRUNCATE events, historical_episodes RESTART IDENTITY CASCADE"))
-        conn.execute(text(_LEGACY_ROWS))
-    try:
-        yield
-    finally:
-        command.upgrade(_ALEMBIC, "head")
-        with engine.begin() as conn:
-            conn.execute(text("TRUNCATE events, historical_episodes RESTART IDENTITY CASCADE"))
+    require_disposable_postgres()
+    with disposable_database("nip_score_precision_") as database:
+        engine = create_engine(url_for(database))
+        try:
+            # The earliest bootstrap imports present-day ORM shapes. Reach only the
+            # historic migration under test, then use its real downgrade to restore
+            # 0013's exact types and scale before inserting the legacy sentinel.
+            # No Phase 3 retention migration is ever installed in this disposable.
+            _migrate(engine, "upgrade", "0014")
+            _migrate(engine, "downgrade", "0013")
+            with engine.begin() as conn:
+                conn.execute(text(_LEGACY_ROWS))
+            yield engine
+        finally:
+            engine.dispose()
 
 
 def test_upgrade_rescales_legacy_analogies_and_pins_score_precision(
-    at_revision_0013: None,
+    at_revision_0013: Engine,
 ) -> None:
+    engine = at_revision_0013
     with engine.connect() as conn:
         # Precondition: 0013 really does leave the row on the 0-1 scale.
         assert "<= (1)" in _analogy_check(conn)
 
-    command.upgrade(_ALEMBIC, "0014")
+    _migrate(engine, "upgrade", "0014")
 
     with engine.connect() as conn:
         # The rescale happens at full precision before the cast: 0.855 -> 85.50, not 86.00.
@@ -110,14 +135,15 @@ def test_upgrade_rescales_legacy_analogies_and_pins_score_precision(
 
 
 def test_upgrade_leaves_no_analogy_stranded_above_its_new_ceiling(
-    at_revision_0013: None,
+    at_revision_0013: Engine,
 ) -> None:
+    engine = at_revision_0013
     # The top of the old scale is the top of the new one; it must not overflow NUMERIC(5, 2)
     # or trip the 0-100 CHECK the same statement installs.
     with engine.begin() as conn:
         conn.execute(text("UPDATE event_analogies SET similarity_score = 1"))
 
-    command.upgrade(_ALEMBIC, "0014")
+    _migrate(engine, "upgrade", "0014")
 
     with engine.connect() as conn:
         assert conn.execute(
@@ -126,10 +152,11 @@ def test_upgrade_leaves_no_analogy_stranded_above_its_new_ceiling(
 
 
 def test_downgrade_restores_the_legacy_scale_types_and_drops_raw_output(
-    at_revision_0013: None,
+    at_revision_0013: Engine,
 ) -> None:
-    command.upgrade(_ALEMBIC, "0014")
-    command.downgrade(_ALEMBIC, "0013")
+    engine = at_revision_0013
+    _migrate(engine, "upgrade", "0014")
+    _migrate(engine, "downgrade", "0013")
 
     with engine.connect() as conn:
         # The divide rides along in the USING expression, so the row lands back on its exact

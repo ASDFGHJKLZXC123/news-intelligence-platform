@@ -55,6 +55,18 @@ def _is_loopback(host: str | None) -> bool:
         return False
 
 
+def _personal_same_origin(request: Request, origin: str, settings: Any) -> bool:
+    """Allow the loopback app's own browser without trusting a foreign Host/origin."""
+    return (
+        settings.personal_processing_transport == "subprocess"
+        and settings.personal_processing_mode == "personal"
+        and request.client is not None
+        and _is_loopback(request.client.host)
+        and (request.url.hostname == "localhost" or _is_loopback(request.url.hostname))
+        and origin == str(request.base_url).rstrip("/")
+    )
+
+
 def get_request_id(request: Request) -> str:
     """The correlation id for this request.
 
@@ -190,6 +202,22 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         path = request.url.path
         protected = request.method in _MUTATING_METHODS or path.startswith(_INTERNAL_PREFIX)
         if protected and path not in _EXEMPT_PATHS:
+            origin = request.headers.get("Origin")
+            if (
+                origin is not None
+                and origin not in settings.cors_origins_list
+                and not _personal_same_origin(request, origin, settings)
+            ):
+                logger.warning(
+                    "rejected protected browser request: origin is not allowed",
+                    extra={"path": path},
+                )
+                return _error_response(
+                    request,
+                    status_code=403,
+                    code="forbidden",
+                    message="browser origin is not allowed for protected requests",
+                )
             if settings.api_key:
                 provided = request.headers.get("X-API-Key", "")
                 # Constant-time comparison avoids leaking the key via timing.

@@ -1,0 +1,313 @@
+CAPTURE capture-failure-corrected- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Today" [level=1]
+  - generic: Readable results for 2026-10-02 · America/Los_Angeles
+  - button "Refresh display":
+    - text: Refresh display
+  - button "Request today’s update":
+    - text: Request today’s update
+  - status:
+    - strong: A newer update did not finish cleanly
+    - generic: Failed
+    - paragraph: Run date 2026-10-03. Personal update failed; an explicit retry may be available.
+    - generic: Last status read Oct 3, 2026, 06:06:20 PM PDT
+    - button "Retry this run"
+  - region "Retained RSS articles":
+    - generic: Readable without AI
+    - heading "Retained RSS articles · 1" [level=2]
+    - button "Refresh articles"
+    - paragraph: Admitted articles awaiting grouping stay readable here. Grouped articles appear in their story and remain accessible by their original article link.
+    - article:
+      - generic: Retained RSS article
+      - generic: Admitted
+      - 'heading "Synthetic item 6 policy: retained raw article 14" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 04:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/14?utm_source=item6
+  - generic: 2026-10-02
+  - heading "Displayed update" [level=3]
+  - generic: Failed
+  - generic: Attempt 1 of 3
+  - generic: Last successful update
+  - generic: Oct 3, 2026, 06:00:57 PM PDT
+  - generic: Run ID
+  - generic: e289fdd4-0912-437d-b7d2-0b1cc618618c
+  - generic: Settings revision
+  - generic: "8"
+  - button "Retry this run"
+  - heading "Capture coverage" [level=3]
+  - generic: Capture started
+  - generic: Oct 2, 2026, 06:05:32 PM PDT
+  - generic: Capture ended
+  - generic: Oct 2, 2026, 06:05:39 PM PDT
+  - generic: Feeds configured
+  - generic: "2"
+  - generic: Feeds succeeded
+  - generic: "0"
+  - generic: Feeds failed
+  - generic: "2"
+  - generic: Feeds paused
+  - generic: "0"
+  - generic: Pending items
+  - generic: 9 of 2000 capacity
+  - generic: Selected for enrichment
+  - generic: "0"
+  - generic: Grouped articles
+  - generic: "0"
+  - generic: Capture
+  - generic: Failed
+  - generic: Admission
+  - generic: Succeeded
+  - generic: Forecasting
+  - generic: Disabled · Disabled by profile
+  - generic: Entity Linking
+  - generic: Disabled · Disabled by profile
+  - generic: Event Embeddings
+  - generic: Disabled · Disabled by profile
+  - generic: Historical Analogies
+  - generic: Disabled · Disabled by profile
+  - generic: Search stored stories
+  - textbox "Search stored stories":
+    - /placeholder: Title or summary
+  - generic: Update
+  - combobox "Update":
+    - option "Latest readable result"
+    - option "2026-10-03 · Failed · attempt 1"
+    - option "2026-10-02 · Failed · attempt 1" [selected]
+    - option "2026-10-01 · Partially failed · attempt 1"
+    - option "2026-09-30 · Succeeded · attempt 1"
+  - checkbox "Saved only"
+  - generic: Saved only
+  - button "Apply" [active]
+  - button "Reset"
+  - generic: Grouped stories unavailable
+  - generic: This update failed; grouped stories are unavailable. Any retained RSS articles remain readable above.
+  - generic "Local access"- complementary:
+  - generic: SIGNAL
+  - navigation:
+    - generic: Personal desk
+    - generic "Today":
+      - generic: Today
+    - generic "Saved":
+      - generic: Saved
+    - generic "Briefs":
+      - generic: Briefs
+    - generic "Settings":
+      - generic: Settings
+  - generic: Personal mode
+  - generic: Local reading workspace
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - generic: Personal news research desk
+  - heading "Today" [level=1]
+  - generic: Readable results for 2026-10-03 · America/Los_Angeles
+  - button "Refresh display":
+    - text: Refresh display
+  - button "Request today’s update":
+    - text: Request today’s update
+  - region "Retained RSS articles":
+    - generic: Readable without AI
+    - heading "Retained RSS articles · 9" [level=2]
+    - button "Refresh articles"
+    - paragraph: Admitted articles awaiting grouping stay readable here. Grouped articles appear in their story and remain accessible by their original article link.
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 policy: retained raw article 16" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 02:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/16?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 technology: retained raw article 14" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 04:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/14?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 technology: retained raw article 17" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 01:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/17?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 policy: retained raw article 15" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 03:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/15?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 technology: retained raw article 00" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Publication time unknown
+      - paragraph: "Unknown publication time fixture. Retained summary: boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text bo"
+      - text: The retained RSS text was shortened to its storage limit.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/0?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 policy: retained raw article 00" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Publication time unknown
+      - paragraph: "Unknown publication time fixture. Retained summary: boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text boundary-text bo"
+      - text: The retained RSS text was shortened to its storage limit.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/0?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 policy: retained raw article 17" [level=2]'
+      - generic: Synthetic item 6 policy feed
+      - generic: Published Oct 1, 2026, 01:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/policy/17?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 technology: retained raw article 16" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 02:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/16?utm_source=item6
+    - article:
+      - generic: Retained RSS article
+      - generic: Provider failed
+      - 'heading "Synthetic item 6 technology: retained raw article 15" [level=2]'
+      - generic: Synthetic item 6 technology feed
+      - generic: Published Oct 1, 2026, 03:00:57 AM PDT
+      - paragraph: Synthetic retained snippet. The agency reported a browser fixture observation.
+      - paragraph: "Processing: Personal update failed; an explicit retry may be available."
+      - button "Read retained article"
+      - link "Open original source":
+        - /url: https://offline.personal.test/item6/technology/15?utm_source=item6
+  - generic: 2026-10-03
+  - heading "Displayed update" [level=3]
+  - generic: Failed
+  - generic: Attempt 1 of 3
+  - generic: Last successful update
+  - generic: Oct 3, 2026, 06:00:57 PM PDT
+  - generic: Run ID
+  - generic: 994e036f-eb93-4d7a-aae4-18cb6b28eee2
+  - generic: Settings revision
+  - generic: "9"
+  - generic: Article selection frozen
+  - generic: Oct 3, 2026, 06:06:38 PM PDT
+  - button "Retry this run"
+  - heading "Capture coverage" [level=3]
+  - generic: Capture started
+  - generic: Oct 3, 2026, 06:06:31 PM PDT
+  - generic: Capture ended
+  - generic: Oct 3, 2026, 06:06:36 PM PDT
+  - generic: Feeds configured
+  - generic: "2"
+  - generic: Feeds succeeded
+  - generic: "2"
+  - generic: Feeds failed
+  - generic: "0"
+  - generic: Feeds paused
+  - generic: "0"
+  - generic: Articles admitted
+  - generic: "9"
+  - generic: Pending items
+  - generic: 0 of 2000 capacity
+  - generic: Selected for enrichment
+  - generic: "9"
+  - generic: Grouped articles
+  - generic: "0"
+  - generic: Scope
+  - generic: Succeeded
+  - generic: Capture
+  - generic: Succeeded
+  - generic: Admission
+  - generic: Succeeded
+  - generic: Forecasting
+  - generic: Disabled · Disabled by profile
+  - generic: Entity Linking
+  - generic: Disabled · Disabled by profile
+  - generic: Event Embeddings
+  - generic: Disabled · Disabled by profile
+  - generic: Historical Analogies
+  - generic: Disabled · Disabled by profile
+  - generic: Search stored stories
+  - textbox "Search stored stories":
+    - /placeholder: Title or summary
+  - generic: Update
+  - combobox "Update":
+    - option "Latest readable result"
+    - option "2026-10-03 · Failed · attempt 1" [selected]
+    - option "2026-10-02 · Failed · attempt 1"
+    - option "2026-10-01 · Partially failed · attempt 1"
+    - option "2026-09-30 · Succeeded · attempt 1"
+  - checkbox "Saved only"
+  - generic: Saved only
+  - button "Apply" [active]
+  - button "Reset"
+  - generic: Grouped stories unavailable
+  - generic: This update failed; grouped stories are unavailable. Any retained RSS articles remain readable above.
+  - generic "Local access"

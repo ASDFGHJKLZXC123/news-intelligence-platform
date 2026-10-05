@@ -61,6 +61,8 @@ def check_redis() -> ComponentStatus:
     failures all degrade the status instead of raising. The client is closed only if it
     was successfully created.
     """
+    if get_settings().personal_processing_transport == "subprocess":
+        return ComponentStatus("redis", True, "not_required_in_personal_mode")
     client = None
     try:
         import redis
@@ -90,14 +92,33 @@ def check_config() -> ComponentStatus:
     issues: list[str] = []
     if not settings.database_url:
         issues.append("database_url missing")
-    if not settings.redis_url:
+    if settings.personal_processing_transport != "subprocess" and not settings.redis_url:
         issues.append("redis_url missing")
-    if not settings.celery_broker_url:
+    if settings.personal_processing_transport != "subprocess" and not settings.celery_broker_url:
         issues.append("celery_broker_url missing")
-    if not settings.celery_result_backend:
+    if (
+        settings.personal_processing_transport != "subprocess"
+        and not settings.celery_result_backend
+    ):
         issues.append("celery_result_backend missing")
     if not settings.cors_origins_list:
         issues.append("cors_allow_origins empty")
+    if settings.personal_processing_transport == "subprocess":
+        import ipaddress
+
+        try:
+            loopback = (
+                settings.personal_bind_host == "localhost"
+                or ipaddress.ip_address(settings.personal_bind_host).is_loopback
+            )
+        except ValueError:
+            loopback = False
+        if not loopback:
+            issues.append("personal subprocess mode requires loopback binding")
+        if settings.personal_app_workers != 1:
+            issues.append("personal subprocess mode requires one app supervisor")
+        if settings.personal_processing_mode != "personal":
+            issues.append("personal subprocess transport requires personal processing mode")
     ok = not issues
     return ComponentStatus(name="config", ok=ok, detail="ok" if ok else "; ".join(issues))
 
@@ -268,4 +289,42 @@ def check_worker_config() -> ComponentStatus:
     broker settings without a replying worker are degraded.
     """
 
+    if get_settings().personal_processing_transport == "subprocess":
+        return _check_personal_launcher()
     return _check_worker_runtime(_inspect_active_worker_queues)
+
+
+def _check_personal_launcher() -> ComponentStatus:
+    """Require a ready application launcher and selected durable personal configuration."""
+    try:
+        from sqlalchemy import select
+
+        from apps.api.personal import _readiness
+        from db.base import SessionLocal
+        from db.models import PersonalProfileRevision, PersonalWriterMode
+        from services.personal.supervisor import get_supervisor
+        from services.personal.workspace import get_workspace
+
+        supervisor = get_supervisor()
+        if not supervisor.ready:
+            return ComponentStatus("launcher", False, "launcher is stopping or unavailable")
+        with SessionLocal() as session:
+            workspace, _ = get_workspace(session)
+            mode = session.scalar(
+                select(PersonalWriterMode.mode).where(PersonalWriterMode.singleton.is_(True))
+            )
+            if mode != get_settings().personal_processing_mode:
+                return ComponentStatus(
+                    "launcher", False, "configured processing mode disagrees with database"
+                )
+            if workspace is None:
+                return ComponentStatus("launcher", False, "personal workspace missing")
+            profile = session.get(PersonalProfileRevision, workspace.active_profile_revision_id)
+            ready, reasons = _readiness(workspace, profile, mode, legacy_active=False)
+            return ComponentStatus(
+                "launcher",
+                ready,
+                "ready; Celery/Beat not required" if ready else "; ".join(reasons),
+            )
+    except Exception as exc:
+        return ComponentStatus("launcher", False, type(exc).__name__)

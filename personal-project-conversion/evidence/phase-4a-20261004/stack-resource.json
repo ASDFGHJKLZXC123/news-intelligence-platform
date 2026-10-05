@@ -1,0 +1,478 @@
+{
+  "accepted_api_port": 65494,
+  "accepted_capture_port": 65214,
+  "accepted_concurrent_api_port": 65495,
+  "api_port": 59731,
+  "concurrent_api_port": 63395,
+  "databases": {
+    "backup_source": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_backup_source_a1952a864e82",
+      "oid": 170581
+    },
+    "celery": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_celery_a1952a864e82",
+      "oid": 88512
+    },
+    "celery2": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_celery2_a1952a864e82",
+      "oid": 137744
+    },
+    "celery_accepted": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_celery_accepted_a1952a864e82",
+      "oid": 889421
+    },
+    "celery_final": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_celery_final_a1952a864e82",
+      "oid": 334668
+    },
+    "child": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_child_a1952a864e82",
+      "oid": 88513
+    },
+    "child_accepted": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_child_accepted_a1952a864e82",
+      "oid": 889422
+    },
+    "child_final": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_child_final_a1952a864e82",
+      "oid": 334669
+    },
+    "concurrent": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_concurrent_a1952a864e82",
+      "oid": 337951
+    },
+    "concurrent_accepted": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_concurrent_accepted_a1952a864e82",
+      "oid": 892704
+    },
+    "manual": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_manual_a1952a864e82",
+      "oid": 91794
+    },
+    "manual_accepted": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_manual_accepted_a1952a864e82",
+      "oid": 889424
+    },
+    "manual_final": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_manual_final_a1952a864e82",
+      "oid": 334671
+    },
+    "restored": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_restored_a1952a864e82",
+      "oid": 170582
+    },
+    "template": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_template_a1952a864e82",
+      "oid": 85230
+    },
+    "ui": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_ui_a1952a864e82",
+      "oid": 88514
+    },
+    "ui_accepted": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_ui_accepted_a1952a864e82",
+      "oid": 889423
+    },
+    "ui_final": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_ui_final_a1952a864e82",
+      "oid": 334670
+    },
+    "ui_retry": {
+      "absent_after_drop": true,
+      "created_by_owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "name": "nip_phase4a_ui_retry_a1952a864e82",
+      "oid": 144321
+    }
+  },
+  "final_api_port": 63394,
+  "frontend_port": 59732,
+  "owner": "a1952a864e824e0bbc99a4c2c131862e",
+  "parity_run_id": "7ef07384-9f27-4fdf-82ba-eae2f633f9d1",
+  "processes": {
+    "api": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "59731"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 59731",
+      "created": "Sun Oct  4 01:58:42 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 85840,
+      "pid": 85840,
+      "started_utc": "2026-10-04T08:58:42.600537+00:00",
+      "stopped_utc": "2026-10-04T09:42:31.461149+00:00"
+    },
+    "api_accepted": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "65494"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 65494",
+      "created": "Sun Oct  4 02:37:24 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 17842,
+      "pid": 17842,
+      "started_utc": "2026-10-04T09:37:24.462779+00:00",
+      "stopped_utc": "2026-10-04T09:42:30.944985+00:00"
+    },
+    "api_before_backup_copy": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "59731"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 59731",
+      "created": "Sun Oct  4 01:50:01 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 78930,
+      "pid": 78930,
+      "started_utc": "2026-10-04T08:50:01.533165+00:00",
+      "stopped_utc": "2026-10-04T08:58:42.354734+00:00"
+    },
+    "api_before_restart": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "59731"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 59731",
+      "created": "Sun Oct  4 01:37:49 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 69119,
+      "pid": 69119,
+      "started_utc": "2026-10-04T08:37:49.628938+00:00",
+      "stopped_utc": "2026-10-04T08:50:01.494513+00:00"
+    },
+    "api_concurrent": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "63395"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 63395",
+      "created": "Sun Oct  4 02:15:53 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 99860,
+      "pid": 99860,
+      "started_utc": "2026-10-04T09:15:53.885925+00:00",
+      "stopped_utc": "2026-10-04T09:42:30.730309+00:00"
+    },
+    "api_concurrent_accepted": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "65495"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 65495",
+      "created": "Sun Oct  4 02:37:24 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 17846,
+      "pid": 17846,
+      "started_utc": "2026-10-04T09:37:24.494344+00:00",
+      "stopped_utc": "2026-10-04T09:42:30.387888+00:00"
+    },
+    "api_final": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "63394"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 63394",
+      "created": "Sun Oct  4 02:15:53 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 99856,
+      "pid": 99856,
+      "started_utc": "2026-10-04T09:15:53.854668+00:00",
+      "stopped_utc": "2026-10-04T09:42:30.028051+00:00"
+    },
+    "api_retry": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "services.personal.app",
+        "--port",
+        "61730"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m services.personal.app --port 61730",
+      "created": "Sun Oct  4 01:50:58 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 79822,
+      "pid": 79822,
+      "started_utc": "2026-10-04T08:50:58.756377+00:00",
+      "stopped_utc": "2026-10-04T09:42:29.632721+00:00"
+    },
+    "beat": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "beat",
+        "--loglevel=INFO",
+        "--schedule",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule-final",
+        "--pidfile",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final.pid"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule-final --pidfile /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final.pid",
+      "created": "Sun Oct  4 01:35:56 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 67486,
+      "pid": 67486,
+      "started_utc": "2026-10-04T08:35:56.053644+00:00",
+      "stopped_utc": "2026-10-04T08:35:57.801982+00:00"
+    },
+    "beat_accepted": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "beat",
+        "--loglevel=INFO",
+        "--schedule",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch-schedule",
+        "--pidfile",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch.pid"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch-schedule --pidfile /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-accepted-epoch.pid",
+      "created": "Sun Oct  4 02:37:18 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 17668,
+      "pid": 17668,
+      "started_utc": "2026-10-04T09:37:18.651613+00:00",
+      "stopped_utc": "2026-10-04T09:37:20.267220+00:00"
+    },
+    "beat_final": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "beat",
+        "--loglevel=INFO",
+        "--schedule",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final-epoch-schedule",
+        "--pidfile",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final-epoch.pid"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app beat --loglevel=INFO --schedule /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final-epoch-schedule --pidfile /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-final-epoch.pid",
+      "created": "Sun Oct  4 02:15:47 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 99782,
+      "pid": 99782,
+      "started_utc": "2026-10-04T09:15:47.992352+00:00",
+      "stopped_utc": "2026-10-04T09:15:49.576484+00:00"
+    },
+    "capture_accepted": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver_accepted.py",
+        "65214"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver_accepted.py 65214",
+      "created": "Sun Oct  4 02:35:53 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 16419,
+      "pid": 16419,
+      "started_utc": "2026-10-04T09:35:53.213846+00:00",
+      "stopped_utc": "2026-10-04T09:42:29.123329+00:00"
+    },
+    "frontend": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "http.server",
+        "59732",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/frontend"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m http.server 59732 --bind 127.0.0.1 --directory /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/frontend",
+      "created": "Sun Oct  4 01:37:49 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 69123,
+      "pid": 69123,
+      "started_utc": "2026-10-04T08:37:49.669352+00:00",
+      "stopped_utc": "2026-10-04T09:42:29.033366+00:00"
+    },
+    "receiver": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py",
+        "60842"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py 60842",
+      "created": "Sun Oct  4 02:18:23 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 2125,
+      "pid": 2125,
+      "started_utc": "2026-10-04T09:18:23.206095+00:00",
+      "stopped_utc": "2026-10-04T09:42:28.937515+00:00"
+    },
+    "receiver_pre_final": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py",
+        "60842"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py 60842",
+      "created": "Sun Oct  4 01:46:27 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 76191,
+      "pid": 76191,
+      "started_utc": "2026-10-04T08:46:27.110347+00:00",
+      "stopped_utc": "2026-10-04T09:18:23.174485+00:00"
+    },
+    "receiver_previous": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py",
+        "60842"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/capture_receiver.py 60842",
+      "created": "Sun Oct  4 01:39:57 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 70947,
+      "pid": 70947,
+      "started_utc": "2026-10-04T08:39:57.577907+00:00",
+      "stopped_utc": "2026-10-04T08:46:27.081189+00:00"
+    },
+    "worker": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "worker",
+        "--loglevel=INFO",
+        "--pool=solo",
+        "--queues=pipeline",
+        "--hostname=phase4a-a1952a864e82@localhost",
+        "--without-gossip",
+        "--without-mingle"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-a1952a864e82@localhost --without-gossip --without-mingle",
+      "created": "Sun Oct  4 01:35:56 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 67482,
+      "pid": 67482,
+      "started_utc": "2026-10-04T08:35:56.023520+00:00",
+      "stopped_utc": "2026-10-04T08:35:58.500043+00:00"
+    },
+    "worker_accepted": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "worker",
+        "--loglevel=INFO",
+        "--pool=solo",
+        "--queues=pipeline",
+        "--hostname=phase4a-accepted-a1952a864e82@localhost",
+        "--without-gossip",
+        "--without-mingle"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-accepted-a1952a864e82@localhost --without-gossip --without-mingle",
+      "created": "Sun Oct  4 02:37:18 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 17658,
+      "pid": 17658,
+      "started_utc": "2026-10-04T09:37:18.625012+00:00",
+      "stopped_utc": "2026-10-04T09:37:21.067155+00:00"
+    },
+    "worker_final": {
+      "args": [
+        "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+        "-m",
+        "celery",
+        "-A",
+        "workers.celery_app.celery_app",
+        "worker",
+        "--loglevel=INFO",
+        "--pool=solo",
+        "--queues=pipeline",
+        "--hostname=phase4a-final-a1952a864e82@localhost",
+        "--without-gossip",
+        "--without-mingle"
+      ],
+      "cmdline": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=phase4a-final-a1952a864e82@localhost --without-gossip --without-mingle",
+      "created": "Sun Oct  4 02:15:47 2026",
+      "owner": "a1952a864e824e0bbc99a4c2c131862e",
+      "pgid": 99778,
+      "pid": 99778,
+      "started_utc": "2026-10-04T09:15:47.959651+00:00",
+      "stopped_utc": "2026-10-04T09:15:50.267800+00:00"
+    }
+  },
+  "receiver_port": 60842,
+  "redis": {
+    "created": "2026-10-04T08:29:03.479936591Z",
+    "id": "997ef659955daece01db805627010d740caca9ed601f9aabe294a9f1971ddf77",
+    "image": "sha256:ff02b58f971e7d7d156a1267e283fcbbeee91773b6aa36c49dac28ecfe28eadf",
+    "mounts": [],
+    "name": "/nip-phase4a-redis-a1952a864e82",
+    "port": 59735,
+    "removed": true
+  },
+  "retry_api_port": 61730
+}

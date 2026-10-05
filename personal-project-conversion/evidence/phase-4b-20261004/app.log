@@ -1,0 +1,42 @@
+{"timestamp": "2026-10-05T00:28:07.235283+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+INFO:     Started server process [52617]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:58118 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60768 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60772 - "GET /api/v1/personal/events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60773 - "GET /api/v1/personal/saved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60774 - "GET /api/v1/personal/briefs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60775 - "GET /api/v1/personal/spending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60789 - "GET /saved HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60793 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60789 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60793 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60790 - "GET /api/v1/watchlist?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /api/v1/personal/saved?limit=12&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60793 - "GET /api/v1/personal/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60805 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60809 - "GET /api/v1/industries?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60811 - "GET /api/v1/alerts?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60810 - "GET /api/v1/companies?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60811 - "GET /api/v1/admin/jobs?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60808 - "GET /api/v1/risk-radar?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60807 - "GET /api/v1/events?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60805 - "GET /api/v1/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60811 - "GET /api/v1/admin/models?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60809 - "GET /api/v1/watchlist?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60810 - "GET /api/v1/admin/sources?limit=100&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60808 - "GET /api/v1/reports/daily-brief/latest HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60808 - "GET /api/v1/personal/briefs/76078893-1fd8-4386-b1d6-14c87995706c HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52617]

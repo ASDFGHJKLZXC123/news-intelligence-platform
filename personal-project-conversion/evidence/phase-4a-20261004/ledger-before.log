@@ -1,0 +1,17 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_paid_reservation_rejects_a_run_without_global_personal_ownership _____
+
+    def test_paid_reservation_rejects_a_run_without_global_personal_ownership():
+        # Existing monetary component fixture creates business rows but leaves legacy mode active.
+        # Possessing a run token is insufficient authority to dispatch in the other durable mode.
+        with migrated_disposable_engine() as engine:
+            _, ledgers = seed(engine, dates=1)
+>           with pytest.raises(PaidWorkBlocked):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE PaidWorkBlocked
+
+tests/integration/test_personal_phase4a_ledger.py:17: Failed
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_phase4a_ledger.py::test_paid_reservation_rejects_a_run_without_global_personal_ownership
+1 failed in 2.44s

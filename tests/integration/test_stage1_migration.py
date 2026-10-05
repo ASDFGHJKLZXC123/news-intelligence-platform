@@ -7,16 +7,37 @@ into the new shape without losing them, and that it reverses.
 
 from __future__ import annotations
 
-import pytest
-from alembic import command
-from alembic.config import Config
-from sqlalchemy import inspect, text
+import os
+import subprocess
+import sys
+from pathlib import Path
 
-from db.base import engine
+import pytest
+from sqlalchemy import Engine, create_engine, inspect, text
+
+from tests.integration._stage6_db import disposable_database, require_disposable_postgres, url_for
 
 pytestmark = pytest.mark.integration
 
-_ALEMBIC = Config("alembic.ini")
+
+def _migrate(engine: Engine, action: str, revision: str) -> None:
+    """Use explicit subprocess settings; never migrate the shared runtime engine."""
+    assert engine.url.database and engine.url.database.startswith("nip_stage1_migration_")
+    environment = {
+        **os.environ,
+        "APP_ENV": "test",
+        "DATABASE_URL": engine.url.render_as_string(hide_password=False),
+    }
+    result = subprocess.run(
+        [sys.executable, "-m", "alembic", action, revision],
+        env=environment,
+        cwd=Path(__file__).parents[2],
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    assert result.returncode == 0, result.stderr[-3000:]
+
 
 _VECTOR = "(SELECT ('[' || string_agg('0.1', ',') || ']')::vector FROM generate_series(1, 1536))"
 
@@ -48,31 +69,33 @@ INSERT INTO report_sections (id, report_id, section_order, title, body, evidence
 
 
 @pytest.fixture
-def at_revision_0012(require_postgres: None):
+def at_revision_0012():
     """A database holding pre-Stage-1 rows, parked one revision below 0013."""
-    command.upgrade(_ALEMBIC, "head")
-    command.downgrade(_ALEMBIC, "0012")
-    with engine.begin() as conn:
-        # Start from a clean slate: earlier tests in the session may have left rows.
-        conn.execute(text("TRUNCATE sources, users RESTART IDENTITY CASCADE"))
-        conn.execute(text(_LEGACY_ROWS))
-    try:
-        yield
-    finally:
-        command.upgrade(_ALEMBIC, "head")
-        with engine.begin() as conn:
-            conn.execute(text("TRUNCATE sources, users RESTART IDENTITY CASCADE"))
+    require_disposable_postgres()
+    with disposable_database("nip_stage1_migration_") as database:
+        engine = create_engine(url_for(database))
+        try:
+            # Bootstrap imports present-day ORM definitions. The historic 0013
+            # downgrade recreates the actual 0012 shape (including nullable embedding
+            # versions) before legacy rows are inserted. This disposable never
+            # installs or downgrades a Phase 3 retention migration.
+            _migrate(engine, "upgrade", "0013")
+            _migrate(engine, "downgrade", "0012")
+            with engine.begin() as conn:
+                conn.execute(text(_LEGACY_ROWS))
+            yield engine
+        finally:
+            engine.dispose()
 
 
-def test_upgrade_carries_legacy_rows_into_the_stage1_shape(at_revision_0012: None) -> None:
-    command.upgrade(_ALEMBIC, "0013")
+def test_upgrade_carries_legacy_rows_into_the_stage1_shape(at_revision_0012: Engine) -> None:
+    engine = at_revision_0012
+    _migrate(engine, "upgrade", "0013")
 
     with engine.connect() as conn:
         # The embedding survives and is stamped with the deployed identity, so widening the
         # primary key to (article_id, model, model_version) orphans no vector.
-        embeddings = conn.execute(
-            text("SELECT model, model_version FROM article_embeddings")
-        ).all()
+        embeddings = conn.execute(text("SELECT model, model_version FROM article_embeddings")).all()
         assert embeddings == [("text-embedding-3-small", "current")]
 
         alerts = dict(
@@ -97,9 +120,10 @@ def test_upgrade_carries_legacy_rows_into_the_stage1_shape(at_revision_0012: Non
 
 
 def test_downgrade_reverses_stage1_and_keeps_one_embedding_per_article(
-    at_revision_0012: None,
+    at_revision_0012: Engine,
 ) -> None:
-    command.upgrade(_ALEMBIC, "0013")
+    engine = at_revision_0012
+    _migrate(engine, "upgrade", "0013")
 
     with engine.begin() as conn:
         # A second embedding for the same article -- only legal under the composite key.
@@ -112,15 +136,21 @@ def test_downgrade_reverses_stage1_and_keeps_one_embedding_per_article(
         )
         assert conn.execute(text("SELECT count(*) FROM article_embeddings")).scalar_one() == 2
 
-    command.downgrade(_ALEMBIC, "0012")
+    _migrate(engine, "downgrade", "0012")
 
     with engine.connect() as conn:
         columns = {c["name"] for c in inspect(conn).get_columns("alerts")}
         assert "status" in columns
         assert "state" not in columns
 
-        stage1 = {"entity_aliases", "entity_redirects", "historical_episodes",
-                  "forecast_scenarios", "event_analogies", "risk_warnings"}
+        stage1 = {
+            "entity_aliases",
+            "entity_redirects",
+            "historical_episodes",
+            "forecast_scenarios",
+            "event_analogies",
+            "risk_warnings",
+        }
         assert not stage1 & set(inspect(conn).get_table_names())
 
         # Narrowing the key back to article_id keeps exactly one row -- the newest.

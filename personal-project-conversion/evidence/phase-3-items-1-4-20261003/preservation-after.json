@@ -1,0 +1,12 @@
+{
+  "unchanged": true,
+  "hashes": {
+    "services/personal/spending.py": "0c56132e9dd2bc345cbfe0c559429a160397e2820e0a94ded3307ed9c0877a42",
+    "db/migrations/versions/0022_personal_spending.py": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491",
+    "tests/integration/test_daily_pipeline_vertical_slice.py": "6685d7a3fa1f9f78def3f0734e867df3a62f969a8ff4fd055522de0ce39be281",
+    "personal-project-conversion/config/selected-preferences.json": "3d63e463d17239c28927fb8fe6afb7dd0f17f2dce646b1eaec39846ec9d5a127",
+    ".gitignore": "ad896ad66042b58d14cd83a4001180c6e4be6654aead0de97d1811071680ebd2",
+    "docs/evaluation/stage9-validation-protocol.md": "494f97fb5357ecda8d35a296567fde0d9c503be58257ea003df2bd4625fda3af",
+    "git_index_tree": "fc5087d3784e8ccae8502d23ba4efe5cd61017fd"
+  }
+}

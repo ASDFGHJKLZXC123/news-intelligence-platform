@@ -38,8 +38,24 @@ secrets/
 # Operational runbooks are release artifacts and must remain visible to version control.
 /docs/*
 !/docs/operations/
+# Stage 9's frozen opening-baseline protocol is a required test input. Keep the
+# rest of the local evaluation notes private while delivering this one file.
+!/docs/evaluation/
+/docs/evaluation/*
+!/docs/evaluation/stage9-validation-protocol.md
 /BUILDING_PLAN.md
 /backend_platform_building_plan.md
 /build.md
 /frontend/uploads/frontend_building_plan.md
 /incomplete.md
+
+# Raw personal-workflow backups, reviewer transcripts, and local scheduler state.
+# Retain these files locally; publish the acceptance summaries and checked outputs.
+/personal-project-conversion/evidence/**/*.sql
+/personal-project-conversion/evidence/phase-4a-20261004/backup-before.json
+/personal-project-conversion/evidence/phase-4a-20261004/backup-after-mode-switch.json
+/personal-project-conversion/evidence/phase-4a-20261004/backup-restored.json
+/personal-project-conversion/evidence/phase-3-items-1-4-20261003/resource-postgres-full-ddl.log
+/personal-project-conversion/evidence/claude-phase4-review-20261004/claude-events.jsonl
+/personal-project-conversion/evidence/claude-phase4-review-20261004/claude-prompt.txt
+/personal-project-conversion/evidence/**/owned-beat*schedule*

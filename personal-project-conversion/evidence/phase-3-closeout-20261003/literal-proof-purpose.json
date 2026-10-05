@@ -1,0 +1,74 @@
+{
+  "schema": "phase3-closeout-literal-proof-purpose.v1",
+  "authored_at": "2026-10-04T02:54:22.388467+00:00",
+  "scope": "Three literal acceptance input gaps; execution belongs to the root-owned identity-checked disposable PostgreSQL harness.",
+  "test_file": "tests/integration/test_personal_phase3_closeout.py",
+  "test_source_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+  "shared_authored_rss_sha256": "f1fddce95550b567f275aa2986bd3a06440fe015089b82093db8a2edd3a78f07",
+  "input_identity": "Canonical JSON of authored RSS guid/title/summary/url/published_at/source/provider_name/source_refs/evidence_refs. Generated database/run/profile UUIDs differ per mode and are excluded.",
+  "cases": [
+    {
+      "id": "C1",
+      "acceptance": "P3-02",
+      "nodeids": [
+        "tests/integration/test_personal_phase3_closeout.py::test_two_concurrent_http_retries_rotate_one_attempt_and_preserve_frozen_admissions"
+      ],
+      "assertions": [
+        "Two actual simultaneous HTTP retries yield one 202 and one 409, one production enqueue/scripted broker delivery and only attempt 2 with a rotated token.",
+        "Frozen profile, date, membership, capture/admission records and two charges remain unchanged; stale ownership fails.",
+        "Actual coordinator resumes frozen raw scope without recapture or provider/report dispatch; one pending item remains."
+      ]
+    },
+    {
+      "id": "C2",
+      "acceptance": "P3-06",
+      "nodeids": [
+        "tests/integration/test_personal_phase3_closeout.py::test_http_old_caller_dates_cannot_backdate_run_or_reopen_same_day_admission"
+      ],
+      "assertions": [
+        "Fixed server instant independently converts to the expected America/Los_Angeles calendar date.",
+        "First actual POST captures three, admits two and retains one pending; second POST supplies four old caller date fields yet returns the same succeeded run/date/attempt.",
+        "One run, one job, one delivery, two articles, two charged admissions and unchanged frozen membership/records prove no renewed daily credit."
+      ]
+    },
+    {
+      "id": "C3",
+      "acceptance": "P3-12",
+      "nodeids": [
+        "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[default]",
+        "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[raw]",
+        "tests/integration/test_personal_phase3_closeout.py::test_same_authored_rss_fixture_preserves_v2_scope_across_processing_modes[stage_failure]"
+      ],
+      "assertions": [
+        "Every mode reconstructs identical authored RSS fields and checks the shared input hash; v2 profiles freeze two admitted articles before enrichment.",
+        "Default uses actual offline embedding/grouping/claim/snapshot/report publication. A live profile edit after freeze cannot change eligible agency membership or the pinned original profile; snapshot hash is independently recomputed.",
+        "Actual brief detail/evidence APIs cite only persisted eligible agency sources and remain byte-identical after current Article title/summary/URL mutation.",
+        "Raw mode selects zero enrichment, persists explicit disabled outcomes and readable raw content, and rejects any embedding/report dispatch.",
+        "Required embedding failure occurs after scope freeze, remains failed with explicit workflow/provider failure, no snapshot/report, and both raw records readable."
+      ]
+    }
+  ],
+  "transports": "Broker delivery and RSS/model responses are synthetic. Production HTTP handlers, coordinator, PostgreSQL scope/revisions/grouping/claims/publication and read APIs execute. No real paid provider or live network behavior is claimed.",
+  "proposed_command": [
+    ".venv/bin/python",
+    "personal-project-conversion/evidence/phase-3-closeout-20261003/verify.py",
+    "personal-final",
+    "tests/integration/test_personal_*.py"
+  ],
+  "command_qualification": "The root expands the glob and supplies the exact owned resource, cleared credentials, paid gate false and a database-only socket guard; exact executed arguments belong to its retained command artifact.",
+  "failure_adjudication": {
+    "retained_gate": "final-targeted.log/xml/result.json",
+    "actual": "Two failed and six passed; default expected an unwritten success-stage key, while workflow failure JSON was truly lost before refreshed ownership checking.",
+    "oracle_correction": "Assert actual published Report plus run.result published/pass/report/snapshot identity and four implemented successful stage outcomes.",
+    "production_correction": "Only session.flush() after workflow failed stage assignment and before finish_run; required failed-stage assertion remains intact.",
+    "before_bytes": "coordinator-before-failure-stage-fix.py",
+    "diff": "coordinator-failure-stage-fix.diff"
+  },
+  "execution_status": "Root-owned personal-final gate passed all 100 individually recorded personal integration targets at the current coordinator/test source hashes; independent rerun remains separately recorded, and totals are not an acceptance oracle.",
+  "execution_artifacts": [
+    "personal-final.xml",
+    "personal-final.log",
+    "personal-final-result.json",
+    "personal-final-source-after.json"
+  ]
+}

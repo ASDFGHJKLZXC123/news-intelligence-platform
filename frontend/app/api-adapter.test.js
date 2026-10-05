@@ -275,7 +275,7 @@ const FIXTURES = {
 };
 
 function loadReachable(overrides) {
-  return A.loadSnapshot({ fixtures: FIXTURES, apiBase: "http://localhost:8000", fetch: makeServer(overrides), now: "2026-06-05T16:00:00Z" });
+  return A.loadSnapshot({ apiBase: "http://localhost:8000", fetch: makeServer(overrides), now: "2026-06-05T16:00:00Z" });
 }
 
 /* ---- types.ts field extraction (mapping-table alignment) ------------------ */
@@ -314,6 +314,7 @@ function assertAligned(typeName, produced) {
 test("CommonJS + browser export, no data side effects at eval", () => {
   assert.equal(typeof A.loadSnapshot, "function");
   assert.equal(typeof A.buildFixtureSnapshot, "function");
+  assert.equal(typeof A.buildEmptySnapshot, "function");
   assert.equal(A.DEFAULT_API_BASE, "http://localhost:8000");
   assert.deepEqual(A.DATA_QUALITY, { LIVE: "live", PARTIAL: "partial", SYNTHETIC: "synthetic", EMPTY: "empty" });
   // requiring the module attaches the browser global (globalThis in node) but never
@@ -376,6 +377,17 @@ test("mappers align with types.ts and apply safe defaults", () => {
   assertAligned("ModelUsageStats", A.mapModel(WIRE.models[0]));
   assertAligned("EvidenceSource", A.mapEvidenceLink(WIRE.evidenceByClaim["claim-1"].evidence[0], "claim-1"));
   assertAligned("RiskRadarItem", A.mapRiskRadarItem(WIRE.riskRadar[0], WIRE.riskDetail.geopolitical_supply_chain, [], Date.now()));
+});
+
+test("evidence mapping preserves only the retained snippet and validates source protocols", () => {
+  const wire = WIRE.evidenceByClaim["claim-1"].evidence[0];
+  const mapped = A.mapEvidenceLink({ ...wire, snippet: '<script>alert("x")</script> exact retained text' }, "claim-1");
+  assert.equal(mapped.excerpt, '<script>alert("x")</script> exact retained text');
+  assert.equal(A.safeHttpUrl("https://example.test/source"), "https://example.test/source");
+  assert.equal(A.safeHttpUrl("http://example.test/source"), "http://example.test/source");
+  assert.equal(A.safeHttpUrl("javascript:alert(1)"), null);
+  assert.equal(A.safeHttpUrl("#"), null);
+  assert.equal(A.safeHttpUrl(undefined), null);
 });
 
 test("risk detail stays descriptive when prediction-backed fields are gated off", () => {
@@ -452,7 +464,8 @@ test("reachable snapshot: every field present, blocks merged, metadata attached"
   assert.equal(typeof D.conf, "function");
   assert.equal(D.conf(0.8), "High");
   assert.equal(typeof D.NOW, "string");
-  assert.equal(D.runtime.mode, "api");
+  assert.equal(D.runtime.mode, "real");
+  assert.equal(D.runtime.lastSuccessfulFetchAt, D.NOW);
   assert.ok(D.NOW.endsWith("-04:00")); // now converted to NY summer offset
 
   // alerts mapped + status triad
@@ -493,24 +506,24 @@ test("reachable snapshot: every field present, blocks merged, metadata attached"
   // company-research enrichment matched NVDA by ticker
   assert.ok(D.companyProfiles["c-nvda"]);
 
-  // events merged: live cores + retained synthetic fixture event
+  // real mode contains only API events; fixture ids cannot leak across modes
   assert.ok(D.eventsById["e-uuid-1"]); // live
-  assert.ok(D.eventsById["evt-semis"]); // synthetic fixture retained
-  assert.equal(D.eventsById["evt-semis"].dataQuality, "synthetic");
+  assert.ok(!D.eventsById["evt-semis"]);
 
-  // evidence: real drawer links + retained fixture evidence, deduped, unioned claims
+  // evidence: real drawer links only, deduped, unioned claims
   const ei1 = D.evidenceById["ei-1"];
   assert.ok(ei1); // real
+  assert.equal(ei1.excerpt, "…");
   assert.deepEqual(ei1.relatedClaims.sort(), ["claim-1", "claim-2"]); // unioned across claims
-  assert.ok(D.evidenceById["ev1"]); // fixture retained for synthetic events
+  assert.ok(!D.evidenceById["ev1"]);
 
   // block quality registry + non-enumerable dataQuality tags
   assert.equal(D.blockQuality.metrics.quality, "live");
   assert.equal(D.blockQuality.industries.quality, "partial");
-  assert.equal(D.blockQuality.askSuggestions.quality, "synthetic");
+  assert.equal(D.blockQuality.askSuggestions.quality, "empty");
   assert.equal(D.blockQuality.NOW.kind, "derived");
   assert.equal(D.metrics.dataQuality, "live");
-  assert.equal(D.events.dataQuality, "partial");
+  assert.equal(D.events.dataQuality, "live");
   // non-enumerable: does not show up in key iteration or JSON
   assert.ok(!Object.keys(D.metrics).includes("dataQuality"));
   assert.ok(Array.isArray(D.metrics));
@@ -573,11 +586,23 @@ test("over-cap pagination marks the block partial and records a truncation, neve
 /* ======================================================================== */
 test("evidence comes from real drawer links; a 404 brief is an honest empty source", async () => {
   const D = await loadReachable({ "/api/v1/reports/daily-brief/latest": makeResponse(404, { error: { code: "not_found", message: "no brief", request_id: "req-nb" } }) });
-  // no real evidence, but fixture evidence retained for the synthetic events -> partial, no error
-  assert.ok(D.evidenceById["ev1"]);
+  // no real evidence and no fixture substitution; an expected 404 is not an error
+  assert.ok(!D.evidenceById["ev1"]);
   assert.ok(!D.evidenceById["ei-1"]);
-  assert.equal(D.blockQuality.evidence.quality, "partial");
+  assert.equal(D.blockQuality.evidence.quality, "empty");
   assert.ok(!D.apiErrors.some((e) => e.endpoint.includes("daily-brief"))); // 404 is not an error
+});
+
+test("latest-brief and nested claim failures degrade evidence instead of disappearing", async () => {
+  const latestFailure = await loadReachable({ "/api/v1/reports/daily-brief/latest": "throw" });
+  assert.equal(latestFailure.runtime.degraded, true);
+  assert.ok(latestFailure.apiErrors.some((e) => e.endpoint.includes("daily-brief")));
+
+  const claimFailure = await loadReachable({ "/api/v1/evidence/claim-2": makeResponse(503, { error: { code: "unavailable", message: "claim unavailable", request_id: "req-claim-2" } }) });
+  assert.equal(claimFailure.runtime.degraded, true);
+  assert.equal(claimFailure.blockQuality.evidence.quality, "partial");
+  assert.ok(claimFailure.evidenceById["ei-1"]);
+  assert.ok(claimFailure.apiErrors.some((e) => e.requestId === "req-claim-2"));
 });
 
 /* ======================================================================== */
@@ -588,7 +613,7 @@ test("reachable API with failed history yields empty series, never a fake curve"
     "/api/v1/risk-radar/geopolitical_supply_chain/history": "throw",
     "/api/v1/risk-radar/banking/history": "throw",
   });
-  assert.equal(D.runtime.mode, "api");
+  assert.equal(D.runtime.mode, "real");
   for (const label of Object.keys(D.riskTrends)) {
     assert.deepEqual(D.riskTrends[label], []); // empty, not a 30-point synthetic curve
   }
@@ -596,27 +621,47 @@ test("reachable API with failed history yields empty series, never a fake curve"
 });
 
 /* ======================================================================== */
-/*  Full API-unreachable fixture fallback                                    */
+/*  Real failure and explicit fixture demonstration                          */
 /* ======================================================================== */
-test("total API-unreachable -> full fixture snapshot in demo mode", async () => {
+test("total API-unreachable stays real and contains no fixture content", async () => {
   const D = await A.loadSnapshot({ fixtures: FIXTURES, apiBase: "http://localhost:8000", fetch: async () => { throw new Error("ECONNREFUSED"); }, now: "2026-06-05T16:00:00Z" });
-  assert.equal(D.runtime.mode, "demo");
+  assert.equal(D.runtime.mode, "real");
   assert.equal(D.runtime.degraded, true);
-  // fixtures passed through
-  assert.equal(D.events.length, 1);
+  assert.equal(D.runtime.requestFailed, true);
+  assert.equal(D.runtime.lastSuccessfulFetchAt, null);
+  assert.deepEqual(D.events, []);
+  assert.deepEqual(D.evidence, []);
+  assert.deepEqual(D.askSuggestions, []);
+  assert.ok(!D.eventsById["evt-semis"]);
+});
+
+test("all HTTP failures are a first-load error while healthy empty responses are successful", async () => {
+  const httpFailed = await A.loadSnapshot({
+    apiBase: "http://localhost:8000",
+    fetch: async () => makeResponse(503, { error: { code: "down", message: "down", request_id: "req-down" } }),
+    now: "2026-06-05T16:00:00Z",
+  });
+  assert.equal(httpFailed.runtime.requestFailed, true);
+  assert.equal(httpFailed.runtime.lastSuccessfulFetchAt, null);
+
+  const emptyServer = async (url) => {
+    const pathName = new URL(url).pathname;
+    if (pathName === "/api/v1/dashboard") return makeResponse(200, {});
+    if (pathName === "/api/v1/reports/daily-brief/latest") return makeResponse(404, { error: { code: "not_found", message: "none", request_id: "req-none" } });
+    return makeResponse(200, { items: [], total: 0, limit: 100, offset: 0 });
+  };
+  const empty = await A.loadSnapshot({ apiBase: "http://localhost:8000", fetch: emptyServer, now: "2026-06-05T16:00:00Z" });
+  assert.equal(empty.runtime.mode, "real");
+  assert.equal(empty.runtime.requestFailed, false);
+  assert.equal(empty.runtime.lastSuccessfulFetchAt, empty.NOW);
+  assert.deepEqual(empty.events, []);
+});
+
+test("demo snapshot requires an explicit demo request", async () => {
+  const D = await A.loadSnapshot({ mode: "demo", fixtures: FIXTURES, apiBase: "http://localhost:8000", fetch: async () => { throw new Error("must not request API"); }, now: "2026-06-05T16:00:00Z" });
+  assert.equal(D.runtime.mode, "demo");
   assert.equal(D.events[0].id, "evt-semis");
-  assert.equal(D.companies[0].name, "NVIDIA");
-  assert.deepEqual(D.askSuggestions, FIXTURES.core.ask.suggestions);
-  // every block synthetic
-  for (const f of ["metrics", "events", "riskRadar", "alerts", "companies", "askSuggestions"]) {
-    assert.equal(D.blockQuality[f].quality, "synthetic", f + " should be synthetic in demo");
-  }
-  // demo mode is the ONLY place a synthetic 30-day trend is generated
-  assert.equal(D.riskTrends["Macro Risk"].length, 30);
-  assert.equal(D.riskTrends["Geopolitical Risk"].length, 30);
-  // derived lookups still built
-  assert.ok(D.eventsById["evt-semis"]);
-  assert.ok(D.evidenceById["ev1"]);
+  assert.equal(D.runtime.lastSuccessfulFetchAt, null);
 });
 
 test("buildFixtureSnapshot is pure and self-contained", () => {
@@ -697,6 +742,122 @@ test("company-research enrichment failure is partial, never erases companies", a
   assert.equal(D.companies.length, 2); // companies preserved
   assert.equal(D.blockQuality.companyProfiles.quality, "partial");
   assert.ok(D.apiErrors.some((e) => e.endpoint.includes("company-research")));
+});
+
+/* -------------------------------------------------------------------------- */
+/*  Personal workflow client and status polling                               */
+/* -------------------------------------------------------------------------- */
+
+test("personal client scopes queries and maps wire keys before pages see them", async () => {
+  const calls = [];
+  const client = A.createPersonalApi({
+    apiBase: "http://localhost:8000/",
+    fetch: async (url, init) => {
+      calls.push({ url, init });
+      return makeResponse(200, {
+        items: [{ id: "evt-1", source_count: 2, newest_publication_at: "2026-09-08T12:00:00Z" }],
+        total: 1, limit: 12, offset: 12, displayed_run: { id: "run-1", local_date: "2026-09-08" },
+        last_successful_update_at: "2026-09-08T12:05:00Z",
+      });
+    },
+  });
+  const page = await client.listEvents({ runId: "run/1", query: "grid stress", savedOnly: true, limit: 12, offset: 12 });
+  assert.equal(page.items[0].sourceCount, 2);
+  assert.equal(page.items[0].newestPublicationAt, "2026-09-08T12:00:00Z");
+  assert.equal(page.displayedRun.localDate, "2026-09-08");
+  assert.equal(page.lastSuccessfulUpdateAt, "2026-09-08T12:05:00Z");
+  const parsed = new URL(calls[0].url);
+  assert.equal(parsed.pathname, "/api/v1/personal/events");
+  assert.equal(parsed.searchParams.get("run_id"), "run/1");
+  assert.equal(parsed.searchParams.get("q"), "grid stress");
+  assert.equal(parsed.searchParams.get("saved"), "true");
+  assert.equal(parsed.searchParams.get("offset"), "12");
+  assert.equal(calls[0].init.headers["X-API-Key"], undefined);
+});
+
+test("personal protected writes use only an explicit tab key and start accepts no date/body", async () => {
+  const calls = [];
+  const client = A.createPersonalApi({
+    apiBase: "http://localhost:8000",
+    fetch: async (url, init) => {
+      calls.push({ url, init });
+      if (init.method === "DELETE") return makeResponse(204, null);
+      return makeResponse(200, { run: { id: "run-1", local_date: "2026-09-08" } });
+    },
+  });
+  await client.startRun();
+  assert.equal(calls[0].url, "http://localhost:8000/api/v1/personal/runs");
+  assert.equal(calls[0].init.method, "POST");
+  assert.equal(calls[0].init.body, undefined);
+  assert.equal(calls[0].init.headers["X-API-Key"], undefined);
+
+  client.setApiKey("  throwaway-test-key  ");
+  await client.saveEvent("evt/1");
+  assert.equal(calls[1].init.headers["X-API-Key"], "throwaway-test-key");
+  assert.equal(calls[1].url, "http://localhost:8000/api/v1/personal/saved/evt%2F1");
+  client.setApiKey("");
+  await client.unsaveEntry("entry-1");
+  assert.equal(calls[2].init.headers["X-API-Key"], undefined);
+});
+
+test("personal mutation failure rejects with visible safe details and cannot look successful", async () => {
+  const client = A.createPersonalApi({
+    apiBase: "http://localhost:8000",
+    apiKey: "wrong-key",
+    fetch: async () => makeResponse(401, { error: { code: "unauthorized", message: "invalid api key", request_id: "req-personal-1" } }),
+  });
+  await assert.rejects(client.saveEvent("evt-1"), (error) => {
+    assert.equal(error.name, "PersonalApiError");
+    assert.equal(error.status, 401);
+    assert.equal(error.code, "unauthorized");
+    assert.equal(error.requestId, "req-personal-1");
+    assert.equal(error.message, "invalid api key");
+    return true;
+  });
+});
+
+test("personal reports, evidence, and exports remain pinned to the selected report UUID", async () => {
+  const calls = [];
+  const client = A.createPersonalApi({
+    apiBase: "http://localhost:8000",
+    fetch: async (url) => { calls.push(url); return makeResponse(200, { evidence: [] }); },
+  });
+  await client.claimEvidence("report/7", "claim/2");
+  assert.equal(calls[0], "http://localhost:8000/api/v1/personal/briefs/report%2F7/claims/claim%2F2/evidence");
+  assert.equal(client.reportExportUrl("report/7", "md"), "http://localhost:8000/api/v1/personal/briefs/report%2F7/export.md");
+  assert.equal(client.reportExportUrl("report/7", "pdf"), "http://localhost:8000/api/v1/personal/briefs/report%2F7/export.pdf");
+});
+
+test("personal run poller allows one status request at a time and stops at terminal", async () => {
+  let resolveFirst;
+  let calls = 0;
+  const scheduled = [];
+  const updates = [];
+  let terminal = null;
+  const poller = A.createPersonalStatusPoller({
+    interval: 2000,
+    setTimeout: (fn, delay) => { scheduled.push({ fn, delay }); return scheduled.length; },
+    clearTimeout: () => {},
+    readRun: async () => {
+      calls += 1;
+      if (calls === 1) return new Promise((resolve) => { resolveFirst = resolve; });
+      return { run: { id: "run-1", state: "succeeded" } };
+    },
+    onUpdate: (run) => updates.push(run.state),
+    onTerminal: (run) => { terminal = run; },
+  });
+  poller.start("run-1");
+  assert.equal(poller.isInFlight(), true);
+  await poller.refresh();
+  assert.equal(calls, 1);
+  resolveFirst({ run: { id: "run-1", state: "running" } });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(scheduled[0].delay, 2000);
+  await scheduled.shift().fn();
+  assert.deepEqual(updates, ["running", "succeeded"]);
+  assert.equal(terminal.state, "succeeded");
+  assert.equal(poller.isStopped(), true);
+  assert.equal(scheduled.length, 0);
 });
 
 /* ======================================================================== */

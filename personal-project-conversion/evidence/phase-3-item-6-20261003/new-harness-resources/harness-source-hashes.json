@@ -1,0 +1,5 @@
+{
+  "scripts/personal_phase2_offline_db.py": "c4329c4183addf7cd58ba68dc7c17204b647ce2f2cd81274a8efcf8a4730908f",
+  "scripts/start-personal-phase2-offline.sh": "ab1dd5765ecf9f3570e164b6a59fe12df32eb26d899c22cb4e010ed25796e346",
+  "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee"
+}

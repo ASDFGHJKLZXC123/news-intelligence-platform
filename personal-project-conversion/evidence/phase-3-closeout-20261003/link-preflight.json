@@ -1,0 +1,19 @@
+{
+  "checked": 353,
+  "unexpected_broken_links": [],
+  "planned_final_artifacts_only": [
+    {
+      "from": "personal-project-conversion/evidence/phase-3.md",
+      "target": "phase-3-closeout-20261003/final-check.json"
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-closeout-20261003/README.md",
+      "target": "independent-final-check.json"
+    },
+    {
+      "from": "personal-project-conversion/evidence/phase-3-closeout-20261003/README.md",
+      "target": "final-check.json"
+    }
+  ],
+  "status": "PASS_preflight"
+}

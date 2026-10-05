@@ -1,0 +1,11 @@
+{
+  "README.md": "6f3f1ae1321ad9e8482b7f2c750958da31fd4b2e5e7f42851f55c6360a33406c",
+  "cleanup-verification.json": "a836c98b3700803016a53d91e4a3537842d1341ac240a0c46b81dbb498ba0709",
+  "final-check.json": "336e43fa2337e4c29f86fbb5ee044425195ae74db50f11fdd6cc41e185c0b411",
+  "focused-integration.json": "0f13b5d08b6f46c0ade0d52c24aaf82f405412a1141bf444eb24a0ec8289dbf7",
+  "focused-integration.log": "b5c2b48098370b972381abdb85dc5c960dd4d7a7d49a70e3d132eca2b34e8461",
+  "focused-unit-verification.json": "f0d10a41a67f312d14832b79eca55fb93214bb0e575b19f3e298285992138d57",
+  "implementation-files.json": "2f48208095a972c2d7c4a2ca6784d308ec9213e8f67d8acdaa2b3c7b8b86b9a5",
+  "independent-review.md": "ad5a530bcf4753dd75c49052cf059af7d83698399caed1bcc7454e41b9875862",
+  "manifest.json": "4814ce6e8733a6dde964af1734a729b0305b47ac8d5caac9e829e42d68b90889"
+}

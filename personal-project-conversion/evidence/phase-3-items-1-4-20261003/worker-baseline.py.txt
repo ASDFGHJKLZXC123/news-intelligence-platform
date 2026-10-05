@@ -1,0 +1,947 @@
+"""Celery entry point for one explicitly delivered personal daily run.
+
+The task has no automatic retry: PostgreSQL owns the logical attempt counter and the API exposes
+an explicit retry action. Production providers are selected only from the run's immutable profile.
+A synthetic provider bundle is available solely when a local/test process names an explicit
+fixture file and the frozen route names the same fixture identity.
+"""
+
+from __future__ import annotations
+
+import datetime
+import math
+import uuid
+from dataclasses import dataclass
+from decimal import Decimal
+from typing import Any
+
+import httpx
+from celery import shared_task
+from sqlalchemy import func, select
+from sqlalchemy.engine import make_url
+
+from db.base import SessionLocal
+from db.models import (
+    Article,
+    Claim,
+    ClaimEvidence,
+    Event,
+    EvidenceItem,
+    Job,
+    LLMRun,
+    PersonalCapture,
+    PersonalProfileRevision,
+    PersonalRun,
+    PersonalWorkspace,
+    PersonalWriterMode,
+    Report,
+    Source,
+    User,
+)
+from packages.config import metrics
+from packages.config.logging import get_logger, set_job_id
+from packages.config.settings import Settings, get_settings
+from services.ingestion.http_provider import HttpRSSProvider
+from services.llm.cache import InMemoryLLMPromptCache
+from services.llm.http_providers import (
+    AnthropicMessagesProvider,
+    DeepSeekChatCompletionsProvider,
+    GeminiInteractionsProvider,
+    OpenAIChatCompletionsProvider,
+)
+from services.llm.orchestrator import LLMOrchestrator
+from services.llm.repository import SQLAlchemyLLMRuntimeRepository
+from services.personal.coordinator import run_personal_daily
+from services.personal.live_smoke import (
+    FixedCaptureRSSProvider,
+    GuardedHTTPClient,
+    GuardedLLMProvider,
+    LiveSmokeConfig,
+    LiveSmokeError,
+    LiveSmokeLedger,
+    build_guarded_openai_embedding_provider,
+)
+from services.personal.offline_fixture import (
+    OfflinePersonalFixture,
+    load_offline_personal_fixture,
+)
+from services.personal.runs import (
+    create_daily_run,
+    lock_owned_run,
+    require_personal_writer_mode,
+)
+from services.personal.settings import processing_block_reason
+from services.personal.workspace import configure_profile, ensure_workspace
+from workers.celery_app import (
+    PIPELINE_TASK_SOFT_TIME_LIMIT,
+    PIPELINE_TASK_TIME_LIMIT,
+    QUEUE_PIPELINE,
+)
+
+logger = get_logger("workers.personal_tasks")
+TASK_NAME = "workers.personal_tasks.run_personal_daily"
+_SUPPORTED_LIVE_PROVIDERS = frozenset({"anthropic", "openai", "gemini", "deepseek"})
+_LIVE_SMOKE_DATABASE_PREFIX = "nip_phase2_live_"
+_LOOPBACK_DATABASE_HOSTS = frozenset({"127.0.0.1", "localhost", "::1"})
+_LIVE_PROVIDER_CLASSES = {
+    "anthropic": AnthropicMessagesProvider,
+    "openai": OpenAIChatCompletionsProvider,
+    "gemini": GeminiInteractionsProvider,
+    "deepseek": DeepSeekChatCompletionsProvider,
+}
+_OFFICIAL_PROVIDER_BASE_URLS = {
+    "anthropic": "https://api.anthropic.com",
+    "openai": "https://api.openai.com",
+    "gemini": "https://generativelanguage.googleapis.com",
+    "deepseek": "https://api.deepseek.com",
+}
+
+
+@dataclass(frozen=True)
+class _RuntimeSpec:
+    route: dict[str, Any]
+    authorized_spend_usd: float
+    ai_block_reason: str | None = None
+
+
+@dataclass(frozen=True)
+class _LiveSmokeRun:
+    run_id: uuid.UUID
+    ownership_token: uuid.UUID
+    frozen_route: dict[str, Any]
+
+
+def _runtime_spec(run_id: uuid.UUID, token: uuid.UUID) -> _RuntimeSpec:
+    with SessionLocal() as session:
+        row = session.execute(
+            select(PersonalRun, PersonalProfileRevision)
+            .join(
+                PersonalProfileRevision,
+                PersonalProfileRevision.id == PersonalRun.profile_revision_id,
+            )
+            .where(PersonalRun.id == run_id)
+        ).one_or_none()
+        if row is None:
+            raise ValueError("personal run or frozen profile is unavailable")
+        run, profile = row
+        if run.ownership_token != token or run.state != "queued":
+            raise ValueError("personal worker delivery is stale")
+        settings = profile.settings or {}
+        route = settings.get("model_route")
+        if (
+            profile.schema_revision != "personal-profile.v2"
+            and profile.execution_profile == "assisted"
+            and (not isinstance(route, dict) or not route)
+        ):
+            raise ValueError("assisted personal run has no frozen model route")
+        try:
+            authorized_spend = float(settings.get("authorized_spend_usd") or 0)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("personal spending allowance must be finite") from exc
+        if not math.isfinite(authorized_spend) or authorized_spend < 0:
+            raise ValueError("personal spending allowance must be finite and non-negative")
+        reason = (
+            processing_block_reason(profile)
+            if profile.schema_revision == "personal-profile.v2"
+            else None
+        )
+        # Ordinary live activation has not been authorized. Durable paid adapters are
+        # verified separately using synthetic transport; config/keys alone cannot
+        # activate them through this worker. Continue bounded raw intake instead.
+        if (
+            profile.schema_revision == "personal-profile.v2"
+            and isinstance(route, dict)
+            and route.get("mode") == "live"
+        ):
+            reason = reason or "execution_route_unavailable"
+        return _RuntimeSpec(
+            route=(
+                {"mode": "raw"}
+                if profile.execution_profile == "raw" or reason is not None
+                else dict(route)
+                if isinstance(route, dict)
+                else {}
+            ),
+            authorized_spend_usd=authorized_spend,
+            ai_block_reason=reason,
+        )
+
+
+def _provider_key(settings: Settings, provider: str) -> str:
+    return {
+        "anthropic": settings.anthropic_api_key,
+        "openai": settings.openai_api_key,
+        "gemini": settings.gemini_api_key,
+        "deepseek": settings.deepseek_api_key,
+    }.get(provider, "")
+
+
+def _routed_settings(
+    settings: Settings, route: dict[str, Any], authorized_spend_usd: float
+) -> Settings:
+    if route.get("mode") != "live":
+        raise ValueError("production personal worker requires an explicit live route")
+    generation = route.get("generation")
+    embedding = route.get("embedding")
+    if not isinstance(generation, dict) or not isinstance(embedding, dict):
+        raise ValueError("personal live route must identify generation and embedding models")
+    provider = generation.get("provider")
+    model = generation.get("model")
+    if provider not in _SUPPORTED_LIVE_PROVIDERS or not isinstance(model, str) or not model:
+        raise ValueError("personal live route provider/model is invalid")
+    if not math.isfinite(authorized_spend_usd) or authorized_spend_usd <= 0:
+        raise ValueError("personal live route has no authorized spending allowance")
+    if not _provider_key(settings, provider):
+        raise ValueError("personal live route provider credential is unavailable")
+    if not settings.openai_api_key:
+        raise ValueError("personal assisted processing requires the configured embedding route")
+    if (
+        embedding.get("provider") != "openai"
+        or not isinstance(embedding.get("model"), str)
+        or not embedding["model"]
+        or not isinstance(embedding.get("model_version"), str)
+        or not embedding["model_version"]
+    ):
+        raise ValueError("personal embedding route is invalid or unsupported")
+    price_key = f"{provider}:{model}"
+    if price_key not in settings.llm_provider_token_price_usd_per_1m:
+        raise ValueError("personal live route has no configured price identity")
+    ceiling = min(settings.llm_monthly_budget_usd, authorized_spend_usd)
+    return settings.model_copy(
+        update={
+            "llm_models": {**settings.llm_models, "T1": model, "T2": model, "T3": model},
+            "llm_tier_providers": {
+                **settings.llm_tier_providers,
+                "T1": provider,
+                "T2": provider,
+                "T3": provider,
+            },
+            "llm_tier_fallbacks": {},
+            "llm_monthly_budget_usd": ceiling,
+            "llm_budget_enforced": True,
+            "embedding_model": embedding["model"],
+            "embedding_model_version": embedding["model_version"],
+        }
+    )
+
+
+def _redis_client(settings: Settings) -> Any:
+    import redis
+
+    return redis.Redis.from_url(settings.redis_url)
+
+
+def _close(resource: object | None) -> None:
+    if resource is None:
+        return
+    close = getattr(resource, "close", None)
+    if callable(close):
+        close()
+
+
+def _offline_runtime(
+    settings: Settings, spec: _RuntimeSpec
+) -> tuple[OfflinePersonalFixture, object, None]:
+    if settings.app_env not in {"local", "test"}:
+        raise ValueError("offline personal fixtures are limited to local/test processes")
+    fixture = load_offline_personal_fixture(settings.personal_offline_fixture_path)
+    fixture.validate_route(spec.route)
+    return fixture, fixture.embedding_provider(), None
+
+
+class _DisabledEmbeddingProvider:
+    model_name = "disabled"
+    model_version = "raw"
+
+    def embed(self, _texts):  # noqa: ANN001, ANN202
+        raise RuntimeError("raw personal profile attempted an embedding dispatch")
+
+
+def _mark_queued_setup_failure(run_id: uuid.UUID, token: uuid.UUID) -> bool:
+    """Fail only the still-queued attempt whose runtime setup could not start."""
+
+    with SessionLocal() as session:
+        try:
+            run = lock_owned_run(session, run_id, token, allow_queued=True)
+            if run.state != "queued":
+                session.rollback()
+                return False
+            error = {
+                "code": "worker_setup_failed",
+                "message": "Personal update could not start; an explicit retry may be available.",
+            }
+            run.state = "failed"
+            run.error = error
+            run.lease_expires_at = None
+            stages = dict(run.stage_results or {})
+            stages["worker_setup"] = {"status": "failed", "code": "worker_setup_failed"}
+            run.stage_results = stages
+            job = session.get(Job, run.job_id, with_for_update=True, populate_existing=True)
+            if job is None:
+                raise RuntimeError("personal run job is unavailable")
+            job.state = "failed"
+            job.error = error
+            session.commit()
+            return True
+        except Exception:
+            session.rollback()
+            return False
+
+
+def _live_smoke_database_name(session: Any, settings: Settings) -> str:
+    """Prove the dedicated run cannot touch an ordinary or remote database."""
+
+    if settings.app_env not in {"local", "test"}:
+        raise LiveSmokeError("live smoke execution is limited to a non-production process")
+    bind = session.get_bind()
+    url = make_url(bind.url if hasattr(bind, "url") else settings.database_url)
+    if not url.drivername.startswith("postgresql"):
+        raise LiveSmokeError("live smoke execution requires a disposable PostgreSQL database")
+    if url.host not in _LOOPBACK_DATABASE_HOSTS:
+        raise LiveSmokeError("live smoke database must be on the loopback host")
+    if url.port in {None, 5432}:
+        raise LiveSmokeError("live smoke database must use an explicit non-default test port")
+    database = url.database or ""
+    if not database.startswith(_LIVE_SMOKE_DATABASE_PREFIX):
+        raise LiveSmokeError(f"live smoke database must start with {_LIVE_SMOKE_DATABASE_PREFIX}")
+    return database
+
+
+def _validate_fresh_live_smoke_database(
+    session: Any, settings: Settings, config: LiveSmokeConfig
+) -> tuple[Source, ...]:
+    """Require a migrated, otherwise empty database with only the listed active feeds."""
+
+    _live_smoke_database_name(session, settings)
+    source_ids = tuple(
+        dict.fromkeys(uuid.UUID(article.source_id) for article in config.capture_articles)
+    )
+    sources = tuple(
+        session.execute(select(Source).where(Source.id.in_(source_ids)).order_by(Source.id))
+        .scalars()
+        .all()
+    )
+    if {source.id for source in sources} != set(source_ids) or any(
+        not source.active for source in sources
+    ):
+        raise LiveSmokeError("every fixed-capture source must exist and be active")
+    total_sources = int(session.scalar(select(func.count()).select_from(Source)) or 0)
+    if total_sources != len(source_ids):
+        raise LiveSmokeError("live smoke database contains an unrelated source")
+
+    for model in (
+        User,
+        PersonalWorkspace,
+        PersonalProfileRevision,
+        PersonalRun,
+        PersonalCapture,
+        Article,
+        Event,
+        Claim,
+        ClaimEvidence,
+        EvidenceItem,
+        Report,
+        LLMRun,
+        Job,
+    ):
+        if session.scalar(select(func.count()).select_from(model)):
+            raise LiveSmokeError(
+                f"live smoke database is not fresh ({model.__tablename__} contains rows)"
+            )
+    mode = session.scalar(
+        select(PersonalWriterMode.mode).where(PersonalWriterMode.singleton.is_(True))
+    )
+    if mode != "legacy":
+        raise LiveSmokeError("fresh live smoke database has an invalid writer mode")
+    return sources
+
+
+def _live_smoke_route(config: LiveSmokeConfig, ledger: LiveSmokeLedger) -> dict[str, Any]:
+    primary = config.route_by_id[config.generation_route_ids[0]]
+    embedding = config.route_by_id[config.embedding_route_id]
+    return {
+        "mode": "live",
+        "verification_id": config.verification_id,
+        "config_hash": config.config_hash,
+        "ledger_path": str(ledger.path),
+        "capture_ids": [article.capture_id for article in config.capture_articles],
+        "generation": {
+            "route_id": primary.route_id,
+            "provider": primary.provider,
+            "model": primary.model,
+            "model_version": primary.model_version,
+        },
+        "generation_routes": [
+            config.route_by_id[route_id].public_dict() for route_id in config.generation_route_ids
+        ],
+        "probe_routes": [
+            config.route_by_id[route_id].public_dict() for route_id in config.probe_route_ids
+        ],
+        "embedding": {
+            "route_id": embedding.route_id,
+            "provider": embedding.provider,
+            "model": embedding.model,
+            "model_version": embedding.model_version,
+        },
+    }
+
+
+def _create_live_smoke_run(
+    *,
+    settings: Settings,
+    config: LiveSmokeConfig,
+    ledger: LiveSmokeLedger,
+    now: datetime.datetime,
+) -> _LiveSmokeRun:
+    state = ledger.snapshot()
+    if state.get("personal_run_id") is not None or state.get("dispatches") or state.get("outcome"):
+        raise LiveSmokeError("live smoke execution requires a fresh unbound ledger")
+    with SessionLocal() as session:
+        sources = _validate_fresh_live_smoke_database(session, settings, config)
+        workspace, _choices = ensure_workspace(session)
+        if workspace.owner_id is None:
+            raise LiveSmokeError("live smoke workspace owner could not be initialized")
+        frozen_route = _live_smoke_route(config, ledger)
+        configure_profile(
+            session,
+            workspace,
+            selected_source_ids=[source.id for source in sources],
+            include_phrases=list(config.include_phrases),
+            exclude_phrases=list(config.exclude_phrases),
+            execution_profile="assisted",
+            settings={
+                "model_route": frozen_route,
+                "authorized_spend_usd": str(config.effective_allowance_usd),
+                "live_smoke_verification_id": config.verification_id,
+                "live_smoke_config_hash": config.config_hash,
+                "live_smoke_ledger_path": str(ledger.path),
+            },
+        )
+        decision = create_daily_run(
+            session,
+            workspace,
+            now=now,
+            allow_bounded_live=True,
+        )
+        if not decision.created or not decision.should_enqueue:
+            raise LiveSmokeError("live smoke database already contains today's personal run")
+        token = decision.run.ownership_token
+        if token is None:
+            raise LiveSmokeError("live smoke run has no ownership token")
+        decision.run.stage_results = {
+            **(decision.run.stage_results or {}),
+            "live_smoke": {
+                "status": "configured",
+                "verification_id": config.verification_id,
+                "config_hash": config.config_hash,
+            },
+        }
+        session.commit()
+        return _LiveSmokeRun(decision.run.id, token, frozen_route)
+
+
+def _provider_base_url(settings: Settings, provider: str) -> str:
+    configured = {
+        "anthropic": settings.anthropic_base_url,
+        "openai": settings.openai_base_url,
+        "gemini": settings.gemini_base_url,
+        "deepseek": settings.deepseek_base_url,
+    }[provider]
+    expected = _OFFICIAL_PROVIDER_BASE_URLS[provider]
+    if configured.rstrip("/") != expected:
+        raise LiveSmokeError(f"bounded live smoke requires the official {provider} API endpoint")
+    return expected
+
+
+def _live_smoke_settings(settings: Settings, config: LiveSmokeConfig) -> Settings:
+    primary = config.route_by_id[config.generation_route_ids[0]]
+    prices = dict(settings.llm_provider_token_price_usd_per_1m)
+    planned_prices: dict[str, tuple[Decimal, Decimal]] = {}
+    for route_id in (*config.generation_route_ids, *config.probe_route_ids):
+        route = config.route_by_id[route_id]
+        if not _provider_key(settings, route.provider):
+            raise LiveSmokeError(
+                f"credential for enumerated provider {route.provider} is unavailable"
+            )
+        key = f"{route.provider}:{route.model}"
+        exact_price = (
+            route.input_usd_per_million_tokens,
+            route.output_usd_per_million_tokens,
+        )
+        if key in planned_prices and planned_prices[key] != exact_price:
+            raise LiveSmokeError("one provider/model cannot carry two prices in a live smoke plan")
+        planned_prices[key] = exact_price
+        prices[key] = {
+            "input": float(exact_price[0]),
+            "output": float(exact_price[1]),
+        }
+    return settings.model_copy(
+        update={
+            "llm_models": {
+                **settings.llm_models,
+                "T1": primary.model,
+                "T2": primary.model,
+                "T3": primary.model,
+            },
+            "llm_tier_providers": {
+                **settings.llm_tier_providers,
+                "T1": primary.provider,
+                "T2": primary.provider,
+                "T3": primary.provider,
+            },
+            "llm_tier_fallbacks": {},
+            "llm_provider_token_price_usd_per_1m": prices,
+            "llm_tier_context_token_limits": {
+                **settings.llm_tier_context_token_limits,
+                "T1": config.limits.reasoning_input_tokens,
+                "T2": config.limits.reasoning_input_tokens,
+                "T3": config.limits.reasoning_input_tokens,
+            },
+            "llm_tier_max_output_tokens": {
+                **settings.llm_tier_max_output_tokens,
+                "T1": config.limits.reasoning_output_tokens,
+                "T2": config.limits.reasoning_output_tokens,
+                "T3": config.limits.reasoning_output_tokens,
+            },
+            "llm_monthly_budget_usd": float(config.effective_allowance_usd),
+            "llm_budget_enforced": True,
+        }
+    )
+
+
+def _preflight_live_smoke_runtime(settings: Settings, config: LiveSmokeConfig) -> Settings:
+    """Validate every external route before a feed or billable provider can be touched."""
+
+    if config.probe_route_ids:
+        raise LiveSmokeError(
+            "the Phase 2 coordinator has no separate paid probe stage; probe routes must be empty"
+        )
+    if not settings.openai_api_key:
+        raise LiveSmokeError("credential for the enumerated embedding provider is unavailable")
+    _provider_base_url(settings, "openai")
+    routed = _live_smoke_settings(settings, config)
+    for route_id in config.generation_route_ids:
+        route = config.route_by_id[route_id]
+        _provider_base_url(routed, route.provider)
+        if route.provider == "gemini" and route.model not in routed.gemini_model_thinking_levels:
+            raise LiveSmokeError(
+                "the enumerated Gemini route has no explicit thinking-level configuration"
+            )
+    return routed
+
+
+def _build_guarded_live_orchestrator(
+    *,
+    session: Any,
+    settings: Settings,
+    config: LiveSmokeConfig,
+    ledger: LiveSmokeLedger,
+    input_ids: tuple[str, ...],
+) -> LLMOrchestrator:
+    routed = _live_smoke_settings(settings, config)
+    providers: list[GuardedLLMProvider] = []
+    try:
+        for route_id in config.generation_route_ids:
+            route = config.route_by_id[route_id]
+            provider_class = _LIVE_PROVIDER_CLASSES[route.provider]
+            raw_client = httpx.Client(
+                base_url=_provider_base_url(routed, route.provider),
+                timeout=routed.llm_request_timeout_seconds,
+                follow_redirects=False,
+                trust_env=False,
+            )
+            guarded_client = GuardedHTTPClient(
+                config=config,
+                ledger=ledger,
+                route_id=route.route_id,
+                delegate=raw_client,
+                input_ids=input_ids,
+            )
+            try:
+                delegate = provider_class(
+                    settings=routed,
+                    model_name=route.model,
+                    model_version=route.model_version,
+                    max_output_tokens=config.limits.reasoning_output_tokens,
+                    client=guarded_client,
+                )
+                providers.append(GuardedLLMProvider(delegate=delegate, http_client=guarded_client))
+            except BaseException:
+                guarded_client.close()
+                raise
+    except BaseException:
+        for provider in reversed(providers):
+            _close(provider)
+        raise
+    provider_tuple = tuple(providers)
+    return LLMOrchestrator(
+        settings=routed,
+        repository=SQLAlchemyLLMRuntimeRepository(session, commit_on_write=False),
+        providers_by_tier={
+            "T1": provider_tuple,
+            "T2": provider_tuple,
+            "T3": provider_tuple,
+        },
+        cache=InMemoryLLMPromptCache(),
+    )
+
+
+def _captured_live_smoke_ids(run_id: uuid.UUID, config: LiveSmokeConfig) -> tuple[str, ...]:
+    with SessionLocal() as session:
+        hashes = set(
+            session.execute(
+                select(PersonalCapture.url_hash).where(PersonalCapture.run_id == run_id)
+            ).scalars()
+        )
+    return tuple(
+        article.capture_id for article in config.capture_articles if article.url_hash in hashes
+    )
+
+
+def _require_live_smoke_ledger_identity(config: LiveSmokeConfig, ledger: LiveSmokeLedger) -> None:
+    """Reject a valid ledger that belongs to another verification or config."""
+
+    if (
+        ledger.config.verification_id != config.verification_id
+        or ledger.config.config_hash != config.config_hash
+    ):
+        raise LiveSmokeError("live smoke configuration does not match the supplied ledger")
+    canonical_path = LiveSmokeLedger.canonical_path(ledger.path.parent, config.verification_id)
+    if ledger.path != canonical_path:
+        raise LiveSmokeError("live smoke ledger does not use its canonical verification path")
+
+
+def _record_live_smoke_stage(
+    run_id: uuid.UUID,
+    config: LiveSmokeConfig,
+    *,
+    status: str,
+    code: str,
+    capture_ids: tuple[str, ...],
+    snapshot_id: uuid.UUID | None,
+    report_id: uuid.UUID | None,
+    report_published: bool,
+) -> None:
+    """Persist a sanitized workflow-versus-verification outcome under the writer fence."""
+
+    with SessionLocal() as session:
+        require_personal_writer_mode(session, lock=True)
+        run = session.execute(
+            select(PersonalRun)
+            .where(PersonalRun.id == run_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        ).scalar_one_or_none()
+        if run is None:
+            raise LiveSmokeError("live smoke run disappeared before status persistence")
+        current = dict((run.stage_results or {}).get("live_smoke") or {})
+        stages = dict(run.stage_results or {})
+        stages["live_smoke"] = {
+            **current,
+            "status": status,
+            "code": code,
+            "verification_id": config.verification_id,
+            "config_hash": config.config_hash,
+            "capture_ids": list(capture_ids),
+            "snapshot_id": str(snapshot_id) if snapshot_id is not None else None,
+            "report_id": str(report_id) if report_id is not None else None,
+            "report_published": report_published,
+        }
+        run.stage_results = stages
+        session.commit()
+
+
+def execute_personal_live_smoke(
+    *, config: LiveSmokeConfig, ledger: LiveSmokeLedger
+) -> dict[str, Any]:
+    """Execute one fresh, fixed-capture live proof through guarded production adapters.
+
+    This boundary is intentionally not a Celery task and is unavailable through the ordinary API.
+    The CLI must validate explicit authorization before calling it. Every database row belongs to a
+    new loopback disposable database, while every paid HTTP POST reserves in ``ledger`` first.
+    """
+
+    _require_live_smoke_ledger_identity(config, ledger)
+    config.require_execution_authorized(config.verification_id)
+    settings = get_settings()
+    _preflight_live_smoke_runtime(settings, config)
+    now = datetime.datetime.now(datetime.UTC)
+    prepared: _LiveSmokeRun | None = None
+    embedding_provider: object | None = None
+    capture_ids: tuple[str, ...] = ()
+    snapshot_id: uuid.UUID | None = None
+    report_id: uuid.UUID | None = None
+    report_published = False
+    try:
+        prepared = _create_live_smoke_run(
+            settings=settings,
+            config=config,
+            ledger=ledger,
+            now=now,
+        )
+        ledger.bind_run(str(prepared.run_id))
+        input_ids = tuple(article.capture_id for article in config.capture_articles)
+        embedding_client = httpx.Client(
+            base_url=_provider_base_url(settings, "openai"),
+            timeout=settings.llm_request_timeout_seconds,
+            follow_redirects=False,
+            trust_env=False,
+        )
+        try:
+            embedding_provider = build_guarded_openai_embedding_provider(
+                config=config,
+                ledger=ledger,
+                route_id=config.embedding_route_id,
+                api_key=settings.openai_api_key,
+                input_ids=input_ids,
+                client=embedding_client,
+            )
+        except BaseException:
+            embedding_client.close()
+            raise
+
+        def rss_factory(source):  # noqa: ANN001, ANN202
+            return FixedCaptureRSSProvider(
+                config=config,
+                source_id=str(source.id),
+                delegate=HttpRSSProvider(),
+            )
+
+        def orchestrator_factory(session, frozen_route):  # noqa: ANN001, ANN202
+            if frozen_route != prepared.frozen_route:
+                raise LiveSmokeError("live smoke snapshot route differs from its frozen profile")
+            return _build_guarded_live_orchestrator(
+                session=session,
+                settings=settings,
+                config=config,
+                ledger=ledger,
+                input_ids=input_ids,
+            )
+
+        result = run_personal_daily(
+            prepared.run_id,
+            prepared.ownership_token,
+            session_factory=SessionLocal,
+            rss_provider_factory=rss_factory,
+            embedding_provider=embedding_provider,
+            orchestrator_factory=orchestrator_factory,
+            now=now,
+        )
+        with SessionLocal() as session:
+            run = session.get(PersonalRun, prepared.run_id)
+            if run is None:
+                raise LiveSmokeError("live smoke run disappeared before terminal verification")
+            state = run.state
+            snapshot_id = run.snapshot_id
+            report_id = run.report_id
+            report = session.get(Report, report_id) if report_id is not None else None
+        capture_ids = _captured_live_smoke_ids(prepared.run_id, config)
+        full_capture = set(capture_ids) == {
+            article.capture_id for article in config.capture_articles
+        }
+        report_published = bool(
+            report is not None
+            and report.status == "published"
+            and result.report is not None
+            and result.report.published
+        )
+        succeeded = bool(
+            state == "succeeded" and full_capture and snapshot_id is not None and report_published
+        )
+        _record_live_smoke_stage(
+            prepared.run_id,
+            config,
+            status="workflow_published" if report_published else "workflow_failed",
+            code=("ledger_verification_pending" if report_published else "workflow_incomplete"),
+            capture_ids=capture_ids,
+            snapshot_id=snapshot_id,
+            report_id=report_id,
+            report_published=report_published,
+        )
+        ledger.record_outcome(
+            outcome="succeeded" if succeeded else "failed",
+            capture_ids=capture_ids,
+            personal_run_id=str(prepared.run_id),
+            snapshot_id=str(snapshot_id) if snapshot_id is not None else None,
+            report_id=str(report_id) if report_id is not None else None,
+            reason=None if succeeded else "workflow_incomplete",
+        )
+        if not succeeded:
+            raise LiveSmokeError("live smoke workflow did not produce a complete published result")
+        _record_live_smoke_stage(
+            prepared.run_id,
+            config,
+            status="verified",
+            code="ledger_reconciled",
+            capture_ids=capture_ids,
+            snapshot_id=snapshot_id,
+            report_id=report_id,
+            report_published=True,
+        )
+        return {
+            "status": state,
+            "verification_id": config.verification_id,
+            "config_hash": config.config_hash,
+            "run_id": str(prepared.run_id),
+            "snapshot_id": str(snapshot_id),
+            "report_id": str(report_id),
+            "capture_ids": list(capture_ids),
+            "ledger": ledger.snapshot()["totals"],
+        }
+    except BaseException as exc:
+        if prepared is not None:
+            _mark_queued_setup_failure(prepared.run_id, prepared.ownership_token)
+            if not capture_ids:
+                capture_ids = _captured_live_smoke_ids(prepared.run_id, config)
+            ledger_outcome = ledger.snapshot().get("outcome")
+            if ledger_outcome is None and report_published:
+                try:
+                    _record_live_smoke_stage(
+                        prepared.run_id,
+                        config,
+                        status="verification_blocked",
+                        code="accounting_incomplete",
+                        capture_ids=capture_ids,
+                        snapshot_id=snapshot_id,
+                        report_id=report_id,
+                        report_published=True,
+                    )
+                except Exception:
+                    logger.exception(
+                        "failed to persist blocked live-smoke verification status",
+                        extra={"personal_run_id": str(prepared.run_id)},
+                    )
+            try:
+                if ledger_outcome is None:
+                    ledger.record_outcome(
+                        outcome="blocked" if isinstance(exc, LiveSmokeError) else "failed",
+                        capture_ids=capture_ids,
+                        personal_run_id=str(prepared.run_id),
+                        snapshot_id=str(snapshot_id) if snapshot_id is not None else None,
+                        report_id=str(report_id) if report_id is not None else None,
+                        reason=(
+                            "accounting_incomplete"
+                            if report_published
+                            else (
+                                "bounded_guard_rejected"
+                                if isinstance(exc, LiveSmokeError)
+                                else "workflow_failed"
+                            )
+                        ),
+                    )
+            except LiveSmokeError:
+                # Preserve the original failure and immutable ledger outcome.
+                pass
+        raise
+    finally:
+        _close(embedding_provider)
+
+
+def execute_personal_task(
+    run_id: uuid.UUID,
+    token: uuid.UUID,
+    *,
+    now: datetime.datetime | None = None,
+) -> dict[str, Any]:
+    """Execute the registered worker behavior; tests call this same boundary directly."""
+
+    set_job_id(str(run_id))
+    metrics.increment(metrics.JOB_STARTS)
+    redis_client: object | None = None
+    embedding_provider: object | None = None
+    fixture: OfflinePersonalFixture | None = None
+    try:
+        settings = get_settings()
+        spec = _runtime_spec(run_id, token)
+        if spec.route.get("mode") == "raw":
+            embedding_provider = _DisabledEmbeddingProvider()
+
+            def rss_factory(_source):  # noqa: ANN001, ANN202
+                return HttpRSSProvider()
+
+            def orchestrator_factory(*_args, **_kwargs):  # noqa: ANN202
+                raise RuntimeError("raw personal profile attempted report generation")
+
+            fixture_label = None
+        elif spec.route.get("mode") == "offline_fixture":
+            fixture, embedding_provider, _ = _offline_runtime(settings, spec)
+            rss_factory = fixture.rss_provider
+            orchestrator_factory = fixture.orchestrator
+            fixture_label = fixture.label
+        else:
+            raise ValueError(
+                "live assisted processing requires the dedicated bounded smoke harness"
+            )
+
+        result = run_personal_daily(
+            run_id,
+            token,
+            session_factory=SessionLocal,
+            rss_provider_factory=rss_factory,
+            embedding_provider=embedding_provider,
+            orchestrator_factory=orchestrator_factory,
+            now=now or datetime.datetime.now(datetime.UTC),
+            ai_block_reason=spec.ai_block_reason,
+        )
+        with SessionLocal() as session:
+            terminal_state = session.scalar(
+                select(PersonalRun.state).where(PersonalRun.id == run_id)
+            )
+        if terminal_state == "succeeded":
+            metrics.increment(metrics.JOB_SUCCESSES)
+        else:
+            metrics.increment(metrics.JOB_FAILURES)
+        return {
+            "status": terminal_state,
+            "run_id": str(result.run_id),
+            "report_id": str(result.report.report.id) if result.report is not None else None,
+            "published": result.report.published if result.report is not None else False,
+            "feeds_attempted": result.feeds_attempted,
+            "feeds_succeeded": result.feeds_succeeded,
+            "feeds_failed": result.feeds_failed,
+            "articles_captured": result.articles_captured,
+            "articles_admitted": result.articles_admitted,
+            "events_observed": result.events_observed,
+            "claims_supported": result.claims_supported,
+            "fixture_label": fixture_label,
+        }
+    except Exception:
+        metrics.increment(metrics.JOB_FAILURES)
+        _mark_queued_setup_failure(run_id, token)
+        logger.exception("personal daily task failed", extra={"personal_run_id": str(run_id)})
+        raise
+    finally:
+        try:
+            for resource in (embedding_provider, redis_client):
+                try:
+                    _close(resource)
+                except Exception:
+                    logger.warning(
+                        "personal task resource cleanup failed",
+                        exc_info=True,
+                        extra={"personal_run_id": str(run_id)},
+                    )
+        finally:
+            set_job_id(None)
+
+
+@shared_task(
+    name=TASK_NAME,
+    queue=QUEUE_PIPELINE,
+    soft_time_limit=PIPELINE_TASK_SOFT_TIME_LIMIT,
+    time_limit=PIPELINE_TASK_TIME_LIMIT,
+    acks_late=True,
+    reject_on_worker_lost=True,
+)
+def run_personal_daily_task(run_id: str, ownership_token: str) -> dict[str, Any]:
+    """Run one PostgreSQL-owned attempt. Celery never invents an automatic retry."""
+
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+
+
+__all__ = [
+    "TASK_NAME",
+    "execute_personal_live_smoke",
+    "execute_personal_task",
+    "run_personal_daily_task",
+]

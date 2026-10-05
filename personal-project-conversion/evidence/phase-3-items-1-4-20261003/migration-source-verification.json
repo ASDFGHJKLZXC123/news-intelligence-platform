@@ -1,0 +1,19 @@
+{
+  "sha256_after": {
+    "tests/integration/test_stage6_brief_selection.py": "aea87fee60b5e386046246747c616aa665482b9c686de2429dde1cb9c6131228",
+    "db/migrations/versions/0016_event_hotness_score.py": "a77956bc4ac070c481541e3f0fa8411c414fe0f2dfec89277bf01bbeffb7e62c",
+    "db/migrations/versions/0022_personal_spending.py": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491"
+  },
+  "unchanged_migration_hashes": {
+    "db/migrations/versions/0016_event_hotness_score.py": "a77956bc4ac070c481541e3f0fa8411c414fe0f2dfec89277bf01bbeffb7e62c",
+    "db/migrations/versions/0022_personal_spending.py": "f97fe212c2e2953ad2cddb4d3e38b1ec22cebf61b79092f13e0cf51c3318a491"
+  },
+  "unchanged_fixture_and_tests": [
+    "selection_db",
+    "test_the_hotness_check_constraint_is_live",
+    "test_repository_loads_the_windows_events_with_risk_and_credibility",
+    "test_repository_finds_an_all_clear_by_its_peak_severity",
+    "test_repository_returns_every_version_and_selection_picks_the_published_one",
+    "test_end_to_end_selection_over_the_live_schema"
+  ]
+}

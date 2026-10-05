@@ -1,0 +1,923 @@
+{
+  "personal_runs": [
+    {
+      "id": "e78cacb3-001c-4bb8-b278-7579ceff4693",
+      "error": null,
+      "state": "succeeded",
+      "job_id": "eea16aef-2d3d-4ed6-a38b-27f5bb7b13cb",
+      "result": {
+        "attempt": 1,
+        "published": true,
+        "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+        "snapshot_id": "9b2d5fad-2938-4861-9725-a998488c8fa6",
+        "gate_outcome": "pass",
+        "section_count": 5,
+        "capture_partial": false,
+        "processing_degraded": false
+      },
+      "attempt": 1,
+      "coverage": {
+        "schema": "personal-capture-coverage.v1",
+        "feed_pauses": [],
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feed_failures": [],
+        "items_fetched": 1,
+        "pending_total": 0,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 1,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_admitted": 1,
+        "articles_captured": 1
+      },
+      "event_ids": [
+        "2cc6fea0-879e-45e3-a7a0-6dd9ca042007"
+      ],
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "created_at": "2026-09-20T07:51:25.731253+00:00",
+      "local_date": "2026-09-20",
+      "updated_at": "2026-09-20T07:51:42.075025+00:00",
+      "snapshot_id": "9b2d5fad-2938-4861-9725-a998488c8fa6",
+      "max_attempts": 3,
+      "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+      "stage_results": {
+        "scope": {
+          "status": "succeeded",
+          "articles_admitted": 1,
+          "articles_selected_for_enrichment": 1
+        },
+        "capture": {
+          "schema": "personal-capture-coverage.v1",
+          "status": "succeeded",
+          "feed_pauses": [],
+          "feeds_failed": 0,
+          "feeds_paused": 0,
+          "feed_failures": [],
+          "items_fetched": 1,
+          "pending_total": 1,
+          "feeds_attempted": 1,
+          "feeds_succeeded": 1,
+          "feeds_configured": 1,
+          "pending_capacity": 2000,
+          "articles_captured": 1
+        },
+        "grouping": {
+          "status": "succeeded",
+          "events_created": 1,
+          "articles_clustered": 1
+        },
+        "snapshot": {
+          "status": "succeeded",
+          "snapshot_id": "9b2d5fad-2938-4861-9725-a998488c8fa6"
+        },
+        "admission": {
+          "status": "succeeded",
+          "run_limit": 100,
+          "local_day_limit": 100,
+          "articles_admitted": 1
+        },
+        "embedding": {
+          "status": "succeeded",
+          "articles_embedded": 1
+        },
+        "live_smoke": {
+          "code": "ledger_reconciled",
+          "status": "verified",
+          "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+          "capture_ids": [
+            "bbc-japan-rates-1"
+          ],
+          "config_hash": "a398cc803e147527249077896fc16147732372be5ba230cbffac401b1194390d",
+          "snapshot_id": "9b2d5fad-2938-4861-9725-a998488c8fa6",
+          "verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+          "report_published": true
+        },
+        "observations": {
+          "status": "succeeded",
+          "events_observed": 1
+        },
+        "claim_preparation": {
+          "status": "succeeded",
+          "abstained": 0,
+          "supported": 1
+        }
+      },
+      "celery_task_id": null,
+      "execution_mode": "personal",
+      "ownership_token": "bb4e7ace-a821-45c4-a404-2bab7e81f787",
+      "capture_ended_at": "2026-09-20T07:51:26.420021+00:00",
+      "lease_expires_at": null,
+      "scopes_frozen_at": "2026-09-20T07:51:26.467108+00:00",
+      "terminal_manifest": {
+        "schema": "personal-review-manifest.v1",
+        "observations": [
+          {
+            "event_id": "2cc6fea0-879e-45e3-a7a0-6dd9ca042007",
+            "revision": 1,
+            "observation_id": "2c9ac5c5-1693-4208-9781-ad025159a631"
+          }
+        ]
+      },
+      "capture_started_at": "2026-09-20T07:51:26.005395+00:00",
+      "profile_revision_id": "97201590-476e-4208-89a7-82b5c7268f89",
+      "admitted_article_ids": [
+        "79650e29-868a-42f6-943c-dd688c8d9bc3"
+      ],
+      "enrichment_article_ids": [
+        "79650e29-868a-42f6-943c-dd688c8d9bc3"
+      ]
+    }
+  ],
+  "personal_profile_revisions": [
+    {
+      "id": "a5c43eca-667d-493f-ad48-75710686aa75",
+      "revision": 1,
+      "settings": {
+        "source": "selection_required",
+        "observed_active_source_count": 1
+      },
+      "created_at": "2026-09-20T07:51:25.731253+00:00",
+      "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+      "exclude_phrases": [],
+      "include_phrases": [],
+      "schema_revision": "personal-profile.v1",
+      "execution_profile": "assisted",
+      "selected_source_ids": []
+    },
+    {
+      "id": "97201590-476e-4208-89a7-82b5c7268f89",
+      "revision": 2,
+      "settings": {
+        "source": "explicit_configuration",
+        "model_route": {
+          "mode": "live",
+          "embedding": {
+            "model": "text-embedding-3-small",
+            "provider": "openai",
+            "route_id": "embedding-primary",
+            "model_version": "text-embedding-3-small"
+          },
+          "generation": {
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "route_id": "generation-primary",
+            "model_version": "gemini-3.5-flash-lite"
+          },
+          "capture_ids": [
+            "bbc-japan-rates-1"
+          ],
+          "config_hash": "a398cc803e147527249077896fc16147732372be5ba230cbffac401b1194390d",
+          "ledger_path": "/private/tmp/nip-phase2-live-20260920_corrected_dec8277e/live-smoke-dec8277e-7e6e-4d27-ba01-2a7f4b44e921.json",
+          "probe_routes": [],
+          "verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+          "generation_routes": [
+            {
+              "role": "reasoning",
+              "model": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "route_id": "generation-primary",
+              "price_source": {
+                "url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.5-flash-lite",
+                "version": "Official Standard API prices independently rechecked before user-authorized corrected attempt",
+                "retrieved_at": "2026-09-20T07:49:11Z"
+              },
+              "model_version": "gemini-3.5-flash-lite",
+              "max_dispatches": 9,
+              "input_usd_per_million_tokens": "0.3",
+              "output_usd_per_million_tokens": "2.5"
+            }
+          ]
+        },
+        "authorized_spend_usd": "0.25",
+        "live_smoke_config_hash": "a398cc803e147527249077896fc16147732372be5ba230cbffac401b1194390d",
+        "live_smoke_ledger_path": "/private/tmp/nip-phase2-live-20260920_corrected_dec8277e/live-smoke-dec8277e-7e6e-4d27-ba01-2a7f4b44e921.json",
+        "live_smoke_verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921"
+      },
+      "created_at": "2026-09-20T07:51:25.731253+00:00",
+      "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+      "exclude_phrases": [],
+      "include_phrases": [],
+      "schema_revision": "personal-profile.v1",
+      "execution_profile": "assisted",
+      "selected_source_ids": [
+        "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+      "name": "BBC Business",
+      "active": true,
+      "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "created_at": "2026-09-20T07:50:53.552139+00:00",
+      "updated_at": "2026-09-20T07:50:53.552139+00:00",
+      "source_type": "rss",
+      "homepage_url": null,
+      "authority_score": null
+    }
+  ],
+  "personal_captures": [
+    {
+      "id": "7e03de97-434c-458e-ac17-fe8bb16a602a",
+      "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "run_id": "e78cacb3-001c-4bb8-b278-7579ceff4693",
+      "receipt": {
+        "schema": "personal-capture-receipt.v1",
+        "provider": "http-rss",
+        "item_schema": "rss-item.v1",
+        "source_refs": [],
+        "evidence_refs": [],
+        "admission_ordinal": 0
+      },
+      "url_hash": "cdee651c7558a1434292c55fc5442034f8cb9cca2da97d6b766abd877ebb36ae",
+      "source_id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+      "truncated": false,
+      "article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+      "admitted_at": "2026-09-20T07:51:26.428526+00:00",
+      "captured_at": "2026-09-20T07:51:26.010539+00:00",
+      "rss_summary": "Central banks around the world have hiked rates as high energy prices are pushing up inflation.",
+      "published_at": "2026-09-18T07:14:57+00:00",
+      "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+      "canonical_url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS",
+      "admitted_run_id": "e78cacb3-001c-4bb8-b278-7579ceff4693"
+    }
+  ],
+  "personal_article_revisions": [
+    {
+      "id": "e2278e19-ef22-4ab9-8f4a-b9ff3bec91da",
+      "run_id": "e78cacb3-001c-4bb8-b278-7579ceff4693",
+      "source_id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+      "truncated": false,
+      "article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+      "created_at": "2026-09-20T07:51:26.467804+00:00",
+      "provenance": {
+        "schema": "personal-article-revision.v1",
+        "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+        "fetched_at": "2026-09-20T07:51:26.429095Z",
+        "source_field": "rss_title_and_summary"
+      },
+      "content_hash": "d034c64509ce27a9bce5a7b0c4d1b627509a485ab4b432b4d23c7a462d9a37c1",
+      "retained_url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS",
+      "retained_title": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "retained_summary": "Central banks around the world have hiked rates as high energy prices are pushing up inflation.",
+      "retained_publisher": "BBC Business",
+      "retained_published_at": "2026-09-18T07:14:57+00:00"
+    }
+  ],
+  "claims": [
+    {
+      "id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+      "claim_text": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "claim_type": "source_reported_assertion",
+      "created_at": "2026-09-20T07:51:27.871132+00:00",
+      "confidence_score": null,
+      "created_by_run_id": null
+    }
+  ],
+  "claim_evidence": [
+    {
+      "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+      "created_at": "2026-09-20T07:51:27.871132+00:00",
+      "support_type": "supports",
+      "confidence_score": null,
+      "evidence_item_id": "79055201-52f0-5887-8026-e9957817ffc1"
+    }
+  ],
+  "evidence_items": [
+    {
+      "id": "79055201-52f0-5887-8026-e9957817ffc1",
+      "url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS",
+      "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "raw_ref": null,
+      "metadata": {
+        "canonical_article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3"
+      },
+      "publisher": "BBC Business",
+      "source_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+      "created_at": "2026-09-20T07:51:27.871132+00:00",
+      "source_type": "article",
+      "published_at": "2026-09-18T07:14:57+00:00",
+      "credibility_score": null
+    }
+  ],
+  "personal_brief_snapshots": [
+    {
+      "id": "9b2d5fad-2938-4861-9725-a998488c8fa6",
+      "run_id": "e78cacb3-001c-4bb8-b278-7579ceff4693",
+      "input_hash": "fa255ba05c051facc1bbc873f9c9a8d71c20c8a247e417282fba1241baa27e94",
+      "model_route": {
+        "mode": "live",
+        "embedding": {
+          "model": "text-embedding-3-small",
+          "provider": "openai",
+          "route_id": "embedding-primary",
+          "model_version": "text-embedding-3-small"
+        },
+        "generation": {
+          "model": "gemini-3.5-flash-lite",
+          "provider": "gemini",
+          "route_id": "generation-primary",
+          "model_version": "gemini-3.5-flash-lite"
+        },
+        "capture_ids": [
+          "bbc-japan-rates-1"
+        ],
+        "config_hash": "a398cc803e147527249077896fc16147732372be5ba230cbffac401b1194390d",
+        "ledger_path": "/private/tmp/nip-phase2-live-20260920_corrected_dec8277e/live-smoke-dec8277e-7e6e-4d27-ba01-2a7f4b44e921.json",
+        "probe_routes": [],
+        "verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+        "generation_routes": [
+          {
+            "role": "reasoning",
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "route_id": "generation-primary",
+            "price_source": {
+              "url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.5-flash-lite",
+              "version": "Official Standard API prices independently rechecked before user-authorized corrected attempt",
+              "retrieved_at": "2026-09-20T07:49:11Z"
+            },
+            "model_version": "gemini-3.5-flash-lite",
+            "max_dispatches": 9,
+            "input_usd_per_million_tokens": "0.3",
+            "output_usd_per_million_tokens": "2.5"
+          }
+        ]
+      },
+      "prepared_at": "2026-09-20T07:51:27.910549+00:00",
+      "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+      "input_payload": {
+        "claims": [
+          {
+            "span": [
+              0,
+              68
+            ],
+            "status": "supported",
+            "citable": true,
+            "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+            "article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+            "validation": {
+              "schema": "source-reported-assertion.v1",
+              "assertion_kind": "source_reported",
+              "truth_verified": false,
+              "qualifiers_preserved": true,
+              "support_created_by_personal": true,
+              "evidence_created_by_personal": true
+            },
+            "source_field": "title",
+            "exact_excerpt": "Japan raises interest rate to new 31-year high to curb rising prices",
+            "preparation_id": "14eb8c62-0ca4-438a-ab3b-2647a959ea11",
+            "evidence_item_id": "79055201-52f0-5887-8026-e9957817ffc1",
+            "article_revision_id": "e2278e19-ef22-4ab9-8f4a-b9ff3bec91da",
+            "article_revision_hash": "d034c64509ce27a9bce5a7b0c4d1b627509a485ab4b432b4d23c7a462d9a37c1"
+          }
+        ],
+        "run_id": "e78cacb3-001c-4bb8-b278-7579ceff4693",
+        "schema": "personal-brief-input.v1",
+        "captured": {
+          "end": "2026-09-20T07:51:26.420021Z",
+          "start": "2026-09-20T07:51:26.005395Z"
+        },
+        "coverage": {
+          "schema": "personal-capture-coverage.v1",
+          "feed_pauses": [],
+          "feeds_failed": 0,
+          "feeds_paused": 0,
+          "feed_failures": [],
+          "items_fetched": 1,
+          "pending_total": 0,
+          "feeds_attempted": 1,
+          "feeds_succeeded": 1,
+          "feeds_configured": 1,
+          "pending_capacity": 2000,
+          "articles_admitted": 1,
+          "articles_captured": 1
+        },
+        "candidates": [
+          {
+            "ranking": {
+              "hotness": 29.17,
+              "sort_key": [
+                -1,
+                0,
+                -29.17,
+                0,
+                -1789715697.0,
+                "2cc6fea0-879e-45e3-a7a0-6dd9ca042007"
+              ],
+              "source_count": 1,
+              "candidate_rank": 1,
+              "newest_publication_at": "2026-09-18T07:14:57Z"
+            },
+            "event_id": "2cc6fea0-879e-45e3-a7a0-6dd9ca042007",
+            "revision": 1,
+            "source_inputs": {
+              "schema": "personal-event-observation.v1",
+              "articles": [
+                {
+                  "url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS",
+                  "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+                  "publisher": "BBC Business",
+                  "source_id": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+                  "truncated": false,
+                  "article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+                  "revision_id": "e2278e19-ef22-4ab9-8f4a-b9ff3bec91da",
+                  "rss_summary": "Central banks around the world have hiked rates as high energy prices are pushing up inflation.",
+                  "content_hash": "d034c64509ce27a9bce5a7b0c4d1b627509a485ab4b432b4d23c7a462d9a37c1",
+                  "published_at": "2026-09-18T07:14:57Z"
+                }
+              ],
+              "event_title": "Japan raises interest rate to new 31-year high to curb rising prices",
+              "event_summary": "Central banks around the world have hiked rates as high energy prices are pushing up inflation."
+            },
+            "observation_id": "2c9ac5c5-1693-4208-9781-ad025159a631"
+          }
+        ],
+        "local_date": "2026-09-20",
+        "model_route": {
+          "mode": "live",
+          "embedding": {
+            "model": "text-embedding-3-small",
+            "provider": "openai",
+            "route_id": "embedding-primary",
+            "model_version": "text-embedding-3-small"
+          },
+          "generation": {
+            "model": "gemini-3.5-flash-lite",
+            "provider": "gemini",
+            "route_id": "generation-primary",
+            "model_version": "gemini-3.5-flash-lite"
+          },
+          "capture_ids": [
+            "bbc-japan-rates-1"
+          ],
+          "config_hash": "a398cc803e147527249077896fc16147732372be5ba230cbffac401b1194390d",
+          "ledger_path": "/private/tmp/nip-phase2-live-20260920_corrected_dec8277e/live-smoke-dec8277e-7e6e-4d27-ba01-2a7f4b44e921.json",
+          "probe_routes": [],
+          "verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+          "generation_routes": [
+            {
+              "role": "reasoning",
+              "model": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "route_id": "generation-primary",
+              "price_source": {
+                "url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.5-flash-lite",
+                "version": "Official Standard API prices independently rechecked before user-authorized corrected attempt",
+                "retrieved_at": "2026-09-20T07:49:11Z"
+              },
+              "model_version": "gemini-3.5-flash-lite",
+              "max_dispatches": 9,
+              "input_usd_per_million_tokens": "0.3",
+              "output_usd_per_million_tokens": "2.5"
+            }
+          ]
+        },
+        "prepared_at": "2026-09-20T07:51:27.910549Z",
+        "workspace_id": "43110f3c-8e93-4b2f-b5be-f4a338f4235b",
+        "composition_policy": "personal_descriptive.v1",
+        "profile_revision_id": "97201590-476e-4208-89a7-82b5c7268f89",
+        "admitted_article_ids": [
+          "79650e29-868a-42f6-943c-dd688c8d9bc3"
+        ],
+        "enrichment_article_ids": [
+          "79650e29-868a-42f6-943c-dd688c8d9bc3"
+        ]
+      },
+      "input_contract": "personal-brief-input.v1",
+      "selected_event_ids": [
+        "2cc6fea0-879e-45e3-a7a0-6dd9ca042007"
+      ],
+      "candidate_event_ids": [
+        "2cc6fea0-879e-45e3-a7a0-6dd9ca042007"
+      ],
+      "profile_revision_id": "97201590-476e-4208-89a7-82b5c7268f89"
+    }
+  ],
+  "reports": [
+    {
+      "id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "stale": false,
+      "title": "Personal News Brief \u2014 2026-09-20",
+      "status": "published",
+      "user_id": "d9800e19-8bd7-487b-b316-6569eb1dd892",
+      "version": 1,
+      "event_id": null,
+      "brief_date": "2026-09-20",
+      "created_at": "2026-09-20T07:51:27.942647+00:00",
+      "updated_at": "2026-09-20T07:51:27.96428+00:00",
+      "report_type": "personal_daily_brief",
+      "change_reason": null,
+      "content_policy": "descriptive_only.v1",
+      "confidence_score": null,
+      "generated_by_run_id": "9f219f91-ba5b-49b1-816b-fb73fdfe96aa"
+    }
+  ],
+  "report_sections": [
+    {
+      "id": "1e21d0ea-a4ab-4409-b7b7-f0e625fdc3f6",
+      "body": "Authorities in Japan have increased interest rates to a level not seen in over three decades, with the objective of addressing increasing costs.",
+      "title": "Executive Summary",
+      "blocks": [
+        {
+          "text": "Authorities in Japan have increased interest rates to a level not seen in over three decades, with the objective of addressing increasing costs.",
+          "claim_ids": [
+            "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+          ]
+        }
+      ],
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "evidence_refs": [
+        "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+      ],
+      "section_order": 1,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "276e803a-543f-4e18-91a3-621f4d9ceb09",
+      "body": "According to reports, Japan has elevated its interest rate to a level not seen in thirty-one years. This financial adjustment was implemented with the objective of addressing increasing costs and prices.",
+      "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "blocks": [
+        {
+          "text": "According to reports, Japan has elevated its interest rate to a level not seen in thirty-one years. This financial adjustment was implemented with the objective of addressing increasing costs and prices.",
+          "claim_ids": [
+            "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+          ]
+        }
+      ],
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "evidence_refs": [
+        "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+      ],
+      "section_order": 2,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "1cb0c2d5-ced5-4f6e-b44a-d8632063a87d",
+      "body": "No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported.\nNo risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "title": "What Changed Since Yesterday",
+      "blocks": null,
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "evidence_refs": null,
+      "section_order": 3,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "76033ea2-78ea-4c3e-afcc-1213942de4a1",
+      "body": "[capture_coverage] Capture completed for 1 of 1 configured feeds; 1 articles were retained, 0 feeds failed, and 0 feeds were paused at pending capacity.\n[no_risk_observations] Personal Phase 2 does not compute or narrate risk scores.\n[no_reliable_analogy] Historical analogy generation is disabled for the personal Phase 2 workflow.\n[no_prior_brief] No prior personal brief is injected into this immutable snapshot.\n[no_prior_comparison] No published brief exists for the previous day, so today's figures cannot be compared against what we previously reported. No risk carried an observation on both sides of the window, so no day-over-day movement could be measured.",
+      "title": "Data Quality",
+      "blocks": null,
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "evidence_refs": null,
+      "section_order": 4,
+      "grounding_status": "passed"
+    },
+    {
+      "id": "6ba73fe5-2b35-42f4-8425-ce809101e0f1",
+      "body": "This system provides probabilistic analysis based on public information, data signals, and model-assisted reasoning. It is for informational purposes only and does not constitute investment, legal, or financial advice.",
+      "title": "Disclaimer",
+      "blocks": null,
+      "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+      "evidence_refs": null,
+      "section_order": 5,
+      "grounding_status": "passed"
+    }
+  ],
+  "llm_runs": [
+    {
+      "id": "9f219f91-ba5b-49b1-816b-fb73fdfe96aa",
+      "seed": null,
+      "model": "gemini-3.5-flash-lite",
+      "output": {
+        "blocks": [
+          {
+            "text": "Authorities in Japan have increased interest rates to a level not seen in over three decades, with the objective of addressing increasing costs.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "status": "succeeded",
+      "attempt": 1,
+      "cost_usd": 0.000557,
+      "provider": "gemini",
+      "trace_id": "e93e263afe714898844d842d2950c37c",
+      "created_at": "2026-09-20T07:51:27.96428+00:00",
+      "input_refs": {
+        "job_key": "personal:e78cacb3-001c-4bb8-b278-7579ceff4693:daily_brief_composition",
+        "trace_id": "e93e263afe714898844d842d2950c37c",
+        "cache_hit": false,
+        "requested_schema": "ReportComposition"
+      },
+      "latency_ms": 1205,
+      "raw_output": {
+        "blocks": [
+          {
+            "text": "Authorities in Japan have increased interest rates to a level not seen in over three decades, with the objective of addressing increasing costs.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "started_at": "2026-09-20T07:51:27.9869+00:00",
+      "prompt_hash": "ae75b0841cffe06dbc061e25f4b7010aaed632778fa480191926ab9cdf39661d",
+      "prompt_name": "personal_brief_executive_summary",
+      "temperature": 0.0,
+      "completed_at": "2026-09-20T07:51:29.192462+00:00",
+      "input_tokens": 665,
+      "model_params": {
+        "mode": "realtime",
+        "tier": "T2",
+        "queue": "essential",
+        "adapter_params": {
+          "thinking_level": "minimal",
+          "temperature_sent": false,
+          "temperature_strategy": "deterministic_system_instruction",
+          "temperature_requested": 0.0
+        },
+        "degraded_reasons": [],
+        "degraded_provider": null
+      },
+      "error_details": null,
+      "error_message": null,
+      "evidence_refs": {
+        "brief_date": "2026-09-20",
+        "section_kind": "executive_summary",
+        "budget_attempt": 1,
+        "allowed_claim_ids": [
+          "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+        ],
+        "composition_policy": "personal_descriptive.v1",
+        "word_budget_target": 60,
+        "word_budget_maximum": 120,
+        "word_budget_minimum": 1,
+        "grounding_regeneration": false
+      },
+      "output_tokens": 143,
+      "prompt_version": "personal_descriptive.v1",
+      "no_finding_reason": null,
+      "output_schema_name": "ReportComposition",
+      "output_schema_version": "1.0",
+      "prompt_template_version": "v1"
+    },
+    {
+      "id": "d746e218-4253-4d50-9c40-b83e52caaf71",
+      "seed": null,
+      "model": "gemini-3.5-flash-lite",
+      "output": {
+        "blocks": [
+          {
+            "text": "According to reports, Japan has elevated its interest rate to a level not seen in thirty-one years. This financial adjustment was implemented with the objective of addressing increasing costs and prices.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "status": "succeeded",
+      "attempt": 1,
+      "cost_usd": 0.0005839,
+      "provider": "gemini",
+      "trace_id": "16f546dff9894cb48426a6f6016c8031",
+      "created_at": "2026-09-20T07:51:27.96428+00:00",
+      "input_refs": {
+        "job_key": "personal:e78cacb3-001c-4bb8-b278-7579ceff4693:daily_brief_composition",
+        "trace_id": "16f546dff9894cb48426a6f6016c8031",
+        "cache_hit": false,
+        "requested_schema": "ReportComposition"
+      },
+      "latency_ms": 925,
+      "raw_output": {
+        "blocks": [
+          {
+            "text": "According to reports, Japan has elevated its interest rate to a level not seen in thirty-one years. This financial adjustment was implemented with the objective of addressing increasing costs and prices.",
+            "claim_ids": [
+              "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+            ]
+          }
+        ],
+        "schema_name": "ReportComposition",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "started_at": "2026-09-20T07:51:29.20396+00:00",
+      "prompt_hash": "388010ee32453a32213cda1639f0882d3e56f596d706e53948f97170a8255f51",
+      "prompt_name": "personal_brief_top_event",
+      "temperature": 0.0,
+      "completed_at": "2026-09-20T07:51:30.130034+00:00",
+      "input_tokens": 663,
+      "model_params": {
+        "mode": "realtime",
+        "tier": "T2",
+        "queue": "essential",
+        "adapter_params": {
+          "thinking_level": "minimal",
+          "temperature_sent": false,
+          "temperature_strategy": "deterministic_system_instruction",
+          "temperature_requested": 0.0
+        },
+        "degraded_reasons": [],
+        "degraded_provider": null
+      },
+      "error_details": null,
+      "error_message": null,
+      "evidence_refs": {
+        "brief_date": "2026-09-20",
+        "section_kind": "top_event",
+        "budget_attempt": 1,
+        "allowed_claim_ids": [
+          "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+        ],
+        "composition_policy": "personal_descriptive.v1",
+        "word_budget_target": 90,
+        "word_budget_maximum": 180,
+        "word_budget_minimum": 1,
+        "grounding_regeneration": false
+      },
+      "output_tokens": 154,
+      "prompt_version": "personal_descriptive.v1",
+      "no_finding_reason": null,
+      "output_schema_name": "ReportComposition",
+      "output_schema_version": "1.0",
+      "prompt_template_version": "v1"
+    },
+    {
+      "id": "285d56a4-fac0-4e1c-b27a-ca3db3851a0b",
+      "seed": null,
+      "model": "gemini-3.5-flash-lite",
+      "output": {
+        "verdicts": [
+          {
+            "verdict": "supported",
+            "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+            "rationale": "The block text states that authorities in Japan have increased interest rates to a level not seen in over three decades to address increasing costs, which directly aligns with the supporting evidence snippet indicating Japan raised interest rates to a new 31-year high to curb rising prices."
+          }
+        ],
+        "schema_name": "ClaimGrounding",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "status": "succeeded",
+      "attempt": 1,
+      "cost_usd": 0.0005785,
+      "provider": "gemini",
+      "trace_id": "313666068fa24c1bb8e798777420116e",
+      "created_at": "2026-09-20T07:51:27.96428+00:00",
+      "input_refs": {
+        "job_key": "personal:e78cacb3-001c-4bb8-b278-7579ceff4693:daily_brief_grounding",
+        "trace_id": "313666068fa24c1bb8e798777420116e",
+        "cache_hit": false,
+        "requested_schema": "ClaimGrounding"
+      },
+      "latency_ms": 10523,
+      "raw_output": {
+        "verdicts": [
+          {
+            "verdict": "supported",
+            "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+            "rationale": "The block text states that authorities in Japan have increased interest rates to a level not seen in over three decades to address increasing costs, which directly aligns with the supporting evidence snippet indicating Japan raised interest rates to a new 31-year high to curb rising prices."
+          }
+        ],
+        "schema_name": "ClaimGrounding",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "started_at": "2026-09-20T07:51:30.146635+00:00",
+      "prompt_hash": "4cf9e0b12eb2b59b0d01d01aa0b9df094239c894570a6cc920186a25c34d54ad",
+      "prompt_name": "daily_brief_claim_grounding",
+      "temperature": 0.0,
+      "completed_at": "2026-09-20T07:51:40.670805+00:00",
+      "input_tokens": 445,
+      "model_params": {
+        "mode": "realtime",
+        "tier": "T1",
+        "queue": "essential",
+        "adapter_params": {
+          "thinking_level": "minimal",
+          "temperature_sent": false,
+          "temperature_strategy": "deterministic_system_instruction",
+          "temperature_requested": 0.0
+        },
+        "degraded_reasons": [],
+        "degraded_provider": null
+      },
+      "error_details": null,
+      "error_message": null,
+      "evidence_refs": {
+        "brief_date": "2026-09-20",
+        "block_index": 0,
+        "section_kind": "executive_summary",
+        "grounding_round": 1,
+        "allowed_claim_ids": [
+          "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+        ]
+      },
+      "output_tokens": 178,
+      "prompt_version": "v1",
+      "no_finding_reason": null,
+      "output_schema_name": "ClaimGrounding",
+      "output_schema_version": "1.0",
+      "prompt_template_version": "v1"
+    },
+    {
+      "id": "61b74a1a-0f78-41bc-be8f-d85601e03154",
+      "seed": null,
+      "model": "gemini-3.5-flash-lite",
+      "output": {
+        "verdicts": [
+          {
+            "verdict": "supported",
+            "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+            "rationale": "The block's text directly corresponds to the claim that Japan raised its interest rate to a 31-year high to curb rising prices."
+          }
+        ],
+        "schema_name": "ClaimGrounding",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "status": "succeeded",
+      "attempt": 1,
+      "cost_usd": 0.0005218,
+      "provider": "gemini",
+      "trace_id": "03a955cd0b434acab7a34534d23cb9fd",
+      "created_at": "2026-09-20T07:51:27.96428+00:00",
+      "input_refs": {
+        "job_key": "personal:e78cacb3-001c-4bb8-b278-7579ceff4693:daily_brief_grounding",
+        "trace_id": "03a955cd0b434acab7a34534d23cb9fd",
+        "cache_hit": false,
+        "requested_schema": "ClaimGrounding"
+      },
+      "latency_ms": 1268,
+      "raw_output": {
+        "verdicts": [
+          {
+            "verdict": "supported",
+            "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+            "rationale": "The block's text directly corresponds to the claim that Japan raised its interest rate to a 31-year high to curb rising prices."
+          }
+        ],
+        "schema_name": "ClaimGrounding",
+        "schema_version": "1.0",
+        "no_finding_reason": null,
+        "prompt_template_version": "v1"
+      },
+      "started_at": "2026-09-20T07:51:40.693426+00:00",
+      "prompt_hash": "b412d259668bac45c9792e15e70be1d56a30ac6d59e64eb4de2c635e9b3bded1",
+      "prompt_name": "daily_brief_claim_grounding",
+      "temperature": 0.0,
+      "completed_at": "2026-09-20T07:51:41.961739+00:00",
+      "input_tokens": 456,
+      "model_params": {
+        "mode": "realtime",
+        "tier": "T1",
+        "queue": "essential",
+        "adapter_params": {
+          "thinking_level": "minimal",
+          "temperature_sent": false,
+          "temperature_strategy": "deterministic_system_instruction",
+          "temperature_requested": 0.0
+        },
+        "degraded_reasons": [],
+        "degraded_provider": null
+      },
+      "error_details": null,
+      "error_message": null,
+      "evidence_refs": {
+        "brief_date": "2026-09-20",
+        "block_index": 0,
+        "section_kind": "top_event",
+        "grounding_round": 1,
+        "allowed_claim_ids": [
+          "d657a01e-97c4-5983-89d3-8ca9f3bead31"
+        ]
+      },
+      "output_tokens": 154,
+      "prompt_version": "v1",
+      "no_finding_reason": null,
+      "output_schema_name": "ClaimGrounding",
+      "output_schema_version": "1.0",
+      "prompt_template_version": "v1"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="12.856" timestamp="2026-10-04T02:00:26.659545-07:00" hostname="Mac"><properties><property name="actual_cli_ctrl_c" value="{&quot;attempt&quot;: 2, &quot;child_pid&quot;: 87374, &quot;ctrl_c_shutdown_seconds&quot;: 0.6995441247709095, &quot;descendant_pid&quot;: null, &quot;generation&quot;: 3, &quot;graceful_deadline_at&quot;: &quot;2026-10-04T09:00:32.399309+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-04T09:00:32.899309+00:00&quot;, &quot;lease_expires_at&quot;: &quot;2026-10-04T09:00:33.399309+00:00&quot;, &quot;run_id&quot;: &quot;c4a5a2af-866a-48ec-b106-51457bd684ff&quot;, &quot;started_at&quot;: &quot;2026-10-04T09:00:29.899309+00:00&quot;}" /></properties><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_actual_cli_ctrl_c_stops_active_child_and_preserves_failed_attempt" time="3.591" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_actual_child_bootstrap_obeys_original_handoff_despite_large_db_timeouts" time="8.595"><failure message="subprocess.TimeoutExpired: Command '['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-m', 'tests.integration._personal_runtime_fault_child', '32faf8a3-9b76-428b-88cd-2c766a4d2640', '1ccde658-1511-4ab2-b924-2d51ff48d4a1', '2']' timed out after 7 seconds">tmp_path = PosixPath('/private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/pytest-of-f8fq/pytest-245/test_actual_child_bootstrap_ob0')
+record_testsuite_property = &lt;bound method LogXML.add_global_property of &lt;_pytest.junitxml.LogXML object at 0x11077eba0&gt;&gt;
+
+    def test_actual_child_bootstrap_obeys_original_handoff_despite_large_db_timeouts(
+        tmp_path, record_testsuite_property
+    ):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _ = _queued_run(engine)
+            deadline = dt.datetime.now(dt.UTC) + dt.timedelta(seconds=5)
+            with Session(engine) as session:
+                run = session.get(PersonalRun, run_id)
+                run.lease_expires_at = deadline
+                control = session.scalar(select(PersonalWriterMode))
+                control.lease_expires_at = deadline
+                generation = run.fencing_generation
+                session.commit()
+            env = _environment(engine, "bootstrap_block")
+            env.update(
+                {
+                    "PERSONAL_CHILD_IDENTITY": str(uuid.uuid4()),
+                    "PERSONAL_LAUNCHER_ID": str(uuid.uuid4()),
+                    "PERSONAL_HANDOFF_DEADLINE": deadline.isoformat(),
+                    "DATABASE_CONNECT_TIMEOUT_SECONDS": "100",
+                    "DATABASE_STATEMENT_TIMEOUT_MS": "999999",
+                }
+            )
+            with (tmp_path / "child.log").open("w") as log:
+                child = subprocess.Popen(
+                    [sys.executable, "-m", FAULT_MODULE, str(run_id), str(token), str(generation)],
+                    cwd=ROOT,
+                    env=env,
+                    stdin=subprocess.DEVNULL,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                    start_new_session=True,
+                    shell=False,
+                )
+            try:
+&gt;               child.wait(timeout=7)
+
+tests/integration/test_personal_runtime_lifecycle.py:482: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py:1277: in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;Popen: returncode: -9 args: ['/Users/f8fq/coding projects/Unfinished/news-i...&gt;
+timeout = 7
+
+    def _wait(self, timeout):
+        """Internal implementation of wait() on POSIX."""
+        if self.returncode is not None:
+            return self.returncode
+    
+        if timeout is not None:
+            endtime = _time() + timeout
+            # Enter a busy loop if we have a timeout.  This busy loop was
+            # cribbed from Lib/threading.py in Thread.wait() at r71065.
+            delay = 0.0005 # 500 us -&gt; initial delay of 1 ms
+            while True:
+                if self._waitpid_lock.acquire(False):
+                    try:
+                        if self.returncode is not None:
+                            break  # Another thread waited.
+                        (pid, sts) = self._try_wait(os.WNOHANG)
+                        assert pid == self.pid or pid == 0
+                        if pid == self.pid:
+                            self._handle_exitstatus(sts)
+                            break
+                    finally:
+                        self._waitpid_lock.release()
+                remaining = self._remaining_time(endtime)
+                if remaining &lt;= 0:
+&gt;                   raise TimeoutExpired(self.args, timeout)
+E                   subprocess.TimeoutExpired: Command '['/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python', '-m', 'tests.integration._personal_runtime_fault_child', '32faf8a3-9b76-428b-88cd-2c766a4d2640', '1ccde658-1511-4ab2-b924-2d51ff48d4a1', '2']' timed out after 7 seconds
+
+/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py:2055: TimeoutExpired</failure></testcase></testsuite></testsuites>

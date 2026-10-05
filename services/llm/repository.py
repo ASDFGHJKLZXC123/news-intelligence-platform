@@ -66,6 +66,12 @@ class SQLAlchemyLLMRuntimeRepository(LLMRuntimeRepository):
         self._session = session
         self._commit_on_write = commit_on_write
 
+    @property
+    def commit_on_write(self) -> bool:
+        """Whether orchestration writes end their own transaction."""
+
+        return self._commit_on_write
+
     def _finish_write(self) -> None:
         try:
             if self._commit_on_write:

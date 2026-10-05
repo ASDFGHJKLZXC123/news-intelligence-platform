@@ -1,0 +1,59 @@
+Browser tab: 1, Title: "SIGNAL � AI News Intelligence", URL: "http://127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/saved".
+1 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/saved
+	3 container root
+		4 container
+			5 image
+			6 text SIGNAL
+			7 text PERSONAL DESK
+			8 container
+				9 image
+				10 text Today
+			11 container
+				12 image
+				13 text Saved
+			14 container
+				15 image
+				16 text Briefs
+			17 container
+				18 image
+				19 text Settings
+		20 container
+			21 button Toggle sidebar
+				22 image
+			23 button Search stories
+				24 image
+				25 text Search stories�
+				26 text &#8984;K
+			27 container Display data mode
+				28 checkbox Real, Value: 1
+				29 checkbox Demo, Value: 0
+			30 button Description: Toggle theme, Help: Switch to light mode
+				31 image
+		32 container
+			33 text PERSONAL NEWS RESEARCH DESK
+			34 heading Saved, Value: 1
+				35 text Saved
+			36 text Stories saved for your local profile.
+			37 button Refresh display
+				38 image
+				39 text Refresh display
+			40 text SAVED STORY
+			41 heading Agency approves coastal resilience project, Value: 2
+				42 text Agency approves coastal resilience project
+			43 text The agency confirmed the coastal resilience project was approved.
+			44 text Saved  Oct 4, 2026, 01:38:38 AM PDT
+			45 button Open
+			46 button Remove
+			47 image
+			48 text READ-ONLY � ALL OWNERS AND ITEM TYPES
+			49 heading Legacy saved items, Value: 3
+				50 text Legacy saved items
+			51 text These records remain in their original owner and item-type groups. Personal saving does not reassign or convert them.
+			52 text Agency approves coastal resilience project
+			53 container
+				54 text Owner  82eebcbf-d69e-4a11-9c31-3456cb857374  �  Event  � target  bf89871b-c470-46c4-9b98-b28f69617194
+			55 text Oct 4, 2026, 01:38:38 AM PDT
+			56 button (collapsed) Local access, Secondary Actions: Expand
+				57 text Local access
+
+The focused UI element is 1 AXWebArea SIGNAL � AI News Intelligence, URL: 127.0.0.1:59732/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:59731#/saved

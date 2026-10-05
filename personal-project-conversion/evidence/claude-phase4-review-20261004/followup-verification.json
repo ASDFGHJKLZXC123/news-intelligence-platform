@@ -1,0 +1,65 @@
+{
+  "verified_utc": "2026-10-05T01:17:11.046250+00:00",
+  "verifier": "Codex parent, separate from Claude external read-only verdict",
+  "external_report_sha256": "ec6a6c60479c8b3758fb8f9436c4293d2308648058830f8d96dba1e83bab86a4",
+  "F1": {
+    "status": "fresh single-test failure reproduced; source provenance adjudication confirmed Phase4A attribute change",
+    "test": "tests/unit/test_pipeline_runtime.py::test_api_delivery_helper_uses_exact_pipeline_queue",
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skips": 0,
+    "failure": "AttributeError: apps.api.pipeline has no attribute run_daily_pipeline_task",
+    "scope": "The unchanged test targets a module attribute removed by Phase4A lazy import; this is test compatibility, not evidence of a wrong production queue. No prePhase4 passing test execution claimed."
+  },
+  "F2": {
+    "status": "confirmed by 8 fresh in-process method/transport requests",
+    "results_file": "unknown-route-probe.json",
+    "subprocess_mutations": 405,
+    "celery_mutations": 404,
+    "GET_both_transports": 404,
+    "all_responses_json_errors": true,
+    "socket_connect_attempts": [],
+    "scope": "No external network or database; lifespan not entered; no real browser/runtime acceptance rerun."
+  },
+  "E1": {
+    "accepted_manifest": "personal-project-conversion/evidence/phase-4b-20261004/actual-final-formatted-source-before.json",
+    "manifest_entry_count": 627,
+    "matching_current_entries": 623,
+    "missing_current_entries": [],
+    "mismatched_current_entries": [
+      {
+        "path": "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+        "accepted_sha256": "4f596e2d4c4d0dc97ac3efc6b2253e6438d6265350022d27eb16a97177f9009b",
+        "current_sha256": "af41b7fe9ec4d20c1a3c7b4303e40a661d5aa5a9e31a394c420e972a618c3a8e"
+      },
+      {
+        "path": "README.md",
+        "accepted_sha256": "fd1fb15326b8d22efaf0085639543d42b3f678c400aa9b28d5e7a9cb6b17ee05",
+        "current_sha256": "009b5ec39bab6f96bb65ad030b8b35a3156f8d0a57bdf02e459fd518bd4fedc0"
+      },
+      {
+        "path": "personal-project-conversion/04-local-runtime.md",
+        "accepted_sha256": "eac73582308a553d62809363b8585f7193f273ed84cb1f3308892ed9b66ca929",
+        "current_sha256": "b725ca91894117cd1a63849a152a4f4c46b86b3c66f09363f45dea7146e7de70"
+      },
+      {
+        "path": "personal-project-conversion/README.md",
+        "accepted_sha256": "76d58cc6badca478d2b6bc9dc676ce45b7c33d4a97ff1c9182e9863cb692bc26",
+        "current_sha256": "edb023b7ef9819c441a23f68fccfe78fb16cd2b592b272b164a353a343270356"
+      }
+    ],
+    "all_non_markdown_entries_match": true,
+    "non_markdown_entry_count": 599,
+    "snapshot_copy_entry_count": 1219,
+    "snapshot_copy_current_mismatches": [],
+    "formatting_scope": "Both recorded after-hashes match current bytes; fresh AST equality cannot be reconstructed from hashes alone because pre-format bytes were not retained."
+  },
+  "unchanged_scope_limits": [
+    "No full acceptance suite rerun by Claude or during follow-up",
+    "Configured-key real-browser mutation remains unverified",
+    "Actual worker/CLI/UI parity remains Phase4A epoch only; composed postPhase4B Celery integration retained",
+    "Local/synthetic evidence only; paid activation off; Phase5/live/public usefulness unverified"
+  ],
+  "repairs_applied": false
+}

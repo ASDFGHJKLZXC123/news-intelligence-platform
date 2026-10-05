@@ -1,0 +1,9 @@
+{
+  "status": "CORRECTED_VERIFIER_LABEL_MISMATCH",
+  "context": "post-gate independent resource inspection, not a pytest failure",
+  "first_expected_head": "0022_personal_reading_bounds",
+  "actual_head": "0022_personal_spending",
+  "correction": "read declared db/migrations/versions/0022_personal_spending.py revision and recheck all five DB lifecycle records",
+  "pytest_always_passed": 5,
+  "corrected_check_passed": true
+}

@@ -1,0 +1,30 @@
+{
+  "args": [
+    "claude",
+    "--print",
+    "--restricted",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "Read,Glob,Grep",
+    "--allowedTools",
+    "Read,Glob,Grep",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--no-chrome",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--output-format",
+    "stream-json",
+    "--verbose"
+  ],
+  "cwd": "/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-claude-phase4-81cbe328fe-r6vlxeo0/repo",
+  "stdin": "claude-prompt.txt",
+  "model": "existing Claude Code default, no override",
+  "tool_boundary": "snapshot-confined read/grep/glob only; no Bash/Edit/Write/MCP/browser",
+  "user_authorization": "Call Claude Code to verify Phase4A and Phase4B"
+}

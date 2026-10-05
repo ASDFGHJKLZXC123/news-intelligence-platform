@@ -1,0 +1,9 @@
+{
+  "user_instruction": "Run this test.",
+  "recorded_at": "2026-09-20T06:52:59Z",
+  "verification_id": "8cf55cfa-8162-436b-bb14-2430636fdd34",
+  "allowance_usd": "0.25",
+  "scope": "single one-article attempt; exact approved models; no fallback; no recurring activation",
+  "proposal": "../phase-2-live-proposal-20260919/README.md",
+  "execution_started": false
+}

@@ -1,0 +1,24 @@
+{
+  "state_directory_mode": "0o700",
+  "retained_private_files": [
+    {
+      "path": "/tmp/nip-personal-phase2-offline-p3_item6_20261003_b/manifest.json",
+      "before_mode": "0o600",
+      "after_mode": "0o600",
+      "contents_retained_in_evidence": false
+    },
+    {
+      "path": "/tmp/nip-personal-phase2-offline-p3_item6_20261003_b/browser-key",
+      "before_mode": "0o600",
+      "after_mode": "0o600",
+      "contents_retained_in_evidence": false
+    },
+    {
+      "path": "/tmp/nip-item6-start-private.log",
+      "before_mode": "0o644",
+      "after_mode": "0o600",
+      "contents_retained_in_evidence": false
+    }
+  ],
+  "reason": "Private exact task ownership/key sources remain for audit; only credential-free projections and redacted logs are in retained evidence. Resource processes/databases/containers/volumes are removed."
+}

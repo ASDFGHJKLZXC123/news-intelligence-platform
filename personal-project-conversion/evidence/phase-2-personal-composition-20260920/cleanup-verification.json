@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-09-20T07:38:02.360711+00:00",
+  "owned_container_removed": true,
+  "owned_port_closed": true,
+  "leaked_test_databases": [],
+  "existing_containers": [
+    {
+      "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+      "unchanged": true
+    },
+    {
+      "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+      "unchanged": true
+    },
+    {
+      "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "name": "/fencepost-m3-linux-inode-35423434648",
+      "unchanged": true
+    },
+    {
+      "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "name": "/news-intelligence-platform-postgres-1",
+      "unchanged": true
+    },
+    {
+      "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "name": "/promptgate-gateway-1",
+      "unchanged": true
+    },
+    {
+      "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "name": "/fp-w4-prep-order-pytest-sysmodules",
+      "unchanged": true
+    },
+    {
+      "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+      "name": "/fp-w4-prep-order-numpy-22825",
+      "unchanged": true
+    }
+  ],
+  "retained_state_dir": "/tmp/nip-phase2-policy-check-20260920_98db64a8",
+  "other_runtime_resources_created": false
+}

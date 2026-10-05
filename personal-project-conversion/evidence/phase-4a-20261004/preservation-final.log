@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-04T09:54:35.038311+00:00",
+  "head": "7c7fcebbeba9c7b9671d6eb38631c2625cc8b454",
+  "branch": "codex/stage10-hardening",
+  "baseline_file_count": 1457,
+  "missing_baseline_files": [],
+  "unexpected_changes": [],
+  "protected_hashes_equal": {
+    ".env": true,
+    ".git/index": true,
+    "personal-project-conversion/SELECTED_PREFERENCES.md": true
+  },
+  "accepted_protected_hashes_equal_including_helper": {
+    ".env": true,
+    ".git/index": true,
+    "personal-project-conversion/SELECTED_PREFERENCES.md": true,
+    "personal-project-conversion/evidence/phase-4a-20261004/verify.py": true
+  },
+  "index_byte_identical": true,
+  "staged_diff_byte_identical": true,
+  "phase3_prior_record_byte_identical_archive": true,
+  "phase3_prior_body_retained": true,
+  "other_historical_evidence_files_unchanged": 655,
+  "implementation_and_executed_test_hashes_unchanged": true,
+  "only_changes_after_accepted_execution": [
+    "PERSONAL_PROJECT_CONVERSION_PLAN.md",
+    "README.md",
+    "personal-project-conversion/03-bounded-daily-use.md",
+    "personal-project-conversion/04-local-runtime.md",
+    "personal-project-conversion/README.md"
+  ],
+  "frontend_executed_inputs_unchanged": true,
+  "all_verification_resources_cleaned": true,
+  "preexisting_container_count_preserved": 20,
+  "remaining_phase_scope": "4B and 5 unstarted; paid disabled; preferences unapplied"
+}

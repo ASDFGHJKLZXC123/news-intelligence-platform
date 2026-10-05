@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+    "-m",
+    "services.personal.cli",
+    "retry",
+    "7ef07384-9f27-4fdf-82ba-eae2f633f9d1"
+  ],
+  "dataset": "synthetic",
+  "exit_code": 0,
+  "ordinary_paid_activation": false
+}

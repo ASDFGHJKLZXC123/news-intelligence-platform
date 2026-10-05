@@ -1,0 +1,686 @@
+{
+  "completed_at_utc": "2026-10-03T23:15:26.055111+00:00",
+  "verified_ownership": {
+    "verification_id": "7ca9fcb920f7417e99aed95bae46e54b",
+    "container_id": "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+    "container_name": "nip-p3-items14-7ca9fcb920f7",
+    "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "created": "2026-10-03T23:00:36.843252585Z",
+    "port": 64707,
+    "binding": "127.0.0.1",
+    "scope": "phase3-items1-4-20261003"
+  },
+  "identity_rechecked_immediately_before_removal": true,
+  "total_created_databases": 97,
+  "total_dropped_databases": 97,
+  "created_database_names": [
+    "nip_stage6_sel_749ce0d0626d490a8943f5c2b63feb8b",
+    "nip_stage6_sel_f6e4881944d841f19ca95e5f898ffbb6",
+    "nip_stage6_hotness_58df740e0f3d467881789bca115f8336",
+    "nip_stage6_sel_2044211f21da400c911abe36e574583b",
+    "nip_stage6_hotness_9322753749da4c9da17075d9d5b39994",
+    "nip_stage6_sel_efca3d25895c461187091157298a277c",
+    "nip_stage6_sel_fda80d2315c9409d8fb4fa3b6fe7a429",
+    "nip_stage6_sel_d5f5e874ad334f97a2ffa6d35c029bb2",
+    "nip_stage6_sel_a2947741c08f477792b296aae649e006",
+    "nip_stage7_aa1fea69f3f145219ba89710995f74ec",
+    "nip_alembic_smoke_2a67604c7bc84d049265832ac14dd09d",
+    "nip_alembic_smoke_d03769edc1b9487c956ad837814e0ef2",
+    "nip_stage7_04ef4a3d1ba043a3907dda1d50eba3aa",
+    "nip_stage7_8bfd2da677de41bf9161c6655847f94e",
+    "nip_stage7_900486f033194eb68a25b07595ca32a1",
+    "nip_stage7_d9d2d1283ce04dbdbe2c5215a53ab9f0",
+    "nip_stage7_88fe140e5a044dd2b60b3859b3b727b6",
+    "nip_stage7_b3c8c79e62d34c10a0e7b6aeaf8e9907",
+    "nip_stage7_8cbf27a50c3d432db5cf80a0a45d4312",
+    "nip_stage7_df09b64940164a619afce2ff02470747",
+    "nip_stage7_8b14c9ad475d4af592a3a160a77505fc",
+    "nip_stage7_4c35465f2427491984a336a90fa68340",
+    "nip_stage7_97d9630c35ce4a6e875ef2179b006a46",
+    "nip_stage7_f84d447cae764ade9ffa9f2eee9e4326",
+    "nip_stage7_db4803ee5e3444d587567e4e11a93568",
+    "nip_stage7_10951b5a9c6049bc95893912d1294b0c",
+    "nip_stage7_31eaa15bc5b34eef8bd52598534b5757",
+    "nip_stage7_7e5d88bf6903475982dae70d18395582",
+    "nip_stage7_4d9773ceef2144a49a2557efbef058ca",
+    "nip_stage7_f1e5fb2f700248a18012cd9739076cbf",
+    "nip_stage7_8aac2276a2f6473096f6e7b108d7cab3",
+    "nip_stage7_977fb97c1f4144019bcdda2c3aa69a3c",
+    "nip_stage7_9118e6df747d4b779a3e11d4b1c29c36",
+    "nip_stage7_5a8d0e2705aa46be8c1a1e637b467edf",
+    "nip_stage7_c0ff22d0ecfb4136b6970b6a4e8106c4",
+    "nip_stage7_46d2a57a0ebf475fabeab953006a0629",
+    "nip_stage7_3a6a2432387f48b59c943793e2beb1be",
+    "nip_stage7_72ad5032ef074afa8b290654c4f36e20",
+    "nip_stage7_71cc9d56571c4b2caed29ba5452bb6f6",
+    "nip_stage7_ef22ac6dfada42999271cec6ca791288",
+    "nip_stage7_38ba229e53d74508adc9e1a19e3b4169",
+    "nip_stage7_bdd86dfdbcae4c30812bbe089129ebac",
+    "nip_stage7_8d3f4e50405d4cf0af4d51fc094df2b6",
+    "nip_stage7_83fffa4e19494d499a51f90a72e07f4a",
+    "nip_stage7_866eaf7a6fc9460392914bc924346c5c",
+    "nip_stage7_d82a20c39d9d4358aafce96f7ce48186",
+    "nip_stage7_61a5f3c06c424c5db798081de65ce916",
+    "nip_stage7_173c9b33890047f0b47342eef5a4d083",
+    "nip_stage7_17c2f18a5d884ec7a8c074b3a5887b9d",
+    "nip_stage7_7c7399f4df3d491a93e9cb5f3fb6b36f",
+    "nip_stage7_7628a59d01814700bf1fe795d7b2b9bc",
+    "nip_stage7_421ae7c652c34ea7940042097e920217",
+    "nip_stage7_f4d76c9e13e84e3782f0dded14eb0a7a",
+    "nip_stage7_926b46f086c64a3babd31739a2a9206d",
+    "nip_stage7_b1294c6f154e45079671839f486799c4",
+    "nip_stage7_dd91b984241f4579b0f0dad35c40b574",
+    "nip_stage7_4d23f2a1e2484a5a912115c5b91e32d8",
+    "nip_stage7_f8048353165a42049fbaea03fb53e39b",
+    "nip_stage7_8c139c864f8d458bbb87686d9b20e24a",
+    "nip_stage7_8e0ca7af6b18408aa65a076988bbbd03",
+    "nip_stage7_e59b97a8f888496b90a128cae00727e7",
+    "nip_stage7_71da16614558449e8311c80b67fd7572",
+    "nip_stage7_a6cfc807bef04230b661f8e3ffb91269",
+    "nip_stage7_458abb3320c44c02aa675775c08eed59",
+    "nip_stage7_964be396005f4fa49fee9103d979b287",
+    "nip_stage7_75d18e8b8b1f4f689977de8e70868d3d",
+    "nip_stage7_4fdcfb661b76462ba35141a39aea8ea8",
+    "nip_phase2_live_ac3868e401c447a19aa00f4ee1846924",
+    "nip_phase2_live_f666351396364de09901027efceecfe8",
+    "nip_phase2_live_861ba624ae1746288c073da2d53a8a81",
+    "nip_stage7_1a3d942de7c942c78d2186bb48c00d07",
+    "nip_stage7_7aec9638031246a5ac20e3578541ddee",
+    "nip_stage7_6e2d55f36f3f4e83ba85c8aae8a3bc3f",
+    "nip_stage7_49f85c23a49a48508952a074794d1eb6",
+    "nip_stage7_bc2a4f476f7a48e0b0630eec5ea10d06",
+    "nip_stage7_acf77e69dcaa417aba8744d78ac0413e",
+    "nip_stage7_90483c129c1347398c081865e569a669",
+    "nip_stage7_e2baa51acb6940cf984d2d6295c97a54",
+    "nip_stage7_cddc97d1ecc34587b36b653cb3880694",
+    "nip_stage7_d483e3a6c109492781767c8dacb6bc91",
+    "nip_stage7_19808731e9904c8092030ef7e819ce6f",
+    "nip_stage7_7a99b93ba11740a699c35bd81758fd91",
+    "nip_stage7_f9ae696e0acd49d792f91b627eaa3399",
+    "nip_stage7_f2b6d203de654ecc80b6201a0784742a",
+    "nip_stage7_025f7f9715544fcab2a8c3c9068457da",
+    "nip_stage7_ca6e9a7588d44c8bb291d6f8f972f75c",
+    "nip_stage7_5e4e95e3c1254b7ebb05dfa74086fadf",
+    "nip_stage7_3c0daf28f55547678c816f10acd00a57",
+    "nip_stage7_abd431453fe74d4096079f66a1c99f7f",
+    "nip_stage7_59857ac0f5024d3c92fa71082b7afb7e",
+    "nip_stage7_90c54f40844a423a911fe85838d44abe",
+    "nip_stage7_ef0b22564e0c4e509061d3875930eae1",
+    "nip_stage7_c854d32323d242f88198cca540196b98",
+    "nip_stage7_65e4dd99a89b472d939e540f16695ca9",
+    "nip_stage7_418810ccc3394590b312fa925bb272a9",
+    "nip_stage7_ad08d8ad024f4364b17264a17346828d",
+    "nip_stage7_bc69c6c11e7c499a97c8223e88229f3f"
+  ],
+  "dropped_database_names": [
+    "nip_stage6_sel_749ce0d0626d490a8943f5c2b63feb8b",
+    "nip_stage6_sel_f6e4881944d841f19ca95e5f898ffbb6",
+    "nip_stage6_hotness_58df740e0f3d467881789bca115f8336",
+    "nip_stage6_sel_2044211f21da400c911abe36e574583b",
+    "nip_stage6_hotness_9322753749da4c9da17075d9d5b39994",
+    "nip_stage6_sel_efca3d25895c461187091157298a277c",
+    "nip_stage6_sel_fda80d2315c9409d8fb4fa3b6fe7a429",
+    "nip_stage6_sel_d5f5e874ad334f97a2ffa6d35c029bb2",
+    "nip_stage6_sel_a2947741c08f477792b296aae649e006",
+    "nip_stage7_aa1fea69f3f145219ba89710995f74ec",
+    "nip_alembic_smoke_2a67604c7bc84d049265832ac14dd09d",
+    "nip_alembic_smoke_d03769edc1b9487c956ad837814e0ef2",
+    "nip_stage7_04ef4a3d1ba043a3907dda1d50eba3aa",
+    "nip_stage7_8bfd2da677de41bf9161c6655847f94e",
+    "nip_stage7_900486f033194eb68a25b07595ca32a1",
+    "nip_stage7_d9d2d1283ce04dbdbe2c5215a53ab9f0",
+    "nip_stage7_88fe140e5a044dd2b60b3859b3b727b6",
+    "nip_stage7_b3c8c79e62d34c10a0e7b6aeaf8e9907",
+    "nip_stage7_8cbf27a50c3d432db5cf80a0a45d4312",
+    "nip_stage7_df09b64940164a619afce2ff02470747",
+    "nip_stage7_8b14c9ad475d4af592a3a160a77505fc",
+    "nip_stage7_4c35465f2427491984a336a90fa68340",
+    "nip_stage7_97d9630c35ce4a6e875ef2179b006a46",
+    "nip_stage7_f84d447cae764ade9ffa9f2eee9e4326",
+    "nip_stage7_db4803ee5e3444d587567e4e11a93568",
+    "nip_stage7_10951b5a9c6049bc95893912d1294b0c",
+    "nip_stage7_31eaa15bc5b34eef8bd52598534b5757",
+    "nip_stage7_7e5d88bf6903475982dae70d18395582",
+    "nip_stage7_4d9773ceef2144a49a2557efbef058ca",
+    "nip_stage7_f1e5fb2f700248a18012cd9739076cbf",
+    "nip_stage7_8aac2276a2f6473096f6e7b108d7cab3",
+    "nip_stage7_977fb97c1f4144019bcdda2c3aa69a3c",
+    "nip_stage7_9118e6df747d4b779a3e11d4b1c29c36",
+    "nip_stage7_5a8d0e2705aa46be8c1a1e637b467edf",
+    "nip_stage7_c0ff22d0ecfb4136b6970b6a4e8106c4",
+    "nip_stage7_46d2a57a0ebf475fabeab953006a0629",
+    "nip_stage7_3a6a2432387f48b59c943793e2beb1be",
+    "nip_stage7_72ad5032ef074afa8b290654c4f36e20",
+    "nip_stage7_71cc9d56571c4b2caed29ba5452bb6f6",
+    "nip_stage7_ef22ac6dfada42999271cec6ca791288",
+    "nip_stage7_38ba229e53d74508adc9e1a19e3b4169",
+    "nip_stage7_bdd86dfdbcae4c30812bbe089129ebac",
+    "nip_stage7_8d3f4e50405d4cf0af4d51fc094df2b6",
+    "nip_stage7_83fffa4e19494d499a51f90a72e07f4a",
+    "nip_stage7_866eaf7a6fc9460392914bc924346c5c",
+    "nip_stage7_d82a20c39d9d4358aafce96f7ce48186",
+    "nip_stage7_61a5f3c06c424c5db798081de65ce916",
+    "nip_stage7_173c9b33890047f0b47342eef5a4d083",
+    "nip_stage7_17c2f18a5d884ec7a8c074b3a5887b9d",
+    "nip_stage7_7c7399f4df3d491a93e9cb5f3fb6b36f",
+    "nip_stage7_7628a59d01814700bf1fe795d7b2b9bc",
+    "nip_stage7_421ae7c652c34ea7940042097e920217",
+    "nip_stage7_f4d76c9e13e84e3782f0dded14eb0a7a",
+    "nip_stage7_926b46f086c64a3babd31739a2a9206d",
+    "nip_stage7_b1294c6f154e45079671839f486799c4",
+    "nip_stage7_dd91b984241f4579b0f0dad35c40b574",
+    "nip_stage7_4d23f2a1e2484a5a912115c5b91e32d8",
+    "nip_stage7_f8048353165a42049fbaea03fb53e39b",
+    "nip_stage7_8c139c864f8d458bbb87686d9b20e24a",
+    "nip_stage7_8e0ca7af6b18408aa65a076988bbbd03",
+    "nip_stage7_e59b97a8f888496b90a128cae00727e7",
+    "nip_stage7_71da16614558449e8311c80b67fd7572",
+    "nip_stage7_a6cfc807bef04230b661f8e3ffb91269",
+    "nip_stage7_458abb3320c44c02aa675775c08eed59",
+    "nip_stage7_964be396005f4fa49fee9103d979b287",
+    "nip_stage7_75d18e8b8b1f4f689977de8e70868d3d",
+    "nip_stage7_4fdcfb661b76462ba35141a39aea8ea8",
+    "nip_phase2_live_ac3868e401c447a19aa00f4ee1846924",
+    "nip_phase2_live_f666351396364de09901027efceecfe8",
+    "nip_phase2_live_861ba624ae1746288c073da2d53a8a81",
+    "nip_stage7_1a3d942de7c942c78d2186bb48c00d07",
+    "nip_stage7_7aec9638031246a5ac20e3578541ddee",
+    "nip_stage7_6e2d55f36f3f4e83ba85c8aae8a3bc3f",
+    "nip_stage7_49f85c23a49a48508952a074794d1eb6",
+    "nip_stage7_bc2a4f476f7a48e0b0630eec5ea10d06",
+    "nip_stage7_acf77e69dcaa417aba8744d78ac0413e",
+    "nip_stage7_90483c129c1347398c081865e569a669",
+    "nip_stage7_e2baa51acb6940cf984d2d6295c97a54",
+    "nip_stage7_cddc97d1ecc34587b36b653cb3880694",
+    "nip_stage7_d483e3a6c109492781767c8dacb6bc91",
+    "nip_stage7_19808731e9904c8092030ef7e819ce6f",
+    "nip_stage7_7a99b93ba11740a699c35bd81758fd91",
+    "nip_stage7_f9ae696e0acd49d792f91b627eaa3399",
+    "nip_stage7_f2b6d203de654ecc80b6201a0784742a",
+    "nip_stage7_025f7f9715544fcab2a8c3c9068457da",
+    "nip_stage7_ca6e9a7588d44c8bb291d6f8f972f75c",
+    "nip_stage7_5e4e95e3c1254b7ebb05dfa74086fadf",
+    "nip_stage7_3c0daf28f55547678c816f10acd00a57",
+    "nip_stage7_abd431453fe74d4096079f66a1c99f7f",
+    "nip_stage7_59857ac0f5024d3c92fa71082b7afb7e",
+    "nip_stage7_90c54f40844a423a911fe85838d44abe",
+    "nip_stage7_ef0b22564e0c4e509061d3875930eae1",
+    "nip_stage7_c854d32323d242f88198cca540196b98",
+    "nip_stage7_65e4dd99a89b472d939e540f16695ca9",
+    "nip_stage7_418810ccc3394590b312fa925bb272a9",
+    "nip_stage7_ad08d8ad024f4364b17264a17346828d",
+    "nip_stage7_bc69c6c11e7c499a97c8223e88229f3f"
+  ],
+  "database_counts_by_prefix": {
+    "nip_stage6_sel_": 7,
+    "nip_stage6_hotness_": 2,
+    "nip_stage7_": 83,
+    "nip_alembic_smoke_": 2,
+    "nip_phase2_live_": 3
+  },
+  "all_database_rows_before_removal": [
+    {
+      "oid": 5,
+      "datname": "postgres"
+    },
+    {
+      "oid": 4,
+      "datname": "template0"
+    },
+    {
+      "oid": 1,
+      "datname": "template1"
+    }
+  ],
+  "remaining_owned_databases": [],
+  "container_removed": true,
+  "container_absent_after_removal": true,
+  "preexisting_container_count": 17,
+  "preexisting_containers_unchanged": true,
+  "preexisting_comparison": [
+    {
+      "id": "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "unchanged": true,
+      "before": {
+        "id": "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+        "name": "/infra-monitor-demo-20261003-relay",
+        "created": "2026-10-03T21:45:43.144892256Z",
+        "started": "2026-10-03T21:45:43.220920214Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "15442"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+        "name": "/infra-monitor-demo-20261003-relay",
+        "created": "2026-10-03T21:45:43.144892256Z",
+        "started": "2026-10-03T21:45:43.220920214Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "15442"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "unchanged": true,
+      "before": {
+        "id": "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+        "name": "/infra-monitor-demo-20261003-db",
+        "created": "2026-10-03T21:45:42.825446464Z",
+        "started": "2026-10-03T21:45:42.977145339Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": null
+        }
+      },
+      "after": {
+        "id": "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+        "name": "/infra-monitor-demo-20261003-db",
+        "created": "2026-10-03T21:45:42.825446464Z",
+        "started": "2026-10-03T21:45:42.977145339Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": null
+        }
+      }
+    },
+    {
+      "id": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "unchanged": true,
+      "before": {
+        "id": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+        "name": "/nip-personal-phase2-offline-redis-p3_browser_20260920_a",
+        "created": "2026-09-20T23:02:21.319704421Z",
+        "started": "2026-09-20T23:02:21.422923463Z",
+        "running": true,
+        "ports": {
+          "6379/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59749"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+        "name": "/nip-personal-phase2-offline-redis-p3_browser_20260920_a",
+        "created": "2026-09-20T23:02:21.319704421Z",
+        "started": "2026-09-20T23:02:21.422923463Z",
+        "running": true,
+        "ports": {
+          "6379/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59749"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "unchanged": true,
+      "before": {
+        "id": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+        "name": "/nip-personal-phase2-offline-pg-p3_browser_20260920_a",
+        "created": "2026-09-20T23:02:15.896693252Z",
+        "started": "2026-09-20T23:02:16.042279418Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59734"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+        "name": "/nip-personal-phase2-offline-pg-p3_browser_20260920_a",
+        "created": "2026-09-20T23:02:15.896693252Z",
+        "started": "2026-09-20T23:02:16.042279418Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59734"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "unchanged": true,
+      "before": {
+        "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+        "name": "/nip-phase3-tests-02ea38048d",
+        "created": "2026-09-20T22:50:40.739020472Z",
+        "started": "2026-09-20T22:50:40.915016514Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "58553"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+        "name": "/nip-phase3-tests-02ea38048d",
+        "created": "2026-09-20T22:50:40.739020472Z",
+        "started": "2026-09-20T22:50:40.915016514Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "58553"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "unchanged": true,
+      "before": {
+        "id": "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+        "name": "/fencepost-m3-cache-a4-4e48ad1",
+        "created": "2026-09-20T11:44:08.373334463Z",
+        "started": "2026-09-20T11:44:08.493246172Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+        "name": "/fencepost-m3-cache-a4-4e48ad1",
+        "created": "2026-09-20T11:44:08.373334463Z",
+        "started": "2026-09-20T11:44:08.493246172Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "unchanged": true,
+      "before": {
+        "id": "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+        "name": "/fencepost-m3-product-a4-20260920t105847z",
+        "created": "2026-09-20T11:01:58.054552875Z",
+        "started": "2026-09-20T11:01:58.162424251Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+        "name": "/fencepost-m3-product-a4-20260920t105847z",
+        "created": "2026-09-20T11:01:58.054552875Z",
+        "started": "2026-09-20T11:01:58.162424251Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "unchanged": true,
+      "before": {
+        "id": "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+        "name": "/fencepost-m3-native-smoke-20260920",
+        "created": "2026-09-20T09:35:34.547572213Z",
+        "started": "2026-09-20T09:35:36.559674172Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+        "name": "/fencepost-m3-native-smoke-20260920",
+        "created": "2026-09-20T09:35:34.547572213Z",
+        "started": "2026-09-20T09:35:36.559674172Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "unchanged": true,
+      "before": {
+        "id": "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+        "name": "/fencepost-m3-native-preflight-20260920",
+        "created": "2026-09-20T09:25:14.445850967Z",
+        "started": "2026-09-20T09:25:17.124204385Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+        "name": "/fencepost-m3-native-preflight-20260920",
+        "created": "2026-09-20T09:25:14.445850967Z",
+        "started": "2026-09-20T09:25:17.124204385Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "unchanged": true,
+      "before": {
+        "id": "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+        "name": "/fencepost-m3-native-tools-20260920",
+        "created": "2026-09-20T09:22:35.342241755Z",
+        "started": "2026-09-20T09:22:35.418908255Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+        "name": "/fencepost-m3-native-tools-20260920",
+        "created": "2026-09-20T09:22:35.342241755Z",
+        "started": "2026-09-20T09:22:35.418908255Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "unchanged": true,
+      "before": {
+        "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+        "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+        "created": "2026-09-19T05:23:14.806281091Z",
+        "started": "2026-09-19T05:23:14.995419716Z",
+        "running": true,
+        "ports": {
+          "6379/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59821"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+        "name": "/nip-personal-phase2-offline-redis-browser_20260918_b81c",
+        "created": "2026-09-19T05:23:14.806281091Z",
+        "started": "2026-09-19T05:23:14.995419716Z",
+        "running": true,
+        "ports": {
+          "6379/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59821"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "unchanged": true,
+      "before": {
+        "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+        "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+        "created": "2026-09-19T05:23:01.579926084Z",
+        "started": "2026-09-19T05:23:01.740485043Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59773"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+        "name": "/nip-personal-phase2-offline-pg-browser_20260918_b81c",
+        "created": "2026-09-19T05:23:01.579926084Z",
+        "started": "2026-09-19T05:23:01.740485043Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "59773"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "unchanged": true,
+      "before": {
+        "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+        "name": "/fencepost-m3-linux-inode-35423434648",
+        "created": "2026-09-19T05:21:12.026951214Z",
+        "started": "2026-09-19T05:21:12.099369381Z",
+        "running": true,
+        "ports": {}
+      },
+      "after": {
+        "id": "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+        "name": "/fencepost-m3-linux-inode-35423434648",
+        "created": "2026-09-19T05:21:12.026951214Z",
+        "started": "2026-09-19T05:21:12.099369381Z",
+        "running": true,
+        "ports": {}
+      }
+    },
+    {
+      "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "unchanged": true,
+      "before": {
+        "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+        "name": "/news-intelligence-platform-postgres-1",
+        "created": "2026-09-09T06:16:04.665051842Z",
+        "started": "2026-09-09T06:16:04.728352259Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "55432"
+            }
+          ]
+        }
+      },
+      "after": {
+        "id": "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+        "name": "/news-intelligence-platform-postgres-1",
+        "created": "2026-09-09T06:16:04.665051842Z",
+        "started": "2026-09-09T06:16:04.728352259Z",
+        "running": true,
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "55432"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "unchanged": true,
+      "before": {
+        "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+        "name": "/promptgate-gateway-1",
+        "created": "2026-08-09T17:49:59.795639928Z",
+        "started": "2026-08-09T17:50:09.124909126Z",
+        "running": false,
+        "ports": {}
+      },
+      "after": {
+        "id": "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+        "name": "/promptgate-gateway-1",
+        "created": "2026-08-09T17:49:59.795639928Z",
+        "started": "2026-08-09T17:50:09.124909126Z",
+        "running": false,
+        "ports": {}
+      }
+    },
+    {
+      "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "unchanged": true,
+      "before": {
+        "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+        "name": "/fp-w4-prep-order-pytest-sysmodules",
+        "created": "2026-08-09T09:24:09.44827055Z",
+        "started": "2026-08-09T09:24:09.540916925Z",
+        "running": false,
+        "ports": {}
+      },
+      "after": {
+        "id": "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+        "name": "/fp-w4-prep-order-pytest-sysmodules",
+        "created": "2026-08-09T09:24:09.44827055Z",
+        "started": "2026-08-09T09:24:09.540916925Z",
+        "running": false,
+        "ports": {}
+      }
+    },
+    {
+      "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+      "unchanged": true,
+      "before": {
+        "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+        "name": "/fp-w4-prep-order-numpy-22825",
+        "created": "2026-08-09T09:24:02.986568339Z",
+        "started": "2026-08-09T09:24:08.91130355Z",
+        "running": false,
+        "ports": {}
+      },
+      "after": {
+        "id": "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+        "name": "/fp-w4-prep-order-numpy-22825",
+        "created": "2026-08-09T09:24:02.986568339Z",
+        "started": "2026-08-09T09:24:08.91130355Z",
+        "running": false,
+        "ports": {}
+      }
+    }
+  ],
+  "full_ddl_log": "resource-postgres-full-ddl.log",
+  "lifecycle_log": "resource-database-lifecycle.log"
+}

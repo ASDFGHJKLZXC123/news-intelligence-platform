@@ -1,0 +1,22 @@
+........F                                                                [100%]
+=================================== FAILURES ===================================
+______ test_ordinary_generation_allowance_block_keeps_report_unpublished _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x113280e60>
+
+    def test_ordinary_generation_allowance_block_keeps_report_unpublished(monkeypatch):
+        with migrated_disposable_engine() as engine:
+            run_id, token, _, _ = _queued(engine, monthly="0.001")
+            factory, calls, delegates = _runtime(monkeypatch, engine)
+            result = worker.run_personal_daily_task.run(str(run_id), str(token))
+            assert result["status"] == "succeeded" and not result["published"]
+>           assert [role for role, _ in calls] == ["embedding"]
+E           AssertionError: assert [] == ['embedding']
+E             
+E             Right contains one more item: 'embedding'
+E             Use -v to get more diff
+
+tests/integration/test_personal_paid_worker.py:215: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_paid_worker.py::test_ordinary_generation_allowance_block_keeps_report_unpublished
+1 failed, 8 passed in 19.55s

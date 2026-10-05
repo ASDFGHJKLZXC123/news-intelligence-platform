@@ -1,0 +1,26 @@
+{
+  "command": "node --test frontend/app/personal-foundation.test.js frontend/app/api-adapter.test.js",
+  "exit_code": 0,
+  "passed": 50,
+  "failed": 0,
+  "skipped": 0,
+  "log": "independent-ui-after.log",
+  "scope": "Final independent item-6 scoped review PASS; R1 source/tests and actual corrected Chrome captures inspected; R2 guard resolved; source/index preservation and fresh cleanup independently verified.",
+  "capture_secret_guard": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python personal-project-conversion/evidence/phase-3-item-6-20261003/test-browser-capture-secret-guard.py",
+    "exit_code": 0,
+    "passed": 4,
+    "log": "independent-capture-guard-after.log"
+  },
+  "cache_key_after_verification": {
+    "command": "node --test frontend/app/personal-foundation.test.js frontend/app/api-adapter.test.js",
+    "exit_code": 0,
+    "passed": 50,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Independent repeat after the one-line dirty-before HTML script-version change; same 50 targets, not additive coverage.",
+    "result_source": "Reviewer native exec_command output retained in this task session; source/controller untouched."
+  },
+  "native_fidelity": "independent-native-fidelity-check.json",
+  "final_review": "independent-final-check.json"
+}

@@ -1,0 +1,45 @@
+{
+  "lint": {
+    "command": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "ruff",
+      "check",
+      "--no-cache",
+      "."
+    ],
+    "exit_code": 0
+  },
+  "format": {
+    "command": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/.venv/bin/python",
+      "-m",
+      "ruff",
+      "format",
+      "--check",
+      "--no-cache",
+      "tests/integration/test_personal_item5_composed.py",
+      "tests/integration/test_personal_bounds_upgrade.py",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-item-5-20261003/verify.py",
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-3-item-5-20261003/checks.py"
+    ],
+    "exit_code": 0
+  },
+  "whitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  "staged-whitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit_code": 0
+  }
+}

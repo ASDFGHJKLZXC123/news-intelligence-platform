@@ -1,0 +1,489 @@
+>> starting disposable Postgres (project=nip-ephemeral-20260909045542-94338-13721, automatic host port)
+ Network nip-ephemeral-20260909045542-94338-13721_default Creating 
+ Network nip-ephemeral-20260909045542-94338-13721_default Created 
+ Volume nip-ephemeral-20260909045542-94338-13721_pgdata Creating 
+ Volume nip-ephemeral-20260909045542-94338-13721_pgdata Created 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Creating 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Created 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Starting 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Started 
+>> waiting for readiness
+>> disposable Postgres is ready on host port 55002
+>> migrating blank database to head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, create pgvector extension
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, core schema: pipeline + canonical crisis-model tables
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, provider data integration storage
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, provider expansion storage tables
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, enable postgis extension
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, company master tables
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, ingestion observability tables
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, evidence and claim tables
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, event intelligence tables
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, provider provenance columns
+INFO  [alembic.runtime.migration] Running upgrade 0010 -> 0011, risk output tables
+INFO  [alembic.runtime.migration] Running upgrade 0011 -> 0012, application tables
+INFO  [alembic.runtime.migration] Running upgrade 0012 -> 0013, intelligence contract schema
+INFO  [alembic.runtime.migration] Running upgrade 0013 -> 0014, llm raw_output, contract score precision, and analogy scale reconciliation
+INFO  [alembic.runtime.migration] Running upgrade 0014 -> 0015, alert condition state and alert peak severity
+INFO  [alembic.runtime.migration] Running upgrade 0015 -> 0016, events.hotness_score
+INFO  [alembic.runtime.migration] Running upgrade 0016 -> 0017, Expand embedding persistence for immutable model snapshots.
+INFO  [alembic.runtime.migration] Running upgrade 0017 -> 0018, Add durable lifecycle details for the manual daily pipeline.
+INFO  [alembic.runtime.migration] Running upgrade 0018 -> 0019, Add a durable Gate-G content policy marker to reports.
+INFO  [alembic.runtime.migration] Running upgrade 0019 -> 0020, Add the personal news desk schema without rewriting legacy data.
+>> running integration suite
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-9.1.0, pluggy-1.6.0
+rootdir: /private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-phase2-orchestration-hh6k_p8m/m2-delivery
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.13.0
+collected 4191 items / 4041 deselected / 150 selected
+
+tests/integration/test_alembic_smoke.py .                                [  0%]
+tests/integration/test_alert_delivery_durability.py .....                [  4%]
+tests/integration/test_analogy_persistence_pgvector.py ........          [  9%]
+tests/integration/test_analogy_retrieval_pgvector.py ........            [ 14%]
+tests/integration/test_application_schema_smoke.py .                     [ 15%]
+tests/integration/test_clustering_smoke.py ..                            [ 16%]
+tests/integration/test_company_master_schema_smoke.py .                  [ 17%]
+tests/integration/test_core_schema_smoke.py .                            [ 18%]
+tests/integration/test_daily_pipeline_vertical_slice.py .                [ 18%]
+tests/integration/test_database_role_hardening.py .                      [ 19%]
+tests/integration/test_embedding_snapshot_expand_migration.py ...        [ 21%]
+tests/integration/test_entity_identity_pipeline.py ........              [ 26%]
+tests/integration/test_event_entity_linking_pipeline.py .........        [ 32%]
+tests/integration/test_event_intelligence_schema_smoke.py .              [ 33%]
+tests/integration/test_evidence_schema_smoke.py .                        [ 34%]
+tests/integration/test_ingestion_observability_schema_smoke.py .         [ 34%]
+tests/integration/test_ingestion_smoke.py .                              [ 35%]
+tests/integration/test_llm_runtime_repository.py ..                      [ 36%]
+tests/integration/test_personal_phase2.py F..                            [ 38%]
+tests/integration/test_personal_run_claim_snapshot.py ......             [ 42%]
+tests/integration/test_pgvector_smoke.py .                               [ 43%]
+tests/integration/test_postgis_smoke.py .                                [ 44%]
+tests/integration/test_provider_provenance_schema_smoke.py .             [ 44%]
+tests/integration/test_risk_output_schema_smoke.py .                     [ 45%]
+tests/integration/test_score_precision_migration.py ...                  [ 47%]
+tests/integration/test_stage1_migration.py ..                            [ 48%]
+tests/integration/test_stage6_brief_selection.py .......                 [ 53%]
+tests/integration/test_stage6_context_joins.py ......                    [ 57%]
+tests/integration/test_stage6_export.py .......                          [ 62%]
+tests/integration/test_stage6_generation.py ....                         [ 64%]
+tests/integration/test_stage6_lifecycle.py .........                     [ 70%]
+tests/integration/test_stage6_report_api.py .........                    [ 76%]
+tests/integration/test_stage7_api_contract.py .......................... [ 94%]
+.........                                                                [100%]
+
+=================================== FAILURES ===================================
+_ test_owner_selection_today_sources_and_saved_persistence_on_migrated_database _
+
+    def test_owner_selection_today_sources_and_saved_persistence_on_migrated_database() -> None:
+        with migrated_disposable_engine() as engine, Session(engine) as session:
+            _remove_blank_migration_bootstrap(session)
+            first, second, event, article = _legacy_data(session)
+            workspace, choices = ensure_workspace(session)
+            session.commit()
+            assert workspace.owner_id is None
+            assert {choice.id for choice in choices} == {first.id, second.id}
+            assert (
+                session.scalar(select(Report.title).where(Report.report_type == "daily_brief"))
+                == "Legacy v7"
+            )
+            assert (
+                session.scalar(
+                    select(WatchlistItem.item_id).where(WatchlistItem.item_type == "company")
+                )
+                == "legacy-company"
+            )
+    
+            bind_owner(session, workspace, second.id)
+            session.commit()
+            with pytest.raises(OwnerBindingConflict):
+                bind_owner(session, workspace, first.id)
+            session.rollback()
+    
+            run = _personal_run(session, workspace, event, article)
+            pinned_observation = session.scalar(
+                select(PersonalRunEventObservation).where(
+                    PersonalRunEventObservation.run_id == run.id
+                )
+            )
+            snapshot = PersonalBriefSnapshot(
+                workspace_id=workspace.id,
+                run_id=run.id,
+                profile_revision_id=run.profile_revision_id,
+                candidate_event_ids=[event.id],
+                selected_event_ids=[event.id],
+                input_payload={
+                    "candidates": [
+                        {
+                            "observation_id": str(pinned_observation.id),
+                            "event_id": str(event.id),
+                            "revision": 1,
+                        }
+                    ]
+                },
+                input_hash="a" * 64,
+                model_route={"mode": "offline_fixture"},
+                prepared_at=datetime.datetime(2026, 9, 6, 22, tzinfo=UTC),
+            )
+            session.add(snapshot)
+            session.flush()
+            run.snapshot_id = snapshot.id
+            session.add(
+                PersonalRunEventObservation(
+                    run_id=run.id,
+                    event_id=event.id,
+                    revision=2,
+                    qualifying_article_ids=[],
+                    source_inputs={
+                        "event_title": "Later observation title",
+                        "event_summary": "Later observation summary",
+                        "articles": [],
+                    },
+                    ranking_inputs={
+                        "source_count": 0,
+                        "hotness": 1,
+                        "newest_publication_at": None,
+                        "sort_key": [0, 0, -1, 1, 0, str(event.id)],
+                    },
+                )
+            )
+            pinned_title = event.title
+            event.title = "Later mutable event title"
+            event.summary = "Later mutable event summary"
+            event.hotness_score = 1
+            session.commit()
+            repo = PersonalRepository(session, workspace)
+            items, total, displayed, newer = repo.list_events(
+                run_id=None, query="interest rate", saved_only=False, limit=1, offset=0
+            )
+            assert total == 1 and items[0]["id"] == str(event.id)
+            assert items[0]["title"] == pinned_title
+            assert items[0]["summary"] is None
+            assert items[0]["hotness_score"] == 10
+            assert displayed.id == run.id and newer.id == run.id
+    
+            sources, source_total = repo.event_sources(event.id, run_id=run.id, limit=1, offset=0)
+            assert source_total == 1
+            assert sources[0]["url"] == article.url
+            assert sources[0]["in_run_scope"] is True
+>           assert sources[0]["qualifies_for_brief"] is True
+E           assert False is True
+
+tests/integration/test_personal_phase2.py:239: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_phase2.py::test_owner_selection_today_sources_and_saved_persistence_on_migrated_database
+========== 1 failed, 149 passed, 4041 deselected in 60.20s (0:01:00) ===========
+>> disposable Postgres logs after failure
+postgres-1  | The files belonging to this database system will be owned by user "postgres".
+postgres-1  | This user must also own the server process.
+postgres-1  | 
+postgres-1  | The database cluster will be initialized with locale "en_US.utf8".
+postgres-1  | The default database encoding has accordingly been set to "UTF8".
+postgres-1  | The default text search configuration will be set to "english".
+postgres-1  | 
+postgres-1  | Data page checksums are disabled.
+postgres-1  | 
+postgres-1  | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+postgres-1  | creating subdirectories ... ok
+postgres-1  | selecting dynamic shared memory implementation ... posix
+postgres-1  | selecting default max_connections ... 100
+postgres-1  | selecting default shared_buffers ... 128MB
+postgres-1  | selecting default time zone ... Etc/UTC
+postgres-1  | creating configuration files ... ok
+postgres-1  | running bootstrap script ... ok
+postgres-1  | performing post-bootstrap initialization ... ok
+postgres-1  | initdb: warning: enabling "trust" authentication for local connections
+postgres-1  | initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+postgres-1  | syncing data to disk ... ok
+postgres-1  | 
+postgres-1  | 
+postgres-1  | Success. You can now start the database server using:
+postgres-1  | 
+postgres-1  |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+postgres-1  | 
+postgres-1  | waiting for server to start....2026-09-09 04:55:43.303 UTC [54] LOG:  starting PostgreSQL 16.14 (Debian 16.14-1.pgdg12+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+postgres-1  | 2026-09-09 04:55:43.303 UTC [54] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres-1  | 2026-09-09 04:55:43.305 UTC [57] LOG:  database system was shut down at 2026-09-09 04:55:43 UTC
+postgres-1  | 2026-09-09 04:55:43.306 UTC [54] LOG:  database system is ready to accept connections
+postgres-1  |  done
+postgres-1  | server started
+postgres-1  | CREATE DATABASE
+postgres-1  | 
+postgres-1  | 
+postgres-1  | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+postgres-1  | 
+postgres-1  | waiting for server to shut down....2026-09-09 04:55:43.466 UTC [54] LOG:  received fast shutdown request
+postgres-1  | 2026-09-09 04:55:43.467 UTC [54] LOG:  aborting any active transactions
+postgres-1  | 2026-09-09 04:55:43.468 UTC [54] LOG:  background worker "logical replication launcher" (PID 60) exited with exit code 1
+postgres-1  | 2026-09-09 04:55:43.468 UTC [55] LOG:  shutting down
+postgres-1  | 2026-09-09 04:55:43.468 UTC [55] LOG:  checkpoint starting: shutdown immediate
+postgres-1  | 2026-09-09 04:55:43.500 UTC [55] LOG:  checkpoint complete: wrote 922 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.025 s, total=0.033 s; sync files=301, longest=0.017 s, average=0.001 s; distance=4255 kB, estimate=4255 kB; lsn=0/1912080, redo lsn=0/1912080
+postgres-1  | 2026-09-09 04:55:43.502 UTC [54] LOG:  database system is shut down
+postgres-1  |  done
+postgres-1  | server stopped
+postgres-1  | 
+postgres-1  | PostgreSQL init process complete; ready for start up.
+postgres-1  | 
+postgres-1  | 2026-09-09 04:55:43.584 UTC [1] LOG:  starting PostgreSQL 16.14 (Debian 16.14-1.pgdg12+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+postgres-1  | 2026-09-09 04:55:43.584 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres-1  | 2026-09-09 04:55:43.584 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres-1  | 2026-09-09 04:55:43.585 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres-1  | 2026-09-09 04:55:43.587 UTC [70] LOG:  database system was shut down at 2026-09-09 04:55:43 UTC
+postgres-1  | 2026-09-09 04:55:43.588 UTC [1] LOG:  database system is ready to accept connections
+postgres-1  | 2026-09-09 04:55:55.411 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:55.585 UTC [68] LOG:  checkpoint complete: wrote 1856 buffers (11.3%); 0 WAL file(s) added, 0 removed, 2 recycled; write=0.018 s, sync=0.145 s, total=0.174 s; sync files=2670, longest=0.021 s, average=0.001 s; distance=33375 kB, estimate=33375 kB; lsn=0/39A9E58, redo lsn=0/39A9E20
+postgres-1  | 2026-09-09 04:55:55.719 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:55.722 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5004 kB, estimate=30538 kB; lsn=0/3E8CFE8, redo lsn=0/3E8CFB0
+postgres-1  | 2026-09-09 04:55:55.865 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:55.869 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5000 kB, estimate=27984 kB; lsn=0/436F108, redo lsn=0/436F0D0
+postgres-1  | 2026-09-09 04:55:56.001 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.004 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5001 kB, estimate=25686 kB; lsn=0/4851538, redo lsn=0/4851500
+postgres-1  | 2026-09-09 04:55:56.150 UTC [116] ERROR:  new row for relation "event_analogies" violates check constraint "ck_event_analogies_similarity_score"
+postgres-1  | 2026-09-09 04:55:56.150 UTC [116] DETAIL:  Failing row contains (131a1a7b-a081-42c9-b343-af3f2c8947db, 44444444-4444-4444-8444-444444444444, 11111111-1111-4111-8111-111111111111, null, 101.00, off the contract scale, null, null, null, null, 2026-09-09 04:55:56.149676+00).
+postgres-1  | 2026-09-09 04:55:56.150 UTC [116] STATEMENT:  INSERT INTO event_analogies (id, event_id, historical_episode_id, llm_run_id, similarity_score, rationale, limitations, shared_causes, regime_caveats) VALUES ('131a1a7b-a081-42c9-b343-af3f2c8947db'::uuid::UUID, '44444444-4444-4444-8444-444444444444'::uuid::UUID, '11111111-1111-4111-8111-111111111111'::uuid::UUID, NULL::UUID, 101.0, 'off the contract scale', NULL::TEXT[], NULL::TEXT[], NULL::TEXT[]) RETURNING event_analogies.created_at
+postgres-1  | 2026-09-09 04:55:56.155 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.159 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4994 kB, estimate=23616 kB; lsn=0/4D31F40, redo lsn=0/4D31F08
+postgres-1  | 2026-09-09 04:55:56.360 UTC [118] ERROR:  duplicate key value violates unique constraint "uq_event_analogies_event_episode"
+postgres-1  | 2026-09-09 04:55:56.360 UTC [118] DETAIL:  Key (event_id, historical_episode_id)=(44444444-4444-4444-8444-444444444444, 11111111-1111-4111-8111-111111111111) already exists.
+postgres-1  | 2026-09-09 04:55:56.360 UTC [118] STATEMENT:  INSERT INTO event_analogies (id, event_id, historical_episode_id, llm_run_id, similarity_score, rationale, limitations, shared_causes, regime_caveats) VALUES ('a3326c61-0b2f-4216-be03-988fb0902b0d'::uuid::UUID, '44444444-4444-4444-8444-444444444444'::uuid::UUID, '11111111-1111-4111-8111-111111111111'::uuid::UUID, NULL::UUID, 80.0, 'duplicate pair', NULL::TEXT[], NULL::TEXT[], NULL::TEXT[]), ('6818d349-77e9-4159-9b45-63dae601ea6d'::uuid::UUID, '44444444-4444-4444-8444-444444444444'::uuid::UUID, '11111111-1111-4111-8111-111111111111'::uuid::UUID, NULL::UUID, 80.0, 'duplicate pair', NULL::TEXT[], NULL::TEXT[], NULL::TEXT[]) RETURNING event_analogies.created_at, event_analogies.id
+postgres-1  | 2026-09-09 04:55:56.365 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.371 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.002 s, total=0.007 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4996 kB, estimate=21754 kB; lsn=0/5213058, redo lsn=0/5213020
+postgres-1  | 2026-09-09 04:55:56.494 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.499 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4996 kB, estimate=20079 kB; lsn=0/56F4360, redo lsn=0/56F4328
+postgres-1  | 2026-09-09 04:55:56.589 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.592 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4996 kB, estimate=18570 kB; lsn=0/5BD56E8, redo lsn=0/5BD56B0
+postgres-1  | 2026-09-09 04:55:56.692 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.697 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4966 kB, estimate=17210 kB; lsn=0/60AF030, redo lsn=0/60AEFF8
+postgres-1  | 2026-09-09 04:55:56.809 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.813 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4966 kB, estimate=15986 kB; lsn=0/6588B38, redo lsn=0/6588B00
+postgres-1  | 2026-09-09 04:55:56.902 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.906 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4966 kB, estimate=14884 kB; lsn=0/6A62638, redo lsn=0/6A62600
+postgres-1  | 2026-09-09 04:55:56.984 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:56.987 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4966 kB, estimate=13892 kB; lsn=0/6F3C210, redo lsn=0/6F3C1D8
+postgres-1  | 2026-09-09 04:55:57.079 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:57.082 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4967 kB, estimate=12999 kB; lsn=0/7415F30, redo lsn=0/7415EF8
+postgres-1  | 2026-09-09 04:55:57.165 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:57.168 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4967 kB, estimate=12196 kB; lsn=0/78EFD68, redo lsn=0/78EFD30
+postgres-1  | 2026-09-09 04:55:57.266 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:57.269 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4967 kB, estimate=11473 kB; lsn=0/7DC9C90, redo lsn=0/7DC9C58
+postgres-1  | 2026-09-09 04:55:57.367 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:57.371 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4967 kB, estimate=10823 kB; lsn=0/82A3C08, redo lsn=0/82A3BD0
+postgres-1  | 2026-09-09 04:55:58.830 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:55:58.842 UTC [68] LOG:  checkpoint complete: wrote 110 buffers (0.7%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.003 s, sync=0.007 s, total=0.013 s; sync files=39, longest=0.003 s, average=0.001 s; distance=17279 kB, estimate=17279 kB; lsn=0/9383978, redo lsn=0/9383940
+postgres-1  | 2026-09-09 04:56:01.002 UTC [172] ERROR:  division by zero
+postgres-1  | 2026-09-09 04:56:01.002 UTC [172] STATEMENT:  SELECT 1 / 0;
+postgres-1  | 2026-09-09 04:56:01.119 UTC [179] ERROR:  division by zero
+postgres-1  | 2026-09-09 04:56:01.119 UTC [179] STATEMENT:  SELECT 1 / 0;
+postgres-1  | 2026-09-09 04:56:01.274 UTC [180] ERROR:  permission denied for function privilege_future_fn_a3db1cd58853
+postgres-1  | 2026-09-09 04:56:01.274 UTC [180] STATEMENT:  SELECT public."privilege_future_fn_a3db1cd58853"()
+postgres-1  | 2026-09-09 04:56:01.275 UTC [180] ERROR:  permission denied for function security_definer_fn_a3db1cd58853
+postgres-1  | 2026-09-09 04:56:01.275 UTC [180] STATEMENT:  SELECT public."security_definer_fn_a3db1cd58853"()
+postgres-1  | 2026-09-09 04:56:01.361 UTC [194] ERROR:  division by zero
+postgres-1  | 2026-09-09 04:56:01.361 UTC [194] STATEMENT:  SELECT 1 / 0;
+postgres-1  | 2026-09-09 04:56:01.507 UTC [180] ERROR:  permission denied for schema public at character 14
+postgres-1  | 2026-09-09 04:56:01.507 UTC [180] STATEMENT:  CREATE TABLE public.runtime_forbidden (id integer)
+postgres-1  | 2026-09-09 04:56:01.509 UTC [180] ERROR:  must be owner of table sources
+postgres-1  | 2026-09-09 04:56:01.509 UTC [180] STATEMENT:  ALTER TABLE public.sources ADD COLUMN forbidden text
+postgres-1  | 2026-09-09 04:56:01.509 UTC [180] ERROR:  must be owner of table sources
+postgres-1  | 2026-09-09 04:56:01.509 UTC [180] STATEMENT:  DROP TABLE public.sources
+postgres-1  | 2026-09-09 04:56:01.510 UTC [180] ERROR:  permission denied for table privilege_future_a3db1cd58853
+postgres-1  | 2026-09-09 04:56:01.510 UTC [180] STATEMENT:  TRUNCATE TABLE public."privilege_future_a3db1cd58853"
+postgres-1  | 2026-09-09 04:56:01.511 UTC [180] ERROR:  permission denied for table alembic_version
+postgres-1  | 2026-09-09 04:56:01.511 UTC [180] STATEMENT:  SELECT version_num FROM public.alembic_version
+postgres-1  | 2026-09-09 04:56:01.511 UTC [180] ERROR:  permission denied for table spatial_ref_sys
+postgres-1  | 2026-09-09 04:56:01.511 UTC [180] STATEMENT:  UPDATE public.spatial_ref_sys SET auth_name = auth_name WHERE srid = 4326
+postgres-1  | 2026-09-09 04:56:01.512 UTC [180] ERROR:  permission denied to create temporary tables in database "nip_roles_a3db1cd58853" at character 24
+postgres-1  | 2026-09-09 04:56:01.512 UTC [180] STATEMENT:  CREATE TEMPORARY TABLE runtime_temp_forbidden (id integer)
+postgres-1  | 2026-09-09 04:56:01.517 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:01.523 UTC [68] LOG:  checkpoint complete: wrote 25 buffers (0.2%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.004 s, total=0.007 s; sync files=20, longest=0.003 s, average=0.001 s; distance=17389 kB, estimate=17389 kB; lsn=0/A47EF80, redo lsn=0/A47EF48
+postgres-1  | 2026-09-09 04:56:02.392 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:02.409 UTC [68] LOG:  checkpoint complete: wrote 257 buffers (1.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.011 s, total=0.018 s; sync files=400, longest=0.003 s, average=0.001 s; distance=7254 kB, estimate=16375 kB; lsn=0/AB94820, redo lsn=0/AB947E8
+postgres-1  | 2026-09-09 04:56:02.615 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:02.619 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4535 kB, estimate=15191 kB; lsn=0/B002600, redo lsn=0/B0025C8
+postgres-1  | 2026-09-09 04:56:02.974 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:02.979 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.002 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4541 kB, estimate=14126 kB; lsn=0/B471B88, redo lsn=0/B471B50
+postgres-1  | 2026-09-09 04:56:03.156 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:03.159 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4504 kB, estimate=13164 kB; lsn=0/B8D7D68, redo lsn=0/B8D7D30
+postgres-1  | 2026-09-09 04:56:03.388 UTC [233] ERROR:  duplicate key value violates unique constraint "uq_entity_aliases_entity_normalized_alias_source"
+postgres-1  | 2026-09-09 04:56:03.388 UTC [233] DETAIL:  Key (entity_id, normalized_alias, source)=(95b4b7c8-32ec-433c-8174-09167a257c97, apple, sec-edgar) already exists.
+postgres-1  | 2026-09-09 04:56:03.388 UTC [233] STATEMENT:  INSERT INTO entity_aliases (id, entity_id, alias, normalized_alias, alias_type, source, valid_from, valid_to) VALUES ('a2992ef2-592d-44f7-b3a4-3ea6a0390f45'::uuid::UUID, '95b4b7c8-32ec-433c-8174-09167a257c97'::uuid::UUID, 'Apple Inc.', 'apple', 'legal_name', 'sec-edgar', NULL, NULL) RETURNING entity_aliases.created_at
+postgres-1  | 2026-09-09 04:56:03.391 UTC [233] ERROR:  duplicate key value violates unique constraint "entity_profiles_primary_cik_key"
+postgres-1  | 2026-09-09 04:56:03.391 UTC [233] DETAIL:  Key (primary_cik)=(0000320193) already exists.
+postgres-1  | 2026-09-09 04:56:03.391 UTC [233] STATEMENT:  INSERT INTO entity_profiles (id, canonical_name, normalized_name, entity_type, country, primary_ticker, primary_cik, primary_lei, website) VALUES ('a2fbb412-f75b-45e3-ac76-68f05ab4e929'::uuid::UUID, 'Impostor Inc.', 'impostor inc.', 'company', NULL, NULL, '0000320193', NULL, NULL) RETURNING entity_profiles.created_at, entity_profiles.updated_at
+postgres-1  | 2026-09-09 04:56:03.395 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:03.399 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4530 kB, estimate=12301 kB; lsn=0/BD446F0, redo lsn=0/BD446B8
+postgres-1  | 2026-09-09 04:56:03.660 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:03.664 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4531 kB, estimate=11524 kB; lsn=0/C1B1318, redo lsn=0/C1B12E0
+postgres-1  | 2026-09-09 04:56:03.783 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:03.786 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4492 kB, estimate=10821 kB; lsn=0/C614488, redo lsn=0/C614450
+postgres-1  | 2026-09-09 04:56:03.934 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:03.937 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4505 kB, estimate=10189 kB; lsn=0/CA7A9E8, redo lsn=0/CA7A9B0
+postgres-1  | 2026-09-09 04:56:04.056 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:04.058 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4631 kB, estimate=9633 kB; lsn=0/CF00980, redo lsn=0/CF00948
+postgres-1  | 2026-09-09 04:56:04.238 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:04.242 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4648 kB, estimate=9135 kB; lsn=0/D38AB88, redo lsn=0/D38AB50
+postgres-1  | 2026-09-09 04:56:04.455 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:04.459 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4650 kB, estimate=8686 kB; lsn=0/D815668, redo lsn=0/D815630
+postgres-1  | 2026-09-09 04:56:04.656 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:04.659 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4648 kB, estimate=8282 kB; lsn=0/DC9FA20, redo lsn=0/DC9F9E8
+postgres-1  | 2026-09-09 04:56:04.850 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:04.853 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4649 kB, estimate=7919 kB; lsn=0/E129ED0, redo lsn=0/E129E98
+postgres-1  | 2026-09-09 04:56:05.046 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:05.049 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4648 kB, estimate=7592 kB; lsn=0/E5B4108, redo lsn=0/E5B40D0
+postgres-1  | 2026-09-09 04:56:05.191 UTC [253] ERROR:  new row for relation "event_entities" violates check constraint "ck_event_entities_confidence_score"
+postgres-1  | 2026-09-09 04:56:05.191 UTC [253] DETAIL:  Failing row contains (44444444-4444-4444-8444-444444444444, 11111111-1111-4111-8111-111111111111, direct_mention_asserted, null, null, 1.5, 2026-09-09 04:56:05.190913+00).
+postgres-1  | 2026-09-09 04:56:05.191 UTC [253] STATEMENT:  INSERT INTO event_entities (event_id, entity_profile_id, role, impact_direction, impact_score, confidence_score) VALUES ('44444444-4444-4444-8444-444444444444'::uuid::UUID, '11111111-1111-4111-8111-111111111111'::uuid::UUID, 'direct_mention_asserted', NULL, NULL, 1.5) RETURNING event_entities.created_at
+postgres-1  | 2026-09-09 04:56:05.194 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:05.197 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4643 kB, estimate=7297 kB; lsn=0/EA3CF88, redo lsn=0/EA3CF50
+postgres-1  | 2026-09-09 04:56:05.346 UTC [255] ERROR:  insert or update on table "event_entities" violates foreign key constraint "event_entities_entity_profile_id_fkey"
+postgres-1  | 2026-09-09 04:56:05.346 UTC [255] DETAIL:  Key (entity_profile_id)=(e66c3fac-fd3a-45e2-9e42-a286ba4ee60a) is not present in table "entity_profiles".
+postgres-1  | 2026-09-09 04:56:05.346 UTC [255] STATEMENT:  INSERT INTO event_entities (event_id, entity_profile_id, role, impact_direction, impact_score, confidence_score) VALUES ('44444444-4444-4444-8444-444444444444'::uuid::UUID, 'e66c3fac-fd3a-45e2-9e42-a286ba4ee60a'::uuid::UUID, 'direct_mention_asserted', NULL, NULL, 0.9) RETURNING event_entities.created_at
+postgres-1  | 2026-09-09 04:56:05.349 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:05.352 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4644 kB, estimate=7032 kB; lsn=0/EEC61D8, redo lsn=0/EEC61A0
+postgres-1  | 2026-09-09 04:56:05.551 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:05.556 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4650 kB, estimate=6794 kB; lsn=0/F350A50, redo lsn=0/F350A18
+postgres-1  | 2026-09-09 04:56:07.583 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:07.605 UTC [68] LOG:  checkpoint complete: wrote 99 buffers (0.6%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.016 s, total=0.022 s; sync files=273, longest=0.005 s, average=0.001 s; distance=17450 kB, estimate=17450 kB; lsn=0/1045B2E8, redo lsn=0/1045B2B0
+postgres-1  | 2026-09-09 04:56:09.224 UTC [280] ERROR:  personal report/link/workspace/run/snapshot identity mismatch
+postgres-1  | 2026-09-09 04:56:09.224 UTC [280] CONTEXT:  PL/pgSQL function validate_personal_report_links() line 29 at RAISE
+postgres-1  | 2026-09-09 04:56:09.224 UTC [280] STATEMENT:  COMMIT
+postgres-1  | 2026-09-09 04:56:09.229 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:09.233 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17012 kB, estimate=17406 kB; lsn=0/114F83A8, redo lsn=0/114F8370
+postgres-1  | 2026-09-09 04:56:11.270 UTC [286] ERROR:  refusing to downgrade nonempty personal news desk data; archive it with an explicit migration first
+postgres-1  | 2026-09-09 04:56:11.270 UTC [286] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+postgres-1  | 2026-09-09 04:56:11.270 UTC [286] STATEMENT:  
+postgres-1  | 	        DO $$
+postgres-1  | 	        BEGIN
+postgres-1  | 	          IF EXISTS (SELECT 1 FROM personal_workspaces)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_profile_revisions)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_runs)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_captures)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_run_event_observations)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_brief_snapshots)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_report_links)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_article_revisions)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM personal_claim_preparations)
+postgres-1  | 	             OR EXISTS (SELECT 1 FROM reports WHERE report_type = 'personal_daily_brief')
+postgres-1  | 	             THEN
+postgres-1  | 	            RAISE EXCEPTION 'refusing to downgrade nonempty personal news desk data; archive it with an explicit migration first';
+postgres-1  | 	          END IF;
+postgres-1  | 	        END $$
+postgres-1  | 	        
+postgres-1  | 2026-09-09 04:56:11.363 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:11.367 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17010 kB, estimate=17366 kB; lsn=0/12594D38, redo lsn=0/12594D00
+postgres-1  | 2026-09-09 04:56:13.034 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:13.040 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.002 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17014 kB, estimate=17331 kB; lsn=0/136328F0, redo lsn=0/136328B8
+postgres-1  | 2026-09-09 04:56:14.612 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:14.639 UTC [68] LOG:  checkpoint complete: wrote 1794 buffers (10.9%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.019 s, sync=0.007 s, total=0.027 s; sync files=81, longest=0.005 s, average=0.001 s; distance=19981 kB, estimate=19981 kB; lsn=0/149B5F70, redo lsn=0/149B5F38
+postgres-1  | 2026-09-09 04:56:16.415 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:16.421 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.002 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17020 kB, estimate=19685 kB; lsn=0/15A552E8, redo lsn=0/15A552B0
+postgres-1  | 2026-09-09 04:56:17.915 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:17.920 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17045 kB, estimate=19421 kB; lsn=0/16AFA8E8, redo lsn=0/16AFA8B0
+postgres-1  | 2026-09-09 04:56:19.600 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:19.604 UTC [68] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=5, longest=0.001 s, average=0.001 s; distance=17034 kB, estimate=19182 kB; lsn=0/17B9D178, redo lsn=0/17B9D140
+postgres-1  | 2026-09-09 04:56:21.070 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:21.075 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17042 kB, estimate=18968 kB; lsn=0/18C41AC0, redo lsn=0/18C41A88
+postgres-1  | 2026-09-09 04:56:26.434 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:26.505 UTC [68] LOG:  checkpoint complete: wrote 628 buffers (3.8%); 0 WAL file(s) added, 0 removed, 2 recycled; write=0.006 s, sync=0.055 s, total=0.071 s; sync files=2238, longest=0.007 s, average=0.001 s; distance=25245 kB, estimate=25245 kB; lsn=0/1A4E9160, redo lsn=0/1A4E9128
+postgres-1  | 2026-09-09 04:56:27.541 UTC [380] ERROR:  new row for relation "events" violates check constraint "ck_events_hotness_score"
+postgres-1  | 2026-09-09 04:56:27.541 UTC [380] DETAIL:  Failing row contains (22222222-2222-2222-2222-222222222222, Too hot, null, null, null, null, null, 100.01, 0, 0, null, null, 2026-09-09 04:56:27.54054+00, 2026-09-09 04:56:27.54054+00).
+postgres-1  | 2026-09-09 04:56:27.541 UTC [380] STATEMENT:  INSERT INTO events (id, title, hotness_score) VALUES ('22222222-2222-2222-2222-222222222222', 'Too hot', 100.01)
+postgres-1  | 2026-09-09 04:56:27.545 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:27.548 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17009 kB, estimate=24422 kB; lsn=0/1B585678, redo lsn=0/1B585640
+postgres-1  | 2026-09-09 04:56:28.852 UTC [393] FATAL:  terminating autovacuum process due to administrator command
+postgres-1  | 2026-09-09 04:56:28.853 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:28.857 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17746 kB, estimate=23754 kB; lsn=0/1C6D9F00, redo lsn=0/1C6D9EC8
+postgres-1  | 2026-09-09 04:56:30.465 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:30.480 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.004 s, sync=0.003 s, total=0.016 s; sync files=4, longest=0.003 s, average=0.001 s; distance=17036 kB, estimate=23082 kB; lsn=0/1D77D070, redo lsn=0/1D77D038
+postgres-1  | 2026-09-09 04:56:31.933 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:31.936 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17036 kB, estimate=22478 kB; lsn=0/1E820308, redo lsn=0/1E8202D0
+postgres-1  | 2026-09-09 04:56:33.167 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:33.171 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17036 kB, estimate=21933 kB; lsn=0/1F8C3658, redo lsn=0/1F8C3620
+postgres-1  | 2026-09-09 04:56:34.295 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.300 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.002 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17037 kB, estimate=21444 kB; lsn=0/20966B40, redo lsn=0/20966B08
+postgres-1  | 2026-09-09 04:56:34.444 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.447 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5037 kB, estimate=19803 kB; lsn=0/20E52190, redo lsn=0/20E52158
+postgres-1  | 2026-09-09 04:56:34.566 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.570 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5040 kB, estimate=18327 kB; lsn=0/2133E370, redo lsn=0/2133E338
+postgres-1  | 2026-09-09 04:56:34.677 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.680 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5038 kB, estimate=16998 kB; lsn=0/21829BB0, redo lsn=0/21829B78
+postgres-1  | 2026-09-09 04:56:34.794 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.797 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5037 kB, estimate=15802 kB; lsn=0/21D15100, redo lsn=0/21D150C8
+postgres-1  | 2026-09-09 04:56:34.910 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:34.913 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5059 kB, estimate=14727 kB; lsn=0/22205D50, redo lsn=0/22205D18
+postgres-1  | 2026-09-09 04:56:35.036 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:35.038 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=5038 kB, estimate=13759 kB; lsn=0/226F18F0, redo lsn=0/226F18B8
+postgres-1  | 2026-09-09 04:56:35.250 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:35.253 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4611 kB, estimate=12844 kB; lsn=0/22B72888, redo lsn=0/22B72850
+postgres-1  | 2026-09-09 04:56:35.909 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:35.915 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4612 kB, estimate=12021 kB; lsn=0/22FF3910, redo lsn=0/22FF38D8
+postgres-1  | 2026-09-09 04:56:36.227 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:36.233 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4612 kB, estimate=11280 kB; lsn=0/23474B38, redo lsn=0/23474B00
+postgres-1  | 2026-09-09 04:56:36.370 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:36.373 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4606 kB, estimate=10612 kB; lsn=0/238F4558, redo lsn=0/238F4520
+postgres-1  | 2026-09-09 04:56:36.680 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:36.686 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.006 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4606 kB, estimate=10012 kB; lsn=0/23D74068, redo lsn=0/23D74030
+postgres-1  | 2026-09-09 04:56:36.819 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:36.823 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4607 kB, estimate=9471 kB; lsn=0/241F3C78, redo lsn=0/241F3C40
+postgres-1  | 2026-09-09 04:56:37.455 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:37.462 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.007 s; sync files=4, longest=0.002 s, average=0.001 s; distance=4607 kB, estimate=8985 kB; lsn=0/24673980, redo lsn=0/24673948
+postgres-1  | 2026-09-09 04:56:38.575 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:38.579 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17031 kB, estimate=17031 kB; lsn=0/257157D0, redo lsn=0/25715798
+postgres-1  | 2026-09-09 04:56:39.713 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:39.718 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17020 kB, estimate=17030 kB; lsn=0/267B4A08, redo lsn=0/267B49D0
+postgres-1  | 2026-09-09 04:56:41.394 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:41.411 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.004 s, sync=0.003 s, total=0.017 s; sync files=4, longest=0.003 s, average=0.001 s; distance=17023 kB, estimate=17029 kB; lsn=0/27854820, redo lsn=0/278547E8
+postgres-1  | 2026-09-09 04:56:43.258 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.273 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.004 s, sync=0.004 s, total=0.016 s; sync files=4, longest=0.003 s, average=0.001 s; distance=17043 kB, estimate=17043 kB; lsn=0/288F9428, redo lsn=0/288F93F0
+postgres-1  | 2026-09-09 04:56:43.387 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.391 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.005 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4623 kB, estimate=15801 kB; lsn=0/28D7D1C8, redo lsn=0/28D7D190
+postgres-1  | 2026-09-09 04:56:43.503 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.506 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4620 kB, estimate=14683 kB; lsn=0/292004C8, redo lsn=0/29200490
+postgres-1  | 2026-09-09 04:56:43.635 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.638 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4628 kB, estimate=13677 kB; lsn=0/296854F0, redo lsn=0/296854B8
+postgres-1  | 2026-09-09 04:56:43.768 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.773 UTC [68] LOG:  checkpoint complete: wrote 34 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.003 s, total=0.006 s; sync files=13, longest=0.003 s, average=0.001 s; distance=4782 kB, estimate=12788 kB; lsn=0/29B44390, redo lsn=0/29B30FE0
+postgres-1  | 2026-09-09 04:56:43.910 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:43.914 UTC [68] LOG:  checkpoint complete: wrote 29 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.002 s, total=0.005 s; sync files=13, longest=0.002 s, average=0.001 s; distance=4818 kB, estimate=11991 kB; lsn=0/29FE5908, redo lsn=0/29FE58D0
+postgres-1  | 2026-09-09 04:56:44.050 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.054 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4669 kB, estimate=11258 kB; lsn=0/2A4750F8, redo lsn=0/2A4750C0
+postgres-1  | 2026-09-09 04:56:44.248 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.251 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4684 kB, estimate=10601 kB; lsn=0/2A908350, redo lsn=0/2A908318
+postgres-1  | 2026-09-09 04:56:44.400 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.403 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4671 kB, estimate=10008 kB; lsn=0/2AD98098, redo lsn=0/2AD98060
+postgres-1  | 2026-09-09 04:56:44.556 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.560 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4734 kB, estimate=9481 kB; lsn=0/2B237A20, redo lsn=0/2B2379E8
+postgres-1  | 2026-09-09 04:56:44.717 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.721 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4681 kB, estimate=9001 kB; lsn=0/2B6CA1D0, redo lsn=0/2B6CA198
+postgres-1  | 2026-09-09 04:56:44.878 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:44.880 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4682 kB, estimate=8569 kB; lsn=0/2BB5CA50, redo lsn=0/2BB5CA18
+postgres-1  | 2026-09-09 04:56:45.197 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.203 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.007 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4682 kB, estimate=8180 kB; lsn=0/2BFEF3C8, redo lsn=0/2BFEF390
+postgres-1  | 2026-09-09 04:56:45.327 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.331 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4682 kB, estimate=7830 kB; lsn=0/2C481E38, redo lsn=0/2C481E00
+postgres-1  | 2026-09-09 04:56:45.437 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.439 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4682 kB, estimate=7515 kB; lsn=0/2C9149A8, redo lsn=0/2C914970
+postgres-1  | 2026-09-09 04:56:45.544 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.547 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4667 kB, estimate=7231 kB; lsn=0/2CDA3768, redo lsn=0/2CDA3730
+postgres-1  | 2026-09-09 04:56:45.707 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.711 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4683 kB, estimate=6976 kB; lsn=0/2D2366B8, redo lsn=0/2D236680
+postgres-1  | 2026-09-09 04:56:45.852 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.855 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4683 kB, estimate=6747 kB; lsn=0/2D6C94D8, redo lsn=0/2D6C94A0
+postgres-1  | 2026-09-09 04:56:45.979 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:45.982 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4668 kB, estimate=6539 kB; lsn=0/2DB58588, redo lsn=0/2DB58550
+postgres-1  | 2026-09-09 04:56:48.126 UTC [68] LOG:  checkpoint starting: immediate force wait
+postgres-1  | 2026-09-09 04:56:48.133 UTC [68] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=4, longest=0.001 s, average=0.001 s; distance=17101 kB, estimate=17101 kB; lsn=0/2EC0BAD8, redo lsn=0/2EC0BAA0
+>> tearing down disposable Postgres (including its volume)
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Stopping 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Stopped 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Removing 
+ Container nip-ephemeral-20260909045542-94338-13721-postgres-1 Removed 
+ Volume nip-ephemeral-20260909045542-94338-13721_pgdata Removing 
+ Network nip-ephemeral-20260909045542-94338-13721_default Removing 
+ Volume nip-ephemeral-20260909045542-94338-13721_pgdata Removed 
+ Network nip-ephemeral-20260909045542-94338-13721_default Removed 
+>> cleanup verified: no project containers, volumes, networks, or images remain

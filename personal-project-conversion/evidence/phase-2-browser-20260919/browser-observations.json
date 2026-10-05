@@ -1,0 +1,56 @@
+{
+  "recorded_on_local": "2026-09-19",
+  "timezone": "America/Los_Angeles",
+  "browser_availability": "Real browser interaction succeeded; previous locked-session blocker is no longer applicable.",
+  "disposable_harness": "browser_20260919_5fa7",
+  "browser_tab_ids": {
+    "devtools": 2,
+    "chrome": "952903094"
+  },
+  "browser_journey": [
+    "Requested today's update using the browser UI and throwaway API key",
+    "Observed queued then succeeded run da3288e6-efbd-4497-8f18-2adfb512c888",
+    "Saved grouped story a9e1014b-0ff0-4cf9-8edb-0e9606762fa2 from Today",
+    "Opened the saved story through Saved > Open",
+    "Opened published version 1 through Briefs > Open this version",
+    "Clicked visible Markdown and PDF anchors in Chrome",
+    "Inspected native Chrome Download History and Done status for both exact report filenames",
+    "Used Show in Finder and moved each actual downloaded file into this evidence folder",
+    "Reopened Saved > Open in Chrome and visually inspected source wording"
+  ],
+  "downloads": {
+    "report_id": "0539fc3a-a716-4f88-8647-d780de20ca82",
+    "snapshot_id": "55301cb1-e7d6-4198-9337-e03ff5af6a52",
+    "markdown_native_ui": "personal-news-brief-2026-09-19-v1-0539fc3a-a716-4f88-8647-d780de20ca82.md 3.6 KB • Done",
+    "pdf_native_ui": "personal-news-brief-2026-09-19-v1-0539fc3a-a716-4f88-8647-d780de20ca82.pdf 18.9 KB • Done",
+    "history_origin": "From http://127.0.0.1:3019",
+    "provenance": "Chrome history linked to the selected UUID's loopback export URLs. Retained files' macOS WhereFroms metadata independently names those exact URLs.",
+    "direct_api_export_bytes_used_as_download_proof": false
+  },
+  "saved": {
+    "url": "http://127.0.0.1:3019/SIGNAL%20-%20Intelligence%20Platform.html?api=http://127.0.0.1:58685#/event/a9e1014b-0ff0-4cf9-8edb-0e9606762fa2",
+    "expected_and_observed_explanation": "These sources show current coverage for this saved story. No daily update is selected.",
+    "expected_and_observed_source_label": "Current event coverage",
+    "all_current_articles": 1,
+    "run_specific_article_count_visible": false,
+    "used_in_this_brief_label_visible": false,
+    "visual_layout_passed": true
+  },
+  "boundaries": {
+    "feeds": "synthetic offline.personal.test fixture",
+    "models": "four scripted offline-personal-fixture records, cost 0",
+    "live_execution": false,
+    "paid_calls": false,
+    "selected_preferences_applied": false,
+    "phase3_started": false,
+    "frontend_cdn_assets": "The existing frontend loaded its normal public JS/CSS/fonts; offline refers to feed/model inputs, not an air-gapped browser."
+  },
+  "tooling_notes": [
+    "DevTools initially recorded a successful Markdown request, but this alone was not counted as download proof.",
+    "DevTools could not save artifacts to the workspace or open chrome://downloads. Native Chrome/CUA supplied completed-download proof.",
+    "Shell access to Downloads was denied by macOS; Finder moved only the two owned download files into evidence.",
+    "The initial metadata inspection helper lacked os.listxattr; it was corrected to read metadata with xattr. The subsequent complete identity check passed."
+  ],
+  "scope_defects_found": [],
+  "application_source_changes": []
+}

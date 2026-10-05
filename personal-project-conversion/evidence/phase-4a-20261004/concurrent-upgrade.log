@@ -1,0 +1,25 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, create pgvector extension
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, core schema: pipeline + canonical crisis-model tables
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, provider data integration storage
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, provider expansion storage tables
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, enable postgis extension
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, company master tables
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, ingestion observability tables
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, evidence and claim tables
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, event intelligence tables
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, provider provenance columns
+INFO  [alembic.runtime.migration] Running upgrade 0010 -> 0011, risk output tables
+INFO  [alembic.runtime.migration] Running upgrade 0011 -> 0012, application tables
+INFO  [alembic.runtime.migration] Running upgrade 0012 -> 0013, intelligence contract schema
+INFO  [alembic.runtime.migration] Running upgrade 0013 -> 0014, llm raw_output, contract score precision, and analogy scale reconciliation
+INFO  [alembic.runtime.migration] Running upgrade 0014 -> 0015, alert condition state and alert peak severity
+INFO  [alembic.runtime.migration] Running upgrade 0015 -> 0016, events.hotness_score
+INFO  [alembic.runtime.migration] Running upgrade 0016 -> 0017, Expand embedding persistence for immutable model snapshots.
+INFO  [alembic.runtime.migration] Running upgrade 0017 -> 0018, Add durable lifecycle details for the manual daily pipeline.
+INFO  [alembic.runtime.migration] Running upgrade 0018 -> 0019, Add a durable Gate-G content policy marker to reports.
+INFO  [alembic.runtime.migration] Running upgrade 0019 -> 0020, Add the personal news desk schema without rewriting legacy data.
+INFO  [alembic.runtime.migration] Running upgrade 0020 -> 0021_personal_daily_bounds, Add retained capture receipts and explicit personal enrichment transfers.
+INFO  [alembic.runtime.migration] Running upgrade 0021_personal_daily_bounds -> 0022_personal_spending, Retain paid dispatch reservations and legacy application usage.
+INFO  [alembic.runtime.migration] Running upgrade 0022_personal_spending -> 0023_personal_processing_control, Expand the existing processing mode into durable global ownership.

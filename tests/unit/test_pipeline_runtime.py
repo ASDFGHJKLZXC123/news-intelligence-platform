@@ -653,7 +653,7 @@ def test_api_delivery_helper_uses_exact_pipeline_queue(
             deliveries.append({"args": args, "queue": queue, "task_id": task_id})
             return _AsyncResult()
 
-    monkeypatch.setattr(pipeline_api, "run_daily_pipeline_task", FakeTask())
+    monkeypatch.setattr(pipeline_tasks, "run_daily_pipeline_task", FakeTask())
     delivery_token = uuid.uuid4()
     result = pipeline_api.enqueue_pipeline_task(
         PROCESS_DATE,

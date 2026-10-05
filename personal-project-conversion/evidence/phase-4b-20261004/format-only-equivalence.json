@@ -1,0 +1,12 @@
+{
+  "apps/api/personal_frontend.py": {
+    "before_sha256": "cf88f3b4b705d498df9c67d103c7eb0ec7f7d9c6bf25894e6a6d8b647b30c06b",
+    "after_sha256": "f713e54c240d3efa0dbff33492240539599f13c64cafe8bc1afc264cfa32e53a",
+    "ast_unchanged": true
+  },
+  "tests/unit/test_personal_phase4b_api.py": {
+    "before_sha256": "5f823f149e72fe19cf77bc0f74a7501c9db326a0794d017c167ee503d33971d7",
+    "after_sha256": "e6e0a6e93be87f0d59a69bc44fc11bc8e04f9adfb29d11e1734543a84210d23b",
+    "ast_unchanged": true
+  }
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="44" time="103.559" timestamp="2026-10-04T17:06:03.265230-07:00" hostname="Mac"><properties><property name="actual_child_shutdown" value="{&quot;attempt&quot;: 1, &quot;child_pid&quot;: 36987, &quot;descendant_pid&quot;: null, &quot;generation&quot;: 2, &quot;graceful_deadline_at&quot;: &quot;2026-10-05T00:07:05.856229+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-05T00:07:06.356229+00:00&quot;, &quot;lease_expires_at&quot;: &quot;2026-10-05T00:07:06.856229+00:00&quot;, &quot;run_id&quot;: &quot;383998e2-342f-4c17-bd36-0fa5843f35fe&quot;, &quot;shutdown_seconds&quot;: 0.2486432921141386, &quot;started_at&quot;: &quot;2026-10-05T00:07:03.356229+00:00&quot;}" /><property name="actual_child_hard_deadline" value="{&quot;attempt&quot;: 1, &quot;child_pid&quot;: 36997, &quot;descendant_pid&quot;: 37002, &quot;generation&quot;: 2, &quot;graceful_deadline_at&quot;: &quot;2026-10-05T00:07:08.424444+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-05T00:07:08.924444+00:00&quot;, &quot;hard_exit_utc&quot;: &quot;2026-10-05T00:07:08.934557+00:00&quot;, &quot;lease_expires_at&quot;: &quot;2026-10-05T00:07:09.424444+00:00&quot;, &quot;run_id&quot;: &quot;5cde6296-c59b-4825-ae5f-ba01541cca11&quot;, &quot;started_at&quot;: &quot;2026-10-05T00:07:05.924444+00:00&quot;}" /><property name="actual_launcher_loss" value="{&quot;attempt&quot;: 1, &quot;child_exit_utc&quot;: &quot;2026-10-05T00:07:15.317921+00:00&quot;, &quot;child_pid&quot;: 37119, &quot;descendant_pid&quot;: 37125, &quot;generation&quot;: 2, &quot;graceful_deadline_at&quot;: &quot;2026-10-05T00:07:14.796523+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-05T00:07:15.296523+00:00&quot;, &quot;launcher_pid&quot;: 37116, &quot;lease_expires_at&quot;: &quot;2026-10-05T00:07:15.796523+00:00&quot;, &quot;run_id&quot;: &quot;a94e8d2c-ef75-4194-8a2f-88cd0860c4c2&quot;, &quot;started_at&quot;: &quot;2026-10-05T00:07:12.296523+00:00&quot;}" /><property name="actual_stale_handoff" value="{&quot;attempt&quot;: 2, &quot;child_pid&quot;: 37319, &quot;descendant_pid&quot;: null, &quot;generation&quot;: 3, &quot;graceful_deadline_at&quot;: &quot;2026-10-05T00:07:21.436590+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-05T00:07:21.936590+00:00&quot;, &quot;lease_expires_at&quot;: &quot;2026-10-05T00:07:22.436590+00:00&quot;, &quot;run_id&quot;: &quot;badb2eaa-19b4-49f9-9df7-f4442c3af7fe&quot;, &quot;started_at&quot;: &quot;2026-10-05T00:07:18.936590+00:00&quot;}" /><property name="actual_cli_ctrl_c" value="{&quot;attempt&quot;: 2, &quot;child_pid&quot;: 37329, &quot;ctrl_c_shutdown_seconds&quot;: 0.7152188750915229, &quot;descendant_pid&quot;: null, &quot;generation&quot;: 3, &quot;graceful_deadline_at&quot;: &quot;2026-10-05T00:07:24.468730+00:00&quot;, &quot;hard_deadline_at&quot;: &quot;2026-10-05T00:07:24.968730+00:00&quot;, &quot;lease_expires_at&quot;: &quot;2026-10-05T00:07:25.468730+00:00&quot;, &quot;run_id&quot;: &quot;35551073-7551-4523-a5ec-7452a1d958a6&quot;, &quot;started_at&quot;: &quot;2026-10-05T00:07:21.968730+00:00&quot;}" /><property name="actual_child_bootstrap" value="{&quot;calls_started&quot;: 0, &quot;child_pid&quot;: 37341, &quot;configured_connect_seconds&quot;: 100, &quot;configured_statement_ms&quot;: 999999, &quot;exit_at&quot;: &quot;2026-10-05T00:07:29.369841+00:00&quot;, &quot;generation&quot;: 2, &quot;no_running_claim&quot;: true, &quot;original_handoff_deadline&quot;: &quot;2026-10-05T00:07:29.346014+00:00&quot;, &quot;run_id&quot;: &quot;269d6620-ce79-405f-b275-07fd501e2643&quot;}" /></properties><testcase classname="tests.integration.test_personal_processing_control" name="test_upgrade_retains_legacy_mode_and_configuration_agreement" time="3.611" /><testcase classname="tests.integration.test_personal_processing_control" name="test_global_claim_blocks_a_different_date_and_same_date_is_idempotent" time="1.583" /><testcase classname="tests.integration.test_personal_processing_control" name="test_expired_handoff_recovery_fences_delayed_old_delivery" time="1.516" /><testcase classname="tests.integration.test_personal_processing_control" name="test_fixed_running_deadlines_and_no_lease_renewal" time="1.533" /><testcase classname="tests.integration.test_personal_processing_control" name="test_stale_attempt_cannot_write_event_report_or_newer_terminal_state" time="2.018" /><testcase classname="tests.integration.test_personal_processing_control" name="test_mode_switch_is_idle_only_durable_and_invalidates_generations" time="1.675" /><testcase classname="tests.integration.test_personal_processing_control" name="test_explicit_expiry_recovery_never_launches_or_resets_attempts" time="1.571" /><testcase classname="tests.integration.test_personal_processing_control" name="test_concurrent_different_dates_have_one_global_owner" time="1.353" /><testcase classname="tests.integration.test_personal_processing_control" name="test_takeover_retains_old_child_until_exact_old_exit_is_confirmed" time="1.677" /><testcase classname="tests.integration.test_personal_processing_control" name="test_supported_maintenance_rejects_queued_legacy_writer" time="1.447" /><testcase classname="tests.integration.test_personal_processing_control" name="test_explicit_child_reconciliation_preserves_terminal_success_and_attempt" time="1.423" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[celery-create]" time="1.784" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[celery-retry]" time="3.294" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[subprocess-create]" time="1.493" /><testcase classname="tests.integration.test_personal_processing_control" name="test_queued_claim_records_selected_transport_before_any_delivery[subprocess-retry]" time="1.442" /><testcase classname="tests.integration.test_personal_phase4a_ledger" name="test_paid_reservation_rejects_a_run_without_global_personal_ownership" time="1.562" /><testcase classname="tests.integration.test_personal_phase4a_ledger" name="test_durable_dispatch_permission_needs_full_call_budget" time="1.533" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_rss_response_cannot_insert_capture_or_fail_replacement" time="1.595" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_embedding_response_cannot_insert_vectors_events_or_fail_replacement" time="1.542" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_composition_response_cannot_publish_or_fail_newer_attempt" time="1.570" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_successful_composition_supports_celery_and_child_session_expiry[True]" time="2.925" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_successful_composition_supports_celery_and_child_session_expiry[False]" time="2.624" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_queued_delivery_token_cannot_grant_paid_dispatch_permission" time="1.584" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_late_paid_usage_reconciles_accounting_only_after_takeover" time="1.814" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_connection_failure_stops_dispatch_and_reconnect_cannot_restore_old_owner" time="1.490" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_stale_launcher_terminal_write_cannot_replace_newer_success" time="1.683" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_api_retry_reason_requires_confirmed_child_exit_for_failed_run" time="1.992" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_total_three_attempts_survives_dispatch_failures_and_expired_recovery" time="2.637" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_terminal_run_with_unconfirmed_child_blocks_mode_switch_until_owned_exit" time="1.643" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_fatal_cancellation_during_feed_never_starts_the_next_feed" time="1.556" /><testcase classname="tests.integration.test_personal_phase4a_faults" name="test_fatal_cancellation_during_composition_preserves_identity_and_stops_calls" time="1.633" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_child_normal_shutdown_is_bounded_and_durable" time="2.609" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_child_ignores_graceful_then_watchdog_kills_owned_group" time="5.474" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_launcher_loss_keeps_original_child_deadlines_and_requires_recovery" time="6.741" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_real_old_child_after_handoff_recovery_cannot_mutate_replacement" time="3.305" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_actual_cli_ctrl_c_stops_active_child_and_preserves_failed_attempt" time="3.574" /><testcase classname="tests.integration.test_personal_runtime_lifecycle" name="test_actual_child_bootstrap_obeys_original_handoff_despite_large_db_timeouts" time="6.688" /><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[legacy-None]" time="3.480" /><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[personal-queued]" time="3.542" /><testcase classname="tests.integration.test_personal_processing_upgrade" name="test_populated_0022_upgrade_retains_mode_scopes_versions_saves_and_obligations[personal-running]" time="3.079" /><testcase classname="tests.integration.test_personal_brief_generation" name="test_published_bookkeeping_recovery_reuses_report_without_model_calls" time="1.688" /><testcase classname="tests.integration.test_personal_item5_composed" name="test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost" time="1.724"><failure message="ValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x11343f150&gt;
+
+    def test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost(
+        monkeypatch,
+    ):
+        with migrated_disposable_engine() as engine:
+            workspace_id, profile_id, _ = _configured_workspace(engine, route=model_route())
+            observed_requests = []
+            delivery = {}
+    
+            def observe_send(role, factory):
+                payload = calls[-1][1]
+                with factory() as session:
+                    row = session.scalar(
+                        select(PersonalPaidRequest).where(PersonalPaidRequest.status == "dispatching")
+                    )
+                    run = session.get(PersonalRun, row.run_id)
+                    route = PaidRoute.from_mapping(model_route()[role], role=role)
+                    assert row.workspace_id == run.workspace_id == workspace_id
+                    assert str(row.run_id) == delivery["args"][0]
+                    control = session.get(PersonalWriterMode, True)
+                    assert str(run.ownership_token) != delivery["args"][1]
+                    assert control.active_run_id == run.id
+                    assert control.active_attempt == run.attempt
+                    assert control.ownership_token == run.ownership_token
+                    assert control.delivery_token == uuid.UUID(delivery["args"][1])
+                    assert control.generation == run.fencing_generation
+                    assert row.attempt == run.attempt == 1
+                    assert run.profile_revision_id == profile_id and run.scopes_frozen_at is not None
+                    assert row.role == role and row.route == route.to_mapping()
+                    assert row.input_token_bound == conservative_payload_token_bound(payload)
+                    assert row.output_token_bound == (0 if role == "embedding" else 1000)
+                    assert row.reserved_usd == route.cost(row.input_token_bound, row.output_token_bound)
+                    assert row.actual_usd is None and row.dispatch_attempt_at is not None
+                    if role == "generation":
+                        snapshot = session.get(PersonalBriefSnapshot, run.snapshot_id)
+                        assert snapshot.run_id == run.id and snapshot.profile_revision_id == profile_id
+                        assert snapshot.model_route == model_route()
+                    observed_requests.append(row.id)
+    
+            factory, calls, delegates = _runtime(monkeypatch, engine, on_send=observe_send)
+            deliveries = _capture_production_delivery(monkeypatch, factory)
+            with _client(engine) as client:
+                response = client.post("/api/v1/personal/runs")
+                assert response.status_code == 202, response.text
+                assert len(deliveries) == 1
+                delivery["args"] = deliveries[0][1]
+                assert response.json()["run"]["id"] == delivery["args"][0]
+                assert response.json()["run"]["profile_revision_id"] == str(profile_id)
+                assert response.json()["run"]["state"] == "queued"
+    
+            task = celery_app.tasks[deliveries[0][0]]
+            assert task.name == worker.TASK_NAME and task.run == worker.run_personal_daily_task.run
+&gt;           result = task.run(*delivery["args"])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_personal_item5_composed.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+workers/personal_tasks.py:853: in run_personal_daily_task
+    return execute_personal_task(uuid.UUID(run_id), uuid.UUID(ownership_token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workers/personal_tasks.py:830: in execute_personal_task
+    return execute(
+services/personal/runner.py:265: in execute_personal_task
+    redis.Redis.from_url(
+.venv/lib/python3.13/site-packages/redis/client.py:170: in from_url
+    connection_pool = ConnectionPool.from_url(url, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/redis/connection.py:1371: in from_url
+    url_options = parse_url(url)
+                  ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = ''
+
+    def parse_url(url):
+        if not (
+            url.startswith("redis://")
+            or url.startswith("rediss://")
+            or url.startswith("unix://")
+        ):
+&gt;           raise ValueError(
+                "Redis URL must specify one of the following "
+                "schemes (redis://, rediss://, unix://)"
+            )
+E           ValueError: Redis URL must specify one of the following schemes (redis://, rediss://, unix://)
+
+.venv/lib/python3.13/site-packages/redis/connection.py:1261: ValueError</failure></testcase><testcase classname="tests.integration.test_personal_phase2" name="test_nonempty_personal_downgrade_refuses_data_loss" time="2.133" /><testcase classname="tests.integration.test_personal_worker" name="test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry" time="1.539" /></testsuite></testsuites>

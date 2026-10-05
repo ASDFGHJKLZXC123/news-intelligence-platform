@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-09-20T05:39:35.515024+00:00",
+  "database": {
+    "owned": false,
+    "url": "postgresql+psycopg2://news:news@127.0.0.1:58678/nip_personal_phase2_offline_browser_20260919_5fa7"
+  },
+  "database_name": "nip_personal_phase2_offline_browser_20260919_5fa7",
+  "dataset": "synthetic",
+  "feed_url": "https://offline.personal.test/feed.xml",
+  "fixture_id": "phase-2-offline-workflow-v1",
+  "owner_token": "7816ab84-d9cc-417f-9f44-7c07125c54cd",
+  "postgres": {
+    "container_id": "82ffcd7d643b78f9f99f4d8b51125c98663e3d004c6d59bdbf128c47ad355080",
+    "container_name": "nip-personal-phase2-offline-pg-browser_20260919_5fa7",
+    "host_port": 58678,
+    "mode": "owned",
+    "owned": true
+  },
+  "processes": {
+    "api": {
+      "command_marker": "--port 58685",
+      "pid": 86485,
+      "started": "Sat Sep 19 22:39:44 2026"
+    },
+    "worker": {
+      "command_marker": "--hostname=personal-offline-browser_20260919_5fa7@localhost",
+      "pid": 86599,
+      "started": "Sat Sep 19 22:39:45 2026"
+    }
+  },
+  "redis": {
+    "container_id": "e6c431fa0a8b9f31f8b62119b83b5ef1cb9eecc8555d5b167f35a37719852a95",
+    "container_name": "nip-personal-phase2-offline-redis-browser_20260919_5fa7",
+    "host_port": 58684,
+    "owned": true
+  },
+  "run_id": "browser_20260919_5fa7",
+  "schema": "personal-phase2-offline-harness.v2",
+  "source_id": "c99cb658-f676-4c62-81d9-a7c7e87356f8",
+  "state_dir": "/private/tmp/nip-personal-phase2-offline-browser_20260919_5fa7",
+  "workspace_id": "231e39bf-97aa-455c-b44e-14802134e2d8"
+}

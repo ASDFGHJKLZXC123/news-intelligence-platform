@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIGNAL — AI News Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+<link rel="stylesheet" href="app/styles.css?v=personal-workflow-7" />
+<style>
+  #boot { position: fixed; inset: 0; display: grid; place-items: center; background: #0a0d13; z-index: 999; transition: opacity .4s; }
+  #boot .b { display: flex; align-items: center; gap: 12px; color: #e8edf6; font-family: "IBM Plex Mono", monospace; }
+  #boot .m { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(140deg, #38bdf8, #1d6fa0); display: grid; place-items: center; animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+</style>
+</head>
+<body>
+<div id="boot"><div class="b"><div class="m"></div><span style="letter-spacing:0;font-weight:600">SIGNAL</span></div></div>
+<div id="root"></div>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.142/Build/Cesium/Cesium.js"></script>
+
+<!-- api adapter (the ONLY wire layer) — must load before the data loader -->
+<script>
+  // A disposable local harness may use a random port. Accept an explicit loopback-only
+  // ?api=http://127.0.0.1:PORT override before the adapter and personal client initialize.
+  try {
+    const configuredApi = new URLSearchParams(window.location.search).get("api");
+    if (configuredApi) {
+      const candidate = new URL(configuredApi);
+      const loopback = ["127.0.0.1", "localhost", "[::1]"].includes(candidate.hostname);
+      if (candidate.protocol === "http:" && loopback && !candidate.username && !candidate.password) {
+        window.SIGNAL_API_BASE = candidate.origin;
+      }
+    }
+  } catch (_ignoredLocalApiOverride) {}
+</script>
+<script src="app/api-adapter.js?v=personal-workflow-7"></script>
+<script>
+  // Preserve any caller-supplied base; otherwise adopt the adapter default.
+  // (Trailing-slash normalization is delegated to the adapter, not done here.)
+  if (!window.SIGNAL_API_BASE && window.SignalApiAdapter) {
+    window.SIGNAL_API_BASE = window.SignalApiAdapter.DEFAULT_API_BASE;
+  }
+</script>
+
+<!-- data loader + icons (plain JS) -->
+<script src="app/data.js?v=stage7-6b-1"></script>
+<script src="app/icons.js"></script>
+<!-- data-quality presentation helpers (pure, plain JS) — must load before the JSX that consumes window.SignalDataQuality -->
+<script src="app/data-quality.js?v=stage7-7-1"></script>
+<script src="app/globe-runtime.js?v=map-optimized-2"></script>
+
+<!-- tweaks shell + primitives -->
+<script type="text/babel" src="app/tweaks-panel.jsx?v=frontend-polish-2"></script>
+<script type="text/babel" src="app/components.jsx?v=frontend-polish-3"></script>
+<script type="text/babel" src="app/shell.jsx?v=personal-workflow-7"></script>
+<script type="text/babel" src="app/widgets.jsx?v=company-row-actions-1"></script>
+
+<!-- pages -->
+<script type="text/babel" src="app/page-dashboard.jsx?v=frontend-polish-1"></script>
+<script type="text/babel" src="app/page-events.jsx?v=search-dedupe-1"></script>
+<script type="text/babel" src="app/page-geo-intel.jsx?v=company-logos-1"></script>
+<script type="text/babel" src="app/page-event-detail.jsx?v=company-logos-1"></script>
+<script type="text/babel" src="app/page-risk.jsx?v=frontend-polish-3"></script>
+<script type="text/babel" src="app/page-entities.jsx?v=company-research-1"></script>
+<script type="text/babel" src="app/page-alerts-admin.jsx"></script>
+<script type="text/babel" src="app/page-misc.jsx?v=company-logos-1"></script>
+<script type="text/babel" src="app/page-personal.jsx?v=personal-workflow-7"></script>
+
+<!-- mount (must be last) -->
+<script type="text/babel" src="app/main.jsx?v=personal-workflow-7"></script>
+
+<script type="text/babel" data-presets="env,react">
+  // hide boot splash once React mounts AND fonts are ready (avoids font-swap reflow)
+  const _o = document.getElementById("boot");
+  const t0 = Date.now();
+  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  let fontsDone = false;
+  fontsReady.then(() => { fontsDone = true; });
+  const check = setInterval(() => {
+    const ready = document.querySelector(".app") && (fontsDone || Date.now() - t0 > 2500);
+    if (ready || Date.now() - t0 > 6000) {
+      clearInterval(check);
+      if (_o) { _o.style.opacity = "0"; setTimeout(() => _o.remove(), 420); }
+    }
+  }, 80);
+</script>
+</body>
+</html>

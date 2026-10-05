@@ -1,0 +1,65 @@
+{
+  "schema": "personal-preferences-record.v1",
+  "selected_on": "2026-09-18",
+  "selection_status": "approved",
+  "purpose": "Technology, business, and economic policy",
+  "sources": [
+    {
+      "key": "bbc-business",
+      "name": "BBC Business",
+      "source_type": "rss",
+      "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml"
+    },
+    {
+      "key": "ars-technology",
+      "name": "Ars Technica Technology Lab",
+      "source_type": "rss",
+      "feed_url": "https://feeds.arstechnica.com/arstechnica/technology-lab"
+    },
+    {
+      "key": "mit-ai",
+      "name": "MIT News \u2014 Artificial Intelligence",
+      "source_type": "rss",
+      "feed_url": "https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml"
+    },
+    {
+      "key": "fed-monetary-policy",
+      "name": "Federal Reserve \u2014 Monetary Policy",
+      "source_type": "rss",
+      "feed_url": "https://www.federalreserve.gov/feeds/press_monetary.xml"
+    }
+  ],
+  "interest": {
+    "include_phrases": [],
+    "exclude_phrases": []
+  },
+  "preferred_model_route": {
+    "generation": {
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite"
+    },
+    "embedding": {
+      "provider": "openai",
+      "model": "text-embedding-3-small"
+    },
+    "fallbacks": []
+  },
+  "spending": {
+    "decision": "approved",
+    "authorized_allowance_usd": "0.25",
+    "live_execution_authorized": true,
+    "authorized_at": "2026-09-20T07:44:59Z",
+    "allowance_scope": "single_phase_2_live_verification",
+    "allowance_approved_at": "2026-09-20T06:03:53Z",
+    "authorized_verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+    "execution_status": "succeeded",
+    "further_attempts_authorized": false,
+    "known_actual_usd": "0.00224186",
+    "held_uncertain_usd": "0",
+    "cumulative_verification_known_actual_usd": "0.00586212"
+  },
+  "activation": {
+    "status": "verification_complete_not_activated",
+    "applied_to_runtime": false
+  }
+}

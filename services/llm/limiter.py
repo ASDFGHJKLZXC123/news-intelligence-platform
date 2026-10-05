@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import math
 import time
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
+from threading import RLock
 from typing import Protocol, runtime_checkable
 
 
@@ -157,6 +159,79 @@ class CompositeProviderLimiter(TokenBucketLimiter):
         )
 
 
+@dataclass
+class LocalProviderRateLimiter(TokenBucketLimiter):
+    """Atomic provider RPM/TPM buckets, empty when a runner process starts.
+
+    Admission consumes both buckets together. A failed admission consumes neither,
+    so waiting for token refill cannot silently exhaust the request allowance.
+    """
+
+    rpm_limits: Mapping[str, int]
+    tpm_limits: Mapping[str, int]
+    time_func: Callable[[], float] = time.monotonic
+    _state: dict[str, tuple[float, float, float]] = field(default_factory=dict, init=False)
+    _cooldowns: dict[str, float] = field(default_factory=dict, init=False)
+    _lock: RLock = field(default_factory=RLock, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.rpm_limits, self.tpm_limits = dict(self.rpm_limits), dict(self.tpm_limits)
+        started = self.time_func()
+        for provider in set(self.rpm_limits) | set(self.tpm_limits):
+            rpm, tpm = self.rpm_limits.get(provider, 0), self.tpm_limits.get(provider, 0)
+            if type(rpm) is not int or type(tpm) is not int or rpm <= 0 or tpm <= 0:
+                raise ValueError(f"positive RPM and TPM limits are required for {provider}")
+            self._state[provider] = (0.0, 0.0, started)
+
+    def _refill(self, provider: str, now: float) -> tuple[float, float]:
+        requests, tokens, previous = self._state[provider]
+        elapsed = max(0.0, now - previous)
+        requests = min(
+            self.rpm_limits[provider], requests + elapsed * self.rpm_limits[provider] / 60.0
+        )
+        tokens = min(self.tpm_limits[provider], tokens + elapsed * self.tpm_limits[provider] / 60.0)
+        self._state[provider] = (requests, tokens, max(previous, now))
+        return requests, tokens
+
+    def delay_until_available(self, key: str, tokens: int, *, now: float | None = None) -> float:
+        provider = key.partition(":")[0]
+        with self._lock:
+            if provider not in self._state or tokens > self.tpm_limits[provider]:
+                return math.inf
+            current = self.time_func() if now is None else now
+            requests, available_tokens = self._refill(provider, current)
+            return max(
+                0.0,
+                (1.0 - requests) * 60.0 / self.rpm_limits[provider],
+                (max(1, tokens) - available_tokens) * 60.0 / self.tpm_limits[provider],
+                self._cooldowns.get(provider, current) - current,
+            )
+
+    def consume(self, key: str, tokens: int, *, now: float | None = None) -> bool:
+        provider = key.partition(":")[0]
+        with self._lock:
+            current = self.time_func() if now is None else now
+            if self.delay_until_available(key, tokens, now=current) > 0:
+                return False
+            requests, available_tokens, previous = self._state[provider]
+            self._state[provider] = (
+                requests - 1.0,
+                available_tokens - max(1, tokens),
+                previous,
+            )
+            return True
+
+    def defer(self, provider: str, seconds: float) -> None:
+        """Provider Retry-After applies to every subsequent call on that provider."""
+        if not math.isfinite(seconds) or seconds < 0:
+            raise ValueError("provider cooldown must be finite and non-negative")
+        with self._lock:
+            if provider not in self._state:
+                return
+            until = self.time_func() + seconds
+            self._cooldowns[provider] = max(self._cooldowns.get(provider, until), until)
+
+
 def build_provider_rate_limiter(
     *,
     redis_client: object,
@@ -195,6 +270,7 @@ __all__ = [
     "TokenBucketLimiter",
     "CompositeProviderLimiter",
     "InMemoryTokenBucketLimiter",
+    "LocalProviderRateLimiter",
     "RedisTokenBucketLimiter",
     "build_provider_rate_limiter",
 ]

@@ -1,0 +1,33 @@
+{
+  "kind": "actual browser actions with synthetic inputs",
+  "address": "http://127.0.0.1:58118/",
+  "database": "nip_phase4b_browser_accepted_ac0f466f5808",
+  "query_api_override": false,
+  "update_run": "9c3515f8-1d29-4fa9-9263-75dd4d8d63e5",
+  "update_result": "succeeded attempt1/3, one feed, one article, one grouped story, zero pending",
+  "saved_owner": "c9e784bf-e9cd-46a2-a68c-99e185196038",
+  "saved_event": "db7c8654-1b14-454e-a3b3-2a0702da4a4b",
+  "saved_display_time": "2026-10-04 17:17:03 PDT",
+  "brief_report": "76078893-1fd8-4386-b1d6-14c87995706c",
+  "brief_snapshot": "c2ec88f7-2b8e-4d96-bd79-28a0e05f20be",
+  "brief_version": 1,
+  "direct_browser_route": "http://127.0.0.1:58118/saved#/saved",
+  "browser_route_result": "Saved heading and saved story visibly loaded without API query override",
+  "exports": "Both Markdown and PDF downloaded through observed published-brief links via in-app browser, retained native bytes and SHA256 in browser-export-result.json",
+  "pdf_visual_result": "Both rendered pages inspected; report/run/snapshot identities, summary, story, coverage, source citation and disclaimer readable; no clipping or blank pages",
+  "screenshot_retention": "Browser screenshots observed in conversation; attempted filesystem retention denied by CUA sandbox. No stored browser screenshot is claimed. PDF page renders are retained separately.",
+  "earlier_attempts": "Chrome initial native download reads encountered OS permissions; fresh accepted in-app browser download files were readable and retained. Early app-not-ready/export errors did not count as passes.",
+  "API_404_browser_navigation": "In-app browser blocked a 404 navigation; same actual HTTP response verified directly with urllib and unit tests, retained same-origin-api-error.json",
+  "network_boundary": "Python process network fenced to exact-owned PostgreSQL only; browser loaded existing React/Babel/font/Cesium CDN assets. Feed/model/provider/notification integrations were synthetic/disabled. No paid runtime activation.",
+  "post_final_restart": {
+    "source_identity": "actual-final-formatted-source-before.json",
+    "saved_route": "http://127.0.0.1:58118/saved#/saved",
+    "saved_story": "Agency approves coastal resilience project",
+    "saved_identity_unchanged": true,
+    "saved_display_time_unchanged": true,
+    "brief_route": "http://127.0.0.1:58118/#/brief/76078893-1fd8-4386-b1d6-14c87995706c",
+    "published_report_and_snapshot_unchanged": true,
+    "version": 1,
+    "result": "Both actual browser tabs reloaded after final formatted-source restart, visibly loaded retained saved story and exact published brief; no API override used"
+  }
+}

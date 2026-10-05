@@ -1,0 +1,10 @@
+COMMAND: .venv/bin/python -m ruff check --no-cache workers/personal_tasks.py services/personal/coordinator.py services/personal/paid_runtime.py services/personal/settings.py packages/config/settings.py tests/integration/test_personal_paid_worker.py tests/integration/test_stage6_brief_selection.py tests/unit/test_personal_runtime_readiness.py
+EXIT: 0
+All checks passed!
+
+COMMAND: .venv/bin/python -m ruff format --check --no-cache workers/personal_tasks.py services/personal/coordinator.py services/personal/paid_runtime.py services/personal/settings.py packages/config/settings.py tests/integration/test_personal_paid_worker.py tests/integration/test_stage6_brief_selection.py tests/unit/test_personal_runtime_readiness.py
+EXIT: 0
+8 files already formatted
+
+COMMAND: git diff --check
+EXIT: 0

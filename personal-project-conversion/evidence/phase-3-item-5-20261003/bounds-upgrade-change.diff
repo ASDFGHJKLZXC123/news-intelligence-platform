@@ -1,0 +1,156 @@
+--- before/tests/integration/test_personal_bounds_upgrade.py
++++ after/tests/integration/test_personal_bounds_upgrade.py
+@@ -11,6 +11,7 @@
+ 
+ import pytest
+ from sqlalchemy import MetaData, Table, create_engine, func, select
++from sqlalchemy import event as sqlalchemy_event
+ from sqlalchemy.orm import Session
+ 
+ from db.models import (
+@@ -21,12 +22,17 @@
+     PersonalCapture,
+     PersonalLegacyUsage,
+     PersonalPaidRequest,
++    PersonalProfileRevision,
+     PersonalRun,
++    PersonalSpendingState,
++    PersonalWorkspace,
+     Report,
+     Source,
++    User,
+     WatchlistItem,
+ )
+ from services.ingestion.normalize import url_hash
++from services.personal import spending
+ from services.personal.runs import create_daily_run
+ from services.personal.spending import (
+     PaidWorkBlocked,
+@@ -36,6 +42,7 @@
+ )
+ from services.personal.workspace import configure_profile, ensure_workspace
+ from tests.integration._stage7_db import _disposable_database, require_disposable_postgres, url_for
++from tests.integration.test_personal_brief_api import _client
+ 
+ pytestmark = pytest.mark.integration
+ 
+@@ -51,7 +58,9 @@
+     assert result.returncode == 0, result.stdout + result.stderr
+ 
+ 
+-def test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once():
++def test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once(
++    monkeypatch: pytest.MonkeyPatch,
++):
+     require_disposable_postgres()
+     with _disposable_database() as database:
+         url = url_for(database)
+@@ -67,9 +76,15 @@
+                 session.add_all([source, event])
+                 session.flush()
+                 workspace, _ = ensure_workspace(session)
+-                configure_profile(
++                profile = configure_profile(
+                     session, workspace, selected_source_ids=[source.id], execution_profile="raw"
+                 )
++                expected_configuration = {
++                    "profile_revision_id": str(profile.id),
++                    "profile_revision": profile.revision,
++                    "route_mode": None,
++                    "routes": [],
++                }
+                 decision = create_daily_run(session, workspace, now=now)
+                 run = decision.run
+                 article = Article(
+@@ -207,5 +222,91 @@
+                 with pytest.raises(PaidWorkBlocked) as blocked:
+                     assert_legacy_usage_reconciled(session, identities["workspace"], now=now)
+                 assert blocked.value.code == "legacy_usage_unreconciled"
++
++            # Exercise the actual read API after the populated migration. Freeze its
++            # accounting clock so a UTC month rollover cannot change this comparison.
++            monkeypatch.setattr(
++                spending,
++                "spending_summary",
++                lambda session, workspace_id: spending_summary(session, workspace_id, now=now),
++            )
++            retained_models = (
++                Source,
++                Event,
++                Article,
++                Report,
++                WatchlistItem,
++                User,
++                Job,
++                LLMRun,
++                PersonalWorkspace,
++                PersonalProfileRevision,
++                PersonalRun,
++                PersonalCapture,
++                PersonalLegacyUsage,
++                PersonalSpendingState,
++                PersonalPaidRequest,
++            )
++
++            def retained_rows():
++                with engine.connect() as connection:
++                    return {
++                        model.__tablename__: [
++                            dict(row)
++                            for row in connection.execute(
++                                select(model.__table__).order_by(
++                                    *model.__table__.primary_key.columns
++                                )
++                            ).mappings()
++                        ]
++                        for model in retained_models
++                    }
++
++            before_api = retained_rows()
++            writes = []
++
++            def record_write(_connection, _cursor, statement, _parameters, _context, _executemany):
++                operation = statement.lstrip().split(None, 1)[0].upper()
++                if operation in {
++                    "INSERT",
++                    "UPDATE",
++                    "DELETE",
++                    "MERGE",
++                    "CREATE",
++                    "ALTER",
++                    "DROP",
++                    "TRUNCATE",
++                }:
++                    writes.append(operation)
++
++            sqlalchemy_event.listen(engine, "before_cursor_execute", record_write)
++            try:
++                with _client(engine) as client:
++                    first = client.get("/api/v1/personal/spending")
++                    repeated = client.get("/api/v1/personal/spending")
++                    assert first.status_code == repeated.status_code == 200
++                    assert first.json() == repeated.json() == summary
++            finally:
++                sqlalchemy_event.remove(engine, "before_cursor_execute", record_write)
++
++            api_summary = first.json()
++            assert api_summary["current_configuration"] == expected_configuration
++            assert api_summary["accounted_routes"] == [
++                {
++                    "source": "legacy_usage",
++                    "accounting_period": now.strftime("%Y-%m"),
++                    "role": None,
++                    "provider": provider,
++                    "model": "existing",
++                    "model_version": None,
++                    "price_revision": None,
++                }
++                for provider in ("openai", "scripted")
++            ]
++            assert api_summary["status"] == "legacy_usage_unreconciled"
++            assert api_summary["reserved_usd"] == api_summary["unresolved_usd"] == "0"
++            assert writes == []
++            assert retained_rows() == before_api
++            assert before_api[PersonalPaidRequest.__tablename__] == []
+         finally:
+             engine.dispose()

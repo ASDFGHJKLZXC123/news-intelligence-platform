@@ -1,0 +1,11 @@
+{
+  "user_instruction": "Run the corrected test",
+  "recorded_at": "2026-09-20T07:44:59Z",
+  "verification_id": "dec8277e-7e6e-4d27-ba01-2a7f4b44e921",
+  "allowance_usd": "0.25",
+  "article_count": 1,
+  "one_fresh_attempt": true,
+  "further_attempts_authorized": false,
+  "generation_fallback": false,
+  "ordinary_runtime_activation": false
+}

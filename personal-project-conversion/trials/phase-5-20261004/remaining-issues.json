@@ -1,0 +1,74 @@
+[
+  {
+    "acceptance": [
+      "P5-01",
+      "P5-06",
+      "P5-07"
+    ],
+    "issue": "Three ordinary-reading baseline sessions and actual runtime/profile binding",
+    "priority": 1,
+    "state": "pending_user_observation_and_setup"
+  },
+  {
+    "acceptance": [
+      "P5-01",
+      "P5-05",
+      "P5-06"
+    ],
+    "issue": "Seven real distinct-date raw-reading sessions with complete attempts, source/use/cost/data observations",
+    "priority": 1,
+    "state": "pending_actual_use"
+  },
+  {
+    "acceptance": [
+      "P5-02",
+      "P5-03",
+      "P5-04"
+    ],
+    "issue": "Thirty eligible groups and ten event summaries with personal and engineer reviews",
+    "priority": 1,
+    "state": "insufficient_evidence_raw_mode_produces_neither"
+  },
+  {
+    "acceptance": [
+      "P5-04"
+    ],
+    "issue": "Immutable report publication timestamp absent; cannot determine earliest published summary version",
+    "priority": 1,
+    "state": "needs_correction_before_assisted_sampling"
+  },
+  {
+    "acceptance": [
+      "P5-01",
+      "P5-05"
+    ],
+    "issue": "Current run row does not retain all overwritten raw attempt outcomes",
+    "priority": 2,
+    "state": "capture_each_attempt_before_retry_and_retain_session_observations"
+  },
+  {
+    "acceptance": [
+      "P5-07"
+    ],
+    "issue": "Read-only evidence export tested with synthetic rows, not a real PostgreSQL transaction",
+    "priority": 2,
+    "state": "pending_actual_trial_capture_verification"
+  },
+  {
+    "acceptance": [
+      "P5-07"
+    ],
+    "issue": "Dirty source candidate is identified by hashes but no clean release checkout verified",
+    "priority": 2,
+    "state": "pending_release_reproducibility"
+  },
+  {
+    "acceptance": [
+      "P5-06",
+      "P5-07"
+    ],
+    "issue": "Actual permitted captured-data demonstration and continued-use conclusion",
+    "priority": 2,
+    "state": "pending_actual_use"
+  }
+]

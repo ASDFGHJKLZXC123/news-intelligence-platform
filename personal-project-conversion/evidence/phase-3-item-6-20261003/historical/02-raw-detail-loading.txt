@@ -1,0 +1,19 @@
+- complementary:
+  - navigation:
+    - generic "Today":
+    - generic "Saved":
+    - generic "Briefs":
+    - generic "Settings":
+- banner:
+  - button "Toggle sidebar":
+  - button "Search stories":
+    - generic: Search stories…
+    - generic: ⌘K
+  - group "Display data mode":
+    - button "Real" [pressed]
+    - button "Demo"
+  - button "Toggle theme":
+- main:
+  - heading "Retained article" [level=1]
+  - button "Today"
+  - generic: Reading article

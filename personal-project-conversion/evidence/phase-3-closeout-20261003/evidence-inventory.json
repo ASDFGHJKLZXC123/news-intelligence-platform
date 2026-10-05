@@ -1,0 +1,2173 @@
+{
+  "observed_at_utc": "2026-10-04T02:34:55.050313+00:00",
+  "user_date": "2026-10-03",
+  "classification": "Existing October3 execution evidence inspected now; not a rerun or additive new test total",
+  "item5_source_snapshot": {
+    "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/source-final.json",
+    "sha256": "d47a3947c3583a6b319136e269bd56719e33ae8ba03a147126b60d33bef9cc5b",
+    "matching_files": 589,
+    "changed_files": [
+      {
+        "path": "frontend/SIGNAL - Intelligence Platform.html",
+        "verified_sha256": "89e855d25f1c12a30ce4ebafacf8028bd32a083f77577c851267b8f0360c55fd",
+        "current_sha256": "e510d6f53657881a28b0a7557dcc48edcc3b6e590fee3ff8d6f22c1b08a6dca4"
+      },
+      {
+        "path": "frontend/app/page-personal.jsx",
+        "verified_sha256": "d19585fc9c1129e51a54312cbd19ba6b44b9fecc02ab8649ea0482ac0d5ac60d",
+        "current_sha256": "e9bdf578f5114f898941bc064f59a38e88c0812f6eb806ef44bc3a8ec2b22b3b"
+      },
+      {
+        "path": "frontend/app/personal-foundation.test.js",
+        "verified_sha256": "4a857f0a157920cb1c6c3f5eeaa626d95553663a0f8900bf147f3c80e3e295ca",
+        "current_sha256": "1ce93a144b538a1c1ac3ad86d2ee685edf4a09fa985ca461b68711e2bd28a1a0"
+      }
+    ],
+    "missing_files": []
+  },
+  "junit_evidence": [
+    {
+      "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/full-integration.xml",
+      "sha256": "bcf225fe9c15c111a346bd5e927a89564cc8dec987e5b26acc1ed8eb396afbae",
+      "tests": 238,
+      "outcomes": {
+        "passed": 238,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "classname": "tests.integration.test_alembic_smoke",
+          "name": "test_upgrade_then_downgrade",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alembic_smoke",
+          "name": "test_phase3_downgrade_refuses_to_remove_retained_state[0021_personal_daily_bounds-0020-personal_feed_receipts-Personal daily-use records are retained]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alembic_smoke",
+          "name": "test_phase3_downgrade_refuses_to_remove_retained_state[0022_personal_spending-0021_personal_daily_bounds-personal_paid_requests-Paid usage and unresolved reservations must be retained]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alert_delivery_durability",
+          "name": "test_a_lifecycle_that_will_not_commit_writes_no_alert_and_sends_nothing",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alert_delivery_durability",
+          "name": "test_a_notification_receipt_failure_keeps_the_alert_and_re_owes_only_the_message",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alert_delivery_durability",
+          "name": "test_an_all_clear_receipt_failure_never_re_resolves_or_re_announces_the_ending",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alert_delivery_durability",
+          "name": "test_a_receipt_failure_does_not_roll_back_the_receipts_committed_before_it",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_alert_delivery_durability",
+          "name": "test_a_declined_delivery_stays_owed_until_a_sweep_the_channel_accepts",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_a_run_persists_the_selection_and_its_llm_run_in_one_transaction",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_a_rerun_reconciles_the_set_without_violating_the_unique_pair",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_a_no_match_rerun_clears_the_previously_durable_set",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_a_failed_rerun_rolls_back_to_the_previously_committed_set",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_the_table_enforces_the_zero_to_one_hundred_score_bound",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_the_table_enforces_one_row_per_event_and_episode",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_the_read_api_limit_cuts_after_the_full_tie_break_not_before_it",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_persistence_pgvector",
+          "name": "test_the_read_api_treats_a_missing_vector_similarity_as_zero_in_sql",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_retrieval_ranks_only_leaf_episodes_of_the_same_family_and_model_space",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_outcomes_and_the_parent_arc_are_attached_only_after_matching",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_the_regime_gate_flags_rather_than_drops_an_out_of_regime_episode",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_conflicting_outcomes_come_back_as_a_distribution_over_the_matched_episodes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_the_geography_filter_matches_case_insensitively",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_the_industry_filter_overlaps_the_array_case_insensitively",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_nothing_over_the_threshold_is_the_allowed_no_reliable_analogy_answer",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_analogy_retrieval_pgvector",
+          "name": "test_k_bounds_the_neighbourhood",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_application_schema_smoke",
+          "name": "test_application_tables_constraints_and_indexes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_clustering_smoke",
+          "name": "test_ingest_embed_cluster_emits_features",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_clustering_smoke",
+          "name": "test_clustering_uses_only_configured_embedding_version",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_company_master_schema_smoke",
+          "name": "test_company_master_schema_tables_constraints_and_indexes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_core_schema_smoke",
+          "name": "test_core_schema_tables_exist",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_daily_pipeline_vertical_slice",
+          "name": "test_manual_worker_persists_descriptive_slice_and_replays_idempotently",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_database_role_hardening",
+          "name": "test_runtime_role_can_do_application_dml_but_not_ddl",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_embedding_snapshot_expand_migration",
+          "name": "test_upgrade_copies_the_legacy_vector_without_relabelling_it",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_embedding_snapshot_expand_migration",
+          "name": "test_downgrade_accepts_only_the_exact_legacy_copy",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_embedding_snapshot_expand_migration",
+          "name": "test_downgrade_refuses_to_discard_a_snapshot_sidecar",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_the_disposable_database_is_not_the_developer_database",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_sec_seeds_gleif_fills_and_wikidata_enriches_without_breaking_precedence",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_rerunning_every_refresh_is_idempotent",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_a_repeat_inside_one_period_reuses_the_same_provider_run",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_real_uniqueness_constraints_reject_duplicate_identity_rows",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_a_rename_is_a_redirect_row_that_resolution_follows",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_a_provider_failure_persists_a_failed_run_and_leaves_the_store_untouched",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_entity_identity_pipeline",
+          "name": "test_two_share_classes_of_one_company_stay_one_entity",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_the_disposable_database_is_not_the_developer_database",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_an_event_links_end_to_end_through_real_constraints",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_a_rerun_over_the_same_event_is_idempotent",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_the_parent_exposure_is_derived_at_scoring_time_and_never_persisted",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_a_speculative_mention_is_persisted_but_is_never_a_risk_input",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_an_abstaining_adjudicator_attaches_nothing_for_the_ambiguous_mention",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_the_confidence_check_constraint_is_real",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_a_link_to_an_entity_that_does_not_exist_is_rejected_by_the_foreign_key",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_entity_linking_pipeline",
+          "name": "test_the_pipeline_mints_no_identity_row_of_its_own",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_event_intelligence_schema_smoke",
+          "name": "test_event_intelligence_tables_indexes_and_fks",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_evidence_schema_smoke",
+          "name": "test_evidence_tables_constraints_indexes_and_fks",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_ingestion_observability_schema_smoke",
+          "name": "test_ingestion_observability_tables_constraints_and_indexes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_ingestion_smoke",
+          "name": "test_ingest_is_idempotent",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_llm_runtime_repository",
+          "name": "test_repository_durably_persists_runs_jobs_and_reads_monthly_spend",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_llm_runtime_repository",
+          "name": "test_event_analogy_constraint_is_the_zero_to_one_hundred_contract",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_bounds_upgrade",
+          "name": "test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_api",
+          "name": "test_personal_brief_routes_stay_on_exact_generated_snapshot",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_fresh_captured_source_is_composed_grounded_and_published",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_all_feed_failure_is_failed_and_cannot_publish_as_quiet",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_provider_failure_stays_retryable_and_retry_publishes_new_version",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_personal_snapshot_freezes_policy_and_legacy_absence_never_adopts_new_default",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_failed_personal_grounding_regeneration_cannot_publish[provider]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_failed_personal_grounding_regeneration_cannot_publish[budget]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_partial_capture_remains_partial_across_explicit_retry",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_published_bookkeeping_recovery_reuses_report_without_model_calls",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_brief_generation",
+          "name": "test_main_session_acquisition_failure_marks_reserved_report_failed",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_coordinator",
+          "name": "test_actual_coordinator_captures_groups_claims_and_publishes_from_empty_tables",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_coordinator",
+          "name": "test_all_feed_failure_is_durable_and_explicit_retry_uses_same_run",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_coordinator",
+          "name": "test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_coordinator",
+          "name": "test_grouping_and_all_seven_observations_commit_atomically_then_retry_resumes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_coordinator",
+          "name": "test_duplicate_feed_item_does_not_consume_the_last_pending_capacity_slot",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_01_twenty_admitted_ten_pending_and_twenty_frozen",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_02_concurrent_duplicate_capture_and_rolled_back_admission",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_03_round_robin_order_survives_new_sessions",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_03_older_capture_batch_precedes_newer_and_unknown_dates_follow_known",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_04_retained_candidate_survives_rotation_and_disabled_source",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_05_full_two_thousand_queue_pauses_without_requesting_unknown_input",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[False]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_05_transport_and_entry_bounds_persist_truthful_receipts[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_06_midnight_retry_keeps_run_identity_and_charges_actual_admission_day",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_06_lower_daily_ceiling_applies_now_and_frozen_run_ceiling_cannot_grow",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_13_old_raw_scope_does_not_reduce_new_admission_and_capacity_deferral_transfers",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_14_failed_retry_scope_and_exhausted_failure_are_never_implicitly_transferred",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_daily_bounds",
+          "name": "test_p3_13_existing_raw_from_disabled_feed_stays_readable_and_outside_new_scope",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_missing_route_api_run_keeps_raw_reader_available_without_paid_dispatch",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[scope_not_frozen]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[route_changed]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_reserved_dispatch_rejects_rotated_owner_and_retains_original_obligation",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_registered_ordinary_worker_publishes_through_durable_guard[None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_registered_ordinary_worker_publishes_through_durable_guard[embedding_retry]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_registered_ordinary_worker_publishes_through_durable_guard[schema_retry]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[False-True-True-1-ai_disabled]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-False-True-1-paid_runtime_disabled]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-False-1-configuration_missing]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0-allowance_reached]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_worker_falls_back_to_readable_raw_without_dispatch[True-True-True-0.0000001-allowance_reached]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_generation_allowance_block_keeps_report_unpublished",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_gate_off_raw_articles_transfer_to_a_later_assisted_run",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_api_queued_other_run_obligation_competes_with_ordinary_worker",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_paid_worker",
+          "name": "test_ordinary_failed_report_retry_reuses_snapshot_and_retains_uncertainty",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_phase2",
+          "name": "test_owner_selection_today_sources_and_saved_persistence_on_migrated_database",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_phase2",
+          "name": "test_report_link_trigger_rejects_unlinked_personal_report",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_phase2",
+          "name": "test_nonempty_personal_downgrade_refuses_data_loss",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[raw-False-disabled_by_profile]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-False-ai_disabled]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_raw_api_without_optional_ai_preserves_unknown_dates_pagination_and_backlog[assisted-True-configuration_missing]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_grouped_article_replaces_raw_card_and_original_detail_remains_readable",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_partial_feed_failure_does_not_claim_a_disabled_provider_failed",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_budget_block_retains_readable_transferable_articles_without_repeated_admission",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_reading_bounds",
+          "name": "test_required_provider_failure_stays_failed_with_retained_raw_content",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_same_date_start_is_idempotent_under_concurrency",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_la_logical_date_retry_preserves_scope_and_stops_after_three_attempts",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_preloaded_stale_run_and_writer_mode_cannot_reclaim_ownership",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_seven_observations_survive_terminal_failure_before_snapshot",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_article_scope_cannot_be_owned_by_two_active_or_retryable_runs",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_run_claim_snapshot",
+          "name": "test_fresh_articles_produce_exact_claim_evidence_paths_and_snapshot_rejects_bad_span",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_settings",
+          "name": "test_settings_revisions_preserve_run_scope_and_reject_timezone_change",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_settings",
+          "name": "test_settings_api_is_explicit_and_raw_readiness_survives_missing_ai_configuration",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_settings",
+          "name": "test_draft_feed_is_inactive_until_explicit_settings_save_and_never_reactivates_legacy_source",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_competing_run_dates_share_one_month_reservation_allowance",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_crash_reconstruction_retains_cost_retry_requires_new_credit_and_receipt_is_idempotent",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_month_handoff_moves_reservation_and_late_receipt_stays_in_dispatch_month",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_month_handoff_revalidates_next_bucket_and_confirmed_cancel_only_before_send",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_live_lowering_applies_before_dispatch_but_raise_cannot_expand_frozen_run",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_independent_commit_survives_business_rollback_without_row_lock_deadlock",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_dispatch_handoff_fences_concurrent_ownership_changes[retry]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_dispatch_handoff_fences_concurrent_ownership_changes[finish]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_legacy_costs_import_once_and_unknown_blocks_paid_enablement",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_read_summary_discloses_post_upgrade_legacy_without_mutation_or_guarded_double_count",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_provider_embedding_retry_has_separate_durable_reservations",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending",
+          "name": "test_scripted_http_timeout_retains_each_physical_request_and_no_expiry_credit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending_metadata",
+          "name": "test_spending_get_distinguishes_frozen_routes_from_disabled_current_configuration",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending_metadata",
+          "name": "test_legacy_metadata_keeps_unknown_prices_and_is_identical_before_and_after_import",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending_metadata",
+          "name": "test_spending_metadata_without_active_profile_or_paid_records_is_explicit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_spending_metadata",
+          "name": "test_same_period_charges_retain_both_price_revisions_for_the_same_provider_and_model",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_registered_worker_task_runs_actual_offline_coordinator_and_publishes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_worker_setup_failure_is_sanitized_and_stale_delivery_cannot_fail_retry",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_worker_returns_partial_state_for_partial_offline_capture",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_raw_worker_needs_no_model_route_credentials_or_fixture",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_ordinary_live_profile_cannot_start_outside_dedicated_smoke",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_dedicated_live_run_cannot_consume_an_ordinary_retry_attempt",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_dedicated_live_smoke_uses_real_http_adapters_and_guarded_full_workflow[False]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_dedicated_live_smoke_uses_real_http_adapters_and_guarded_full_workflow[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_live_smoke_preflight_rejects_unsupported_or_ambiguous_paid_routes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_live_smoke_restart_with_bound_ledger_fails_before_database_or_io",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_worker",
+          "name": "test_live_smoke_fresh_database_guard_includes_claim_and_evidence_tables",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_writer_mode",
+          "name": "test_personal_mode_rejects_pipeline_queue_and_direct_ingestion_before_provider",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_writer_mode",
+          "name": "test_legacy_direct_writer_holds_mode_lock_through_provider_and_commit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_writer_mode",
+          "name": "test_manual_report_job_is_durable_and_a_transient_worker_failure_retries",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_pgvector_smoke",
+          "name": "test_pgvector_insert_and_query",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_postgis_smoke",
+          "name": "test_postgis_point_bbox_and_distance_query",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_provider_provenance_schema_smoke",
+          "name": "test_provider_tables_have_provenance_columns_and_raw_asset_fk",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_risk_output_schema_smoke",
+          "name": "test_risk_output_tables_constraints_and_indexes",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_score_precision_migration",
+          "name": "test_upgrade_rescales_legacy_analogies_and_pins_score_precision",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_score_precision_migration",
+          "name": "test_upgrade_leaves_no_analogy_stranded_above_its_new_ceiling",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_score_precision_migration",
+          "name": "test_downgrade_restores_the_legacy_scale_types_and_drops_raw_output",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage1_migration",
+          "name": "test_upgrade_carries_legacy_rows_into_the_stage1_shape",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage1_migration",
+          "name": "test_downgrade_reverses_stage1_and_keeps_one_embedding_per_article",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_migration_adds_hotness_without_disturbing_existing_events",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_the_hotness_check_constraint_is_live",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_migration_is_reversible",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_repository_loads_the_windows_events_with_risk_and_credibility",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_repository_finds_an_all_clear_by_its_peak_severity",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_repository_returns_every_version_and_selection_picks_the_published_one",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_brief_selection",
+          "name": "test_end_to_end_selection_over_the_live_schema",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_supportive_linked_claim_is_loaded_through_the_cast_join",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_contradicting_non_article_and_disconnected_claims_are_all_excluded",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_rss_evidence_on_a_linked_article_uuid_is_excluded_by_exact_source_type",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_body_excerpt_is_bounded_in_the_database",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_analogy_joins_episode_and_optional_parent",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_context_joins",
+          "name": "test_forecast_scenarios_load_for_selected_events",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_markdown_export_resolves_all_sources_safely",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_pdf_export_is_valid_deterministic_and_leaks_nothing",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_pdf_export_retains_non_winansi_unicode",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_latest_export_serves_the_published_version_not_the_higher_failed_one",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_specific_published_version_exports_but_a_failed_version_is_404",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_missing_date_and_version_are_404",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_export",
+          "name": "test_export_mutates_nothing",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_generation",
+          "name": "test_busy_brief_publishes_with_real_citations_and_a_real_run_id",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_generation",
+          "name": "test_a_quiet_day_publishes_with_no_events_no_runs_and_no_run_id",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_generation",
+          "name": "test_a_mid_pipeline_fault_fails_the_same_version_and_leaves_no_partial_rows",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_generation",
+          "name": "test_a_rerun_creates_version_2_with_a_reason_and_leaves_version_1_unchanged",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_full_publish_sequence_persists_and_never_commits",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_concurrent_version_allocation_yields_1_and_2_without_collision",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_a_published_version_is_byte_for_byte_immutable_through_regeneration",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_latest_published_ignores_a_higher_failed_or_in_flight_version",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_a_blocked_report_persists_its_sections_but_cannot_publish",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_persisted_failed_sections_cannot_be_published_by_a_different_passing_gate",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_stale_marking_follows_the_citation_join_and_spares_unrelated_rows",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_a_non_claim_evidence_ref_cannot_persist_but_real_claims_do",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_lifecycle",
+          "name": "test_report_sections_read_fails_loud_on_a_live_overflow",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_latest_and_by_date_serve_the_published_version_over_higher_unpublished",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_versions_lists_all_three_newest_first_and_an_exact_prior_version",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_reports_listing_default_serves_only_the_latest_published_daily_brief",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_evidence_drawer_returns_real_support_types_and_a_safe_article_snippet",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_evidence_drawer_missing_claim_is_404",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_evidence_drawer_malformed_uuid_is_422_at_routing",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_reprocess_event_stales_only_dependent_published_reports",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_reprocess_unknown_event_is_404",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage6_report_api",
+          "name": "test_generate_daily_brief_enqueues_through_the_app_without_a_broker",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_owned_database_is_a_stage7_disposable_never_news",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_disposable_create_failure_fails_loudly_and_never_skips",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_pre_existing_stage7_database_blocks_creation_and_never_skips",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_page_envelope_and_real_total_over_a_partial_page",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_item_carries_derived_scores_status_and_embedded_identity",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_fallback_risk_is_max_linked_score_with_null_confidence",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[country=us-expected_ids0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[event_type=banking-expected_ids1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[risk_level=high-expected_ids2]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[risk_level=critical-expected_ids3]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[risk_level=low-expected_ids4]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[status=developing-expected_ids5]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[status=new-expected_ids6]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[status=resolved-expected_ids7]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[industry=semiconductors-expected_ids8]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[industry=bank-expected_ids9]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[company=EXSM-expected_ids10]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_filters_narrow_the_real_total_to_seeded_facts[company=Example%20Semi-expected_ids11]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_company_filter_by_uuid_matches_the_linked_event",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_events_date_window_is_inclusive_utc_day",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_preserves_existing_and_adds_five_blocks",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_metrics_are_real_counts_plus_overall_risk",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_event_map_projects_coordinates_and_drops_uncoordinated",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_company_ranking_uses_latest_rollup_per_company",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_industry_summary_dedups_latest_per_industry",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_dashboard_upcoming_trigger_is_the_future_entry_only",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_radar_list_paginates_over_real_total",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_detail_gate_closed_keeps_descriptive_observation",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_detail_gate_open_assembles_matched_prediction",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_detail_related_ids_group_by_target_and_drop_unsupported",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_detail_missing_risk_type_is_404_envelope",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_risk_history_is_chronological_real_series_with_real_total",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_evidence_drawer_returns_real_links_and_a_safe_article_snippet",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_evidence_drawer_unknown_claim_is_404",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_stage7_api_contract",
+          "name": "test_industries_list_dedups_latest_per_industry_and_counts_distinct",
+          "outcome": "passed"
+        }
+      ]
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/unit.xml",
+      "sha256": "759539efcbdc9f758262f5a1bb926479680b14998243254ad42559c2ea3900f3",
+      "tests": 175,
+      "outcomes": {
+        "passed": 175,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[0.1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[nan]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[NaN]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[Infinity]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[-0.1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[1e9]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[0.0000000000001]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_allowance_never_accepts_binary_float_or_unbounded_decimal[None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[max_input_tokens-0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[max_output_tokens-None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[deadline_seconds-0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[input_usd_per_million_tokens-0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[output_usd_per_million_tokens-NaN]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[price_revision-]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[model_version-]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[price_source_url-https://openai.com.evil.invalid/pricing]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_live_route_must_resolve_every_finite_priced_boundary[provider-hidden-fallback]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_price_roundtrip_and_conservative_fixed_precision",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_dispatch_is_durable_before_the_physical_send_and_reconciles_receipt",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_guard_blocks_invalid_payload_before_reservation_or_network[mutation0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_guard_blocks_invalid_payload_before_reservation_or_network[mutation1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_guard_blocks_invalid_payload_before_reservation_or_network[mutation2]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_guard_blocks_invalid_payload_before_reservation_or_network[mutation3]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_guard_blocks_invalid_payload_before_reservation_or_network[mutation4]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_revalidation_failure_cancels_only_pre_dispatch_reservation",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_timeout_retains_uncertainty_and_never_cancels",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_success_without_usage_remains_unresolved",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_absolute_url_or_timeout_override_cannot_escape_route",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-failed-fields0-None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-succeeded-fields1-None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[None-succeeded-fields2-None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0.001-succeeded-fields3-expected3]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-cached-fields4-expected4]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-failed-fields5-expected5]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-failed-fields6-None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_legacy_zero_requires_proof_of_no_billable_dispatch[0-succeeded-fields7-expected7]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_total_deadline_cancels_slow_headers_and_trickling_body_without_live_network[headers]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_spending",
+          "name": "test_total_deadline_cancels_slow_headers_and_trickling_body_without_live_network[body]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[NaN]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[Infinity]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[-0.01]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[1e1000]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[1e-1000]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[0.25]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_invalid_usd_values_are_rejected[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_limits_require_bounded_integers[daily_article_limit]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_limits_require_bounded_integers[run_article_limit]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_limits_require_bounded_integers[enrichment_article_limit]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_unknown_secrets_and_fallbacks_cannot_enter_settings",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_legacy_test_allowance_never_becomes_recurring_credit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_disabled_has_zero_allowance_and_run_default_never_creates_credit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_raw_reader_is_ready_while_optional_ai_is_disabled_or_missing",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_offline_fixture_remains_a_free_explicit_processing_profile",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_settings",
+          "name": "test_timezone_phrase_and_feed_selection_validation",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_server_activation_defaults_off_even_with_credentials_and_profile",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[False]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[true]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[false]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_only_the_boolean_true_opens_the_gate[gate6]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_absent_runtime_or_gate_is_closed[None]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_absent_runtime_or_gate_is_closed[configured1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[openai]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[anthropic]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[gemini]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_supported_synthetic_configuration_is_ready_and_not_mutated[deepseek]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-openai_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-anthropic_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-gemini_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[-deepseek_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -openai_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -anthropic_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -gemini_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_missing_generation_or_embedding_credentials_are_configuration_missing[   -deepseek_api_key]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_other_generation_provider_still_requires_openai_embedding_credentials",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_gemini_requires_explicit_supported_thinking_configuration",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>2]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>3]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>4]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>5]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_enabled_invalid_route_stays_closed[<lambda>6]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_disabled_profile_allowance_and_raw_readiness_still_take_precedence",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_unready_collection_still_blocks_otherwise_ready_ai",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_offline_fixture_and_legacy_live_profiles_preserve_their_boundary",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_v2_readiness_checks_exact_stored_route_before_public_redaction[fallback]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_v2_readiness_checks_exact_stored_route_before_public_redaction[route_extra]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_runtime_readiness",
+          "name": "test_v2_readiness_checks_exact_stored_route_before_public_redaction[role_extra]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_interest_matching_is_nfkc_casefolded_complete_token_and_exclude_wins",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_empty_include_accepts_and_tokenless_configuration_is_rejected",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_personal_date_uses_workspace_timezone_and_accepts_weekends",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_personal_ranking_uses_source_hotness_publication_then_uuid",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_non_finite_spending_is_rejected_before_workspace_writes[inf]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_non_finite_spending_is_rejected_before_workspace_writes[-inf]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_non_finite_spending_is_rejected_before_workspace_writes[nan]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_non_finite_spending_is_rejected_before_workspace_writes[Infinity]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_contracts",
+          "name": "test_non_finite_spending_is_rejected_before_workspace_writes[NaN]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[The central bank announced a rate cut to 0.25.-The central bank announced a rate cut to 0.25.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[The agency reported a total of 250.-The agency reported a total of 250.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[Dr. Lee confirmed the central bank cut rates.-Dr. Lee confirmed the central bank cut rates.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[The agency confirmed it did not approve the project.-The agency confirmed it did not approve the project.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[The regulator denied a claim:\\nAcme released faulty devices.-The regulator denied a claim:\\nAcme released faulty devices.0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_extracts_exact_complete_source_reported_assertions[The regulator denied a claim:\\nAcme released faulty devices.-The regulator denied a claim:\\nAcme released faulty devices.1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[Did officials confirm that the agency approved the project?\"]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[Top 10 reasons the company reported a loss.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[Five reasons the company announced a new policy.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[Analysts expect the company reported 5% growth.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[Imagine the company announced 20% growth.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[It reported the result after the meeting.]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_abstains_on_questions_listicles_forecasts_dependent_or_incomplete_fragments[The agency announced the plan]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_truncated_revision_abstains_and_candidate_bound_is_explicit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_claims",
+          "name": "test_revision_hash_changes_with_pinned_source_metadata",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_brevity_uses_only_source_inputs_and_versioned_audit_identity",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_legacy_default_keeps_its_prompt_and_minimum_budgets",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_hard_ceiling_remains_inclusive_and_one_retry_only[0-executive_summary-120]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_hard_ceiling_remains_inclusive_and_one_retry_only[0-top_event-180]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_hard_ceiling_remains_inclusive_and_one_retry_only[1-executive_summary-120]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_hard_ceiling_remains_inclusive_and_one_retry_only[1-top_event-180]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_abstention_is_still_empty_and_degrades_after_one_retry",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_no_eligible_claims_makes_no_model_call",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_policy_survives_grounding_regeneration_with_the_same_claim_whitelist",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_persistently_unsupported_personal_prose_is_withheld_after_regeneration",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_prose_still_passes_the_real_schema_and_citation_boundary[minted_claim]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_personal_prose_still_passes_the_real_schema_and_citation_boundary[whitespace]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_composition_policy",
+          "name": "test_unknown_policy_is_rejected_before_model_calls",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_personal_exports",
+          "name": "test_one_canonical_claim_keeps_every_distinct_frozen_article_support",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_valid_empty_rss_is_a_healthy_empty_feed",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_unsupported_or_invalid_xml_is_not_quiet_success[<feed xmlns='http://www.w3.org/2005/Atom'><title>Atom</title></feed>]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_unsupported_or_invalid_xml_is_not_quiet_success[<html><body>Feed unavailable</body></html>]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_unsupported_or_invalid_xml_is_not_quiet_success[<rss version='2.0'></rss>]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_unknown_publication_time_stays_unknown",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_response_body_and_parsed_item_count_are_bounded",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_501_entries_returns_500_with_an_explicit_unknown_total",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_exactly_500_entries_is_complete",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_entries_count_towards_the_entry_limit",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_oversized_capture_reads_at_most_two_mib_and_retains_no_partial_xml[False]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_oversized_capture_reads_at_most_two_mib_and_retains_no_partial_xml[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_exact_byte_ceiling_requires_framing_proof_to_be_complete[False]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_exact_byte_ceiling_requires_framing_proof_to_be_complete[True]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_short_stream_reads_are_not_mistaken_for_the_end_of_a_feed",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_truncated_transport_is_not_a_complete_capture",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_malformed_xml_after_the_entry_bound_cannot_yield_unverified_prefix",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_bounds_preserve_canonical_identity_original_url_and_field_truncations",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_larger_source_permission_cannot_raise_the_application_snippet_bound",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_legacy_list_preserves_field_lengths_for_its_own_truncation_boundary",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[javascript:alert(1)]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[ftp://offline.example/a]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[/relative/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https:///no-host]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://user:secret@offline.example/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://offline.example:bad/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://offline.example:70000/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://bad host.example/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://bad..example/article]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://offline.example/line\\nbreak]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://offline.example/path%xx]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_urls_are_rejected_without_corrupting_their_identity[https://offline.example/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_canonical_url_expansion_cannot_be_silently_sliced",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_injected_provider_iterator_is_not_drained_past_one_sentinel",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_valid_non_utc_publisher_time_is_normalized_not_discarded",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_missing_or_invalid_publisher_dates_stay_unknown[]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_missing_or_invalid_publisher_dates_stay_unknown[not a date]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_missing_or_invalid_publisher_dates_stay_unknown[Sun, 99 Sep 2026 01:15:00 GMT]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options0]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options1]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options2]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options3]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options4]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options5]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options6]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.unit.test_http_rss_provider",
+          "name": "test_invalid_capture_bounds_cannot_disable_limits[options7]",
+          "outcome": "passed"
+        }
+      ]
+    },
+    {
+      "path": "personal-project-conversion/evidence/phase-3-item-5-20261003/new-proof.xml",
+      "sha256": "4b3c6b70c4406db1c3f4e53ea9f1c6b617fd03b96e260270e3634a252b8a1687",
+      "tests": 6,
+      "outcomes": {
+        "passed": 6,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_api_enqueuer_registered_worker_preserves_frozen_identity_payload_and_exact_cost",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_missing_route_api_run_keeps_raw_reader_available_without_paid_dispatch",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[scope_not_frozen]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_guard_rejects_unfrozen_scope_or_mismatched_route_before_rows_or_send[route_changed]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_item5_composed",
+          "name": "test_reserved_dispatch_rejects_rotated_owner_and_retains_original_obligation",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.integration.test_personal_bounds_upgrade",
+          "name": "test_populated_upgrade_preserves_sources_raw_saved_reports_and_imports_known_unknown_usage_once",
+          "outcome": "passed"
+        }
+      ]
+    }
+  ],
+  "item6_final_verification": {
+    "path": "personal-project-conversion/evidence/phase-3-item-6-20261003/final-check.json",
+    "sha256": "9bf36e1f7aa3575d87ea70bb4efc6f016539ebd6cc7d5be4f5f9167d521aa4b3"
+  },
+  "item6_native_index": {
+    "path": "personal-project-conversion/evidence/phase-3-item-6-20261003/browser/capture-index.json",
+    "sha256": "d48a483924bb3a645c9bf7998bf6fe158f25d453ba62d284a05111df494f2f10"
+  },
+  "frontend_delta_qualification": "Only explicit item6 failure-state JSX/tests/cachekey changes need later frontend/browser evidence; backend integration coverage is reused only where relevant sources/tests match. Documentation changes do not invalidate behavioral test results."
+}

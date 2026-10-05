@@ -1,0 +1,25 @@
+{
+  "executor": "browser_gate_review implementation agent",
+  "reported_at": "2026-09-20T07:36:06.918556+00:00",
+  "result": "passed",
+  "passed": 84,
+  "duration_seconds": 2.34,
+  "files": [
+    "tests/unit/test_personal_composition_policy.py",
+    "tests/unit/test_report_budget.py",
+    "tests/unit/test_report_prompts.py",
+    "tests/unit/test_report_composition.py",
+    "tests/unit/test_report_grounding.py",
+    "tests/unit/test_report_copyright.py"
+  ],
+  "environment": {
+    "APP_ENV": "test",
+    "provider_keys": "all four blank",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "pytest_cache_provider": "disabled"
+  },
+  "root_reran_same_units": false,
+  "interim_test_failures": "Two 83-pass/1-fail runs while correcting a new whitespace-only test fixture and its assertion. Shared word counter correctly treated whitespace as zero; no application changes were needed for those corrections.",
+  "ruff_check": "passed",
+  "git_diff_check": "passed"
+}

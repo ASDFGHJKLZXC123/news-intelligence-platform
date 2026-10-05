@@ -1,0 +1,6 @@
+{"timestamp": "2026-09-09T04:12:32.269302+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:12:34.326304+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:12:34.386108+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:12:34.392661+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/b717e721-ed19-4ffb-bfc6-7acb5a36922e \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:12:34.403490+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 200 OK\""}
+{"probe": "preexisting canonical plus uppercase UUID saves", "before_total": 2, "delete_status": 204, "delete_body": "", "after_total": 0}

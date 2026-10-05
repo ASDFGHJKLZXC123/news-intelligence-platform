@@ -82,15 +82,13 @@ function CompanyLogo({ company, ticker, name, size = 30 }) {
   );
 }
 
-/* Watchlist toggle button */
-function WatchBtn({ id, sm }) {
-  const st = useStore();
-  const on = st.watch.has(id);
+/* Phase 1 keeps saving visible but cannot pretend that it persisted. */
+function WatchBtn({ sm }) {
   return (
-    <button className={"btn watch-btn " + (sm ? "btn-sm " : "") + (on ? "btn-primary" : "")}
-      onClick={(e) => { e.stopPropagation(); Store.toggleWatch(id); }}>
+    <button className={"btn watch-btn " + (sm ? "btn-sm " : "")} type="button" disabled
+      title="Saving is unavailable in this version" aria-label="Save story — unavailable in this version">
       <Icon.watchlist style={{ width: sm ? 13 : 15, height: sm ? 13 : 15 }} />
-      {on ? "Watching" : "Watch"}
+      Save
     </button>
   );
 }

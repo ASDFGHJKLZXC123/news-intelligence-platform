@@ -36,6 +36,7 @@ from services.entities.event_linking import (
 )
 from services.llm.runtime import build_production_orchestrator
 from services.nlp.mentions import ArticleText, extract_mentions
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import QUEUE_PIPELINE, Stage1Task
 
 logger = get_logger("workers.entity_linking_tasks")
@@ -108,6 +109,7 @@ def run_event_entity_linking(event_id: str) -> dict[str, Any]:
     redis_client: Any = None
     adjudicator: Any = None
     try:
+        require_legacy_writer_mode(session, lock=True)
         redis_client = build_redis_client()
         adjudicator = build_mention_adjudicator(session, redis_client)
         result = link_event_entities(

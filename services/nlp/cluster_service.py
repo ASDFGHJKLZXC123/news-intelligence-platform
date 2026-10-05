@@ -9,6 +9,7 @@ is integration-tested.
 from __future__ import annotations
 
 import uuid
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from sqlalchemy import and_, select
@@ -44,6 +45,7 @@ def cluster_unclustered_articles(
     threshold: float = DEFAULT_CLUSTERING_THRESHOLD,
     embedding_model: str | None = None,
     embedding_model_version: str | None = None,
+    article_ids: Sequence[uuid.UUID] | None = None,
 ) -> ClusterResult:
     """Cluster articles in exactly one configured embedding vector space."""
     settings = get_settings()
@@ -68,6 +70,8 @@ def cluster_unclustered_articles(
         .where(EventArticle.article_id.is_(None))
         .order_by(Article.fetched_at)
     )
+    if article_ids is not None:
+        stmt = stmt.where(Article.id.in_(tuple(article_ids)))
     rows = session.execute(stmt).all()
     if not rows:
         return ClusterResult(0, 0, 0)

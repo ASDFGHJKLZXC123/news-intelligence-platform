@@ -1,0 +1,19 @@
+{
+  "acceptance": {
+    "P5-01": "pending",
+    "P5-02": "pending",
+    "P5-03": "pending",
+    "P5-04": "pending",
+    "P5-05": "pending",
+    "P5-06": "pending",
+    "P5-07": "pending"
+  },
+  "actual_sessions": 0,
+  "baseline_sessions": 0,
+  "continued_use_judgment": null,
+  "decision": "insufficient_evidence",
+  "group_sample_count": 0,
+  "summary_sample_count": 0,
+  "trial_id": "fe79058e-52c3-4d1d-b9f0-3f7cf8af2efb",
+  "user_relevance_judgments": 0
+}

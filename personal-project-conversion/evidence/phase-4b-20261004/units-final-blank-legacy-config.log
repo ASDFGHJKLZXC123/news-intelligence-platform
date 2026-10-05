@@ -1,0 +1,156 @@
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 47%]
+..................................................FFFFF................. [ 63%]
+........................................................................ [ 79%]
+........................................................................ [ 95%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+___ test_worker_check_requires_live_workers_covering_every_configured_queue ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ee31240>
+
+    def test_worker_check_requires_live_workers_covering_every_configured_queue(monkeypatch) -> None:
+        seen_timeouts: list[float] = []
+    
+        def inspect_queues(timeout_seconds: float) -> object:
+            seen_timeouts.append(timeout_seconds)
+            return {
+                "worker-name-is-not-exposed": [
+                    {"name": "default"},
+                    {"name": "ingestion"},
+                    {"name": "pipeline"},
+                ]
+            }
+    
+        monkeypatch.setattr(deps, "_inspect_active_worker_queues", inspect_queues)
+    
+        status = check_worker_config()
+    
+>       assert status == ComponentStatus(
+            name="worker",
+            ok=True,
+            detail="reachable; live_workers=1; queues=default,ingestion,pipeline",
+        )
+E       AssertionError: assert ComponentStat...d, or queues') == ComponentStat...ion,pipeline')
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing attributes:
+E         ['ok', 'detail']
+E         
+E         Drill down into differing attribute ok:
+E           ok: False != True...
+E         
+E         ...Full output truncated (5 lines hidden), use '-vv' to show
+
+tests/unit/test_health.py:187: AssertionError
+______________ test_worker_check_degrades_when_no_worker_replies _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x110560b40>
+
+    def test_worker_check_degrades_when_no_worker_replies(monkeypatch) -> None:
+        monkeypatch.setattr(deps, "_inspect_active_worker_queues", lambda _timeout: None)
+    
+        status = check_worker_config()
+    
+>       assert status == ComponentStatus(name="worker", ok=False, detail="no valid live worker replies")
+E       AssertionError: assert ComponentStat...d, or queues') == ComponentStat...rker replies')
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['detail']
+E         
+E         Drill down into differing attribute detail:
+E           detail: 'missing broker, result backend, or queues' != 'no valid live worker replies'
+E           - no valid live worker replies
+E           + missing broker, result backend, or queues
+
+tests/unit/test_health.py:201: AssertionError
+______ test_worker_check_degrades_when_a_configured_queue_has_no_consumer ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x110561780>
+
+    def test_worker_check_degrades_when_a_configured_queue_has_no_consumer(monkeypatch) -> None:
+        monkeypatch.setattr(
+            deps,
+            "_inspect_active_worker_queues",
+            lambda _timeout: {"worker-a": [{"name": "default"}, {"name": "ingestion"}]},
+        )
+    
+        status = check_worker_config()
+    
+>       assert status == ComponentStatus(
+            name="worker",
+            ok=False,
+            detail="live workers missing required queues: pipeline",
+        )
+E       AssertionError: assert ComponentStat...d, or queues') == ComponentStat...es: pipeline')
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['detail']
+E         
+E         Drill down into differing attribute detail:
+E           detail: 'missing broker, result backend, or queues' != 'live workers missing required queues: pipeline'
+E           - live workers missing required queues: pipeline
+E           + missing broker, result backend, or queues
+
+tests/unit/test_health.py:213: AssertionError
+__________________ test_worker_check_sanitizes_probe_failures __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x110561a90>
+
+    def test_worker_check_sanitizes_probe_failures(monkeypatch) -> None:
+        def fail(_timeout: float) -> object:
+            raise ConnectionError("redis://user:secret@internal-broker:6379/1")
+    
+        monkeypatch.setattr(deps, "_inspect_active_worker_queues", fail)
+    
+        status = check_worker_config()
+    
+>       assert status == ComponentStatus(name="worker", ok=False, detail="ConnectionError")
+E       AssertionError: assert ComponentStat...d, or queues') == ComponentStat...nectionError')
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['detail']
+E         
+E         Drill down into differing attribute detail:
+E           detail: 'missing broker, result backend, or queues' != 'ConnectionError'
+E           - ConnectionError
+E           + missing broker, result backend, or queues
+
+tests/unit/test_health.py:229: AssertionError
+______________ test_worker_check_rejects_malformed_queue_replies _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ee3f9a0>
+
+    def test_worker_check_rejects_malformed_queue_replies(monkeypatch) -> None:
+        monkeypatch.setattr(
+            deps,
+            "_inspect_active_worker_queues",
+            lambda _timeout: {"worker-a": [{"routing_key": "default"}]},
+        )
+    
+        status = check_worker_config()
+    
+>       assert status == ComponentStatus(name="worker", ok=False, detail="no valid live worker replies")
+E       AssertionError: assert ComponentStat...d, or queues') == ComponentStat...rker replies')
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['detail']
+E         
+E         Drill down into differing attribute detail:
+E           detail: 'missing broker, result backend, or queues' != 'no valid live worker replies'
+E           - no valid live worker replies
+E           + missing broker, result backend, or queues
+
+tests/unit/test_health.py:243: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_health.py::test_worker_check_requires_live_workers_covering_every_configured_queue
+FAILED tests/unit/test_health.py::test_worker_check_degrades_when_no_worker_replies
+FAILED tests/unit/test_health.py::test_worker_check_degrades_when_a_configured_queue_has_no_consumer
+FAILED tests/unit/test_health.py::test_worker_check_sanitizes_probe_failures
+FAILED tests/unit/test_health.py::test_worker_check_rejects_malformed_queue_replies
+5 failed, 446 passed in 10.77s

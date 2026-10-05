@@ -1,0 +1,16 @@
+{
+  "md": {
+    "native_browser_download_path": "/Users/f8fq/Downloads/personal-news-brief-2026-10-04-v1-76078893-1fd8-4386-b1d6-14c87995706c.md",
+    "exists": true,
+    "bytes": 3694,
+    "native_sha256": "bbb7563cbdfb99d6e6b520985a8c334cf328d252af4e5f6c5f1c124b8c6717a2",
+    "retained_from_native_file": true
+  },
+  "pdf": {
+    "native_browser_download_path": "/Users/f8fq/Downloads/personal-news-brief-2026-10-04-v1-76078893-1fd8-4386-b1d6-14c87995706c.pdf",
+    "exists": true,
+    "bytes": 19465,
+    "native_sha256": "817211d8239753b6ab578f23644ccd39d67d544d798fe25f2c3762e7d5918680",
+    "retained_from_native_file": true
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "id": "rootfinal_32fd2dc82b",
+  "dataset": "synthetic",
+  "source_hashes_before": {
+    "scripts/start-personal-phase2-offline.sh": "ab1dd5765ecf9f3570e164b6a59fe12df32eb26d899c22cb4e010ed25796e346",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "c4329c4183addf7cd58ba68dc7c17204b647ce2f2cd81274a8efcf8a4730908f",
+    "workers/personal_tasks.py": "f850bfdee3443ce4f856dd774c6bd5fd59407ca70db8f0eaff32deb91882b8fe",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "a8dbc8998b41b2a481058e9977dcd4c391cb3e2dc4e04101be0f7c0a01c5f5cc",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "checks": [
+    "launcher tool exited before separate verification process started",
+    "same-day duplicate returns same run without extra business/LLM rows",
+    "fresh queue generation, snapshot and persisted embedding route identity match"
+  ],
+  "bystanders": [
+    "00c20ac6eb4f63f58cf7c2b0a13c7f27b36590817f4f6ed82616ce8949dd38c7",
+    "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+    "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+    "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5",
+    "ae1b9f443ae78200d20fb7c299048c4f5876cef8d873a9c34a40c3a85d26132b",
+    "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02"
+  ],
+  "launcher_process_id": 74470,
+  "launcher_return_code": 0,
+  "verification_process_id": 75067,
+  "api": "http://127.0.0.1:49782",
+  "state_dir": "/tmp/nip-personal-phase2-offline-rootfinal_32fd2dc82b",
+  "before_counts": {
+    "articles": 0,
+    "events": 0,
+    "claims": 0,
+    "claim_evidence": 0,
+    "reports": 0,
+    "personal_runs": 0,
+    "personal_captures": 0,
+    "personal_run_event_observations": 0,
+    "personal_brief_snapshots": 0,
+    "llm_runs": 0
+  },
+  "run": {
+    "id": "90ccab09-14df-430d-b36d-8d1d70ff3e7f",
+    "local_date": "2026-09-09",
+    "state": "succeeded",
+    "attempt": 1,
+    "max_attempts": 3,
+    "created_at": "2026-09-09T19:20:11.103614Z",
+    "updated_at": "2026-09-09T19:20:11.380116Z",
+    "lease_expires_at": null,
+    "capture_started_at": "2026-09-09T19:20:11.287928Z",
+    "capture_ended_at": "2026-09-09T19:20:11.303994Z",
+    "coverage": {
+      "schema": "personal-capture-coverage.v1",
+      "feed_pauses": [],
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feed_failures": [],
+      "items_fetched": 1,
+      "pending_total": 0,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 1,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_admitted": 1,
+      "articles_captured": 1
+    },
+    "available_event_ids": [
+      "27419328-519e-4b00-9913-7e868a4935d6"
+    ],
+    "snapshot_id": "96900f94-98fb-481f-a653-036d765b911d",
+    "report_id": "668f36fb-ee51-4d81-89e5-cf30ff4396aa",
+    "stage_results": {
+      "scope": {
+        "status": "succeeded",
+        "articles_admitted": 1,
+        "articles_selected_for_enrichment": 1
+      },
+      "capture": {
+        "schema": "personal-capture-coverage.v1",
+        "status": "succeeded",
+        "feed_pauses": [],
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feed_failures": [],
+        "items_fetched": 1,
+        "pending_total": 1,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 1,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_captured": 1
+      },
+      "grouping": {
+        "status": "succeeded",
+        "events_created": 1,
+        "articles_clustered": 1
+      },
+      "snapshot": {
+        "status": "succeeded",
+        "snapshot_id": "96900f94-98fb-481f-a653-036d765b911d"
+      },
+      "admission": {
+        "status": "succeeded",
+        "run_limit": 100,
+        "local_day_limit": 100,
+        "articles_admitted": 1
+      },
+      "embedding": {
+        "status": "succeeded",
+        "articles_embedded": 1
+      },
+      "observations": {
+        "status": "succeeded",
+        "events_observed": 1
+      },
+      "claim_preparation": {
+        "status": "succeeded",
+        "abstained": 0,
+        "supported": 2
+      }
+    },
+    "result": {
+      "attempt": 1,
+      "published": true,
+      "report_id": "668f36fb-ee51-4d81-89e5-cf30ff4396aa",
+      "snapshot_id": "96900f94-98fb-481f-a653-036d765b911d",
+      "gate_outcome": "pass",
+      "section_count": 5,
+      "capture_partial": false,
+      "processing_degraded": false
+    },
+    "error": null,
+    "retry_eligible": false,
+    "retry_reason": "run in state succeeded is not retryable"
+  },
+  "after_counts": {
+    "articles": 1,
+    "events": 1,
+    "claims": 2,
+    "claim_evidence": 2,
+    "reports": 1,
+    "personal_runs": 1,
+    "personal_captures": 1,
+    "personal_run_event_observations": 1,
+    "personal_brief_snapshots": 1,
+    "llm_runs": 4
+  },
+  "md_sha256": "1adbf95bf8af11a467b4306db3c12d467bdd13f2dcbf66c5ec1394cb2437ee50",
+  "pdf_sha256": "c14a8f5b4dde0e38bdd9a4ada739c15515ceb3b6e915fce3c7c54e048ec09c3b",
+  "embedding": [
+    {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "model_version": "fixture-v1"
+    }
+  ],
+  "snapshot_route": {
+    "mode": "offline_fixture",
+    "embedding": {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture",
+      "model_version": "fixture-v1"
+    },
+    "fixture_id": "phase-2-offline-workflow-v1",
+    "generation": {
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture"
+    }
+  },
+  "profile_route": {
+    "mode": "offline_fixture",
+    "embedding": {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture",
+      "model_version": "fixture-v1"
+    },
+    "fixture_id": "phase-2-offline-workflow-v1",
+    "generation": {
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture"
+    }
+  },
+  "llm": [
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    }
+  ],
+  "passed": true,
+  "cleanup_codes": [
+    0,
+    0
+  ],
+  "database_owned_after": false,
+  "bystanders_preserved": true,
+  "owned_containers_absent": true,
+  "source_hashes_after": {
+    "scripts/start-personal-phase2-offline.sh": "ab1dd5765ecf9f3570e164b6a59fe12df32eb26d899c22cb4e010ed25796e346",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "c4329c4183addf7cd58ba68dc7c17204b647ce2f2cd81274a8efcf8a4730908f",
+    "workers/personal_tasks.py": "f850bfdee3443ce4f856dd774c6bd5fd59407ca70db8f0eaff32deb91882b8fe",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "a8dbc8998b41b2a481058e9977dcd4c391cb3e2dc4e04101be0f7c0a01c5f5cc",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "source_drift": []
+}

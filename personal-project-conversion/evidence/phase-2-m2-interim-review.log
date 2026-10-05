@@ -1,0 +1,33 @@
+{"case": "seven committed observations terminal-pinned before snapshot", "result": "PASS", "count": 7}
+{"case": "fresh production claim chain, exact frozen spans and retry idempotence", "result": "PASS", "counts": [8, 8, 8, 8]}
+{"case": "snapshot corruption rejected", "result": "PASS", "corruption": "span", "message": "supported claim span does not match its frozen source"}
+{"case": "snapshot corruption rejected", "result": "PASS", "corruption": "revision_hash", "message": "claim preparation references a modified article revision"}
+{"case": "snapshot corruption rejected", "result": "PASS", "corruption": "supportive_link", "message": "supported preparation lacks its canonical article evidence link"}
+{"case": "observation source corruption", "result": "FINDING", "accepted_into_snapshot": true}
+{"case": "selected five only citable; excluded source retained noncitable; frozen snapshot reused after midnight", "result": "PASS", "snapshot_id": "c9f24f45-37da-452c-b96c-d8445369617a", "hash": "7a2d9d4f0582248f13eb8ab32cb24dfeeff9c929ce836ba9c5a9b19b1c70a58f"}
+{"case": "retry-exhausted input re-enrichment", "result": "FINDING", "accepted": true}
+{"case": "active other-run scope rejected", "result": "PASS", "message": "an article in this scope belongs to another active or retryable personal run"}
+{"case": "retry-eligible failed other-run scope rejected", "result": "PASS", "message": "an article in this scope belongs to another active or retryable personal run"}
+{"case": "preloaded old token cannot write claim evidence", "result": "PASS", "message": "personal write refused because attempt ownership changed"}
+{"case": "preloaded failed run cannot retry successful date", "result": "PASS", "message": "run in state succeeded is not eligible for retry"}
+{"case": "preloaded writer mode cannot bypass changed fence", "result": "PASS", "message": "personal processing is unavailable while the legacy writer mode is active"}
+{"case": "exact sentence boundary retained", "result": "PASS", "text": "The agency reported a total of 250."}
+{"case": "exact sentence boundary retained", "result": "PASS", "text": "Dr. Lee confirmed the bank cut rates to 0.25."}
+{"case": "exact sentence boundary retained", "result": "PASS", "text": "The regulator denied a claim:\nAcme released faulty devices."}
+{
+  "initial_hashes": {
+    "db/models/personal.py": "b7c9cff7973269f7a206754524b584b99b03e455875a8c9973203047bdf74b33",
+    "services/personal/runs.py": "e7f097c109b2f53ed93d4c6200f0613e1d06baa29054311b7365f3af36192b21",
+    "services/personal/claims.py": "35cc494ca05d87f0abee3dd38dda6641725acda9ac5ed0eed8e6d95fb25beaf7",
+    "services/personal/snapshots.py": "f62e696f11571c832b8adba451cae2c429968e7c9a3bca15e36f7a6c20ddd6c9",
+    "db/migrations/versions/0020_personal_news_desk.py": "280384c035920c6707459a2b035d841ad4a049fd66cbba78ff42bb881fe2d2e7"
+  },
+  "final_hashes": {
+    "db/models/personal.py": "b7c9cff7973269f7a206754524b584b99b03e455875a8c9973203047bdf74b33",
+    "services/personal/runs.py": "e7f097c109b2f53ed93d4c6200f0613e1d06baa29054311b7365f3af36192b21",
+    "services/personal/claims.py": "35cc494ca05d87f0abee3dd38dda6641725acda9ac5ed0eed8e6d95fb25beaf7",
+    "services/personal/snapshots.py": "f62e696f11571c832b8adba451cae2c429968e7c9a3bca15e36f7a6c20ddd6c9",
+    "db/migrations/versions/0020_personal_news_desk.py": "280384c035920c6707459a2b035d841ad4a049fd66cbba78ff42bb881fe2d2e7"
+  }
+}
+{"case": "source stability", "result": "PASS"}

@@ -1,0 +1,49 @@
+{
+  "observed_at": "2026-10-04T01:27:50.394472+00:00",
+  "active_evidence_python_syntax": "PASS",
+  "active_count": 11,
+  "active_files": [
+    "compare-browser-raw-pagination.py",
+    "extract-browser-captures.py",
+    "finalize-evidence.py",
+    "fixture-controller.py",
+    "historical/extract_historical.py",
+    "new-harness-resources/capture-cleanup.py",
+    "resources/adjudicate-cleanup.py",
+    "resources/capture-audit.py",
+    "resources/cleanup-historical.py",
+    "resources/continue-historical-cleanup.py",
+    "test-browser-capture-secret-guard.py"
+  ],
+  "archived_preflight_files_excluded": [
+    "new-harness-resources/preflight-manifest-key-capture-cleanup.py",
+    "new-harness-resources/preflight-parse-capture-cleanup.py",
+    "resources/preflight-absence-case-cleanup-historical.py"
+  ],
+  "exclusion_reason": "Exact historical failed preparation versions are preserved as failure evidence, not runnable current utilities. The parse-failed fresh cleanup preflight intentionally retains its original SyntaxError.",
+  "current_finalizer_style_checks": [
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "check",
+        "--no-cache",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/finalize-evidence.py"
+      ],
+      "exit_code": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        ".venv/bin/ruff",
+        "format",
+        "--check",
+        "--no-cache",
+        "personal-project-conversion/evidence/phase-3-item-6-20261003/finalize-evidence.py"
+      ],
+      "exit_code": 0,
+      "stdout": "1 file already formatted\n",
+      "stderr": ""
+    }
+  ]
+}

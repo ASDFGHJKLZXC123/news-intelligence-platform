@@ -283,6 +283,10 @@ def seed_episode_corpus(
     # alone the table, and the operator should find out for free rather than after 100 embeddings.
     unreviewed = enforce_review_gate(corpus, allow_unreviewed=allow_unreviewed)
 
+    from services.writer_mode import require_legacy_maintenance_mode
+
+    require_legacy_maintenance_mode(session)
+
     # The provider's own space wins over the configured default, so pointing the seeder at a new
     # model is all a re-embedding migration takes (ADR 0004).
     model, model_version = resolve_embedding_identity(

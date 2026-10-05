@@ -1,0 +1,2 @@
+{"already_processed": false, "queued": true, "run_id": "2c26f407-f585-4c83-9820-347b0dc72095"}
+{"articles_admitted": 1, "articles_captured": 1, "claims_supported": 2, "events_observed": 1, "feeds_attempted": 1, "feeds_failed": 0, "feeds_succeeded": 1, "fixture_label": "Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls", "published": true, "report_id": "1212ff21-b537-42a3-8bdb-9a4d84fb4f04", "run_id": "2c26f407-f585-4c83-9820-347b0dc72095", "status": "succeeded"}

@@ -1,0 +1,31 @@
+{
+  "broad_preexisting_container_state_comparison_passed": false,
+  "bytecode_environment_flag_not_zero_write_proof": true,
+  "cleanup_drift_explanation": "resource-cleanup-adjudication.json",
+  "errors": 0,
+  "external_feed_provider_requests_performed": false,
+  "failures": 0,
+  "fresh_direct_unit_passes": 175,
+  "fresh_distinct_integration_passes": 238,
+  "global_phase3_acceptance_claimed": false,
+  "historical_files_preserved": 307,
+  "ignored_bootstrap_bytecode_observed": true,
+  "independent_database_rerun_claimed": false,
+  "independent_source_and_evidence_review_complete": true,
+  "judgment": "PASS for item 5 software/synthetic integration",
+  "missing_links": [],
+  "overlapping_focused_reruns": 6,
+  "owned_resource_cleanup_complete": true,
+  "production_files_changed": false,
+  "real_paid_runtime_activated": false,
+  "relative_links_checked": 52,
+  "remaining_scope": [
+    "item 6 browser/old-resource verification",
+    "item 7 global acceptance/closeout",
+    "live/recurring authorization",
+    "Phase 4/5"
+  ],
+  "skips": 0,
+  "staged_work_and_operational_configuration_preserved": true,
+  "tested_source_stable": true
+}

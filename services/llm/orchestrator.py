@@ -40,6 +40,7 @@ from services.llm.selection import (
     estimate_token_count,
     select_representative_articles,
 )
+from services.personal.deadlines import propagate_fatal
 
 
 class LLMOrchestratorError(RuntimeError):
@@ -636,6 +637,7 @@ class LLMOrchestrator:
                             continue
                         break
                     except Exception as exc:  # noqa: BLE001
+                        propagate_fatal(exc)
                         latency_ms = int((time.monotonic() - start) * 1000)
                         billed_response = getattr(exc, "response", None)
                         if not isinstance(billed_response, LLMInvocationResponse):

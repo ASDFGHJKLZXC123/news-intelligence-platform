@@ -568,15 +568,11 @@ def test_the_cli_reports_the_gate_as_an_actionable_message_not_a_traceback(monke
     assert "Traceback" not in stderr
 
 
-def test_a_provider_is_closed_when_the_session_cannot_be_opened(monkeypatch):
-    """The provider is built first, so a database that refuses the connection must not leak it.
-
-    Past the gate, the seed opens two things in order -- the embeddings client, then the session --
-    and only the second one can fail on a database that is down. A `finally` that closes both only
-    runs once both exist, which is exactly the case where one of them does not.
-    """
+def test_provider_is_not_opened_when_the_session_cannot_be_opened(monkeypatch):
+    """A database refusal must prevent provider construction before the mode fence."""
     provider = Mock()
-    monkeypatch.setattr(seed, "build_provider", lambda: provider)
+    factory = Mock(return_value=provider)
+    monkeypatch.setattr(seed, "build_provider", factory)
     monkeypatch.setattr(
         seed,
         "SessionLocal",
@@ -589,4 +585,5 @@ def test_a_provider_is_closed_when_the_session_cannot_be_opened(monkeypatch):
     with pytest.raises(OperationalError):
         seed.seed_episodes(allow_unreviewed=True)
 
-    provider.close.assert_called_once()
+    factory.assert_not_called()
+    provider.close.assert_not_called()

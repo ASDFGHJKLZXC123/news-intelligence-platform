@@ -17,6 +17,7 @@ from packages.config.logging import get_logger, set_job_id
 from packages.jobs import Stage1Job
 from services.ingestion import ingest_source
 from services.ingestion.http_provider import HttpRSSProvider
+from services.writer_mode import require_legacy_writer_mode
 from workers.celery_app import Stage1Task
 
 logger = get_logger("workers.ingestion_tasks")
@@ -32,6 +33,7 @@ def ingest_source_feed(source_id: str) -> dict[str, Any]:
     metrics.increment(metrics.JOB_STARTS)
     session = SessionLocal()
     try:
+        require_legacy_writer_mode(session, lock=True)
         source = session.get(Source, source_id)
         if source is None:
             msg = f"unknown source_id: {source_id}"

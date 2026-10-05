@@ -1,0 +1,807 @@
+[
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-aq",
+      "--no-trunc"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.844499+00:00",
+    "stderr": "",
+    "stdout": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75\n6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd\nce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a\n452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f\nbdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8\n5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4\nd578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73\nbc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5\n59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a\n73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3\n463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99\nd50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb\n788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7\nfcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb\ne14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8\n83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098\n07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a\n44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c\ndf6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02\n9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.894999+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.915959+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.935470+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.955183+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-10-04T00:55:50Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef/_data\",\n        \"Name\": \"892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.978554+00:00",
+    "stderr": "",
+    "stdout": "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:58.998182+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-10-04T00:55:59Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965/_data\",\n        \"Name\": \"e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.023590+00:00",
+    "stderr": "",
+    "stdout": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_agg(d ORDER BY datname) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.096102+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"16384\",\"datname\":\"nip_personal_phase2_offline_p3_item6_20261003_b\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_personal_phase2_offline_p3_item6_20261003_b",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT owner_token FROM personal_offline_harness_ownership"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.186389+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_personal_phase2_offline_p3_item6_20261003_b",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.257728+00:00",
+    "stderr": "",
+    "stdout": "0022_personal_spending\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73698",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.264176+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:00 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73698",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.269059+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 56430\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "eww",
+      "-p",
+      "73698",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.273787+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73812",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.278958+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:02 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73812",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.284319+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python .venv/bin/celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=personal-offline-p3_item6_20261003_b@localhost\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "eww",
+      "-p",
+      "73812",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.289579+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "74254",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.295264+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:41 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "74254",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.300584+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m http.server 60316 --bind 127.0.0.1 --directory frontend\n"
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:56430",
+      "-iTCP:60316",
+      "-iTCP:56414",
+      "-iTCP:56427",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.359384+00:00",
+    "stderr": "",
+    "stdout": "p73698\ncPython\nf10\nn127.0.0.1:56430\nTST=LISTEN\nTQR=0\nTQS=0\nf13\nn127.0.0.1:56447->127.0.0.1:56414\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf19\nn127.0.0.1:56539->127.0.0.1:56414\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf20\nn127.0.0.1:56741->127.0.0.1:56414\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf21\nn127.0.0.1:56801->127.0.0.1:56414\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf23\nn127.0.0.1:56543->127.0.0.1:56414\nTST=ESTABLISHED\nTQR=0\nTQS=0\np73812\ncPython\nf3\nn127.0.0.1:56438->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf4\nn127.0.0.1:56439->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf5\nn127.0.0.1:56440->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf6\nn127.0.0.1:56441->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf7\nn127.0.0.1:56443->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf8\nn127.0.0.1:56445->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf9\nn127.0.0.1:56453->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf10\nn127.0.0.1:56454->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf11\nn127.0.0.1:56455->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf12\nn127.0.0.1:56456->127.0.0.1:56427\nTST=ESTABLISHED\nTQR=0\nTQS=0\np74254\ncPython\nf3\nn127.0.0.1:60316\nTST=LISTEN\nTQR=0\nTQS=0\np86633\nccom.docker.backend\nf210\nn127.0.0.1:56427->127.0.0.1:56438\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf213\nn127.0.0.1:56427->127.0.0.1:56439\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf219\nn127.0.0.1:56414->127.0.0.1:56539\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf227\nn127.0.0.1:56414->127.0.0.1:56741\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf229\nn127.0.0.1:56427->127.0.0.1:56440\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf230\nn127.0.0.1:56427->127.0.0.1:56441\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf242\nn127.0.0.1:56427->127.0.0.1:56443\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf243\nn127.0.0.1:56427->127.0.0.1:56445\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf257\nn127.0.0.1:56414->127.0.0.1:56447\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf258\nn127.0.0.1:56427->127.0.0.1:56453\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf260\nn127.0.0.1:56427->127.0.0.1:56454\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf261\nn127.0.0.1:56414\nTST=LISTEN\nTQR=0\nTQS=0\nf263\nn127.0.0.1:56427->127.0.0.1:56455\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf266\nn127.0.0.1:56414->127.0.0.1:56543\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf270\nn127.0.0.1:56427->127.0.0.1:56456\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf275\nn127.0.0.1:56414->127.0.0.1:56801\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf294\nn127.0.0.1:56427\nTST=LISTEN\nTQR=0\nTQS=0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "pg_dump",
+      "-U",
+      "news",
+      "--no-owner",
+      "--no-acl",
+      "nip_personal_phase2_offline_p3_item6_20261003_b"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.576437+00:00",
+    "stderr": "",
+    "stdout_bytes": 353229,
+    "stdout_sha256": "bc77936c3d629f1c434ebe701c14bc5620f217850fc64a87db8b78ec46ea9f25"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.606137+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.629712+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_agg(d ORDER BY datname) FROM (SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database) d"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.708167+00:00",
+    "stderr": "",
+    "stdout": "[{\"oid\":\"16384\",\"datname\":\"nip_personal_phase2_offline_p3_item6_20261003_b\",\"owner\":\"news\"}, \n {\"oid\":\"5\",\"datname\":\"postgres\",\"owner\":\"news\"}, \n {\"oid\":\"4\",\"datname\":\"template0\",\"owner\":\"news\"}, \n {\"oid\":\"1\",\"datname\":\"template1\",\"owner\":\"news\"}]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_personal_phase2_offline_p3_item6_20261003_b",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT owner_token FROM personal_offline_harness_ownership"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.782248+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_personal_phase2_offline_p3_item6_20261003_b",
+      "-X",
+      "-A",
+      "-t",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.867917+00:00",
+    "stderr": "",
+    "stdout": "0022_personal_spending\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73698",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.874253+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:00 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73698",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.879534+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 56430\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73812",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.884536+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:02 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73812",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:25:59.889325+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python .venv/bin/celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=personal-offline-p3_item6_20261003_b@localhost\n"
+  },
+  {
+    "argv": [
+      "/Users/f8fq/coding projects/Unfinished/news-intelligence-platform/scripts/stop-personal-phase2-offline.sh",
+      "/private/tmp/nip-personal-phase2-offline-p3_item6_20261003_b"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:09.816765+00:00",
+    "stderr": "",
+    "stdout": "Synthetic Phase 2 harness resources removed. Logs and manifest remain at /private/tmp/nip-personal-phase2-offline-p3_item6_20261003_b.\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.867711+00:00",
+    "stderr": "error: no such object: 2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "nip-personal-phase2-offline-pg-p3_item6_20261003_b",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.902923+00:00",
+    "stderr": "error: no such object: nip-personal-phase2-offline-pg-p3_item6_20261003_b\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.931560+00:00",
+    "stderr": "error: no such object: f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "nip-personal-phase2-offline-redis-p3_item6_20261003_b",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.964070+00:00",
+    "stderr": "error: no such object: nip-personal-phase2-offline-redis-p3_item6_20261003_b\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73698",
+      "-o",
+      "lstart=,command="
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.969962+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "73812",
+      "-o",
+      "lstart=,command="
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.974646+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "74254",
+      "-o",
+      "lstart="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:09.978996+00:00",
+    "stderr": "",
+    "stdout": "Sat Oct  3 17:56:41 2026    \n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "74254",
+      "-o",
+      "command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:09.983327+00:00",
+    "stderr": "",
+    "stdout": "/opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m http.server 60316 --bind 127.0.0.1 --directory frontend\n"
+  },
+  {
+    "action": "SIGTERM",
+    "exact_identity_rechecked": true,
+    "pid": 74254,
+    "started_at_utc": "2026-10-04T01:26:09.984340+00:00"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "74254",
+      "-o",
+      "lstart=,command="
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:09.987548+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.007109+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-10-04T00:55:50Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef/_data\",\n        \"Name\": \"892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.025367+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "rm",
+      "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.086918+00:00",
+    "stderr": "",
+    "stdout": "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.105063+00:00",
+    "stderr": "Error response from daemon: get 892de755d83c104d051f96ec7cf43651e73752d14df08c1d4d08ef0596998cef: no such volume\n",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.123067+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-10-04T00:55:59Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965/_data\",\n        \"Name\": \"e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965",
+      "--format",
+      "{{.ID}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.141751+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "rm",
+      "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.163886+00:00",
+    "stderr": "",
+    "stdout": "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.183713+00:00",
+    "stderr": "Error response from daemon: get e06def07668b8eca28d07e9ec356d1f694ce427aba8ea8823833945b887f6965: no such volume\n",
+    "stdout": "[]\n"
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:56430",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.241452+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:60316",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.296512+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:56414",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.354860+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:56427",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:26:10.410897+00:00",
+    "stderr": "",
+    "stdout": ""
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-aq",
+      "--no-trunc"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.483473+00:00",
+    "stderr": "",
+    "stdout": "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75\n6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd\nce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a\n452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f\nbdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8\n5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4\nd578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73\nbc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5\n59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a\n73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3\n463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99\nd50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb\n788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7\nfcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb\ne14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8\n83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098\n07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a\n44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c\ndf6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02\n9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:26:10.531991+00:00",
+    "stderr": "",
+    "stdout": "[private/raw environment output omitted]"
+  }
+]

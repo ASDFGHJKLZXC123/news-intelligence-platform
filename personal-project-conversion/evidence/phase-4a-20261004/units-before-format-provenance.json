@@ -1,0 +1,42 @@
+[
+  {
+    "from": "final-units-source-before-status.txt",
+    "to": "units-before-format-source-before-status.txt",
+    "sha256": "7799946e0b176e1aa057bd1ace407029de40e46b9d4b7168ada5699768934e10"
+  },
+  {
+    "from": "final-units.log",
+    "to": "units-before-format.log",
+    "sha256": "73bc319faa09e34d7c3e43cd7d810dcffe92de925198c6abb480fb422cea4c4a"
+  },
+  {
+    "from": "final-units-source-after.json",
+    "to": "units-before-format-source-after.json",
+    "sha256": "64b1c52069ec77f7571fa3ee7cc5bff326d6d8883714c2f8da1902b14ef7b34a"
+  },
+  {
+    "from": "final-units.xml",
+    "to": "units-before-format.xml",
+    "sha256": "4a3534b4d0f2f1c1ad10f1b455aaef6f69f7b8f8fb7cc69189e66011b66c4e3e"
+  },
+  {
+    "from": "final-units-source-before.json",
+    "to": "units-before-format-source-before.json",
+    "sha256": "61b72ed37faad6dc1c795fba6e83a0f85b31e34c26d6b6bc195b70523b04ba3b"
+  },
+  {
+    "from": "final-units-command.json",
+    "to": "units-before-format-command.json",
+    "sha256": "77b986a949b13d27458502f171a65ac216780e2b78b22de047f3cb70c71dd438"
+  },
+  {
+    "from": "final-units-result.json",
+    "to": "units-before-format-result.json",
+    "sha256": "81265ba81584d4ea35f5d355171e9e4df3daf60d23aea539c8f5baa5c0182d33"
+  },
+  {
+    "from": "final-units-source-after-status.txt",
+    "to": "units-before-format-source-after-status.txt",
+    "sha256": "7799946e0b176e1aa057bd1ace407029de40e46b9d4b7168ada5699768934e10"
+  }
+]

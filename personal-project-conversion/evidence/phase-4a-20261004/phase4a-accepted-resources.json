@@ -1,0 +1,724 @@
+{
+  "after": {
+    "databases": [
+      {
+        "name": "nip_phase4a_backup_source_a1952a864e82",
+        "oid": 170581
+      },
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "nip_phase4a_celery2_a1952a864e82",
+        "oid": 137744
+      },
+      {
+        "name": "nip_phase4a_celery_a1952a864e82",
+        "oid": 88512
+      },
+      {
+        "name": "nip_phase4a_celery_final_a1952a864e82",
+        "oid": 334668
+      },
+      {
+        "name": "nip_phase4a_child_a1952a864e82",
+        "oid": 88513
+      },
+      {
+        "name": "nip_phase4a_child_final_a1952a864e82",
+        "oid": 334669
+      },
+      {
+        "name": "nip_phase4a_concurrent_a1952a864e82",
+        "oid": 337951
+      },
+      {
+        "name": "nip_phase4a_manual_a1952a864e82",
+        "oid": 91794
+      },
+      {
+        "name": "nip_phase4a_manual_final_a1952a864e82",
+        "oid": 334671
+      },
+      {
+        "name": "nip_phase4a_restored_a1952a864e82",
+        "oid": 170582
+      },
+      {
+        "name": "nip_phase4a_template_a1952a864e82",
+        "oid": 85230
+      },
+      {
+        "name": "nip_phase4a_ui_a1952a864e82",
+        "oid": 88514
+      },
+      {
+        "name": "nip_phase4a_ui_final_a1952a864e82",
+        "oid": 334670
+      },
+      {
+        "name": "nip_phase4a_ui_retry_a1952a864e82",
+        "oid": 144321
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "all_owned_databases_removed": true,
+  "before": {
+    "databases": [
+      {
+        "name": "nip_phase4a_backup_source_a1952a864e82",
+        "oid": 170581
+      },
+      {
+        "name": "nip_phase4a_base_a1952a864e82",
+        "oid": 16384
+      },
+      {
+        "name": "nip_phase4a_celery2_a1952a864e82",
+        "oid": 137744
+      },
+      {
+        "name": "nip_phase4a_celery_a1952a864e82",
+        "oid": 88512
+      },
+      {
+        "name": "nip_phase4a_celery_final_a1952a864e82",
+        "oid": 334668
+      },
+      {
+        "name": "nip_phase4a_child_a1952a864e82",
+        "oid": 88513
+      },
+      {
+        "name": "nip_phase4a_child_final_a1952a864e82",
+        "oid": 334669
+      },
+      {
+        "name": "nip_phase4a_concurrent_a1952a864e82",
+        "oid": 337951
+      },
+      {
+        "name": "nip_phase4a_manual_a1952a864e82",
+        "oid": 91794
+      },
+      {
+        "name": "nip_phase4a_manual_final_a1952a864e82",
+        "oid": 334671
+      },
+      {
+        "name": "nip_phase4a_restored_a1952a864e82",
+        "oid": 170582
+      },
+      {
+        "name": "nip_phase4a_template_a1952a864e82",
+        "oid": 85230
+      },
+      {
+        "name": "nip_phase4a_ui_a1952a864e82",
+        "oid": 88514
+      },
+      {
+        "name": "nip_phase4a_ui_final_a1952a864e82",
+        "oid": 334670
+      },
+      {
+        "name": "nip_phase4a_ui_retry_a1952a864e82",
+        "oid": 144321
+      },
+      {
+        "name": "postgres",
+        "oid": 5
+      },
+      {
+        "name": "template0",
+        "oid": 4
+      },
+      {
+        "name": "template1",
+        "oid": 1
+      }
+    ],
+    "roles": [
+      {
+        "name": "news",
+        "oid": 10
+      },
+      {
+        "name": "pg_checkpoint",
+        "oid": 4544
+      },
+      {
+        "name": "pg_create_subscription",
+        "oid": 6304
+      },
+      {
+        "name": "pg_database_owner",
+        "oid": 6171
+      },
+      {
+        "name": "pg_execute_server_program",
+        "oid": 4571
+      },
+      {
+        "name": "pg_monitor",
+        "oid": 3373
+      },
+      {
+        "name": "pg_read_all_data",
+        "oid": 6181
+      },
+      {
+        "name": "pg_read_all_settings",
+        "oid": 3374
+      },
+      {
+        "name": "pg_read_all_stats",
+        "oid": 3375
+      },
+      {
+        "name": "pg_read_server_files",
+        "oid": 4569
+      },
+      {
+        "name": "pg_signal_backend",
+        "oid": 4200
+      },
+      {
+        "name": "pg_stat_scan_tables",
+        "oid": 3377
+      },
+      {
+        "name": "pg_use_reserved_connections",
+        "oid": 4550
+      },
+      {
+        "name": "pg_write_all_data",
+        "oid": 6182
+      },
+      {
+        "name": "pg_write_server_files",
+        "oid": 4570
+      }
+    ]
+  },
+  "container_id": "6d09505d6a0465db867b00eced1cb33a50bfbbfd6f3462f6725a3e1f81f092ab",
+  "databases": [
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1b60e49a48994db2964d372c50f57f98",
+      "oid": 744984
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5f4fafc534cc47e0acc4be6809e16e7b",
+      "oid": 748264
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a40cfe2af13240da96a48b50bc3d8b66",
+      "oid": 751544
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_bf3a234852764a4c927d9a41c743e1d9",
+      "oid": 754824
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_5256a4d38ae44e008fe2c422345721b0",
+      "oid": 758104
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_8007bf2d95b746368440d394357a43b6",
+      "oid": 761384
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_7c2957e6059a42b98e90e0f2c9b3727c",
+      "oid": 764664
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1163d9a0f7cb4a27afac0e7a7963cc9c",
+      "oid": 767944
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ad9e5d37dce440609462f56f52d3a1f3",
+      "oid": 771224
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_459cb6b2f4bb424a98a308368445a372",
+      "oid": 774504
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ca373d2be62f4fe9a5c10f6cc175805b",
+      "oid": 777784
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_9e16ab534b35436baba15dbcbf01cd46",
+      "oid": 781064
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_65b2446113b541ff8a0519cd6066ddf2",
+      "oid": 784344
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_08955cd386ea44ee8a567bdcd79ad5b1",
+      "oid": 787624
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_141a3ef84e0748d2ae1ea9c5962ccba3",
+      "oid": 790904
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_19a50a83e4d24de2a68ac0b7623b081b",
+      "oid": 794184
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_629ab53f6fc34827a9980c3e200b0776",
+      "oid": 797464
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_24887e1ab8c343efac58b4ae60bdac34",
+      "oid": 800744
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_d596f5250046417a96bc9ea77c64a138",
+      "oid": 804024
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a214e3e5e17e4d4e9f89972a2135e66d",
+      "oid": 807313
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c7181ee82d814e17876503e444ce65d2",
+      "oid": 810594
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0860c16f867e42b083e79ec60c3373d2",
+      "oid": 813885
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_51521142af65461ab1f817ee19cbe149",
+      "oid": 817169
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_ce7e2ef7b7a84158823bc062ea9c9937",
+      "oid": 820449
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_13b1bfb2f7f645d289ccfd341be8889e",
+      "oid": 823729
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_7957ff8816fd435fa79ef61f8c0760e3",
+      "oid": 827009
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_6360c44a169948dba2744ff6b12e4ad5",
+      "oid": 830289
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_f2e9b6982a3b47819cc9c3d51372db42",
+      "oid": 833569
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_85481525027849ff80ce4b4104227290",
+      "oid": 836849
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_72fdc3ffc56947be95dba608a2b0703c",
+      "oid": 840129
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_a124527a33e14b9584dfabd133e5b288",
+      "oid": 843409
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_1d5929c695bf458fb7c67bd8f43635d4",
+      "oid": 846690
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_87fbf1bb777b4c08a527cd2abcb7b101",
+      "oid": 849979
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_70060159d41b47c7a62edf04058573d0",
+      "oid": 853268
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_dabfa5980dbc4aca9ad34802636318fa",
+      "oid": 856548
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_33a8c27fb3d2495aa8c2814f9ee77b93",
+      "oid": 859837
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_65c5c62c38cc4e2a9c4737f5e702dc55",
+      "oid": 863126
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_666d2f0107a14743813b8cc93a09addf",
+      "oid": 866415
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_d347a88bc8a54e2da25f8c9b79d71405",
+      "oid": 869704
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_089a4b73957545de8a3689f6f1b3bc43",
+      "oid": 872993
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_aa6b843d91ee4e4498951ad71f8915e7",
+      "oid": 876282
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_c64327f435894df89d35fb1f82ba4881",
+      "oid": 879566
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_7e5be97028a843ceadb8aa623188929a",
+      "oid": 882861
+    },
+    {
+      "absent_after_drop": true,
+      "applied_revisions_before_drop": [
+        "0023_personal_processing_control"
+      ],
+      "created_by_this_run": true,
+      "identity_verified_before_drop": true,
+      "name": "nip_stage7_0099ad071d834b32b82fa45b63daa7f5",
+      "oid": 886141
+    }
+  ],
+  "inventory_unchanged": true,
+  "roles": []
+}

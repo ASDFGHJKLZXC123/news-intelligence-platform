@@ -1,0 +1,141 @@
+..F.F......                                                              [100%]
+=================================== FAILURES ===================================
+_ test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x108c9df30>
+
+    def test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        import services.personal.coordinator as coordinator
+    
+        with migrated_disposable_engine() as engine:
+            now = datetime.datetime(2026, 9, 15, 18, tzinfo=UTC)
+            with Session(engine) as session:
+                sources = [
+                    Source(
+                        name=f"Offline feed {index}",
+                        feed_url=f"https://offline.example/feed-{uuid.uuid4()}.xml",
+                    )
+                    for index in range(2)
+                ]
+                session.add_all(sources)
+                session.flush()
+                workspace, _ = ensure_workspace(session)
+                configure_profile(
+                    session,
+                    workspace,
+                    selected_source_ids=[item.id for item in sources],
+                    execution_profile="raw",
+                )
+                decision = create_daily_run(session, workspace, now=now)
+                run_id = decision.run.id
+                token = decision.run.ownership_token
+                assert token is not None
+                source_ids = tuple(sorted((item.id for item in sources), key=str))
+                session.commit()
+    
+            items_by_source = {
+                source_id: [
+                    RSSItem(
+                        guid=f"{source_id}-new",
+                        title=f"Agency newest item from {source_id}",
+                        url=f"https://offline.example/{source_id}/new",
+                        published_at=now,
+                        summary="The agency confirmed a bounded intake item was received.",
+                        provider_name="offline-rss-fixture",
+                    ),
+                    RSSItem(
+                        guid=f"{source_id}-old",
+                        title=f"Agency older item from {source_id}",
+                        url=f"https://offline.example/{source_id}/old",
+                        published_at=now - datetime.timedelta(days=1),
+                        summary="The agency confirmed an older bounded intake item was received.",
+                        provider_name="offline-rss-fixture",
+                    ),
+                ]
+                for source_id in source_ids
+            }
+            monkeypatch.setattr(coordinator, "MAX_NEW_ADMISSIONS_PER_RUN", 3)
+            result = run_personal_daily(
+                run_id,
+                token,
+                session_factory=lambda: Session(engine, autoflush=False),
+                rss_provider_factory=lambda source: FakeRSSProvider(items_by_source[source.id]),
+                embedding_provider=FakeEmbeddingProvider(
+                    dimension=EMBEDDING_DIM, model="offline-fixture-embedding"
+                ),
+                orchestrator_factory=lambda *_: pytest.fail("raw profile called a model"),
+                now=now,
+                clock=StepClock(now + datetime.timedelta(seconds=10)),
+            )
+            assert result.report is None
+            assert result.articles_captured == 4
+>           assert result.articles_admitted == 3
+E           AssertionError: assert 4 == 3
+E            +  where 4 = PersonalCoordinatorResult(run_id=UUID('5e5ce2a1-2597-42aa-bd86-e23ec022c70e'), report=None, feeds_attempted=2, feeds_succeeded=2, feeds_failed=0, articles_captured=4, articles_admitted=4, events_observed=0, claims_supported=0).articles_admitted
+
+tests/integration/test_personal_coordinator.py:309: AssertionError
+___ test_duplicate_feed_item_does_not_consume_the_last_pending_capacity_slot ___
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10c8fd480>
+
+    def test_duplicate_feed_item_does_not_consume_the_last_pending_capacity_slot(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        import services.personal.coordinator as coordinator
+        from services.ingestion.normalize import url_hash
+        from services.personal.runs import acquire_run
+    
+        with migrated_disposable_engine() as engine:
+            now = datetime.datetime(2026, 9, 17, 18, tzinfo=UTC)
+            run_id, token, source_id, workspace_id = _create_run(engine, now=now)
+            duplicate_url = "https://offline.example/existing"
+            with Session(engine) as session:
+                session.add(
+                    PersonalCapture(
+                        workspace_id=workspace_id,
+                        run_id=run_id,
+                        source_id=source_id,
+                        canonical_url=duplicate_url,
+                        url_hash=url_hash(duplicate_url),
+                        title="Existing pending item",
+                        captured_at=now,
+                        truncated=False,
+                        receipt={"schema": "personal-capture-receipt.v1"},
+                    )
+                )
+                acquire_run(session, run_id, token, now=now)
+                session.commit()
+    
+            items = [
+                RSSItem(
+                    guid="duplicate",
+                    title="Duplicate pending item",
+                    url=duplicate_url,
+                    published_at=now,
+                ),
+                RSSItem(
+                    guid="new",
+                    title="New pending item",
+                    url="https://offline.example/new",
+                    published_at=now,
+                ),
+            ]
+            monkeypatch.setattr(coordinator, "MAX_PENDING_CAPTURES", 2)
+            with Session(engine, autoflush=False) as session:
+>               outcome = coordinator._capture_one_source(
+                    session,
+                    run_id,
+                    token,
+                    source_id,
+                    provider_factory=lambda source: FakeRSSProvider(items),
+                    captured_at=now + datetime.timedelta(seconds=1),
+                )
+E               TypeError: _capture_one_source() missing 1 required keyword-only argument: 'receipt_id'
+
+tests/integration/test_personal_coordinator.py:471: TypeError
+=========================== short test summary info ============================
+FAILED tests/integration/test_personal_coordinator.py::test_pending_capture_is_bounded_and_round_robin_admission_creates_only_selected_articles
+FAILED tests/integration/test_personal_coordinator.py::test_duplicate_feed_item_does_not_consume_the_last_pending_capacity_slot
+2 failed, 9 passed in 22.88s

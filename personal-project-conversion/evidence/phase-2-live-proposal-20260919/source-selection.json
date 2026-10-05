@@ -1,0 +1,21 @@
+{
+  "status": "proposal_only_not_captured_by_application",
+  "retrieved_at": "2026-09-20T06:42:42.382108+00:00",
+  "feed_url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+  "feed_last_build_date": "Sun, 20 Sep 2026 06:42:35 GMT",
+  "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+  "published": "Fri, 18 Sep 2026 07:14:57 GMT",
+  "rss_url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_medium=RSS&at_campaign=rss",
+  "canonical_url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS",
+  "url_hash": "cdee651c7558a1434292c55fc5442034f8cb9cca2da97d6b766abd877ebb36ae",
+  "rss_summary_sha256": "74be9430684e43be4b38eac8d71f96366a49a5d077b87e8387c133c82b466d0c",
+  "rss_summary_characters": 95,
+  "offline_claim_candidate_count": 1,
+  "candidate_fields": [
+    "title"
+  ],
+  "reserved_source_uuid": "b88fbe3b-1b26-4d35-b8a7-dee8ad0faf9e",
+  "source_row_created": false,
+  "full_article_retrieved": false,
+  "earlier_flight_article_candidate_count": 0
+}

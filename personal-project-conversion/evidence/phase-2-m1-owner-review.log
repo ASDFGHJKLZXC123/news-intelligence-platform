@@ -1,0 +1,39 @@
+{"timestamp": "2026-09-09T04:10:01.692423+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:10:03.503734+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:10:03.555435+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 409 Conflict\""}
+{"timestamp": "2026-09-09T04:10:03.559955+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events \"HTTP/1.1 409 Conflict\""}
+{"timestamp": "2026-09-09T04:10:03.564402+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 409 Conflict\""}
+{"timestamp": "2026-09-09T04:10:03.564733+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "d75fafea-5bd4-4d0a-ab41-d4c05c7fba12", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:10:03.564981+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"check": "missing-setup GETs read-only; unauthorized setup rejected", "result": "PASS", "detail": null}
+{"check": "eight concurrent first-use setups converge", "result": "PASS", "detail": {"counts": [1, 1, 1], "identity": ["f8d066d1-1354-4174-a133-9416596192e9", "b6a19f4f-0cbe-4f3c-b161-ee137e5764c3", "ac32dc9a-8742-4857-9c05-c584628976d0"]}}
+{"check": "competing preloaded null-owner bindings", "result": "PASS", "detail": [["conflict", "a48338a7-0ada-487e-bd8d-55994bd049c4"], ["bound", "cec45b7d-c9c5-4f5d-bef0-f15e76631510"]]}
+{"timestamp": "2026-09-09T04:10:05.369629+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:10:05.418582+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events/304a5868-0205-40be-9442-f2a7528a8a9a?run_id=115eba40-cfee-4cde-bca5-78df2fabcb2b \"HTTP/1.1 404 Not Found\""}
+{"timestamp": "2026-09-09T04:10:05.422957+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events/304a5868-0205-40be-9442-f2a7528a8a9a/sources?run_id=ffe00e2d-0ac8-46bf-b6f0-893f8648a53b \"HTTP/1.1 404 Not Found\""}
+{"check": "explicit unavailable run scope rejected by detail and sources", "result": "PASS", "detail": null}
+{"timestamp": "2026-09-09T04:10:05.435681+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events/304a5868-0205-40be-9442-f2a7528a8a9a/sources?run_id=ccacc90d-0b99-4161-839e-657e62e6aa7b&limit=1 \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:10:05.446615+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events/304a5868-0205-40be-9442-f2a7528a8a9a/sources?run_id=ccacc90d-0b99-4161-839e-657e62e6aa7b&limit=1&offset=0 \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:10:05.455341+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/events/304a5868-0205-40be-9442-f2a7528a8a9a/sources?run_id=ccacc90d-0b99-4161-839e-657e62e6aa7b&limit=1&offset=1 \"HTTP/1.1 200 OK\""}
+{"check": "source pagination, malformed URL, bounded excerpt, unmatched enrichment scope", "result": "PASS", "detail": {"total": 2, "excerpt_chars": 200}}
+{"timestamp": "2026-09-09T04:10:05.460371+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:10:05.467445+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: PUT http://testserver/api/v1/personal/saved/304a5868-0205-40be-9442-f2a7528a8a9a \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:10:05.471923+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:10:05.476120+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/304a5868-0205-40be-9442-f2a7528a8a9a \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.479170+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/304a5868-0205-40be-9442-f2a7528a8a9a \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.490358+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/e788e169-1f6b-45ec-a952-f0a97a4ae78d \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.493865+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/e788e169-1f6b-45ec-a952-f0a97a4ae78d \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.497843+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/entries/96b711a6-ef25-40d4-9be8-ed93ef536eec \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.500724+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: DELETE http://testserver/api/v1/personal/saved/entries/561b4295-9f2b-4573-a771-3465ec88ec1b \"HTTP/1.1 204 No Content\""}
+{"timestamp": "2026-09-09T04:10:05.504643+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/saved \"HTTP/1.1 200 OK\""}
+{"check": "uppercase, unavailable, malformed saved entries preserved then removable; other owner untouched", "result": "PASS", "detail": null}
+{
+  "source_hashes": {
+    "db/migrations/versions/0020_personal_news_desk.py": "35ffbfb4fd00227816f185871d1649ace29fafc81ed6d583b5201bd1c1cc5383",
+    "services/personal/workspace.py": "e808e90f85943ee63915d968e356c225b299af289cabce55b642d92b571c2dac",
+    "services/personal/repository.py": "0911925f2b39a2b77ef5f870113b254a5607c8909b76b0acfd009610bff88872",
+    "apps/api/personal.py": "5801af8fc35f0e833e7e3516fd59d2d84af7f271d7389da6dc8d3e4bb7c7bfe8",
+    "db/models/personal.py": "2d430323abd597ba941611d72b61fb576d942daf2ecb65fe4cf0f4ed48f62646"
+  }
+}
+ALL INDEPENDENT REVIEW CHECKS PASSED

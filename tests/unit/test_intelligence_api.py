@@ -546,8 +546,13 @@ class FakeIntelligenceRepository:
             )
         ]
 
-    def claim_is_referenced_by_descriptive_report(self, claim_id: uuid.UUID) -> bool:
-        self.received["claim_policy"] = {"claim_id": claim_id}
+    def claim_is_referenced_by_descriptive_report(
+        self, claim_id: uuid.UUID, *, descriptive_only: bool = True
+    ) -> bool:
+        self.received["claim_policy"] = {
+            "claim_id": claim_id,
+            "descriptive_only": descriptive_only,
+        }
         return False
 
     def list_jobs(self, *, state: str | None, limit: int, offset: int) -> tuple[list[Any], int]:

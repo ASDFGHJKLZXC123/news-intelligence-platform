@@ -1,0 +1,443 @@
+[
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-aq",
+      "--no-trunc"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:43.607505+00:00",
+    "stderr": "",
+    "stdout": "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825\n2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771\n5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75\n6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd\nce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a\n452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f\nbdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8\n5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4\nd578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73\nbc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5\n1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6\n59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a\n73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3\n463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99\nd50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb\n788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7\nfcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb\ne14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8\n83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098\n07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a\n44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c\ndf6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02\n9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "f64fd6cd14383a285f6c7c4a3279feba404a25a0351edb65719ec4df884a8825",
+      "2f1b11050a2254fdf18b20e9a3c280180119a64a34bfd56e19aea9b8b1431771",
+      "5e503a9efae7afcc95d8eb979b0579358fe650a6c0aafa74091d4f3935d2ca75",
+      "6f8a708c4bdae7329f4abd6d591e3cda4537d1b7b4a6fefc33ae8ade02a615dd",
+      "ce594e48c0e7f55b62cec70f22fe4962b335363fbcd91a8caeeb7608495ffd2a",
+      "452b7d065a751d617822e0cd94cd521a8a0f8a8b326c3c99588a3efb3f79ee8f",
+      "bdb3950917d88c6be12d92beaa38ff0ac95e2bb271d6281f0327b7b3ebd32fb8",
+      "5823631a217e18e50a66d997650ea7f652129091cb64567209da5c50b22ac7d4",
+      "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "59dbabbe53c650c11e8cd99af849ddc91a5f741800a3dbea165b22408ab7606a",
+      "73890bf4d1ec77df008992bddccf73aed86498cfc581d28caa1efbec5e75fee3",
+      "463c06b2fe28bb2f234f43e4a2b6fdf2eeb7ccc65d3aec65b3c970c20bdc0b99",
+      "d50158efd486d8b5331f0f102e6345613f563980e6490d2efbc6bb1195bcb2eb",
+      "788d5ed3fc2271eaa6ea55491ea760a2b330fc362448971e0fa8761606a2b1b7",
+      "fcc6c6e8b4f0632bedbeb3b851b92f2199290d3096f234c45b68fde98b0b1cbb",
+      "e14227552c2f86538bacc662bc90b12461cbb3933248c9f8b4a42dca15101eb8",
+      "83ddd8baa6073d3f6e499a92ccd93b7234b1b779577e23d4517a7ac469124098",
+      "07ba195cbb13986dda64ac6300377ca5c512c5df6113c2eb230c1b95594f944a",
+      "44bacc0ebc743c65cf554e4566584cc0cf6a2baae684575fa13bd83c1147c14c",
+      "df6a2e20967c0b743363b7cfd462e435c3afce6dbba1168bf579684289e54c02",
+      "9ed8ab91109fef12a55d2f81f4de11b6ed526da859b2f197efeaf7031509bbf5"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:43.684451+00:00",
+    "stderr": "",
+    "stdout": "[projected secret-safe container identity fields in containers-current.json]"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database ORDER BY datname"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:43.783526+00:00",
+    "stderr": "",
+    "stdout": "oid|datname|owner\n649104|nip_phase3_final_444731f8f123|news\n296986|nip_phase3_full_a5ca8c211b71|news\n5|postgres|news\n4|template0|news\n1|template1|news\n(5 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT datname,pid,usename,application_name,client_addr,backend_start,state FROM pg_stat_activity WHERE backend_type='client backend' ORDER BY datname,pid"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:43.870180+00:00",
+    "stderr": "",
+    "stdout": "datname|pid|usename|application_name|client_addr|backend_start|state\npostgres|57379|news|psql||2026-10-04 01:02:43.939397+00|active\n(1 row)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT oid,datname,pg_get_userbyid(datdba) owner FROM pg_database ORDER BY datname"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:43.949737+00:00",
+    "stderr": "",
+    "stdout": "oid|datname|owner\n16384|nip_personal_phase2_offline_p3_browser_20260920_a|news\n5|postgres|news\n4|template0|news\n1|template1|news\n(4 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "postgres",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT datname,pid,usename,application_name,client_addr,backend_start,state FROM pg_stat_activity WHERE backend_type='client backend' ORDER BY datname,pid"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.031766+00:00",
+    "stderr": "",
+    "stdout": "datname|pid|usename|application_name|client_addr|backend_start|state\nnip_personal_phase2_offline_p3_browser_20260920_a|105|news||172.17.0.1|2026-09-20 23:06:35.766507+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|106|news||172.17.0.1|2026-09-20 23:06:35.767761+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|107|news||172.17.0.1|2026-09-20 23:06:35.799013+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|108|news||172.17.0.1|2026-09-20 23:06:35.802555+00|idle\nnip_personal_phase2_offline_p3_browser_20260920_a|115|news||172.17.0.1|2026-09-20 23:08:39.508039+00|idle\npostgres|41482|news|psql||2026-10-04 01:02:44.09753+00|active\n(6 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT current_database(),version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.109018+00:00",
+    "stderr": "",
+    "stdout": "current_database|version_num\nnip_phase3_full_a5ca8c211b71|0022_personal_spending\n(1 row)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT 'personal_workspaces' table_name,count(*) rows FROM personal_workspaces UNION ALL SELECT 'personal_runs',count(*) FROM personal_runs UNION ALL SELECT 'personal_captures',count(*) FROM personal_captures UNION ALL SELECT 'personal_paid_requests',count(*) FROM personal_paid_requests UNION ALL SELECT 'personal_legacy_usage',count(*) FROM personal_legacy_usage UNION ALL SELECT 'reports',count(*) FROM reports UNION ALL SELECT 'articles',count(*) FROM articles UNION ALL SELECT 'sources',count(*) FROM sources"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.183445+00:00",
+    "stderr": "",
+    "stdout": "table_name|rows\npersonal_workspaces|0\npersonal_runs|0\npersonal_captures|0\npersonal_paid_requests|0\npersonal_legacy_usage|0\nreports|0\narticles|4\nsources|2\n(8 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT id,name,feed_url,active FROM sources ORDER BY id"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.267641+00:00",
+    "stderr": "",
+    "stdout": "id|name|feed_url|active\n59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration Smoke Feed|https://integration.example.test/feed.xml|t\n83cba482-05fc-43d0-8cd6-c15bd6a52a87|Fake Feed|https://fake.example/feed.xml|t\n(2 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_full_a5ca8c211b71",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT id,source_id,title,url,published_at,fetched_at FROM articles ORDER BY id"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.351489+00:00",
+    "stderr": "",
+    "stdout": "id|source_id|title|url|published_at|fetched_at\n2eaa4489-ee23-4fbd-8ee5-e8d05700803e|59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration smoke headline one|https://integration.example.test/news/ingestion-smoke-1|2026-06-20 12:00:00+00|2026-09-20 23:10:05.061258+00\ndd135ef0-86c3-4cb5-b206-c8fc7b356aa3|83cba482-05fc-43d0-8cd6-c15bd6a52a87|Sample headline two|https://example.com/news/2|2026-01-01 12:00:00+00|2026-09-20 23:10:00.084526+00\nf5f14b3d-afac-4658-a501-ccd352bfe3ba|59ff5ed3-a2bf-4cd5-bb35-5fa5f8bebb3b|Integration smoke headline two|https://integration.example.test/news/ingestion-smoke-2|2026-06-20 12:00:00+00|2026-09-20 23:10:05.061258+00\nff6d129c-5de9-4f73-8152-5e2b0ce4d532|83cba482-05fc-43d0-8cd6-c15bd6a52a87|Sample headline one|https://example.com/news/1|2026-01-01 12:00:00+00|2026-09-20 23:10:00.084526+00\n(4 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT current_database(),version_num FROM alembic_version"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.430040+00:00",
+    "stderr": "",
+    "stdout": "current_database|version_num\nnip_phase3_final_444731f8f123|0022_personal_spending\n(1 row)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT 'personal_workspaces' table_name,count(*) rows FROM personal_workspaces UNION ALL SELECT 'personal_runs',count(*) FROM personal_runs UNION ALL SELECT 'personal_captures',count(*) FROM personal_captures UNION ALL SELECT 'personal_paid_requests',count(*) FROM personal_paid_requests UNION ALL SELECT 'personal_legacy_usage',count(*) FROM personal_legacy_usage UNION ALL SELECT 'reports',count(*) FROM reports UNION ALL SELECT 'articles',count(*) FROM articles UNION ALL SELECT 'sources',count(*) FROM sources"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.511854+00:00",
+    "stderr": "",
+    "stdout": "table_name|rows\npersonal_workspaces|0\npersonal_runs|0\npersonal_captures|0\npersonal_paid_requests|0\npersonal_legacy_usage|0\nreports|0\narticles|4\nsources|2\n(8 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT id,name,feed_url,active FROM sources ORDER BY id"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.602266+00:00",
+    "stderr": "",
+    "stdout": "id|name|feed_url|active\n204029d6-225d-409a-9e1e-b0cc12cf96db|Fake Feed|https://fake.example/feed.xml|t\nff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration Smoke Feed|https://integration.example.test/feed.xml|t\n(2 rows)\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "exec",
+      "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6",
+      "psql",
+      "-U",
+      "news",
+      "-d",
+      "nip_phase3_final_444731f8f123",
+      "-X",
+      "-A",
+      "-F",
+      "|",
+      "-c",
+      "SELECT id,source_id,title,url,published_at,fetched_at FROM articles ORDER BY id"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.692871+00:00",
+    "stderr": "",
+    "stdout": "id|source_id|title|url|published_at|fetched_at\n08c2b635-fcfe-42f0-870d-8196fa5496a0|ff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration smoke headline one|https://integration.example.test/news/ingestion-smoke-1|2026-06-20 12:00:00+00|2026-09-20 23:19:58.316759+00\na13fbd7f-7a3e-40bd-9e08-bd3246105677|204029d6-225d-409a-9e1e-b0cc12cf96db|Sample headline one|https://example.com/news/1|2026-01-01 12:00:00+00|2026-09-20 23:19:43.485294+00\nb5d3bf08-c869-45ba-a13c-6e10f4ba05c5|204029d6-225d-409a-9e1e-b0cc12cf96db|Sample headline two|https://example.com/news/2|2026-01-01 12:00:00+00|2026-09-20 23:19:43.485294+00\nbfb92c54-d7ba-48dd-9df4-969ffd2fc230|ff2f214f-2f6a-44ff-b5e1-3c6134513a40|Integration smoke headline two|https://integration.example.test/news/ingestion-smoke-2|2026-06-20 12:00:00+00|2026-09-20 23:19:58.316759+00\n(4 rows)\n"
+  },
+  {
+    "argv": [
+      "ps",
+      "-p",
+      "36237,36245,47982",
+      "-o",
+      "pid=,ppid=,lstart=,command="
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.781433+00:00",
+    "stderr": "",
+    "stdout": "36237     1 Sun Sep 20 16:02:22 2026     /opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 59751\n36245     1 Sun Sep 20 16:02:23 2026     /opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python .venv/bin/celery -A workers.celery_app.celery_app worker --loglevel=INFO --pool=solo --queues=pipeline --hostname=personal-offline-p3_browser_20260920_a@localhost\n47982     1 Sun Sep 20 16:06:03 2026     /opt/homebrew/Cellar/python@3.13/3.13.3_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -m http.server 61410 --bind 127.0.0.1 --directory frontend\n"
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-iTCP:58553",
+      "-iTCP:61410",
+      "-iTCP:59751",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.789613+00:00",
+    "stderr": "",
+    "stdout": "p36237\ncPython\nf10\nn127.0.0.1:59751\nTST=LISTEN\nTQR=0\nTQS=0\np47982\ncPython\nf3\nn127.0.0.1:61410\nTST=LISTEN\nTQR=0\nTQS=0\np86633\nccom.docker.backend\nf228\nn127.0.0.1:58553\nTST=LISTEN\nTQR=0\nTQS=0\n"
+  },
+  {
+    "argv": [
+      "lsof",
+      "-nP",
+      "-a",
+      "-p",
+      "36237,36245,47982",
+      "-iTCP",
+      "-F",
+      "pcnT"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.848133+00:00",
+    "stderr": "",
+    "stdout": "p36237\ncPython\nf10\nn127.0.0.1:59751\nTST=LISTEN\nTQR=0\nTQS=0\nf19\nn127.0.0.1:60146->127.0.0.1:59734\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf20\nn127.0.0.1:60147->127.0.0.1:59734\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf21\nn127.0.0.1:60465->127.0.0.1:59734\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf22\nn127.0.0.1:60149->127.0.0.1:59734\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf23\nn127.0.0.1:60150->127.0.0.1:59734\nTST=ESTABLISHED\nTQR=0\nTQS=0\np36245\ncPython\nf3\nn127.0.0.1:59752->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf4\nn127.0.0.1:59753->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf5\nn127.0.0.1:59754->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf6\nn127.0.0.1:59755->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf7\nn127.0.0.1:59756->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf8\nn127.0.0.1:59760->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf9\nn127.0.0.1:59761->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf10\nn127.0.0.1:59762->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf11\nn127.0.0.1:59763->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\nf12\nn127.0.0.1:59764->127.0.0.1:59749\nTST=ESTABLISHED\nTQR=0\nTQS=0\np47982\ncPython\nf3\nn127.0.0.1:61410\nTST=LISTEN\nTQR=0\nTQS=0\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "volume",
+      "inspect",
+      "6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+      "8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b",
+      "61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.868647+00:00",
+    "stderr": "",
+    "stdout": "[\n    {\n        \"CreatedAt\": \"2026-09-20T22:50:40Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e/_data\",\n        \"Name\": \"6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    },\n    {\n        \"CreatedAt\": \"2026-09-20T23:02:15Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b/_data\",\n        \"Name\": \"8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    },\n    {\n        \"CreatedAt\": \"2026-09-20T23:02:21Z\",\n        \"Driver\": \"local\",\n        \"Labels\": {\n            \"com.docker.volume.anonymous\": \"\"\n        },\n        \"Mountpoint\": \"/var/lib/docker/volumes/61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf/_data\",\n        \"Name\": \"61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf\",\n        \"Options\": null,\n        \"Scope\": \"local\"\n    }\n]\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=6694b72dd93cde45316410bd92ad1a80c28e2745b960ade62ae38a17489b377e",
+      "--format",
+      "{{.ID}} {{.Names}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.889667+00:00",
+    "stderr": "",
+    "stdout": "1e7c72d3ff3bd27f581ea5682e5b8a51206ddf98118be06cea933fb8bb2b55b6 nip-phase3-tests-02ea38048d\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=8f7e3e99d7af3dad37bf64935f151b60b8ea71bff9aa984362d50e33d203c08b",
+      "--format",
+      "{{.ID}} {{.Names}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.914244+00:00",
+    "stderr": "",
+    "stdout": "bc28beea6a80bc44be166ee99d283060bff58425119088a6407bc5f03e738ea5 nip-personal-phase2-offline-pg-p3_browser_20260920_a\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "ps",
+      "-a",
+      "--no-trunc",
+      "--filter",
+      "volume=61991b35cbf67c77fa7fd990704376da228adaa4eda039e1722cdc6351db8dcf",
+      "--format",
+      "{{.ID}} {{.Names}}"
+    ],
+    "exit_code": 0,
+    "started_at_utc": "2026-10-04T01:02:44.938504+00:00",
+    "stderr": "",
+    "stdout": "d578e2a90083b795178154ccb9ad21954010235b2fec0ce539a9ecc1b6702b73 nip-personal-phase2-offline-redis-p3_browser_20260920_a\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:02:44.964987+00:00",
+    "stderr": "error: no such object: 33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424\n",
+    "stdout": "\n"
+  },
+  {
+    "argv": [
+      "docker",
+      "inspect",
+      "fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab",
+      "--format",
+      "{{.Id}}"
+    ],
+    "exit_code": 1,
+    "started_at_utc": "2026-10-04T01:02:44.992906+00:00",
+    "stderr": "error: no such object: fad29e3f021a120416b5ff692009c2e1d23d47cbb7ba19ce9c727a866b4ec8ab\n",
+    "stdout": "\n"
+  }
+]

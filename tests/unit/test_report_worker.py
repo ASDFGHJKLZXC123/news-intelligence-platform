@@ -18,6 +18,7 @@ from typing import Any
 import pytest
 from celery.exceptions import SoftTimeLimitExceeded
 
+from db.models import Job
 from packages.config import metrics
 from packages.config.logging import job_id_var
 from services.reports import (
@@ -77,14 +78,41 @@ class FakeRedisCloseTimesOut:
 
 
 class SessionFactorySpy:
-    """Stands in for ``SessionLocal``: the task must pass it through, never call it."""
+    """Stands in for ``SessionLocal`` while the worker holds its writer-mode fence."""
 
     def __init__(self) -> None:
         self.calls = 0
+        self.fence = SimpleNamespace(rollback=lambda: None, close=lambda: None)
 
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         self.calls += 1
-        raise AssertionError("the worker must not open a session; the coordinator owns sessions")
+        return self.fence
+
+
+class DurableJobSession:
+    """Minimal worker fence retaining one durable manual-job row across redelivery."""
+
+    def __init__(self, job: Job) -> None:
+        self.job = job
+        self.commits = 0
+        self.rollbacks = 0
+
+    def get(self, model: Any, key: Any, **_kwargs: Any) -> Any:
+        if model is Job and key == self.job.id:
+            return self.job
+        return None
+
+    def flush(self) -> None:
+        return None
+
+    def commit(self) -> None:
+        self.commits += 1
+
+    def rollback(self) -> None:
+        self.rollbacks += 1
+
+    def close(self) -> None:
+        return None
 
 
 def _result(
@@ -245,7 +273,7 @@ def test_it_passes_an_explicit_date_and_the_coordinator_owns_the_session(
     call = state["calls"][0]
     assert call["brief_date"] == BRIEF_DATE  # an explicit datetime.date, not a now-window
     assert call["session_factory"] is state["session_factory"]  # SessionLocal handed through...
-    assert state["session_factory"].calls == 0  # ...and never called by the worker
+    assert state["session_factory"].calls == 1  # ...once for the independent writer-mode fence
     # The orchestrator is built for the coordinator's session via the accepted factory hook, with
     # the task's Redis client -- the worker makes no direct LLM provider call.
     assert call["orchestrator_factory"] is state["orchestrator_factory"]
@@ -399,6 +427,59 @@ def test_the_same_brief_date_produces_a_stable_job_identity(
     assert first["job_key"] == second["job_key"]
     assert first["job_id"] == second["job_id"]
     assert other["job_key"] != first["job_key"]
+
+
+def test_manual_job_failure_redelivery_retries_then_terminal_duplicate_is_a_noop(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    job_id = uuid.uuid4()
+    durable = Job(
+        id=job_id,
+        job_key=f"legacy-daily-brief:{BRIEF_DATE}:{job_id}",
+        job_type=report_tasks.LEGACY_DAILY_BRIEF_JOB_TYPE,
+        state="queued",
+        attempt=1,
+        max_attempts=3,
+        related_ids={"brief_date": BRIEF_DATE.isoformat()},
+        safe_to_rerun=True,
+    )
+    session = DurableJobSession(durable)
+
+    _install(monkeypatch, raises=RuntimeError("temporary provider failure"))
+    monkeypatch.setattr(report_tasks, "SessionLocal", lambda: session)
+    with pytest.raises(RuntimeError, match="temporary provider failure"):
+        report_tasks.run_daily_brief_generation(BRIEF_DATE.isoformat(), str(job_id))
+
+    assert durable.state == "failed"
+    assert durable.attempt == 1
+    assert durable.error == {
+        "code": "daily_brief_generation_failed",
+        "message": "daily brief generation failed",
+        "retryable": True,
+    }
+
+    retry = _install(monkeypatch, result=_result(version=2))
+    monkeypatch.setattr(report_tasks, "SessionLocal", lambda: session)
+    payload = report_tasks.run_daily_brief_generation(BRIEF_DATE.isoformat(), str(job_id))
+
+    assert payload["status"] == "published"
+    assert durable.state == "succeeded"
+    assert durable.attempt == 2
+    assert durable.error is None
+    assert durable.related_ids["report_id"] == str(REPORT_ID)
+    assert len(retry["calls"]) == 1
+
+    duplicate = _install(monkeypatch, raises=AssertionError("must not generate again"))
+    monkeypatch.setattr(report_tasks, "SessionLocal", lambda: session)
+    ignored = report_tasks.run_daily_brief_generation(BRIEF_DATE.isoformat(), str(job_id))
+
+    assert ignored == {
+        "status": "duplicate_terminal_delivery",
+        "job_id": str(job_id),
+        "state": "succeeded",
+        "brief_date": BRIEF_DATE.isoformat(),
+    }
+    assert duplicate["calls"] == []
 
 
 # --- Redis pool cleanup is best-effort: a close fault never changes the disposition -----

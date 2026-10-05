@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-10-05T00:00:07.170061+00:00",
+  "creation_command": [
+    "docker",
+    "run",
+    "-d",
+    "--pull",
+    "never",
+    "--name",
+    "nip-phase4b-ac0f466f5808",
+    "--label",
+    "nip.phase4b.owner=ac0f466f58084ff3ba92cb20d1b24eb5",
+    "--label",
+    "nip.phase4b.purpose=phase4b-verification",
+    "-p",
+    "127.0.0.1::5432",
+    "--tmpfs",
+    "/var/lib/postgresql/data:rw",
+    "-e",
+    "POSTGRES_USER=news",
+    "-e",
+    "POSTGRES_PASSWORD=news",
+    "-e",
+    "POSTGRES_DB=nip_phase4b_base_ac0f466f5808",
+    "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+    "postgres",
+    "-c",
+    "log_statement=ddl"
+  ],
+  "database": "nip_phase4b_base_ac0f466f5808",
+  "docker_created": "2026-10-05T00:00:06.149156168Z",
+  "id": "8c88ce5f34abf5f80e18b51a69900b8f7342834bcda4a5314160fa4394bbd700",
+  "image": "sha256:f87fefc064506355f316088583365f286bde08bf8dd175ec08bcb3a6b1823c1c",
+  "mounts": [],
+  "name": "nip-phase4b-ac0f466f5808",
+  "owner": "ac0f466f58084ff3ba92cb20d1b24eb5",
+  "port": 57825,
+  "tmpfs": {
+    "/var/lib/postgresql/data": "rw"
+  },
+  "url": "postgresql+psycopg2://news:news@127.0.0.1:57825/nip_phase4b_base_ac0f466f5808"
+}

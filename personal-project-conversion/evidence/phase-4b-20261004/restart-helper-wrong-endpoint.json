@@ -1,0 +1,7 @@
+{
+  "corrected_supported_probe": "/api/v1/personal/events",
+  "implementation_changed": false,
+  "second_restart_required": false,
+  "status": 404,
+  "wrong_probe": "/api/v1/personal/today"
+}

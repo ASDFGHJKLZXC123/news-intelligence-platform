@@ -1,0 +1,67 @@
+{"timestamp": "2026-09-09T04:21:20.034997+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:23.549035+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:23.605893+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:23.606468+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "81dec111-8690-4da6-b84b-d477bb983244", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:23.606782+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:23.635187+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:23.650301+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:23.660742+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:23.666552+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "zero_none", "result": "PASS", "legacy_users": 0, "bound_owner": "454ac069-dece-4bbd-8b5e-e4cf40b4c2f0", "actions": {"can_setup": false, "can_save": true, "can_start": false}, "populated_downgrade": "refused_preserved"}
+{"timestamp": "2026-09-09T04:21:26.326537+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:26.378586+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:26.379062+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "6dcee868-94ca-43f5-b16d-503deb616f81", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:26.379350+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:26.403086+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:26.419240+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:26.429424+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:26.437886+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "one_none", "result": "PASS", "legacy_users": 1, "bound_owner": "32998bc2-c4e1-47c1-99b7-a24f8e582532", "actions": {"can_setup": false, "can_save": true, "can_start": true}, "populated_downgrade": "refused_preserved"}
+{"timestamp": "2026-09-09T04:21:29.109618+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:29.160241+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:29.160659+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "02ef7b3f-0f87-429c-8d5e-ba205e7fc07a", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:29.160960+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:29.182136+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:29.196669+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "two_none_active_legacy", "result": "PASS", "legacy_users": 2, "bound_owner": null, "actions": {"can_setup": false, "can_save": false, "can_start": false}, "populated_downgrade": "refused_preserved"}
+{"timestamp": "2026-09-09T04:21:31.878370+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:31.927652+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:31.928057+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "f715f308-63fd-4321-a305-0a78844f75af", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:31.928334+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:31.946190+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:31.954141+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:31.961573+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:31.967129+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"case": "two_explicit_override", "result": "PASS", "legacy_users": 2, "bound_owner": "9f197f28-e3e0-4c73-8e5f-641382fb343c", "actions": {"can_setup": false, "can_save": true, "can_start": true}, "populated_downgrade": "refused_preserved"}
+{"timestamp": "2026-09-09T04:21:34.581918+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:34.633088+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:34.633505+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "e3a46e0d-2d73-49de-a690-4265c7d2f5dd", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:34.633797+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:34.647618+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"case": "one_invalid_owner", "result": "PASS", "setup_status": 422, "no_writes": true}
+{"timestamp": "2026-09-09T04:21:36.730356+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:36.778691+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:36.779096+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "da833ed0-3081-4a23-b39d-3d544a5b0582", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:36.779361+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:36.794364+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"case": "zero_invalid_owner", "result": "PASS", "setup_status": 422, "no_writes": true}
+{"timestamp": "2026-09-09T04:21:38.865701+00:00", "level": "INFO", "logger": "apps.api", "message": "api initialized", "env": "test"}
+{"timestamp": "2026-09-09T04:21:38.915415+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: GET http://testserver/api/v1/personal/workspace \"HTTP/1.1 200 OK\""}
+{"timestamp": "2026-09-09T04:21:38.915822+00:00", "level": "WARNING", "logger": "apps.api.middleware", "message": "rejected protected request: bad api key", "request_id": "a22e5353-90b8-4ddb-97ff-79c2f2dc01bf", "path": "/api/v1/personal/workspace/setup"}
+{"timestamp": "2026-09-09T04:21:38.916071+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 401 Unauthorized\""}
+{"timestamp": "2026-09-09T04:21:38.926841+00:00", "level": "INFO", "logger": "httpx2", "message": "HTTP Request: POST http://testserver/api/v1/personal/workspace/setup \"HTTP/1.1 422 Unprocessable Entity\""}
+{"case": "two_malformed_owner", "result": "PASS", "setup_status": 422, "no_writes": true}
+{
+  "initial_hashes": {
+    "db/migrations/versions/0020_personal_news_desk.py": "f904d8ec342f6288183d22d1fc1888bdf399756d6f7ffb02c12fa132f0eee390",
+    "services/personal/workspace.py": "a8a4b77263a2b2236f780cf1bd58e0611f5b27a5efa5428573d550aab526c163",
+    "apps/api/personal.py": "892dfdfb00b1d7349d931150b9a989a8581d1380b3ec212ee675a324428117de"
+  },
+  "final_hashes": {
+    "db/migrations/versions/0020_personal_news_desk.py": "f904d8ec342f6288183d22d1fc1888bdf399756d6f7ffb02c12fa132f0eee390",
+    "services/personal/workspace.py": "a8a4b77263a2b2236f780cf1bd58e0611f5b27a5efa5428573d550aab526c163",
+    "apps/api/personal.py": "892dfdfb00b1d7349d931150b9a989a8581d1380b3ec212ee675a324428117de"
+  },
+  "no_schema_clearing": "Every case used real0019 seed then head; no bootstrap rows/tables deleted; earlier eight-way race was a separate component fixture."
+}
+ALL ORDINARY UPGRADE AND SETUP CHECKS PASSED

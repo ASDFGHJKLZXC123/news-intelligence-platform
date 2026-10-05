@@ -1,0 +1,91 @@
+>> starting disposable Postgres (project=nip-ephemeral-20260909062553-66224-5140, automatic host port)
+ Network nip-ephemeral-20260909062553-66224-5140_default Creating 
+ Network nip-ephemeral-20260909062553-66224-5140_default Created 
+ Volume nip-ephemeral-20260909062553-66224-5140_pgdata Creating 
+ Volume nip-ephemeral-20260909062553-66224-5140_pgdata Created 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Creating 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Created 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Starting 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Started 
+>> waiting for readiness
+>> disposable Postgres is ready on host port 55001
+>> migrating blank database to head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, create pgvector extension
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, core schema: pipeline + canonical crisis-model tables
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, provider data integration storage
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, provider expansion storage tables
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, enable postgis extension
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, company master tables
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, ingestion observability tables
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, evidence and claim tables
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, event intelligence tables
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, provider provenance columns
+INFO  [alembic.runtime.migration] Running upgrade 0010 -> 0011, risk output tables
+INFO  [alembic.runtime.migration] Running upgrade 0011 -> 0012, application tables
+INFO  [alembic.runtime.migration] Running upgrade 0012 -> 0013, intelligence contract schema
+INFO  [alembic.runtime.migration] Running upgrade 0013 -> 0014, llm raw_output, contract score precision, and analogy scale reconciliation
+INFO  [alembic.runtime.migration] Running upgrade 0014 -> 0015, alert condition state and alert peak severity
+INFO  [alembic.runtime.migration] Running upgrade 0015 -> 0016, events.hotness_score
+INFO  [alembic.runtime.migration] Running upgrade 0016 -> 0017, Expand embedding persistence for immutable model snapshots.
+INFO  [alembic.runtime.migration] Running upgrade 0017 -> 0018, Add durable lifecycle details for the manual daily pipeline.
+INFO  [alembic.runtime.migration] Running upgrade 0018 -> 0019, Add a durable Gate-G content policy marker to reports.
+INFO  [alembic.runtime.migration] Running upgrade 0019 -> 0020, Add the personal news desk schema without rewriting legacy data.
+>> running integration suite
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-9.1.0, pluggy-1.6.0
+rootdir: /private/var/folders/2k/bwcysbqs38z7c8kbb5tp5q080000gn/T/nip-phase2-orchestration-hh6k_p8m/m4-delivery
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.13.0
+collected 4207 items / 4047 deselected / 160 selected
+
+tests/integration/test_alembic_smoke.py .                                [  0%]
+tests/integration/test_alert_delivery_durability.py .....                [  3%]
+tests/integration/test_analogy_persistence_pgvector.py ........          [  8%]
+tests/integration/test_analogy_retrieval_pgvector.py ........            [ 13%]
+tests/integration/test_application_schema_smoke.py .                     [ 14%]
+tests/integration/test_clustering_smoke.py ..                            [ 15%]
+tests/integration/test_company_master_schema_smoke.py .                  [ 16%]
+tests/integration/test_core_schema_smoke.py .                            [ 16%]
+tests/integration/test_daily_pipeline_vertical_slice.py .                [ 17%]
+tests/integration/test_database_role_hardening.py .                      [ 18%]
+tests/integration/test_embedding_snapshot_expand_migration.py ...        [ 20%]
+tests/integration/test_entity_identity_pipeline.py ........              [ 25%]
+tests/integration/test_event_entity_linking_pipeline.py .........        [ 30%]
+tests/integration/test_event_intelligence_schema_smoke.py .              [ 31%]
+tests/integration/test_evidence_schema_smoke.py .                        [ 31%]
+tests/integration/test_ingestion_observability_schema_smoke.py .         [ 32%]
+tests/integration/test_ingestion_smoke.py .                              [ 33%]
+tests/integration/test_llm_runtime_repository.py ..                      [ 34%]
+tests/integration/test_personal_brief_generation.py ......               [ 38%]
+tests/integration/test_personal_coordinator.py ....                      [ 40%]
+tests/integration/test_personal_phase2.py ...                            [ 42%]
+tests/integration/test_personal_run_claim_snapshot.py ......             [ 46%]
+tests/integration/test_pgvector_smoke.py .                               [ 46%]
+tests/integration/test_postgis_smoke.py .                                [ 47%]
+tests/integration/test_provider_provenance_schema_smoke.py .             [ 48%]
+tests/integration/test_risk_output_schema_smoke.py .                     [ 48%]
+tests/integration/test_score_precision_migration.py ...                  [ 50%]
+tests/integration/test_stage1_migration.py ..                            [ 51%]
+tests/integration/test_stage6_brief_selection.py .......                 [ 56%]
+tests/integration/test_stage6_context_joins.py ......                    [ 60%]
+tests/integration/test_stage6_export.py .......                          [ 64%]
+tests/integration/test_stage6_generation.py ....                         [ 66%]
+tests/integration/test_stage6_lifecycle.py .........                     [ 72%]
+tests/integration/test_stage6_report_api.py .........                    [ 78%]
+tests/integration/test_stage7_api_contract.py .......................... [ 94%]
+.........                                                                [100%]
+
+=============== 160 passed, 4047 deselected in 70.14s (0:01:10) ================
+>> tearing down disposable Postgres (including its volume)
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Stopping 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Stopped 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Removing 
+ Container nip-ephemeral-20260909062553-66224-5140-postgres-1 Removed 
+ Network nip-ephemeral-20260909062553-66224-5140_default Removing 
+ Volume nip-ephemeral-20260909062553-66224-5140_pgdata Removing 
+ Volume nip-ephemeral-20260909062553-66224-5140_pgdata Removed 
+ Network nip-ephemeral-20260909062553-66224-5140_default Removed 
+>> cleanup verified: no project containers, volumes, networks, or images remain

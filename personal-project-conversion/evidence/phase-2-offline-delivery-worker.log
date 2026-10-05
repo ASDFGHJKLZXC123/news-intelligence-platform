@@ -1,0 +1,51 @@
+ 
+ -------------- personal-offline-rootdelivery_1c28606e@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- macOS-26.4.1-arm64-arm-64bit-Mach-O 2026-09-09 12:34:20
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         news_intelligence:0x1077e6270
+- ** ---------- .> transport:   redis://127.0.0.1:51345/1
+- ** ---------- .> results:     redis://127.0.0.1:51345/2
+- *** --- * --- .> concurrency: 8 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> pipeline         exchange=default(direct) key=default
+                
+
+[tasks]
+  . generate_daily_brief
+  . workers.alert_tasks.run_alert_evaluation
+  . workers.alert_tasks.run_pending_alert_notification_sweep
+  . workers.analogy_tasks.run_event_analogy_rerank
+  . workers.clustering_tasks.run_article_clustering
+  . workers.embedding_tasks.run_article_embedding
+  . workers.embedding_tasks.run_episode_embedding_refresh
+  . workers.embedding_tasks.run_event_embedding
+  . workers.entity_linking_tasks.run_event_entity_linking
+  . workers.ingestion_tasks.ingest_source_feed
+  . workers.personal_tasks.run_personal_daily
+  . workers.pipeline_tasks.run_daily_pipeline
+  . workers.provider_data_tasks.run_country_indicator_ingestion
+  . workers.provider_data_tasks.run_energy_series_ingestion
+  . workers.provider_data_tasks.run_entity_identity_ingestion
+  . workers.provider_data_tasks.run_fred_macro_ingestion
+  . workers.provider_data_tasks.run_gdelt_raw_ingestion
+  . workers.provider_data_tasks.run_geo_incident_ingestion
+  . workers.provider_data_tasks.run_humanitarian_report_ingestion
+  . workers.provider_data_tasks.run_sanctions_ingestion
+  . workers.provider_data_tasks.run_sec_company_ingestion
+  . workers.provider_data_tasks.run_sec_identity_refresh
+  . workers.provider_data_tasks.run_wikidata_identity_ingestion
+  . workers.tasks.noop
+  . workers.tasks.scheduled_heartbeat
+
+[2026-09-09 12:34:20,652: INFO/MainProcess] Connected to redis://127.0.0.1:51345/1
+[2026-09-09 12:34:20,657: INFO/MainProcess] mingle: searching for neighbors
+[2026-09-09 12:34:21,673: INFO/MainProcess] mingle: all alone
+[2026-09-09 12:34:21,687: INFO/MainProcess] personal-offline-rootdelivery_1c28606e@localhost ready.
+[2026-09-09 12:35:22,057: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[765c0d19-0e0f-4417-b160-792ba6caad56] received
+[2026-09-09 12:35:22,288: INFO/MainProcess] Task workers.personal_tasks.run_personal_daily[765c0d19-0e0f-4417-b160-792ba6caad56] succeeded in 0.22973124985583127s: {'status': 'succeeded', 'run_id': '0d1d8ca8-1727-4281-9b9f-1873db943455', 'report_id': '465287ba-9c2e-47c2-962f-a11aa7fef2aa', 'published': True, 'feeds_attempted': 1, 'feeds_succeeded': 1, 'feeds_failed': 0, 'articles_captured': 1, 'articles_admitted': 1, 'events_observed': 1, 'claims_supported': 2, 'fixture_label': 'Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls'}
+
+worker: Warm shutdown (MainProcess)

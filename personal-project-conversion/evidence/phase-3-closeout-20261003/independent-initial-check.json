@@ -1,0 +1,71 @@
+{
+  "schema": "phase3-closeout-independent-initial.v1",
+  "status": "EVIDENCE_GAPS",
+  "scope": "All14 Phase3 criteria; local/synthetic only; final mapping review pending",
+  "findings": [
+    {
+      "id": "C1",
+      "criterion": "P3-02",
+      "kind": "literal_input_proof_gap",
+      "summary": "No found concurrent retry claim/request demonstration for the same failed personal run; parallel capture/admission and sequential/stale retry checks do exist."
+    },
+    {
+      "id": "C2",
+      "criterion": "P3-06",
+      "kind": "literal_input_proof_gap",
+      "summary": "No found personal start API second request carrying old caller date and preserving server date/allowances; midnight and API source semantics support intended behavior."
+    },
+    {
+      "id": "C3",
+      "criterion": "P3-12",
+      "kind": "literal_input_proof_gap",
+      "summary": "Existing profile/failure component cases are not an explicitly retained same-authored-fixture production-coordinator triad."
+    }
+  ],
+  "existing_full_gate": {
+    "total_integration_cases": 238,
+    "personal_cases": 95,
+    "source_after_file_hashes": 592,
+    "current_missing_files": 0,
+    "current_changed_paths": [
+      "frontend/SIGNAL - Intelligence Platform.html",
+      "frontend/app/page-personal.jsx",
+      "frontend/app/personal-foundation.test.js"
+    ],
+    "qualification": "Changed files are item6 reviewed UI correction;50affectedtests and actual browser rechecks passed; no backend Python drift at this observation."
+  },
+  "browser_provenance": {
+    "exact_dom_segments": 39,
+    "exact_native_images": 12,
+    "native_calls": 30,
+    "source": "../phase-3-item-6-20261003/independent-native-fidelity-check.json"
+  },
+  "runtime_mutations": 0,
+  "production_edits": 0,
+  "live_feed_provider_contacts": 0,
+  "unresolved_phase_level_application_defects": 0,
+  "followup_reproduced_gate": {
+    "artifact_prefix": "final-targeted",
+    "passed": 6,
+    "failed": 2,
+    "findings": [
+      {
+        "id": "D1",
+        "kind": "application_defect",
+        "status": "fix_reviewed_execution_pending",
+        "source": "services/personal/coordinator.py",
+        "fix": "session.flush before finish_run after owned-run lock; required workflow assertion retained"
+      },
+      {
+        "id": "O1",
+        "kind": "test_oracle_mismatch",
+        "status": "oracle_reviewed_execution_pending",
+        "source": "tests/integration/test_personal_phase3_closeout.py",
+        "correction": "assert actual persisted publication result/Report/frozen snapshot/API instead of nonexistent report-success stage"
+      }
+    ],
+    "coordinator_fixed_sha256": "5478e2949c09f1ceea7d2236fb4a7f9cdf7d89d35271dd51b581919c68254c16",
+    "closeout_test_corrected_sha256": "0c683bb17fc6d7ac8369ee4b658432e0ea1c7d01c0a7ac09c81bf5694e89c649",
+    "source_qualification": "old item5 full238 is pre-fix history; affected final personal suite and independent new-case rerun pending"
+  }
+}

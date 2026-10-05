@@ -1,0 +1,218 @@
+{
+  "id": "rootproof_06d904c6b2",
+  "dataset": "synthetic",
+  "source_hashes_before": {
+    "scripts/start-personal-phase2-offline.sh": "a3bd66c964710e44f6e642a06b04169f6771459752a5bc28fbb12cea6c9f31d0",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "81d7392a96ae9c2d6cc45abdb6936b848d807c9cc919177757ff7c89218c93f6",
+    "workers/personal_tasks.py": "f01d7a506d2a8a3db319135fcfd70ada34557daca5756ef4602496730e24d374",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "c8e1c67713d2c9d776938202b86c6dfe28b8af80f8ac4052368fb23c36a97464",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "checks": [
+    "same-day duplicate returns same run without extra business/LLM rows",
+    "fresh queue generation, snapshot and persisted embedding route identity match"
+  ],
+  "api": "http://127.0.0.1:63354",
+  "state_dir": "/tmp/nip-personal-phase2-offline-rootproof_06d904c6b2",
+  "before_counts": {
+    "articles": 0,
+    "events": 0,
+    "claims": 0,
+    "claim_evidence": 0,
+    "reports": 0,
+    "personal_runs": 0,
+    "personal_captures": 0,
+    "personal_run_event_observations": 0,
+    "personal_brief_snapshots": 0,
+    "llm_runs": 0
+  },
+  "run": {
+    "id": "7d194b95-ed9f-4ba3-8085-eb41e99972ff",
+    "local_date": "2026-09-09",
+    "state": "succeeded",
+    "attempt": 1,
+    "max_attempts": 3,
+    "created_at": "2026-09-09T18:29:49.782828Z",
+    "updated_at": "2026-09-09T18:29:50.023453Z",
+    "lease_expires_at": null,
+    "capture_started_at": "2026-09-09T18:29:49.930983Z",
+    "capture_ended_at": "2026-09-09T18:29:49.940352Z",
+    "coverage": {
+      "schema": "personal-capture-coverage.v1",
+      "feed_pauses": [],
+      "feeds_failed": 0,
+      "feeds_paused": 0,
+      "feed_failures": [],
+      "items_fetched": 1,
+      "pending_total": 0,
+      "feeds_attempted": 1,
+      "feeds_succeeded": 1,
+      "feeds_configured": 1,
+      "pending_capacity": 2000,
+      "articles_admitted": 1,
+      "articles_captured": 1
+    },
+    "available_event_ids": [
+      "60a92121-8808-4254-94c5-834ce78e8364"
+    ],
+    "snapshot_id": "9ac0f902-de22-4cbc-b621-11323e7109ba",
+    "report_id": "cc485f62-bf85-4f2c-98b8-03a7af1ec089",
+    "stage_results": {
+      "scope": {
+        "status": "succeeded",
+        "articles_admitted": 1,
+        "articles_selected_for_enrichment": 1
+      },
+      "capture": {
+        "schema": "personal-capture-coverage.v1",
+        "status": "succeeded",
+        "feed_pauses": [],
+        "feeds_failed": 0,
+        "feeds_paused": 0,
+        "feed_failures": [],
+        "items_fetched": 1,
+        "pending_total": 1,
+        "feeds_attempted": 1,
+        "feeds_succeeded": 1,
+        "feeds_configured": 1,
+        "pending_capacity": 2000,
+        "articles_captured": 1
+      },
+      "grouping": {
+        "status": "succeeded",
+        "events_created": 1,
+        "articles_clustered": 1
+      },
+      "snapshot": {
+        "status": "succeeded",
+        "snapshot_id": "9ac0f902-de22-4cbc-b621-11323e7109ba"
+      },
+      "admission": {
+        "status": "succeeded",
+        "run_limit": 100,
+        "local_day_limit": 100,
+        "articles_admitted": 1
+      },
+      "embedding": {
+        "status": "succeeded",
+        "articles_embedded": 1
+      },
+      "observations": {
+        "status": "succeeded",
+        "events_observed": 1
+      },
+      "claim_preparation": {
+        "status": "succeeded",
+        "abstained": 0,
+        "supported": 2
+      }
+    },
+    "result": {
+      "attempt": 1,
+      "published": true,
+      "report_id": "cc485f62-bf85-4f2c-98b8-03a7af1ec089",
+      "snapshot_id": "9ac0f902-de22-4cbc-b621-11323e7109ba",
+      "gate_outcome": "pass",
+      "section_count": 5,
+      "capture_partial": false,
+      "processing_degraded": false
+    },
+    "error": null,
+    "retry_eligible": false,
+    "retry_reason": "run in state succeeded is not retryable"
+  },
+  "after_counts": {
+    "articles": 1,
+    "events": 1,
+    "claims": 2,
+    "claim_evidence": 2,
+    "reports": 1,
+    "personal_runs": 1,
+    "personal_captures": 1,
+    "personal_run_event_observations": 1,
+    "personal_brief_snapshots": 1,
+    "llm_runs": 4
+  },
+  "md_sha256": "9dacec95b477b31c2c4e69ceaa18c9f48b1fe7ab914ac926e90b2af67273ea3a",
+  "pdf_sha256": "20b101ff98f7230960ab62f906d54ad582e0ffcdba3653dbde993efd20652b8a",
+  "embedding": [
+    {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "model_version": "fixture-v1"
+    }
+  ],
+  "snapshot_route": {
+    "mode": "offline_fixture",
+    "embedding": {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture",
+      "model_version": "fixture-v1"
+    },
+    "fixture_id": "phase-2-offline-workflow-v1",
+    "generation": {
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture"
+    }
+  },
+  "profile_route": {
+    "mode": "offline_fixture",
+    "embedding": {
+      "model": "offline-fixture-embedding:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture",
+      "model_version": "fixture-v1"
+    },
+    "fixture_id": "phase-2-offline-workflow-v1",
+    "generation": {
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "provider": "offline-personal-fixture"
+    }
+  },
+  "llm": [
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    },
+    {
+      "provider": "offline-personal-fixture",
+      "model": "offline-personal-fixture:phase-2-offline-workflow-v1",
+      "status": "succeeded"
+    }
+  ],
+  "passed": true,
+  "cleanup_codes": [
+    0,
+    0
+  ],
+  "database_owned_after": false,
+  "bystanders_preserved": true,
+  "owned_containers_absent": true,
+  "source_hashes_after": {
+    "scripts/start-personal-phase2-offline.sh": "a3bd66c964710e44f6e642a06b04169f6771459752a5bc28fbb12cea6c9f31d0",
+    "scripts/stop-personal-phase2-offline.sh": "5e89633cb3e7a1f3dc2110ff56bbc5ac952f707497a4d2ba17cf3f8cfca4efee",
+    "scripts/personal_phase2_offline_db.py": "81d7392a96ae9c2d6cc45abdb6936b848d807c9cc919177757ff7c89218c93f6",
+    "workers/personal_tasks.py": "f01d7a506d2a8a3db319135fcfd70ada34557daca5756ef4602496730e24d374",
+    "services/personal/offline_fixture.py": "c809834defcfef9ba957b3b128e21d5ef2bea0d654dfb58c9d0a01199006dbb4",
+    "services/personal/coordinator.py": "34554dd7e81a5e336d09e011b532e66e247fd23b844760c82062d8b340752a2a",
+    "services/personal/briefs.py": "aa46b0f689b4275ea37af6001fec97cbc418da78d159c1cbeb8f9f7ea11935ba",
+    "apps/api/personal.py": "c8e1c67713d2c9d776938202b86c6dfe28b8af80f8ac4052368fb23c36a97464",
+    "apps/api/personal_briefs.py": "da5424f30bdfa79a4d66bf7f27be7633504a2b6e1db390eed8a733d16c2af953",
+    "services/personal/exports.py": "07374f66159088ac241e6678f24fbdbe7ade147f7b6c3a9d64198ccc41362de9"
+  },
+  "source_drift": []
+}

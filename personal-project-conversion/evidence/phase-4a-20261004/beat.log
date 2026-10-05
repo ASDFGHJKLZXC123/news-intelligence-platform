@@ -1,0 +1,11 @@
+[2026-10-04 01:35:56,981: INFO/MainProcess] beat: Starting...
+celery beat v5.6.3 (recovery) is starting.
+__    -    ... __   -        _
+LocalTime -> 2026-10-04 01:35:56
+Configuration ->
+    . broker -> redis://127.0.0.1:59735/1
+    . loader -> celery.loaders.app.AppLoader
+    . scheduler -> celery.beat.PersistentScheduler
+    . db -> /Users/f8fq/coding projects/Unfinished/news-intelligence-platform/personal-project-conversion/evidence/phase-4a-20261004/owned-beat-schedule-final
+    . logfile -> [stderr]@%INFO
+    . maxinterval -> 5.00 minutes (300s)

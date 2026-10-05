@@ -1,0 +1,13 @@
+diff --git a/tests/integration/test_daily_pipeline_vertical_slice.py b/tests/integration/test_daily_pipeline_vertical_slice.py
+index 9049b72..c653881 100644
+--- a/tests/integration/test_daily_pipeline_vertical_slice.py
++++ b/tests/integration/test_daily_pipeline_vertical_slice.py
+@@ -119,7 +119,7 @@ def migrated_pipeline_db(require_postgres: None, monkeypatch: pytest.MonkeyPatch
+ 
+         engine = create_engine(database_url, future=True)
+         with engine.connect() as connection:
+-            assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0019"
++            assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "0020"
+         yield sessionmaker(
+             bind=engine,
+             autoflush=False,

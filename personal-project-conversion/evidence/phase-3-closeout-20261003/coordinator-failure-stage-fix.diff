@@ -1,0 +1,10 @@
+--- before/services/personal/coordinator.py
++++ after/services/personal/coordinator.py
+@@ -661,6 +661,7 @@
+             ):
+                 capture.enrichment_state = "provider_failed"
+             _stage(run, "workflow", "failed", code=code)
++            session.flush()
+             finish_run(
+                 session,
+                 run_id,

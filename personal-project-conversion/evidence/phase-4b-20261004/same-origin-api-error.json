@@ -1,0 +1,13 @@
+{
+  "url": "http://127.0.0.1:58118/api/v1/personal/unknown",
+  "status": 404,
+  "content_type": "application/json",
+  "body": {
+    "error": {
+      "code": "not_found",
+      "message": "Not Found",
+      "request_id": "5a1b2f62-8ccd-4a44-84ab-9d51ce8e1483"
+    }
+  },
+  "html": false
+}

@@ -1,11 +1,13 @@
 # News Intelligence Platform
 
+Personal conversion status: Phases 1 and 2 are complete, including their authorized bounded live proof. Ordinary paid operation remains inactive. Phases 3, 4A, and **4B are complete for local/synthetic engineering acceptance**. The personal runtime now uses only the application and PostgreSQL as persistent services, with actual browser/CLI, restart, restore, and cleanup proof. **Phase 5 is in progress: raw-reading trial preparation, with model spending off.** See the [Phase 5 trial guide](personal-project-conversion/PHASE5_TRIAL_GUIDE.md) and [evidence record](personal-project-conversion/evidence/phase-5.md). See the [Phase 4B acceptance record](personal-project-conversion/evidence/phase-4b.md) and [personal startup/recovery guide](personal-project-conversion/PHASE4B_SETUP.md). Historical [Phase 4A](personal-project-conversion/evidence/phase-4a.md), [Phase 3](personal-project-conversion/evidence/phase-3.md), and [Phase 2](personal-project-conversion/evidence/phase-2.md) evidence remains retained.
+
 Backend-first financial-crisis early-warning platform. It combines news and event
 intelligence, macro/provider data, entity resolution, historical analogies, alerting, and
 evidence-grounded reports behind a FastAPI API and a browser frontend adapter.
 
-The focused sequence in `docs/implementation-order.md` now includes a dependency-aware,
-manual-first daily coordinator for the non-crisis pipeline. Stage 9 validation is not closed:
+The delivered application includes a dependency-aware, manual-first daily coordinator for
+the non-crisis pipeline. Stage 9 validation is not closed:
 the v2 readiness boundary authorizes no new evaluation run, entity linking inherits the v1
 policy, analogy remains evaluation-only, and clustering remains not verifiable. The Stage 10
 local hardening controls are implemented through Alembic `0019`; human review and
@@ -23,7 +25,7 @@ packages/          configuration, jobs, prompts, provider contracts, and determi
 services/          ingestion, NLP, entities, LLMs, alerts, analogies, reports, risk, evaluation
 workers/           independent Celery tasks and manual non-crisis pipeline stage adapters
 db/                SQLAlchemy models, Alembic migrations, curated episode seed
-frontend/          no-build browser UI, API adapter, data-quality layer, and mock fallback
+frontend/          no-build browser UI, API adapter, data-quality layer, and sample-data demo
 evaluation/        versioned gold datasets, development reports, and frozen Stage 9 artifacts
 infra/docker/      shared application image and pgvector + PostGIS PostgreSQL image
 tests/             network-free unit suite and disposable-PostgreSQL integration suite
@@ -32,9 +34,26 @@ tests/             network-free unit suite and disposable-PostgreSQL integration
 ## Prerequisites
 
 - Python 3.11+
-- Docker + Docker Compose (for the full stack)
+- Docker + Docker Compose (for the full stack and disposable integration tests)
+- Node.js 18+ (only for the zero-dependency frontend tests)
+- A modern browser (for the local frontend)
+
+The current no-build browser startup loads pinned React, React DOM, and Babel scripts from
+`unpkg.com`, so it requires outbound HTTPS access to that CDN. The page also references Google
+Fonts and Cesium CDN assets. Python and frontend unit tests do not load these browser resources.
+
+Live mention extraction additionally requires spaCy's `en_core_web_trf` model. It is not
+needed for installation or offline tests, and the application never downloads it implicitly:
+
+```bash
+.venv/bin/python -m spacy download en_core_web_trf
+```
 
 ## Quick start
+
+For the personal runtime, use the [Phase 4B setup guide](personal-project-conversion/PHASE4B_SETUP.md): choose the intended PostgreSQL database, verify its backup/migrations and idle mode, then run `python scripts/personal-local.py app --port 8000`. Browser and API use `http://127.0.0.1:8000/`; paid operation stays disabled.
+
+The following commands describe the larger legacy stack.
 
 ```bash
 python3 -m venv .venv           # create the preferred local environment
@@ -43,7 +62,12 @@ cp .env.example .env            # adjust as needed; never commit real secrets
 make up                         # start api, worker, beat, postgres (pgvector + PostGIS), redis
 make migrate                    # apply migrations (creates pgvector and PostGIS extensions)
 curl localhost:8000/health      # API + Postgres + Redis + worker config status
+# In a second terminal:
+make frontend                   # serve the browser UI on loopback
 ```
+
+Open
+`http://127.0.0.1:3000/SIGNAL%20-%20Intelligence%20Platform.html` in the browser.
 
 ## Commands
 
@@ -51,6 +75,7 @@ curl localhost:8000/health      # API + Postgres + Redis + worker config status
 | --- | --- |
 | `make install` | Install runtime + dev dependencies |
 | `make up` / `make down` | Start / stop the Docker Compose stack |
+| `make frontend` | Serve the no-build browser frontend on loopback (default port `3000`) |
 | `make compose-config` | Validate the Docker Compose configuration |
 | `make migrate` | Apply Alembic migrations to head |
 | `make seed` | Seed curated episodes; requires PostgreSQL, an embedding API key, and a registered snapshot |
@@ -58,14 +83,15 @@ curl localhost:8000/health      # API + Postgres + Redis + worker config status
 | `make benchmark-stage-kernels` | Gate fixed ingestion, embedding, clustering, and pipeline-adapter work structure |
 | `make degraded-path-drills` | Exercise bounded dependency-loss, lease-recovery, and shutdown paths |
 | `make production-config-check` | Run the secret-safe, no-network deployment configuration preflight |
-| `make test` | Run the full pytest suite (integration auto-skips unless `REQUIRE_POSTGRES=1`) |
-| `make test-unit` | Run unit tests only (no Postgres/Redis required) |
+| `make test` | Run pytest (integration auto-skips unless `REQUIRE_POSTGRES=1`) and the frontend tests |
+| `make test-unit` | Run Python unit tests only (no Postgres/Redis required) |
+| `make test-frontend` | Run the frontend tests with Node's built-in test runner |
 | `make test-integration` | Run integration tests against an existing configured PostgreSQL |
 | `make test-integration-fresh` | Create a disposable PostgreSQL, migrate it, run integration tests, and remove it |
-| `make db-backup` / `make db-restore-drill` | Create a checksummed logical backup / verify disposable recovery through revision `0019` |
+| `make db-backup` / `make db-restore-drill` | Create a checksummed logical backup / verify disposable recovery through revision `0023_personal_processing_control` |
 | `make lint` / `make fmt` | Lint / format with ruff |
 | `make audit` | **Dependency vulnerability scan** via `pip-audit -r requirements-dev.txt` (runtime + dev) |
-| `make check` | Self-contained gate: Compose + lint + unit + structural benchmark + fresh-database integration + audit |
+| `make check` | Full gate: Compose + lint + Python/frontend tests + structural benchmark + fresh-database integration + audit |
 
 Validate the curated episode corpus without a database, API key, or network:
 
@@ -310,6 +336,9 @@ does not by itself authorize a final evaluation or open Gate G.
 - **Unit tests** (`tests/unit`) run without a database or broker. They cover provider and
   LLM contracts, ingestion/NLP, entity linking, alerts, analogies, reports, API behavior,
   evaluation datasets, and Stage 9 governance.
+- **Frontend tests** (`frontend/app/*.test.js`) use Node's built-in test runner and no npm
+  dependencies. They cover the browser adapter, data loading, data quality, and visible-state
+  source contracts.
 - **Integration tests** (`tests/integration`, marked `integration`) cover clean Alembic
   bootstrap/rollback, pgvector, PostGIS, persistence and transaction durability, entity
   linking, analogy retrieval, report generation/lifecycle/export, and frontend API contracts.
@@ -322,9 +351,13 @@ does not by itself authorize a final evaluation or open Gate G.
 
 ```bash
 make test-unit                 # unit only
+make test-frontend             # no database, broker, npm install, or network
 make test-integration-fresh    # recommended integration path; owns and cleans up its database
 make check                     # complete local/CI-style gate
 ```
+
+`make install` needs access to the configured Python package index. `make audit` may also
+need package-index and vulnerability-service access when their data is not already cached.
 
 For a lightweight post-coordinator performance baseline:
 

@@ -22,6 +22,7 @@ from services.pipeline.contracts import (
     StageStatus,
 )
 from services.pipeline.serialization import pipeline_run_result_from_dict
+from services.writer_mode import require_legacy_writer_mode
 
 PIPELINE_JOB_TYPE = "daily_intelligence_pipeline"
 PIPELINE_MAX_ATTEMPTS = 3
@@ -187,6 +188,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._load(session, identity, for_update=True)
             timestamp = self._now()
             if job is None:
@@ -271,6 +273,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._load(session, identity, for_update=True)
             if job is None or detail is None:
                 raise PipelineStoreError(
@@ -293,6 +296,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._require_rows(session, identity, for_update=True)
             timestamp = self._now()
             state = _state(job.state)
@@ -346,6 +350,7 @@ class SQLAlchemyPipelineLifecycleStore:
             raise ValueError("celery_task_id must be a nonblank string")
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._require_rows(session, identity, for_update=True)
             if detail.delivery_token != delivery_token:
                 raise PipelineStaleDeliveryError(
@@ -372,6 +377,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._load(session, identity, for_update=True)
             timestamp = self._now()
             if job is None:
@@ -461,6 +467,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._require_rows(
                 session,
                 result.identity,
@@ -504,6 +511,7 @@ class SQLAlchemyPipelineLifecycleStore:
 
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._load(session, identity, for_update=True)
             timestamp = self._now()
             if job is None:
@@ -565,6 +573,7 @@ class SQLAlchemyPipelineLifecycleStore:
         normalized = self._normalize_event_ids(event_ids)
         session = self._session_factory()
         try:
+            require_legacy_writer_mode(session, lock=True)
             job, detail = self._require_rows(session, identity, for_update=True)
             if (
                 _state(job.state) is not JobState.RUNNING

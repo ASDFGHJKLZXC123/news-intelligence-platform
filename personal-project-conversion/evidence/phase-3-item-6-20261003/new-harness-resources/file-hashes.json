@@ -1,0 +1,21 @@
+{
+  "README.md": "a68403187240642b7f3489402b7e14fe244a62066a71a0fbf2d1fb48d1e203bd",
+  "after-api.log": "0ec262b15322d1c1fe150b565cf15da5a9d6b3e11c65ece8641cb75ff9edfbe7",
+  "after-frontend.log": "95263351fb099a538e7b67ea63a5f31cc85dd56b5c4edd51f74b4ab24d0398e7",
+  "after-worker.log": "177288ac302b2ed1cd57105ea788953a0d06cecb6a05bd97b9675f410ac0a235",
+  "before-api.log": "3234154c2210e208ab95259863e860b9619192839e098873c3049124880ddad9",
+  "before-frontend.log": "95263351fb099a538e7b67ea63a5f31cc85dd56b5c4edd51f74b4ab24d0398e7",
+  "before-worker.log": "6c5822e00eb7f0707d132852028593c53111781e8d70f8a4a892a5f05223b7ce",
+  "capture-cleanup.py": "bda0ceb7660ee8ef40ba5ac8ffc8901b121bddd31286c4915034d5f3d31f3980",
+  "commands.json": "cce16eba384e3f9e2d9a8488c3e8c3f42760ae3b2937212446a8f213fb2aaa31",
+  "harness-source-hashes.json": "c4dbaa3c662d664a78cb6c9229106abcb4b1bc1275139227d91a48cf906cb88f",
+  "link-check.json": "c9dec3d4b53e0e4c2e0aac1281588e7b9b778f5610f18a99c509cdd90081d437",
+  "manifest-safe.json": "e3b5e246805dc977176766470c31afdb9289eff826c73e81c0dc3f7d3595de1f",
+  "nip_personal_phase2_offline_p3_item6_20261003_b-secret-safe.sql": "fd3df4aab51a45ad46a7059136ef295f45bb696663ca206edd5bc4761bc9a582",
+  "preflight-manifest-key-capture-cleanup.py": "b5416317fb4fb86f9e8fbe2c2cd168a2d90b58382d6ff27b0b6c9f933afca268",
+  "preflight-manifest-key.json": "19cf625486007139479d5b47159ceb1f2f79a0c77eb06e43dafad28868fe3e14",
+  "preflight-parse-capture-cleanup.py": "5d8392e8af804b38196c11e9c776a399966fa1204816688e36b8932d6a7ac316",
+  "preflight-parse.json": "cd5da92176e5aaf35b5532a7817649c07ed84da9523f1b0c20b0b22b68a5d71c",
+  "result.json": "f2f38b3d85b0aeeb5f14325f14f7f5c898bcfa03e1ec2f6209831b5558ec63c2",
+  "safety-preservation-check.json": "396f6ac0feff1ea7c18d6b2d62b0cdab42d868f97e0ac2123a53b21806441d8e"
+}

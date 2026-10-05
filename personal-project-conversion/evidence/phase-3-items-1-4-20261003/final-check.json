@@ -1,0 +1,14 @@
+{
+  "relative_links_checked": 48,
+  "missing_links": [],
+  "guarded_hashes_and_staged_index_unchanged": true,
+  "integration_targets_passed": 59,
+  "unit_targets_passed": 92,
+  "independent_worker_integration_reruns_passed": 3,
+  "independent_worker_unit_reruns_passed": 76,
+  "owned_database_create_drop_counts": 97,
+  "cleanup_evidence": "resource-cleanup.json",
+  "real_runtime_activation_performed": false,
+  "external_feed_provider_requests_performed": false,
+  "global_phase3_acceptance_claimed": false
+}

@@ -1,0 +1,43 @@
+{
+  "report_id": "d9dec7c9-28ce-414a-bd49-03f87872c95f",
+  "snapshot_id": "9b2d5fad-2938-4861-9725-a998488c8fa6",
+  "report_status": "published",
+  "source_hash": "fa255ba05c051facc1bbc873f9c9a8d71c20c8a247e417282fba1241baa27e94",
+  "same_report_byte_stability": true,
+  "export_method": "production published_document and exact-report renderers; prior genuine Chrome download gate retained separately",
+  "exports": {
+    "md": {
+      "file": "personal-news-brief-2026-09-20-v1-d9dec7c9-28ce-414a-bd49-03f87872c95f.md",
+      "bytes": 2593,
+      "sha256": "19855f413c454b65d2542ffd2a78b3268b563055c558351262cad65f90840876"
+    },
+    "pdf": {
+      "file": "personal-news-brief-2026-09-20-v1-d9dec7c9-28ce-414a-bd49-03f87872c95f.pdf",
+      "bytes": 15652,
+      "sha256": "36e57a2023f14e37552f1c1659f8945c777b89d849eed09e13063f678008a4a3"
+    }
+  },
+  "citations": [
+    {
+      "claim_id": "d657a01e-97c4-5983-89d3-8ca9f3bead31",
+      "text": "Japan raises interest rate to new 31-year high to curb rising prices",
+      "evidence": [
+        {
+          "id": "79055201-52f0-5887-8026-e9957817ffc1",
+          "article_id": "79650e29-868a-42f6-943c-dd688c8d9bc3",
+          "source_field": "title",
+          "title": "Japan raises interest rate to new 31-year high to curb rising prices",
+          "publisher": "BBC Business",
+          "url": "https://www.bbc.co.uk/news/articles/cqn74jeek06no?at_campaign=rss&at_medium=RSS"
+        }
+      ]
+    }
+  ],
+  "pdf_page_count": 2,
+  "pdf_all_pages_visually_inspected": true,
+  "pdf_visual_result": "Both pages legible; no clipped or overlapping text; correct source, report identity and final disclaimer.",
+  "pdf_identity_matches": true,
+  "source_supported_prose_manual_review": "passed: generated prose states only Japan raised rates to a 31-year high to address rising prices, supported by the exact retained BBC title.",
+  "source_input_limit": "headline and RSS summary only; no full-article retrieval or independent truth verification",
+  "inspection_tool_note": "pdftoppm rendered both pages; pdftotext unavailable, so bundled pypdf extracted text."
+}

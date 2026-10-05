@@ -1,0 +1,32 @@
+{
+  "container_id": "33a5ddf17f2b38d328e9634f9071ff7a7f8d0922f83d5afc1cee7c217979c424",
+  "uniquely_created_databases": [
+    "nip_stage6_sel_749ce0d0626d490a8943f5c2b63feb8b",
+    "nip_stage6_sel_f6e4881944d841f19ca95e5f898ffbb6",
+    "nip_stage6_hotness_58df740e0f3d467881789bca115f8336",
+    "nip_stage6_sel_2044211f21da400c911abe36e574583b",
+    "nip_stage6_hotness_9322753749da4c9da17075d9d5b39994",
+    "nip_stage6_sel_efca3d25895c461187091157298a277c",
+    "nip_stage6_sel_fda80d2315c9409d8fb4fa3b6fe7a429",
+    "nip_stage6_sel_d5f5e874ad334f97a2ffa6d35c029bb2",
+    "nip_stage6_sel_a2947741c08f477792b296aae649e006",
+    "nip_alembic_smoke_2a67604c7bc84d049265832ac14dd09d",
+    "nip_alembic_smoke_d03769edc1b9487c956ad837814e0ef2"
+  ],
+  "dropped_databases": [
+    "nip_stage6_sel_749ce0d0626d490a8943f5c2b63feb8b",
+    "nip_stage6_sel_f6e4881944d841f19ca95e5f898ffbb6",
+    "nip_stage6_hotness_58df740e0f3d467881789bca115f8336",
+    "nip_stage6_sel_2044211f21da400c911abe36e574583b",
+    "nip_stage6_hotness_9322753749da4c9da17075d9d5b39994",
+    "nip_stage6_sel_efca3d25895c461187091157298a277c",
+    "nip_stage6_sel_fda80d2315c9409d8fb4fa3b6fe7a429",
+    "nip_stage6_sel_d5f5e874ad334f97a2ffa6d35c029bb2",
+    "nip_stage6_sel_a2947741c08f477792b296aae649e006",
+    "nip_alembic_smoke_2a67604c7bc84d049265832ac14dd09d",
+    "nip_alembic_smoke_d03769edc1b9487c956ad837814e0ef2"
+  ],
+  "retained_database_names": [],
+  "identity_checked_before_query": true,
+  "container_cleanup": "pending parent worker verification"
+}

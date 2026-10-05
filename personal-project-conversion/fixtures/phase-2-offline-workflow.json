@@ -1,0 +1,20 @@
+{
+  "schema": "personal-offline-fixture.v1",
+  "fixture_id": "phase-2-offline-workflow-v1",
+  "label": "Synthetic Phase 2 acceptance feed and scripted provider responses; no live network or paid model calls",
+  "sources": {
+    "https://offline.personal.test/feed.xml": [
+      {
+        "guid": "phase2-offline-coastal-1",
+        "title": "Agency approves coastal resilience project",
+        "url": "https://offline.personal.test/articles/coastal-resilience",
+        "published_at": "2026-09-08T16:00:00Z",
+        "summary": "The agency confirmed the coastal resilience project was approved."
+      }
+    ]
+  },
+  "composition": {
+    "executive_text": "The configured feed reports that the agency approved the coastal resilience project. This brief records the approval as a source-reported assertion from the captured article. The retained excerpt attributes the statement to the agency and does not add a reason, budget, schedule, or predicted outcome. Coverage in this snapshot comes from one configured source, so the report does not treat repetition as corroboration. The item appears because it matched the personal source and phrase settings. No independent verification, risk estimate, historical comparison, or forecast is supplied. The available evidence supports only the reported approval and its attribution within this captured source record.",
+    "event_text": "The leading item in this personal snapshot is the reported approval of a coastal resilience project. The configured feed says the agency confirmed that approval, and the brief preserves that attribution. The source record does not state a budget, schedule, implementation milestone, motive, or expected effect, so this section adds none of those details. It also does not turn the source statement into an independently verified fact. Coverage is limited to the retained article from one selected feed. No second source in this run corroborates the assertion. The supported reading is therefore narrow: the captured publisher reports an agency confirmation that the project was approved, with no further conclusion about delivery or impact. The record offers no basis for additional interpretation."
+  }
+}
